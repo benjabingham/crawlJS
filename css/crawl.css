@@ -35,8 +35,26 @@ button:hover{
     }
 }
 
+#custom-controls-wrapper-div{
+    width:600px;
+    margin:auto;
+    text-align:center;
+    padding:1rem;
+    background:#ddd;
+    color:#222;
+}
+
+#custom-controls-div{
+    padding:1rem;
+    width:fit-content;
+    margin:auto;
+}
+
 .control-inputs{
-    width:1rem;
+    width:1.5rem;
+    height:1.5rem;
+    font-size: large;
+    text-align:center;
 }
 
 

@@ -5,10 +5,10 @@ class GameMaster{
         this.save = save;
         this.entityManager = new EntityManager(this.player,this.log, this);
         this.board = this.entityManager.board;
+        this.customControls = {};
         this.display = new Display(this.entityManager, this.board);
         this.dungeonId = 0;
         this.shop = new Shop(this);
-        this.customControls = this.display.customControls;
     }
 
     reset(){

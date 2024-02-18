@@ -340,9 +340,14 @@ class Display{
         let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
         let i = 0;
         keys.forEach((key)=>{
-            $('#'+key+'-input').on('change',()=>{
-                customControls[key] = $('#'+key+'-input').val()+'_0';
-            }).val(defaultCustomControls[i]);
+            let element = $('#'+key+'-input');
+            element.val(defaultCustomControls[i]).on('change',()=>{
+                customControls[key] = element.val()+'_0';
+            }).click(()=>{
+                element.select();
+            }).on('keyup',()=>{
+                element.select();
+            });
             customControls[key] = defaultCustomControls[i]+'_0';
             i++;
         })

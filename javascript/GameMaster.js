@@ -35,9 +35,13 @@ class GameMaster{
         display.showDungeonScreen();
         display.printBoard();
 
+
+        /*
         $(document).off().on("keydown", function(e){
             gm.resolvePlayerInput(e); 
         });
+        */
+        $(document).off().on("keydown", InputManager.recieveInput);
     }
 
     resolvePlayerInput(e){

@@ -10,6 +10,7 @@ class Board{
 
         this.entityManager = entityManager;
         this.destinations = {};
+        //oogabooga
     }
 
     boardInit(){

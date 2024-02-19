@@ -10,6 +10,7 @@ class Board{
 
         this.entityManager = entityManager;
         this.destinations = {};
+        //Look, it's a hidden comment written by andy!
     }
 
     boardInit(){

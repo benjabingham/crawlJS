@@ -11,6 +11,7 @@ class Board{
         this.entityManager = entityManager;
         this.destinations = {};
         //woah, this comment is made by andy who will be pushing to the test branch
+        //and guess who is writing a second comment right below it for another commit to the test branch??
     }
 
     boardInit(){

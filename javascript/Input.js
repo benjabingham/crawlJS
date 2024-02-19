@@ -46,8 +46,8 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
-        console.log(newInput);
-        let theInput = InputManager.inputs.find((input) => input.hasKey(newInput));
+        let inputCode = newInput.originalEvent.code;
+        let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));
         if(theInput){
             theInput.onInput();
         }

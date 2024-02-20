@@ -238,5 +238,14 @@ class GameMaster{
         this.save.day++
         this.player.rest();  
     }
+
+    movePlayer(direction){
+        let translations = {
+            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}
+        };
+
+        let translation = translations[direction];
+        this.entityManager.movePlayer(translation.x,translation.y);
+    }
     
 }

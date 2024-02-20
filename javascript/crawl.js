@@ -2,6 +2,7 @@ $(document).ready(function(){
     let save = new Save();
     let gameMaster = new GameMaster(save);
     let display = gameMaster.display;
+    InputManager.setInputPreset('numpad');
     
     display.showHomeScreen(gameMaster);
     /*

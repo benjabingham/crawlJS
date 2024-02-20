@@ -13,10 +13,10 @@ class Input {
 
     hasKey(keyToCheck) {
         //Allows for multiple keys to be added to one event
-        if(Array.isArray(_key)) {
+        if(Array.isArray(keyToCheck)) {
             return this.key.includes((currentKey) => currentKey == keyToCheck)
         }
-        return key == keyToCheck
+        return this.key == keyToCheck
     }
 
     //Calls the event created by this input
@@ -28,6 +28,14 @@ class Input {
 //Call "addEventListener("keydown", InputMaster.recieveInput)" to recieve key inputs
 class InputManager{
     static inputs = []
+
+    static setInputPreset(presetName){
+        let preset = inputVars[presetName];
+        InputManager.inputs = [];
+        preset.forEach((input)=>{
+            InputManager.addInput(input.inputName, input.inputKey);
+        })
+    }
 
     //Adds a new input with the name and key
     static addInput(inputName, inputKey) {
@@ -47,7 +55,9 @@ class InputManager{
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
         let inputCode = newInput.originalEvent.code;
+        console.log(inputCode);
         let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));
+        console.log(theInput);
         if(theInput){
             theInput.onInput();
         }

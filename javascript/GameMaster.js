@@ -41,7 +41,7 @@ class GameMaster{
             gm.resolvePlayerInput(e); 
         });
         */
-        $(document).off().on("keydown", InputManager.recieveInput);
+        $(document).off('keydown').on("keydown", InputManager.recieveInput);
     }
 
     resolvePlayerInput(e){
@@ -239,13 +239,72 @@ class GameMaster{
         this.player.rest();  
     }
 
-    movePlayer(direction){
+    //set up for player action.
+    //TODO remove the need for this - let player walk into own sword, set skipbehaviors false at end of enemy turn.
+    prePlayerAction(){
+        this.entityManager.skipBehaviors = false;
+    }
+
+    //should belong to input once classes are static
+    movePlayer(event){
+        console.log(this);
+        let direction = event.type;
+        console.log(event);
+        let dungeonId = this.dungeonId;
+
+        this.prePlayerAction();
+
+        //remove sword so it doesn't interfere with player movement;
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
+
         let translations = {
             right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}
         };
 
         let translation = translations[direction];
         this.entityManager.movePlayer(translation.x,translation.y);
+
+        if(dungeonId != this.dungeonId){
+            return false;
+        }
+
+        this.board.calculateLosArray(this.entityManager.getEntity('player'));
+        this.entityManager.placeSword(swordId);
+
+        this.postPlayerAction();
+    }
+
+    resolveEntityBehaviors(){
+        this.entityManager.reapWounded();
+        this.entityManager.triggerBehaviors();
+        this.entityManager.reapWounded();
+        this.player.lightDown(this.log);
+    }
+
+    updateDisplay(){
+        this.display.printBoard(board.boardArray);
+        this.player.inventoryCleanup();
+        this.display.displayInventory(true);
+
+        this.display.fillBars(this.player);
+    }
+
+    postPlayerAction(){        
+        if(!this.entityManager.skipBehaviors){
+            this.resolveEntityBehaviors();
+        }
+
+        this.board.placeEntities(this.log);
+        this.entityManager.saveSnapshot();
+        this.updateDisplay();
+        if(!this.entityManager.skipBehaviors){
+            this.log.turnCounter++;
+        }else{
+            this.log.rewind();
+        }
+        this.log.printLog();  
+        this.log.clearNotices();
     }
     
 }

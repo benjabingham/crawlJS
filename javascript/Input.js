@@ -21,7 +21,9 @@ class Input {
 
     //Calls the event created by this input
     onInput() {
-        dispatchEvent(this.inputEvent)
+        $(document).trigger(this.name);
+        //dispatchEvent(this.inputEvent);
+
     }
 }
 
@@ -34,6 +36,16 @@ class InputManager{
         InputManager.inputs = [];
         preset.forEach((input)=>{
             InputManager.addInput(input.inputName, input.inputKey);
+        })
+    }
+
+    static addEventListeners(gameMaster){
+        let directions = ['upleft','up','upright','left','right','downleft','down','downright'];
+        directions.forEach((direction)=>{
+            $(document).bind(direction,function(event){
+                gameMaster.movePlayer(event);
+            })
+            //addEventListener(direction, gameMaster.movePlayer);
         })
     }
 

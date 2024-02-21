@@ -3,7 +3,7 @@ $(document).ready(function(){
     let gameMaster = new GameMaster(save);
     let display = gameMaster.display;
     InputManager.setInputPreset('numpad');
-    
+    InputManager.addEventListeners(gameMaster)
     display.showHomeScreen(gameMaster);
     /*
     fetch('./rooms/ratnest.json')

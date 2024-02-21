@@ -31,6 +31,7 @@ class Input {
 //Call "addEventListener("keydown", InputMaster.recieveInput)" to recieve key inputs
 class InputManager{
     static inputs = []
+    static locked = false;
 
     static setInputPreset(presetName){
         let preset = inputVars[presetName];
@@ -52,12 +53,15 @@ class InputManager{
 
         inputVars.numpad.forEach((input)=>{
             $(document).bind(input.inputName,function(event){
+                if(InputManager.locked) return false;
+                InputManager.locked = true;
                 if(input.movePlayer) gameMaster.movePlayer(event);
                 if(input.wait) gameMaster.wait(event);
                 if(input.rotate) gameMaster.rotate(event);
                 if(input.useItem) gameMaster.useItem(event);
                 if(input.drop) gameMaster.drop(event);
                 if(input.rewind) gameMaster.rewind(event);
+                InputManager.locked = false;
             })
         })
     }

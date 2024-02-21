@@ -22,6 +22,7 @@ class Input {
     //Calls the event created by this input
     onInput() {
         $(document).trigger(this.name);
+        console.log('trigger '+this.name);
         //dispatchEvent(this.inputEvent);
 
     }
@@ -40,12 +41,24 @@ class InputManager{
     }
 
     static addEventListeners(gameMaster){
+        /*
         let directions = ['upleft','up','upright','left','right','downleft','down','downright'];
         directions.forEach((direction)=>{
             $(document).bind(direction,function(event){
                 gameMaster.movePlayer(event);
             })
             //addEventListener(direction, gameMaster.movePlayer);
+        })*/
+
+        inputVars.numpad.forEach((input)=>{
+            $(document).bind(input.inputName,function(event){
+                if(input.movePlayer) gameMaster.movePlayer(event);
+                if(input.wait) gameMaster.wait(event);
+                if(input.rotate) gameMaster.rotate(event);
+                if(input.useItem) gameMaster.useItem(event);
+                if(input.drop) gameMaster.drop(event);
+                if(input.rewind) gameMaster.rewind(event);
+            })
         })
     }
 

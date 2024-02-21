@@ -10,16 +10,19 @@ inputVars = {
         {inputName:'down', inputKey:'Numpad2', movePlayer:true},
         {inputName:'downright', inputKey:'Numpad3', movePlayer:true},
 
-        {inputName:'item1', inputKey:'Digit1', useItem:true},
-        {inputName:'item2', inputKey:'Digit2', useItem:true},
-        {inputName:'item3', inputKey:'Digit3', useItem:true},
-        {inputName:'item4', inputKey:'Digit4', useItem:true},
-        {inputName:'item5', inputKey:'Digit5', useItem:true},
-        {inputName:'item6', inputKey:'Digit6', useItem:true},
-        {inputName:'item7', inputKey:'Digit7', useItem:true},
+        {inputName:'clockwise', inputKey:'KeyQ', rotate:true},
+        {inputName:'counterclockwise', inputKey:'KeyW', rotate:true},
+
+        {inputName:'item-1', inputKey:'Digit1', useItem:true},
+        {inputName:'item-2', inputKey:'Digit2', useItem:true},
+        {inputName:'item-3', inputKey:'Digit3', useItem:true},
+        {inputName:'item-4', inputKey:'Digit4', useItem:true},
+        {inputName:'item-5', inputKey:'Digit5', useItem:true},
+        {inputName:'item-6', inputKey:'Digit6', useItem:true},
+        {inputName:'item-7', inputKey:'Digit7', useItem:true},
         {inputName:'item8', inputKey:'Digit8', useItem:true},
-        {inputName:'item9', inputKey:'Digit9', useItem:true},
-        {inputName:'item10', inputKey:'Digit0', useItem:true},
+        {inputName:'item-9', inputKey:'Digit9', useItem:true},
+        {inputName:'item-10', inputKey:'Digit0', useItem:true},
 
         {inputName:'drop', inputKey:'KeyD', drop:true},
         {inputName:'rewind', inputKey:'Backspace', rewind:true}       

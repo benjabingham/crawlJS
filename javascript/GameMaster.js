@@ -27,6 +27,7 @@ class GameMaster{
         let display = this.display;
         let gm = this;
 
+        entityManager.skipBehaviors = false;
         board.placeEntities(log);
         entityManager.saveSnapshot();
 
@@ -84,15 +85,15 @@ class GameMaster{
         }else{
             this.log.rewind();
         }
-        console.log(this.log.turnCounter);
+        //console.log(this.log.turnCounter);
         this.log.printLog();  
         this.log.clearNotices();
     }
 
     playerAction(e, swordId){
         let key = e.key +"_"+e.location;
-        console.log(key);
-        console.log(e);
+        //console.log(key);
+        //console.log(e);
         switch(key){
             case this.customControls.right:
             case "6_3":
@@ -239,22 +240,65 @@ class GameMaster{
         this.player.rest();  
     }
 
-    //set up for player action.
-    //TODO remove the need for this - let player walk into own sword, set skipbehaviors false at end of enemy turn.
-    prePlayerAction(){
-        this.entityManager.skipBehaviors = false;
+    rewind(event){
+        if(this.entityManager.canRewind()){
+            console.log('rewind');
+            this.entityManager.rewind();
+            this.entityManager.skipBehaviors = true;
+            this.log.turnCounter--;
+            this.log.messages[log.turnCounter] = false;
+            console.log(this.entityManager.entities);
+        }
+
+        this.postPlayerAction();
+    }
+
+    drop(event){
+        if(!this.dropMode){
+            this.dropMode = true;
+        }else{
+            this.dropMode = false;
+        }
+        /*
+        this.entityManager.skipBehaviors = true;
+        this.postPlayerAction();
+        */
+    }
+
+    useItem(event){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(this.dropMode){
+            if(!this.player.dropItem(slot,this)){
+                //this.entityManager.skipBehaviors = true;
+                this.dropMode = false;
+            }
+        }else if(!this.player.useItem(this.player.inventory[slot], this)){
+            //skip behaviors if invalid item
+            this.entityManager.skipBehaviors = true;
+        }
+
+        this.postPlayerAction();
+    }
+
+    wait(event){
+        this.player.gainStamina();
+        this.postPlayerAction();
+    }
+
+    rotate(event){
+        let direction = event.type == 'clockwise'? -1 : 1;
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
+        this.entityManager.rotateSword(swordId,direction);
+        this.postPlayerAction();
     }
 
     //should belong to input once classes are static
     movePlayer(event){
-        console.log(this);
-        let direction = event.type;
-        console.log(event);
         let dungeonId = this.dungeonId;
+        let direction = event.type;
 
-        this.prePlayerAction();
-
-        //remove sword so it doesn't interfere with player movement;
+        //remove sword so it doesn't interfere with player movement and LOS. TODO remove need for this
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.removeEntity(swordId);
 
@@ -268,10 +312,6 @@ class GameMaster{
         if(dungeonId != this.dungeonId){
             return false;
         }
-
-        this.board.calculateLosArray(this.entityManager.getEntity('player'));
-        this.entityManager.placeSword(swordId);
-
         this.postPlayerAction();
     }
 
@@ -290,13 +330,16 @@ class GameMaster{
         this.display.fillBars(this.player);
     }
 
-    postPlayerAction(){        
+    postPlayerAction(){     
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.placeSword(swordId);   
         if(!this.entityManager.skipBehaviors){
             this.resolveEntityBehaviors();
         }
 
         this.board.placeEntities(this.log);
         this.entityManager.saveSnapshot();
+        this.board.calculateLosArray(this.entityManager.getEntity('player'));
         this.updateDisplay();
         if(!this.entityManager.skipBehaviors){
             this.log.turnCounter++;
@@ -305,6 +348,8 @@ class GameMaster{
         }
         this.log.printLog();  
         this.log.clearNotices();
+        console.log(this.entityManager.skipBehaviors);
+        this.entityManager.skipBehaviors = false;
     }
     
 }

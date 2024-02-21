@@ -286,7 +286,7 @@ class GameMaster{
     }
 
     rotate(event){
-        let direction = event.type == 'clockwise'? -1 : 1;
+        let direction = event.type == 'clockwise'? 1 : -1;
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.removeEntity(swordId);
         this.entityManager.rotateSword(swordId,direction);

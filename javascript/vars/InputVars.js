@@ -10,8 +10,8 @@ inputVars = {
         {inputName:'downright', inputKey:'Numpad3', movePlayer:true},
         {inputName:'wait', inputKey:'Numpad5', wait:true},
 
-        {inputName:'clockwise', inputKey:'KeyQ', rotate:true},
-        {inputName:'counterclockwise', inputKey:'KeyW', rotate:true},
+        {inputName:'clockwise', inputKey:'KeyW', rotate:true},
+        {inputName:'counterclockwise', inputKey:'KeyQ', rotate:true},
 
         {inputName:'item-1', inputKey:'Digit1', useItem:true},
         {inputName:'item-2', inputKey:'Digit2', useItem:true},

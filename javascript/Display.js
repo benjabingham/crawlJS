@@ -350,8 +350,10 @@ class Display{
                     $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key).click(()=>{
                         $('#'+input.name+'-input').select();
                     }).on('keydown',(e)=>{
+                        e.preventDefault();
                         InputManager.setInput(input.name,e.originalEvent.code)
                         display.setCustomControls();
+                        $('#'+input.name+'-input').select().focus();
                     })
                 )
             )

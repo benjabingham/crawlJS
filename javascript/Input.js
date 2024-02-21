@@ -88,6 +88,10 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
+        if($(':focus').is('input')){
+            return;
+        }
+        newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
         console.log(inputCode);
         let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));

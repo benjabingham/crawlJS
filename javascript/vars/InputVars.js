@@ -4,11 +4,11 @@ inputVars = {
         {inputName:'up', inputKey:'Numpad8', movePlayer:true},
         {inputName:'upright', inputKey:'Numpad9', movePlayer:true},
         {inputName:'left', inputKey:'Numpad4', movePlayer:true},
-        {inputName:'wait', inputKey:'Numpad5', wait:true},
         {inputName:'right', inputKey:'Numpad6', movePlayer:true},
         {inputName:'downleft', inputKey:'Numpad1', movePlayer:true},
         {inputName:'down', inputKey:'Numpad2', movePlayer:true},
         {inputName:'downright', inputKey:'Numpad3', movePlayer:true},
+        {inputName:'wait', inputKey:'Numpad5', wait:true},
 
         {inputName:'clockwise', inputKey:'KeyQ', rotate:true},
         {inputName:'counterclockwise', inputKey:'KeyW', rotate:true},
@@ -27,7 +27,26 @@ inputVars = {
         {inputName:'drop', inputKey:'KeyD', drop:true},
         {inputName:'rewind', inputKey:'Backspace', rewind:true}       
     ],
+    noNumpad:[
+        {inputName:'upleft', inputKey:'KeyI', movePlayer:true},
+        {inputName:'up', inputKey:'KeyO', movePlayer:true},
+        {inputName:'upright', inputKey:'KeyP', movePlayer:true},
+        {inputName:'left', inputKey:'KeyK', movePlayer:true},
+        {inputName:'right', inputKey:'Semicolon', movePlayer:true},
+        {inputName:'downleft', inputKey:'Comma', movePlayer:true},
+        {inputName:'down', inputKey:'Period', movePlayer:true},
+        {inputName:'downright', inputKey:'Slash', movePlayer:true},
+        {inputName:'wait', inputKey:'KeyL', wait:true},
+    ],
     calby:[
-
+        {inputName:'upleft', inputKey:'KeyU', movePlayer:true},
+        {inputName:'up', inputKey:'KeyJ', movePlayer:true},
+        {inputName:'upright', inputKey:'KeyI', movePlayer:true},
+        {inputName:'left', inputKey:'KeyH', movePlayer:true},
+        {inputName:'right', inputKey:'KeyL', movePlayer:true},
+        {inputName:'downleft', inputKey:'KeyB', movePlayer:true},
+        {inputName:'down', inputKey:'KeyK', movePlayer:true},
+        {inputName:'downright', inputKey:'KeyN', movePlayer:true},
+        {inputName:'wait', inputKey:'KeyO', wait:true},
     ]
 }

@@ -35,7 +35,7 @@ class InputManager{
 
     static setInputPreset(presetName){
         let preset = inputVars[presetName];
-        InputManager.inputs = [];
+        //InputManager.inputs = [];
         preset.forEach((input)=>{
             InputManager.setInput(input.inputName, input.inputKey);
         })

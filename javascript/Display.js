@@ -347,7 +347,12 @@ class Display{
                 $('<div>').addClass('custom-input-divs').append(
                     $('<label>').text(input.name)
                 ).append(
-                    $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key)
+                    $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key).click(()=>{
+                        $('#'+input.name+'-input').select();
+                    }).on('keydown',(e)=>{
+                        InputManager.setInput(input.name,e.originalEvent.code)
+                        display.setCustomControls();
+                    })
                 )
             )
         })

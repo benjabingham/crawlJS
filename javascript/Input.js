@@ -35,7 +35,7 @@ class InputManager{
         let preset = inputVars[presetName];
         InputManager.inputs = [];
         preset.forEach((input)=>{
-            InputManager.addInput(input.inputName, input.inputKey);
+            InputManager.setInput(input.inputName, input.inputKey);
         })
     }
 
@@ -56,7 +56,12 @@ class InputManager{
 
     //Changes the key cooresponding to the input with that name
     static setInput(inputName, inputKey) {
-        this.inputs.find((input) => input.name == inputName).key = inputKey
+        let input =  this.inputs.find((input) => input.name == inputName)
+        if(input){
+            input.key = inputKey;
+        }else{
+            InputManager.addInput(inputName, inputKey);
+        }
     }
 
     //Returns the Input class with this name

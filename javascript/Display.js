@@ -66,12 +66,56 @@ class Display{
     boardDisplayInit(){
         let boardDiv = $("#board");
         boardDiv.css('width',17*1.8+"rem");
+        this.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
         $('#log').css('height',17*2-2.5+"rem");
     }
+
+    generateBoardGrid(){
+        $('#board').html('');
+        let boardArray = this.board.boardArray;
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                $('#board').append(
+                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY)
+                )                 
+            }
+        }
+    }
+
+    printBoardGrid(){
+        let boardArray = this.board.boardArray;
+        let player = this.entityManager.player;
+        let playerPos = this.entityManager.getEntity('player');
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                let symbol = '';
+                let x = (displayX-8) + playerPos.x;
+                let y = (displayY-8) + playerPos.y;
+                //out of bounds
+                if( x < 0 || y < 0 || y >= boardArray.length || x >= boardArray[y].length){
+                    symbol= '▓▓';
+                //in sight
+                }else if(this.board.hasPlayerLos({x:x, y:y})){
+                    if(boardArray[y][x]){
+                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
+                    }
+                //out of sight
+                }else{
+                    symbol = '▓▓';
+                }
+                $('#board-grid-'+displayX+'-'+displayY).text(symbol)
+            }
+        }
+        //console.log(boardString);
+    }
     
     printBoard(){
+        this.printBoardGrid();
+        return false;
         let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
@@ -97,10 +141,7 @@ class Display{
                     }
                 }else{
                     boardString += '▓▓';
-                }
-
-                
-                          
+                }                 
             }
             boardString += "\n";
         }

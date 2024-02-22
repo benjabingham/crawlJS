@@ -21,6 +21,10 @@
     font-family: monospace;
     font-size:xx-large;
     float:left;
+
+    display:grid;
+    grid-template-columns: repeat(17, 1fr);
+
 }
 
 #board:focus{

@@ -92,6 +92,8 @@ class Display{
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
+                let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
+                gridDiv.removeClass('grid-dark grid-wall');
                 let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
@@ -101,13 +103,18 @@ class Display{
                 //in sight
                 }else if(this.board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y][x]){
+                        if(this.board.wallArray[y][x]){
+                            gridDiv.addClass('grid-wall')
+                        }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                     }
                 //out of sight
                 }else{
-                    symbol = '▓▓';
+                    //symbol = '▓▓';
+                    gridDiv.addClass('grid-dark')
                 }
-                $('#board-grid-'+displayX+'-'+displayY).text(symbol)
+                while(symbol.length < 2) symbol += ' ';
+                gridDiv.text(symbol)
             }
         }
         //console.log(boardString);

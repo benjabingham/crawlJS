@@ -30,6 +30,8 @@ button:hover{
     /*font-style:italic;*/
     color:#ddd;
 
+    height:1rem;
+
     p{
         margin:0px;
     }

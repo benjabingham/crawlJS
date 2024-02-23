@@ -93,7 +93,7 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
-                gridDiv.removeClass('grid-dark grid-wall grid-exit');
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off();
                 let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
@@ -104,6 +104,15 @@ class Display{
                             gridDiv.addClass('grid-wall')
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
+                        if(boardArray[y][x].name){
+                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
+                                $('.hint-divs').html('').append(
+                                    $('<p>').text(boardArray[y][x].name)
+                                )
+                            }).off('mouseleave').on('mouseleave',()=>{
+                                $('.hint-divs').html('');
+                            })
+                        }
                     }
                     if(!this.board.isSpace(x,y)){
                         if(this.board.hasAdjacentEmptySpace(x,y)){

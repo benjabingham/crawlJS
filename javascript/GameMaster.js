@@ -128,6 +128,8 @@ class GameMaster{
     }
 
     useItem(event){
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
         if(this.dropMode){
             if(!this.player.dropItem(slot,this)){
@@ -195,6 +197,7 @@ class GameMaster{
     postPlayerAction(){     
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.placeSword(swordId);   
+        console.log(this.entityManager.getEntity(swordId));
         if(!this.entityManager.skipBehaviors){
             this.resolveEntityBehaviors();
         }

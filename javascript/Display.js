@@ -65,11 +65,11 @@ class Display{
 
     boardDisplayInit(){
         let boardDiv = $("#board");
-        boardDiv.css('width',17*1.8+"rem");
+       // boardDiv.css('width',17*1.8+"rem");
         this.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
-        $('#log').css('height',17*2-2.5+"rem");
+        //$('#log').css('height',17*2-2.5+"rem");
     }
 
     generateBoardGrid(){

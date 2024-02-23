@@ -17,6 +17,7 @@
     background-color: #d9d2bf;
     color: #3d3936;
     */
+    background-color:#222;
     white-space:pre-line;
     font-family: monospace;
     font-size:xx-large;
@@ -24,6 +25,12 @@
 
     display:grid;
     grid-template-columns: repeat(17, 1fr);
+    grid-gap: 0px;
+    border-collapse: collapse;
+
+    div:not(.grid-dark){
+        background-color:#ddd;
+    }
 
 }
 
@@ -32,9 +39,17 @@
 }
 
 .board-grid-div{
+    font-size:1.5rem;
     width:1.8rem;
     height:1.8rem;
     text-align:center;
+    /*overflow:hidden;*/
+    border:1px solid #2222221c;
+    outline-offset:1px;
+    margin:auto;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
 }
 /*
 .grid-dark::after{
@@ -49,10 +64,14 @@
 
 .grid-dark{
     background-color:#222;
+
 }
 
 .grid-wall{
-    background-color:#555;
+    background:
+    repeating-conic-gradient(#555 0% 25%, #454545 0% 50%) 
+    50% / 20px;
+    background-size:20% 20%;
 }
 
 .grid-exit{
@@ -62,7 +81,8 @@
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
     */
     background: 
-    repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 
+    repeating-conic-gradient(#555 0% 25%, transparent 0% 50%) 
       50% / 20px;
     background-size:100% 100%;
+    border:none;8
 }

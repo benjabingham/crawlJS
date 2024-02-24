@@ -22,6 +22,24 @@
     border:1px solid black;
 }
 
+#town-screen{
+    .inventory-slot{
+        padding:4px;
+        margin-left:3px;
+        display:flex;
+        height:fit-content;
+        background-image: linear-gradient(#ddcaa4,#c0aa73);
+        border: 1px solid rgb(124, 117, 52);
+        /*border:1px solid gray*/
+    }
+    .inventory-slot:hover{
+        cursor: pointer;
+        background-color: #7272723d;
+        background-image: linear-gradient(#ddcaa4,#aa9665);
+    
+    }
+}
+
 .inventory-list{
     width:600px;
     display:grid;
@@ -31,32 +49,24 @@
     padding-top:2px;
 }
 
-.inventory-slot{
-    padding:4px;
-    margin-left:3px;
-    display:flex;
-    height:fit-content;
-    background-image: linear-gradient(#ddcaa4,#c0aa73);
-    border: 1px solid rgb(124, 117, 52);
-    /*border:1px solid gray*/
+#town-inventory-list,
+#dungeon-inventory-list{
+    .inventory-slot{
+        padding:4px;
+        margin-left:3px;
+        display:flex;
+        height:fit-content;
+        background-image: linear-gradient(#dddddd,#c0c0c0);
+        border: 1px solid rgb(124, 117, 52);
+        /*border:1px solid gray*/
+    }
+    .inventory-slot:hover{
+        cursor: pointer;
+        background-color: #7272723d;
+        background-image: linear-gradient(#d4d4d4,#acacac);
+    
+    }
 }
-
-.inventory-slot:hover{
-    cursor: pointer;
-    background-color: #7272723d;
-    background-image: linear-gradient(#ddcaa4,#aa9665);
-
-}
-
-/*
-.inventory-slot{
-    width:280px;
-    height:120px;
-    border:1px solid #BBBBBB;
-    background-color: #ddd;
-    color: #222;
-}
-*/
 
 .item-name{
     font-weight:800;

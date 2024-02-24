@@ -3,17 +3,6 @@
     margin:auto;
     background-color:#ddd;
     color:#222;
-
-    button{
-        color: rgb(15, 12, 0);
-        background-image:linear-gradient(#fde8cc,#a7a089)
-    }
-    
-    button:hover{
-        cursor: pointer;
-        background-image:linear-gradient(#cab9a3,#a7a089)
-    
-    }
 }
 
 #town-title-div{

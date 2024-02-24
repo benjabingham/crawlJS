@@ -3,7 +3,7 @@ class Display{
         this.entityManager = entityManager;
         this.board = board;
         this.customControls = this.entityManager.gameMaster.customControls;
-        this.setCustomControls();
+        //this.setCustomControls();
 
     }
 
@@ -65,13 +65,76 @@ class Display{
 
     boardDisplayInit(){
         let boardDiv = $("#board");
-        boardDiv.css('width',17*1.8+"rem");
+       // boardDiv.css('width',17*1.8+"rem");
+        this.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
-        $('#log').css('height',17*2-2.5+"rem");
+        //$('#log').css('height',17*2-2.5+"rem");
+    }
+
+    generateBoardGrid(){
+        $('#board').html('');
+        let boardArray = this.board.boardArray;
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                $('#board').append(
+                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY)
+                )                 
+            }
+        }
+    }
+
+    printBoardGrid(){
+        let boardArray = this.board.boardArray;
+        let player = this.entityManager.player;
+        let playerPos = this.entityManager.getEntity('player');
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off();
+                let symbol = '';
+                let x = (displayX-8) + playerPos.x;
+                let y = (displayY-8) + playerPos.y;
+                //out of bounds
+                if(this.board.hasPlayerLos({x:x, y:y})){
+                    if(boardArray[y][x]){
+                        if(this.board.wallArray[y][x]){
+                            gridDiv.addClass('grid-wall')
+                        }
+                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
+                        if(boardArray[y][x].name){
+                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
+                                $('.hint-divs').html('').append(
+                                    $('<p>').text(boardArray[y][x].name)
+                                )
+                            }).off('mouseleave').on('mouseleave',()=>{
+                                $('.hint-divs').html('');
+                            })
+                        }
+                    }
+                    if(!this.board.isSpace(x,y)){
+                        if(this.board.hasAdjacentEmptySpace(x,y)){
+                            gridDiv.addClass('grid-exit');
+                        }else{
+                            gridDiv.addClass('grid-dark')
+                        }
+                    }
+                //out of sight
+                }else{
+                    gridDiv.addClass('grid-dark')
+                }
+                while(symbol.length < 2) symbol += ' ';
+                gridDiv.text(symbol)
+            }
+        }
+        //console.log(boardString);
     }
     
     printBoard(){
+        this.printBoardGrid();
+        return false;
         let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
@@ -97,10 +160,7 @@ class Display{
                     }
                 }else{
                     boardString += '▓▓';
-                }
-
-                
-                          
+                }                 
             }
             boardString += "\n";
         }
@@ -233,22 +293,21 @@ class Display{
             if(item.weapon && !player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        //spoof button press...
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.weapon && player.equipped && player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.usable){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('use').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
@@ -335,22 +394,40 @@ class Display{
     }
 
     setCustomControls(){
+        let display = this;
         let customControls = this.customControls;
-        let keys = ['upleft','up','upright','left','wait','right','downleft','down','downright'];
-        let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
-        let i = 0;
-        keys.forEach((key)=>{
-            let element = $('#'+key+'-input');
-            element.val(defaultCustomControls[i]).on('change',()=>{
-                customControls[key] = element.val()+'_0';
-            }).click(()=>{
-                element.select();
-            }).on('keyup',()=>{
-                element.select();
-            });
-            customControls[key] = defaultCustomControls[i]+'_0';
-            i++;
+        let inputs = InputManager.inputs;
+        //let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
+        
+        $('#custom-controls-div').html('');
+        inputs.forEach((input)=>{
+            console.log(input);
+            $('#custom-controls-div').append(
+                $('<div>').addClass('custom-input-divs').append(
+                    $('<label>').text(input.name)
+                ).append(
+                    $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key).click(()=>{
+                        $('#'+input.name+'-input').select();
+                    }).on('keydown',(e)=>{
+                        e.preventDefault();
+                        InputManager.setInput(input.name,e.originalEvent.code)
+                        display.setCustomControls();
+                        $('#'+input.name+'-input').select().focus();
+                    })
+                )
+            )
         })
+
+        $('#preset-div').html('');
+
+        for(const [k,v] of Object.entries(inputVars)){
+            $('#preset-div').append(
+                $('<button>').text(k).on('click',()=>{
+                    InputManager.setInputPreset(k);
+                    display.setCustomControls();
+                })
+            )
+        }
     }
 
     

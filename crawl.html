@@ -19,8 +19,11 @@
     <script src="javascript/vars/ItemVars.js"></script>
     <script src="javascript/vars/MonsterVars.js"></script>
     <script src="javascript/vars/KeywordVars.js"></script>
+    <script src="javascript/vars/InputVars.js"></script>
+
 
     <script src="javascript/LootManager.js?v=1"></script>
+    <script src="javascript/Input.js?v=1"></script>
     <script src="javascript/Shop.js?v=1"></script>
     <script src="javascript/Save.js?v=1"></script>
     <script src="javascript/GameMaster.js?v=1"></script>
@@ -30,6 +33,7 @@
     <script src="javascript/Log.js?v=1"></script>
     <script src="javascript/Display.js?v=1"></script>
 	<script src="javascript/crawl.js?v=1"></script>
+
     </div>
     <div id ='home-screen'>
         <div id="save-manage-div">
@@ -108,9 +112,9 @@
     
     <div id="dungeon-screen">
         <div id="game-window">
-            <div>
-                <div id="board" tabindex="0"></div> 
-            </div>
+            
+            <div id="board" tabindex="0"></div> 
+            
             <div id="log-window">
                 <div id="log-title">Log</div>
                 <div id="log"></div>
@@ -163,14 +167,11 @@
     </div>
 
     <div id="custom-controls-wrapper-div">
-        Enter custom non-numpad controls below. The outmost inputs correspond to the 8 directions, while the innermost button coresponds to the WAIT action.
-        <div id="custom-controls-div">
-            <input id="upleft-input" class="control-inputs"><input id="up-input" class="control-inputs"><input id="upright-input" class="control-inputs">
-            <br>
-            <input id="left-input" class="control-inputs"><input id="wait-input" class="control-inputs"><input id="right-input" class="control-inputs">
-            <br>
-            <input id="downleft-input" class="control-inputs"><input id="down-input" class="control-inputs"><input id="downright-input" class="control-inputs">
+        <div id="preset-div-wrapper">
+            Presets
+            <div id="preset-div"></div>
         </div>   
+        <div id="custom-controls-div"></div>
     </div>
   </body>
 </html>

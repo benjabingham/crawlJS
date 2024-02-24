@@ -30,6 +30,8 @@ button:hover{
     /*font-style:italic;*/
     color:#ddd;
 
+    height:1rem;
+
     p{
         margin:0px;
     }
@@ -47,14 +49,26 @@ button:hover{
 #custom-controls-div{
     padding:1rem;
     width:fit-content;
-    margin:auto;
+    margin-left:125px;
+    
 }
 
 .control-inputs{
-    width:1.5rem;
-    height:1.5rem;
-    font-size: large;
+    width:5rem;
+    height:1rem;
+    font-size: small;
     text-align:center;
+}
+
+.custom-input-divs{
+    text-align:right;
+}
+
+#preset-div{
+    button{
+        padding:5px;
+        margin:5px;
+    }
 }
 
 

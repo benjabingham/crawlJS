@@ -217,7 +217,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').addClass(item.color).text(item.name)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -282,7 +282,7 @@ class Display{
             itemValue = '0';
         }
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').addClass(item.color).attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
@@ -352,5 +352,7 @@ class Display{
             i++;
         })
     }
+
+    
     
 }

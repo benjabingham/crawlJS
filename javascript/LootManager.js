@@ -348,6 +348,7 @@ class LootManager{
         
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
+        weapon.color = this.getColor(weapon.value);
 
         console.log(weapon);
 
@@ -361,8 +362,7 @@ class LootManager{
         
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
-
-        console.log(treasure);
+        treasure.color = this.getColor(treasure.value);
 
         return JSON.parse(JSON.stringify(treasure));
     }
@@ -411,6 +411,7 @@ class LootManager{
                 lootManager.applyModifier(item[val], modifier);
             }
         })
+        item.color = this.getColor(item.value);
     }
 
     breakWeapon(item){
@@ -423,5 +424,22 @@ class LootManager{
 
     roll(min,max){
         return Math.floor(Math.random()*(max-min+1))+min;
+    }
+
+    getColor(val){
+        let color;
+        if(val <= 3){
+            color = 'gray';
+        }else if (val <= 15){
+            color = 'black';
+        }else if (val <= 35){
+            color = 'gold';
+        }else if (val <= 60){
+            color = 'blue';
+        }else{
+            color = 'purple';
+        }
+
+        return color;
     }
 }

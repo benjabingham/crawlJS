@@ -128,6 +128,7 @@ class GameMaster{
     }
 
     useItem(event){
+        console.log(event);
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;

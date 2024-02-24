@@ -20,7 +20,7 @@ inputVars = {
         {inputName:'item-5', inputKey:'Digit5', useItem:true},
         {inputName:'item-6', inputKey:'Digit6', useItem:true},
         {inputName:'item-7', inputKey:'Digit7', useItem:true},
-        {inputName:'item8', inputKey:'Digit8', useItem:true},
+        {inputName:'item-8', inputKey:'Digit8', useItem:true},
         {inputName:'item-9', inputKey:'Digit9', useItem:true},
         {inputName:'item-10', inputKey:'Digit0', useItem:true},
 

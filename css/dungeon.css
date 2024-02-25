@@ -67,7 +67,10 @@
 }*/
 
 .grid-dark{
-    background-color:#222;
+    background:
+    repeating-conic-gradient(#333333 0% 25%, #494949 0% 50%) 
+    50% / 30px;
+    background-size:10% 10%;
 
 }
 

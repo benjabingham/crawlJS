@@ -5,7 +5,7 @@ let itemVars = {
             name:"rod",
             damage:2,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true,
                 long:true
@@ -17,14 +17,14 @@ let itemVars = {
             name:"club",
             damage:4,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -36,14 +36,14 @@ let itemVars = {
             name:"mace",
             damage:5,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -55,14 +55,14 @@ let itemVars = {
             name:"hammer",
             damage:8,
             stunTime:5,
-            weight:2,
+            weight:3,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:4,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -74,14 +74,14 @@ let itemVars = {
             name:"maul",
             damage:12,
             stunTime:7,
-            weight:3,
+            weight:4,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:5,
-                weight:2,
+                weight:3,
                 type:{
                     blunt:true
                 }
@@ -100,7 +100,7 @@ let itemVars = {
             jab:{
                 damage:8,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     sword:true,
                 },
@@ -112,7 +112,7 @@ let itemVars = {
             name:"shortsword",
             damage:4,
             stunTime:2,
-            weight:1,
+            weight:2,
             type:{
                 sword:true,
                 edged:true
@@ -124,7 +124,7 @@ let itemVars = {
             name:"longsword",
             damage:8,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 sword:true,
                 edged:true
@@ -136,7 +136,7 @@ let itemVars = {
             name:"greatsword",
             damage:12,
             stunTime:4,
-            weight:3,
+            weight:4,
             type:{
                 sword:true,
                 edged:true
@@ -148,14 +148,14 @@ let itemVars = {
             name:"handaxe",
             damage:1,
             stunTime:2,
-            weight:1,
+            weight:2,
             type:{
                 edged:true
             },
             swing:{
                 damage:6,
                 stunTime:4,
-                weight:1,
+                weight:2,
                 type:{
                     edged:true
                 }
@@ -167,14 +167,14 @@ let itemVars = {
             name:"greataxe",
             damage:2,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 edged:true
             },
             swing:{
                 damage:15,
                 stunTime:6,
-                weight:3,
+                weight:4,
                 type:{
                     edged:true
                 }
@@ -186,7 +186,7 @@ let itemVars = {
             name:"halberd",
             damage:10,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 edged:true,
                 long:true
@@ -194,7 +194,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:4,
+                weight:6,
                 type:{
                     edged:true,
                     long:true
@@ -220,31 +220,31 @@ let itemVars = {
         },
         ring:{
             name:"ring",
-            value:2
+            value:4
         },
         cup:{
             name:"cup",
-            value:3
+            value:6
         },
         plate:{
             name:"plate",
-            value:5
+            value:8
         },
         vase:{
             name:"vase",
-            value:7
+            value:10
         },
         pendant:{
             name:"pendant",
-            value:3
+            value:6
         },
         statuette:{
             name:"statuette",
-            value:8
+            value:12
         },
         crown:{
             name:"crown",
-            value:15
+            value:20
         },
         tiara:{
             name:"tiara",

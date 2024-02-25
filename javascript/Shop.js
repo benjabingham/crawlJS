@@ -34,7 +34,7 @@ class Shop{
     stockInventory(){
         let tiers = [0,0,3,4,4];
         let slot = 0;
-        let unallowed = ['stone','bone','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
+        let unallowed = ['stone','bone','obsidian','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
         tiers.forEach((tier)=>{
             let priceMultiplier = this.lootManager.roll(1,4) + tier;
             let item = this.lootManager.getWeaponLoot(tier);
@@ -71,7 +71,7 @@ class Shop{
     }
 
     restockInventory(){
-        let unallowed = ['stone','bone','lead','silver','gold','crystal','glass','rubber'];
+        let unallowed = ['stone','bone','obsidian','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){

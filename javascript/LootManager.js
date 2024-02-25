@@ -6,10 +6,10 @@ class LootManager{
                 flimsy:5,
                 stunTime: -1,
                 edged:{
-                    damage:-2
+                    damage:-3
                 },
                 blunt:{
-                    damage:-1
+                    damage:-2
                 },
                 value:.25
             },
@@ -18,6 +18,9 @@ class LootManager{
                 flimsy:8,
                 stunTime:-1,
                 edged:{
+                    damage:-2
+                },
+                blunt:{
                     damage:-1
                 },
                 value:.15
@@ -35,6 +38,14 @@ class LootManager{
                 },
                 value:.2
             },
+            obsidian:{
+                name:'obsidian',
+                flimsy:5,
+                edged:{
+                    damage:2
+                },
+                value:.5
+            },
             lead:{
                 name:'lead',
                 flimsy:3,
@@ -46,7 +57,7 @@ class LootManager{
                 edged:{
                     damage:3
                 },
-                value:1
+                value:2
             },
             rubber:{
                 name:'rubber',
@@ -62,27 +73,38 @@ class LootManager{
             glass:{
                 name:'glass',
                 flimsy:40,
-                value:2,
+                value:3,
                 edged:{
                     damage:6
                 }
             },
+            copper:{
+                name:'copper',
+                flimsy:3,
+                value:2
+            },
             bronze:{
                 name:'bronze',
                 flimsy:2,
-                value:1.5
+                edged:{
+                    damage:1
+                },
+                value:3
             },
             iron:{
                 name:'iron',
                 flimsy:1,
-                value:1.2,
+                edged:{
+                    damage:1
+                },
+                value:2.5,
             },
             steel:{
                 name:'steel',
                 edged:{
                     damage:2
                 },
-                value:2
+                value:4.5
             },
             ironwood:{
                 name:'ironwood',
@@ -90,12 +112,15 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
-                value:3
+                edged:{
+                    damage:-1
+                },
+                value:6
             },
             crystal:{
                 name:'crystal',
                 flimsy:20,
-                value:6,
+                value:8,
                 edged:{
                     damage:8
                 }
@@ -110,7 +135,7 @@ class LootManager{
                 edged:{
                     damage:2
                 },
-                value:3
+                value:8
             },
             silver:{
                 name:'silver',
@@ -118,7 +143,7 @@ class LootManager{
                 edged:{
                     damage:-1
                 },
-                value:5
+                value:10
             },
             gold:{
                 name:'gold',
@@ -131,7 +156,7 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
-                value:6
+                value:12
             },
             Adamantine:{
                 name:'adamantine',
@@ -139,7 +164,7 @@ class LootManager{
                 edged:{
                     damage:2
                 },
-                value:10
+                value:20
             }
         }
 

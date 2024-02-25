@@ -32,7 +32,7 @@ class Shop{
     }
 
     stockInventory(){
-        let tiers = [0,0,3,4,4];
+        let tiers = [0,0,1,3,4,4];
         let slot = 0;
         let unallowed = ['stone','bone','obsidian','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
         tiers.forEach((tier)=>{

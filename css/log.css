@@ -32,14 +32,26 @@
     font-weight: 600;
 }
 
+.message-danger{
+    color:rgb(190, 38, 0);
+}
+
+.message-win{
+    color:rgb(90, 0, 150)
+}
+
+.message-pos{
+    color:rgb(0, 0, 136);
+}
+
 .message-fresh.message-danger{
     color:rgb(231, 46, 0);
     font-weight:600;
 }
 
 .message-fresh.message-win{
+    color:rgb(153, 0, 255);
     font-weight:600;
-    color:rgb(153, 0, 255)
 }
 
 

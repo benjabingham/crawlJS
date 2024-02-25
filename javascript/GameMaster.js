@@ -27,6 +27,7 @@ class GameMaster{
         let display = this.display;
         let gm = this;
 
+        entityManager.skipBehaviors = false;
         board.placeEntities(log);
         entityManager.saveSnapshot();
 
@@ -35,147 +36,13 @@ class GameMaster{
         display.showDungeonScreen();
         display.printBoard();
 
+
+        /*
         $(document).off().on("keydown", function(e){
             gm.resolvePlayerInput(e); 
         });
-    }
-
-    resolvePlayerInput(e){
-        //console.log(e);
-        let dungeonId = this.dungeonId;
-        if($(':focus').is('input')){
-            return;
-        }
-        e.preventDefault;
-
-        let swordId = this.entityManager.getProperty('player','sword')
-        this.entityManager.removeEntity(swordId);
-        this.entityManager.skipBehaviors = false;
-
-        if(e){
-            this.playerAction(e.originalEvent, swordId);
-        }
-        //if dungeon left
-        if(dungeonId != this.dungeonId){
-            return false;
-        }
-
-        this.board.calculateLosArray(this.entityManager.getEntity('player'));
-        this.entityManager.placeSword(swordId);
-        if(!this.entityManager.skipBehaviors){
-            this.entityManager.reapWounded();
-            this.entityManager.triggerBehaviors();
-            this.entityManager.reapWounded();
-            this.player.lightDown(this.log);
-        }
-        this.board.placeEntities(this.log);
-        this.display.printBoard(board.boardArray);
-        this.player.inventoryCleanup();
-        this.display.displayInventory(true);
-
-        this.display.fillBars(this.player);
-        this.entityManager.saveSnapshot();
-        if(!this.entityManager.skipBehaviors){
-            this.log.turnCounter++;
-        }else{
-            this.log.rewind();
-        }
-        console.log(this.log.turnCounter);
-        this.log.printLog();  
-        this.log.clearNotices();
-    }
-
-    playerAction(e, swordId){
-        let key = e.key +"_"+e.location;
-        console.log(key);
-        console.log(e);
-        switch(key){
-            case this.customControls.right:
-            case "6_3":
-                this.entityManager.movePlayer(1, 0);
-                break;
-            case this.customControls.left:
-            case "4_3":
-                this.entityManager.movePlayer(-1, 0);
-                break;
-            case this.customControls.up:
-            case "8_3":
-                this.entityManager.movePlayer(0, -1);
-                break;
-            case this.customControls.down:
-            case "2_3":
-                this.entityManager.movePlayer(0, 1);
-                break;
-            case this.customControls.upleft:
-            case "7_3":
-                this.entityManager.movePlayer(-1, -1);
-                break;
-            case this.customControls.upright:
-            case "9_3":
-                this.entityManager.movePlayer(1, -1);
-                break;
-            case this.customControls.downleft:
-            case "1_3":
-                this.entityManager.movePlayer(-1, 1);
-                break;
-            case this.customControls.downright:
-            case "3_3":
-                this.entityManager.movePlayer(1, 1);
-                break; 
-            case "/_3":
-            case "q_0":
-                this.entityManager.rotateSword(swordId,-1);
-                break;
-            case "*_3":
-            case "w_0":
-                this.entityManager.rotateSword(swordId,1);
-                break;
-            case "Backspace_0":
-                if(this.entityManager.canRewind()){
-                    console.log('rewind');
-                    this.entityManager.rewind();
-                    this.entityManager.skipBehaviors = true;
-                    this.log.turnCounter--;
-                    this.log.messages[log.turnCounter] = false;
-                    console.log(this.entityManager.entities);
-                }
-                break;
-            case this.customControls.wait:
-            case "5_3":
-                this.player.gainStamina();
-                break;
-            case "0_0":
-            case "1_0":
-            case "2_0":
-            case "3_0":
-            case "4_0":
-            case "5_0":
-            case "6_0":
-            case "7_0":
-            case "8_0":
-            case "9_0":
-                let slot = parseInt(e.key)-1;
-                if(this.dropMode){
-                    if(!this.player.dropItem(slot,this)){
-                        //this.entityManager.skipBehaviors = true;
-                        this.dropMode = false;
-                    }
-                }else if(!this.player.useItem(this.player.inventory[slot], this)){
-                    //skip behaviors if invalid item
-                    this.entityManager.skipBehaviors = true;
-                }
-                break;
-            case "d_0":
-                if(!this.dropMode){
-                    this.dropMode = true;
-                }else{
-                    this.dropMode = false;
-                }
-                this.entityManager.skipBehaviors = true;
-                break;
-            default:
-                this.entityManager.skipBehaviors = true;
-        }
+        */
+        $(document).off('keydown').on("keydown", InputManager.recieveInput);
     }
 
     getRoom(roomString){
@@ -233,6 +100,122 @@ class GameMaster{
     nextDay(){
         this.save.day++
         this.player.rest();  
+    }
+
+    rewind(event){
+        if(this.entityManager.canRewind()){
+            console.log('rewind');
+            this.entityManager.rewind();
+            this.entityManager.skipBehaviors = true;
+            this.log.turnCounter--;
+            this.log.messages[log.turnCounter] = false;
+            console.log(this.entityManager.entities);
+        }
+
+        this.postPlayerAction();
+    }
+
+    drop(event){
+        if(!this.dropMode){
+            this.dropMode = true;
+        }else{
+            this.dropMode = false;
+        }
+        /*
+        this.entityManager.skipBehaviors = true;
+        this.postPlayerAction();
+        */
+    }
+
+    useItem(event){
+        console.log(event);
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(this.dropMode){
+            if(!this.player.dropItem(slot,this)){
+                //this.entityManager.skipBehaviors = true;
+                this.dropMode = false;
+            }
+        }else if(!this.player.useItem(this.player.inventory[slot], this)){
+            //skip behaviors if invalid item
+            this.entityManager.skipBehaviors = true;
+        }
+
+        this.postPlayerAction();
+    }
+
+    wait(event){
+        this.player.gainStamina();
+        this.postPlayerAction();
+    }
+
+    rotate(event){
+        let direction = event.type == 'clockwise'? 1 : -1;
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
+        this.entityManager.rotateSword(swordId,direction);
+        this.postPlayerAction();
+    }
+
+    //should belong to input once classes are static
+    movePlayer(event){
+        let dungeonId = this.dungeonId;
+        let direction = event.type;
+
+        //remove sword so it doesn't interfere with player movement and LOS. TODO remove need for this
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.removeEntity(swordId);
+
+        let translations = {
+            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}
+        };
+
+        let translation = translations[direction];
+        this.entityManager.movePlayer(translation.x,translation.y);
+
+        if(dungeonId != this.dungeonId){
+            return false;
+        }
+        this.postPlayerAction();
+    }
+
+    resolveEntityBehaviors(){
+        this.entityManager.reapWounded();
+        this.entityManager.triggerBehaviors();
+        this.entityManager.reapWounded();
+        this.player.lightDown(this.log);
+    }
+
+    updateDisplay(){
+        this.display.printBoard(board.boardArray);
+        this.player.inventoryCleanup();
+        this.display.displayInventory(true);
+
+        this.display.fillBars(this.player);
+    }
+
+    postPlayerAction(){     
+        let swordId = this.entityManager.getProperty('player','sword')
+        this.entityManager.placeSword(swordId);   
+        console.log(this.entityManager.getEntity(swordId));
+        if(!this.entityManager.skipBehaviors){
+            this.resolveEntityBehaviors();
+        }
+
+        this.board.placeEntities(this.log);
+        this.entityManager.saveSnapshot();
+        this.board.calculateLosArray(this.entityManager.getEntity('player'));
+        this.updateDisplay();
+        if(!this.entityManager.skipBehaviors){
+            this.log.turnCounter++;
+        }else{
+            this.log.rewind();
+        }
+        this.log.printLog();  
+        this.log.clearNotices();
+        console.log(this.entityManager.skipBehaviors);
+        this.entityManager.skipBehaviors = false;
     }
     
 }

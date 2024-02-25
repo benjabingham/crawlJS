@@ -3,7 +3,7 @@ class Display{
         this.entityManager = entityManager;
         this.board = board;
         this.customControls = this.entityManager.gameMaster.customControls;
-        this.setCustomControls();
+        //this.setCustomControls();
 
     }
 
@@ -233,22 +233,21 @@ class Display{
             if(item.weapon && !player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        //spoof button press...
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.weapon && player.equipped && player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.usable){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('use').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
@@ -335,22 +334,40 @@ class Display{
     }
 
     setCustomControls(){
+        let display = this;
         let customControls = this.customControls;
-        let keys = ['upleft','up','upright','left','wait','right','downleft','down','downright'];
-        let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
-        let i = 0;
-        keys.forEach((key)=>{
-            let element = $('#'+key+'-input');
-            element.val(defaultCustomControls[i]).on('change',()=>{
-                customControls[key] = element.val()+'_0';
-            }).click(()=>{
-                element.select();
-            }).on('keyup',()=>{
-                element.select();
-            });
-            customControls[key] = defaultCustomControls[i]+'_0';
-            i++;
+        let inputs = InputManager.inputs;
+        //let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
+        
+        $('#custom-controls-div').html('');
+        inputs.forEach((input)=>{
+            console.log(input);
+            $('#custom-controls-div').append(
+                $('<div>').addClass('custom-input-divs').append(
+                    $('<label>').text(input.name)
+                ).append(
+                    $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key).click(()=>{
+                        $('#'+input.name+'-input').select();
+                    }).on('keydown',(e)=>{
+                        e.preventDefault();
+                        InputManager.setInput(input.name,e.originalEvent.code)
+                        display.setCustomControls();
+                        $('#'+input.name+'-input').select().focus();
+                    })
+                )
+            )
         })
+
+        $('#preset-div').html('');
+
+        for(const [k,v] of Object.entries(inputVars)){
+            $('#preset-div').append(
+                $('<button>').text(k).on('click',()=>{
+                    InputManager.setInputPreset(k);
+                    display.setCustomControls();
+                })
+            )
+        }
     }
     
 }

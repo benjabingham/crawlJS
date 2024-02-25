@@ -2,9 +2,9 @@ class Display{
     constructor(entityManager, board){
         this.entityManager = entityManager;
         this.board = board;
+        this.customControls = this.entityManager.gameMaster.customControls;
+        //this.setCustomControls();
 
-        this.customControls = {};
-        this.setCustomControls();
     }
 
     showDungeonScreen(){
@@ -65,47 +65,79 @@ class Display{
 
     boardDisplayInit(){
         let boardDiv = $("#board");
-        boardDiv.css('width',17*1.8+"rem");
+       // boardDiv.css('width',17*1.8+"rem");
+        this.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
-        $('#log').css('height',17*2-2.5+"rem");
+        //$('#log').css('height',17*2-2.5+"rem");
     }
-    
-    printBoard(){
+
+    generateBoardGrid(){
+        $('#board').html('');
+        let boardArray = this.board.boardArray;
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                $('#board').append(
+                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY)
+                )                 
+            }
+        }
+    }
+
+    printBoardGrid(){
         let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
-        let boardString = "";
         
         for(let displayY=0; displayY<17; displayY++){
-            //boardString += '|'
             for(let displayX=0; displayX<17; displayX++){
-                let symbol = false;
+                let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green clearblue bone woodbrown redbrown darkgray lightgray silver').off();
+                let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
-                if( x < 0 || y < 0 || y >= boardArray.length || x >= boardArray[y].length){
-                    boardString += '▓▓';
-                }else if(this.board.hasPlayerLos({x:x, y:y})){
+                //out of bounds
+                if(this.board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y][x]){
+                        if(this.board.wallArray[y][x]){
+                            gridDiv.addClass('grid-wall')
+                        }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
-                        boardString += symbol;
-                    }else{
-                        boardString += '.';
+                        if(boardArray[y][x].name){
+                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
+                                $('.hint-divs').html('').append(
+                                    $('<p>').text(boardArray[y][x].name)
+                                )
+                            }).off('mouseleave').on('mouseleave',()=>{
+                                $('.hint-divs').html('');
+                            })
+                        }
+                        if(boardArray[y][x].color){
+                            gridDiv.addClass(boardArray[y][x].color)
+                        }
                     }
-                    if(!symbol || symbol.length < 2){
-                        boardString += ' ';  
+                    if(!this.board.isSpace(x,y)){
+                        if(this.board.hasAdjacentEmptySpace(x,y)){
+                            gridDiv.addClass('grid-exit');
+                        }else{
+                            gridDiv.addClass('grid-dark')
+                        }
                     }
+                //out of sight
                 }else{
-                    boardString += '▓▓';
+                    gridDiv.addClass('grid-dark')
                 }
-
-                
-                          
+                while(symbol.length < 2) symbol += ' ';
+                gridDiv.text(symbol)
             }
-            boardString += "\n";
         }
         //console.log(boardString);
-        $("#board").text(boardString);
+    }
+    
+    printBoard(){
+        this.printBoardGrid();
+        return false;
     }
 
     nourishmentDiv(player){
@@ -217,7 +249,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').addClass(item.color).text(item.name)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -233,22 +265,21 @@ class Display{
             if(item.weapon && !player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        //spoof button press...
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.weapon && player.equipped && player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.usable){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('use').on('click',function(){
-                        gameMaster.resolvePlayerInput({originalEvent:{key:slot+1,location:0}});
+                        gameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
@@ -282,7 +313,7 @@ class Display{
             itemValue = '0';
         }
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').addClass(item.color).attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
@@ -335,14 +366,42 @@ class Display{
     }
 
     setCustomControls(){
+        let display = this;
         let customControls = this.customControls;
-        let keys = ['upleft','up','upright','left','wait','right','downleft','down','downright'];
-        keys.forEach((key)=>{
-            $('#'+key+'-input').on('change',()=>{
-                customControls[key] = $('#'+key+'-input').val()+'_0';
-                console.log(customControls);
-            })
+        let inputs = InputManager.inputs;
+        //let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
+        
+        $('#custom-controls-div').html('');
+        inputs.forEach((input)=>{
+            console.log(input);
+            $('#custom-controls-div').append(
+                $('<div>').addClass('custom-input-divs').append(
+                    $('<label>').text(input.name)
+                ).append(
+                    $('<input>').attr('id',input.name+'-input').addClass('control-inputs').val(input.key).click(()=>{
+                        $('#'+input.name+'-input').select();
+                    }).on('keydown',(e)=>{
+                        e.preventDefault();
+                        InputManager.setInput(input.name,e.originalEvent.code)
+                        display.setCustomControls();
+                        $('#'+input.name+'-input').select().focus();
+                    })
+                )
+            )
         })
+
+        $('#preset-div').html('');
+
+        for(const [k,v] of Object.entries(inputVars)){
+            $('#preset-div').append(
+                $('<button>').text(k).on('click',()=>{
+                    InputManager.setInputPreset(k);
+                    display.setCustomControls();
+                })
+            )
+        }
     }
+
+    
     
 }

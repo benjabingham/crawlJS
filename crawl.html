@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>crawlJS</title>
-    <link rel="stylesheet" href="css/crawl.css">
-    <link rel="stylesheet" href="css/dungeon.css">
-    <link rel="stylesheet" href="css/hud.css">
-    <link rel="stylesheet" href="css/inventory.css">
-    <link rel="stylesheet" href="css/town.css">
-    <link rel="stylesheet" href="css/log.css">
+    
+    <link href="https://fonts.cdnfonts.com/css/common-pixel" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/crawl.css?v=1">
+    <link rel="stylesheet" href="css/dungeon.css?v=1">
+    <link rel="stylesheet" href="css/hud.css?v=1">
+    <link rel="stylesheet" href="css/inventory.css?v=1">
+    <link rel="stylesheet" href="css/town.css?v=1">
+    <link rel="stylesheet" href="css/log.css?v=1">
+    <link rel="stylesheet" href="css/color.css?v=1">
+
 
 
   </head>
@@ -19,17 +24,21 @@
     <script src="javascript/vars/ItemVars.js"></script>
     <script src="javascript/vars/MonsterVars.js"></script>
     <script src="javascript/vars/KeywordVars.js"></script>
+    <script src="javascript/vars/InputVars.js"></script>
 
-    <script src="javascript/LootManager.js"></script>
-    <script src="javascript/Shop.js"></script>
-    <script src="javascript/Save.js"></script>
-    <script src="javascript/GameMaster.js"></script>
-    <script src="javascript/EntityManager.js"></script>
-    <script src="javascript/Board.js"></script>
-    <script src="javascript/Player.js"></script>
-    <script src="javascript/Log.js"></script>
-    <script src="javascript/Display.js"></script>
-	<script src="javascript/crawl.js"></script>
+
+    <script src="javascript/LootManager.js?v=1"></script>
+    <script src="javascript/Input.js?v=1"></script>
+    <script src="javascript/Shop.js?v=1"></script>
+    <script src="javascript/Save.js?v=1"></script>
+    <script src="javascript/GameMaster.js?v=1"></script>
+    <script src="javascript/EntityManager.js?v=1"></script>
+    <script src="javascript/Board.js?v=1"></script>
+    <script src="javascript/Player.js?v=1"></script>
+    <script src="javascript/Log.js?v=1"></script>
+    <script src="javascript/Display.js?v=1"></script>
+	<script src="javascript/crawl.js?v=1"></script>
+
     </div>
     <div id ='home-screen'>
         <div id="save-manage-div">
@@ -108,9 +117,9 @@
     
     <div id="dungeon-screen">
         <div id="game-window">
-            <div>
-                <div id="board" tabindex="0"></div> 
-            </div>
+            
+            <div id="board" tabindex="0"></div> 
+            
             <div id="log-window">
                 <div id="log-title">Log</div>
                 <div id="log"></div>
@@ -162,14 +171,12 @@
         click 'new save' to begin
     </div>
 
-    <div id="custom-controls-div">
-        enter custom controls:
-        <br>
-        <input id="upleft-input" class="control-inputs"><input id="up-input" class="control-inputs"><input id="upright-input" class="control-inputs">
-        <br>
-        <input id="left-input" class="control-inputs"><input id="wait-input" class="control-inputs"><input id="right-input" class="control-inputs">
-        <br>
-        <input id="downleft-input" class="control-inputs"><input id="down-input" class="control-inputs"><input id="downright-input" class="control-inputs">
+    <div id="custom-controls-wrapper-div">
+        <div id="preset-div-wrapper">
+            Presets
+            <div id="preset-div"></div>
+        </div>   
+        <div id="custom-controls-div"></div>
     </div>
   </body>
 </html>

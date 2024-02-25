@@ -4,18 +4,39 @@ class LootManager{
             wood:{
                 name:'wooden',
                 flimsy:5,
+<<<<<<< HEAD
                 stunTime: -2,
                 weight:-1,
                 damage:-4,
                 value:.25
+=======
+                stunTime: -1,
+                edged:{
+                    damage:-2
+                },
+                blunt:{
+                    damage:-1
+                },
+                value:.25,
+                color:'woodbrown'
+>>>>>>> color
             },
             bone:{
                 name:'bone',
                 flimsy:8,
+<<<<<<< HEAD
                 stunTime:-2,
                 weight:-1,
                 damage: -3,
                 value:.15
+=======
+                stunTime:-1,
+                edged:{
+                    damage:-1
+                },
+                value:.15,
+                color:'bone'
+>>>>>>> color
             },
             stone:{
                 name:'stone',
@@ -28,7 +49,8 @@ class LootManager{
                 edged:{
                     damage:2
                 },
-                value:.2
+                value:.2,
+                color:'gray'
             },
             obsidian:{
                 name:'obsidian',
@@ -49,7 +71,12 @@ class LootManager{
                 edged:{
                     damage:3
                 },
+<<<<<<< HEAD
                 value:2
+=======
+                value:1,
+                color:'darkgray'
+>>>>>>> color
             },
             rubber:{
                 name:'rubber',
@@ -68,7 +95,8 @@ class LootManager{
                 value:3,
                 edged:{
                     damage:6
-                }
+                },
+                color:'clearblue'
             },
             copper:{
                 name:'copper',
@@ -78,25 +106,40 @@ class LootManager{
             bronze:{
                 name:'bronze',
                 flimsy:2,
+<<<<<<< HEAD
                 edged:{
                     damage:1
                 },
                 value:3
+=======
+                value:1.5,
+                color:'redbrown'
+>>>>>>> color
             },
             iron:{
                 name:'iron',
                 flimsy:1,
+<<<<<<< HEAD
                 edged:{
                     damage:1
                 },
                 value:2.5,
+=======
+                value:1.2,
+                color:'gray'
+>>>>>>> color
             },
             steel:{
                 name:'steel',
                 edged:{
                     damage:2
                 },
+<<<<<<< HEAD
                 value:4.5
+=======
+                value:2,
+                color:'lightgray'
+>>>>>>> color
             },
             ironwood:{
                 name:'ironwood',
@@ -104,10 +147,15 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
+<<<<<<< HEAD
                 edged:{
                     damage:-1
                 },
                 value:6
+=======
+                value:3,
+                color:'redbrown'
+>>>>>>> color
             },
             crystal:{
                 name:'crystal',
@@ -115,7 +163,8 @@ class LootManager{
                 value:8,
                 edged:{
                     damage:8
-                }
+                },
+                color:'purple'
             },
             lightsteel:{
                 name:'lightsteel',
@@ -127,7 +176,12 @@ class LootManager{
                 edged:{
                     damage:2
                 },
+<<<<<<< HEAD
                 value:8
+=======
+                value:3,
+                color:'silver'
+>>>>>>> color
             },
             silver:{
                 name:'silver',
@@ -135,7 +189,13 @@ class LootManager{
                 edged:{
                     damage:-1
                 },
+<<<<<<< HEAD
                 value:10
+=======
+                value:5,
+                value:3,
+                color:'silver'
+>>>>>>> color
             },
             gold:{
                 name:'gold',
@@ -148,7 +208,13 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
+<<<<<<< HEAD
                 value:12
+=======
+                value:6,
+                value:3,
+                color:'gold'
+>>>>>>> color
             },
             Adamantine:{
                 name:'adamantine',
@@ -156,71 +222,91 @@ class LootManager{
                 edged:{
                     damage:2
                 },
+<<<<<<< HEAD
                 value:20
+=======
+                value:10,
+                color:'blue'
+>>>>>>> color
             }
         }
 
         this.treasureMaterials = {
             paper:{
                 name:"tattered paper",
-                value:.05
+                value:.05,
+                color:"bone"
             },
             bone:{
                 name:"bone",
-                value:0.2
+                value:0.2,
+                color:"bone"
             },
             wood:{
                 name:'wooden',
-                value:0.3
+                value:0.3,
+                color:"woodbrown"
             },
             stone:{
                 name:'stone',
-                value:0.4
+                value:0.4,
+                color:"gray"
             },
             
             iron:{
                 name:'iron',
-                value:.6
+                value:.6,
+                color:"gray"
             },
             steel:{
                 name:'steel',
-                value:1
+                value:1,
+                color:"lightgray"
             },
             bronze:{
                 name:'bronze',
-                value:1.2
+                value:1.2,
+                color:"brown"
             },
             lead:{
                 name:'lead',
-                value:2
+                value:2,
+                color:"darkgray"
             },
             copper:{
                 name:'copper',
-                value:3
+                value:3,
+                color:"redbrown"
             },
             nickel:{
                 name:'nickel',
-                value:3.5
+                value:3.5,
+                color:"lightgray"
             },
             tin:{
                 name:'tin',
-                value:4
+                value:4,
+                color:"lightgray"
             },
             sterling:{
                 name:'sterling silver',
-                value:5
+                value:5,
+                color:'silver'
             },
             silver:{
                 name:'silver',
-                value:8
+                value:8,
+                color:"silver"
             },
             gold:{
                 name:'gold',
-                value:10
+                value:10,
+                color:"gold"
             },
             platinum:{
                 name:'platinum',
-                value:20
+                value:20,
+                color:"silver"
             }
         }
 
@@ -379,8 +465,6 @@ class LootManager{
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
 
-        console.log(treasure);
-
         return JSON.parse(JSON.stringify(treasure));
     }
 
@@ -418,6 +502,9 @@ class LootManager{
                         item[key] = Math.floor(item[key]);
                         item[key] = Math.max(item[key], 1);
                     }
+                    break;
+                case 'color':
+                    item[key] = value;
             }
         }
         let lootManager = this;
@@ -440,5 +527,24 @@ class LootManager{
 
     roll(min,max){
         return Math.floor(Math.random()*(max-min+1))+min;
+    }
+
+    getColor(val){
+        let color;
+        if(val <= 3){
+            color = 'brown';
+        }else if (val <= 15){
+            color = 'gray';
+        }else if (val <= 25){
+            color = 'silver';
+        }else if (val <= 35){
+            color = 'gold';
+        }else if (val <= 50){
+            color = 'gold';
+        }else{
+            color = 'purple';
+        }
+
+        return color;
     }
 }

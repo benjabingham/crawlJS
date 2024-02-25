@@ -11,7 +11,7 @@ html{
 
 button{
     color: rgb(15, 12, 0);
-    background-image:linear-gradient(#fde8cc,#a7a089)
+    background-image:linear-gradient(#fde8cc,#beb79d)
 }
 
 button:hover{
@@ -30,13 +30,45 @@ button:hover{
     /*font-style:italic;*/
     color:#ddd;
 
+    height:1rem;
+
     p{
         margin:0px;
     }
 }
 
+#custom-controls-wrapper-div{
+    width:600px;
+    margin:auto;
+    text-align:center;
+    padding:1rem;
+    background:#ddd;
+    color:#222;
+}
+
+#custom-controls-div{
+    padding:1rem;
+    width:fit-content;
+    margin-left:125px;
+    
+}
+
 .control-inputs{
-    width:1rem;
+    width:5rem;
+    height:1rem;
+    font-size: small;
+    text-align:center;
+}
+
+.custom-input-divs{
+    text-align:right;
+}
+
+#preset-div{
+    button{
+        padding:5px;
+        margin:5px;
+    }
 }
 
 

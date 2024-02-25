@@ -1,0 +1,51 @@
+.clearblue{
+    color:rgba(0, 255, 255, 0.452)
+}
+
+.bone{
+    color:rgb(160, 138, 105)
+}
+
+.woodbrown{
+    color:rgb(133, 102, 66);
+}
+
+.brown{
+    color:rgb(95, 65, 31);
+}
+
+.redbrown{
+    color:rgb(95, 49, 31);
+}
+
+.darkgray{
+    color:#303030;
+}
+
+.gray{
+    color:#4b4b4b;
+}
+
+.lightgray{
+    color:#636363;
+}
+
+.silver{
+    color:rgb(139, 137, 134);
+}
+
+.gold{
+    color:rgb(128, 98, 0);
+}
+
+.blue{
+    color:rgb(0, 0, 155);
+}
+
+.purple{
+    color:purple;
+}
+
+.green{
+    color:rgb(48, 105, 1)
+}

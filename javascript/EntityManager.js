@@ -96,7 +96,7 @@ class EntityManager{
         if (rotation % 4 == 1){
             symbol = '/';
         }else if (rotation % 4 == 2){
-            symbol = '-';
+            symbol = '—';
         }else if (rotation % 4 == 3){
             symbol = '\\';
         }

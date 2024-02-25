@@ -65,13 +65,76 @@ class Display{
 
     boardDisplayInit(){
         let boardDiv = $("#board");
-        boardDiv.css('width',17*1.8+"rem");
+       // boardDiv.css('width',17*1.8+"rem");
+        this.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
-        $('#log').css('height',17*2-2.5+"rem");
+        //$('#log').css('height',17*2-2.5+"rem");
+    }
+
+    generateBoardGrid(){
+        $('#board').html('');
+        let boardArray = this.board.boardArray;
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                $('#board').append(
+                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY)
+                )                 
+            }
+        }
+    }
+
+    printBoardGrid(){
+        let boardArray = this.board.boardArray;
+        let player = this.entityManager.player;
+        let playerPos = this.entityManager.getEntity('player');
+        
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off();
+                let symbol = '';
+                let x = (displayX-8) + playerPos.x;
+                let y = (displayY-8) + playerPos.y;
+                //out of bounds
+                if(this.board.hasPlayerLos({x:x, y:y})){
+                    if(boardArray[y][x]){
+                        if(this.board.wallArray[y][x]){
+                            gridDiv.addClass('grid-wall')
+                        }
+                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
+                        if(boardArray[y][x].name){
+                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
+                                $('.hint-divs').html('').append(
+                                    $('<p>').text(boardArray[y][x].name)
+                                )
+                            }).off('mouseleave').on('mouseleave',()=>{
+                                $('.hint-divs').html('');
+                            })
+                        }
+                    }
+                    if(!this.board.isSpace(x,y)){
+                        if(this.board.hasAdjacentEmptySpace(x,y)){
+                            gridDiv.addClass('grid-exit');
+                        }else{
+                            gridDiv.addClass('grid-dark')
+                        }
+                    }
+                //out of sight
+                }else{
+                    gridDiv.addClass('grid-dark')
+                }
+                while(symbol.length < 2) symbol += ' ';
+                gridDiv.text(symbol)
+            }
+        }
+        //console.log(boardString);
     }
     
     printBoard(){
+        this.printBoardGrid();
+        return false;
         let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
@@ -97,10 +160,7 @@ class Display{
                     }
                 }else{
                     boardString += '▓▓';
-                }
-
-                
-                          
+                }                 
             }
             boardString += "\n";
         }

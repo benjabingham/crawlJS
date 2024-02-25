@@ -4,25 +4,17 @@ class LootManager{
             wood:{
                 name:'wooden',
                 flimsy:5,
-                stunTime: -1,
-                edged:{
-                    damage:-3
-                },
-                blunt:{
-                    damage:-2
-                },
+                stunTime: -2,
+                weight:-1,
+                damage:-4,
                 value:.25
             },
             bone:{
                 name:'bone',
                 flimsy:8,
-                stunTime:-1,
-                edged:{
-                    damage:-2
-                },
-                blunt:{
-                    damage:-1
-                },
+                stunTime:-2,
+                weight:-1,
+                damage: -3,
                 value:.15
             },
             stone:{

@@ -194,7 +194,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:6,
+                weight:5,
                 type:{
                     edged:true,
                     long:true

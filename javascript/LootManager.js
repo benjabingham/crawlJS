@@ -4,39 +4,21 @@ class LootManager{
             wood:{
                 name:'wooden',
                 flimsy:5,
-<<<<<<< HEAD
                 stunTime: -2,
                 weight:-1,
                 damage:-4,
-                value:.25
-=======
-                stunTime: -1,
-                edged:{
-                    damage:-2
-                },
-                blunt:{
-                    damage:-1
-                },
                 value:.25,
                 color:'woodbrown'
->>>>>>> color
+
             },
             bone:{
                 name:'bone',
                 flimsy:8,
-<<<<<<< HEAD
                 stunTime:-2,
                 weight:-1,
                 damage: -3,
-                value:.15
-=======
-                stunTime:-1,
-                edged:{
-                    damage:-1
-                },
                 value:.15,
                 color:'bone'
->>>>>>> color
             },
             stone:{
                 name:'stone',
@@ -52,6 +34,7 @@ class LootManager{
                 value:.2,
                 color:'gray'
             },
+            
             obsidian:{
                 name:'obsidian',
                 flimsy:5,
@@ -71,12 +54,8 @@ class LootManager{
                 edged:{
                     damage:3
                 },
-<<<<<<< HEAD
-                value:2
-=======
-                value:1,
+                value:2,
                 color:'darkgray'
->>>>>>> color
             },
             rubber:{
                 name:'rubber',
@@ -101,45 +80,35 @@ class LootManager{
             copper:{
                 name:'copper',
                 flimsy:3,
-                value:2
+                value:2,
+                color:'redbrown'
             },
             bronze:{
                 name:'bronze',
                 flimsy:2,
-<<<<<<< HEAD
                 edged:{
                     damage:1
                 },
-                value:3
-=======
-                value:1.5,
-                color:'redbrown'
->>>>>>> color
+                value:3,
+                color:'brown'
             },
             iron:{
                 name:'iron',
                 flimsy:1,
-<<<<<<< HEAD
                 edged:{
                     damage:1
                 },
                 value:2.5,
-=======
-                value:1.2,
                 color:'gray'
->>>>>>> color
             },
             steel:{
                 name:'steel',
                 edged:{
                     damage:2
                 },
-<<<<<<< HEAD
-                value:4.5
-=======
+                value:4.5,
                 value:2,
                 color:'lightgray'
->>>>>>> color
             },
             ironwood:{
                 name:'ironwood',
@@ -147,15 +116,12 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
-<<<<<<< HEAD
                 edged:{
                     damage:-1
                 },
-                value:6
-=======
+                value:6,
                 value:3,
                 color:'redbrown'
->>>>>>> color
             },
             crystal:{
                 name:'crystal',
@@ -176,12 +142,9 @@ class LootManager{
                 edged:{
                     damage:2
                 },
-<<<<<<< HEAD
-                value:8
-=======
-                value:3,
+                value:8,
                 color:'silver'
->>>>>>> color
+
             },
             silver:{
                 name:'silver',
@@ -189,13 +152,8 @@ class LootManager{
                 edged:{
                     damage:-1
                 },
-<<<<<<< HEAD
-                value:10
-=======
-                value:5,
-                value:3,
+                value:10,
                 color:'silver'
->>>>>>> color
             },
             gold:{
                 name:'gold',
@@ -208,13 +166,8 @@ class LootManager{
                 blunt:{
                     damage:2
                 },
-<<<<<<< HEAD
-                value:12
-=======
-                value:6,
-                value:3,
+                value:12,
                 color:'gold'
->>>>>>> color
             },
             Adamantine:{
                 name:'adamantine',
@@ -222,37 +175,41 @@ class LootManager{
                 edged:{
                     damage:2
                 },
-<<<<<<< HEAD
-                value:20
-=======
-                value:10,
+                value:20,
                 color:'blue'
->>>>>>> color
             }
         }
 
         this.treasureMaterials = {
             paper:{
-                name:"tattered paper",
-                value:.05,
+                name:"paper",
+                value:.1,
                 color:"bone"
             },
             bone:{
                 name:"bone",
-                value:0.2,
+                value:0.3,
                 color:"bone"
             },
             wood:{
                 name:'wooden',
-                value:0.3,
+                value:0.4,
                 color:"woodbrown"
             },
             stone:{
                 name:'stone',
-                value:0.4,
+                value:0.5,
                 color:"gray"
             },
-            
+            obsidian:{
+                name:'obsidian',
+                value:0.6,
+            },
+            sandstone:{
+                name:'sandstone',
+                value:0.5,
+                color:'bone'
+            },
             iron:{
                 name:'iron',
                 value:.6,
@@ -308,6 +265,22 @@ class LootManager{
                 value:20,
                 color:"silver"
             }
+        }
+
+        this.treasureModifiers = {
+            decrepit:{
+                name:'distressed',
+                value:.4
+            },
+            distressed:{
+                name:'distressed',
+                value:.6
+            },
+            pristine:{
+                name:'pristine',
+                value:1.5
+            },
+            
         }
 
         this.weaponModifiers = {
@@ -398,6 +371,9 @@ class LootManager{
             }
         }
 
+        this.getTreasureModifier(treasure, tier);
+
+
         return treasure;
     }
 
@@ -408,6 +384,18 @@ class LootManager{
         this.getIsWorn(weapon, tier);
 
         return weapon;
+    }
+
+    getTreasureModifier(treasure, tier){
+        let random = this.roll(1,99);
+        random += tier*5;
+        if(random < 30){
+            this.applyModifier(treasure, this.treasureModifiers.decrepit)
+        }else if (random < 60){
+            this.applyModifier(treasure, this.treasureModifiers.distressed)
+        }else if (random >= 90){
+            this. applyModifier(treasure, this.treasureModifiers.pristine)
+        }
     }
 
     getWeaponMaterial(tier){

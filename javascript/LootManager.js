@@ -429,9 +429,9 @@ class LootManager{
     getColor(val){
         let color;
         if(val <= 3){
-            color = 'gray';
+            color = 'brown';
         }else if (val <= 15){
-            color = 'black';
+            color = 'gray';
         }else if (val <= 35){
             color = 'gold';
         }else if (val <= 60){

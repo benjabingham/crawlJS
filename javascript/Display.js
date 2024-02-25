@@ -93,7 +93,7 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off();
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green').off();
                 let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
@@ -112,6 +112,9 @@ class Display{
                             }).off('mouseleave').on('mouseleave',()=>{
                                 $('.hint-divs').html('');
                             })
+                        }
+                        if(boardArray[y][x].color){
+                            gridDiv.addClass(boardArray[y][x].color)
                         }
                     }
                     if(!this.board.isSpace(x,y)){
@@ -135,37 +138,6 @@ class Display{
     printBoard(){
         this.printBoardGrid();
         return false;
-        let boardArray = this.board.boardArray;
-        let player = this.entityManager.player;
-        let playerPos = this.entityManager.getEntity('player');
-        let boardString = "";
-        
-        for(let displayY=0; displayY<17; displayY++){
-            //boardString += '|'
-            for(let displayX=0; displayX<17; displayX++){
-                let symbol = false;
-                let x = (displayX-8) + playerPos.x;
-                let y = (displayY-8) + playerPos.y;
-                if( x < 0 || y < 0 || y >= boardArray.length || x >= boardArray[y].length){
-                    boardString += '▓▓';
-                }else if(this.board.hasPlayerLos({x:x, y:y})){
-                    if(boardArray[y][x]){
-                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
-                        boardString += symbol;
-                    }else{
-                        boardString += '.';
-                    }
-                    if(!symbol || symbol.length < 2){
-                        boardString += ' ';  
-                    }
-                }else{
-                    boardString += '▓▓';
-                }                 
-            }
-            boardString += "\n";
-        }
-        //console.log(boardString);
-        $("#board").text(boardString);
     }
 
     nourishmentDiv(player){

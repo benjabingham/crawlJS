@@ -19,7 +19,6 @@ class GameMaster{
     }
 
     startGame(){
-        console.log(this.save);
         let player = this.player;
         let log = this.log;
         let entityManager = this.entityManager;
@@ -128,7 +127,6 @@ class GameMaster{
     }
 
     useItem(event){
-        console.log(event);
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
@@ -198,7 +196,6 @@ class GameMaster{
     postPlayerAction(){     
         let swordId = this.entityManager.getProperty('player','sword')
         this.entityManager.placeSword(swordId);   
-        console.log(this.entityManager.getEntity(swordId));
         if(!this.entityManager.skipBehaviors){
             this.resolveEntityBehaviors();
         }
@@ -214,7 +211,6 @@ class GameMaster{
         }
         this.log.printLog();  
         this.log.clearNotices();
-        console.log(this.entityManager.skipBehaviors);
         this.entityManager.skipBehaviors = false;
     }
     

@@ -93,7 +93,7 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green').off();
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green clearblue bone woodbrown redbrown darkgray lightgray silver').off();
                 let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;

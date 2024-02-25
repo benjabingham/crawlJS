@@ -212,7 +212,9 @@ class Board{
     }
 
     getLineOfSight(x,y){
-        return this.losArray[y][x];
+        if(this.losArray[y]){
+            return this.losArray[y][x];
+        }
     }
 
     setDimensions(width,height){

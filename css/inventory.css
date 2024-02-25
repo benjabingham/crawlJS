@@ -36,7 +36,7 @@
     margin-left:3px;
     display:flex;
     height:fit-content;
-    background-color: #ddcaa4;
+    background-color: #F0DFC2;
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid rgb(124, 117, 52);
     /*border:1px solid gray*/
@@ -44,7 +44,7 @@
 
 .inventory-slot:hover{
     cursor: pointer;
-    background-color: #ccbb99;
+    background-color: #E8D6BD;
     /*background-image: linear-gradient(#ddcaa4,#aa9665);*/
 
 }

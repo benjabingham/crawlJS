@@ -10,6 +10,11 @@
     margin:auto;
     border:1px solid black;
     width:fit-content;
+    height:510px;
+}
+
+#board:focus{
+    border:none;
 }
 
 #board{
@@ -17,12 +22,70 @@
     background-color: #d9d2bf;
     color: #3d3936;
     */
+    background-color:#222;
     white-space:pre-line;
     font-family: monospace;
     font-size:xx-large;
     float:left;
+
+    width:510px !important;
+    height:510px !important;
+
+    display:grid;
+    grid-template-columns: repeat(17, 1fr);
+    grid-gap: 0px;
+    border-collapse: collapse;
+
+    div:not(.grid-dark){
+        background-color:#ddd;
+    }
+
 }
 
-#board:focus{
-    border:1px solid #BBBBBB;
+.board-grid-div{
+    font-size:1.5rem;
+    width:30px;
+    height:30px;
+    text-align:center;
+    /*overflow:hidden;*/
+    border:1px solid #2222221c;
+    outline-offset:1px;
+    margin:auto;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+/*
+.grid-dark::after{
+    content:'▓▓';
+}
+*/
+/*
+.grid-wall::after{
+    content:'▒▒';
+    margin-left:-1.8rem;
+}*/
+
+.grid-dark{
+    background-color:#222;
+
+}
+
+.grid-wall{
+    background:
+    repeating-conic-gradient(#555 0% 25%, #454545 0% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
+}
+
+.grid-exit{
+    background: 
+    repeating-conic-gradient(#555 0% 25%, transparent 0% 50%) 
+      50% / 20px;
+    background-size:100% 100%;
+    border:none;
+}
+
+.grid-hint:hover{
+    cursor: pointer;
 }

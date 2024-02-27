@@ -148,7 +148,7 @@ class Board{
     }
 
     LosInit(){
-        for(let i=0;i<this.height;i++){
+        for(let i=-1;i<this.height+1;i++){
             this.losArray[i] = [];
             for(let j=0;j<this.width;j++){
                 this.losArray[i][j] = false;
@@ -210,13 +210,13 @@ class Board{
     }
 
     setLineOfSight(x,y, los){
-        if(this.isSpace(x,y)){
-            this.losArray[y][x] = los;
-        }
+        this.losArray[y][x] = los;
     }
 
     getLineOfSight(x,y){
-        return this.losArray[y][x];
+        if(this.losArray[y]){
+            return this.losArray[y][x];
+        }
     }
 
     setDimensions(width,height){
@@ -245,6 +245,19 @@ class Board{
 
     hasPlayerLos(pos){
         return this.hasLight(pos) && this.getLineOfSight(pos.x, pos.y);
+    }
+
+    hasAdjacentEmptySpace(x,y){
+        let result = false;
+        this.entityManager.translations.forEach((translation)=>{
+            let xToCheck = x+translation.x;
+            let yToCheck = y+translation.y;
+            if(this.isSpace(xToCheck,yToCheck) && !this.wallArray[y+translation.y][x+translation.x]){
+                result = true;
+            }
+        })
+
+        return result;
     }
     
 }

@@ -601,6 +601,10 @@ class EntityManager{
         }
         let roster = this.currentMap.roster;
         roster[entity.index].alive = false;
+
+        //add blood
+        let lastPosition = this.history[this.history.length-1].entities[entity.id];
+        this.board.detailArray[lastPosition.y][lastPosition.x] = {blood:true};
     };
 
     equipWeapon(weapon){

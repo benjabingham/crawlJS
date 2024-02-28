@@ -99,7 +99,8 @@ class Display{
             let y = playerPos.y + value.y;
             let gridSquare = $('#board-grid-'+x+'-'+y);
 
-            gridSquare.addClass('control-grid').on('click',()=>{
+            gridSquare.addClass('control-grid').on('click',(e)=>{
+                e.preventDefault();
                 let event = {type:key}
                 if(key == 'wait'){
                     gameMaster.wait(event);

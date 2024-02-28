@@ -1,6 +1,7 @@
 class Display{
-    constructor(entityManager){
+    constructor(entityManager, board){
         this.entityManager = entityManager;
+        this.board = board;
         this.customControls = this.entityManager.gameMaster.customControls;
         //this.setCustomControls();
 
@@ -73,7 +74,7 @@ class Display{
 
     generateBoardGrid(){
         $('#board').html('');
-        let boardArray = Board.boardArray;
+        let boardArray = this.board.boardArray;
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -85,7 +86,7 @@ class Display{
     }
 
     printBoardGrid(){
-        let boardArray = Board.boardArray;
+        let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
         
@@ -97,9 +98,9 @@ class Display{
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
                 //out of bounds
-                if(Board.hasPlayerLos({x:x, y:y})){
+                if(this.board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y][x]){
-                        if(Board.wallArray[y][x]){
+                        if(this.board.wallArray[y][x]){
                             gridDiv.addClass('grid-wall')
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
@@ -113,8 +114,8 @@ class Display{
                             })
                         }
                     }
-                    if(!Board.isSpace(x,y)){
-                        if(Board.hasAdjacentEmptySpace(x,y)){
+                    if(!this.board.isSpace(x,y)){
+                        if(this.board.hasAdjacentEmptySpace(x,y)){
                             gridDiv.addClass('grid-exit');
                         }else{
                             gridDiv.addClass('grid-dark')
@@ -134,7 +135,7 @@ class Display{
     printBoard(){
         this.printBoardGrid();
         return false;
-        let boardArray = Board.boardArray;
+        let boardArray = this.board.boardArray;
         let player = this.entityManager.player;
         let playerPos = this.entityManager.getEntity('player');
         let boardString = "";
@@ -147,7 +148,7 @@ class Display{
                 let y = (displayY-8) + playerPos.y;
                 if( x < 0 || y < 0 || y >= boardArray.length || x >= boardArray[y].length){
                     boardString += '▓▓';
-                }else if(Board.hasPlayerLos({x:x, y:y})){
+                }else if(this.board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y][x]){
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         boardString += symbol;

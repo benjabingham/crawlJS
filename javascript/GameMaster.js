@@ -4,8 +4,9 @@ class GameMaster{
         this.log = new Log();
         this.save = save;
         this.entityManager = new EntityManager(this.player,this.log, this);
+        this.board = this.entityManager.board;
         this.customControls = {};
-        this.display = new Display(this.entityManager, Board);
+        this.display = new Display(this.entityManager, this.board);
         this.dungeonId = 0;
         this.shop = new Shop(this);
     }
@@ -22,7 +23,7 @@ class GameMaster{
         let player = this.player;
         let log = this.log;
         let entityManager = this.entityManager;
-        let board = Board;
+        let board = this.board;
         let display = this.display;
         let gm = this;
 
@@ -66,14 +67,14 @@ class GameMaster{
         let direction = false;
         if (x < 0){
             direction = "left"
-        }else if (x >= Board.width){
+        }else if (x >= this.board.width){
             direction = "right"
         }else if (y < 0){
             direction = "up";
-        }else if (y >= Board.height){
+        }else if (y >= this.board.height){
             direction = "down"
         }
-        let destination = Board.destinations[direction]
+        let destination = this.board.destinations[direction]
         if(!destination){
             return false;
         }
@@ -202,9 +203,9 @@ class GameMaster{
             this.resolveEntityBehaviors();
         }
 
-        Board.placeEntities(this.log);
+        this.board.placeEntities(this.log);
         this.entityManager.saveSnapshot();
-        Board.calculateLosArray(this.entityManager.getEntity('player'));
+        this.board.calculateLosArray(this.entityManager.getEntity('player'));
         this.updateDisplay();
         if(!this.entityManager.skipBehaviors){
             this.log.turnCounter++;

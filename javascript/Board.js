@@ -1,116 +1,116 @@
 class Board{
-    constructor(entityManager, width = 20,height = 20){
-        this.width = width;
-        this.height = height;
+    static width;
+    static height;
 
-        this.boardArray = [];
-        this.wallArray = [];
-        this.losArray = [];
-        this.boardInit();
+    static boardArray = [];
+    static wallArray = [];
+    static losArray = [];
 
-        this.entityManager = entityManager;
-        this.destinations = {};
-    }
+    static entityManager;
+    static destinations = {};
 
-    boardInit(){
-        this.boardArray = [];
-        this.wallArray = [];
-        //this.LosInit();
-        for(let i=0;i<this.height;i++){
-            this.boardArray[i] = [];
-            this.wallArray[i] = [];
-            for(let j=0;j<this.width;j++){
-                this.boardArray[i][j] = false;
-                this.wallArray[i][j] = false;
+    static boardInit(entityManager){
+        if(entityManager){
+            Board.entityManager = entityManager;
+        }
+        Board.boardArray = [];
+        Board.wallArray = [];
+        //Board.LosInit();
+        for(let i=0;i<Board.height;i++){
+            Board.boardArray[i] = [];
+            Board.wallArray[i] = [];
+            for(let j=0;j<Board.width;j++){
+                Board.boardArray[i][j] = false;
+                Board.wallArray[i][j] = false;
             }
         }
     }
 
-    placeEntities(){
+    static placeEntities(){
         console.log('placeEntities');
-        let entities = this.entityManager.entities;
-        this.boardInit();
+        let entities = Board.entityManager.entities;
+        Board.boardInit();
         for (const [k,entity] of Object.entries(entities)){
             //console.log(entity);
             
             let x = entity.x;
             let y = entity.y;
-            if(this.itemAt(x,y).id != entity.id && this.isSpace(x,y)){
-                let itemCase = this.itemAt(x,y).item  || entity.item;
+            if(Board.itemAt(x,y).id != entity.id && Board.isSpace(x,y)){
+                let itemCase = Board.itemAt(x,y).item  || entity.item;
                 if(entity.behavior == 'wall'){
-                    this.wallArray[y][x] = true;
+                    Board.wallArray[y][x] = true;
                 }else{
-                    //this.wallArray[y][x] = false;
+                    //Board.wallArray[y][x] = false;
                 }
-                if(!this.isOccupiedSpace(x,y) || entity.behavior == 'sword' || itemCase){
+                if(!Board.isOccupiedSpace(x,y) || entity.behavior == 'sword' || itemCase){
                     if(itemCase){
-                        if(this.itemAt(x,y).item){
-                            this.entityManager.pickUpItem(entity,this.itemAt(x,y));
-                            this.placeEntity(entity, x, y);
-                        }else if(entity.item && this.itemAt(x,y)){
-                            this.entityManager.pickUpItem(this.itemAt(x,y),entity);
+                        if(Board.itemAt(x,y).item){
+                            Board.entityManager.pickUpItem(entity,Board.itemAt(x,y));
+                            Board.placeEntity(entity, x, y);
+                        }else if(entity.item && Board.itemAt(x,y)){
+                            Board.entityManager.pickUpItem(Board.itemAt(x,y),entity);
                         }else{
-                            this.placeEntity(entity, x, y);
+                            Board.placeEntity(entity, x, y);
                         }
                     }else{
-                        this.placeEntity(entity, x, y);
+                        Board.placeEntity(entity, x, y);
                     }
                 }else{
                     console.log("ENTITY OVERWRITE");
                     console.log(entity);
-                    console.log(this.itemAt(x,y));
+                    console.log(Board.itemAt(x,y));
                 }   
             } 
         };
     }
 
-    updateSpace(x,y){
-        let entities = this.entityManager.entities;
+    static updateSpace(x,y){
+        let entities = Board.entityManager.entities;
         for (const [k,entity] of Object.entries(entities)){
             //console.log(entity);
             if(entity.x == x && entity.y == y){
-                this.placeEntity(entity,x,y);
+                Board.placeEntity(entity,x,y);
             }
         }
     }
 
-    isOpenSpace(x,y){
-        return (this.isSpace(x,y) && (!this.itemAt(x,y) || this.itemAt(x,y).item));
+    static isOpenSpace(x,y){
+        return (Board.isSpace(x,y) && (!Board.itemAt(x,y) || Board.itemAt(x,y).item));
     }
 
-    isOccupiedSpace(x,y){
-        return (this.isSpace(x,y) && this.itemAt(x,y) && !this.itemAt(x,y).item);
+    static isOccupiedSpace(x,y){
+        return (Board.isSpace(x,y) && Board.itemAt(x,y) && !Board.itemAt(x,y).item);
     }
 
-    isSpace(x,y){
-        return (y >= 0 && x >= 0 && y < this.height && x < this.width);
+    static isSpace(x,y){
+        return (y >= 0 && x >= 0 && y < Board.height && x < Board.width);
     }
 
-    itemAt(x,y){
-        if(this.isSpace(x,y)){
-            return this.boardArray[y][x];
+    static itemAt(x,y){
+        if(Board.isSpace(x,y)){
+            return Board.boardArray[y][x];
         }else{
             return false;
         }
     }
 
-    placeEntity(entity, x, y){
+    static placeEntity(entity, x, y){
 
-        if (this.isSpace(x,y)){
-            if(this.isOccupiedSpace(x,y) && !this.itemAt(x,y).item){
+        if (Board.isSpace(x,y)){
+            if(Board.isOccupiedSpace(x,y) && !Board.itemAt(x,y).item){
                 //console.log('ENTITY OVERWRITE');
                 //console.log(entity);
-                //console.log(this.itemAt(x,y));
+                //console.log(Board.itemAt(x,y));
             }
-            this.boardArray[y][x] = entity;
+            Board.boardArray[y][x] = entity;
         }
     }
 
-    clearSpace(x, y){
-        this.placeEntity(false, x, y);
+    static clearSpace(x, y){
+        Board.placeEntity(false, x, y);
     }
 
-    drawLos(playerx,playery,x,y){
+    static drawLos(playerx,playery,x,y){
         //console.log('NEW SPACE');
 
         let lineOfSight = true;
@@ -118,13 +118,13 @@ class Board{
         let fromPoint = {x:playerx, y:playery};
         let targetPoint = {x:x, y:y};
 
-        let line = this.getLine(fromPoint,targetPoint);
+        let line = Board.getLine(fromPoint,targetPoint);
         
         line.forEach((point) =>{
             //console.log(point);
             if(lineOfSight){
-                this.setLineOfSight(point.x, point.y, lineOfSight);
-                if(this.wallAt(point.x,point.y)){
+                Board.setLineOfSight(point.x, point.y, lineOfSight);
+                if(Board.wallAt(point.x,point.y)){
                     lineOfSight = false;
                 }
             }
@@ -134,27 +134,27 @@ class Board{
         })
 
         if(lineOfSight){
-            this.setLineOfSight(targetPoint.x, targetPoint.y, lineOfSight);
+            Board.setLineOfSight(targetPoint.x, targetPoint.y, lineOfSight);
         }
 
         return lineOfSight;
     }
 
-    pointCompare(point1, point2){
+    static pointCompare(point1, point2){
         return (point1.x == point2.x && point1.y == point2.y);
     }
 
-    LosInit(){
-        for(let i=-1;i<this.height+1;i++){
-            this.losArray[i] = [];
-            for(let j=0;j<this.width;j++){
-                this.losArray[i][j] = false;
+    static LosInit(){
+        for(let i=-1;i<Board.height+1;i++){
+            Board.losArray[i] = [];
+            for(let j=0;j<Board.width;j++){
+                Board.losArray[i][j] = false;
             }
         }
     }
 
-    calculateLosArray(player){
-        this.LosInit();
+    static calculateLosArray(player){
+        Board.LosInit();
         let losDistance = 25
         let losMin = 8-losDistance
         let losMax = 8+losDistance
@@ -163,13 +163,13 @@ class Board{
                 if(displayX == losMin || displayY == losMin || displayX == losMax || displayY == losMax){
                     let x = (displayX-8) + player.x;
                     let y = (displayY-8) + player.y;
-                    this.drawLos(player.x, player.y, x, y);
+                    Board.drawLos(player.x, player.y, x, y);
                 }
             }
         }
     }
 
-    getLine(point1,point2){
+    static getLine(point1,point2){
         let xdif = point2.x - point1.x;
         let ydif = point2.y - point1.y;
         
@@ -199,57 +199,57 @@ class Board{
 
     }
 
-    wallAt(x,y){
-        if(!this.isSpace(x,y)){
+    static wallAt(x,y){
+        if(!Board.isSpace(x,y)){
             return false;
         }
-        return this.wallArray[y][x];
+        return Board.wallArray[y][x];
     }
 
-    setLineOfSight(x,y, los){
-        this.losArray[y][x] = los;
+    static setLineOfSight(x,y, los){
+        Board.losArray[y][x] = los;
     }
 
-    getLineOfSight(x,y){
-        if(this.losArray[y]){
-            return this.losArray[y][x];
+    static getLineOfSight(x,y){
+        if(Board.losArray[y]){
+            return Board.losArray[y][x];
         }
     }
 
-    setDimensions(width,height){
-        this.width = width;
-        this.height = height;
+    static setDimensions(width,height){
+        Board.width = width;
+        Board.height = height;
     }
 
-    getTrueDistance(pos1, pos2){
+    static getTrueDistance(pos1, pos2){
         let a2 = Math.abs(pos1.x - pos2.x)**2;
         let b2 = Math.abs(pos1.y - pos2.y)**2;
         let distance = Math.sqrt(a2+b2);
-        //let line = this.getLine(pos1,pos2);
+        //let line = Board.getLine(pos1,pos2);
         //return line.length;
         return Math.floor(distance);
     }
 
-    hasLight(pos){
-        let playerEntity = this.entityManager.getEntity('player');
-        let player = this.entityManager.player
+    static hasLight(pos){
+        let playerEntity = Board.entityManager.getEntity('player');
+        let player = Board.entityManager.player
         let lightDistance = player.light+1;
-        let distance = this.getTrueDistance(pos,playerEntity);
+        let distance = Board.getTrueDistance(pos,playerEntity);
 
         return lightDistance >= distance;
         
     }
 
-    hasPlayerLos(pos){
-        return this.hasLight(pos) && this.getLineOfSight(pos.x, pos.y);
+    static hasPlayerLos(pos){
+        return Board.hasLight(pos) && Board.getLineOfSight(pos.x, pos.y);
     }
 
-    hasAdjacentEmptySpace(x,y){
+    static hasAdjacentEmptySpace(x,y){
         let result = false;
-        this.entityManager.translations.forEach((translation)=>{
+        Board.entityManager.translations.forEach((translation)=>{
             let xToCheck = x+translation.x;
             let yToCheck = y+translation.y;
-            if(this.isSpace(xToCheck,yToCheck) && !this.wallArray[y+translation.y][x+translation.x]){
+            if(Board.isSpace(xToCheck,yToCheck) && !Board.wallArray[y+translation.y][x+translation.x]){
                 result = true;
             }
         })

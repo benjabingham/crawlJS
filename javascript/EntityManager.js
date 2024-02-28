@@ -12,7 +12,7 @@ class EntityManager{
             {x:-1,y:0},
             {x:-1,y:-1}
         ];
-        this.board = new Board(this);
+        Board.boardInit(this);
         this.player = player;
         this.log = log;
         this.history = [];
@@ -121,8 +121,8 @@ class EntityManager{
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
     
-        if(this.board.isOccupiedSpace(x,y)){
-            let target = this.board.itemAt(x,y);
+        if(Board.isOccupiedSpace(x,y)){
+            let target = Board.itemAt(x,y);
             if(target.id != id && target.behavior != 'wall'){
                 this.attack(sword,target);
                 if (ownerId == 'player'){
@@ -192,13 +192,13 @@ class EntityManager{
         x += entity.x;
         y += entity.y;
     
-        if(this.board.isSpace(x,y) && this.board.isOpenSpace(x,y)){
+        if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
             this.setPosition(id,x,y);
             return true;
-        }else if(this.board.itemAt(x,y) && this.board.itemAt(x,y).container){
-            this.lootContainer(entity,this.board.itemAt(x,y));
+        }else if(Board.itemAt(x,y) && Board.itemAt(x,y).container){
+            this.lootContainer(entity,Board.itemAt(x,y));
             return true;
-        }else if(!this.board.isSpace(x,y) && id == "player"){
+        }else if(!Board.isSpace(x,y) && id == "player"){
             this.gameMaster.travel(x,y);
             return true;
         }
@@ -262,19 +262,19 @@ class EntityManager{
     
         let targetX = entity.x+x;
         let targetY = entity.y+y
-        let targetItem = this.board.itemAt(targetX, targetY);
+        let targetItem = Board.itemAt(targetX, targetY);
 
         if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.behavior == "wall"){
             this.attack(entity,targetItem);
         }
 
-        if(targetItem.behavior == "sword" && !this.board.wallAt(targetX, targetY)){
+        if(targetItem.behavior == "sword" && !Board.wallAt(targetX, targetY)){
             this.beat(entity,targetItem);
         }
     
-        if(!this.moveEntity(id, x, y, this.board)){
-            this.moveEntity(id, 0, y, this.board);
-            this.moveEntity(id, x, 0, this.board);
+        if(!this.moveEntity(id, x, y, Board)){
+            this.moveEntity(id, 0, y, Board);
+            this.moveEntity(id, x, 0, Board);
         }
         
     }
@@ -337,8 +337,8 @@ class EntityManager{
         //space must be open AND further from attacker's last position
         let furtherSpace = (this.getOrthoDistance(knockerPos, knocked) < this.getOrthoDistance(knockerPos,{x:x, y:y}))
         let backupSpace = false;
-        while((!this.board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
-            if(this.board.isOpenSpace(x,y) && !backupSpace){
+        while((!Board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
+            if(Board.isOpenSpace(x,y) && !backupSpace){
                 backupSpace = {x:x, y:y};
             }
 
@@ -375,7 +375,7 @@ class EntityManager{
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
         let counter = 1;
-        while((this.board.itemAt(x,y).behavior != 'wall' && this.board.itemAt(x,y)) && counter < 3){
+        while((Board.itemAt(x,y).behavior != 'wall' && Board.itemAt(x,y)) && counter < 3){
             rotation = (sword.rotation + 8 + direction) % 8;
             translation = this.translations[rotation];
             x = owner.x + translation.x;
@@ -384,7 +384,7 @@ class EntityManager{
             counter++;
         }
 
-        if(this.board.itemAt(x,y).behavior == 'wall' || !this.board.itemAt(x,y)){
+        if(Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y)){
             this.transmitMessage('sword knocked!', 'danger');
             sword.rotation = rotation;
             this.placeSword(sword.id);
@@ -412,7 +412,7 @@ class EntityManager{
         for(let i = 0; i < 8; i++){
             let distance = this.getOrthoDistance({x:x,y:y},pos1)+this.getOrthoDistance({x:x,y:y},pos2);
 
-            let validSpace = (this.board.itemAt(x,y).behavior == 'wall' || !this.board.itemAt(x,y))
+            let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
             if(validSpace){
                 if (distance < bestDistance){
                     bestDistance = distance;
@@ -766,7 +766,7 @@ class EntityManager{
         this.history.pop();
         let snapshot = this.history.pop();
         this.entities = snapshot.entities;
-        this.board.placeEntities(this.log);
+        Board.placeEntities(this.log);
         
         //console.log(snapshot.player);
 
@@ -789,14 +789,14 @@ class EntityManager{
         }
         let snapshot = this.history.pop();
         this.entities = snapshot.entities;
-        this.board.placeEntities(this.log);
+        Board.placeEntities(this.log);
         //console.log(snapshot.player);
 
         this.player.setPlayerInfo(snapshot.player);  
         this.skipBehaviors = true; 
 
         let swordId = this.getEntity('player').sword;
-        this.board.calculateLosArray(this.getEntity('player'));
+        Board.calculateLosArray(this.getEntity('player'));
         this.placeSword(swordId);
     }
 
@@ -825,10 +825,10 @@ class EntityManager{
     loadRoom(json){
         console.log(json);
         this.gameMaster.save.catchUpMap(json.name);
-        this.board.setDimensions(json.width,json.height)
-        this.board.boardInit();
+        Board.setDimensions(json.width,json.height)
+        Board.boardInit();
         console.log(json.destinations);
-        this.board.destinations = json.destinations;
+        Board.destinations = json.destinations;
         json.roster.forEach((entity)=>{
             //console.log(entity);
             let value = entity.value;
@@ -883,10 +883,10 @@ class EntityManager{
 
     setPosition(id,x,y){
         let entity = this.getEntity(id);
-        this.board.clearSpace(entity.x,entity.y)
+        Board.clearSpace(entity.x,entity.y)
         this.setProperty(id, 'x', x);
         this.setProperty(id, 'y', y);
-        this.board.placeEntity(this.getEntity(id),x,y)
+        Board.placeEntity(this.getEntity(id),x,y)
         //console.log(this.entities);
     }
 
@@ -917,9 +917,9 @@ class EntityManager{
         let entity = this.getEntity(id);
         let x = entity.x;
         let y = entity.y;
-        this.board.clearSpace(x, y);
+        Board.clearSpace(x, y);
         this.setPosition(id,-1,-1);
-        this.board.updateSpace(x,y);
+        Board.updateSpace(x,y);
     }
 
 
@@ -954,7 +954,7 @@ class EntityManager{
     }
 
     hasPlayerLos(entity){
-        return this.board.getLineOfSight(entity.x,entity.y);
+        return Board.getLineOfSight(entity.x,entity.y);
     }
 
 }

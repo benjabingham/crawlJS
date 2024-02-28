@@ -6,6 +6,7 @@ class Board{
         this.boardArray = [];
         this.wallArray = [];
         this.losArray = [];
+        this.detailArray = [];
         this.boardInit();
 
         this.entityManager = entityManager;
@@ -255,6 +256,22 @@ class Board{
         })
 
         return result;
+    }
+
+    setDetail(x,y, detail){
+        if(!this.detailArray[y]){
+            this.detailArray[y] = [];
+        }
+
+        this.detailArray[y][x] = detail;
+    }
+
+    getDetail(x,y){
+        if(!this.detailArray[y]){
+            return false;
+        }
+
+        return this.detailArray[y][x];
     }
     
 }

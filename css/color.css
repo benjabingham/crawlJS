@@ -1,7 +1,7 @@
 :root{
     /*dungeon*/
-    --dark:#222;
-    --floor:#ddd;
+    --dark:#ddd;
+    --floor:#222;
     --darkAccent:#262626;
     --wall:#666;
     --wallAccent:#6a6a6a;
@@ -29,9 +29,9 @@
 
     --clearBlue:rgba(0, 155, 155, 0.514);
     --bone:rgb(160, 138, 105);
-    --woodBrown:rgb(133, 102, 66);
+    --woodBrown:rgb(136, 122, 107);
     --brown:rgb(95, 65, 31);
-    --redBrown:rgb(95, 49, 31);
+    --redBrown:rgb(107, 76, 63);
     --gray:#4b4b4b;
     --darkGray:#303030;
     --lightGray:#636363;
@@ -47,11 +47,11 @@
     --buttonHoverG2:#a7a089;
 
     /*inventories*/
-    --inventorySlot:#F0DFC2;
-    --inventoryBorder:rgb(124, 117, 52);
-    --inventorySlotHover:#E8D6BD;
+    --inventorySlot:var(--floor);
+    --inventoryBorder:rgba(124, 117, 52, 0.459);
+    --inventorySlotHover:#111;
 
-    --shopFresh:#fdd7003a;
+    --shopFresh:var(--floor);
 
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);

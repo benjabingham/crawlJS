@@ -89,3 +89,7 @@
 .grid-hint:hover{
     cursor: pointer;
 }
+
+.control-grid:hover{
+    cursor:pointer;
+}

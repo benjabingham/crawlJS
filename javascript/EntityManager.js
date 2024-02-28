@@ -13,7 +13,6 @@ class EntityManager{
         {x:-1,y:-1}
     ];
     static player;
-    static log;
     static history = [];
     static historyLimit = 10;
 
@@ -21,10 +20,9 @@ class EntityManager{
 
     static currentMap;
     
-    static entityManagerInit(player, log){
+    static entityManagerInit(player){
         Board.boardInit(this);
         EntityManager.player = player;
-        EntityManager.log = log;
         EntityManager.lootManager = new LootManager();
     }
 
@@ -68,7 +66,6 @@ class EntityManager{
         }
         EntityManager.entityCounter++;
         EntityManager.entities[id] = entity;
-        //console.log(entity);
     
         return EntityManager.entities[id];
     }
@@ -109,7 +106,6 @@ class EntityManager{
 
     static placeSword(id){
         let sword = EntityManager.getEntity(id);
-        console.log(sword);
         if(!sword.equipped){
             return;
         }
@@ -134,14 +130,9 @@ class EntityManager{
                     let weight;
                     if(sword[strikeType]){
                         weight = sword[strikeType].weight;
-                        console.log("..."+weight);
-
                     }else{
                         weight = sword.weight;
-                        console.log(weight);
-
                     }
-                    console.log(weight);
                     EntityManager.player.changeStamina(weight * -1);
                     
                 }
@@ -153,7 +144,6 @@ class EntityManager{
         }
         if (EntityManager.player.stamina < 0){
             EntityManager.cancelAction({insuficientStamina:true});
-            console.log('ACTION CANCELLED');
         }
     }
 
@@ -316,7 +306,6 @@ class EntityManager{
             EntityManager.knock(target.id, attacker.id);
             EntityManager.enrageAndDaze(target);   
             EntityManager.sturdy(attacker,target);
-            console.log(target);
         }
 
         if(attacker.owner == 'player'){
@@ -392,8 +381,6 @@ class EntityManager{
             sword.rotation = rotation;
             EntityManager.placeSword(sword.id);
             
-        }else{
-            console.log('sword knock failed');
         }
 
 
@@ -472,7 +459,6 @@ class EntityManager{
     //has beat% chance to beat sword out of way.
     //also beats sword out of way if damage exceeds player stamina.
     static beat(entity, sword){
-        console.log(entity);
         if(sword.owner == 'player'){
             EntityManager.transmitMessage(entity.name+" attacks your weapon...");
             let damage = EntityManager.roll(0,entity.damage);
@@ -487,7 +473,6 @@ class EntityManager{
         }
 
         let random = EntityManager.roll(1,100);
-        console.log(EntityManager.player.stamina < 0);
         if(random <= beatChance || EntityManager.player.stamina < 0){
             EntityManager.player.changeStamina(0);
             EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
@@ -524,9 +509,7 @@ class EntityManager{
     }
 
     static triggerBehaviors(){
-        //console.log(board);
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            //console.log(entity);
             let random = EntityManager.roll(1,100);
             let skip = entity.stunned
             if(entity.behaviorInfo){
@@ -548,7 +531,6 @@ class EntityManager{
                 }
             }
             if (entity.behavior != 'dead'){
-                //console.log('enemy is stunned');
                 if(entity.stunned > 0){
                     entity.stunned--;
                 }
@@ -564,7 +546,6 @@ class EntityManager{
 
 
             if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated){
-                //console.log('obliterated');
                 EntityManager.dropItems(entity);
                 entity.obliterated = true;
                 EntityManager.setPosition(entity.id,-1,-1);
@@ -579,14 +560,11 @@ class EntityManager{
                 EntityManager.kill(entity);
             }
         }
-        //console.log(player.health);
         if(EntityManager.player.health <= 0){
             EntityManager.setProperty('player','symbol', 'x');
             EntityManager.setProperty('player','behavior', 'dead');
             EntityManager.transmitMessage('you are dead.', 'urgent');
         }
-        //console.log('Stamina: ' +player.stamina);
-        //console.log('Health: ' + player.health);
     }
 
     static kill(entity){
@@ -617,8 +595,6 @@ class EntityManager{
         let symbol = sword.symbol;
         let behavior = sword.behavior;
 
-        console.log(owner);
-
         EntityManager.entities[id] = JSON.parse(JSON.stringify(weapon));
         sword = EntityManager.getEntity(id);
         sword.x = x;
@@ -629,7 +605,6 @@ class EntityManager{
         sword.id = id;
         sword.behavior = behavior;
         sword.equipped = true;
-        console.log(sword);
         
         EntityManager.transmitMessage('equipped weapon: '+weapon.name);
     }
@@ -667,13 +642,12 @@ class EntityManager{
         item.item = true;
         item.walkable = true;
         item.id = EntityManager.entityCounter;
-        item.dropTurn = EntityManager.log.turnCounter;
+        item.dropTurn = Log.turnCounter;
         if (!item.symbol){
             item.symbol = '*';
         }
         EntityManager.entities[EntityManager.entityCounter] = item;
         EntityManager.entityCounter++;
-        console.log(item);
     }
 
     static dropItems(entity){
@@ -702,7 +676,6 @@ class EntityManager{
                 let obj = item;
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
                 EntityManager.entities[obj.id] = obliterated;
-                console.log(obj);
                 obj.walkable = false;
                 obj.inventory = false;
                 obj.item = false;
@@ -713,14 +686,12 @@ class EntityManager{
     }
 
     static pickUpItem(entity,item){
-        if(!entity || entity.behavior == 'sword' || (item.dropTurn >= EntityManager.log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
+        if(!entity || entity.behavior == 'sword' || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
             return false;
         }
         if(entity.id == 'player'){
             entity = EntityManager.player;
         }
-        //console.log('pickup');
-        //console.log(JSON.parse(JSON.stringify(item)));
         let items = [];
         if(item.inventory){
             item.inventory.forEach((obj) =>{
@@ -745,7 +716,6 @@ class EntityManager{
                 entity.inventory.push(obj);
             }
         })
-        console.log(entity);
     }
 
     static saveSnapshot(){
@@ -769,10 +739,8 @@ class EntityManager{
         EntityManager.history.pop();
         let snapshot = EntityManager.history.pop();
         EntityManager.entities = snapshot.entities;
-        Board.placeEntities(EntityManager.log);
+        Board.placeEntities();
         
-        //console.log(snapshot.player);
-
         EntityManager.player.setPlayerInfo(snapshot.player);
         if(EntityManager.player.equipped){
             EntityManager.player.equipped = EntityManager.player.inventory[EntityManager.player.equipped.slot];
@@ -781,19 +749,18 @@ class EntityManager{
     }
 
     static cancelAction(reason){
-        EntityManager.log.addNotice('Action Halted');
+        Log.addNotice('Action Halted');
         if(reason.insuficientStamina){
-            EntityManager.log.addNotice('Not Enough Stamina')
-            EntityManager.log.addNotice('Press NUMPAD5 to recover')
+            Log.addNotice('Not Enough Stamina')
+            Log.addNotice('Press NUMPAD5 to recover')
 
         }
         if(reason.blocked){
-            EntityManager.log.addNotice('Path Blocked')
+            Log.addNotice('Path Blocked')
         }
         let snapshot = EntityManager.history.pop();
         EntityManager.entities = snapshot.entities;
-        Board.placeEntities(EntityManager.log);
-        //console.log(snapshot.player);
+        Board.placeEntities();
 
         EntityManager.player.setPlayerInfo(snapshot.player);  
         EntityManager.skipBehaviors = true; 
@@ -826,14 +793,11 @@ class EntityManager{
     }
 
     static loadRoom(json){
-        console.log(json);
         GameMaster.save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit();
-        console.log(json.destinations);
         Board.destinations = json.destinations;
         json.roster.forEach((entity)=>{
-            //console.log(entity);
             let value = entity.value;
             let entityObj;
             let x = entity.x;
@@ -854,13 +818,10 @@ class EntityManager{
             if(entityObj){
                 entityObj.index = entity.index;
                 if(entityObj.behavior != 'wall'){
-                    console.log(entity);
                     if(!entity.inventory || entity.inventory.length == 0){
-                        console.log('give inventory');
                         EntityManager.lootManager.giveMonsterLoot(entityObj);
                         entity.inventory = entityObj.inventory;
                     }
-                    console.log('take inventory');
                     entityObj.inventory = entity.inventory;
                     
                 }
@@ -890,7 +851,6 @@ class EntityManager{
         EntityManager.setProperty(id, 'x', x);
         EntityManager.setProperty(id, 'y', y);
         Board.placeEntity(EntityManager.getEntity(id),x,y)
-        //console.log(EntityManager.entities);
     }
 
     static getPosition(id){
@@ -952,7 +912,7 @@ class EntityManager{
     }
 
     static transmitMessage(message, messageClass = false, keywords = false){
-        EntityManager.log.addMessage(message, messageClass, keywords);
+        Log.addMessage(message, messageClass, keywords);
         console.log(message);
     }
 

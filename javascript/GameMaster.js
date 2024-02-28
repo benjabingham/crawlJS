@@ -1,6 +1,5 @@
 class GameMaster{
     static player;
-    static log;
     static save;
     static customControls = {};
     static dungeonId = 0;
@@ -8,9 +7,8 @@ class GameMaster{
 
     static gameMasterInit(save){
         GameMaster.player = save.player;
-        GameMaster.log = new Log() ;
         GameMaster.save = save;
-        EntityManager.entityManagerInit(GameMaster.player,GameMaster.log);
+        EntityManager.entityManagerInit(GameMaster.player);
         GameMaster.shop = new Shop();
         Display.displayInit();
     }
@@ -18,19 +16,17 @@ class GameMaster{
     static reset(){
         EntityManager.updateSavedInventories();
         GameMaster.player.unequipWeapon();
-        GameMaster.log.wipeLog();
+        Log.wipeLog();
         EntityManager.wipeEntities();
     }
 
     static startGame(){
-        console.log(GameMaster.save);
         let player = GameMaster.player;
-        let log = GameMaster.log;
         let entityManager = EntityManager;
         let board = Board;
 
         entityManager.skipBehaviors = false;
-        board.placeEntities(log);
+        board.placeEntities();
         entityManager.saveSnapshot();
 
         board.calculateLosArray(entityManager.getEntity('player'));
@@ -58,7 +54,6 @@ class GameMaster{
             .then((response) => response.json())
             .then((json) => {
                 GameMaster.save.mapInit(json);
-                console.log(GameMaster.save);
                 EntityManager.loadRoom(GameMaster.save.maps[roomString]);
                 GameMaster.startGame();
             })
@@ -81,7 +76,6 @@ class GameMaster{
             return false;
         }
         GameMaster.dungeonId++;
-        console.log('travel');
         GameMaster.reset();
 
         if(destination.type == "town"){
@@ -109,9 +103,8 @@ class GameMaster{
             console.log('rewind');
             EntityManager.rewind();
             EntityManager.skipBehaviors = true;
-            GameMaster.log.turnCounter--;
-            GameMaster.log.messages[log.turnCounter] = false;
-            console.log(EntityManager.entities);
+            Log.turnCounter--;
+            Log.messages[log.turnCounter] = false;
         }
 
         GameMaster.postPlayerAction();
@@ -130,7 +123,6 @@ class GameMaster{
     }
 
     static useItem(event){
-        console.log(event);
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
@@ -186,7 +178,7 @@ class GameMaster{
         EntityManager.reapWounded();
         EntityManager.triggerBehaviors();
         EntityManager.reapWounded();
-        GameMaster.player.lightDown(GameMaster.log);
+        GameMaster.player.lightDown();
     }
 
     static updateDisplay(){
@@ -200,23 +192,21 @@ class GameMaster{
     static postPlayerAction(){     
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.placeSword(swordId);   
-        console.log(EntityManager.getEntity(swordId));
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }
 
-        Board.placeEntities(GameMaster.log);
+        Board.placeEntities();
         EntityManager.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();
         if(!EntityManager.skipBehaviors){
-            GameMaster.log.turnCounter++;
+            Log.turnCounter++;
         }else{
-            GameMaster.log.rewind();
+            Log.rewind();
         }
-        GameMaster.log.printLog();  
-        GameMaster.log.clearNotices();
-        console.log(EntityManager.skipBehaviors);
+        Log.printLog();  
+        Log.clearNotices();
         EntityManager.skipBehaviors = false;
     }
     

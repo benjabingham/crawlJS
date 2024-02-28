@@ -27,7 +27,6 @@ class Board{
         let entities = EntityManager.entities;
         Board.boardInit();
         for (const [k,entity] of Object.entries(entities)){
-            //console.log(entity);
             
             let x = entity.x;
             let y = entity.y;
@@ -51,11 +50,7 @@ class Board{
                     }else{
                         Board.placeEntity(entity, x, y);
                     }
-                }else{
-                    console.log("ENTITY OVERWRITE");
-                    console.log(entity);
-                    console.log(Board.itemAt(x,y));
-                }   
+                } 
             } 
         };
     }
@@ -63,7 +58,6 @@ class Board{
     static updateSpace(x,y){
         let entities = EntityManager.entities;
         for (const [k,entity] of Object.entries(entities)){
-            //console.log(entity);
             if(entity.x == x && entity.y == y){
                 Board.placeEntity(entity,x,y);
             }
@@ -94,9 +88,6 @@ class Board{
 
         if (Board.isSpace(x,y)){
             if(Board.isOccupiedSpace(x,y) && !Board.itemAt(x,y).item){
-                //console.log('ENTITY OVERWRITE');
-                //console.log(entity);
-                //console.log(Board.itemAt(x,y));
             }
             Board.boardArray[y][x] = entity;
         }
@@ -107,8 +98,6 @@ class Board{
     }
 
     static drawLos(playerx,playery,x,y){
-        //console.log('NEW SPACE');
-
         let lineOfSight = true;
 
         let fromPoint = {x:playerx, y:playery};
@@ -117,7 +106,6 @@ class Board{
         let line = Board.getLine(fromPoint,targetPoint);
         
         line.forEach((point) =>{
-            //console.log(point);
             if(lineOfSight){
                 Board.setLineOfSight(point.x, point.y, lineOfSight);
                 if(Board.wallAt(point.x,point.y)){

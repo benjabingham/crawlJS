@@ -187,7 +187,7 @@ class Player {
         }
     }
 
-    lightDown(log){
+    lightDown(){
         if(this.light < 1){
             return false;
         }
@@ -196,7 +196,7 @@ class Player {
         if (random < this.lightTime-150){
             this.light--;
             this.lightTime = 0;
-            log.addMessage('Your light dims...');
+            Log.addMessage('Your light dims...');
         }
     }
 

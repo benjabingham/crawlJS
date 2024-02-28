@@ -128,7 +128,6 @@ class Display{
                 gridDiv.text(symbol)
             }
         }
-        //console.log(boardString);
     }
     
     static printBoard(){
@@ -214,7 +213,6 @@ class Display{
 
     static displayShop(){
         let shop = GameMaster.shop;
-        console.log(shop);
         $('#shop-wrapper').show();
         $('#shop-list').html('');
         let inventory = shop.getInventory();
@@ -298,10 +296,6 @@ class Display{
     }
 
     static displayItemInfo(item, inventory){
-        console.log({
-            item:item,
-            inventory:inventory
-        })
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -341,7 +335,6 @@ class Display{
         }
 
         ['jab','swing','strafe'].forEach(function(val){
-            console.log(val);
             if(item[val]){
                 let special = item[val];
                 $('#'+inventory+'-description-body').append(
@@ -367,7 +360,6 @@ class Display{
         
         $('#custom-controls-div').html('');
         inputs.forEach((input)=>{
-            console.log(input);
             $('#custom-controls-div').append(
                 $('<div>').addClass('custom-input-divs').append(
                     $('<label>').text(input.name)

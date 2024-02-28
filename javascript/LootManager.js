@@ -349,8 +349,6 @@ class LootManager{
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
 
-        console.log(weapon);
-
         return JSON.parse(JSON.stringify(weapon));
     }
 
@@ -361,8 +359,6 @@ class LootManager{
         
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
-
-        console.log(treasure);
 
         return JSON.parse(JSON.stringify(treasure));
     }

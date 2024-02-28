@@ -17,19 +17,15 @@ class EntityManager{
     static history = [];
     static historyLimit = 10;
 
-    static gameMaster;
-
     static lootManager;
 
     static currentMap;
     
-    static entityManagerInit(player, log, gameMaster){
+    static entityManagerInit(player, log){
         Board.boardInit(this);
         EntityManager.player = player;
         EntityManager.log = log;
-        EntityManager.gameMaster = gameMaster;
         EntityManager.lootManager = new LootManager();
-        console.log(EntityManager.gameMaster);
     }
 
     static wipeEntities(){
@@ -172,7 +168,7 @@ class EntityManager{
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
             }else{
                 EntityManager.lootManager.breakWeapon(EntityManager.player.equipped);
-                EntityManager.player.unequipWeapon(EntityManager.gameMaster);
+                EntityManager.player.unequipWeapon();
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
                 EntityManager.removeEntity(item.id);
             }
@@ -206,7 +202,7 @@ class EntityManager{
             EntityManager.lootContainer(entity,Board.itemAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && id == "player"){
-            EntityManager.gameMaster.travel(x,y);
+            GameMaster.travel(x,y);
             return true;
         }
 
@@ -831,7 +827,7 @@ class EntityManager{
 
     static loadRoom(json){
         console.log(json);
-        EntityManager.gameMaster.save.catchUpMap(json.name);
+        GameMaster.save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit();
         console.log(json.destinations);

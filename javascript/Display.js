@@ -3,7 +3,7 @@ class Display{
     static customControls;
 
     static displayInit(){
-        Display.customControls = EntityManager.gameMaster.customControls;
+        Display.customControls = GameMaster.customControls;
     }
 
     static showDungeonScreen(){
@@ -14,26 +14,26 @@ class Display{
         Display.displayInventory(true);
     }
 
-    static showHomeScreen(gameMaster){
+    static showHomeScreen(){
         Display.hideAllScreens();
         $('#home-screen').show();
-        Display.populateLocations(gameMaster);
-        Display.giveSaveButtonsBehavior(gameMaster);
+        Display.populateLocations();
+        Display.giveSaveButtonsBehavior();
     }
 
-    static showTownScreen(gameMaster){
+    static showTownScreen(){
         Display.hideAllScreens();
         $('#hud-div').show();
         $('#town-screen').show();
-        $('#day-div').text('day '+gameMaster.save.day);
+        $('#day-div').text('day '+GameMaster.save.day);
         $('#town-inventory-wrapper').show();
 
-        Display.populateLocations(gameMaster);
+        Display.populateLocations();
         Display.displayInventory(false);
         Display.displayShop();
         Display.restButton();
-        Display.fillBars(gameMaster.player);
-        Display.nourishmentDiv(gameMaster.player);
+        Display.fillBars(GameMaster.player);
+        Display.nourishmentDiv(GameMaster.player);
     }
 
     static hideAllScreens(){
@@ -44,21 +44,21 @@ class Display{
         $('#inventory-wrapper').hide();
     }
 
-    static giveSaveButtonsBehavior(gameMaster){
-        let save = gameMaster.save
+    static giveSaveButtonsBehavior(){
+        let save = GameMaster.save;
         let display = this;
         $('#new-save-button').off().on('click',function(){
             save.newSave();
-            display.showTownScreen(gameMaster);
+            display.showTownScreen();
         })
 
         $('#load-file-input').off().change(function(){
             save.loadSave($('#load-file-input').prop('files')[0])
-            display.showTownScreen(gameMaster);
+            display.showTownScreen();
         })
 
         $('#download-save-button').off().on('click',function(){
-            save.downloadSave(gameMaster);
+            save.downloadSave();
         })
     }
 
@@ -181,15 +181,14 @@ class Display{
 
     }
     
-    static populateLocations(gameMaster){
+    static populateLocations(){
         $('#travel-locations-div').html('');
         let maps = ['cave','trainingHall','trainingHallNoOgre','andyDungeon']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
                     $("<button>").text(element).on('click',function(){
-                        console.log(element);
-                        gameMaster.getRoom(element+".json")
+                        GameMaster.getRoom(element+".json")
                     })
                 )
             )
@@ -197,9 +196,8 @@ class Display{
     }
 
     static restButton(){
-        let gameMaster = EntityManager.gameMaster;
         $('#rest-button').off().on('click',()=>{
-            gameMaster.loadTown();
+            GameMaster.loadTown();
         })
     }
 
@@ -215,7 +213,7 @@ class Display{
     }
 
     static displayShop(){
-        let shop = EntityManager.gameMaster.shop;
+        let shop = GameMaster.shop;
         console.log(shop);
         $('#shop-wrapper').show();
         $('#shop-list').html('');
@@ -235,8 +233,7 @@ class Display{
         let slot = item.slot;
         let display = this;
         let player = EntityManager.player;
-        let gameMaster = EntityManager.gameMaster;
-        let shop = gameMaster.shop;
+        let shop = GameMaster.shop;
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -262,21 +259,21 @@ class Display{
             if(item.weapon && !player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.weapon && player.equipped && player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.usable){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('use').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }

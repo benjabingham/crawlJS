@@ -135,25 +135,25 @@ class Player {
         this.health = this.healthMax;
     }
 
-    useItem(item,gameMaster){
+    useItem(item){
         if(!item){
             return false;
         }
         if(item.fuel){
-            this.addFuel(item,gameMaster);
+            this.addFuel(item);
             return true;
         }else if(item.weapon && this.equipped.slot == item.slot){
-           this.unequipWeapon(gameMaster);
+           this.unequipWeapon();
            return true;
         }else if(item.weapon && !this.equipped){
-            this.equipWeapon(item,gameMaster);
+            this.equipWeapon(item);
             return true;
         }
 
         return false;
     }
 
-    equipWeapon(weapon,gameMaster){
+    equipWeapon(weapon){
         if(this.equipped){
             return;
         }
@@ -161,7 +161,7 @@ class Player {
         EntityManager.equipWeapon(weapon);
     }
 
-    unequipWeapon(gameMaster){
+    unequipWeapon(){
         if (!this.equipped){
             return;
         }
@@ -169,7 +169,7 @@ class Player {
         EntityManager.unequipWeapon();
     }
 
-    addFuel(fuel,gameMaster){
+    addFuel(fuel){
         let slot = fuel.slot;
         this.light += fuel.light;
         this.light = Math.min(this.lightMax, this.light);
@@ -213,12 +213,12 @@ class Player {
         this.inventory = newInventory;
     }
 
-    dropItem(slot, gameMaster){
+    dropItem(slot){
         if(!this.inventory[slot]){
             return false;
         }
         if(this.equipped.slot == slot){
-            this.unequipWeapon(gameMaster);
+            this.unequipWeapon();
         }
         let playerEntity = EntityManager.getEntity('player');
         EntityManager.dropItem(this.inventory[slot],playerEntity.x,playerEntity.y);

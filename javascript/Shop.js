@@ -1,10 +1,9 @@
 class Shop{
-    constructor(gameMaster){
+    constructor(){
         this.lootManager = new LootManager();
         this.inventory = [];
         this.essentials = [];
         this.stockInventory();
-        this.gameMaster = gameMaster;
     }
 
     getInventory(){
@@ -111,12 +110,12 @@ class Shop{
     }
 
     buyItem(slot){
-        let player = this.gameMaster.player;
+        let player = GameMaster.player;
         let item = this.inventory[slot];
-        if (item.price > this.gameMaster.player.gold){
+        if (item.price > GameMaster.player.gold){
             return false;
         }
-        this.gameMaster.player.gold -= item.price;
+        GameMaster.player.gold -= item.price;
         if(slot != -1){
             this.inventory[slot] = {purchased:true,tier:item.tier};
         }
@@ -127,7 +126,7 @@ class Shop{
     }
 
     sellItem(slot){
-        let player = this.gameMaster.player;
+        let player = GameMaster.player;
         let item = player.inventory[slot];
         player.inventory[slot] = false;
         player.gold += item.value;

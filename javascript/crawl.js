@@ -1,10 +1,10 @@
 $(document).ready(function(){
     let save = new Save();
-    let gameMaster = new GameMaster(save);
+    GameMaster.gameMasterInit(save);
     InputManager.setInputPreset('numpad');
-    InputManager.addEventListeners(gameMaster)
+    InputManager.addEventListeners()
     Display.setCustomControls();
-    Display.showHomeScreen(gameMaster);
+    Display.showHomeScreen();
     /*
     fetch('./rooms/ratnest.json')
         .then((response) => response.json())

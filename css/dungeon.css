@@ -37,7 +37,7 @@
     border-collapse: collapse;
 
     div:not(.grid-dark){
-        background-color:#ddd;
+        background-color:#bbb;
     }
 
 }
@@ -68,7 +68,7 @@
 
 .grid-dark{
     background:
-    repeating-conic-gradient(#333333 0% 25%, #494949 0% 50%) 
+    repeating-conic-gradient(#222 0% 25%, #262626 0% 50%) 
     50% / 30px;
     background-size:10% 10%;
 
@@ -76,7 +76,7 @@
 
 .grid-wall{
     background:
-    repeating-conic-gradient(#969696 0% 25%, #a09e9e 0% 50%) 
+    repeating-conic-gradient(#666 0% 25%, #6a6a6a 0% 50%) 
     50% / 30px;
     background-size:20% 20%;
 }

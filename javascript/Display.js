@@ -91,7 +91,7 @@ class Display{
         let gameMaster = this.entityManager.gameMaster;
         let playerPos = {x:8,y:8};
         let translations = {
-            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}
+            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}, wait:{x:0,y:0}
         };
 
         for (const [key, value] of Object.entries(translations)) {
@@ -101,7 +101,10 @@ class Display{
 
             gridSquare.addClass('control-grid').on('click',()=>{
                 let event = {type:key}
-                console.log(event);
+                if(key == 'wait'){
+                    gameMaster.wait(event);
+                    return;
+                }
                 gameMaster.movePlayer(event);
             })
         }

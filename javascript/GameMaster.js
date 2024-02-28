@@ -5,9 +5,10 @@ class GameMaster{
         this.save = save;
         this.entityManager = new EntityManager(this.player,this.log, this);
         this.customControls = {};
-        this.display = new Display(this.entityManager, Board);
         this.dungeonId = 0;
         this.shop = new Shop(this);
+
+        Display.displayInit(this.entityManager);
     }
 
     reset(){
@@ -23,7 +24,6 @@ class GameMaster{
         let log = this.log;
         let entityManager = this.entityManager;
         let board = Board;
-        let display = this.display;
         let gm = this;
 
         entityManager.skipBehaviors = false;
@@ -32,8 +32,8 @@ class GameMaster{
 
         board.calculateLosArray(entityManager.getEntity('player'));
 
-        display.showDungeonScreen();
-        display.printBoard();
+        Display.showDungeonScreen();
+        Display.printBoard();
 
 
         /*
@@ -91,7 +91,7 @@ class GameMaster{
     loadTown(){
         this.nextDay();
         this.shop.restockInventory();
-        this.display.showTownScreen(this);
+        Display.showTownScreen(this);
         this.player.changeStamina(100);
         this.player.light = 0;
     }
@@ -187,11 +187,11 @@ class GameMaster{
     }
 
     updateDisplay(){
-        this.display.printBoard(board.boardArray);
+        Display.printBoard(board.boardArray);
         this.player.inventoryCleanup();
-        this.display.displayInventory(true);
+        Display.displayInventory(true);
 
-        this.display.fillBars(this.player);
+        Display.fillBars(this.player);
     }
 
     postPlayerAction(){     

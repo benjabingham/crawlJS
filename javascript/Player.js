@@ -158,7 +158,7 @@ class Player {
             return;
         }
         this.equipped = weapon
-        gameMaster.entityManager.equipWeapon(weapon);
+        EntityManager.equipWeapon(weapon);
     }
 
     unequipWeapon(gameMaster){
@@ -166,7 +166,7 @@ class Player {
             return;
         }
         this.equipped = false;
-        gameMaster.entityManager.unequipWeapon();
+        EntityManager.unequipWeapon();
     }
 
     addFuel(fuel,gameMaster){
@@ -214,15 +214,14 @@ class Player {
     }
 
     dropItem(slot, gameMaster){
-        let entityManager = gameMaster.entityManager;
         if(!this.inventory[slot]){
             return false;
         }
         if(this.equipped.slot == slot){
             this.unequipWeapon(gameMaster);
         }
-        let playerEntity = entityManager.getEntity('player');
-        entityManager.dropItem(this.inventory[slot],playerEntity.x,playerEntity.y);
+        let playerEntity = EntityManager.getEntity('player');
+        EntityManager.dropItem(this.inventory[slot],playerEntity.x,playerEntity.y);
         this.inventory[slot] = false;
     }
 

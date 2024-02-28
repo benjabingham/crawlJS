@@ -2,9 +2,8 @@ class Display{
     static entityManager;
     static customControls;
 
-    static displayInit(entityManager){
-        Display.entityManager = entityManager;
-        Display.customControls = Display.entityManager.gameMaster.customControls;
+    static displayInit(){
+        Display.customControls = EntityManager.gameMaster.customControls;
     }
 
     static showDungeonScreen(){
@@ -87,8 +86,8 @@ class Display{
 
     static printBoardGrid(){
         let boardArray = Board.boardArray;
-        let player = Display.entityManager.player;
-        let playerPos = Display.entityManager.getEntity('player');
+        let player = EntityManager.player;
+        let playerPos = EntityManager.getEntity('player');
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -198,7 +197,7 @@ class Display{
     }
 
     static restButton(){
-        let gameMaster = Display.entityManager.gameMaster;
+        let gameMaster = EntityManager.gameMaster;
         $('#rest-button').off().on('click',()=>{
             gameMaster.loadTown();
         })
@@ -208,7 +207,7 @@ class Display{
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
-        let inventory = Display.entityManager.player.inventory;
+        let inventory = EntityManager.player.inventory;
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
@@ -216,7 +215,7 @@ class Display{
     }
 
     static displayShop(){
-        let shop = Display.entityManager.gameMaster.shop;
+        let shop = EntityManager.gameMaster.shop;
         console.log(shop);
         $('#shop-wrapper').show();
         $('#shop-list').html('');
@@ -228,15 +227,15 @@ class Display{
     }
 
     static displayGold(){
-        let player = Display.entityManager.player;
+        let player = EntityManager.player;
         $('.gold-div').text(player.gold+" gold");
     }
 
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
-        let player = Display.entityManager.player;
-        let gameMaster = Display.entityManager.gameMaster;
+        let player = EntityManager.player;
+        let gameMaster = EntityManager.gameMaster;
         let shop = gameMaster.shop;
         let itemValue = item.value;
         if(!itemValue){

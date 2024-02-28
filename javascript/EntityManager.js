@@ -1,51 +1,58 @@
 class EntityManager{
-    constructor(player, log, gameMaster){
-        this.entities = {};
-        this.entityCounter = 0;
-        this.translations = [
-            {x:0,y:-1},
-            {x:1,y:-1},
-            {x:1,y:0},
-            {x:1,y:1},
-            {x:0,y:1},
-            {x:-1,y:1},
-            {x:-1,y:0},
-            {x:-1,y:-1}
-        ];
+
+    static entities = {};
+    static entityCounter = 0;
+    static translations = [
+        {x:0,y:-1},
+        {x:1,y:-1},
+        {x:1,y:0},
+        {x:1,y:1},
+        {x:0,y:1},
+        {x:-1,y:1},
+        {x:-1,y:0},
+        {x:-1,y:-1}
+    ];
+    static player;
+    static log;
+    static history = [];
+    static historyLimit = 10;
+
+    static gameMaster;
+
+    static lootManager;
+
+    static currentMap;
+    
+    static entityManagerInit(player, log, gameMaster){
         Board.boardInit(this);
-        this.player = player;
-        this.log = log;
-        this.history = [];
-        this.historyLimit = 10;
-
-        this.gameMaster = gameMaster;
-
-        this.lootManager = new LootManager();
-
-        this.currentMap;
+        EntityManager.player = player;
+        EntityManager.log = log;
+        EntityManager.gameMaster = gameMaster;
+        EntityManager.lootManager = new LootManager();
+        console.log(EntityManager.gameMaster);
     }
 
-    wipeEntities(){
-        this.entities = {};
-        this.entityCounter = 0;
-        this.history = [];
-        this.historyLimit = 10;
+    static wipeEntities(){
+        EntityManager.entities = {};
+        EntityManager.entityCounter = 0;
+        EntityManager.history = [];
+        EntityManager.historyLimit = 10;
     }
 
-    playerInit(x=0,y=0){
-        this.entities.player = {
+    static playerInit(x=0,y=0){
+        EntityManager.entities.player = {
             x:x,
             y:y,
             symbol:"☺",
             id: "player"
         };
-        this.swordInit("player");
+        EntityManager.swordInit("player");
     }
     
 
-    entityInit(symbol, behavior, x=0,y=0, hitDice=1, damage=0, behaviorInfo = {}, name = "", inventorySlots = 10){
-        let threshold = Math.max(this.rollN(hitDice,1,8),1);
-        let id = this.entityCounter;
+    static entityInit(symbol, behavior, x=0,y=0, hitDice=1, damage=0, behaviorInfo = {}, name = "", inventorySlots = 10){
+        let threshold = Math.max(EntityManager.rollN(hitDice,1,8),1);
+        let id = EntityManager.entityCounter;
         if (!name){
             name = id;
         }
@@ -63,35 +70,35 @@ class EntityManager{
             name:name,
             inventorySlots:inventorySlots
         }
-        this.entityCounter++;
-        this.entities[id] = entity;
+        EntityManager.entityCounter++;
+        EntityManager.entities[id] = entity;
         //console.log(entity);
     
-        return this.entities[id];
+        return EntityManager.entities[id];
     }
 
-    swordInit(owner, rotation = 3){
-        let sword = this.entityInit('*', 'sword', -1,-1);
+    static swordInit(owner, rotation = 3){
+        let sword = EntityManager.entityInit('*', 'sword', -1,-1);
         let id = sword.id;
         sword.owner = owner;
-        sword.equipped = this.player.equipped;
+        sword.equipped = EntityManager.player.equipped;
         sword.rotation = rotation;
 
-        this.setEntity(id, sword);
+        EntityManager.setEntity(id, sword);
 
-        this.setProperty(owner,'sword', id);
+        EntityManager.setProperty(owner,'sword', id);
 
         if(sword.equipped){
-            //this.equipWeapon(this.player.equipped);
+            //EntityManager.equipWeapon(EntityManager.player.equipped);
         }
         
-        //this.switchWeapon('stick');
-        this.placeSword(id, this.player);
+        //EntityManager.switchWeapon('stick');
+        EntityManager.placeSword(id, EntityManager.player);
     
         return id;
     }
 
-    getSwordSymbol(rotation){
+    static getSwordSymbol(rotation){
         let symbol = '|'
         if (rotation % 4 == 1){
             symbol = '/';
@@ -104,30 +111,30 @@ class EntityManager{
         return symbol;
     }
 
-    placeSword(id){
-        let sword = this.getEntity(id);
+    static placeSword(id){
+        let sword = EntityManager.getEntity(id);
         console.log(sword);
         if(!sword.equipped){
             return;
         }
         let ownerId = sword.owner;
-        let owner = this.getEntity(ownerId);
+        let owner = EntityManager.getEntity(ownerId);
         let swordPosition = {x:sword.x, y:sword.y};
 
         let rotation = sword.rotation;
-        this.setProperty(id, 'symbol', this.getSwordSymbol(rotation));
+        EntityManager.setProperty(id, 'symbol', EntityManager.getSwordSymbol(rotation));
         
-        let translation = this.translations[rotation];
+        let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
     
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.itemAt(x,y);
             if(target.id != id && target.behavior != 'wall'){
-                this.attack(sword,target);
+                EntityManager.attack(sword,target);
                 if (ownerId == 'player'){
                     
-                    let strikeType = this.getStrikeType(sword);
+                    let strikeType = EntityManager.getStrikeType(sword);
                     let weight;
                     if(sword[strikeType]){
                         weight = sword[strikeType].weight;
@@ -139,44 +146,44 @@ class EntityManager{
 
                     }
                     console.log(weight);
-                    this.player.changeStamina(weight * -1);
+                    EntityManager.player.changeStamina(weight * -1);
                     
                 }
             }
         }
         //if sword hasn't been placed somewhere else as result of attack...
         if(rotation == sword.rotation && sword.x == swordPosition.x && sword.y == swordPosition.y && sword.equipped){
-            this.setPosition(id,x,y);
+            EntityManager.setPosition(id,x,y);
         }
-        if (this.player.stamina < 0){
-            this.cancelAction({insuficientStamina:true});
+        if (EntityManager.player.stamina < 0){
+            EntityManager.cancelAction({insuficientStamina:true});
             console.log('ACTION CANCELLED');
         }
     }
 
-    degradeItem(item, modifier = 0, multiplier = 1){
+    static degradeItem(item, modifier = 0, multiplier = 1){
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
             if(!item.worn){
-                this.lootManager.applyModifier(this.player.equipped,this.lootManager.weaponModifiers.worn);
-                this.lootManager.applyModifier(item,this.lootManager.weaponModifiers.worn);
+                EntityManager.lootManager.applyModifier(EntityManager.player.equipped,EntityManager.lootManager.weaponModifiers.worn);
+                EntityManager.lootManager.applyModifier(item,EntityManager.lootManager.weaponModifiers.worn);
 
-                this.transmitMessage(item.name + ' is showing wear!', 'urgent');
+                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
             }else{
-                this.lootManager.breakWeapon(this.player.equipped);
-                this.player.unequipWeapon(this.gameMaster);
-                this.transmitMessage(item.name + ' has broken!', 'urgent');
-                this.removeEntity(item.id);
+                EntityManager.lootManager.breakWeapon(EntityManager.player.equipped);
+                EntityManager.player.unequipWeapon(EntityManager.gameMaster);
+                EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
+                EntityManager.removeEntity(item.id);
             }
         }
     }
 
-    getStrikeType(sword){
+    static getStrikeType(sword){
         let owner = sword.owner;
-        let ownerPos = this.getEntity(owner);
-        let lastSwordPos = this.history[this.history.length-1].entities[sword.id];
-        let lastOwnerPos = this.history[this.history.length-1].entities[owner];
+        let ownerPos = EntityManager.getEntity(owner);
+        let lastSwordPos = EntityManager.history[EntityManager.history.length-1].entities[sword.id];
+        let lastOwnerPos = EntityManager.history[EntityManager.history.length-1].entities[owner];
         if(lastSwordPos.rotation != sword.rotation){
             return "swing";
         }
@@ -187,46 +194,46 @@ class EntityManager{
         return "strafe";
     }
 
-    moveEntity(id, x, y){
-        let entity = this.getEntity(id);
+    static moveEntity(id, x, y){
+        let entity = EntityManager.getEntity(id);
         x += entity.x;
         y += entity.y;
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
-            this.setPosition(id,x,y);
+            EntityManager.setPosition(id,x,y);
             return true;
         }else if(Board.itemAt(x,y) && Board.itemAt(x,y).container){
-            this.lootContainer(entity,Board.itemAt(x,y));
+            EntityManager.lootContainer(entity,Board.itemAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && id == "player"){
-            this.gameMaster.travel(x,y);
+            EntityManager.gameMaster.travel(x,y);
             return true;
         }
 
         return false;
     }
 
-    movePlayer(x,y){
-        if(!this.moveEntity('player',x,y)){
-            this.cancelAction({blocked:true})
+    static movePlayer(x,y){
+        if(!EntityManager.moveEntity('player',x,y)){
+            EntityManager.cancelAction({blocked:true})
         }
     }
 
-    rotateSword(id, direction){
-        let rotation = this.getProperty(id, 'rotation');
+    static rotateSword(id, direction){
+        let rotation = EntityManager.getProperty(id, 'rotation');
         rotation += 8 + direction;
         rotation %= 8;
     
-        this.setProperty(id, 'rotation', rotation);
+        EntityManager.setProperty(id, 'rotation', rotation);
     }
 
-    chaseNatural(id, behaviorInfo){
-        let entity = this.getEntity(id);
-        let playerEntity = this.getEntity('player');
+    static chaseNatural(id, behaviorInfo){
+        let entity = EntityManager.getEntity(id);
+        let playerEntity = EntityManager.getEntity('player');
         //creature is less focused the further they are
         let focus = behaviorInfo.focus;
-        focus -= this.getDistance(entity, playerEntity);
-        if(!this.hasPlayerLos(entity)){
+        focus -= EntityManager.getDistance(entity, playerEntity);
+        if(!EntityManager.hasPlayerLos(entity)){
             focus -= 20;
         }
         focus =  Math.max(focus, 4);
@@ -234,7 +241,7 @@ class EntityManager{
         let y = 0;
 
         //the higher focus is, the less likely the creature is to move randomly
-        let random = this.roll(1,focus);
+        let random = EntityManager.roll(1,focus);
         if(random == 1){
             x = -1;
         }else if (random == 2){
@@ -247,7 +254,7 @@ class EntityManager{
             x = 1;
         }
         
-        random = this.roll(1,focus);
+        random = EntityManager.roll(1,focus);
         if(random == 1){
             y = -1;
         }else if (random == 2){
@@ -265,25 +272,25 @@ class EntityManager{
         let targetItem = Board.itemAt(targetX, targetY);
 
         if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.behavior == "wall"){
-            this.attack(entity,targetItem);
+            EntityManager.attack(entity,targetItem);
         }
 
         if(targetItem.behavior == "sword" && !Board.wallAt(targetX, targetY)){
-            this.beat(entity,targetItem);
+            EntityManager.beat(entity,targetItem);
         }
     
-        if(!this.moveEntity(id, x, y, Board)){
-            this.moveEntity(id, 0, y, Board);
-            this.moveEntity(id, x, 0, Board);
+        if(!EntityManager.moveEntity(id, x, y, Board)){
+            EntityManager.moveEntity(id, 0, y, Board);
+            EntityManager.moveEntity(id, x, 0, Board);
         }
         
     }
 
-    attack(attacker,target){
+    static attack(attacker,target){
         let damage = attacker.damage;
         let stunTime = attacker.stunTime;
         if(attacker.behavior == 'sword'){
-            let strikeType = this.getStrikeType(attacker);
+            let strikeType = EntityManager.getStrikeType(attacker);
             if(attacker[strikeType]){
                 damage = attacker[strikeType].damage;
                 stunTime = attacker[strikeType].stunTime;
@@ -295,47 +302,47 @@ class EntityManager{
         }
         let stunAdded = 0;
         if (stunTime){
-            stunAdded = this.roll(1,stunTime);
+            stunAdded = EntityManager.roll(1,stunTime);
         }
-        let mortality = this.rollN(damageDice,0,damage);
+        let mortality = EntityManager.rollN(damageDice,0,damage);
 
         if (target.id == 'player'){
-            this.transmitMessage(attacker.name+" attacks you!");
-            this.player.changeHealth(mortality * -1);
+            EntityManager.transmitMessage(attacker.name+" attacks you!");
+            EntityManager.player.changeHealth(mortality * -1);
         }else if(target.behavior == 'wall'){
-            this.addMortality(target.id, mortality);
+            EntityManager.addMortality(target.id, mortality);
         }else{
             if(!target.dead){
-                this.transmitMessage(target.name+" is struck!");
+                EntityManager.transmitMessage(target.name+" is struck!");
             }
-            this.addStunTime(target.id,stunAdded);
-            this.addMortality(target.id, mortality);
-            this.knock(target.id, attacker.id);
-            this.enrageAndDaze(target);   
-            this.sturdy(attacker,target);
+            EntityManager.addStunTime(target.id,stunAdded);
+            EntityManager.addMortality(target.id, mortality);
+            EntityManager.knock(target.id, attacker.id);
+            EntityManager.enrageAndDaze(target);   
+            EntityManager.sturdy(attacker,target);
             console.log(target);
         }
 
         if(attacker.owner == 'player'){
-            this.degradeItem(attacker,0,0.25);
+            EntityManager.degradeItem(attacker,0,0.25);
         }
         
     }
 
-    knock(knockedId, knockerId){
-        let knocked = this.getEntity(knockedId);
-        let knocker = this.getEntity(knockerId);
+    static knock(knockedId, knockerId){
+        let knocked = EntityManager.getEntity(knockedId);
+        let knocker = EntityManager.getEntity(knockerId);
         let knockerPos;
-        knockerPos = this.history[this.history.length-1].entities[knockerId];
+        knockerPos = EntityManager.history[EntityManager.history.length-1].entities[knockerId];
         
 
-        let direction = this.roll(0,7);
-        let x = knockedId.x + this.translations[direction].x;
-        let y = knockedId.y + this.translations[direction].y;
+        let direction = EntityManager.roll(0,7);
+        let x = knockedId.x + EntityManager.translations[direction].x;
+        let y = knockedId.y + EntityManager.translations[direction].y;
     
         let tries = 0;
         //space must be open AND further from attacker's last position
-        let furtherSpace = (this.getOrthoDistance(knockerPos, knocked) < this.getOrthoDistance(knockerPos,{x:x, y:y}))
+        let furtherSpace = (EntityManager.getOrthoDistance(knockerPos, knocked) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
         let backupSpace = false;
         while((!Board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
             if(Board.isOpenSpace(x,y) && !backupSpace){
@@ -343,41 +350,41 @@ class EntityManager{
             }
 
             direction = (direction+1) % 8;
-            x = knocked.x + this.translations[direction].x;
-            y = knocked.y + this.translations[direction].y;
+            x = knocked.x + EntityManager.translations[direction].x;
+            y = knocked.y + EntityManager.translations[direction].y;
 
-            furtherSpace = (this.getOrthoDistance(knockerPos, knocked) < this.getOrthoDistance(knockerPos,{x:x, y:y}))
+            furtherSpace = (EntityManager.getOrthoDistance(knockerPos, knocked) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
             tries++;
         }
 
         if(tries < 8){
-            this.setPosition(knockedId,x,y)
+            EntityManager.setPosition(knockedId,x,y)
         }else if (backupSpace){
-            this.setPosition(knockedId,backupSpace.x,backupSpace.y);
+            EntityManager.setPosition(knockedId,backupSpace.x,backupSpace.y);
         }else{
-            this.transmitMessage(knocked.name + " is cornered!", 'pos');
+            EntityManager.transmitMessage(knocked.name + " is cornered!", 'pos');
             if(knocker.behavior == 'sword'){
-                this.setToLastPosition(knocker.owner);
-                this.setToLastPosition(knockerId);
-                this.placeSword(knockerId)
-                //this.knockSword(knockerId);
+                EntityManager.setToLastPosition(knocker.owner);
+                EntityManager.setToLastPosition(knockerId);
+                EntityManager.placeSword(knockerId)
+                //EntityManager.knockSword(knockerId);
             }
         }
     }
 
-    knockSword(swordId){
-        let sword = this.getEntity(swordId);
-        let owner = this.getEntity(sword.owner);
+    static knockSword(swordId){
+        let sword = EntityManager.getEntity(swordId);
+        let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
-        let direction = (this.roll(0,1) * 2) - 1;
+        let direction = (EntityManager.roll(0,1) * 2) - 1;
         let rotation = (sword.rotation + 8 + direction) % 8;
-        let translation = this.translations[rotation];
+        let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
         let counter = 1;
         while((Board.itemAt(x,y).behavior != 'wall' && Board.itemAt(x,y)) && counter < 3){
             rotation = (sword.rotation + 8 + direction) % 8;
-            translation = this.translations[rotation];
+            translation = EntityManager.translations[rotation];
             x = owner.x + translation.x;
             y = owner.y + translation.y;
         
@@ -385,9 +392,9 @@ class EntityManager{
         }
 
         if(Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y)){
-            this.transmitMessage('sword knocked!', 'danger');
+            EntityManager.transmitMessage('sword knocked!', 'danger');
             sword.rotation = rotation;
-            this.placeSword(sword.id);
+            EntityManager.placeSword(sword.id);
             
         }else{
             console.log('sword knock failed');
@@ -396,21 +403,21 @@ class EntityManager{
 
     }
 
-    findSwordMiddle(sword,pos1,pos2){
-        let owner = this.getEntity(sword.owner);
+    static findSwordMiddle(sword,pos1,pos2){
+        let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
-        let direction = (this.roll(0,1) * 2) - 1;
+        let direction = (EntityManager.roll(0,1) * 2) - 1;
         let rotation = (sword.rotation + 8 + direction) % 8;
-        let translation = this.translations[rotation];
+        let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
 
         let bestPos = {x:x, y:y};
         let bestRotation = rotation;
-        let bestDistance = this.getOrthoDistance({x:x,y:y},pos1)+this.getOrthoDistance({x:x,y:y},pos2)
+        let bestDistance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2)
 
         for(let i = 0; i < 8; i++){
-            let distance = this.getOrthoDistance({x:x,y:y},pos1)+this.getOrthoDistance({x:x,y:y},pos2);
+            let distance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2);
 
             let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
             if(validSpace){
@@ -421,25 +428,25 @@ class EntityManager{
                 }
             }
             rotation = (rotation + 8 + direction) % 8;
-            translation = this.translations[rotation];
+            translation = EntityManager.translations[rotation];
             x = owner.x + translation.x;
             y = owner.y + translation.y;
         }
 
         sword.rotation = bestRotation;
-        this.placeSword(sword.id);
+        EntityManager.placeSword(sword.id);
     }
 
-    enrageAndDaze(entity){
+    static enrageAndDaze(entity){
         if(!entity.behaviorInfo || entity.dead){
             return;
         }
         let enrageChance = entity.behaviorInfo.enrage;
         let dazeChance = entity.behaviorInfo.daze;
 
-        let random = this.roll(1,100);
+        let random = EntityManager.roll(1,100);
         if(random <= enrageChance){
-            this.transmitMessage(entity.name+" is enraged!", 'danger', ['enraged']);
+            EntityManager.transmitMessage(entity.name+" is enraged!", 'danger', ['enraged']);
             entity.behaviorInfo.focus += 5;
             entity.behaviorInfo.slow -= 3;
             if(!entity.behaviorInfo.beat){
@@ -450,11 +457,11 @@ class EntityManager{
                 entity.behaviorInfo.sturdy = 0;
             }
             entity.sturdy += 5;
-            entity.stunned -= Math.max(this.roll(0,entity.stunned),0);
+            entity.stunned -= Math.max(EntityManager.roll(0,entity.stunned),0);
         }
-        random = this.roll(1,100);
+        random = EntityManager.roll(1,100);
         if(random <= dazeChance){
-            this.transmitMessage(entity.name+" is dazed!", 'pos', ['dazed']);
+            EntityManager.transmitMessage(entity.name+" is dazed!", 'pos', ['dazed']);
             entity.behaviorInfo.focus -= 7;
             if(!entity.behaviorInfo.slow){
                 entity.behaviorInfo.slow = 0;
@@ -468,14 +475,14 @@ class EntityManager{
 
     //has beat% chance to beat sword out of way.
     //also beats sword out of way if damage exceeds player stamina.
-    beat(entity, sword){
+    static beat(entity, sword){
         console.log(entity);
         if(sword.owner == 'player'){
-            this.transmitMessage(entity.name+" attacks your weapon...");
-            let damage = this.roll(0,entity.damage);
-            this.player.changeStamina(damage * -1);
+            EntityManager.transmitMessage(entity.name+" attacks your weapon...");
+            let damage = EntityManager.roll(0,entity.damage);
+            EntityManager.player.changeStamina(damage * -1);
             if(damage < 1){
-                this.degradeItem(sword, damage*0.25, 1);
+                EntityManager.degradeItem(sword, damage*0.25, 1);
             }
         }
         let beatChance = 0;
@@ -483,48 +490,48 @@ class EntityManager{
             beatChance = entity.behaviorInfo.beat;
         }
 
-        let random = this.roll(1,100);
-        console.log(this.player.stamina < 0);
-        if(random <= beatChance || this.player.stamina < 0){
-            this.player.changeStamina(0);
-            this.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
-            this.knockSword(sword.id);
-        }else if(this.player.equipped){
-            this.transmitMessage("You hold steady!");
+        let random = EntityManager.roll(1,100);
+        console.log(EntityManager.player.stamina < 0);
+        if(random <= beatChance || EntityManager.player.stamina < 0){
+            EntityManager.player.changeStamina(0);
+            EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
+            EntityManager.knockSword(sword.id);
+        }else if(EntityManager.player.equipped){
+            EntityManager.transmitMessage("You hold steady!");
 
         }
         
     }
 
-    sturdy(attacker,target){
+    static sturdy(attacker,target){
         if(!target.behaviorInfor){
             return;
         }
         let sturdyChance = target.behaviorInfo.sturdy;
 
-        let random = this.roll(1,100);
+        let random = EntityManager.roll(1,100);
         if (random <= sturdyChance){
             /*
-            this.setToLastPosition(attacker.owner);
-            this.setToLastPosition(attacker.id);
-            this.setToLastPosition(target.id);
-            this.placeSword(attacker.id);
+            EntityManager.setToLastPosition(attacker.owner);
+            EntityManager.setToLastPosition(attacker.id);
+            EntityManager.setToLastPosition(target.id);
+            EntityManager.placeSword(attacker.id);
             */
-            this.removeEntity(attacker.id);
-            this.setToLastPosition(target.id);
-            let lastSwordPos = this.history[this.history.length-1].entities[attacker.id];
-            this.findSwordMiddle(attacker,target,lastSwordPos);
+            EntityManager.removeEntity(attacker.id);
+            EntityManager.setToLastPosition(target.id);
+            let lastSwordPos = EntityManager.history[EntityManager.history.length-1].entities[attacker.id];
+            EntityManager.findSwordMiddle(attacker,target,lastSwordPos);
             if(!target.dead){
-                this.transmitMessage(target.name+" holds its footing!", 'danger');
+                EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
             }
         }
     }
 
-    triggerBehaviors(){
+    static triggerBehaviors(){
         //console.log(board);
-        for (const [k,entity] of Object.entries(this.entities)){
+        for (const [k,entity] of Object.entries(EntityManager.entities)){
             //console.log(entity);
-            let random = this.roll(1,100);
+            let random = EntityManager.roll(1,100);
             let skip = entity.stunned
             if(entity.behaviorInfo){
                 skip += (random <= entity.behaviorInfo.slow);
@@ -533,10 +540,10 @@ class EntityManager{
             if (!skip){
                 switch(entity.behavior){
                     case "chase":
-                        this.chaseNatural(k, entity.behaviorInfo);
+                        EntityManager.chaseNatural(k, entity.behaviorInfo);
                         break;
                     case "sword":
-                        //player = this.placeSword(k,board, player);
+                        //player = EntityManager.placeSword(k,board, player);
                         break;
                     case "dead":
                         //entity.tempSymbol = 'x';
@@ -562,32 +569,32 @@ class EntityManager{
 
             if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated){
                 //console.log('obliterated');
-                this.dropItems(entity);
+                EntityManager.dropItems(entity);
                 entity.obliterated = true;
-                this.setPosition(entity.id,-1,-1);
+                EntityManager.setPosition(entity.id,-1,-1);
 
             }
         }
     }
 
-    reapWounded(){
-        for (const [k,entity] of Object.entries(this.entities)){
+    static reapWounded(){
+        for (const [k,entity] of Object.entries(EntityManager.entities)){
             if (entity.mortal > entity.threshold && entity.behavior != 'dead'){
-                this.kill(entity);
+                EntityManager.kill(entity);
             }
         }
         //console.log(player.health);
-        if(this.player.health <= 0){
-            this.setProperty('player','symbol', 'x');
-            this.setProperty('player','behavior', 'dead');
-            this.transmitMessage('you are dead.', 'urgent');
+        if(EntityManager.player.health <= 0){
+            EntityManager.setProperty('player','symbol', 'x');
+            EntityManager.setProperty('player','behavior', 'dead');
+            EntityManager.transmitMessage('you are dead.', 'urgent');
         }
         //console.log('Stamina: ' +player.stamina);
         //console.log('Health: ' + player.health);
     }
 
-    kill(entity){
-        this.transmitMessage(entity.name+" is slain!", 'win');
+    static kill(entity){
+        EntityManager.transmitMessage(entity.name+" is slain!", 'win');
         entity.name += " corpse";
         entity.behavior = 'dead';
         entity.dead = true;
@@ -599,13 +606,13 @@ class EntityManager{
             entity.walkable = true;
             entity.tempSymbol = '*';
         }
-        let roster = this.currentMap.roster;
+        let roster = EntityManager.currentMap.roster;
         roster[entity.index].alive = false;
     };
 
-    equipWeapon(weapon){
-        let id = this.getProperty("player", "sword");
-        let sword = this.getEntity(id);
+    static equipWeapon(weapon){
+        let id = EntityManager.getProperty("player", "sword");
+        let sword = EntityManager.getEntity(id);
 
         let x = sword.x;
         let y = sword.y;
@@ -616,8 +623,8 @@ class EntityManager{
 
         console.log(owner);
 
-        this.entities[id] = JSON.parse(JSON.stringify(weapon));
-        sword = this.getEntity(id);
+        EntityManager.entities[id] = JSON.parse(JSON.stringify(weapon));
+        sword = EntityManager.getEntity(id);
         sword.x = x;
         sword.y = y;
         sword.rotation = rotation;
@@ -628,20 +635,20 @@ class EntityManager{
         sword.equipped = true;
         console.log(sword);
         
-        this.transmitMessage('equipped weapon: '+weapon.name);
+        EntityManager.transmitMessage('equipped weapon: '+weapon.name);
     }
 
-    unequipWeapon(){
-        let sword = this.getEntity(this.entities.player.sword);
+    static unequipWeapon(){
+        let sword = EntityManager.getEntity(EntityManager.entities.player.sword);
         sword.equipped = false;
     }
 
-    monsterInit(monsterName,x,y){
-        let id = this.entityCounter;
-        this.entityCounter++;
+    static monsterInit(monsterName,x,y){
+        let id = EntityManager.entityCounter;
+        EntityManager.entityCounter++;
         let monster = JSON.parse(JSON.stringify(monsterVars[monsterName]));
 
-        let threshold = Math.max(this.rollN(monster.hitDice,1,8),1);
+        let threshold = Math.max(EntityManager.rollN(monster.hitDice,1,8),1);
 
         monster.x = x;
         monster.y = y;
@@ -650,12 +657,12 @@ class EntityManager{
         monster.stunned = 0;
         monster.mortal = 0;
 
-        this.entities[id] = monster;
+        EntityManager.entities[id] = monster;
 
-        return this.entities[id];
+        return EntityManager.entities[id];
     }
 
-    dropItem(item,x,y){
+    static dropItem(item,x,y){
         if(!item){
             return false;
         }
@@ -663,33 +670,33 @@ class EntityManager{
         item.y = y;
         item.item = true;
         item.walkable = true;
-        item.id = this.entityCounter;
-        item.dropTurn = this.log.turnCounter;
+        item.id = EntityManager.entityCounter;
+        item.dropTurn = EntityManager.log.turnCounter;
         if (!item.symbol){
             item.symbol = '*';
         }
-        this.entities[this.entityCounter] = item;
-        this.entityCounter++;
+        EntityManager.entities[EntityManager.entityCounter] = item;
+        EntityManager.entityCounter++;
         console.log(item);
     }
 
-    dropItems(entity){
+    static dropItems(entity){
         let inventory = entity.inventory
         if(!inventory){
             return false;
         }
 
         inventory.forEach((item) =>{
-            this.dropItem(item, entity.x, entity.y);
+            EntityManager.dropItem(item, entity.x, entity.y);
         })
     }
 
-    lootContainer(looter,container){
+    static lootContainer(looter,container){
         if(!container.inventory){
             return false;
         }
         if(looter.id == 'player'){
-            looter = this.player;
+            looter = EntityManager.player;
         }
         if(!looter.inventory){
             looter.inventory = [];
@@ -698,7 +705,7 @@ class EntityManager{
             if(item && (looter.inventory.length < looter.inventorySlots)){
                 let obj = item;
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
-                this.entities[obj.id] = obliterated;
+                EntityManager.entities[obj.id] = obliterated;
                 console.log(obj);
                 obj.walkable = false;
                 obj.inventory = false;
@@ -709,12 +716,12 @@ class EntityManager{
         })
     }
 
-    pickUpItem(entity,item){
-        if(!entity || entity.behavior == 'sword' || (item.dropTurn >= this.log.turnCounter && !entity.item) || this.skipBehaviors){
+    static pickUpItem(entity,item){
+        if(!entity || entity.behavior == 'sword' || (item.dropTurn >= EntityManager.log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
             return false;
         }
         if(entity.id == 'player'){
-            entity = this.player;
+            entity = EntityManager.player;
         }
         //console.log('pickup');
         //console.log(JSON.parse(JSON.stringify(item)));
@@ -735,7 +742,7 @@ class EntityManager{
         items.forEach((obj)=>{
             if(entity.inventory.length < entity.inventorySlots || entity.item){
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
-                this.entities[obj.id] = obliterated;
+                EntityManager.entities[obj.id] = obliterated;
                 obj.walkable = false;
                 obj.inventory = false;
                 obj.item = false;
@@ -745,86 +752,86 @@ class EntityManager{
         console.log(entity);
     }
 
-    saveSnapshot(){
-        let entities = JSON.parse(JSON.stringify(this.entities));
-        let playerJson = JSON.parse(JSON.stringify(this.player));
-        this.history.push({
+    static saveSnapshot(){
+        let entities = JSON.parse(JSON.stringify(EntityManager.entities));
+        let playerJson = JSON.parse(JSON.stringify(EntityManager.player));
+        EntityManager.history.push({
             entities:entities,
             player:playerJson
         });
-        if(this.history.length > this.historyLimit){
-            this.history.shift();
+        if(EntityManager.history.length > EntityManager.historyLimit){
+            EntityManager.history.shift();
         }
     }
 
-    canRewind(){
-        return this.history.length > 1 && this.player.luck > 0;
+    static canRewind(){
+        return EntityManager.history.length > 1 && EntityManager.player.luck > 0;
     }
 
-    rewind(){
-        let luck = this.player.luck-1;
-        this.history.pop();
-        let snapshot = this.history.pop();
-        this.entities = snapshot.entities;
-        Board.placeEntities(this.log);
+    static rewind(){
+        let luck = EntityManager.player.luck-1;
+        EntityManager.history.pop();
+        let snapshot = EntityManager.history.pop();
+        EntityManager.entities = snapshot.entities;
+        Board.placeEntities(EntityManager.log);
         
         //console.log(snapshot.player);
 
-        this.player.setPlayerInfo(snapshot.player);
-        if(this.player.equipped){
-            this.player.equipped = this.player.inventory[this.player.equipped.slot];
+        EntityManager.player.setPlayerInfo(snapshot.player);
+        if(EntityManager.player.equipped){
+            EntityManager.player.equipped = EntityManager.player.inventory[EntityManager.player.equipped.slot];
         }
-        this.player.luck = Math.max(0,luck);
+        EntityManager.player.luck = Math.max(0,luck);
     }
 
-    cancelAction(reason){
-        this.log.addNotice('Action Halted');
+    static cancelAction(reason){
+        EntityManager.log.addNotice('Action Halted');
         if(reason.insuficientStamina){
-            this.log.addNotice('Not Enough Stamina')
-            this.log.addNotice('Press NUMPAD5 to recover')
+            EntityManager.log.addNotice('Not Enough Stamina')
+            EntityManager.log.addNotice('Press NUMPAD5 to recover')
 
         }
         if(reason.blocked){
-            this.log.addNotice('Path Blocked')
+            EntityManager.log.addNotice('Path Blocked')
         }
-        let snapshot = this.history.pop();
-        this.entities = snapshot.entities;
-        Board.placeEntities(this.log);
+        let snapshot = EntityManager.history.pop();
+        EntityManager.entities = snapshot.entities;
+        Board.placeEntities(EntityManager.log);
         //console.log(snapshot.player);
 
-        this.player.setPlayerInfo(snapshot.player);  
-        this.skipBehaviors = true; 
+        EntityManager.player.setPlayerInfo(snapshot.player);  
+        EntityManager.skipBehaviors = true; 
 
-        let swordId = this.getEntity('player').sword;
-        Board.calculateLosArray(this.getEntity('player'));
-        this.placeSword(swordId);
+        let swordId = EntityManager.getEntity('player').sword;
+        Board.calculateLosArray(EntityManager.getEntity('player'));
+        EntityManager.placeSword(swordId);
     }
 
-    setToLastPosition(id){
-        let lastPosition = this.history[this.history.length-1].entities[id];
-        let entity = this.getEntity(id);
+    static setToLastPosition(id){
+        let lastPosition = EntityManager.history[EntityManager.history.length-1].entities[id];
+        let entity = EntityManager.getEntity(id);
         if (entity.behavior == "sword"){
             entity.rotation = lastPosition.rotation;
         }else{
-            this.setPosition(id,lastPosition.x,lastPosition.y)
+            EntityManager.setPosition(id,lastPosition.x,lastPosition.y)
         }
     }
 
-    roll(min,max){
+    static roll(min,max){
         return Math.floor(Math.random()*(max-min+1))+min;
     }
     
-    rollN(n, min,max){
+    static rollN(n, min,max){
         let sum = 0;
         for(let i = 0; i < n; i++){
-            sum += this.roll(min,max);
+            sum += EntityManager.roll(min,max);
         }
         return sum;
     }
 
-    loadRoom(json){
+    static loadRoom(json){
         console.log(json);
-        this.gameMaster.save.catchUpMap(json.name);
+        EntityManager.gameMaster.save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit();
         console.log(json.destinations);
@@ -835,17 +842,17 @@ class EntityManager{
             let entityObj;
             let x = entity.x;
             let y = entity.y;
-            let random = this.roll(0,99);
+            let random = EntityManager.roll(0,99);
             let spawn = (random < entity.spawnChance || !entity.spawnChance);
             if(value == "player"){
-                this.playerInit(x, y)
+                EntityManager.playerInit(x, y)
             }else if(value.monster){
                 if(entity.alive && spawn){
-                    entityObj = this.monsterInit(value.monster,x,y);
+                    entityObj = EntityManager.monsterInit(value.monster,x,y);
                 }
             }else{
                 if(entity.alive && spawn){
-                    entityObj = this.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);
+                    entityObj = EntityManager.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);
                 }
             }
             if(entityObj){
@@ -854,7 +861,7 @@ class EntityManager{
                     console.log(entity);
                     if(!entity.inventory || entity.inventory.length == 0){
                         console.log('give inventory');
-                        this.lootManager.giveMonsterLoot(entityObj);
+                        EntityManager.lootManager.giveMonsterLoot(entityObj);
                         entity.inventory = entityObj.inventory;
                     }
                     console.log('take inventory');
@@ -864,35 +871,35 @@ class EntityManager{
             }
         })
 
-        this.currentMap = json;
+        EntityManager.currentMap = json;
         
     }
 
-    updateSavedInventories(){
-        for (const [key, entity] of Object.entries(this.entities)) { 
+    static updateSavedInventories(){
+        for (const [key, entity] of Object.entries(EntityManager.entities)) { 
             if(entity.index){
-                let entitySave = this.currentMap.roster[entity.index];
+                let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory = entity.inventory;
             }
         }
     }
 
-    setProperty(id, Property, value){
-        this.entities[id][Property] = value;
+    static setProperty(id, Property, value){
+        EntityManager.entities[id][Property] = value;
     }
 
-    setPosition(id,x,y){
-        let entity = this.getEntity(id);
+    static setPosition(id,x,y){
+        let entity = EntityManager.getEntity(id);
         Board.clearSpace(entity.x,entity.y)
-        this.setProperty(id, 'x', x);
-        this.setProperty(id, 'y', y);
-        Board.placeEntity(this.getEntity(id),x,y)
-        //console.log(this.entities);
+        EntityManager.setProperty(id, 'x', x);
+        EntityManager.setProperty(id, 'y', y);
+        Board.placeEntity(EntityManager.getEntity(id),x,y)
+        //console.log(EntityManager.entities);
     }
 
-    getPosition(id){
-        let x = this.getProperty(id, 'x');
-        let y = this.getProperty(id, 'y');
+    static getPosition(id){
+        let x = EntityManager.getProperty(id, 'x');
+        let y = EntityManager.getProperty(id, 'y');
 
         return{
             x:x,
@@ -901,59 +908,59 @@ class EntityManager{
         }
     }
 
-    getProperty(id, Property){
-        return this.entities[id][Property];
+    static getProperty(id, Property){
+        return EntityManager.entities[id][Property];
     }
 
-    getEntity(id){
-        return this.entities[id];
+    static getEntity(id){
+        return EntityManager.entities[id];
     }
 
-    setEntity(id, entity){
-        this.entities[id] = entity;
+    static setEntity(id, entity){
+        EntityManager.entities[id] = entity;
     }
 
-    removeEntity(id){
-        let entity = this.getEntity(id);
+    static removeEntity(id){
+        let entity = EntityManager.getEntity(id);
         let x = entity.x;
         let y = entity.y;
         Board.clearSpace(x, y);
-        this.setPosition(id,-1,-1);
+        EntityManager.setPosition(id,-1,-1);
         Board.updateSpace(x,y);
     }
 
 
 
-    addStunTime(id, stunTime){
-        stunTime +=this.getProperty(id, 'stunned');
-        this.setProperty(id, 'stunned', stunTime);
+    static addStunTime(id, stunTime){
+        stunTime +=EntityManager.getProperty(id, 'stunned');
+        EntityManager.setProperty(id, 'stunned', stunTime);
     }
 
-    addMortality(id, mortal){
-        mortal += Math.max(this.getProperty(id, 'mortal'),0);
-        this.setProperty(id, 'mortal', mortal);
+    static addMortality(id, mortal){
+        mortal += Math.max(EntityManager.getProperty(id, 'mortal'),0);
+        EntityManager.setProperty(id, 'mortal', mortal);
     }
 
-    getDistance(point1, point2){
+    static getDistance(point1, point2){
         let xdif = Math.abs(point1.x - point2.x);
         let ydif = Math.abs(point1.y - point2.y);
 
         return Math.max(xdif, ydif);
     }
 
-    getOrthoDistance(point1, point2){
+    static getOrthoDistance(point1, point2){
         let xdif = Math.abs(point1.x - point2.x);
         let ydif = Math.abs(point1.y - point2.y);
 
         return xdif + ydif;
     }
 
-    transmitMessage(message, messageClass = false, keywords = false){
-        this.log.addMessage(message, messageClass, keywords);
+    static transmitMessage(message, messageClass = false, keywords = false){
+        EntityManager.log.addMessage(message, messageClass, keywords);
         console.log(message);
     }
 
-    hasPlayerLos(entity){
+    static hasPlayerLos(entity){
         return Board.getLineOfSight(entity.x,entity.y);
     }
 

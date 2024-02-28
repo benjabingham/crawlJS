@@ -6,13 +6,9 @@ class Board{
     static wallArray = [];
     static losArray = [];
 
-    static entityManager;
     static destinations = {};
 
-    static boardInit(entityManager){
-        if(entityManager){
-            Board.entityManager = entityManager;
-        }
+    static boardInit(){
         Board.boardArray = [];
         Board.wallArray = [];
         //Board.LosInit();
@@ -28,7 +24,7 @@ class Board{
 
     static placeEntities(){
         console.log('placeEntities');
-        let entities = Board.entityManager.entities;
+        let entities = EntityManager.entities;
         Board.boardInit();
         for (const [k,entity] of Object.entries(entities)){
             //console.log(entity);
@@ -45,10 +41,10 @@ class Board{
                 if(!Board.isOccupiedSpace(x,y) || entity.behavior == 'sword' || itemCase){
                     if(itemCase){
                         if(Board.itemAt(x,y).item){
-                            Board.entityManager.pickUpItem(entity,Board.itemAt(x,y));
+                            EntityManager.pickUpItem(entity,Board.itemAt(x,y));
                             Board.placeEntity(entity, x, y);
                         }else if(entity.item && Board.itemAt(x,y)){
-                            Board.entityManager.pickUpItem(Board.itemAt(x,y),entity);
+                            EntityManager.pickUpItem(Board.itemAt(x,y),entity);
                         }else{
                             Board.placeEntity(entity, x, y);
                         }
@@ -65,7 +61,7 @@ class Board{
     }
 
     static updateSpace(x,y){
-        let entities = Board.entityManager.entities;
+        let entities = EntityManager.entities;
         for (const [k,entity] of Object.entries(entities)){
             //console.log(entity);
             if(entity.x == x && entity.y == y){
@@ -231,8 +227,8 @@ class Board{
     }
 
     static hasLight(pos){
-        let playerEntity = Board.entityManager.getEntity('player');
-        let player = Board.entityManager.player
+        let playerEntity = EntityManager.getEntity('player');
+        let player = EntityManager.player
         let lightDistance = player.light+1;
         let distance = Board.getTrueDistance(pos,playerEntity);
 
@@ -246,7 +242,7 @@ class Board{
 
     static hasAdjacentEmptySpace(x,y){
         let result = false;
-        Board.entityManager.translations.forEach((translation)=>{
+        EntityManager.translations.forEach((translation)=>{
             let xToCheck = x+translation.x;
             let yToCheck = y+translation.y;
             if(Board.isSpace(xToCheck,yToCheck) && !Board.wallArray[y+translation.y][x+translation.x]){

@@ -20,11 +20,9 @@ class Board{
         for(let i=0;i<this.height;i++){
             this.boardArray[i] = [];
             this.wallArray[i] = [];
-            this.detailArray[i] = [];
             for(let j=0;j<this.width;j++){
                 this.boardArray[i][j] = false;
                 this.wallArray[i][j] = false;
-                this.detailArray[i][j] = false;
             }
         }
     }
@@ -258,6 +256,22 @@ class Board{
         })
 
         return result;
+    }
+
+    setDetail(x,y, detail){
+        if(!this.detailArray[y]){
+            this.detailArray[y] = [];
+        }
+
+        this.detailArray[y][x] = detail;
+    }
+
+    getDetail(x,y){
+        if(!this.detailArray[y]){
+            return false;
+        }
+
+        return this.detailArray[y][x];
     }
     
 }

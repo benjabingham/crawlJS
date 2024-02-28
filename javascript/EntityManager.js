@@ -16,14 +16,11 @@ class EntityManager{
     static history = [];
     static historyLimit = 10;
 
-    static lootManager;
-
     static currentMap;
     
     static entityManagerInit(player){
         Board.boardInit(this);
         EntityManager.player = player;
-        EntityManager.lootManager = new LootManager();
     }
 
     static wipeEntities(){
@@ -152,12 +149,12 @@ class EntityManager{
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
             if(!item.worn){
-                EntityManager.lootManager.applyModifier(EntityManager.player.equipped,EntityManager.lootManager.weaponModifiers.worn);
-                EntityManager.lootManager.applyModifier(item,EntityManager.lootManager.weaponModifiers.worn);
+                LootManager.applyModifier(EntityManager.player.equipped,itemVars.weaponModifiers.worn);
+                LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
 
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
             }else{
-                EntityManager.lootManager.breakWeapon(EntityManager.player.equipped);
+                LootManager.breakWeapon(EntityManager.player.equipped);
                 EntityManager.player.unequipWeapon();
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
                 EntityManager.removeEntity(item.id);
@@ -819,7 +816,7 @@ class EntityManager{
                 entityObj.index = entity.index;
                 if(entityObj.behavior != 'wall'){
                     if(!entity.inventory || entity.inventory.length == 0){
-                        EntityManager.lootManager.giveMonsterLoot(entityObj);
+                        LootManager.giveMonsterLoot(entityObj);
                         entity.inventory = entityObj.inventory;
                     }
                     entityObj.inventory = entity.inventory;

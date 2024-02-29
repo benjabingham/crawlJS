@@ -109,27 +109,25 @@ class Shop{
     }
 
     buyItem(slot){
-        let player = GameMaster.player;
         let item = this.inventory[slot];
-        if (item.price > GameMaster.player.gold){
+        if (item.price > Player.gold){
             return false;
         }
-        GameMaster.player.gold -= item.price;
+        Player.gold -= item.price;
         if(slot != -1){
             this.inventory[slot] = {purchased:true,tier:item.tier};
         }
         item.fresh = false;
-        player.inventory.push(item);
-        player.inventoryCleanup();
+        Player.inventory.push(item);
+        Player.inventoryCleanup();
         this.inventoryCleanup();
     }
 
     sellItem(slot){
-        let player = GameMaster.player;
-        let item = player.inventory[slot];
-        player.inventory[slot] = false;
-        player.gold += item.value;
-        player.inventoryCleanup();
+        let item = Player.inventory[slot];
+        Player.inventory[slot] = false;
+        Player.gold += item.value;
+        Player.inventoryCleanup();
     }
 
 }

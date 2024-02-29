@@ -1,27 +1,24 @@
 class GameMaster{
-    static player;
     static save;
     static customControls = {};
     static dungeonId = 0;
     static shop;
 
     static gameMasterInit(save){
-        GameMaster.player = save.player;
         GameMaster.save = save;
-        EntityManager.entityManagerInit(GameMaster.player);
+        EntityManager.entityManagerInit();
         GameMaster.shop = new Shop();
         Display.displayInit();
     }
 
     static reset(){
         EntityManager.updateSavedInventories();
-        GameMaster.player.unequipWeapon();
+        Player.unequipWeapon();
         Log.wipeLog();
         EntityManager.wipeEntities();
     }
 
     static startGame(){
-        let player = GameMaster.player;
         let entityManager = EntityManager;
         let board = Board;
 
@@ -89,13 +86,13 @@ class GameMaster{
         GameMaster.nextDay();
         GameMaster.shop.restockInventory();
         Display.showTownScreen();
-        GameMaster.player.changeStamina(100);
-        GameMaster.player.light = 0;
+        Player.changeStamina(100);
+        Player.light = 0;
     }
 
     static nextDay(){
         GameMaster.save.day++
-        GameMaster.player.rest();  
+        Player.rest();  
     }
 
     static rewind(event){
@@ -127,11 +124,11 @@ class GameMaster{
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
         if(GameMaster.dropMode){
-            if(!GameMaster.player.dropItem(slot)){
+            if(!Player.dropItem(slot)){
                 //EntityManager.skipBehaviors = true;
                 GameMaster.dropMode = false;
             }
-        }else if(!GameMaster.player.useItem(GameMaster.player.inventory[slot])){
+        }else if(!Player.useItem(Player.inventory[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }
@@ -140,7 +137,7 @@ class GameMaster{
     }
 
     static wait(event){
-        GameMaster.player.gainStamina();
+        Player.gainStamina();
         GameMaster.postPlayerAction();
     }
 
@@ -178,15 +175,15 @@ class GameMaster{
         EntityManager.reapWounded();
         EntityManager.triggerBehaviors();
         EntityManager.reapWounded();
-        GameMaster.player.lightDown();
+        Player.lightDown();
     }
 
     static updateDisplay(){
         Display.printBoard(board.boardArray);
-        GameMaster.player.inventoryCleanup();
+        Player.inventoryCleanup();
         Display.displayInventory(true);
 
-        Display.fillBars(GameMaster.player);
+        Display.fillBars(Player);
     }
 
     static postPlayerAction(){     

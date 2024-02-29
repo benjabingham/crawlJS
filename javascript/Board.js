@@ -137,7 +137,7 @@ class Board{
         }
     }
 
-    static calculateLosArray(player){
+    static calculateLosArray(playerPos){
         Board.LosInit();
         let losDistance = 25
         let losMin = 8-losDistance
@@ -145,9 +145,9 @@ class Board{
         for(let displayY=losMin;displayY<=losMax;displayY++){
             for(let displayX=losMin;displayX<=losMax;displayX++){
                 if(displayX == losMin || displayY == losMin || displayX == losMax || displayY == losMax){
-                    let x = (displayX-8) + player.x;
-                    let y = (displayY-8) + player.y;
-                    Board.drawLos(player.x, player.y, x, y);
+                    let x = (displayX-8) + playerPos.x;
+                    let y = (displayY-8) + playerPos.y;
+                    Board.drawLos(playerPos.x, playerPos.y, x, y);
                 }
             }
         }
@@ -216,8 +216,7 @@ class Board{
 
     static hasLight(pos){
         let playerEntity = EntityManager.getEntity('player');
-        let player = EntityManager.player
-        let lightDistance = player.light+1;
+        let lightDistance = Player.light+1;
         let distance = Board.getTrueDistance(pos,playerEntity);
 
         return lightDistance >= distance;

@@ -1,12 +1,12 @@
 class Save{
     constructor(){
         this.maps = {};
-        this.player = new Player;
+        Player.playerInit();
         this.day = 0;
     }
 
     newSave(){
-        this.player.reset();
+        Player.reset();
     }
 
     loadSave(file){

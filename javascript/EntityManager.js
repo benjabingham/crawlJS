@@ -12,15 +12,13 @@ class EntityManager{
         {x:-1,y:0},
         {x:-1,y:-1}
     ];
-    static player;
     static history = [];
     static historyLimit = 10;
 
     static currentMap;
     
-    static entityManagerInit(player){
+    static entityManagerInit(){
         Board.boardInit(this);
-        EntityManager.player = player;
     }
 
     static wipeEntities(){
@@ -71,7 +69,7 @@ class EntityManager{
         let sword = EntityManager.entityInit('*', 'sword', -1,-1);
         let id = sword.id;
         sword.owner = owner;
-        sword.equipped = EntityManager.player.equipped;
+        sword.equipped = Player.equipped;
         sword.rotation = rotation;
 
         EntityManager.setEntity(id, sword);
@@ -79,11 +77,11 @@ class EntityManager{
         EntityManager.setProperty(owner,'sword', id);
 
         if(sword.equipped){
-            //EntityManager.equipWeapon(EntityManager.player.equipped);
+            //EntityManager.equipWeapon(Player.equipped);
         }
         
         //EntityManager.switchWeapon('stick');
-        EntityManager.placeSword(id, EntityManager.player);
+        EntityManager.placeSword(id);
     
         return id;
     }
@@ -130,7 +128,7 @@ class EntityManager{
                     }else{
                         weight = sword.weight;
                     }
-                    EntityManager.player.changeStamina(weight * -1);
+                    Player.changeStamina(weight * -1);
                     
                 }
             }
@@ -139,7 +137,7 @@ class EntityManager{
         if(rotation == sword.rotation && sword.x == swordPosition.x && sword.y == swordPosition.y && sword.equipped){
             EntityManager.setPosition(id,x,y);
         }
-        if (EntityManager.player.stamina < 0){
+        if (Player.stamina < 0){
             EntityManager.cancelAction({insuficientStamina:true});
         }
     }
@@ -149,13 +147,13 @@ class EntityManager{
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
             if(!item.worn){
-                LootManager.applyModifier(EntityManager.player.equipped,itemVars.weaponModifiers.worn);
+                LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);
                 LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
 
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
             }else{
-                LootManager.breakWeapon(EntityManager.player.equipped);
-                EntityManager.player.unequipWeapon();
+                LootManager.breakWeapon(Player.equipped);
+                Player.unequipWeapon();
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
                 EntityManager.removeEntity(item.id);
             }
@@ -291,7 +289,7 @@ class EntityManager{
 
         if (target.id == 'player'){
             EntityManager.transmitMessage(attacker.name+" attacks you!");
-            EntityManager.player.changeHealth(mortality * -1);
+            Player.changeHealth(mortality * -1);
         }else if(target.behavior == 'wall'){
             EntityManager.addMortality(target.id, mortality);
         }else{
@@ -459,7 +457,7 @@ class EntityManager{
         if(sword.owner == 'player'){
             EntityManager.transmitMessage(entity.name+" attacks your weapon...");
             let damage = EntityManager.roll(0,entity.damage);
-            EntityManager.player.changeStamina(damage * -1);
+            Player.changeStamina(damage * -1);
             if(damage < 1){
                 EntityManager.degradeItem(sword, damage*0.25, 1);
             }
@@ -470,11 +468,11 @@ class EntityManager{
         }
 
         let random = EntityManager.roll(1,100);
-        if(random <= beatChance || EntityManager.player.stamina < 0){
-            EntityManager.player.changeStamina(0);
+        if(random <= beatChance || Player.stamina < 0){
+            Player.changeStamina(0);
             EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
             EntityManager.knockSword(sword.id);
-        }else if(EntityManager.player.equipped){
+        }else if(Player.equipped){
             EntityManager.transmitMessage("You hold steady!");
 
         }
@@ -557,7 +555,7 @@ class EntityManager{
                 EntityManager.kill(entity);
             }
         }
-        if(EntityManager.player.health <= 0){
+        if(Player.health <= 0){
             EntityManager.setProperty('player','symbol', 'x');
             EntityManager.setProperty('player','behavior', 'dead');
             EntityManager.transmitMessage('you are dead.', 'urgent');
@@ -663,7 +661,7 @@ class EntityManager{
             return false;
         }
         if(looter.id == 'player'){
-            looter = EntityManager.player;
+            looter = Player;
         }
         if(!looter.inventory){
             looter.inventory = [];
@@ -687,7 +685,7 @@ class EntityManager{
             return false;
         }
         if(entity.id == 'player'){
-            entity = EntityManager.player;
+            entity = Player;
         }
         let items = [];
         if(item.inventory){
@@ -717,7 +715,7 @@ class EntityManager{
 
     static saveSnapshot(){
         let entities = JSON.parse(JSON.stringify(EntityManager.entities));
-        let playerJson = JSON.parse(JSON.stringify(EntityManager.player));
+        let playerJson = Player.getPlayerJson();
         EntityManager.history.push({
             entities:entities,
             player:playerJson
@@ -728,21 +726,21 @@ class EntityManager{
     }
 
     static canRewind(){
-        return EntityManager.history.length > 1 && EntityManager.player.luck > 0;
+        return EntityManager.history.length > 1 && Player.luck > 0;
     }
 
     static rewind(){
-        let luck = EntityManager.player.luck-1;
+        let luck = Player.luck-1;
         EntityManager.history.pop();
         let snapshot = EntityManager.history.pop();
         EntityManager.entities = snapshot.entities;
         Board.placeEntities();
         
-        EntityManager.player.setPlayerInfo(snapshot.player);
-        if(EntityManager.player.equipped){
-            EntityManager.player.equipped = EntityManager.player.inventory[EntityManager.player.equipped.slot];
+        Player.setPlayerInfo(snapshot.player);
+        if(Player.equipped){
+            Player.equipped = Player.inventory[Player.equipped.slot];
         }
-        EntityManager.player.luck = Math.max(0,luck);
+        Player.luck = Math.max(0,luck);
     }
 
     static cancelAction(reason){
@@ -759,7 +757,7 @@ class EntityManager{
         EntityManager.entities = snapshot.entities;
         Board.placeEntities();
 
-        EntityManager.player.setPlayerInfo(snapshot.player);  
+        Player.setPlayerInfo(snapshot.player);  
         EntityManager.skipBehaviors = true; 
 
         let swordId = EntityManager.getEntity('player').sword;

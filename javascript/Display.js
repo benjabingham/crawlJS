@@ -32,8 +32,8 @@ class Display{
         Display.displayInventory(false);
         Display.displayShop();
         Display.restButton();
-        Display.fillBars(GameMaster.player);
-        Display.nourishmentDiv(GameMaster.player);
+        Display.fillBars(Player);
+        Display.nourishmentDiv(Player);
     }
 
     static hideAllScreens(){
@@ -86,7 +86,6 @@ class Display{
 
     static printBoardGrid(){
         let boardArray = Board.boardArray;
-        let player = EntityManager.player;
         let playerPos = EntityManager.getEntity('player');
         
         for(let displayY=0; displayY<17; displayY++){
@@ -136,10 +135,10 @@ class Display{
         
     }
 
-    static nourishmentDiv(player){
+    static nourishmentDiv(){
         let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
         let display = this;
-        $('#nourishment-level-div').text('you are '+nourishmentLevels[player.nourishmentLevel]);
+        $('#nourishment-level-div').text('you are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
             {name:'meager meal',cost:3,nourishment:3},
@@ -152,10 +151,10 @@ class Display{
         meals.forEach((meal)=>{
             $('#meals-div').append(
                 $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                    if(player.gold >= meal.cost){
-                        player.changeNourishment(meal.nourishment);
-                        player.gold-= meal.cost;
-                        display.nourishmentDiv(player);
+                    if(Player.gold >= meal.cost){
+                        Player.changeNourishment(meal.nourishment);
+                        Player.gold-= meal.cost;
+                        display.nourishmentDiv();
                         display.displayGold();
                     }
                 })
@@ -163,19 +162,19 @@ class Display{
         })
     }
     
-    static fillBars(player){
-        let staminaPercent = player.staminaPercent;
+    static fillBars(){
+        let staminaPercent = Player.staminaPercent;
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
-        $('#stamina-level').text(player.stamina+"/"+player.staminaMax);
+        $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
 
-        let healthPercent = player.healthPercent;
+        let healthPercent = Player.healthPercent;
         $('#health-level').css('width',healthPercent*1.5+"px");
-        $('#health-level').text(player.health+"/"+player.healthMax);
+        $('#health-level').text(Player.health+"/"+Player.healthMax);
 
 
-        let luckPercent = player.luckPercent;
+        let luckPercent = Player.luckPercent;
         $('#luck-level').css('width',luckPercent*1.5+"px");
-        $('#luck-level').text(player.luck+"/"+player.luckMax);
+        $('#luck-level').text(Player.luck+"/"+Player.luckMax);
 
 
     }
@@ -204,7 +203,7 @@ class Display{
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
-        let inventory = EntityManager.player.inventory;
+        let inventory = Player.inventory;
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
@@ -223,14 +222,12 @@ class Display{
     }
 
     static displayGold(){
-        let player = EntityManager.player;
-        $('.gold-div').text(player.gold+" gold");
+        $('.gold-div').text(Player.gold+" gold");
     }
 
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
-        let player = EntityManager.player;
         let shop = GameMaster.shop;
         let itemValue = item.value;
         if(!itemValue){
@@ -254,14 +251,14 @@ class Display{
         }
 
         if(dungeonMode){
-            if(item.weapon && !player.equipped){
+            if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
                         GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
-            if(item.weapon && player.equipped && player.equipped.slot == slot){
+            if(item.weapon && Player.equipped && Player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
                         GameMaster.useItem({type:'item-'+(slot+1)});

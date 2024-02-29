@@ -1,53 +1,71 @@
 class Player {
-    constructor(){
-        this.staminaMax = 10;
-        this.stamina = this.staminaMax;
+    static staminaMax = 10;
+    static stamina;
 
-        this.healthMax = 10;
-        this.health = this.healthMax;
+    static healthMax = 10;
+    static health;
 
-        this.luckMax = 10;
-        this.luck = this.luckMax;
+    static luckMax = 10;
+    static luck;
 
-        this.nourishmentMax = 10;
-        this.nourishment = this.nourishmentMax;
+    static nourishmentMax = 10;
+    static nourishment;
 
-        this.light = 0;
-        this.lightMax = 8;
-        this.lightTime = 0;
+    static light = 0;
+    static lightMax = 8;
+    static lightTime = 0;
         
-        this.inventorySlots = 10;
-        this.inventory = [
-            {
-                usable:true,
-                name: "oil flask",
-                fuel:true,
-                light:2,
-                uses:3
-            }
-        ];
-        this.inventoryCleanup();
-        this.gold = 15;
-        this.equipped = false;
-        console.log('new player');
+    static inventorySlots = 10;
+    static inventory = [
+        {
+            usable:true,
+            name: "oil flask",
+            fuel:true,
+            light:2,
+            uses:3
+        }
+    ];
+    static gold = 15;
+    static equipped = false;
+
+    static playerInit(){
+        Player.stamina = Player.staminaMax;
+        Player.health = Player.healthMax
+        Player.luck = Player.luckMax
+        Player.nourishment = Player.nourishmentMax
+        Player.inventoryCleanup();
     }
 
-    get staminaPercent(){
-        return Math.floor((this.stamina/this.staminaMax)*100);
+    static getPlayerJson(){
+        return{
+            stamina:Player.stamina,
+            health:Player.health,
+            luck:Player.luck,
+            nourishment:Player.nourishment,
+            light:Player.light,
+            lightTime:Player.lightTime,
+            inventory:Player.inventory,
+            gold:Player.gold,
+            equipped:Player.equipped
+        }
     }
 
-    get healthPercent(){
-        return Math.floor((this.health/this.healthMax)*100);
+    static get staminaPercent(){
+        return Math.floor((Player.stamina/Player.staminaMax)*100);
     }
 
-    get luckPercent(){
-        return Math.floor((this.luck/this.luckMax)*100);
+    static get healthPercent(){
+        return Math.floor((Player.health/Player.healthMax)*100);
+    }
+
+    static get luckPercent(){
+        return Math.floor((Player.luck/Player.luckMax)*100);
 
     }
 
-    get nourishmentLevel(){
+    static get nourishmentLevel(){
         let level;
-        let nourishment = this.nourishment;
+        let nourishment = Player.nourishment;
         if(nourishment == 0){
             level = 0;
         }else if(nourishment < 4){
@@ -61,168 +79,168 @@ class Player {
         return level;
     }
 
-    rest(){
-        let health = this.nourishmentLevel-1;
-        this.changeHealth(health);
+    static rest(){
+        let health = Player.nourishmentLevel-1;
+        Player.changeHealth(health);
 
         let luck = Math.floor(Math.random()*2)
-        this.changeLuck(luck);
+        Player.changeLuck(luck);
 
-        this.changeNourishment(-5);
+        Player.changeNourishment(-5);
 
-        console.log(this.nourishment);
-        console.log(this.nourishmentLevel);
+        console.log(Player.nourishment);
+        console.log(Player.nourishmentLevel);
     }
 
 
-    gainStamina(){
+    static gainStamina(){
         let stamina;
-        if(this.nourishment < 4){
+        if(Player.nourishment < 4){
             stamina = 1;
         }else{
             stamina = 2;
         }
         let random = Math.random()*100;
-        if(this.nourishment == 0 && random < 50){
+        if(Player.nourishment == 0 && random < 50){
             stamina--;
         }
-        if(this.nourishment ==10 && random < 50){
+        if(Player.nourishment ==10 && random < 50){
             stamina++;
         }
 
-        this.changeStamina(stamina);
+        Player.changeStamina(stamina);
     }
 
-    changeStamina(n){
-        this.stamina = Math.max(0,this.stamina)
-        this.stamina = this.stamina+n;
-        this.stamina = Math.min(this.staminaMax,this.stamina);
+    static changeStamina(n){
+        Player.stamina = Math.max(0,Player.stamina)
+        Player.stamina = Player.stamina+n;
+        Player.stamina = Math.min(Player.staminaMax,Player.stamina);
     }
 
-    changeHealth(n){
-        this.health = this.health+n;
-        this.health = Math.min(this.healthMax,this.health);
-        this.health = Math.max(0,this.health)
+    static changeHealth(n){
+        Player.health = Player.health+n;
+        Player.health = Math.min(Player.healthMax,Player.health);
+        Player.health = Math.max(0,Player.health)
     }
 
-    changeLuck(n){
-        this.luck = this.luck+n;
-        this.luck = Math.min(this.luckMax,this.luck);
-        this.luck = Math.max(0,this.luck)
+    static changeLuck(n){
+        Player.luck = Player.luck+n;
+        Player.luck = Math.min(Player.luckMax,Player.luck);
+        Player.luck = Math.max(0,Player.luck)
     }
 
-    changeNourishment(n){
-        this.nourishment = this.nourishment+n;
-        if(this.nourishment > this.nourishmentMax){
-            this.changeLuck(1);
+    static changeNourishment(n){
+        Player.nourishment = Player.nourishment+n;
+        if(Player.nourishment > Player.nourishmentMax){
+            Player.changeLuck(1);
         }
-        this.nourishment = Math.min(this.nourishmentMax,this.nourishment);
-        this.nourishment = Math.max(0,this.nourishment)
+        Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
+        Player.nourishment = Math.max(0,Player.nourishment)
     }
 
 
-    setPlayerInfo(playerInfo){
+    static setPlayerInfo(playerInfo){
         for (const [key, value] of Object.entries(playerInfo)) {
-            this[key] = value;
+            Player[key] = value;
           }
     }
 
-    reset(){
-        this.staminaMax = 10;
-        this.stamina = this.staminaMax;
+    static reset(){
+        Player.staminaMax = 10;
+        Player.stamina = Player.staminaMax;
 
-        this.healthMax = 10;
-        this.health = this.healthMax;
+        Player.healthMax = 10;
+        Player.health = Player.healthMax;
     }
 
-    useItem(item){
+    static useItem(item){
         if(!item){
             return false;
         }
         if(item.fuel){
-            this.addFuel(item);
+            Player.addFuel(item);
             return true;
-        }else if(item.weapon && this.equipped.slot == item.slot){
-           this.unequipWeapon();
+        }else if(item.weapon && Player.equipped.slot == item.slot){
+           Player.unequipWeapon();
            return true;
-        }else if(item.weapon && !this.equipped){
-            this.equipWeapon(item);
+        }else if(item.weapon && !Player.equipped){
+            Player.equipWeapon(item);
             return true;
         }
 
         return false;
     }
 
-    equipWeapon(weapon){
-        if(this.equipped){
+    static equipWeapon(weapon){
+        if(Player.equipped){
             return;
         }
-        this.equipped = weapon
+        Player.equipped = weapon
         EntityManager.equipWeapon(weapon);
     }
 
-    unequipWeapon(){
-        if (!this.equipped){
+    static unequipWeapon(){
+        if (!Player.equipped){
             return;
         }
-        this.equipped = false;
+        Player.equipped = false;
         EntityManager.unequipWeapon();
     }
 
-    addFuel(fuel){
+    static addFuel(fuel){
         let slot = fuel.slot;
-        this.light += fuel.light;
-        this.light = Math.min(this.lightMax, this.light);
-        this.lightTime = 0;
+        Player.light += fuel.light;
+        Player.light = Math.min(Player.lightMax, Player.light);
+        Player.lightTime = 0;
 
-        this.consume(slot);
+        Player.consume(slot);
     }
 
-    consume(slot){
-        let item = this.inventory[slot];
+    static consume(slot){
+        let item = Player.inventory[slot];
         if(item.uses > 1){
             item.uses--;
         }else{
-            this.inventory[slot] = false;
+            Player.inventory[slot] = false;
         }
     }
 
-    lightDown(){
-        if(this.light < 1){
+    static lightDown(){
+        if(Player.light < 1){
             return false;
         }
-        this.lightTime += this.light;
+        Player.lightTime += Player.light;
         let random = Math.random()*1500;
-        if (random < this.lightTime-150){
-            this.light--;
-            this.lightTime = 0;
+        if (random < Player.lightTime-150){
+            Player.light--;
+            Player.lightTime = 0;
             Log.addMessage('Your light dims...');
         }
     }
 
-    inventoryCleanup(){
+    static inventoryCleanup(){
         let newInventory = [];
         let slot = 0;
-        this.inventory.forEach((item) =>{
+        Player.inventory.forEach((item) =>{
             if(item){
                 newInventory.push(item);
                 item.slot = slot;
                 slot++;
             }
         })
-        this.inventory = newInventory;
+        Player.inventory = newInventory;
     }
 
-    dropItem(slot){
-        if(!this.inventory[slot]){
+    static dropItem(slot){
+        if(!Player.inventory[slot]){
             return false;
         }
-        if(this.equipped.slot == slot){
-            this.unequipWeapon();
+        if(Player.equipped.slot == slot){
+            Player.unequipWeapon();
         }
         let playerEntity = EntityManager.getEntity('player');
-        EntityManager.dropItem(this.inventory[slot],playerEntity.x,playerEntity.y);
-        this.inventory[slot] = false;
+        EntityManager.dropItem(Player.inventory[slot],playerEntity.x,playerEntity.y);
+        Player.inventory[slot] = false;
     }
 
 }

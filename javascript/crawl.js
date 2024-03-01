@@ -1,6 +1,6 @@
 $(document).ready(function(){
-    let save = new Save();
-    GameMaster.gameMasterInit(save);
+    Save.saveInit();
+    GameMaster.gameMasterInit();
     InputManager.setInputPreset('numpad');
     InputManager.addEventListeners()
     Display.setCustomControls();

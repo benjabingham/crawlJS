@@ -788,7 +788,7 @@ class EntityManager{
     }
 
     static loadRoom(json){
-        GameMaster.save.catchUpMap(json.name);
+        Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit();
         Board.destinations = json.destinations;

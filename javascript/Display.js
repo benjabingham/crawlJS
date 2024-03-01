@@ -25,7 +25,7 @@ class Display{
         Display.hideAllScreens();
         $('#hud-div').show();
         $('#town-screen').show();
-        $('#day-div').text('day '+GameMaster.save.day);
+        $('#day-div').text('day '+Save.day);
         $('#town-inventory-wrapper').show();
 
         Display.populateLocations();
@@ -45,20 +45,19 @@ class Display{
     }
 
     static giveSaveButtonsBehavior(){
-        let save = GameMaster.save;
         let display = this;
         $('#new-save-button').off().on('click',function(){
-            save.newSave();
+            Save.newSave();
             display.showTownScreen();
         })
 
         $('#load-file-input').off().change(function(){
-            save.loadSave($('#load-file-input').prop('files')[0])
+            Save.loadSave($('#load-file-input').prop('files')[0])
             display.showTownScreen();
         })
 
         $('#download-save-button').off().on('click',function(){
-            save.downloadSave();
+            Save.downloadSave();
         })
     }
 

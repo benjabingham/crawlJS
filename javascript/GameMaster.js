@@ -1,11 +1,9 @@
 class GameMaster{
-    static save;
     static customControls = {};
     static dungeonId = 0;
     static shop;
 
-    static gameMasterInit(save){
-        GameMaster.save = save;
+    static gameMasterInit(){
         EntityManager.entityManagerInit();
         GameMaster.shop = new Shop();
         Display.displayInit();
@@ -41,17 +39,17 @@ class GameMaster{
     }
 
     static getRoom(roomString){
-        if(GameMaster.save.maps[roomString]){
+        if(Save.maps[roomString]){
             console.log('room cached')
-            EntityManager.loadRoom(GameMaster.save.maps[roomString]);
+            EntityManager.loadRoom(Save.maps[roomString]);
             GameMaster.startGame();
         }else{
             console.log('loading room '+roomString);
             fetch('./rooms/'+roomString)
             .then((response) => response.json())
             .then((json) => {
-                GameMaster.save.mapInit(json);
-                EntityManager.loadRoom(GameMaster.save.maps[roomString]);
+                Save.mapInit(json);
+                EntityManager.loadRoom(Save.maps[roomString]);
                 GameMaster.startGame();
             })
         }
@@ -91,7 +89,7 @@ class GameMaster{
     }
 
     static nextDay(){
-        GameMaster.save.day++
+        Save.day++
         Player.rest();  
     }
 

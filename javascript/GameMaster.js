@@ -1,11 +1,10 @@
 class GameMaster{
     static customControls = {};
     static dungeonId = 0;
-    static shop;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
-        GameMaster.shop = new Shop();
+        Shop.shopInit();
         Display.displayInit();
     }
 
@@ -82,7 +81,7 @@ class GameMaster{
 
     static loadTown(){
         GameMaster.nextDay();
-        GameMaster.shop.restockInventory();
+        Shop.restockInventory();
         Display.showTownScreen();
         Player.changeStamina(100);
         Player.light = 0;

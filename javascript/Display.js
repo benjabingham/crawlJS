@@ -210,10 +210,9 @@ class Display{
     }
 
     static displayShop(){
-        let shop = GameMaster.shop;
         $('#shop-wrapper').show();
         $('#shop-list').html('');
-        let inventory = shop.getInventory();
+        let inventory = Shop.getInventory();
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, false, 'shop');
         })
@@ -227,7 +226,6 @@ class Display{
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
-        let shop = GameMaster.shop;
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -274,7 +272,7 @@ class Display{
         }else if (inventory != 'shop'){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
-                    shop.sellItem(slot);
+                    Shop.sellItem(slot);
                     display.displayShop();
                     display.displayInventory(false);
                 })
@@ -282,7 +280,7 @@ class Display{
         }else if(inventory == 'shop'){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('buy - '+item.price).on('click',function(){
-                    shop.buyItem(slot);
+                    Shop.buyItem(slot);
                     display.displayShop();
                     display.displayInventory(false);
                 })

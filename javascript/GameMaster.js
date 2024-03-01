@@ -184,8 +184,7 @@ class GameMaster{
     }
 
     static postPlayerAction(){     
-        let swordId = EntityManager.getProperty('player','sword')
-        EntityManager.placeSword(swordId);   
+        EntityManager.placeSword('player');   
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }

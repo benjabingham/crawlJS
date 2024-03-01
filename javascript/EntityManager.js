@@ -82,46 +82,12 @@ class EntityManager{
         return symbol;
     }
 
-    static placeSword(id){
-        let sword = EntityManager.getEntity(id);
-        if(!sword.equipped){
-            return;
-        }
-        let ownerId = sword.owner;
+    static placeSword(ownerId){
         let owner = EntityManager.getEntity(ownerId);
-        let swordPosition = {x:sword.x, y:sword.y};
-
-        let rotation = sword.rotation;
-        EntityManager.setProperty(id, 'symbol', EntityManager.getSwordSymbol(rotation));
-        
-        let translation = EntityManager.translations[rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
-    
-        if(Board.isOccupiedSpace(x,y)){
-            let target = Board.itemAt(x,y);
-            if(target.id != id && target.behavior != 'wall'){
-                EntityManager.attack(sword,target);
-                if (ownerId == 'player'){
-                    
-                    let strikeType = EntityManager.getStrikeType(sword);
-                    let weight;
-                    if(sword[strikeType]){
-                        weight = sword[strikeType].weight;
-                    }else{
-                        weight = sword.weight;
-                    }
-                    Player.changeStamina(weight * -1);
-                    
-                }
-            }
-        }
-        //if sword hasn't been placed somewhere else as result of attack...
-        if(rotation == sword.rotation && sword.x == swordPosition.x && sword.y == swordPosition.y && sword.equipped){
-            EntityManager.setPosition(id,x,y);
-        }
-        if (Player.stamina < 0){
-            EntityManager.cancelAction({insuficientStamina:true});
+        let swordId = EntityManager.getEntity(owner.sword);
+        if(swordId){
+            let sword = EntityManager.getEntity(swordId);
+            sword.place();
         }
     }
 
@@ -329,7 +295,7 @@ class EntityManager{
             if(knocker.behavior == 'sword'){
                 EntityManager.setToLastPosition(knocker.owner);
                 EntityManager.setToLastPosition(knockerId);
-                EntityManager.placeSword(knockerId)
+                knocker.place();
                 //EntityManager.knockSword(knockerId);
             }
         }
@@ -357,7 +323,7 @@ class EntityManager{
         if(Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y)){
             EntityManager.transmitMessage('sword knocked!', 'danger');
             sword.rotation = rotation;
-            EntityManager.placeSword(sword.id);
+            sword.place();
             
         }
 
@@ -395,7 +361,7 @@ class EntityManager{
         }
 
         sword.rotation = bestRotation;
-        EntityManager.placeSword(sword.id);
+        sword.place();
     }
 
     static enrageAndDaze(entity){
@@ -476,12 +442,6 @@ class EntityManager{
 
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
-            /*
-            EntityManager.setToLastPosition(attacker.owner);
-            EntityManager.setToLastPosition(attacker.id);
-            EntityManager.setToLastPosition(target.id);
-            EntityManager.placeSword(attacker.id);
-            */
             EntityManager.removeEntity(attacker.id);
             EntityManager.setToLastPosition(target.id);
             let lastSwordPos = EntityManager.history[EntityManager.history.length-1].entities[attacker.id];
@@ -506,7 +466,6 @@ class EntityManager{
                         EntityManager.chaseNatural(k, entity.behaviorInfo);
                         break;
                     case "sword":
-                        //player = EntityManager.placeSword(k,board, player);
                         break;
                     case "dead":
                         //entity.tempSymbol = 'x';
@@ -749,9 +708,8 @@ class EntityManager{
         Player.setPlayerInfo(snapshot.player);  
         EntityManager.skipBehaviors = true; 
 
-        let swordId = EntityManager.getEntity('player').sword;
         Board.calculateLosArray(EntityManager.getEntity('player'));
-        EntityManager.placeSword(swordId);
+        EntityManager.placeSword('player');
     }
 
     static setToLastPosition(id){

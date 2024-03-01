@@ -28,14 +28,8 @@ class EntityManager{
         EntityManager.historyLimit = 10;
     }
 
-    static playerInit(x=0,y=0){
-        EntityManager.entities.player = {
-            x:x,
-            y:y,
-            symbol:"☺",
-            id: "player"
-        };
-        EntityManager.makeSword("player", Player.equipped);
+    static playerInit(x=0, y=0){
+        return new PlayerEntity(x,y);
     }
     
 
@@ -65,30 +59,8 @@ class EntityManager{
         return EntityManager.entities[id];
     }
 
-    static makeSword(ownerId, name, item){
-        return new SwordEntity(ownerId, name, item);
-    }
-
-    static getSwordSymbol(rotation){
-        let symbol = '|'
-        if (rotation % 4 == 1){
-            symbol = '/';
-        }else if (rotation % 4 == 2){
-            symbol = '—';
-        }else if (rotation % 4 == 3){
-            symbol = '\\';
-        }
-    
-        return symbol;
-    }
-
-    static placeSword(ownerId){
-        let owner = EntityManager.getEntity(ownerId);
-        let swordId = EntityManager.getEntity(owner.sword);
-        if(swordId){
-            let sword = EntityManager.getEntity(swordId);
-            sword.place();
-        }
+    static makeSword(ownerId, item){
+        return new SwordEntity(ownerId, item);
     }
 
     static degradeItem(item, modifier = 0, multiplier = 1){
@@ -109,40 +81,20 @@ class EntityManager{
         }
     }
 
-    static getStrikeType(sword){
-        let owner = sword.owner;
-        let ownerPos = EntityManager.getEntity(owner);
-        let lastSwordPos = EntityManager.history[EntityManager.history.length-1].entities[sword.id];
-        let lastOwnerPos = EntityManager.history[EntityManager.history.length-1].entities[owner];
-        if(lastSwordPos.rotation != sword.rotation){
-            return "swing";
-        }
-        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) || (lastOwnerPos.x == ownerPos.x && lastOwnerPos.y == ownerPos.y)){
-            return "jab";
-        }
+    static placeSword(ownerId){
+        let owner = EntityManager.getEntity(ownerId);
+        let swordId = owner.sword;
+        let sword = EntityManager.getEntity(swordId);
 
-        return "strafe";
+        sword.place();
     }
 
     static moveEntity(id, x, y){
         let entity = EntityManager.getEntity(id);
-        x += entity.x;
-        y += entity.y;
-    
-        if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
-            EntityManager.setPosition(id,x,y);
-            return true;
-        }else if(Board.itemAt(x,y) && Board.itemAt(x,y).container){
-            EntityManager.lootContainer(entity,Board.itemAt(x,y));
-            return true;
-        }else if(!Board.isSpace(x,y) && id == "player"){
-            GameMaster.travel(x,y);
-            return true;
-        }
-
-        return false;
+        return entity.move(x,y);
     }
 
+    
     static movePlayer(x,y){
         if(!EntityManager.moveEntity('player',x,y)){
             EntityManager.cancelAction({blocked:true})
@@ -150,11 +102,8 @@ class EntityManager{
     }
 
     static rotateSword(id, direction){
-        let rotation = EntityManager.getProperty(id, 'rotation');
-        rotation += 8 + direction;
-        rotation %= 8;
-    
-        EntityManager.setProperty(id, 'rotation', rotation);
+        let sword = EntityManager.getEntity(id);
+        sword.rotate(direction);
     }
 
     static chaseNatural(id, behaviorInfo){
@@ -219,13 +168,6 @@ class EntityManager{
     static attack(attacker,target){
         let damage = attacker.damage;
         let stunTime = attacker.stunTime;
-        if(attacker.behavior == 'sword'){
-            let strikeType = EntityManager.getStrikeType(attacker);
-            if(attacker[strikeType]){
-                damage = attacker[strikeType].damage;
-                stunTime = attacker[strikeType].stunTime;
-            }
-        }
         let damageDice = 1;
         if(target.stunned){
             damageDice=2;
@@ -252,10 +194,6 @@ class EntityManager{
             EntityManager.sturdy(attacker,target);
         }
 
-        if(attacker.owner == 'player'){
-            EntityManager.degradeItem(attacker,0,0.25);
-        }
-        
     }
 
     static knock(knockedId, knockerId){
@@ -303,33 +241,10 @@ class EntityManager{
 
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
-        let owner = EntityManager.getEntity(sword.owner);
-        //direction is either 1 or -1
-        let direction = (Random.roll(0,1) * 2) - 1;
-        let rotation = (sword.rotation + 8 + direction) % 8;
-        let translation = EntityManager.translations[rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
-        let counter = 1;
-        while((Board.itemAt(x,y).behavior != 'wall' && Board.itemAt(x,y)) && counter < 3){
-            rotation = (sword.rotation + 8 + direction) % 8;
-            translation = EntityManager.translations[rotation];
-            x = owner.x + translation.x;
-            y = owner.y + translation.y;
-        
-            counter++;
-        }
-
-        if(Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y)){
-            EntityManager.transmitMessage('sword knocked!', 'danger');
-            sword.rotation = rotation;
-            sword.place();
-            
-        }
-
-
+        sword.knockSword();
     }
 
+    //place sword in space closest to center between two points
     static findSwordMiddle(sword,pos1,pos2){
         let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
@@ -517,7 +432,7 @@ class EntityManager{
         entity.dead = true;
         entity.tempSymbol = 'x';
         entity.stunned = 0;
-        entity.container = true;
+        entity.isContainer = true;
         if(entity.tiny){
             entity.item = true;
             entity.walkable = true;
@@ -527,34 +442,19 @@ class EntityManager{
         roster[entity.index].alive = false;
     };
 
-    static equipWeapon(weapon){
-        let id = EntityManager.getProperty("player", "sword");
+    static equipWeapon(wielderId, weapon){
+        let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
-
-        let x = sword.x;
-        let y = sword.y;
-        let rotation = sword.rotation;
-        let owner = sword.owner;
-        let symbol = sword.symbol;
-        let behavior = sword.behavior;
-
-        EntityManager.entities[id] = JSON.parse(JSON.stringify(weapon));
-        sword = EntityManager.getEntity(id);
-        sword.x = x;
-        sword.y = y;
-        sword.rotation = rotation;
-        sword.owner = owner;
-        sword.symbol = symbol;
-        sword.id = id;
-        sword.behavior = behavior;
-        sword.equipped = true;
+        sword.equip(weapon);
         
         EntityManager.transmitMessage('equipped weapon: '+weapon.name);
     }
 
-    static unequipWeapon(){
-        let sword = EntityManager.getEntity(EntityManager.entities.player.sword);
-        sword.equipped = false;
+    static unequipWeapon(wielderId){
+        let id = EntityManager.getProperty(wielderId, "sword");
+        let sword = EntityManager.getEntity(id);
+
+        sword.unequip();
     }
 
     static monsterInit(monsterName,x,y){

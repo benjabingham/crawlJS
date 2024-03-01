@@ -125,7 +125,7 @@ let monsterVars = {
         hitDice:0,
         damage:4,
         inventorySlots: 10,
-        container: true,
+        isContainer: true,
         loot:{
             weapon:{
                 chance:50,

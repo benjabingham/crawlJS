@@ -176,7 +176,7 @@ class Player {
             return;
         }
         Player.equipped = weapon
-        EntityManager.equipWeapon(weapon);
+        EntityManager.equipWeapon('player', weapon);
     }
 
     static unequipWeapon(){
@@ -184,7 +184,7 @@ class Player {
             return;
         }
         Player.equipped = false;
-        EntityManager.unequipWeapon();
+        EntityManager.unequipWeapon('player');
     }
 
     static addFuel(fuel){

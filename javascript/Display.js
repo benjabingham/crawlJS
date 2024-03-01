@@ -81,6 +81,33 @@ class Display{
                 )                 
             }
         }
+
+        this.addClickControls();
+    }
+
+    addClickControls(){
+        let gameMaster = this.entityManager.gameMaster;
+        let playerPos = {x:8,y:8};
+        let translations = {
+            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}, wait:{x:0,y:0}
+        };
+
+        for (const [key, value] of Object.entries(translations)) {
+            let x = playerPos.x + value.x;
+            let y = playerPos.y + value.y;
+            let gridSquare = $('#board-grid-'+x+'-'+y);
+
+            gridSquare.addClass('control-grid').on('click',(e)=>{
+                e.preventDefault();
+                let event = {type:key}
+                if(key == 'wait'){
+                    gameMaster.wait(event);
+                    return;
+                }
+                gameMaster.movePlayer(event);
+            })
+        }
+
     }
 
     static printBoardGrid(){
@@ -90,7 +117,7 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off();
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
                 let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;

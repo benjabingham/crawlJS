@@ -82,11 +82,10 @@ class Display{
             }
         }
 
-        this.addClickControls();
+        Display.addClickControls();
     }
 
-    addClickControls(){
-        let gameMaster = this.entityManager.gameMaster;
+    static addClickControls(){
         let playerPos = {x:8,y:8};
         let translations = {
             right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}, wait:{x:0,y:0}
@@ -101,10 +100,10 @@ class Display{
                 e.preventDefault();
                 let event = {type:key}
                 if(key == 'wait'){
-                    gameMaster.wait(event);
+                    GameMaster.wait(event);
                     return;
                 }
-                gameMaster.movePlayer(event);
+                GameMaster.movePlayer(event);
             })
         }
 

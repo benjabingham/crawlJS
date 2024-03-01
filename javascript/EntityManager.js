@@ -35,7 +35,7 @@ class EntityManager{
             symbol:"☺",
             id: "player"
         };
-        EntityManager.swordInit("player");
+        EntityManager.makeSword("player", Player.equipped);
     }
     
 
@@ -65,25 +65,8 @@ class EntityManager{
         return EntityManager.entities[id];
     }
 
-    static swordInit(owner, rotation = 3){
-        let sword = EntityManager.entityInit('*', 'sword', -1,-1);
-        let id = sword.id;
-        sword.owner = owner;
-        sword.equipped = Player.equipped;
-        sword.rotation = rotation;
-
-        EntityManager.setEntity(id, sword);
-
-        EntityManager.setProperty(owner,'sword', id);
-
-        if(sword.equipped){
-            //EntityManager.equipWeapon(Player.equipped);
-        }
-        
-        //EntityManager.switchWeapon('stick');
-        EntityManager.placeSword(id);
-    
-        return id;
+    static makeSword(ownerId, name, item){
+        return new SwordEntity(ownerId, name, item);
     }
 
     static getSwordSymbol(rotation){
@@ -458,7 +441,13 @@ class EntityManager{
             EntityManager.transmitMessage(entity.name+" attacks your weapon...");
             let damage = Random.roll(0,entity.damage);
             Player.changeStamina(damage * -1);
-            if(damage < 1){
+            if(Player.stamina < 0){
+                Player.stamina = 0;
+                let knock = true;
+            }else{
+                let knock = false;
+            }
+            if(damage > 1){
                 EntityManager.degradeItem(sword, damage*0.25, 1);
             }
         }
@@ -468,14 +457,14 @@ class EntityManager{
         }
 
         let random = Random.roll(1,100);
-        if(random <= beatChance || Player.stamina < 0){
-            Player.changeStamina(0);
+        if(random <= beatChance || knock){
             EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
             EntityManager.knockSword(sword.id);
         }else if(Player.equipped){
             EntityManager.transmitMessage("You hold steady!");
-
         }
+
+        
         
     }
 

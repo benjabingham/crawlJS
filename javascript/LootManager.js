@@ -9,14 +9,14 @@ class LootManager{
         }
         let weaponLoot = entity.loot.weapon;
         if(weaponLoot){
-            if(LootManager.roll(1,99) < weaponLoot.chance){
+            if(Random.roll(1,99) < weaponLoot.chance){
                 entity.inventory.push(LootManager.getWeaponLoot(weaponLoot.tier));
             }
         }
 
         let treasureLoot = entity.loot.treasure;
         if(treasureLoot){
-            if(LootManager.roll(1,99) < treasureLoot.chance){
+            if(Random.roll(1,99) < treasureLoot.chance){
                 entity.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
             }
         }
@@ -58,9 +58,9 @@ class LootManager{
         let nRolls = tier-3;
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
-        let materialIndex = LootManager.roll(0,nMaterials-1);
+        let materialIndex = Random.roll(0,nMaterials-1);
         for(let i = 0; i < nRolls; i++){
-            let newIndex = LootManager.roll(0,nMaterials-1);
+            let newIndex = Random.roll(0,nMaterials-1);
             materialIndex = maxMinFunc(materialIndex,newIndex);
         }
         let key = materials[materialIndex];
@@ -72,7 +72,7 @@ class LootManager{
     static getTreasureMaterial(){
         let materials = Object.keys(itemVars.treasureMaterials);
         let nMaterials = materials.length;
-        let materialIndex = LootManager.roll(0,nMaterials-1);
+        let materialIndex = Random.roll(0,nMaterials-1);
         let key = materials[materialIndex];
         let material = itemVars.treasureMaterials[key];
 
@@ -81,7 +81,7 @@ class LootManager{
 
     static getIsWorn(weapon, tier){
         let nonWornChance = 20 * tier;
-        if(LootManager.roll(0,99) >= nonWornChance){
+        if(Random.roll(0,99) >= nonWornChance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.worn);
         }
     }
@@ -89,7 +89,7 @@ class LootManager{
     static getWeapon(){
         let weapons = Object.keys(itemVars.weapons);
         let nWeapons = weapons.length;
-        let weaponIndex = LootManager.roll(0,nWeapons-1);
+        let weaponIndex = Random.roll(0,nWeapons-1);
         
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
@@ -100,7 +100,7 @@ class LootManager{
     static getTreasure(){
         let treasures = Object.keys(itemVars.treasure);
         let nTreasures = treasures.length;
-        let treasureIndex = LootManager.roll(0,nTreasures-1);
+        let treasureIndex = Random.roll(0,nTreasures-1);
         
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
@@ -162,7 +162,4 @@ class LootManager{
         item.value = Math.max(item.value,1);
     }
 
-    static roll(min,max){
-        return Math.floor(Math.random()*(max-min+1))+min;
-    }
 }

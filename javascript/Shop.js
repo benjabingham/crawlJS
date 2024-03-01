@@ -37,7 +37,7 @@ class Shop{
         let slot = 0;
         let unallowed = ['stone','bone','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
         tiers.forEach((tier)=>{
-            let priceMultiplier = LootManager.roll(1,4) + tier;
+            let priceMultiplier = Random.roll(1,4) + tier;
             let item = LootManager.getWeaponLoot(tier);
             
             while(!Shop.itemAllowed(item,unallowed)){
@@ -82,13 +82,13 @@ class Shop{
                 Shop.inventory[slot] = fuel;
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
-                let random = LootManager.roll(1,99);
+                let random = Random.roll(1,99);
                 if(random < restockChance || item.purchased){
                     let newItem = LootManager.getWeaponLoot(item.tier);
                     while(!Shop.itemAllowed(newItem,unallowed)){
                         newItem = LootManager.getWeaponLoot(item.tier);                
                     }
-                    let priceMultiplier = LootManager.roll(1,4) + item.tier;
+                    let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value,1) * priceMultiplier;
                     newItem.slot = slot;
                     newItem.fresh = true;
@@ -104,7 +104,7 @@ class Shop{
 
     static getFuel(){
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
-        let priceMultiplier = LootManager.roll(2,4);
+        let priceMultiplier = Random.roll(2,4);
         fuel.price = Math.max(fuel.value,1) * priceMultiplier;
         fuel.tier = 'fuel';
 

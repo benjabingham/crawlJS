@@ -40,7 +40,7 @@ class EntityManager{
     
 
     static entityInit(symbol, behavior, x=0,y=0, hitDice=1, damage=0, behaviorInfo = {}, name = "", inventorySlots = 10){
-        let threshold = Math.max(EntityManager.rollN(hitDice,1,8),1);
+        let threshold = Math.max(Random.rollN(hitDice,1,8),1);
         let id = EntityManager.entityCounter;
         if (!name){
             name = id;
@@ -222,7 +222,7 @@ class EntityManager{
         let y = 0;
 
         //the higher focus is, the less likely the creature is to move randomly
-        let random = EntityManager.roll(1,focus);
+        let random = Random.roll(1,focus);
         if(random == 1){
             x = -1;
         }else if (random == 2){
@@ -235,7 +235,7 @@ class EntityManager{
             x = 1;
         }
         
-        random = EntityManager.roll(1,focus);
+        random = Random.roll(1,focus);
         if(random == 1){
             y = -1;
         }else if (random == 2){
@@ -283,9 +283,9 @@ class EntityManager{
         }
         let stunAdded = 0;
         if (stunTime){
-            stunAdded = EntityManager.roll(1,stunTime);
+            stunAdded = Random.roll(1,stunTime);
         }
-        let mortality = EntityManager.rollN(damageDice,0,damage);
+        let mortality = Random.rollN(damageDice,0,damage);
 
         if (target.id == 'player'){
             EntityManager.transmitMessage(attacker.name+" attacks you!");
@@ -316,7 +316,7 @@ class EntityManager{
         knockerPos = EntityManager.history[EntityManager.history.length-1].entities[knockerId];
         
 
-        let direction = EntityManager.roll(0,7);
+        let direction = Random.roll(0,7);
         let x = knockedId.x + EntityManager.translations[direction].x;
         let y = knockedId.y + EntityManager.translations[direction].y;
     
@@ -356,7 +356,7 @@ class EntityManager{
         let sword = EntityManager.getEntity(swordId);
         let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
-        let direction = (EntityManager.roll(0,1) * 2) - 1;
+        let direction = (Random.roll(0,1) * 2) - 1;
         let rotation = (sword.rotation + 8 + direction) % 8;
         let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
@@ -384,7 +384,7 @@ class EntityManager{
     static findSwordMiddle(sword,pos1,pos2){
         let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
-        let direction = (EntityManager.roll(0,1) * 2) - 1;
+        let direction = (Random.roll(0,1) * 2) - 1;
         let rotation = (sword.rotation + 8 + direction) % 8;
         let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
@@ -422,7 +422,7 @@ class EntityManager{
         let enrageChance = entity.behaviorInfo.enrage;
         let dazeChance = entity.behaviorInfo.daze;
 
-        let random = EntityManager.roll(1,100);
+        let random = Random.roll(1,100);
         if(random <= enrageChance){
             EntityManager.transmitMessage(entity.name+" is enraged!", 'danger', ['enraged']);
             entity.behaviorInfo.focus += 5;
@@ -435,9 +435,9 @@ class EntityManager{
                 entity.behaviorInfo.sturdy = 0;
             }
             entity.sturdy += 5;
-            entity.stunned -= Math.max(EntityManager.roll(0,entity.stunned),0);
+            entity.stunned -= Math.max(Random.roll(0,entity.stunned),0);
         }
-        random = EntityManager.roll(1,100);
+        random = Random.roll(1,100);
         if(random <= dazeChance){
             EntityManager.transmitMessage(entity.name+" is dazed!", 'pos', ['dazed']);
             entity.behaviorInfo.focus -= 7;
@@ -456,7 +456,7 @@ class EntityManager{
     static beat(entity, sword){
         if(sword.owner == 'player'){
             EntityManager.transmitMessage(entity.name+" attacks your weapon...");
-            let damage = EntityManager.roll(0,entity.damage);
+            let damage = Random.roll(0,entity.damage);
             Player.changeStamina(damage * -1);
             if(damage < 1){
                 EntityManager.degradeItem(sword, damage*0.25, 1);
@@ -467,7 +467,7 @@ class EntityManager{
             beatChance = entity.behaviorInfo.beat;
         }
 
-        let random = EntityManager.roll(1,100);
+        let random = Random.roll(1,100);
         if(random <= beatChance || Player.stamina < 0){
             Player.changeStamina(0);
             EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
@@ -485,7 +485,7 @@ class EntityManager{
         }
         let sturdyChance = target.behaviorInfo.sturdy;
 
-        let random = EntityManager.roll(1,100);
+        let random = Random.roll(1,100);
         if (random <= sturdyChance){
             /*
             EntityManager.setToLastPosition(attacker.owner);
@@ -505,7 +505,7 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = EntityManager.roll(1,100);
+            let random = Random.roll(1,100);
             let skip = entity.stunned
             if(entity.behaviorInfo){
                 skip += (random <= entity.behaviorInfo.slow);
@@ -614,7 +614,7 @@ class EntityManager{
         EntityManager.entityCounter++;
         let monster = JSON.parse(JSON.stringify(monsterVars[monsterName]));
 
-        let threshold = Math.max(EntityManager.rollN(monster.hitDice,1,8),1);
+        let threshold = Math.max(Random.rollN(monster.hitDice,1,8),1);
 
         monster.x = x;
         monster.y = y;
@@ -775,18 +775,6 @@ class EntityManager{
         }
     }
 
-    static roll(min,max){
-        return Math.floor(Math.random()*(max-min+1))+min;
-    }
-    
-    static rollN(n, min,max){
-        let sum = 0;
-        for(let i = 0; i < n; i++){
-            sum += EntityManager.roll(min,max);
-        }
-        return sum;
-    }
-
     static loadRoom(json){
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
@@ -797,7 +785,7 @@ class EntityManager{
             let entityObj;
             let x = entity.x;
             let y = entity.y;
-            let random = EntityManager.roll(0,99);
+            let random = Random.roll(0,99);
             let spawn = (random < entity.spawnChance || !entity.spawnChance);
             if(value == "player"){
                 EntityManager.playerInit(x, y)

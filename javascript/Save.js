@@ -98,16 +98,12 @@ class Save{
         let map = Save.maps[mapString];
         map.roster.forEach((entity)=>{
             if(!entity.alive && entity.value.respawnChance){
-                let random = Save.roll(0,99);
+                let random = Random.roll(0,99);
                 if(random < entity.value.respawnChance){
                     entity.alive = true;
                 }
             }
         })
-    }
-
-    static roll(min,max){
-        return Math.floor(Math.random()*(max-min+1))+min;
     }
 
 }

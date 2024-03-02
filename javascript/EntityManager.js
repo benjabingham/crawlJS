@@ -150,7 +150,7 @@ class EntityManager{
         let targetY = entity.y+y
         let targetItem = Board.itemAt(targetX, targetY);
 
-        if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.behavior == "wall"){
+        if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.isWall){
             EntityManager.attack(entity,targetItem);
         }
 
@@ -627,6 +627,8 @@ class EntityManager{
                 }
             }else if(value.isWall){
                 new Wall(x, y, value.hitDice, value.name);
+            }else if(value.isContainer){
+                new Container(value.containerKey,x,y,value);
             }else{
                 if(entity.alive && spawn){
                     entityObj = EntityManager.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);

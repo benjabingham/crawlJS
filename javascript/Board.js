@@ -11,7 +11,6 @@ class Board{
     static boardInit(){
         Board.boardArray = [];
         Board.wallArray = [];
-        //Board.LosInit();
         for(let i=0;i<Board.height;i++){
             Board.boardArray[i] = [];
             Board.wallArray[i] = [];
@@ -32,7 +31,7 @@ class Board{
             let y = entity.y;
             if(Board.itemAt(x,y).id != entity.id && Board.isSpace(x,y)){
                 let itemCase = Board.itemAt(x,y).item  || entity.item;
-                if(entity.behavior == 'wall'){
+                if(entity.isWall){
                     Board.wallArray[y][x] = true;
                 }else{
                     //Board.wallArray[y][x] = false;

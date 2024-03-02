@@ -30,10 +30,10 @@ class Entity{
         y += this.y;
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
-            EntityManager.setPosition(id,x,y);
+            EntityManager.setPosition(this.id,x,y);
             return true;
         }else if(Board.itemAt(x,y) && Board.itemAt(x,y).isContainer){
-            EntityManager.lootContainer(entity,Board.itemAt(x,y));
+            EntityManager.lootContainer(this,Board.itemAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
             GameMaster.travel(x,y);
@@ -158,7 +158,7 @@ class SwordEntity extends Entity{
 
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.itemAt(x,y);
-            if(target.id != this.id && target.behavior != 'wall'){
+            if(target.id != this.id && !target.isWall){
                 //TODO: Sword.attack()
                 this.swordAttack(target);
                 if (this.owner == 'player'){  
@@ -175,7 +175,7 @@ class SwordEntity extends Entity{
         }
         //if sword hasn't been placed somewhere else as result of attack...
         if(prevRotation == this.rotation && this.x == prevPosition.x && this.y == prevPosition.y && this.item){
-            EntityManager.setPosition(id,x,y);
+            EntityManager.setPosition(this.id,x,y);
         }
         //undo action if results in negative player stamina
         if (Player.stamina < 0){
@@ -316,9 +316,43 @@ class Wall extends Entity{
     threshold;
     isWall = true;
 
-    constructor(x=0,y=0,hitDice = 10, name=false){
+    constructor(x,y,hitDice = 10, name=false){
         super(false,x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
+
+        return this;
+    }
+}
+
+class Container extends Entity{
+    mortal = 0;
+    threshold;
+    isContainer = true;
+
+    constructor(containerKey, x, y, additionalParameters = {}){
+        super('Ch',x,y, 'chest');
+        if(containerVars[containerKey]){
+            let container = JSON.parse(JSON.stringify(containerVars[containerKey]));
+            //copy chest vars from template
+            for (const [key, val] of Object.entries(container)) { 
+                //if legal key...
+                if(!['id','x','y'].includes(key)){
+                    this[key] = val;
+                }
+            }
+        }
+        
+        //copy additional parameters...
+        for (const [key, val] of Object.entries(additionalParameters)) { 
+            //if legal key...
+            if(!['id','x','y'].includes(key)){
+                this[key] = val;
+            }
+        }
+
+        if(!this.threshold){
+            this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
+        }
 
         return this;
     }

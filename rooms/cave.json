@@ -155,7 +155,8 @@
             "respawnChance":10
         },
         "7":{
-            "monsterKey":"chest",
+            "isContainer":true,
+            "containerKey":"chest",
             "code":"7",
             "spawnChance":100,
             "respawnChance":0

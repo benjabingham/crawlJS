@@ -119,51 +119,57 @@
     ],
     "values":{
         "1":{
-            "symbol":"",
+            "isWall":true,
             "behavior":"wall",
-            "hitDice":"100",
+            "hitDice":"50",
             "name":"wall"
         },
         "2":"player",
         
         "3":{
-            "monster":"rat",
+            "isMonster":true,
+            "monsterKey":"rat",
             "code":"3",
             "spawnChance":80,
             "respawnChance":20
         },
         "4":{
-            "monster":"direRat",
+            "isMonster":true,
+            "monsterKey":"direRat",
             "code":"4",
             "spawnChance":60,
             "respawnChance":10
         },
         "5":{
-            "monster":"ogre",
+            "isMonster":true,
+            "monsterKey":"ogre",
             "code":"5",
             "spawnChance":60,
             "respawnChance":5
         },
         "6":{
-            "monster":"goblin",
+            "isMonster":true,
+            "monsterKey":"goblin",
             "code":"6",
             "spawnChance":80,
             "respawnChance":10
         },
         "7":{
-            "monster":"chest",
+            "monsterKey":"chest",
             "code":"7",
             "spawnChance":100,
             "respawnChance":0
         },
         "8":{
-            "monster":"wolf",
+            "isMonster":true,
+            "monsterKey":"wolf",
             "code":"8",
             "spawnChance":90,
             "respawnChance":10
         },
         "9":{
-            "monster":"direWolf",
+            "isMonster":true,
+            "monsterKey":"direWolf",
             "code":"9",
             "spawnChance":50,
             "respawnChance":10

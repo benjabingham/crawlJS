@@ -457,23 +457,8 @@ class EntityManager{
         sword.unequip();
     }
 
-    static monsterInit(monsterName,x,y){
-        let id = EntityManager.entityCounter;
-        EntityManager.entityCounter++;
-        let monster = JSON.parse(JSON.stringify(monsterVars[monsterName]));
-
-        let threshold = Math.max(Random.rollN(monster.hitDice,1,8),1);
-
-        monster.x = x;
-        monster.y = y;
-        monster.id = id;
-        monster.threshold = threshold;
-        monster.stunned = 0;
-        monster.mortal = 0;
-
-        EntityManager.entities[id] = monster;
-
-        return EntityManager.entities[id];
+    static monsterInit(monsterKey,x,y, additionalParameters = {}){     
+        return new Monster(monsterKey, x, y, additionalParameters);
     }
 
     static dropItem(item,x,y){
@@ -636,10 +621,12 @@ class EntityManager{
             let spawn = (random < entity.spawnChance || !entity.spawnChance);
             if(value == "player"){
                 EntityManager.playerInit(x, y)
-            }else if(value.monster){
+            }else if(value.isMonster){
                 if(entity.alive && spawn){
-                    entityObj = EntityManager.monsterInit(value.monster,x,y);
+                    entityObj = EntityManager.monsterInit(value.monsterKey,x,y,value);
                 }
+            }else if(value.isWall){
+                new Wall(x, y, value.hitDice, value.name);
             }else{
                 if(entity.alive && spawn){
                     entityObj = EntityManager.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);

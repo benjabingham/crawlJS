@@ -270,25 +270,42 @@ class Monster extends Entity{
     //behavior - string determing monster's behavior method
     behavior;
     //behaviorInfo - object containing parameters to be passed to behavior method
-    behaviorInfo;
+    behaviorInfo= {};
     //stunned - integer decreases when positive each turn, takes double damage and skips turn while positive.
-    stunned;
+    stunned = 0;
     //mortal - the amount of damage it has taken
     mortal = 0;
     //threshold - the amount of damage that will destroy it
-    threshold;
-    inventorySlots;
+    threshold = 1;
+    inventorySlots = 0;
     //damage - determines the amount of damage done by this monsters attacks
-    damage;
+    damage = 0;
     isMonster = true;
 
-    constructor(symbol, behavior, x=0, y=0, hitDice = 1, damage =0, behaviorInfo = {}, name = false, inventorySlots = 10){
-        super(symbol, x, y, name);
-        this.threshold = Math.max(Random.rollN(hitDice,1,8),1);
-        this.behavior = behavior;
-        this.behaviorInfo = behaviorInfo;
-        this.damage = damage;
-        this.inventorySlots = inventorySlots;
+    constructor(monsterKey,x,y, additionalParameters = {}){
+        super(false, x, y);
+        if(monsterVars[monsterKey]){
+            let monster = JSON.parse(JSON.stringify(monsterVars[monsterKey]));
+            //copy monster vars from template
+            for (const [key, val] of Object.entries(monster)) { 
+                //if legal key...
+                if(!['id','x','y'].includes(key)){
+                    this[key] = val;
+                }
+            }
+        }
+        
+        //copy additional parameters...
+        for (const [key, val] of Object.entries(additionalParameters)) { 
+            //if legal key...
+            if(!['id','x','y'].includes(key)){
+                this[key] = val;
+            }
+        }
+
+        if(!this.threshold){
+            this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
+        }
 
         return this;
     }

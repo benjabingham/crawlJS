@@ -52,6 +52,7 @@ class Save{
         console.log(this);
     }
 
+    //TODO: this should be where we give monsters their loot
     static mapInit(json){
         let roomString = json.name;
         let board = json.board;
@@ -94,6 +95,7 @@ class Save{
         map.lastDay = day;
     }
 
+    //TODO: this should be where we give monsters their loot
     static mapRespawn(mapString){
         let map = Save.maps[mapString];
         map.roster.forEach((entity)=>{

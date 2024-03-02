@@ -88,6 +88,18 @@ class Entity{
             }
         }
     }
+
+    //rewind to a saved snapshot of this object
+    rewind(snapshot){
+        snapshot = JSON.parse(JSON.stringify(snapshot));
+        for (const [key, val] of Object.entries(snapshot)) { 
+            this[key] = val;
+        }
+
+        for (const [key, val] of Object.entries(this)) { 
+            this[key] = snapshot[key];
+        }
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -120,7 +132,7 @@ class SwordEntity extends Entity{
         return this;
     }
 
-    get symbol(){
+    updateSymbol(){
         let symbol = '|'
         if (this.rotation % 4 == 1){
             symbol = '/';
@@ -130,7 +142,7 @@ class SwordEntity extends Entity{
             symbol = '\\';
         }
     
-        return symbol;
+        this.symbol = symbol;
     }
 
     equip(item){
@@ -181,6 +193,8 @@ class SwordEntity extends Entity{
         if (Player.stamina < 0){
             EntityManager.cancelAction({insuficientStamina:true});
         }
+
+        this.updateSymbol();
     }
 
     getStrikeType(){
@@ -317,7 +331,7 @@ class Wall extends Entity{
     isWall = true;
 
     constructor(x,y,hitDice = 10, name=false){
-        super(false,x,y,name);
+        super('',x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
 
         return this;

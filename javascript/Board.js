@@ -36,7 +36,7 @@ class Board{
                 }else{
                     //Board.wallArray[y][x] = false;
                 }
-                if(!Board.isOccupiedSpace(x,y) || entity.behavior == 'sword' || itemCase){
+                if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
                         if(Board.itemAt(x,y).item){
                             EntityManager.pickUpItem(entity,Board.itemAt(x,y));

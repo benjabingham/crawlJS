@@ -86,6 +86,11 @@ class EntityManager{
         let swordId = owner.sword;
         let sword = EntityManager.getEntity(swordId);
 
+        console.log({
+            owner:owner,
+            swordId:swordId,
+            sword:sword
+        })
         sword.place();
     }
 
@@ -154,7 +159,7 @@ class EntityManager{
             EntityManager.attack(entity,targetItem);
         }
 
-        if(targetItem.behavior == "sword" && !Board.wallAt(targetX, targetY)){
+        if(targetItem.isSword && !Board.wallAt(targetX, targetY)){
             EntityManager.beat(entity,targetItem);
         }
     
@@ -230,7 +235,7 @@ class EntityManager{
             EntityManager.setPosition(knockedId,backupSpace.x,backupSpace.y);
         }else{
             EntityManager.transmitMessage(knocked.name + " is cornered!", 'pos');
-            if(knocker.behavior == 'sword'){
+            if(knocker.isSword){
                 EntityManager.setToLastPosition(knocker.owner);
                 EntityManager.setToLastPosition(knockerId);
                 knocker.place();
@@ -380,11 +385,6 @@ class EntityManager{
                     case "chase":
                         EntityManager.chaseNatural(k, entity.behaviorInfo);
                         break;
-                    case "sword":
-                        break;
-                    case "dead":
-                        //entity.tempSymbol = 'x';
-                        break;
                     default:
                 }
             }
@@ -514,7 +514,7 @@ class EntityManager{
     }
 
     static pickUpItem(entity,item){
-        if(!entity || entity.behavior == 'sword' || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
+        if(!entity || entity.isSword || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
             return false;
         }
         if(entity.id == 'player'){
@@ -563,10 +563,11 @@ class EntityManager{
     }
 
     static rewind(){
+        console.log('rewind');
         let luck = Player.luck-1;
         EntityManager.history.pop();
         let snapshot = EntityManager.history.pop();
-        EntityManager.entities = snapshot.entities;
+        EntityManager.loadSnapshot(snapshot);
         Board.placeEntities();
         
         Player.setPlayerInfo(snapshot.player);
@@ -574,6 +575,12 @@ class EntityManager{
             Player.equipped = Player.inventory[Player.equipped.slot];
         }
         Player.luck = Math.max(0,luck);
+    }
+
+    static loadSnapshot(snapshot){
+        for (const [id, entity] of Object.entries(EntityManager.entities)) { 
+            entity.rewind(snapshot.entities[id]);
+        }
     }
 
     static cancelAction(reason){
@@ -587,7 +594,7 @@ class EntityManager{
             Log.addNotice('Path Blocked')
         }
         let snapshot = EntityManager.history.pop();
-        EntityManager.entities = snapshot.entities;
+        EntityManager.loadSnapshot(snapshot);
         Board.placeEntities();
 
         Player.setPlayerInfo(snapshot.player);  
@@ -600,7 +607,7 @@ class EntityManager{
     static setToLastPosition(id){
         let lastPosition = EntityManager.history[EntityManager.history.length-1].entities[id];
         let entity = EntityManager.getEntity(id);
-        if (entity.behavior == "sword"){
+        if (entity.isSword){
             entity.rotation = lastPosition.rotation;
         }else{
             EntityManager.setPosition(id,lastPosition.x,lastPosition.y)

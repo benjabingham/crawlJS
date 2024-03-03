@@ -412,7 +412,7 @@ class EntityManager{
 
             if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated && !entity.isSword){
                 entity.dropInventory();
-                entity.delete();
+                entity.obliterate();
             }
         }
     }

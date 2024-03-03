@@ -94,6 +94,10 @@ class Entity{
 
     //rewind to a saved snapshot of this object
     rewind(snapshot){
+        if(!snapshot){
+            this.obliterate();
+            return;
+        }
         snapshot = JSON.parse(JSON.stringify(snapshot));
         for (const [key, val] of Object.entries(snapshot)) { 
             this[key] = val;
@@ -144,12 +148,18 @@ class Entity{
         }
 
         while(container.inventory.length < 0 && this.inventory.length < this.inventoryMax){
-            this.inventory.push(itemPile.inventory.pop());
+            this.inventory.push(container.inventory.pop());
         }
     }
 
-    delete(){
-        delete EntityManager[this.id];
+    obliterate(){
+        console.log({
+            action:'obliterating',
+            item:this
+        })
+        this.obliterated = true;
+        this.x = -1;
+        this.y = -1;
     }
 }
 
@@ -459,7 +469,7 @@ class ItemPile extends Entity{
 
     checkIsEmpty(){
         if(this.inventory.length == 0){
-            this.delete();
+            this.obliterate();
         }
     }
 }

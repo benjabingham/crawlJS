@@ -215,7 +215,7 @@ class SwordEntity extends Entity{
         let weapon = this.item;
         let damage = weapon.damage;
         let stunTime = weapon.stunTime;
-        let strikeType = attacker.getStrikeType();
+        let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
             stunTime = weapon[strikeType].stunTime;
@@ -240,9 +240,9 @@ class SwordEntity extends Entity{
             }
             EntityManager.addStunTime(target.id,stunAdded);
             EntityManager.addMortality(target.id, mortality);
-            EntityManager.knock(target.id, attacker.id);
+            EntityManager.knock(target.id, this.id);
             EntityManager.enrageAndDaze(target);   
-            EntityManager.sturdy(attacker,target);
+            EntityManager.sturdy(this,target);
         }
 
         if(this.owner == 'player'){

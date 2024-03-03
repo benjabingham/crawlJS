@@ -323,15 +323,14 @@ class EntityManager{
     //has beat% chance to beat sword out of way.
     //also beats sword out of way if damage exceeds player stamina.
     static beat(entity, sword){
+        let knock = false;
         if(sword.owner == 'player'){
             EntityManager.transmitMessage(entity.name+" attacks your weapon...");
             let damage = Random.roll(0,entity.damage);
             Player.changeStamina(damage * -1);
             if(Player.stamina < 0){
                 Player.stamina = 0;
-                let knock = true;
-            }else{
-                let knock = false;
+                knock = true;
             }
             if(damage > 1){
                 EntityManager.degradeItem(sword, damage*0.25, 1);
@@ -403,7 +402,8 @@ class EntityManager{
 
 
 
-            if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated){
+            if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated && !entity.isSword){
+                console.log('OBLITERATING ' + entity.name)
                 EntityManager.dropItems(entity);
                 entity.obliterated = true;
                 EntityManager.setPosition(entity.id,-1,-1);
@@ -502,6 +502,8 @@ class EntityManager{
         container.inventory.forEach((item,i) =>{
             if(item && (looter.inventory.length < looter.inventorySlots)){
                 let obj = item;
+                console.log('OBLITERATING ' + item.name)
+
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
                 EntityManager.entities[obj.id] = obliterated;
                 obj.walkable = false;
@@ -514,7 +516,7 @@ class EntityManager{
     }
 
     static pickUpItem(entity,item){
-        if(!entity || entity.isSword || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
+        if(!entity || !item.isItem || entity.isSword || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
             return false;
         }
         if(entity.id == 'player'){
@@ -536,6 +538,8 @@ class EntityManager{
         }
         items.forEach((obj)=>{
             if(entity.inventory.length < entity.inventorySlots || entity.item){
+                console.log('OBLITERATING ' + obj.name)
+
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
                 EntityManager.entities[obj.id] = obliterated;
                 obj.walkable = false;

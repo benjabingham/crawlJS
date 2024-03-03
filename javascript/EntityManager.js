@@ -314,7 +314,13 @@ class EntityManager{
                 entity.behaviorInfo.slow = 0;
             }
             entity.behaviorInfo.slow += 7;
+            if(!entity.behaviorInfo.sturdy){
+                entity.behaviorInfo.sturdy = 0;
+            }
             entity.sturdy -= 7;
+            if(!entity.behaviorInfo.beat){
+                entity.behaviorInfo.beat = 0;
+            }
             entity.beat -=7;
             entity.stunned ++;
         }

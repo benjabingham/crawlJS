@@ -24,25 +24,26 @@ class Board{
     static placeEntities(){
         console.log('placeEntities');
         let entities = EntityManager.entities;
+        //TODO: does boardinit have to happen every time?
         Board.boardInit();
         for (const [k,entity] of Object.entries(entities)){
             
             let x = entity.x;
             let y = entity.y;
             if(Board.itemAt(x,y).id != entity.id && Board.isSpace(x,y)){
-                let itemCase = Board.itemAt(x,y).item  || entity.item;
-                if(entity.isWall){
+                let itemCase = Board.itemAt(x,y).isItemPile  || entity.isItemPile;
+                if(entity.isWall && !entity.dead){
                     Board.wallArray[y][x] = true;
                 }else{
                     //Board.wallArray[y][x] = false;
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
-                        if(Board.itemAt(x,y).item){
-                            EntityManager.pickUpItem(entity,Board.itemAt(x,y));
+                        if(Board.itemAt(x,y).isItemPile){
+                            entity.pickUpItemPile(Board.itemAt(x,y));
                             Board.placeEntity(entity, x, y);
-                        }else if(entity.item && Board.itemAt(x,y)){
-                            EntityManager.pickUpItem(Board.itemAt(x,y),entity);
+                        }else if(entity.isItemPile && Board.itemAt(x,y)){
+                            Board.itemAt(x,y).pickUpItemPile(entity);
                         }else{
                             Board.placeEntity(entity, x, y);
                         }
@@ -75,6 +76,7 @@ class Board{
         return (y >= 0 && x >= 0 && y < Board.height && x < Board.width);
     }
 
+    //TODO: rename to entityAt
     static itemAt(x,y){
         if(Board.isSpace(x,y)){
             return Board.boardArray[y][x];

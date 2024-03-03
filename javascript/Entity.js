@@ -100,6 +100,40 @@ class Entity{
             this[key] = snapshot[key];
         }
     }
+
+    pickUpItemPile(itemPile){
+        if(EntityManager.skipBehaviors || !this.inventoryMax){
+            return false;
+        }
+        while(itemPile.inventory.length < 0 && this.inventory.length < this.inventoryMax){
+            this.inventory.push(itemPile.inventory.pop());
+        }
+
+        if(ItemPile.prototype.isPrototypeOf(this)){
+            this.sortInventory();
+        }
+
+        itemPile.checkIsEmpty();
+    }
+
+    dropItem(slot){
+        if(!this.inventory[slot]){
+            return false;
+        }
+
+        let item = this.inventory.splice(slot,slot);
+
+        new ItemPile(this.x, this.y, item);
+    }
+
+    dropInventory(){
+        new ItemPile(this.x, this.y, this.inventory);
+        this.inventory = [];
+    }
+
+    delete(){
+        delete EntityManager[this.id];
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -108,6 +142,7 @@ class PlayerEntity extends Entity{
     constructor(x=0, y=0){
         super("☺", x, y, 'you', 'player')
         this.sword = new SwordEntity(this.id, Player.equipped).id;
+        this.inventory = Player.inventory;
 
         return this;
     }
@@ -369,5 +404,43 @@ class Container extends Entity{
         }
 
         return this;
+    }
+}
+
+class ItemPile extends Entity{
+    inventory = [];
+    walkable = true;
+    isItemPile = true;
+    inventoryMax = 100;
+
+    constructor(x,y,inventory = []){
+        super('*', x, y);
+
+        this.inventory = inventory;
+    }
+
+    sortInventory(){
+        this.inventory.sort((item1, item2)=>{
+            if(item1.value < item2.value){
+                return -1;
+            }else if(item2. value < item1.value){
+                return 1;
+            }
+
+            return 0;
+        });
+    }
+
+    addItems(itemArray){
+        itemArray.forEach((item)=>{
+            this.inventory.push(item);
+        })
+        this.sortInventory();
+    }
+
+    checkIsEmpty(){
+        if(this.inventory.length == 0){
+            this.delete();
+        }
     }
 }

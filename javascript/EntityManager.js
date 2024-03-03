@@ -628,6 +628,7 @@ class EntityManager{
         }
     }
 
+    //TODO - containers not getting index. Monster index is same as id?
     static loadRoom(json){
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)

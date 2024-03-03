@@ -135,6 +135,9 @@ class Entity{
     }
 
     dropInventory(){
+        if(!this.inventory || this.inventory.length == 0){
+            return false;
+        }
         new ItemPile(this.x, this.y, this.inventory);
         this.inventory = [];
     }

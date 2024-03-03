@@ -1,9 +1,12 @@
+//TODO - make Creature class which includes player and monster
 class Entity{
     name;
     symbol;
     id;
     x;
     y;
+    maxInventory = 0;
+    inventory = [];
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
             id = EntityManager.entityCounter;
@@ -33,7 +36,7 @@ class Entity{
             EntityManager.setPosition(this.id,x,y);
             return true;
         }else if(Board.itemAt(x,y) && Board.itemAt(x,y).isContainer){
-            EntityManager.lootContainer(this,Board.itemAt(x,y));
+            this.lootContainer(Board.itemAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
             GameMaster.travel(x,y);
@@ -111,6 +114,7 @@ class Entity{
 
         if(ItemPile.prototype.isPrototypeOf(this)){
             this.sortInventory();
+            this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
         itemPile.checkIsEmpty();
@@ -129,6 +133,19 @@ class Entity{
     dropInventory(){
         new ItemPile(this.x, this.y, this.inventory);
         this.inventory = [];
+    }
+
+    lootContainer(container){
+        if (!container.inventory){
+            return false;
+        }
+        if(!this.inventory){
+            this.inventory = [];
+        }
+
+        while(container.inventory.length < 0 && this.inventory.length < this.inventoryMax){
+            this.inventory.push(itemPile.inventory.pop());
+        }
     }
 
     delete(){
@@ -275,7 +292,7 @@ class SwordEntity extends Entity{
             }
             EntityManager.addStunTime(target.id,stunAdded);
             EntityManager.addMortality(target.id, mortality);
-            EntityManager.knock(target.id, this.id);
+            this.knock(target.id);
             EntityManager.enrageAndDaze(target);   
             EntityManager.sturdy(this,target);
         }
@@ -412,11 +429,13 @@ class ItemPile extends Entity{
     walkable = true;
     isItemPile = true;
     inventoryMax = 100;
+    dropTurn;
 
     constructor(x,y,inventory = []){
         super('*', x, y);
 
         this.inventory = inventory;
+        this.dropTurn = Log.turnCounter;
     }
 
     sortInventory(){

@@ -33,6 +33,7 @@ class EntityManager{
     }
     
 
+    /*
     static entityInit(symbol, behavior, x=0,y=0, hitDice=1, damage=0, behaviorInfo = {}, name = "", inventorySlots = 10){
         let threshold = Math.max(Random.rollN(hitDice,1,8),1);
         let id = EntityManager.entityCounter;
@@ -57,7 +58,7 @@ class EntityManager{
         EntityManager.entities[id] = entity;
     
         return EntityManager.entities[id];
-    }
+    }*/
 
     static makeSword(ownerId, item){
         return new SwordEntity(ownerId, item);
@@ -86,11 +87,6 @@ class EntityManager{
         let swordId = owner.sword;
         let sword = EntityManager.getEntity(swordId);
 
-        console.log({
-            owner:owner,
-            swordId:swordId,
-            sword:sword
-        })
         sword.place();
     }
 
@@ -170,6 +166,7 @@ class EntityManager{
         
     }
 
+    //TODO - move to monster class
     static attack(attacker,target){
         let damage = attacker.damage;
         let stunTime = attacker.stunTime;
@@ -186,7 +183,7 @@ class EntityManager{
         if (target.id == 'player'){
             EntityManager.transmitMessage(attacker.name+" attacks you!");
             Player.changeHealth(mortality * -1);
-        }else if(target.behavior == 'wall'){
+        }else if(target.isWall){
             EntityManager.addMortality(target.id, mortality);
         }else{
             if(!target.dead){
@@ -194,13 +191,14 @@ class EntityManager{
             }
             EntityManager.addStunTime(target.id,stunAdded);
             EntityManager.addMortality(target.id, mortality);
-            EntityManager.knock(target.id, attacker.id);
+            target.knock(attacker.id);
             EntityManager.enrageAndDaze(target);   
             EntityManager.sturdy(attacker,target);
         }
 
     }
 
+    /*
     static knock(knockedId, knockerId){
         let knocked = EntityManager.getEntity(knockedId);
         let knocker = EntityManager.getEntity(knockerId);
@@ -242,7 +240,7 @@ class EntityManager{
                 //EntityManager.knockSword(knockerId);
             }
         }
-    }
+    }*/
 
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
@@ -250,6 +248,7 @@ class EntityManager{
     }
 
     //place sword in space closest to center between two points
+    //TODO - give to SwordEntity
     static findSwordMiddle(sword,pos1,pos2){
         let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
@@ -284,6 +283,7 @@ class EntityManager{
         sword.place();
     }
 
+    //TODO - give to Monster
     static enrageAndDaze(entity){
         if(!entity.behaviorInfo || entity.dead){
             return;
@@ -322,6 +322,7 @@ class EntityManager{
 
     //has beat% chance to beat sword out of way.
     //also beats sword out of way if damage exceeds player stamina.
+    //TODO - give to Entity
     static beat(entity, sword){
         let knock = false;
         if(sword.owner == 'player'){
@@ -353,6 +354,7 @@ class EntityManager{
         
     }
 
+    //TODO - give to Monster (or to Creature???)
     static sturdy(attacker,target){
         if(!target.behaviorInfor){
             return;
@@ -403,11 +405,8 @@ class EntityManager{
 
 
             if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated && !entity.isSword){
-                console.log('OBLITERATING ' + entity.name)
-                EntityManager.dropItems(entity);
-                entity.obliterated = true;
-                EntityManager.setPosition(entity.id,-1,-1);
-
+                entity.dropInventory();
+                entity.delete();
             }
         }
     }
@@ -425,6 +424,7 @@ class EntityManager{
         }
     }
 
+    //give to Entity
     static kill(entity){
         EntityManager.transmitMessage(entity.name+" is slain!", 'win');
         entity.name += " corpse";
@@ -460,7 +460,7 @@ class EntityManager{
     static monsterInit(monsterKey,x,y, additionalParameters = {}){     
         return new Monster(monsterKey, x, y, additionalParameters);
     }
-
+/*
     static dropItem(item,x,y){
         if(!item){
             return false;
@@ -487,8 +487,9 @@ class EntityManager{
         inventory.forEach((item) =>{
             EntityManager.dropItem(item, entity.x, entity.y);
         })
-    }
+    }*/
 
+    /*
     static lootContainer(looter,container){
         if(!container.inventory){
             return false;
@@ -514,7 +515,9 @@ class EntityManager{
             }
         })
     }
+    */
 
+    /*
     static pickUpItem(entity,item){
         if(!entity || !item.isItem || entity.isSword || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
             return false;
@@ -548,7 +551,7 @@ class EntityManager{
                 entity.inventory.push(obj);
             }
         })
-    }
+    }*/
 
     static saveSnapshot(){
         let entities = JSON.parse(JSON.stringify(EntityManager.entities));
@@ -608,6 +611,7 @@ class EntityManager{
         EntityManager.placeSword('player');
     }
 
+    //TODO - move to entity
     static setToLastPosition(id){
         let lastPosition = EntityManager.history[EntityManager.history.length-1].entities[id];
         let entity = EntityManager.getEntity(id);
@@ -641,9 +645,11 @@ class EntityManager{
             }else if(value.isContainer){
                 new Container(value.containerKey,x,y,value);
             }else{
+                /*
                 if(entity.alive && spawn){
                     entityObj = EntityManager.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);
                 }
+                */
             }
             if(entityObj){
                 entityObj.index = entity.index;
@@ -716,12 +722,12 @@ class EntityManager{
     }
 
 
-
+    //TODO - give to entity
     static addStunTime(id, stunTime){
         stunTime +=EntityManager.getProperty(id, 'stunned');
         EntityManager.setProperty(id, 'stunned', stunTime);
     }
-
+    //TODO - give to entity
     static addMortality(id, mortal){
         mortal += Math.max(EntityManager.getProperty(id, 'mortal'),0);
         EntityManager.setProperty(id, 'mortal', mortal);

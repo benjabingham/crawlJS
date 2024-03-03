@@ -77,7 +77,7 @@ class EntityManager{
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
-                EntityManager.removeEntity(item.id);
+                item.unequip();
             }
         }
     }

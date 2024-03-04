@@ -64,7 +64,9 @@ class EntityManager{
         return new SwordEntity(ownerId, item);
     }
 
-    static degradeItem(item, modifier = 0, multiplier = 1){
+    static degradeItem(weapon, modifier = 0, multiplier = 1){
+        let item = weapon.item;
+        console.log(weapon);
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
@@ -77,7 +79,7 @@ class EntityManager{
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
-                item.unequip();
+                weapon.unequip();
             }
         }
     }

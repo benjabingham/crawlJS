@@ -115,6 +115,11 @@ class Entity{
         if(EntityManager.skipBehaviors || !this.inventory.slots){
             return false;
         }
+
+        if(!this.isItemPile && itemPile.dropTurn >= Log.turnCounter){
+            return false;
+        }
+
         while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
             this.inventory.items.push(itemPile.inventory.items.pop());
         }
@@ -122,10 +127,6 @@ class Entity{
         if(ItemPile.prototype.isPrototypeOf(this)){
             this.sortInventory();
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
-        }
-
-        if(PlayerEntity.prototype.isPrototypeOf(this)){
-            Player.inventory = this.inventory;
         }
 
         itemPile.checkIsEmpty();
@@ -138,9 +139,14 @@ class Entity{
             return false;
         }
 
-        let item = this.inventory.items.splice(slot,slot);
+        let item = this.inventory.items.splice(slot,1);
 
         new ItemPile(this.x, this.y, item);
+        console.log({
+            message:'dropping',
+            item:item,
+            inventory:this.inventory
+        })
     }
 
     dropInventory(){
@@ -321,7 +327,7 @@ class SwordEntity extends Entity{
         }
 
         if(this.owner == 'player'){
-            EntityManager.degradeItem(weapon,0,0.25);
+            EntityManager.degradeItem(this,0,0.25);
         }
     }
 
@@ -463,7 +469,6 @@ class ItemPile extends Entity{
     }
 
     sortInventory(){
-        console.log(this);
         this.inventory.items.sort((item1, item2)=>{
             if(item1.value < item2.value){
                 return -1;

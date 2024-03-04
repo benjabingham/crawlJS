@@ -251,8 +251,7 @@ class Player {
             Player.unequipWeapon();
         }
         let playerEntity = EntityManager.getEntity('player');
-        EntityManager.dropItem(Player.inventory.items[slot],playerEntity.x,playerEntity.y);
-        Player.inventory.items[slot] = false;
+        playerEntity.dropItem(slot);
     }
 
 }

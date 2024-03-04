@@ -69,7 +69,7 @@ class Board{
     }
 
     static isOccupiedSpace(x,y){
-        return (Board.isSpace(x,y) && Board.itemAt(x,y) && !Board.itemAt(x,y).item);
+        return (Board.isSpace(x,y) && Board.itemAt(x,y) && !Board.itemAt(x,y).isItemPile);
     }
 
     static isSpace(x,y){

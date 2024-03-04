@@ -108,6 +108,7 @@ class Entity{
         for (const [key, val] of Object.entries(this)) { 
             this[key] = snapshot[key];
         }
+
     }
 
     pickUpItemPile(itemPile){
@@ -172,6 +173,7 @@ class Entity{
 
 class PlayerEntity extends Entity{
     sword;
+    isPlayer = true;
 
     constructor(x=0, y=0){
         super("☺", x, y, 'you', 'player')
@@ -324,7 +326,7 @@ class SwordEntity extends Entity{
         this.rotation %= 8;
     }
 
-    static knockSword(){
+    knockSword(){
         //direction is either 1 or -1
         let direction = (Random.roll(0,1) * 2) - 1;
         let rotation = (this.rotation + 8 + direction) % 8;

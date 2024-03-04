@@ -586,6 +586,8 @@ class EntityManager{
         if(Player.equipped){
             Player.equipped = Player.inventory[Player.equipped.slot];
         }
+        //resync inventory
+        Player.inventory = EntityManager.getEntity('player').inventory;
         Player.luck = Math.max(0,luck);
     }
 

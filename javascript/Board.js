@@ -88,8 +88,6 @@ class Board{
     static placeEntity(entity, x, y){
 
         if (Board.isSpace(x,y)){
-            if(Board.isOccupiedSpace(x,y) && !Board.itemAt(x,y).item){
-            }
             Board.boardArray[y][x] = entity;
         }
     }

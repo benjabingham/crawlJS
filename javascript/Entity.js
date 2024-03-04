@@ -111,7 +111,6 @@ class Entity{
     }
 
     pickUpItemPile(itemPile){
-        console.log('pick up')
         if(EntityManager.skipBehaviors || !this.inventory.slots){
             return false;
         }
@@ -131,7 +130,6 @@ class Entity{
 
         itemPile.checkIsEmpty();
 
-        console.log(Player.inventory);
     }
 
     dropItem(slot){
@@ -142,11 +140,6 @@ class Entity{
         let item = this.inventory.items.splice(slot,1);
 
         new ItemPile(this.x, this.y, item);
-        console.log({
-            message:'dropping',
-            item:item,
-            inventory:this.inventory
-        })
     }
 
     dropInventory(){
@@ -171,10 +164,6 @@ class Entity{
     }
 
     obliterate(){
-        console.log({
-            action:'obliterating',
-            item:this
-        })
         this.obliterated = true;
         this.x = -1;
         this.y = -1;
@@ -252,7 +241,6 @@ class SwordEntity extends Entity{
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.itemAt(x,y);
             if(target.id != this.id && !target.isWall){
-                //TODO: Sword.attack()
                 this.swordAttack(target);
                 if (this.owner == 'player'){  
                     let strikeType = this.getStrikeType();
@@ -321,7 +309,7 @@ class SwordEntity extends Entity{
             }
             EntityManager.addStunTime(target.id,stunAdded);
             EntityManager.addMortality(target.id, mortality);
-            this.knock(target.id);
+            target.knock(this.id);
             EntityManager.enrageAndDaze(target);   
             EntityManager.sturdy(this,target);
         }

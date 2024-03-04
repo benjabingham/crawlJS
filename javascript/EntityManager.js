@@ -462,7 +462,7 @@ class EntityManager{
 
         sword.unequip();
     }
-      
+
 /*
     static dropItem(item,x,y){
         if(!item){
@@ -647,7 +647,7 @@ class EntityManager{
             }else if(value.isWall){
                 entityObj = new Wall(x, y, value.hitDice, value.name);
             }else if(value.isContainer){
-                netityObj = new Container(value.containerKey,x,y,value);
+                entityObj = new Container(value.containerKey,x,y,value);
             }else{
                 /*
                 if(entity.alive && spawn){

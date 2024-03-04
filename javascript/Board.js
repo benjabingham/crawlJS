@@ -65,7 +65,7 @@ class Board{
     }
 
     static isOpenSpace(x,y){
-        return (Board.isSpace(x,y) && (!Board.itemAt(x,y) || Board.itemAt(x,y).walkable));
+        return (Board.isSpace(x,y) && !Board.wallAt(x,y) && (!Board.itemAt(x,y) || Board.itemAt(x,y).walkable));
     }
 
     static isOccupiedSpace(x,y){

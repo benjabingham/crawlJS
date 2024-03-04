@@ -146,7 +146,8 @@ class Player {
     static setPlayerInfo(playerInfo){
         for (const [key, value] of Object.entries(playerInfo)) {
             Player[key] = value;
-          }
+        }
+        
     }
 
     static reset(){

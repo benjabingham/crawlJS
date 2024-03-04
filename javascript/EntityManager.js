@@ -583,11 +583,7 @@ class EntityManager{
         Board.placeEntities();
         
         Player.setPlayerInfo(snapshot.player);
-        //resync inventory
-        Player.inventory = EntityManager.getEntity('player').inventory;
-        if(Player.equipped){
-            Player.equipped = Player.inventory.items[Player.equipped.slot];
-        }
+        EntityManager.syncPlayerInventory();
        
         Player.luck = Math.max(0,luck);
     }
@@ -613,6 +609,8 @@ class EntityManager{
         Board.placeEntities();
 
         Player.setPlayerInfo(snapshot.player);  
+        EntityManager.syncPlayerInventory();
+        
         EntityManager.skipBehaviors = true; 
 
         Board.calculateLosArray(EntityManager.getEntity('player'));
@@ -627,6 +625,15 @@ class EntityManager{
             entity.rotation = lastPosition.rotation;
         }else{
             EntityManager.setPosition(id,lastPosition.x,lastPosition.y)
+        }
+    }
+
+    static syncPlayerInventory(){
+        if(EntityManager.getEntity('player')){
+            Player.inventory = EntityManager.getEntity('player').inventory;
+        }
+        if(Player.equipped){
+            Player.equipped = Player.inventory.items[Player.equipped.slot];
         }
     }
 

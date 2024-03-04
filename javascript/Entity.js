@@ -5,8 +5,10 @@ class Entity{
     id;
     x;
     y;
-    inventorySlots = 0;
-    inventory = [];
+    inventory = {
+        slots:0,
+        items:[]
+    }
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
             id = EntityManager.entityCounter;
@@ -110,11 +112,11 @@ class Entity{
 
     pickUpItemPile(itemPile){
         console.log('pick up')
-        if(EntityManager.skipBehaviors || !this.inventorySlots){
+        if(EntityManager.skipBehaviors || !this.inventory.slots){
             return false;
         }
-        while(itemPile.inventory.length > 0 && this.inventory.length < this.inventorySlots){
-            this.inventory.push(itemPile.inventory.pop());
+        while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
+            this.inventory.items.push(itemPile.inventory.items.pop());
         }
 
         if(ItemPile.prototype.isPrototypeOf(this)){
@@ -132,33 +134,33 @@ class Entity{
     }
 
     dropItem(slot){
-        if(!this.inventory[slot]){
+        if(!this.inventory.items[slot]){
             return false;
         }
 
-        let item = this.inventory.splice(slot,slot);
+        let item = this.inventory.items.splice(slot,slot);
 
         new ItemPile(this.x, this.y, item);
     }
 
     dropInventory(){
-        if(!this.inventory || this.inventory.length == 0){
+        if(!this.inventory.items || this.inventory.items.length == 0){
             return false;
         }
-        new ItemPile(this.x, this.y, this.inventory);
-        this.inventory = [];
+        new ItemPile(this.x, this.y, this.inventory.items);
+        this.inventory.items = [];
     }
 
     lootContainer(container){
-        if (!container.inventory){
+        if (!container.inventory.items){
             return false;
         }
-        if(!this.inventory){
-            this.inventory = [];
+        if(!this.inventory.items){
+            this.inventory.items = [];
         }
 
-        while(container.inventory.length < 0 && this.inventory.length < this.inventorySlots){
-            this.inventory.push(container.inventory.pop());
+        while(container.inventory.items.length < 0 && this.inventory.items.length < this.inventory.slots){
+            this.inventory.items.push(container.inventory.items.pop());
         }
     }
 
@@ -180,7 +182,7 @@ class PlayerEntity extends Entity{
         super("☺", x, y, 'you', 'player')
         this.sword = new SwordEntity(this.id, Player.equipped).id;
         this.inventory = Player.inventory;
-        this.inventorySlots = Player.inventorySlots;
+        this.inventory.slots = Player.inventory.slots;
 
         return this;
     }
@@ -364,7 +366,6 @@ class Monster extends Entity{
     mortal = 0;
     //threshold - the amount of damage that will destroy it
     threshold = 1;
-    inventorySlots = 0;
     //damage - determines the amount of damage done by this monsters attacks
     damage = 0;
     isMonster = true;
@@ -376,7 +377,7 @@ class Monster extends Entity{
             //copy monster vars from template
             for (const [key, val] of Object.entries(monster)) { 
                 //if legal key...
-                if(!['id','x','y'].includes(key)){
+                if(!['inventory','id','x','y'].includes(key)){
                     this[key] = val;
                 }
             }
@@ -385,7 +386,7 @@ class Monster extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['id','x','y'].includes(key)){
+            if(!['inventory','id','x','y'].includes(key)){
                 this[key] = val;
             }
         }
@@ -417,14 +418,14 @@ class Container extends Entity{
     isContainer = true;
 
     constructor(containerKey, x, y, additionalParameters = {}){
-        console.log(additionalParameters);
+        //console.log(additionalParameters);
         super('Ch',x,y, 'chest');
         if(containerVars[containerKey]){
             let container = JSON.parse(JSON.stringify(containerVars[containerKey]));
             //copy chest vars from template
             for (const [key, val] of Object.entries(container)) { 
                 //if legal key...
-                if(!['id','x','y'].includes(key)){
+                if(!['inventory','id','x','y'].includes(key)){
                     this[key] = val;
                 }
             }
@@ -433,7 +434,7 @@ class Container extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['id','x','y'].includes(key)){
+            if(!['inventory','id','x','y'].includes(key)){
                 this[key] = val;
             }
         }
@@ -447,21 +448,23 @@ class Container extends Entity{
 }
 
 class ItemPile extends Entity{
-    inventory = [];
     walkable = true;
     isItemPile = true;
-    inventorySlots = 100;
     dropTurn;
 
     constructor(x,y,inventory = []){
         super('*', x, y);
 
-        this.inventory = inventory;
+        this.inventory = {
+            slots:100,
+            items:inventory
+        }
         this.dropTurn = Log.turnCounter;
     }
 
     sortInventory(){
-        this.inventory.sort((item1, item2)=>{
+        console.log(this);
+        this.inventory.items.sort((item1, item2)=>{
             if(item1.value < item2.value){
                 return -1;
             }else if(item2. value < item1.value){
@@ -474,13 +477,13 @@ class ItemPile extends Entity{
 
     addItems(itemArray){
         itemArray.forEach((item)=>{
-            this.inventory.push(item);
+            this.inventory.items.push(item);
         })
         this.sortInventory();
     }
 
     checkIsEmpty(){
-        if(this.inventory.length == 0){
+        if(this.inventory.items.length == 0){
             this.obliterate();
         }
     }

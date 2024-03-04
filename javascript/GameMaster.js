@@ -125,7 +125,7 @@ class GameMaster{
                 //EntityManager.skipBehaviors = true;
                 GameMaster.dropMode = false;
             }
-        }else if(!Player.useItem(Player.inventory[slot])){
+        }else if(!Player.useItem(Player.inventory.items[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }

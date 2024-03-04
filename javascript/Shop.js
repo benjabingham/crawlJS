@@ -121,14 +121,14 @@ class Shop{
             Shop.inventory[slot] = {purchased:true,tier:item.tier};
         }
         item.fresh = false;
-        Player.inventory.push(item);
+        Player.inventory.items.push(item);
         Player.inventoryCleanup();
         Shop.inventoryCleanup();
     }
 
     static sellItem(slot){
-        let item = Player.inventory[slot];
-        Player.inventory[slot] = false;
+        let item = Player.inventory.items[slot];
+        Player.inventory.items[slot] = false;
         Player.gold += item.value;
         Player.inventoryCleanup();
     }

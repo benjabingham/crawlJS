@@ -13,7 +13,7 @@ let monsterVars = {
         inventorySlots: 1,
         loot:{
             weapon:{
-                chance:5,
+                chance:100,
                 tier:1
             },
             treasure:{

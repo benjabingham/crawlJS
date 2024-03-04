@@ -230,7 +230,7 @@ class Display{
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
-        let inventory = Player.inventory;
+        let inventory = Player.inventory.items;
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })

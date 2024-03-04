@@ -66,15 +66,19 @@ class Save{
         board.forEach((row)=>{
             row.forEach((item)=>{
                 if(item){
-                    roster.push({
+                    let entitySave = {
                         code:item,
                         value:values[item],
                         index:counter,
                         alive:true,
                         x:x,
-                        y:y
-                    })
+                        y:y,
+                        inventory:[]
+                    }
+                    LootManager.getEntityLoot(entitySave);
+                    roster.push(entitySave)
                     counter++;
+
                 }
                 x++;
             })

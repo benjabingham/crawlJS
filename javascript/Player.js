@@ -15,22 +15,20 @@ class Player {
     static lightMax = 8;
     static lightTime = 0;
         
-    /*TODO - inventory should be an object:
+    
     static inventory = {
         slots: 10,
-        items:[]
+        items:[
+            {
+                usable:true,
+                name: "oil flask",
+                fuel:true,
+                light:2,
+                uses:3
+            }
+        ]
     }
-    */
-    static inventorySlots = 10;
-    static inventory = [
-        {
-            usable:true,
-            name: "oil flask",
-            fuel:true,
-            light:2,
-            uses:3
-        }
-    ];
+
     static gold = 15;
     static equipped = false;
 
@@ -203,11 +201,11 @@ class Player {
     }
 
     static consume(slot){
-        let item = Player.inventory[slot];
+        let item = Player.inventory.items[slot];
         if(item.uses > 1){
             item.uses--;
         }else{
-            Player.inventory[slot] = false;
+            Player.inventory.items[slot] = false;
         }
     }
 
@@ -228,15 +226,15 @@ class Player {
     static inventoryCleanup(){
         let newInventory = [];
 
-        while(Player.inventory.length > 0){
-            newInventory.push(Player.inventory.pop())
+        while(Player.inventory.items.length > 0){
+            newInventory.push(Player.inventory.items.pop())
         }
         let slot = 0;
 
         while(newInventory.length > 0){
             let item = newInventory.pop();
             if(item){
-                Player.inventory.push(item);
+                Player.inventory.items.push(item);
             }
             item.slot = slot;
             slot++;
@@ -246,15 +244,15 @@ class Player {
     }
 
     static dropItem(slot){
-        if(!Player.inventory[slot]){
+        if(!Player.inventory.items[slot]){
             return false;
         }
         if(Player.equipped.slot == slot){
             Player.unequipWeapon();
         }
         let playerEntity = EntityManager.getEntity('player');
-        EntityManager.dropItem(Player.inventory[slot],playerEntity.x,playerEntity.y);
-        Player.inventory[slot] = false;
+        EntityManager.dropItem(Player.inventory.items[slot],playerEntity.x,playerEntity.y);
+        Player.inventory.items[slot] = false;
     }
 
 }

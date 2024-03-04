@@ -482,7 +482,7 @@ class EntityManager{
     }
 
     static dropItems(entity){
-        let inventory = entity.inventory
+        let inventory = entity.inventory.items
         if(!inventory){
             return false;
         }
@@ -539,11 +539,11 @@ class EntityManager{
 
         items.push(item);
         
-        if(!entity.inventory){
-            entity.inventory = [];
+        if(!entity.inventory.items){
+            entity.inventory.items = [];
         }
         items.forEach((obj)=>{
-            if(entity.inventory.length < entity.inventorySlots || entity.item){
+            if(entity.inventory.items.length < entity.inventory.itemsSlots || entity.item){
                 console.log('OBLITERATING ' + obj.name)
 
                 let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
@@ -551,7 +551,7 @@ class EntityManager{
                 obj.walkable = false;
                 obj.inventory = false;
                 obj.item = false;
-                entity.inventory.push(obj);
+                entity.inventory.items.push(obj);
             }
         })
     }*/
@@ -631,17 +631,17 @@ class EntityManager{
         Board.setDimensions(json.width,json.height)
         Board.boardInit();
         Board.destinations = json.destinations;
-        json.roster.forEach((entity)=>{
-            let value = entity.value;
+        json.roster.forEach((entitySave)=>{
+            let value = entitySave.value;
             let entityObj;
-            let x = entity.x;
-            let y = entity.y;
+            let x = entitySave.x;
+            let y = entitySave.y;
             let random = Random.roll(0,99);
-            let spawn = (random < entity.spawnChance || !entity.spawnChance);
+            let spawn = (random < entitySave.spawnChance || !entitySave.spawnChance);
             if(value == "player"){
                 EntityManager.playerInit(x, y)
             }else if(value.isMonster){
-                if(entity.alive && spawn){
+                if(entitySave.alive && spawn){
                     entityObj = new Monster(value.monsterKey,x,y,value);
                 }
             }else if(value.isWall){
@@ -656,15 +656,16 @@ class EntityManager{
                 */
             }
             if(entityObj){
-                entityObj.index = entity.index;
-                if(entityObj.behavior != 'wall'){
-                    if(!entity.inventory || entity.inventory.length == 0){
-                        LootManager.giveMonsterLoot(entityObj);
-                        entity.inventory = entityObj.inventory;
-                    }
-                    entityObj.inventory = entity.inventory;
-                    
-                }
+                entityObj.index = entitySave.index;
+            }else{
+                console.log({
+                    message:'entityObj = false',
+                    entitySave:entitySave
+                })
+                return false;
+            }
+            if(entitySave.inventory){
+                entityObj.inventory.items = entitySave.inventory;
             }
         })
 
@@ -676,7 +677,7 @@ class EntityManager{
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
             if(entity.index){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
-                entitySave.inventory = entity.inventory;
+                entitySave.inventory = entity.inventory.items;
             }
         }
     }

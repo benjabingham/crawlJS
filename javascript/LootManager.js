@@ -1,23 +1,38 @@
 class LootManager{
 
-    static giveMonsterLoot(entity){
-        if(!entity.loot){
+    static getEntityLoot(entitySave){
+        let lootChances = false;
+        let monsterKey = entitySave.value.monsterKey;
+        let containerKey = entitySave.value.containerKey;
+        
+        if(entitySave.value.loot){
+            lootChances = entitySave.value.loot;
+        }else if(monsterKey){
+            lootChances = monsterVars[monsterKey].loot;
+            entitySave.inventory = monsterVars[monsterKey].inventory;
+        }else if(containerKey){
+            lootChances = containerVars[containerKey].loot;
+            entitySave.inventory = containerVars[containerKey].inventory;
+        }
+
+        if(!entitySave.inventory){
+            entitySave.inventory = [];
+        }
+
+        if(!lootChances){
             return false;
         }
-        if(!entity.inventory){
-            entity.inventory = [];
-        }
-        let weaponLoot = entity.loot.weapon;
+        let weaponLoot = lootChances.weapon;
         if(weaponLoot){
             if(Random.roll(1,99) < weaponLoot.chance){
-                entity.inventory.push(LootManager.getWeaponLoot(weaponLoot.tier));
+                entitySave.inventory.push(LootManager.getWeaponLoot(weaponLoot.tier));
             }
         }
 
-        let treasureLoot = entity.loot.treasure;
+        let treasureLoot = lootChances.treasure;
         if(treasureLoot){
             if(Random.roll(1,99) < treasureLoot.chance){
-                entity.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
+                entitySave.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
             }
         }
     }

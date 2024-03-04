@@ -462,10 +462,7 @@ class EntityManager{
 
         sword.unequip();
     }
-
-    static monsterInit(monsterKey,x,y, additionalParameters = {}){     
-        return new Monster(monsterKey, x, y, additionalParameters);
-    }
+      
 /*
     static dropItem(item,x,y){
         if(!item){
@@ -645,12 +642,12 @@ class EntityManager{
                 EntityManager.playerInit(x, y)
             }else if(value.isMonster){
                 if(entity.alive && spawn){
-                    entityObj = EntityManager.monsterInit(value.monsterKey,x,y,value);
+                    entityObj = new Monster(value.monsterKey,x,y,value);
                 }
             }else if(value.isWall){
-                new Wall(x, y, value.hitDice, value.name);
+                entityObj = new Wall(x, y, value.hitDice, value.name);
             }else if(value.isContainer){
-                new Container(value.containerKey,x,y,value);
+                netityObj = new Container(value.containerKey,x,y,value);
             }else{
                 /*
                 if(entity.alive && spawn){

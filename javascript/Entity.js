@@ -409,6 +409,7 @@ class Container extends Entity{
     isContainer = true;
 
     constructor(containerKey, x, y, additionalParameters = {}){
+        console.log(additionalParameters);
         super('Ch',x,y, 'chest');
         if(containerVars[containerKey]){
             let container = JSON.parse(JSON.stringify(containerVars[containerKey]));

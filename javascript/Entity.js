@@ -158,7 +158,7 @@ class Entity{
             this.inventory.items = [];
         }
 
-        while(container.inventory.items.length < 0 && this.inventory.items.length < this.inventory.slots){
+        while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
             this.inventory.items.push(container.inventory.items.pop());
         }
     }
@@ -385,7 +385,7 @@ class Monster extends Entity{
             }
         }
 
-        if(!this.threshold){
+        if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
 
@@ -408,7 +408,7 @@ class Wall extends Entity{
 
 class Container extends Entity{
     mortal = 0;
-    threshold;
+    threshold = 1;
     isContainer = true;
 
     constructor(containerKey, x, y, additionalParameters = {}){
@@ -433,7 +433,7 @@ class Container extends Entity{
             }
         }
 
-        if(!this.threshold){
+        if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
 
@@ -454,6 +454,7 @@ class ItemPile extends Entity{
             items:inventory
         }
         this.dropTurn = Log.turnCounter;
+        this.sortInventory();
     }
 
     sortInventory(){
@@ -466,6 +467,8 @@ class ItemPile extends Entity{
 
             return 0;
         });
+
+        this.name = this.inventory.items[this.inventory.items.length-1].name;
     }
 
     addItems(itemArray){

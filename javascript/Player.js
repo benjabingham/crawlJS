@@ -164,7 +164,7 @@ class Player {
         if(item.fuel){
             Player.addFuel(item);
             return true;
-        }else if(item.weapon && Player.equipped.slot == item.slot){
+        }else if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            Player.unequipWeapon();
            return true;
         }else if(item.weapon && !Player.equipped){
@@ -235,9 +235,9 @@ class Player {
             let item = newInventory.pop();
             if(item){
                 Player.inventory.items.push(item);
+                item.slot = slot;
+                slot++;
             }
-            item.slot = slot;
-            slot++;
 
         }
 
@@ -247,7 +247,7 @@ class Player {
         if(!Player.inventory.items[slot]){
             return false;
         }
-        if(Player.equipped.slot == slot){
+        if(Player.equipped && Player.equipped.slot == slot){
             Player.unequipWeapon();
         }
         let playerEntity = EntityManager.getEntity('player');

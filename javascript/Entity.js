@@ -169,6 +169,18 @@ class Entity{
         this.x = -1;
         this.y = -1;
     }
+
+    removeFromBoard(){
+        Board.updateSpace(this.x,this.y);
+        this.setPosition(-1,-1);
+    }
+
+    setPosition(x,y){
+        Board.clearSpace(this.x,this.y) 
+        this.x = x;
+        this.y = y;
+        Board.placeEntity(this,x,y)
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -225,6 +237,7 @@ class SwordEntity extends Entity{
     unequip(){
         this.item = false;
         this.name = 'UNEQUIPPED';
+        this.removeFromBoard();
     }
 
     //place the weapon. Should happen each frame. Triggers an attack if placed on another entity.

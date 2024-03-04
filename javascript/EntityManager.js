@@ -583,11 +583,12 @@ class EntityManager{
         Board.placeEntities();
         
         Player.setPlayerInfo(snapshot.player);
-        if(Player.equipped){
-            Player.equipped = Player.inventory[Player.equipped.slot];
-        }
         //resync inventory
         Player.inventory = EntityManager.getEntity('player').inventory;
+        if(Player.equipped){
+            Player.equipped = Player.inventory.items[Player.equipped.slot];
+        }
+       
         Player.luck = Math.max(0,luck);
     }
 
@@ -692,10 +693,7 @@ class EntityManager{
 
     static setPosition(id,x,y){
         let entity = EntityManager.getEntity(id);
-        Board.clearSpace(entity.x,entity.y)
-        EntityManager.setProperty(id, 'x', x);
-        EntityManager.setProperty(id, 'y', y);
-        Board.placeEntity(EntityManager.getEntity(id),x,y)
+        entity.setPosition(x,y);
     }
 
     static getPosition(id){
@@ -723,11 +721,10 @@ class EntityManager{
 
     static removeEntity(id){
         let entity = EntityManager.getEntity(id);
+        entity.removeFromBoard();
         let x = entity.x;
         let y = entity.y;
-        Board.clearSpace(x, y);
-        EntityManager.setPosition(id,-1,-1);
-        Board.updateSpace(x,y);
+        
     }
 
 

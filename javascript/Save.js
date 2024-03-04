@@ -57,8 +57,7 @@ class Save{
         let roomString = json.name;
         let board = json.board;
         let values = json.values;
-        json.roster = [];
-        let roster = json.roster;
+        let roster = [];
         let counter = 0;
         let x = 0;
         let y = 0;
@@ -85,6 +84,7 @@ class Save{
             y++;
             x=0;
         })
+        json.roster = roster;
         Save.maps[roomString] = json;
         console.log('loaded');
     }
@@ -107,6 +107,7 @@ class Save{
                 let random = Random.roll(0,99);
                 if(random < entity.value.respawnChance){
                     entity.alive = true;
+                    LootManager.getEntityLoot(entity);
                 }
             }
         })

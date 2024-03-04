@@ -8,11 +8,17 @@ class LootManager{
         if(entitySave.value.loot){
             lootChances = entitySave.value.loot;
         }else if(monsterKey){
-            lootChances = monsterVars[monsterKey].loot;
-            entitySave.inventory = monsterVars[monsterKey].inventory;
+            let template = monsterVars[monsterKey];
+            lootChances = template.loot;
+            if(template.inventory){
+                entitySave.inventory = [...template.inventory];
+            }
         }else if(containerKey){
-            lootChances = containerVars[containerKey].loot;
-            entitySave.inventory = containerVars[containerKey].inventory;
+            let template = containerVars[containerKey];
+            lootChances = template.loot;
+            if(template.inventory){
+                entitySave.inventory = [...template.inventory];
+            }
         }
 
         if(!entitySave.inventory){

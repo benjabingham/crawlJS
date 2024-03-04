@@ -15,6 +15,12 @@ class Player {
     static lightMax = 8;
     static lightTime = 0;
         
+    /*TODO - inventory should be an object:
+    static inventory = {
+        slots: 10,
+        items:[]
+    }
+    */
     static inventorySlots = 10;
     static inventory = [
         {
@@ -218,17 +224,25 @@ class Player {
         }
     }
 
+    
     static inventoryCleanup(){
         let newInventory = [];
+
+        while(Player.inventory.length > 0){
+            newInventory.push(Player.inventory.pop())
+        }
         let slot = 0;
-        Player.inventory.forEach((item) =>{
+
+        while(newInventory.length > 0){
+            let item = newInventory.pop();
             if(item){
-                newInventory.push(item);
-                item.slot = slot;
-                slot++;
+                Player.inventory.push(item);
             }
-        })
-        Player.inventory = newInventory;
+            item.slot = slot;
+            slot++;
+
+        }
+
     }
 
     static dropItem(slot){

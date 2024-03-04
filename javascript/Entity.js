@@ -5,7 +5,7 @@ class Entity{
     id;
     x;
     y;
-    maxInventory = 0;
+    inventorySlots = 0;
     inventory = [];
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
@@ -109,10 +109,11 @@ class Entity{
     }
 
     pickUpItemPile(itemPile){
-        if(EntityManager.skipBehaviors || !this.inventoryMax){
+        console.log('pick up')
+        if(EntityManager.skipBehaviors || !this.inventorySlots){
             return false;
         }
-        while(itemPile.inventory.length < 0 && this.inventory.length < this.inventoryMax){
+        while(itemPile.inventory.length > 0 && this.inventory.length < this.inventorySlots){
             this.inventory.push(itemPile.inventory.pop());
         }
 
@@ -121,7 +122,13 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
+        if(PlayerEntity.prototype.isPrototypeOf(this)){
+            Player.inventory = this.inventory;
+        }
+
         itemPile.checkIsEmpty();
+
+        console.log(Player.inventory);
     }
 
     dropItem(slot){
@@ -150,7 +157,7 @@ class Entity{
             this.inventory = [];
         }
 
-        while(container.inventory.length < 0 && this.inventory.length < this.inventoryMax){
+        while(container.inventory.length < 0 && this.inventory.length < this.inventorySlots){
             this.inventory.push(container.inventory.pop());
         }
     }
@@ -173,6 +180,7 @@ class PlayerEntity extends Entity{
         super("☺", x, y, 'you', 'player')
         this.sword = new SwordEntity(this.id, Player.equipped).id;
         this.inventory = Player.inventory;
+        this.inventorySlots = Player.inventorySlots;
 
         return this;
     }
@@ -442,7 +450,7 @@ class ItemPile extends Entity{
     inventory = [];
     walkable = true;
     isItemPile = true;
-    inventoryMax = 100;
+    inventorySlots = 100;
     dropTurn;
 
     constructor(x,y,inventory = []){

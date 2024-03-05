@@ -110,6 +110,7 @@ class Display{
     }
 
     static printBoardGrid(){
+        let devMode = false
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         
@@ -122,7 +123,10 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter click');
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                if(devMode){
+                    gridDiv.off('click');
+                }
                 let symbol = '';
                 //out of bounds
                 if(Board.hasPlayerLos({x:x, y:y})){
@@ -138,9 +142,12 @@ class Display{
                                 )
                             }).off('mouseleave').on('mouseleave',()=>{
                                 $('.hint-divs').html('');
-                            }).on('click',()=>{
-                                console.log(boardArray[y][x]);
                             })
+                            if(devMode){
+                                gridDiv.on('click',()=>{
+                                    console.log(boardArray[y][x]);
+                                })
+                            }                 
                         }
                     }
                     if(!Board.isSpace(x,y)){

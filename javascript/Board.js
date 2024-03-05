@@ -21,6 +21,14 @@ class Board{
         }
     }
 
+    static clearBoard(){
+        Board.boardArray.forEach((row)=>{
+            row.forEach((cell)=>{
+                
+            })
+        })
+    }
+
     static placeEntities(){
         console.log('placeEntities');
         let entities = EntityManager.entities;

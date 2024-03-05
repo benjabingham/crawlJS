@@ -409,13 +409,17 @@ class Monster extends Entity{
 }
 
 class Wall extends Entity{
+    //an indestructible wall cannot be attacked, moved, or destroyed by ANY means, and isn't tracked in EntityManager.history. Is set in map file.
+    destructible;
     mortal = 0;
-    threshold;
+    threshold = 100;
     isWall = true;
 
-    constructor(x,y,hitDice = 10, name=false){
+
+    constructor(x,y,hitDice = 10, name=false, destructible = false){
         super('',x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
+        this.destructible = destructible;
 
         return this;
     }

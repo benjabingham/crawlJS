@@ -16,14 +16,14 @@ class GameMaster{
     }
 
     static startGame(){
-        let entityManager = EntityManager;
         let board = Board;
 
-        entityManager.skipBehaviors = false;
+        EntityManager.skipBehaviors = false;
         board.placeEntities();
-        entityManager.saveSnapshot();
+        //EntityManager.removeTerrain();
+        EntityManager.saveSnapshot();
 
-        board.calculateLosArray(entityManager.getEntity('player'));
+        board.calculateLosArray(EntityManager.getEntity('player'));
 
         Display.showDungeonScreen();
         Display.printBoard();

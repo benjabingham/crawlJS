@@ -118,6 +118,7 @@ class Display{
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
+                //don't bother if spot was dark before and is still dark
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }

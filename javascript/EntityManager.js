@@ -557,14 +557,23 @@ class EntityManager{
             }
         })
     }*/
+    
+    static getCopy(object){
+        return JSON.parse(JSON.stringify(object));
+        //return structuredClone(object);
+    }
 
     static saveSnapshot(){
-        let entities = JSON.parse(JSON.stringify(EntityManager.entities));
+        let entities = EntityManager.getCopy(EntityManager.entities);
         let playerJson = Player.getPlayerJson();
         EntityManager.history.push({
             entities:entities,
             player:playerJson
         });
+        EntityManager.trimHistory();
+    }
+
+    static trimHistory(){
         if(EntityManager.history.length > EntityManager.historyLimit){
             EntityManager.history.shift();
         }

@@ -200,50 +200,6 @@ class EntityManager{
 
     }
 
-    /*
-    static knock(knockedId, knockerId){
-        let knocked = EntityManager.getEntity(knockedId);
-        let knocker = EntityManager.getEntity(knockerId);
-        let knockerPos;
-        knockerPos = EntityManager.history[EntityManager.history.length-1].entities[knockerId];
-        
-
-        let direction = Random.roll(0,7);
-        let x = knockedId.x + EntityManager.translations[direction].x;
-        let y = knockedId.y + EntityManager.translations[direction].y;
-    
-        let tries = 0;
-        //space must be open AND further from attacker's last position
-        let furtherSpace = (EntityManager.getOrthoDistance(knockerPos, knocked) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
-        let backupSpace = false;
-        while((!Board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
-            if(Board.isOpenSpace(x,y) && !backupSpace){
-                backupSpace = {x:x, y:y};
-            }
-
-            direction = (direction+1) % 8;
-            x = knocked.x + EntityManager.translations[direction].x;
-            y = knocked.y + EntityManager.translations[direction].y;
-
-            furtherSpace = (EntityManager.getOrthoDistance(knockerPos, knocked) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
-            tries++;
-        }
-
-        if(tries < 8){
-            EntityManager.setPosition(knockedId,x,y)
-        }else if (backupSpace){
-            EntityManager.setPosition(knockedId,backupSpace.x,backupSpace.y);
-        }else{
-            EntityManager.transmitMessage(knocked.name + " is cornered!", 'pos');
-            if(knocker.isSword){
-                EntityManager.setToLastPosition(knocker.owner);
-                EntityManager.setToLastPosition(knockerId);
-                knocker.place();
-                //EntityManager.knockSword(knockerId);
-            }
-        }
-    }*/
-
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
         sword.knockSword();
@@ -373,7 +329,7 @@ class EntityManager{
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
             EntityManager.setToLastPosition(target.id);
-            let lastSwordPos = EntityManager.history[EntityManager.history.length-1].entities[attacker.id];
+            let lastSwordPos = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[attacker.id];
             EntityManager.findSwordMiddle(attacker,target,lastSwordPos);
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
@@ -564,7 +520,8 @@ class EntityManager{
     }
 
     static saveSnapshot(){
-        let entities = EntityManager.getCopy(EntityManager.entities);
+        //let entities = EntityManager.getCopy(EntityManager.entities);
+        let entities = JSON.stringify(EntityManager.entities);
         let playerJson = Player.getPlayerJson();
         EntityManager.history.push({
             entities:entities,
@@ -598,8 +555,9 @@ class EntityManager{
     }
 
     static loadSnapshot(snapshot){
+        let entities = JSON.parse(snapshot.entities);
         for (const [id, entity] of Object.entries(EntityManager.entities)) { 
-            entity.rewind(snapshot.entities[id]);
+            entity.rewind(entities[id]);
         }
     }
 
@@ -628,7 +586,7 @@ class EntityManager{
 
     //TODO - move to entity
     static setToLastPosition(id){
-        let lastPosition = EntityManager.history[EntityManager.history.length-1].entities[id];
+        let lastPosition = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[id];
         let entity = EntityManager.getEntity(id);
         if (entity.isSword){
             entity.rotation = lastPosition.rotation;

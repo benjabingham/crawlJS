@@ -123,7 +123,7 @@ class EntityManager{
         let targetItem = Board.itemAt(targetX, targetY);
 
         if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.destructible){
-            EntityManager.attack(entity,targetItem);
+            entity.attack(targetItem);
         }
 
         if(targetItem.isSword && !Board.wallAt(targetX, targetY)){
@@ -137,8 +137,7 @@ class EntityManager{
         
     }
 
-    //TODO - move to monster class
-    static attack(attacker,target){
+/*    static attack(attacker,target){
         let damage = attacker.damage;
         let stunTime = attacker.stunTime;
         let damageDice = 1;
@@ -167,7 +166,7 @@ class EntityManager{
             EntityManager.sturdy(attacker,target);
         }
 
-    }
+    }*/
 
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
@@ -176,6 +175,7 @@ class EntityManager{
 
     //place sword in space closest to center between two points
     //TODO - give to SwordEntity
+    /*
     static findSwordMiddle(sword,pos1,pos2){
         let owner = EntityManager.getEntity(sword.owner);
         //direction is either 1 or -1
@@ -209,6 +209,7 @@ class EntityManager{
         sword.rotation = bestRotation;
         sword.place();
     }
+    */
 
     //TODO - give to Monster
     static enrageAndDaze(entity){
@@ -297,9 +298,9 @@ class EntityManager{
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
-            EntityManager.setToLastPosition(target.id);
+            target.setToLastPosition();
             let lastSwordPos = History.getSnapshotEntity(attacker.id);
-            EntityManager.findSwordMiddle(attacker,target,lastSwordPos);
+            attacker.findSwordMiddle(target,lastSwordPos);
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
             }
@@ -426,7 +427,7 @@ class EntityManager{
         EntityManager.placeSword('player');
     }
 
-    //TODO - move to entity
+    /*
     static setToLastPosition(id){
         let lastPosition = History.getSnapshotEntity(id);
         let entity = EntityManager.getEntity(id);
@@ -436,6 +437,7 @@ class EntityManager{
             EntityManager.setPosition(id,lastPosition.x,lastPosition.y)
         }
     }
+    */
 
     static syncPlayerInventory(){
         if(EntityManager.getEntity('player')){
@@ -446,7 +448,6 @@ class EntityManager{
         }
     }
 
-    //TODO - containers not getting index. Monster index is same as id?
     static loadRoom(json){
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)

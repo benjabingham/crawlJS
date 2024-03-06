@@ -88,8 +88,9 @@ class Entity{
         }else{
             EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
             if(knocker.isSword){
-                EntityManager.setToLastPosition(knocker.owner);
-                EntityManager.setToLastPosition(knockerId);
+                let owner = EntityManager.getEntity(knocker.owner);
+                owner.setToLastPosition();
+                knocker.setToLastPosition();
                 knocker.place();
             }
         }
@@ -180,6 +181,15 @@ class Entity{
         this.x = x;
         this.y = y;
         Board.placeEntity(this,x,y)
+    }
+
+    setToLastPosition(){
+        let lastPosition = History.getSnapshotEntity(this.id);
+        if (this.isSword){
+            this.rotation = lastPosition.rotation;
+        }else{
+            EntityManager.setPosition(this.id,lastPosition.x,lastPosition.y)
+        }
     }
 }
 
@@ -362,6 +372,41 @@ class SwordEntity extends Entity{
             this.place();
         }
     }
+
+    //place sword in space closest to center between two points
+    static findSwordMiddle(pos1,pos2){
+        let owner = EntityManager.getEntity(this.owner);
+        //direction is either 1 or -1
+        let direction = (Random.roll(0,1) * 2) - 1;
+        let rotation = (this.rotation + 8 + direction) % 8;
+        let translation = EntityManager.translations[rotation];
+        let x = owner.x + translation.x;
+        let y = owner.y + translation.y;
+
+        let bestPos = {x:x, y:y};
+        let bestRotation = rotation;
+        let bestDistance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2)
+
+        for(let i = 0; i < 8; i++){
+            let distance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2);
+
+            let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
+            if(validSpace){
+                if (distance < bestDistance){
+                    bestDistance = distance;
+                    bestPos = {x:x, y:y};
+                    bestRotation = rotation;
+                }
+            }
+            rotation = (rotation + 8 + direction) % 8;
+            translation = EntityManager.translations[rotation];
+            x = owner.x + translation.x;
+            y = owner.y + translation.y;
+        }
+
+        this.rotation = bestRotation;
+        this.place();
+    }
 }
 
 class Monster extends Entity{
@@ -406,6 +451,23 @@ class Monster extends Entity{
 
         return this;
     }
+
+    attack(target){
+        let damage = this.damage;
+        let mortality = Random.roll(0,damage);
+
+        if (target.id == 'player'){
+            EntityManager.transmitMessage(this.name+" attacks you!");
+            if(mortality == 0){
+                EntityManager.transmitMessage(this.name+" misses!");
+            }else{
+                Player.changeHealth(mortality * -1);
+            }
+        }else if(target.isWall && target.destructible){
+            EntityManager.addMortality(target.id, mortality);
+        }
+
+    }
 }
 
 class Wall extends Entity{
@@ -415,10 +477,10 @@ class Wall extends Entity{
     threshold = 100;
     isWall = true;
 
-    constructor(x,y,hitDice = 10, name=false, indestructible = true){
+    constructor(x,y,hitDice = 10, name=false, destructible = false){
         super('',x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
-        this.indestructible = indestructible;
+        this.destructible = destructible;
 
         return this;
     }

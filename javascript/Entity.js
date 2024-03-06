@@ -191,6 +191,13 @@ class Entity{
             EntityManager.setPosition(this.id,lastPosition.x,lastPosition.y)
         }
     }
+
+    addMortality(mortal){
+        if(!this.mortal){
+            this.mortal = 0;
+        }
+        this.mortal += mortal;
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -332,8 +339,10 @@ class SwordEntity extends Entity{
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" is struck!");
             }
-            EntityManager.addStunTime(target.id,stunAdded);
-            EntityManager.addMortality(target.id, mortality);
+            if(Monster.prototype.isPrototypeOf(target)){
+                target.addStunTime(stunAdded);
+            }
+            target.addMortality(mortality);
             target.knock(this.id);
             EntityManager.enrageAndDaze(target);   
             EntityManager.sturdy(this,target);
@@ -467,6 +476,13 @@ class Monster extends Entity{
             EntityManager.addMortality(target.id, mortality);
         }
 
+    }
+
+    addStunTime(stunTime){
+        if(!this.stunned){
+            this.stunned = 0;
+        }
+        this.stunned += stunTime;
     }
 }
 

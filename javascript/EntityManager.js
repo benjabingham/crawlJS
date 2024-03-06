@@ -539,15 +539,18 @@ class EntityManager{
 
 
     //TODO - give to entity
+    /*
     static addStunTime(id, stunTime){
         stunTime +=EntityManager.getProperty(id, 'stunned');
         EntityManager.setProperty(id, 'stunned', stunTime);
     }
+    */
     //TODO - give to entity
+    /*
     static addMortality(id, mortal){
         mortal += Math.max(EntityManager.getProperty(id, 'mortal'),0);
         EntityManager.setProperty(id, 'mortal', mortal);
-    }
+    }*/
 
     static getDistance(point1, point2){
         let xdif = Math.abs(point1.x - point2.x);

@@ -77,6 +77,7 @@ class EntityManager{
         sword.rotate(direction);
     }
 
+    //TODO - give to monster
     static chaseNatural(id, behaviorInfo){
         let entity = EntityManager.getEntity(id);
         let playerEntity = EntityManager.getEntity('player');
@@ -121,12 +122,8 @@ class EntityManager{
         let targetY = entity.y+y
         let targetItem = Board.itemAt(targetX, targetY);
 
-        if(targetItem.id == "player" || targetItem.behavior == "dead" || targetItem.destructible){
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
             entity.attack(targetItem);
-        }
-
-        if(targetItem.isSword && !Board.wallAt(targetX, targetY)){
-            EntityManager.beat(entity,targetItem);
         }
     
         if(!EntityManager.moveEntity(id, x, y, Board)){
@@ -136,160 +133,15 @@ class EntityManager{
         
     }
 
-/*    static attack(attacker,target){
-        let damage = attacker.damage;
-        let stunTime = attacker.stunTime;
-        let damageDice = 1;
-        if(target.stunned){
-            damageDice=2;
-        }
-        let stunAdded = 0;
-        if (stunTime){
-            stunAdded = Random.roll(1,stunTime);
-        }
-        let mortality = Random.rollN(damageDice,0,damage);
-
-        if (target.id == 'player'){
-            EntityManager.transmitMessage(attacker.name+" attacks you!");
-            Player.changeHealth(mortality * -1);
-        }else if(target.isWall){
-            EntityManager.addMortality(target.id, mortality);
-        }else{
-            if(!target.dead){
-                EntityManager.transmitMessage(target.name+" is struck!");
-            }
-            EntityManager.addStunTime(target.id,stunAdded);
-            EntityManager.addMortality(target.id, mortality);
-            target.knock(attacker.id);
-            EntityManager.enrageAndDaze(target);   
-            EntityManager.sturdy(attacker,target);
-        }
-
-    }*/
-
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
         sword.knockSword();
     }
 
-    //place sword in space closest to center between two points
-    //TODO - give to SwordEntity
-    /*
-    static findSwordMiddle(sword,pos1,pos2){
-        let owner = EntityManager.getEntity(sword.owner);
-        //direction is either 1 or -1
-        let direction = (Random.roll(0,1) * 2) - 1;
-        let rotation = (sword.rotation + 8 + direction) % 8;
-        let translation = EntityManager.translations[rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
-
-        let bestPos = {x:x, y:y};
-        let bestRotation = rotation;
-        let bestDistance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2)
-
-        for(let i = 0; i < 8; i++){
-            let distance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2);
-
-            let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
-            if(validSpace){
-                if (distance < bestDistance){
-                    bestDistance = distance;
-                    bestPos = {x:x, y:y};
-                    bestRotation = rotation;
-                }
-            }
-            rotation = (rotation + 8 + direction) % 8;
-            translation = EntityManager.translations[rotation];
-            x = owner.x + translation.x;
-            y = owner.y + translation.y;
-        }
-
-        sword.rotation = bestRotation;
-        sword.place();
-    }
-    */
-
-    //TODO - give to Monster
-    static enrageAndDaze(entity){
-        if(!entity.behaviorInfo || entity.dead){
-            return;
-        }
-        let enrageChance = entity.behaviorInfo.enrage;
-        let dazeChance = entity.behaviorInfo.daze;
-
-        let random = Random.roll(1,100);
-        if(random <= enrageChance){
-            EntityManager.transmitMessage(entity.name+" is enraged!", 'danger', ['enraged']);
-            entity.behaviorInfo.focus += 5;
-            entity.behaviorInfo.slow -= 3;
-            if(!entity.behaviorInfo.beat){
-                entity.behaviorInfo.beat = 0;
-            }
-            entity.behaviorInfo.beat += 5;
-            if(!entity.behaviorInfo.sturdy){
-                entity.behaviorInfo.sturdy = 0;
-            }
-            entity.sturdy += 5;
-            entity.stunned -= Math.max(Random.roll(0,entity.stunned),0);
-        }
-        random = Random.roll(1,100);
-        if(random <= dazeChance){
-            EntityManager.transmitMessage(entity.name+" is dazed!", 'pos', ['dazed']);
-            entity.behaviorInfo.focus -= 7;
-            if(!entity.behaviorInfo.slow){
-                entity.behaviorInfo.slow = 0;
-            }
-            entity.behaviorInfo.slow += 7;
-            if(!entity.behaviorInfo.sturdy){
-                entity.behaviorInfo.sturdy = 0;
-            }
-            entity.sturdy -= 7;
-            if(!entity.behaviorInfo.beat){
-                entity.behaviorInfo.beat = 0;
-            }
-            entity.beat -=7;
-            entity.stunned ++;
-        }
-    }
-
-    //has beat% chance to beat sword out of way.
-    //also beats sword out of way if damage exceeds player stamina.
-    //TODO - give to Entity
-    static beat(entity, sword){
-        let knock = false;
-        if(sword.owner == 'player'){
-            EntityManager.transmitMessage(entity.name+" attacks your weapon...");
-            let damage = Random.roll(0,entity.damage);
-            Player.changeStamina(damage * -1);
-            if(Player.stamina < 0){
-                Player.stamina = 0;
-                knock = true;
-            }
-            if(damage > 1){
-                EntityManager.degradeItem(sword, damage*0.25, 1);
-            }
-        }
-        let beatChance = 0;
-        if(entity.behaviorInfor){
-            beatChance = entity.behaviorInfo.beat;
-        }
-
-        let random = Random.roll(1,100);
-        if(random <= beatChance || knock){
-            EntityManager.transmitMessage(entity.name+" knocks your weapon out of the way!", 'danger');
-            EntityManager.knockSword(sword.id);
-        }else if(Player.equipped){
-            EntityManager.transmitMessage("You hold steady!");
-        }
-
-        
-        
-    }
-
     //TODO - give to Monster (or to Creature???)
+    /*
     static sturdy(attacker,target){
-        if(!target.behaviorInfor){
+        if(!target.behaviorInfo){
             return;
         }
         let sturdyChance = target.behaviorInfo.sturdy;
@@ -298,13 +150,18 @@ class EntityManager{
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
             target.setToLastPosition();
-            let lastSwordPos = History.getSnapshotEntity(attacker.id);
-            attacker.findSwordMiddle(target,lastSwordPos);
+            let attackerLastPos = History.getSnapshotEntity(attacker.id);
+            if(attacker.isSword){
+                attacker.findSwordMiddle(target,attackerLastPos);
+            }else{
+                EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
+            }
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
             }
         }
     }
+    */
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
@@ -347,7 +204,7 @@ class EntityManager{
     static reapWounded(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
             if (entity.mortal > entity.threshold && entity.behavior != 'dead'){
-                EntityManager.kill(entity);
+                entity.kill();
             }
         }
         if(Player.health <= 0){
@@ -356,24 +213,6 @@ class EntityManager{
             EntityManager.transmitMessage('you are dead.', 'urgent');
         }
     }
-
-    //give to Entity
-    static kill(entity){
-        EntityManager.transmitMessage(entity.name+" is slain!", 'win');
-        entity.name += " corpse";
-        entity.behavior = 'dead';
-        entity.dead = true;
-        entity.tempSymbol = 'x';
-        entity.stunned = 0;
-        entity.isContainer = true;
-        if(entity.tiny){
-            entity.item = true;
-            entity.walkable = true;
-            entity.tempSymbol = '*';
-        }
-        let roster = EntityManager.currentMap.roster;
-        roster[entity.index].alive = false;
-    };
 
     static equipWeapon(wielderId, weapon){
         let id = EntityManager.getProperty(wielderId, "sword");
@@ -425,18 +264,6 @@ class EntityManager{
         Board.calculateLosArray(EntityManager.getEntity('player'));
         EntityManager.placeSword('player');
     }
-
-    /*
-    static setToLastPosition(id){
-        let lastPosition = History.getSnapshotEntity(id);
-        let entity = EntityManager.getEntity(id);
-        if (entity.isSword){
-            entity.rotation = lastPosition.rotation;
-        }else{
-            EntityManager.setPosition(id,lastPosition.x,lastPosition.y)
-        }
-    }
-    */
 
     static syncPlayerInventory(){
         if(EntityManager.getEntity('player')){
@@ -536,21 +363,6 @@ class EntityManager{
         let y = entity.y;
         
     }
-
-
-    //TODO - give to entity
-    /*
-    static addStunTime(id, stunTime){
-        stunTime +=EntityManager.getProperty(id, 'stunned');
-        EntityManager.setProperty(id, 'stunned', stunTime);
-    }
-    */
-    //TODO - give to entity
-    /*
-    static addMortality(id, mortal){
-        mortal += Math.max(EntityManager.getProperty(id, 'mortal'),0);
-        EntityManager.setProperty(id, 'mortal', mortal);
-    }*/
 
     static getDistance(point1, point2){
         let xdif = Math.abs(point1.x - point2.x);

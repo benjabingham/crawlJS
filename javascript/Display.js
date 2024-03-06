@@ -110,7 +110,7 @@ class Display{
     }
 
     static printBoardGrid(){
-        let devMode = false
+        let devMode = true
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         

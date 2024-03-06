@@ -10,6 +10,8 @@ class Entity{
         slots:0,
         items:[]
     }
+    //index refers to an entity's index in its map's save array
+    index;
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
             id = EntityManager.entityCounter;
@@ -198,6 +200,88 @@ class Entity{
         }
         this.mortal += mortal;
     }
+
+    kill(){
+        if(this.isMonster){
+            if(Board.hasPlayerLos(this)){
+                EntityManager.transmitMessage(this.name+" is slain!", 'win');
+            }
+            this.name += " corpse";
+            this.behavior = 'dead';
+            this.dead = true;
+            this.stunned = 0;
+        }else{
+            if(Board.hasPlayerLos(this)){
+                EntityManager.transmitMessage(this.name+" is destroyed!")
+            }
+            this.name = "destroyed "+this.name;
+        }
+        this.tempSymbol = 'x';
+        this.isContainer = true;
+        /*
+        if(this.tiny){
+            this.item = true;
+            this.walkable = true;
+            this.tempSymbol = '*';
+        }
+        */
+        let roster = EntityManager.currentMap.roster;
+        if(roster[this.index]){
+            roster[this.index].alive = false;
+        }
+    };
+
+    //has beat% chance to beat sword out of way.
+    //also beats sword out of way if damage exceeds player stamina.
+    beat(targetSword){
+        let knock = false;
+        if(targetSword.owner == 'player'){
+            EntityManager.transmitMessage(this.name+" attacks your weapon...");
+            let damage = Random.roll(0,this.damage);
+            Player.changeStamina(damage * -1);
+            if(Player.stamina < 0){
+                Player.stamina = 0;
+                knock = true;
+            }
+            if(damage > 1){
+                EntityManager.degradeItem(targetSword, damage*0.25, 1);
+            }
+        }
+        let beatChance = 0;
+        if(this.behaviorInfo){
+            beatChance = this.behaviorInfo.beat;
+        }
+
+        let random = Random.roll(1,100);
+        if(random <= beatChance || knock){
+            EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger');
+            EntityManager.knockSword(targetSword.id);
+        }else if(Player.equipped){
+            EntityManager.transmitMessage("You hold steady!");
+        }     
+    };
+
+    sturdy(attacker){
+        if(!this.behaviorInfo){
+            return;
+        }
+        let sturdyChance = this.behaviorInfo.sturdy;
+
+        let random = Random.roll(1,100);
+        if (random <= sturdyChance){
+            EntityManager.removeEntity(attacker.id);
+            this.setToLastPosition();
+            let attackerLastPos = History.getSnapshotEntity(attacker.id);
+            if(attacker.isSword){
+                attacker.findSwordMiddle(this,attackerLastPos);
+            }else{
+                EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
+            }
+            if(!this.dead){
+                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger');
+            }
+        }
+    };
 }
 
 class PlayerEntity extends Entity{
@@ -344,8 +428,11 @@ class SwordEntity extends Entity{
             }
             target.addMortality(mortality);
             target.knock(this.id);
-            EntityManager.enrageAndDaze(target);   
-            EntityManager.sturdy(this,target);
+            if(target.enrageAndDaze){
+                target.enrageAndDaze();   
+            }
+            console.log(target);
+            target.sturdy(this);
         }
 
         if(this.owner == 'player'){
@@ -383,7 +470,7 @@ class SwordEntity extends Entity{
     }
 
     //place sword in space closest to center between two points
-    static findSwordMiddle(pos1,pos2){
+    findSwordMiddle(pos1,pos2){
         let owner = EntityManager.getEntity(this.owner);
         //direction is either 1 or -1
         let direction = (Random.roll(0,1) * 2) - 1;
@@ -432,6 +519,8 @@ class Monster extends Entity{
     //damage - determines the amount of damage done by this monsters attacks
     damage = 0;
     isMonster = true;
+    //is used to temporarily change monster's symbol, ex. if stunned or killed
+    tempSymbol;
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
@@ -462,6 +551,11 @@ class Monster extends Entity{
     }
 
     attack(target){
+        if(target.isSword){
+            this.beat(target);
+            return;
+        }
+
         let damage = this.damage;
         let mortality = Random.roll(0,damage);
 
@@ -484,6 +578,52 @@ class Monster extends Entity{
         }
         this.stunned += stunTime;
     }
+
+    enrageAndDaze(){
+        if(!this.behaviorInfo || this.dead){
+            return;
+        }
+        let enrageChance = this.behaviorInfo.enrage;
+        let dazeChance = this.behaviorInfo.daze;
+
+        let random = Random.roll(1,100);
+        if(random <= enrageChance){
+            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', ['enraged']);
+            this.behaviorInfo.focus += 5;
+            if(!this.behaviorInfo.slow){
+                this.behaviorInfo.slow = 0;
+            }
+            this.behaviorInfo.slow -= 3;
+            if(!this.behaviorInfo.beat){
+                this.behaviorInfo.beat = 0;
+            }
+            this.behaviorInfo.beat += 5;
+            if(!this.behaviorInfo.sturdy){
+                this.behaviorInfo.sturdy = 0;
+            }
+            this.behaviorInfo.sturdy += 5;
+            this.stunned -= Math.max(Random.roll(0,this.stunned),0);
+        }
+        random = Random.roll(1,100);
+        if(random <= dazeChance){
+            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', ['dazed']);
+            this.behaviorInfo.focus -= 7;
+            if(!this.behaviorInfo.slow){
+                this.behaviorInfo.slow = 0;
+            }
+            this.behaviorInfo.slow += 7;
+            if(!this.behaviorInfo.sturdy){
+                this.behaviorInfo.sturdy = 0;
+            }
+            this.sturdy -= 7;
+            if(!this.behaviorInfo.beat){
+                this.behaviorInfo.beat = 0;
+            }
+            this.beat -=7;
+            this.stunned ++;
+        }
+    }
+
 }
 
 class Wall extends Entity{
@@ -535,6 +675,7 @@ class Container extends Entity{
 
         return this;
     }
+
 }
 
 class ItemPile extends Entity{

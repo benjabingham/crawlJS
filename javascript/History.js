@@ -25,8 +25,15 @@ class History{
     }
 
     static getSnapshotEntity(id, n=1){
-        return JSON.parse(History.snapshots[this.snapshots.length-n].entities[id]);
+        let snapshotEntity = History.snapshots[this.snapshots.length-n].entities[id];
+        if (snapshotEntity){
+            return JSON.parse(snapshotEntity);
+        }
 
+        console.log(EntityManager.getEntity(id));
+        throw new Error('Entity does not exist in History.snapshots! ');
+
+        return false;
     }
 
     static popSnapshot(){
@@ -39,6 +46,7 @@ class History{
         //let entities = JSON.stringify(EntityManager.entities);
         let entities = {};
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
+            if(!(entity.isWall && !entity.destructible))
             entities[key] = JSON.stringify(entity);
         }
         let playerJson = Player.getPlayerJson();

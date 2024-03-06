@@ -517,9 +517,10 @@ class EntityManager{
     }
 
     static loadSnapshot(snapshot){
-        let entities = snapshot.entities;
-        for (const [id, entity] of Object.entries(EntityManager.entities)) { 
-            entity.rewind(entities[id]);
+        let snapshotEntities = snapshot.entities;
+        for (const [id, snapshotEntity] of Object.entries(snapshotEntities)) {
+            let entity = EntityManager.getEntity(id);
+            entity.rewind(snapshotEntity);
         }
     }
 

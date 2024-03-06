@@ -274,7 +274,12 @@ class SwordEntity extends Entity{
                     }else{
                         weight = this.item.weight;
                     }
-                    Player.changeStamina(weight * -1);
+                    if(Player.stamina < weight){
+                        EntityManager.cancelAction({insuficientStamina:true});
+                        return false;
+                    }else{
+                        Player.changeStamina(weight * -1);
+                    }
                 }
                 this.swordAttack(target);
             }
@@ -283,11 +288,6 @@ class SwordEntity extends Entity{
         if(prevRotation == this.rotation && this.x == prevPosition.x && this.y == prevPosition.y && this.item){
             EntityManager.setPosition(this.id,x,y);
         }
-        //undo action if results in negative player stamina
-        if (Player.stamina < 0){
-            EntityManager.cancelAction({insuficientStamina:true});
-        }
-
         this.updateSymbol();
     }
 

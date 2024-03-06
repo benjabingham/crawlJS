@@ -1,4 +1,5 @@
 //TODO - make Creature class which includes player and monster
+//TODO - 'attackable' property
 class Entity{
     name;
     symbol;
@@ -346,7 +347,7 @@ class SwordEntity extends Entity{
         let x = this.owner.x + translation.x;
         let y = this.owner.y + translation.y;
         let counter = 1;
-        while((Board.itemAt(x,y).behavior != 'wall' && Board.itemAt(x,y)) && counter < 3){
+        while((!Board.itemAt(x,y).isWall && Board.itemAt(x,y)) && counter < 3){
             rotation = (sword.rotation + 8 + direction) % 8;
             translation = EntityManager.translations[rotation];
             x = owner.x + translation.x;
@@ -355,7 +356,7 @@ class SwordEntity extends Entity{
             counter++;
         }
 
-        if(Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y)){
+        if(Board.itemAt(x,y).isWall || !Board.itemAt(x,y)){
             EntityManager.transmitMessage('sword knocked!', 'danger');
             this.rotation = rotation;
             this.place();
@@ -408,13 +409,16 @@ class Monster extends Entity{
 }
 
 class Wall extends Entity{
+    //an indestructible wall cannot be attacked, moved, or destroyed by ANY means, and isn't tracked in History.snapshots. Is set in map file.
+    destructible;
     mortal = 0;
-    threshold;
+    threshold = 100;
     isWall = true;
 
-    constructor(x,y,hitDice = 10, name=false){
+    constructor(x,y,hitDice = 10, name=false, indestructible = true){
         super('',x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
+        this.indestructible = indestructible;
 
         return this;
     }

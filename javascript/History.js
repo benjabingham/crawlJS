@@ -10,17 +10,37 @@ class History{
 
     //get snapshot of entities from n turn(s) ago 
     static getSnapshotEntities(n = 1){
-        return JSON.parse(History.snapshots[this.snapshots.length-n].entities);
+        //return JSON.parse(History.snapshots[this.snapshots.length-n].entities);
+        let snapshotEntities = History.snapshots[this.snapshots.length-n].entities
+        return History.decodeSnapshotEntities(snapshotEntities);
+    }
+
+    static decodeSnapshotEntities(snapshotEntities){
+        let entities = {};
+        for (const [key, entity] of Object.entries(snapshotEntities)) { 
+            entities[key] = JSON.parse(entity);
+        }
+
+        return entities;
+    }
+
+    static getSnapshotEntity(id, n=1){
+        return JSON.parse(History.snapshots[this.snapshots.length-n].entities[id]);
+
     }
 
     static popSnapshot(){
         let snapshot = History.snapshots.pop();
-        snapshot.entities = JSON.parse(snapshot.entities);
+        snapshot.entities = History.decodeSnapshotEntities(snapshot.entities);
         return snapshot;
     }
 
     static saveSnapshot(){
-        let entities = JSON.stringify(EntityManager.entities);
+        //let entities = JSON.stringify(EntityManager.entities);
+        let entities = {};
+        for (const [key, entity] of Object.entries(EntityManager.entities)) { 
+            entities[key] = JSON.stringify(entity);
+        }
         let playerJson = Player.getPlayerJson();
         History.snapshots.push({
             entities:entities,

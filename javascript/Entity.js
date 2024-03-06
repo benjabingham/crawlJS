@@ -51,7 +51,7 @@ class Entity{
     knock(knockerId){
         let knocker = EntityManager.getEntity(knockerId);
         let knockerPos;
-        knockerPos = History.getSnapshotEntities()[knockerId];
+        knockerPos = History.getSnapshotEntity(knockerId);
         
         //pick a random adjacent space
         let direction = Random.roll(0,7);
@@ -282,8 +282,8 @@ class SwordEntity extends Entity{
 
     getStrikeType(){
         let ownerPos = EntityManager.getEntity(this.owner);
-        let lastSwordPos = History.getSnapshotEntities()[this.id];
-        let lastOwnerPos = History.getSnapshotEntities()[this.owner];
+        let lastSwordPos = History.getSnapshotEntity(this.id);
+        let lastOwnerPos = History.getSnapshotEntity(this.owner);
         if(lastSwordPos.rotation != this.rotation){
             return "swing";
         }

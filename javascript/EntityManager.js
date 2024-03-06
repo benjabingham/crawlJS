@@ -326,7 +326,7 @@ class EntityManager{
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
             EntityManager.setToLastPosition(target.id);
-            let lastSwordPos = History.getSnapshotEntities(1)[attacker.id];
+            let lastSwordPos = History.getSnapshotEntity(attacker.id);
             EntityManager.findSwordMiddle(attacker,target,lastSwordPos);
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
@@ -548,7 +548,7 @@ class EntityManager{
 
     //TODO - move to entity
     static setToLastPosition(id){
-        let lastPosition = History.getSnapshotEntities(1)[id];
+        let lastPosition = History.getSnapshotEntity(id);
         let entity = EntityManager.getEntity(id);
         if (entity.isSword){
             entity.rotation = lastPosition.rotation;

@@ -266,7 +266,6 @@ class SwordEntity extends Entity{
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.itemAt(x,y);
             if(target.id != this.id && !target.isWall){
-                this.swordAttack(target);
                 if (this.owner == 'player'){  
                     let strikeType = this.getStrikeType();
                     let weight;
@@ -277,6 +276,7 @@ class SwordEntity extends Entity{
                     }
                     Player.changeStamina(weight * -1);
                 }
+                this.swordAttack(target);
             }
         }
         //if sword hasn't been placed somewhere else as result of attack...

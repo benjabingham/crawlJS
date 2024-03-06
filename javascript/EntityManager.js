@@ -35,7 +35,6 @@ class EntityManager{
 
     static degradeItem(weapon, modifier = 0, multiplier = 1){
         let item = weapon.item;
-        console.log(weapon);
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){

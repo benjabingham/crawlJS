@@ -12,8 +12,6 @@ class EntityManager{
         {x:-1,y:0},
         {x:-1,y:-1}
     ];
-    static history = [];
-    static historyLimit = 10;
 
     static currentMap;
     
@@ -24,8 +22,7 @@ class EntityManager{
     static wipeEntities(){
         EntityManager.entities = {};
         EntityManager.entityCounter = 0;
-        EntityManager.history = [];
-        EntityManager.historyLimit = 10;
+        History.reset();
     }
 
     static playerInit(x=0, y=0){
@@ -329,7 +326,7 @@ class EntityManager{
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
             EntityManager.setToLastPosition(target.id);
-            let lastSwordPos = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[attacker.id];
+            let lastSwordPos = History.getSnapshotEntities(1)[attacker.id];
             EntityManager.findSwordMiddle(attacker,target,lastSwordPos);
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
@@ -519,43 +516,8 @@ class EntityManager{
         //return structuredClone(object);
     }
 
-    static saveSnapshot(){
-        //let entities = EntityManager.getCopy(EntityManager.entities);
-        let entities = JSON.stringify(EntityManager.entities);
-        let playerJson = Player.getPlayerJson();
-        EntityManager.history.push({
-            entities:entities,
-            player:playerJson
-        });
-        EntityManager.trimHistory();
-    }
-
-    static trimHistory(){
-        if(EntityManager.history.length > EntityManager.historyLimit){
-            EntityManager.history.shift();
-        }
-    }
-
-    static canRewind(){
-        return EntityManager.history.length > 1 && Player.luck > 0;
-    }
-
-    static rewind(){
-        console.log('rewind');
-        let luck = Player.luck-1;
-        EntityManager.history.pop();
-        let snapshot = EntityManager.history.pop();
-        EntityManager.loadSnapshot(snapshot);
-        Board.placeEntities();
-        
-        Player.setPlayerInfo(snapshot.player);
-        EntityManager.syncPlayerInventory();
-       
-        Player.luck = Math.max(0,luck);
-    }
-
     static loadSnapshot(snapshot){
-        let entities = JSON.parse(snapshot.entities);
+        let entities = snapshot.entities;
         for (const [id, entity] of Object.entries(EntityManager.entities)) { 
             entity.rewind(entities[id]);
         }
@@ -571,7 +533,7 @@ class EntityManager{
         if(reason.blocked){
             Log.addNotice('Path Blocked')
         }
-        let snapshot = EntityManager.history.pop();
+        let snapshot = History.popSnapshot();
         EntityManager.loadSnapshot(snapshot);
         Board.placeEntities();
 
@@ -586,7 +548,7 @@ class EntityManager{
 
     //TODO - move to entity
     static setToLastPosition(id){
-        let lastPosition = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[id];
+        let lastPosition = History.getSnapshotEntities(1)[id];
         let entity = EntityManager.getEntity(id);
         if (entity.isSword){
             entity.rotation = lastPosition.rotation;

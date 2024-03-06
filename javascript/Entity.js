@@ -51,7 +51,7 @@ class Entity{
     knock(knockerId){
         let knocker = EntityManager.getEntity(knockerId);
         let knockerPos;
-        knockerPos = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[knockerId];
+        knockerPos = History.getSnapshotEntities()[knockerId];
         
         //pick a random adjacent space
         let direction = Random.roll(0,7);
@@ -95,18 +95,17 @@ class Entity{
     }
 
     //rewind to a saved snapshot of this object
-    rewind(snapshot){
-        if(!snapshot){
+    rewind(entitySnapshot){
+        if(!entitySnapshot){
             this.obliterate();
             return;
         }
-        snapshot = JSON.parse(JSON.stringify(snapshot));
-        for (const [key, val] of Object.entries(snapshot)) { 
+        for (const [key, val] of Object.entries(entitySnapshot)) { 
             this[key] = val;
         }
 
         for (const [key, val] of Object.entries(this)) { 
-            this[key] = snapshot[key];
+            this[key] = entitySnapshot[key];
         }
 
     }
@@ -283,8 +282,8 @@ class SwordEntity extends Entity{
 
     getStrikeType(){
         let ownerPos = EntityManager.getEntity(this.owner);
-        let lastSwordPos = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[this.id];
-        let lastOwnerPos = JSON.parse(EntityManager.history[EntityManager.history.length-1].entities)[this.owner];
+        let lastSwordPos = History.getSnapshotEntities()[this.id];
+        let lastOwnerPos = History.getSnapshotEntities()[this.owner];
         if(lastSwordPos.rotation != this.rotation){
             return "swing";
         }

@@ -21,7 +21,7 @@ class GameMaster{
 
         entityManager.skipBehaviors = false;
         board.placeEntities();
-        entityManager.saveSnapshot();
+        History.saveSnapshot();
 
         board.calculateLosArray(entityManager.getEntity('player'));
 
@@ -93,9 +93,9 @@ class GameMaster{
     }
 
     static rewind(event){
-        if(EntityManager.canRewind()){
+        if(History.canRewind()){
             console.log('rewind');
-            EntityManager.rewind();
+            History.rewind();
             EntityManager.skipBehaviors = true;
             Log.turnCounter--;
             Log.messages[log.turnCounter] = false;
@@ -190,7 +190,7 @@ class GameMaster{
         }
 
         Board.placeEntities();
-        EntityManager.saveSnapshot();
+        History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();
         if(!EntityManager.skipBehaviors){

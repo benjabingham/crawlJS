@@ -28,34 +28,6 @@ class EntityManager{
     static playerInit(x=0, y=0){
         return new PlayerEntity(x,y);
     }
-    
-
-    /*
-    static entityInit(symbol, behavior, x=0,y=0, hitDice=1, damage=0, behaviorInfo = {}, name = "", inventorySlots = 10){
-        let threshold = Math.max(Random.rollN(hitDice,1,8),1);
-        let id = EntityManager.entityCounter;
-        if (!name){
-            name = id;
-        }
-        let entity = {
-            x : x,
-            y: y,
-            symbol: symbol,
-            behavior: behavior,
-            behaviorInfo: behaviorInfo,
-            id:id,
-            stunned:0,
-            mortal:0,
-            threshold:threshold,
-            damage:damage,
-            name:name,
-            inventorySlots:inventorySlots
-        }
-        EntityManager.entityCounter++;
-        EntityManager.entities[id] = entity;
-    
-        return EntityManager.entities[id];
-    }*/
 
     static makeSword(ownerId, item){
         return new SwordEntity(ownerId, item);
@@ -418,99 +390,6 @@ class EntityManager{
         sword.unequip();
     }
 
-/*
-    static dropItem(item,x,y){
-        if(!item){
-            return false;
-        }
-        item.x = x;
-        item.y = y;
-        item.item = true;
-        item.walkable = true;
-        item.id = EntityManager.entityCounter;
-        item.dropTurn = Log.turnCounter;
-        if (!item.symbol){
-            item.symbol = '*';
-        }
-        EntityManager.entities[EntityManager.entityCounter] = item;
-        EntityManager.entityCounter++;
-    }
-
-    static dropItems(entity){
-        let inventory = entity.inventory.items
-        if(!inventory){
-            return false;
-        }
-
-        inventory.forEach((item) =>{
-            EntityManager.dropItem(item, entity.x, entity.y);
-        })
-    }*/
-
-    /*
-    static lootContainer(looter,container){
-        if(!container.inventory){
-            return false;
-        }
-        if(looter.id == 'player'){
-            looter = Player;
-        }
-        if(!looter.inventory){
-            looter.inventory = [];
-        }
-        container.inventory.forEach((item,i) =>{
-            if(item && (looter.inventory.length < looter.inventorySlots)){
-                let obj = item;
-                console.log('OBLITERATING ' + item.name)
-
-                let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
-                EntityManager.entities[obj.id] = obliterated;
-                obj.walkable = false;
-                obj.inventory = false;
-                obj.item = false;
-                looter.inventory.push(obj);
-                container.inventory[i] = false;
-            }
-        })
-    }
-    */
-
-    /*
-    static pickUpItem(entity,item){
-        if(!entity || !item.isItem || entity.isSword || (item.dropTurn >= Log.turnCounter && !entity.item) || EntityManager.skipBehaviors){
-            return false;
-        }
-        if(entity.id == 'player'){
-            entity = Player;
-        }
-        let items = [];
-        if(item.inventory){
-            item.inventory.forEach((obj) =>{
-                if(!obj.obliterated){
-                    items.push(obj);
-                }
-            })
-        }
-
-        items.push(item);
-        
-        if(!entity.inventory.items){
-            entity.inventory.items = [];
-        }
-        items.forEach((obj)=>{
-            if(entity.inventory.items.length < entity.inventory.itemsSlots || entity.item){
-                console.log('OBLITERATING ' + obj.name)
-
-                let obliterated = {id:obj.id, obliterated:true, x:-1, y:-1};
-                EntityManager.entities[obj.id] = obliterated;
-                obj.walkable = false;
-                obj.inventory = false;
-                obj.item = false;
-                entity.inventory.items.push(obj);
-            }
-        })
-    }*/
-    
     static getCopy(object){
         return JSON.parse(JSON.stringify(object));
         //return structuredClone(object);
@@ -590,12 +469,6 @@ class EntityManager{
                 entityObj = new Wall(x, y, value.hitDice, value.name, value.destructible);
             }else if(value.isContainer){
                 entityObj = new Container(value.containerKey,x,y,value);
-            }else{
-                /*
-                if(entity.alive && spawn){
-                    entityObj = EntityManager.entityInit(value.symbol, value.behavior, x, y, value.hitDice,value.damage, value.behaviorInfo, value.name);
-                }
-                */
             }
             if(entityObj){
                 entityObj.index = entitySave.index;

@@ -431,7 +431,6 @@ class SwordEntity extends Entity{
             if(target.enrageAndDaze){
                 target.enrageAndDaze();   
             }
-            console.log(target);
             target.sturdy(this);
         }
 
@@ -569,6 +568,10 @@ class Monster extends Entity{
             }
         }else if(target.isWall && target.destructible){
             EntityManager.addMortality(target.id, mortality);
+        }
+
+        if(target.dead){
+            this.knock(target);
         }
 
     }

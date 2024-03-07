@@ -138,31 +138,6 @@ class EntityManager{
         sword.knockSword();
     }
 
-    //TODO - give to Monster (or to Creature???)
-    /*
-    static sturdy(attacker,target){
-        if(!target.behaviorInfo){
-            return;
-        }
-        let sturdyChance = target.behaviorInfo.sturdy;
-
-        let random = Random.roll(1,100);
-        if (random <= sturdyChance){
-            EntityManager.removeEntity(attacker.id);
-            target.setToLastPosition();
-            let attackerLastPos = History.getSnapshotEntity(attacker.id);
-            if(attacker.isSword){
-                attacker.findSwordMiddle(target,attackerLastPos);
-            }else{
-                EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
-            }
-            if(!target.dead){
-                EntityManager.transmitMessage(target.name+" holds its footing!", 'danger');
-            }
-        }
-    }
-    */
-
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
             let random = Random.roll(1,100);

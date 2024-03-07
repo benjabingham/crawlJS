@@ -615,11 +615,11 @@ class Monster extends Entity{
             if(!this.behaviorInfo.sturdy){
                 this.behaviorInfo.sturdy = 0;
             }
-            this.sturdy -= 7;
+            this.behaviorInfo.sturdy -= 7;
             if(!this.behaviorInfo.beat){
                 this.behaviorInfo.beat = 0;
             }
-            this.beat -=7;
+            this.behaviorInfo.beat -=7;
             this.stunned ++;
         }
     }

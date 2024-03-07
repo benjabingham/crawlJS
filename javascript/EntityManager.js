@@ -270,7 +270,9 @@ class EntityManager{
             }else if(value.isWall){
                 entityObj = new Wall(x, y, value.hitDice, value.name, value.destructible);
             }else if(value.isContainer){
-                entityObj = new Container(value.containerKey,x,y,value);
+                if(entitySave.alive){
+                    entityObj = new Container(value.containerKey,x,y,value);
+                }
             }
             if(entityObj){
                 entityObj.index = entitySave.index;

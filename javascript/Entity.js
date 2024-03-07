@@ -262,7 +262,7 @@ class Entity{
     };
 
     sturdy(attacker){
-        if(!this.behaviorInfo){
+        if(!this.behaviorInfo || this.dead){
             return;
         }
         let sturdyChance = this.behaviorInfo.sturdy;
@@ -470,6 +470,7 @@ class SwordEntity extends Entity{
     }
 
     //place sword in space closest to center between two points
+    //TODO - should prefer point that is equidistant between both points
     findSwordMiddle(pos1,pos2){
         let owner = EntityManager.getEntity(this.owner);
         //direction is either 1 or -1

@@ -1,4 +1,3 @@
-//TODO - make Creature class which includes player and monster
 //TODO - 'attackable' property
 class Entity{
     name;
@@ -51,6 +50,9 @@ class Entity{
         return false;
     }
 
+    //knocks this entity into another space.
+    //Attempts to knock entity into space further from knocker's space in last frame than current space
+    //If no such space is found, defaults to furthest space found.
     knock(knockerId){
         let knocker = EntityManager.getEntity(knockerId);
         let knockerPos;
@@ -66,9 +68,8 @@ class Entity{
         let furtherSpace = (EntityManager.getOrthoDistance(knockerPos, this) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
         let backupSpace = false;
         while((!Board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
-            //find a backup space, in case none of the other options is further from knocker than current position.
-            //TODO - should keep looking for furthest possible backupspace, not stop after finding one.
-            if(Board.isOpenSpace(x,y) && !backupSpace){
+            //backupSpacetracks the furthest space we've found so far
+            if(Board.isOpenSpace(x,y) && (!backupSpace || EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}) > EntityManager.getOrthoDistance(knockerPos,backupSpace))){
                 backupSpace = {x:x, y:y};
             }
 

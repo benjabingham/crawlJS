@@ -77,68 +77,6 @@ class EntityManager{
         sword.rotate(direction);
     }
 
-    //TODO - give to monster
-    /*
-    static chaseNatural(id, behaviorInfo){
-        let entity = EntityManager.getEntity(id);
-        let playerEntity = EntityManager.getEntity('player');
-        //creature is less focused the further they are
-        let focus = behaviorInfo.focus;
-        focus -= EntityManager.getDistance(entity, playerEntity);
-        if(!EntityManager.hasPlayerLos(entity)){
-            focus -= 20;
-        }
-        focus =  Math.max(focus, 4);
-        let x = 0;
-        let y = 0;
-
-        //the higher focus is, the less likely the creature is to move randomly
-        let random = Random.roll(1,focus);
-        if(random == 1){
-            x = -1;
-        }else if (random == 2){
-            x = 1;
-        }else if (random == 3 || random == 4){
-            //do nothing
-        }else if(entity.x > playerEntity.x){
-            x = -1;
-        }else if (entity.x < playerEntity.x){
-            x = 1;
-        }
-        
-        random = Random.roll(1,focus);
-        if(random == 1){
-            y = -1;
-        }else if (random == 2){
-            y = 1;
-        }else if (random == 3 || random == 4){
-            //do nothing
-        }else if(entity.y > playerEntity.y){
-            y = -1;
-        }else if (entity.y < playerEntity.y){
-            y = 1;
-        }
-    
-        let targetX = entity.x+x;
-        let targetY = entity.y+y
-        let targetItem = Board.itemAt(targetX, targetY);
-
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
-            entity.attack(targetItem);
-        }
-    
-        if(!EntityManager.moveEntity(id, x, y, Board)){
-            EntityManager.moveEntity(id, 0, y, Board);
-            EntityManager.moveEntity(id, x, 0, Board);
-        }
-        
-    }*/
-
-    static knockSword(swordId){
-        let sword = EntityManager.getEntity(swordId);
-        sword.knockSword();
-    }
-
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
             let random = Random.roll(1,100);

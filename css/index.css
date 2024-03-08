@@ -1,0 +1,10 @@
+html{
+    background-color: #222;
+    color: #ddd;
+}
+
+h1{
+    margin:auto auto;
+    width:fit-content;
+    margin-top:1rem;
+}

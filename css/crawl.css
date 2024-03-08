@@ -71,4 +71,18 @@ button:hover{
     }
 }
 
+#save-manage-div{
+    width:fit-content;
+    margin:auto;
+}
 
+#new-save-button{
+    font-size:larger;
+    padding:5px;
+    margin:auto;
+    display:block;
+}
+
+h1, h2, h3{
+    letter-spacing: .3rem;
+}

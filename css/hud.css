@@ -4,7 +4,7 @@
     margin-bottom:1rem;
     background-color:var(--menuBack);
     /*background-image:linear-gradient(#a5a5a5,#ddd)*/;
-    color:var(--dark);
+    color:var(--menuText);
     padding-bottom:5px;
     font-weight:600;
     display:none;
@@ -40,7 +40,7 @@
 
 .resource-bar-divs{
     background-color: var(--dark);
-    border:1px solid var(--dark);
+    border:1px solid var(--resourceBorder);
     height:20px;
     width:150px;
 }
@@ -49,7 +49,7 @@
     /*text-align:center;*/
     height:20px;
     width:100px;
-    border:1px solid var(--border);
+    border:1px solid var(--resourceBorder);
 }
 
 #stamina-level{

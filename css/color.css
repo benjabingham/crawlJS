@@ -6,10 +6,21 @@
     --wall:#666;
     --wallAccent:#6a6a6a;
     --exit:#555;
-
     --gridLine:#2222221c;
 
+    --defaultEntity:var(--dark);
+
+    /*hud*/
+    --healthBar:var(--red);
+    --healthBarText:var(--darkRed);
+    --staminaBar:var(--yellow);
+    --staminaBarText:var(--darkYellow);
+    --luckBar:var(--green);
+    --luckBarText:var(--darkGreen);
+
+
     /*menus*/
+    --border:var(--gray);
     --menuBack:var(--floor);
     --menuText:var(--dark);
     --altBack:var(--dark);
@@ -50,9 +61,8 @@
     --inventorySlot:#F0DFC2;
     --inventoryBorder:rgb(124, 117, 52);
     --inventorySlotHover:#E8D6BD;
-
     --shopFresh:#fdd7003a;
-
+    
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);
     --urgentBackground:rgba(250, 0, 0, 0.315);

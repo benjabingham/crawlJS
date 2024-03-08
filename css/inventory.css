@@ -1,6 +1,6 @@
 
 #shop{
-    background-color:rgba(252, 143, 0, 0.164);
+    background-color:var(--shopBackground)
 }
 
 .inventory-title{
@@ -19,7 +19,7 @@
     color: var(--menuText);
     display:flex;
     height:10rem;
-    border:1px solid black;
+    border:1px solid var(--border);
 }
 
 .inventory-list{
@@ -80,7 +80,7 @@
 }
 
 .inventory-description{
-    outline:1px solid black;
+    outline:1px solid var(--border);
     margin-left:auto;
     width:250px;
     padding:5px;

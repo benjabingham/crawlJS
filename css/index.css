@@ -3,8 +3,16 @@ html{
     color: #ddd;
 }
 
+body{
+    margin-left:1rem;
+}
+
 h1{
     margin:auto auto;
     width:fit-content;
     margin-top:1rem;
+}
+
+a{
+    color:#ddf
 }

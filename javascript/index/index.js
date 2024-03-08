@@ -1,0 +1,21 @@
+$(document).ready(function(){
+    mainReleases.forEach((branch)=>{
+        $('#main-releases-ul').append(
+            $('<li>').append(
+                $('<a>').text(branch.name).attr('href',
+                    'https://htmlpreview.github.io/?https://github.com/benjabingham/crawlJS/blob/'+branch.branchName+'/crawl.html'
+                )
+            )
+        )
+    })
+
+    devBranches.forEach((branch)=>{
+        $('#dev-branches-ul').append(
+            $('<li>').append(
+                $('<a>').text(branch.name).attr('href',
+                    'https://htmlpreview.github.io/?https://github.com/benjabingham/crawlJS/blob/'+branch.branchName+'/crawl.html'
+                )
+            )
+        )
+    })
+})

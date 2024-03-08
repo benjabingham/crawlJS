@@ -30,7 +30,10 @@ class History{
             return JSON.parse(snapshotEntity);
         }
 
-        console.log(EntityManager.getEntity(id));
+        console.log({
+            id:id,
+            entity:EntityManager.getEntity(id)
+        });
         throw new Error('Entity does not exist in History.snapshots! ');
 
         return false;

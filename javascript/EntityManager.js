@@ -78,6 +78,7 @@ class EntityManager{
     }
 
     //TODO - give to monster
+    /*
     static chaseNatural(id, behaviorInfo){
         let entity = EntityManager.getEntity(id);
         let playerEntity = EntityManager.getEntity('player');
@@ -131,7 +132,7 @@ class EntityManager{
             EntityManager.moveEntity(id, x, 0, Board);
         }
         
-    }
+    }*/
 
     static knockSword(swordId){
         let sword = EntityManager.getEntity(swordId);
@@ -149,7 +150,7 @@ class EntityManager{
             if (!skip){
                 switch(entity.behavior){
                     case "chase":
-                        EntityManager.chaseNatural(k, entity.behaviorInfo);
+                        entity.chaseNatural();
                         break;
                     default:
                 }

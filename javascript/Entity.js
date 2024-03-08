@@ -464,7 +464,8 @@ class SwordEntity extends Entity{
         let y = owner.y + translation.y;
 
         if(!Board.itemAt(x,y).isWall || Board.isOpenSpace(x,y)){
-            rotation *= -1
+            direction *= -1;
+            let rotation = (this.rotation + 8 + direction) % 8;
             translation = EntityManager.translations[rotation];
             x = owner.x + translation.x;
             y = owner.y + translation.y;
@@ -561,6 +562,62 @@ class Monster extends Entity{
         return this;
     }
 
+    //base behavior for monsters - move straight toward player, with some randomness.
+    //Randomness depends on creature's behaviorinfo.focus, and increases based on distance from the player and line of sight.
+    chaseNatural(){
+        let playerEntity = EntityManager.getEntity('player');
+        //creature is less focused the further they are
+        let focus = this.behaviorInfo.focus;
+        focus -= EntityManager.getDistance(this, playerEntity);
+        if(!EntityManager.hasPlayerLos(this)){
+            focus -= 20;
+        }
+        focus =  Math.max(focus, 4);
+        let x = 0;
+        let y = 0;
+
+        //the higher focus is, the less likely the creature is to move randomly
+        let random = Random.roll(1,focus);
+        if(random == 1){
+            x = -1;
+        }else if (random == 2){
+            x = 1;
+        }else if (random == 3 || random == 4){
+            //do nothing
+        }else if(this.x > playerEntity.x){
+            x = -1;
+        }else if (this.x < playerEntity.x){
+            x = 1;
+        }
+        
+        random = Random.roll(1,focus);
+        if(random == 1){
+            y = -1;
+        }else if (random == 2){
+            y = 1;
+        }else if (random == 3 || random == 4){
+            //do nothing
+        }else if(this.y > playerEntity.y){
+            y = -1;
+        }else if (this.y < playerEntity.y){
+            y = 1;
+        }
+    
+        let targetX = this.x+x;
+        let targetY = this.y+y
+        let targetItem = Board.itemAt(targetX, targetY);
+
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+            this.attack(targetItem);
+        }
+    
+        if(!this.move(x, y)){
+            this.move(0, y);
+            this.move(x, 0);
+        }
+        
+    }
+
     attack(target){
         if(target.isSword){
             this.beat(target);
@@ -582,7 +639,7 @@ class Monster extends Entity{
         }
 
         if(target.dead){
-            this.knock(target);
+            this.knock(target.id);
         }
 
     }

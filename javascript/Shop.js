@@ -1,15 +1,16 @@
 class Shop{
-    constructor(gameMaster){
-        this.lootManager = new LootManager();
-        this.inventory = [];
-        this.essentials = [];
-        this.stockInventory();
-        this.gameMaster = gameMaster;
+
+    static inventory = [];
+    static essentials = [];
+
+    static shopInit(){
+        Shop.stockInventory();
+
     }
 
-    getInventory(){
+    static getInventory(){
         let inventory = [];
-        this.inventory.forEach((item)=>{
+        Shop.inventory.forEach((item)=>{
             if(item && !item.purchased){
                 inventory.push(item);
             }
@@ -18,45 +19,45 @@ class Shop{
         return inventory;
     }
 
-    inventoryCleanup(){
+    static inventoryCleanup(){
         let newInventory = [];
         let slot = 0;
-        this.inventory.forEach((item) =>{
+        Shop.inventory.forEach((item) =>{
             if(item){
                 newInventory.push(item);
                 item.slot = slot;
                 slot++;
             }
         })
-        this.inventory = newInventory;
+        Shop.inventory = newInventory;
     }
 
-    stockInventory(){
+    static stockInventory(){
         let tiers = [0,0,3,4,4];
         let slot = 0;
         let unallowed = ['stone','bone','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
         tiers.forEach((tier)=>{
-            let priceMultiplier = this.lootManager.roll(1,4) + tier;
-            let item = this.lootManager.getWeaponLoot(tier);
+            let priceMultiplier = Random.roll(1,4) + tier;
+            let item = LootManager.getWeaponLoot(tier);
             
-            while(!this.itemAllowed(item,unallowed)){
-                item = this.lootManager.getWeaponLoot(tier);                
+            while(!Shop.itemAllowed(item,unallowed)){
+                item = LootManager.getWeaponLoot(tier);                
             }
             
             item.price = Math.max(item.value,1) * priceMultiplier;
             item.slot = slot;
             item.tier = tier;
-            this.inventory.push(item);
+            Shop.inventory.push(item);
             slot++;
         })
 
-        let fuel = this.getFuel();
+        let fuel = Shop.getFuel();
         fuel.slot = slot;
-        this.inventory.push(fuel);
+        Shop.inventory.push(fuel);
         slot++;
     }
 
-    itemAllowed(item,unallowed){
+    static itemAllowed(item,unallowed){
         
         let name = item.name;
         let result = true;
@@ -70,29 +71,29 @@ class Shop{
         return result;
     }
 
-    restockInventory(){
+    static restockInventory(){
         let unallowed = ['stone','bone','lead','silver','gold','crystal','glass','rubber'];
-        this.inventory.forEach((item)=>{
+        Shop.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
-                let fuel = this.getFuel();
+                let fuel = Shop.getFuel();
                 fuel.slot = slot;
                 fuel.fresh = true;
-                this.inventory[slot] = fuel;
+                Shop.inventory[slot] = fuel;
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
-                let random = this.lootManager.roll(1,99);
+                let random = Random.roll(1,99);
                 if(random < restockChance || item.purchased){
-                    let newItem = this.lootManager.getWeaponLoot(item.tier);
-                    while(!this.itemAllowed(newItem,unallowed)){
-                        newItem = this.lootManager.getWeaponLoot(item.tier);                
+                    let newItem = LootManager.getWeaponLoot(item.tier);
+                    while(!Shop.itemAllowed(newItem,unallowed)){
+                        newItem = LootManager.getWeaponLoot(item.tier);                
                     }
-                    let priceMultiplier = this.lootManager.roll(1,4) + item.tier;
+                    let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value,1) * priceMultiplier;
                     newItem.slot = slot;
                     newItem.fresh = true;
                     newItem.tier = item.tier;
-                    this.inventory[slot] = newItem;
+                    Shop.inventory[slot] = newItem;
                 }
             }
             if(item.fresh){
@@ -101,37 +102,35 @@ class Shop{
         })
     }
 
-    getFuel(){
+    static getFuel(){
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
-        let priceMultiplier = this.lootManager.roll(2,4);
+        let priceMultiplier = Random.roll(2,4);
         fuel.price = Math.max(fuel.value,1) * priceMultiplier;
         fuel.tier = 'fuel';
 
         return fuel;
     }
 
-    buyItem(slot){
-        let player = this.gameMaster.player;
-        let item = this.inventory[slot];
-        if (item.price > this.gameMaster.player.gold){
+    static buyItem(slot){
+        let item = Shop.inventory[slot];
+        if (item.price > Player.gold){
             return false;
         }
-        this.gameMaster.player.gold -= item.price;
+        Player.gold -= item.price;
         if(slot != -1){
-            this.inventory[slot] = {purchased:true,tier:item.tier};
+            Shop.inventory[slot] = {purchased:true,tier:item.tier};
         }
         item.fresh = false;
-        player.inventory.push(item);
-        player.inventoryCleanup();
-        this.inventoryCleanup();
+        Player.inventory.items.push(item);
+        Player.inventoryCleanup();
+        Shop.inventoryCleanup();
     }
 
-    sellItem(slot){
-        let player = this.gameMaster.player;
-        let item = player.inventory[slot];
-        player.inventory[slot] = false;
-        player.gold += item.value;
-        player.inventoryCleanup();
+    static sellItem(slot){
+        let item = Player.inventory.items[slot];
+        Player.inventory.items[slot] = false;
+        Player.gold += item.value;
+        Player.inventoryCleanup();
     }
 
 }

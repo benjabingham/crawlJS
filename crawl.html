@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<<<<<<< HEAD
     <title>crawlJS</title>
+=======
+    <title>S O L I D U S</title>
+>>>>>>> cleanup
     <link rel="stylesheet" href="css/crawl.css?v=4">
     <link rel="stylesheet" href="css/dungeon.css?v=4">
     <link rel="stylesheet" href="css/hud.css?v=4">
@@ -15,9 +19,16 @@
 
   </head>
   <body>
+<<<<<<< HEAD
     <script src="javascript/lib/jquery-3.7.1.js?v=4"></script>
     <script src="javascript/vars/ItemVars.js?v=4"></script>
     <script src="javascript/vars/MonsterVars.js?v=4"></script>
+=======
+    <script src="javascript/lib/jquery-3.7.1.js"></script>
+    <script src="javascript/vars/ItemVars.js?v=4"></script>
+    <script src="javascript/vars/MonsterVars.js?v=4"></script>
+    <script src="javascript/vars/ContainerVars.js?v=4"></script>
+>>>>>>> cleanup
     <script src="javascript/vars/KeywordVars.js?v=4"></script>
     <script src="javascript/vars/InputVars.js?v=4"></script>
 
@@ -32,13 +43,22 @@
     <script src="javascript/Player.js?v=4"></script>
     <script src="javascript/Log.js?v=4"></script>
     <script src="javascript/Display.js?v=4"></script>
+<<<<<<< HEAD
+=======
+    <script src="javascript/Random.js?v=4"></script>
+    <script src="javascript/Entity.js?v=4"></script>
+    <script src="javascript/History.js?v=4"></script>
+>>>>>>> cleanup
 	<script src="javascript/crawl.js?v=4"></script>
 
     </div>
     <div id ='home-screen'>
         <div id="save-manage-div">
-            <button id="new-save-button">New Save</button>
+            <h1>S O L I D U S</h1>
+            <button id="new-save-button">New Game</button>
+            <!--
             <input type="file" id="load-file-input" />
+            -->
         </div>
     </div>
     <div id="hud-div">
@@ -142,10 +162,12 @@
     
     
     <div id = 'instructions-div'>
-        Welcome to crawlJS! (soon to instead be called Solidus??)
-        use the numpad to move - you can move up, down, left, right, or diagonally.
-        use Q and W (or the / and * on the numpad for one-handed play) to rotate your weapon clockwise or counter-clockwise.
+        <H2>INSTRUCTIONS</H2>
+        <h3>CONTROLS</h3>
+        By default, the numpad is used to move - you can move up, down, left, right, or diagonally. Press numpad5 to wait.
+        use Q and W to rotate your weapon clockwise or counter-clockwise.
         <br><br>
+        <h3>CRAWLING</h3>
         Fight monsters by navigating your weapon onto them. If there is room, you will knock them backwards and may stun them.
         Stunned enemies appear in lower case and take double damage. Many weapons deal different damage and stun depending on the type of strike - a SWING is when you hit an enemy by rotating your weapon. a JAB is when you advance on an enemy, thrusting your weapon into them.
         <br><br>
@@ -155,18 +177,25 @@
         <br><br>
         Luck can be used to undo an action by pressing BACKSPACE. this is a valuable resource! Use luck to undo a mistake, or to "reroll" an action with undesirable results (such as an attack that causes your weapon to break).
         <br><br>
+        items are represented by asterisks and can be collected by walking over them. Dead bodies and chests can be looted by pushing against them (or by smashing them). Items in your inventory can be used by pressing the numeral key corresponding to their slot (on the number bar, not the numpad). Items can be dropped by pressing the D key before pressing the corresponding number. Your tenth slot is currently inacessible, because there is no 10 key on the keyboard. Woops.
+        <br><br>
+        <h3>OUTSIDE THE DUNGEON</h3>
         As days pass, luck and health will regenerate and nourishment will deplete. You may REST to pass a day without venturing into the dungeon.
         <br><br>
         resources can be gained by finding treasure in the dungeon and selling it in town. Make sure to keep your lantern full of oil and your stomach full of food, as a top priority.
         <br><br>
+<<<<<<< HEAD
         items are represented by asterisks and can be collected by walking over them. Dead bodies and chests can be looted by pushing against them (or by smashing them). Items in your inventory can be used by pressing the numeral key corresponding to their slot (on the number bar, not the numpad). Items can be dropped by pressing the D key before pressing the corresponding number.
         <br><br>
+=======
+>>>>>>> cleanup
         when in town, choose a map from the map select dropdown to venture off. Currently, the only dungeon is labeled "cave".
         <br><br>
         click 'new save' to begin
     </div>
 
     <div id="custom-controls-wrapper-div">
+        <h3>CUSTOM CONTROLS</h3>
         <div id="preset-div-wrapper">
             Presets
             <div id="preset-div"></div>

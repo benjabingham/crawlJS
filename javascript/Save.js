@@ -1,31 +1,31 @@
 class Save{
-    constructor(){
-        this.maps = {};
-        this.player = new Player;
-        this.day = 0;
+    static maps = {};
+    static day = 0;
+
+    static saveInit(){
+        Player.playerInit();
     }
 
-    newSave(){
-        this.player.reset();
+    static newSave(){
+        Player.reset();
     }
 
-    loadSave(file){
+    static loadSave(file){
         if (file) {
-            let save = this;
             var reader = new FileReader();
             reader.readAsText(file, "UTF-8");
             reader.onload = function (evt) {
                 let fileString = evt.target.result;
                 let fileJson = JSON.parse(fileString);
-                save.maps = fileJson.maps;
+                Save.maps = fileJson.maps;
                 for (const [key, value] of Object.entries(fileJson.player)) {
-                    save.player[key] = value;
+                    Save.player[key] = value;
                     console.log({
                         k:key,
                         v:value
                     })
                 }
-                console.log(save.player);
+                console.log(Save.player);
             }
             reader.onerror = function (evt) {
                 $('#load-file-input').append("error reading file");
@@ -33,7 +33,7 @@ class Save{
         }
     }
 
-    downloadSave(){
+    static downloadSave(){
         let file = new File([JSON.stringify(this)], 'crawlJS-save.txt', {
             type: 'text/plain',
         })
@@ -52,12 +52,12 @@ class Save{
         console.log(this);
     }
 
-    mapInit(json){
+    //TODO: this should be where we give monsters their loot
+    static mapInit(json){
         let roomString = json.name;
         let board = json.board;
         let values = json.values;
-        json.roster = [];
-        let roster = json.roster;
+        let roster = [];
         let counter = 0;
         let x = 0;
         let y = 0;
@@ -65,49 +65,52 @@ class Save{
         board.forEach((row)=>{
             row.forEach((item)=>{
                 if(item){
-                    roster.push({
+                    let entitySave = {
                         code:item,
                         value:values[item],
                         index:counter,
                         alive:true,
                         x:x,
-                        y:y
-                    })
+                        y:y,
+                        inventory:[]
+                    }
+                    LootManager.getEntityLoot(entitySave);
+                    roster.push(entitySave)
                     counter++;
+
                 }
                 x++;
             })
             y++;
             x=0;
         })
-        this.maps[roomString] = json;
+        json.roster = roster;
+        Save.maps[roomString] = json;
         console.log('loaded');
     }
 
-    catchUpMap(mapString){
-        let day = this.day;
-        let map = this.maps[mapString];
+    static catchUpMap(mapString){
+        let day = Save.day;
+        let map = Save.maps[mapString];
         for(let i = map.lastDay; i < day; i++){
             console.log(i);
-            this.mapRespawn(mapString);
+            Save.mapRespawn(mapString);
         }
         map.lastDay = day;
     }
 
-    mapRespawn(mapString){
-        let map = this.maps[mapString];
+    //TODO: this should be where we give monsters their loot
+    static mapRespawn(mapString){
+        let map = Save.maps[mapString];
         map.roster.forEach((entity)=>{
             if(!entity.alive && entity.value.respawnChance){
-                let random = this.roll(0,99);
+                let random = Random.roll(0,99);
                 if(random < entity.value.respawnChance){
                     entity.alive = true;
+                    LootManager.getEntityLoot(entity);
                 }
             }
         })
-    }
-
-    roll(min,max){
-        return Math.floor(Math.random()*(max-min+1))+min;
     }
 
 }

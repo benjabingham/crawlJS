@@ -1,23 +1,22 @@
 class Log{
-    constructor(){
-        this.messages = {};
-        this.notices = [];
-        this.turnCounter = 0;
+
+    static messages = {};
+    static notices = [];
+    static turnCounter = 0;
+
+    static addNotice(notice){
+        Log.notices.unshift(notice);
     }
 
-    addNotice(notice){
-        this.notices.unshift(notice);
+    static clearNotices(){
+        Log.notices = [];
     }
 
-    clearNotices(){
-        this.notices = [];
-    }
-
-    addMessage(message, messageClass = false, keywords = false){
-        if(!this.messages[this.turnCounter]){
-            this.messages[this.turnCounter] = [];
+    static addMessage(message, messageClass = false, keywords = false){
+        if(!Log.messages[Log.turnCounter]){
+            Log.messages[Log.turnCounter] = [];
         }
-        this.messages[this.turnCounter].unshift({
+        Log.messages[Log.turnCounter].unshift({
             message:message,
             fresh:true,
             messageClass: messageClass,
@@ -25,15 +24,15 @@ class Log{
         });
     }
 
-    wipeLog(){
-        this.messages = {};
-        this.turnCounter = 0;
+    static wipeLog(){
+        Log.messages = {};
+        Log.turnCounter = 0;
     }
 
-    printLog(){
+    static printLog(){
         let log = $('#log');
         log.html('');
-        for (const [turn, messages] of Object.entries(this.messages)) {
+        for (const [turn, messages] of Object.entries(Log.messages)) {
             if(messages){
                 messages.forEach((message) => {
                     log.prepend(
@@ -57,18 +56,18 @@ class Log{
             }
         }
 
-        this.notices.forEach((notice)=>{
+        Log.notices.forEach((notice)=>{
             log.prepend(
                 $('<p>').text(notice).addClass('notice')
             )
         })
     }
 
-    rewind(){
-        this.messages[this.turnCounter] = false;
+    static rewind(){
+        Log.messages[Log.turnCounter] = false;
     }
 
-    peek(){
-        return this.messages[this.turnCounter];
+    static peek(){
+        return Log.messages[Log.turnCounter];
     }
 }

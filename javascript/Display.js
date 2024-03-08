@@ -1,43 +1,42 @@
 class Display{
-    constructor(entityManager, board){
-        this.entityManager = entityManager;
-        this.board = board;
-        this.customControls = this.entityManager.gameMaster.customControls;
-        //this.setCustomControls();
+    static entityManager;
+    static customControls;
 
+    static displayInit(){
+        Display.customControls = GameMaster.customControls;
     }
 
-    showDungeonScreen(){
+    static showDungeonScreen(){
         console.log('showDungeonScreen');
-        this.hideAllScreens();
+        Display.hideAllScreens();
         $('#dungeon-screen').show();
-        this.boardDisplayInit();
-        this.displayInventory(true);
+        Display.boardDisplayInit();
+        Display.displayInventory(true);
     }
 
-    showHomeScreen(gameMaster){
-        this.hideAllScreens();
+    static showHomeScreen(){
+        Display.hideAllScreens();
         $('#home-screen').show();
-        this.populateLocations(gameMaster);
-        this.giveSaveButtonsBehavior(gameMaster);
+        Display.populateLocations();
+        Display.giveSaveButtonsBehavior();
     }
 
-    showTownScreen(gameMaster){
-        this.hideAllScreens();
+    static showTownScreen(){
+        Display.hideAllScreens();
         $('#hud-div').show();
         $('#town-screen').show();
-        $('#day-div').text('day '+gameMaster.save.day);
+        $('#day-div').text('day '+Save.day);
         $('#town-inventory-wrapper').show();
 
-        this.populateLocations(gameMaster);
-        this.displayInventory(false);
-        this.displayShop();
-        this.restButton();
-        this.fillBars(gameMaster.player);
-        this.nourishmentDiv(gameMaster.player);
+        Display.populateLocations();
+        Display.displayInventory(false);
+        Display.displayShop();
+        Display.restButton();
+        Display.fillBars(Player);
+        Display.nourishmentDiv(Player);
     }
 
-    hideAllScreens(){
+    static hideAllScreens(){
         $('#town-screen').hide();
         $('#town-inventory-wrapper').hide();
         $('#home-screen').hide();
@@ -45,36 +44,35 @@ class Display{
         $('#inventory-wrapper').hide();
     }
 
-    giveSaveButtonsBehavior(gameMaster){
-        let save = gameMaster.save
+    static giveSaveButtonsBehavior(){
         let display = this;
         $('#new-save-button').off().on('click',function(){
-            save.newSave();
-            display.showTownScreen(gameMaster);
+            Save.newSave();
+            display.showTownScreen();
         })
 
         $('#load-file-input').off().change(function(){
-            save.loadSave($('#load-file-input').prop('files')[0])
-            display.showTownScreen(gameMaster);
+            Save.loadSave($('#load-file-input').prop('files')[0])
+            display.showTownScreen();
         })
 
         $('#download-save-button').off().on('click',function(){
-            save.downloadSave(gameMaster);
+            Save.downloadSave();
         })
     }
 
-    boardDisplayInit(){
+    static boardDisplayInit(){
         let boardDiv = $("#board");
        // boardDiv.css('width',17*1.8+"rem");
-        this.generateBoardGrid();
+        Display.generateBoardGrid();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
         //$('#log').css('height',17*2-2.5+"rem");
     }
 
-    generateBoardGrid(){
+    static generateBoardGrid(){
         $('#board').html('');
-        let boardArray = this.board.boardArray;
+        let boardArray = Board.boardArray;
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -84,11 +82,10 @@ class Display{
             }
         }
 
-        this.addClickControls();
+        Display.addClickControls();
     }
 
-    addClickControls(){
-        let gameMaster = this.entityManager.gameMaster;
+    static addClickControls(){
         let playerPos = {x:8,y:8};
         let translations = {
             right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}, wait:{x:0,y:0}
@@ -103,31 +100,38 @@ class Display{
                 e.preventDefault();
                 let event = {type:key}
                 if(key == 'wait'){
-                    gameMaster.wait(event);
+                    GameMaster.wait(event);
                     return;
                 }
-                gameMaster.movePlayer(event);
+                GameMaster.movePlayer(event);
             })
         }
 
     }
 
-    printBoardGrid(){
-        let boardArray = this.board.boardArray;
-        let player = this.entityManager.player;
-        let playerPos = this.entityManager.getEntity('player');
+    static printBoard(){
+        let devMode = true
+        let boardArray = Board.boardArray;
+        let playerPos = EntityManager.getEntity('player');
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                let symbol = '';
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
+                //don't bother if spot was dark before and is still dark
+                if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
+                    continue;
+                }
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                if(devMode){
+                    gridDiv.off('click');
+                }
+                let symbol = '';
                 //out of bounds
-                if(this.board.hasPlayerLos({x:x, y:y})){
+                if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y][x]){
-                        if(this.board.wallArray[y][x]){
+                        if(Board.wallArray[y][x]){
                             gridDiv.addClass('grid-wall')
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
@@ -139,10 +143,15 @@ class Display{
                             }).off('mouseleave').on('mouseleave',()=>{
                                 $('.hint-divs').html('');
                             })
+                            if(devMode){
+                                gridDiv.on('click',()=>{
+                                    console.log(boardArray[y][x]);
+                                })
+                            }                 
                         }
                     }
-                    if(!this.board.isSpace(x,y)){
-                        if(this.board.hasAdjacentEmptySpace(x,y)){
+                    if(!Board.isSpace(x,y)){
+                        if(Board.hasAdjacentEmptySpace(x,y)){
                             gridDiv.addClass('grid-exit');
                         }else{
                             gridDiv.addClass('grid-dark')
@@ -156,49 +165,12 @@ class Display{
                 gridDiv.text(symbol)
             }
         }
-        //console.log(boardString);
-    }
-    
-    printBoard(){
-        this.printBoardGrid();
-        return false;
-        let boardArray = this.board.boardArray;
-        let player = this.entityManager.player;
-        let playerPos = this.entityManager.getEntity('player');
-        let boardString = "";
-        
-        for(let displayY=0; displayY<17; displayY++){
-            //boardString += '|'
-            for(let displayX=0; displayX<17; displayX++){
-                let symbol = false;
-                let x = (displayX-8) + playerPos.x;
-                let y = (displayY-8) + playerPos.y;
-                if( x < 0 || y < 0 || y >= boardArray.length || x >= boardArray[y].length){
-                    boardString += '▓▓';
-                }else if(this.board.hasPlayerLos({x:x, y:y})){
-                    if(boardArray[y][x]){
-                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
-                        boardString += symbol;
-                    }else{
-                        boardString += '.';
-                    }
-                    if(!symbol || symbol.length < 2){
-                        boardString += ' ';  
-                    }
-                }else{
-                    boardString += '▓▓';
-                }                 
-            }
-            boardString += "\n";
-        }
-        //console.log(boardString);
-        $("#board").text(boardString);
     }
 
-    nourishmentDiv(player){
+    static nourishmentDiv(){
         let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
         let display = this;
-        $('#nourishment-level-div').text('you are '+nourishmentLevels[player.nourishmentLevel]);
+        $('#nourishment-level-div').text('you are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
             {name:'meager meal',cost:3,nourishment:3},
@@ -211,10 +183,10 @@ class Display{
         meals.forEach((meal)=>{
             $('#meals-div').append(
                 $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                    if(player.gold >= meal.cost){
-                        player.changeNourishment(meal.nourishment);
-                        player.gold-= meal.cost;
-                        display.nourishmentDiv(player);
+                    if(Player.gold >= meal.cost){
+                        Player.changeNourishment(meal.nourishment);
+                        Player.gold-= meal.cost;
+                        display.nourishmentDiv();
                         display.displayGold();
                     }
                 })
@@ -222,79 +194,71 @@ class Display{
         })
     }
     
-    fillBars(player){
-        let staminaPercent = player.staminaPercent;
+    static fillBars(){
+        let staminaPercent = Player.staminaPercent;
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
-        $('#stamina-level').text(player.stamina+"/"+player.staminaMax);
+        $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
 
-        let healthPercent = player.healthPercent;
+        let healthPercent = Player.healthPercent;
         $('#health-level').css('width',healthPercent*1.5+"px");
-        $('#health-level').text(player.health+"/"+player.healthMax);
+        $('#health-level').text(Player.health+"/"+Player.healthMax);
 
 
-        let luckPercent = player.luckPercent;
+        let luckPercent = Player.luckPercent;
         $('#luck-level').css('width',luckPercent*1.5+"px");
-        $('#luck-level').text(player.luck+"/"+player.luckMax);
+        $('#luck-level').text(Player.luck+"/"+Player.luckMax);
 
 
     }
     
-    populateLocations(gameMaster){
+    static populateLocations(){
         $('#travel-locations-div').html('');
         let maps = ['cave','trainingHall','trainingHallNoOgre','andyDungeon']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
                     $("<button>").text(element).on('click',function(){
-                        console.log(element);
-                        gameMaster.getRoom(element+".json")
+                        GameMaster.getRoom(element+".json")
                     })
                 )
             )
         })
     }
 
-    restButton(){
-        let gameMaster = this.entityManager.gameMaster;
+    static restButton(){
         $('#rest-button').off().on('click',()=>{
-            gameMaster.loadTown();
+            GameMaster.loadTown();
         })
     }
 
-    displayInventory(dungeonMode=true){
+    static displayInventory(dungeonMode=true){
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
-        let inventory = this.entityManager.player.inventory;
+        let inventory = Player.inventory.items;
         inventory.forEach((item) =>{
-            this.addInventoryItem(item, dungeonMode, inventoryId);
+            Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
-        this.displayGold();
+        Display.displayGold();
     }
 
-    displayShop(){
-        let shop = this.entityManager.gameMaster.shop;
-        console.log(shop);
+    static displayShop(){
         $('#shop-wrapper').show();
         $('#shop-list').html('');
-        let inventory = shop.getInventory();
+        let inventory = Shop.getInventory();
         inventory.forEach((item) =>{
-            this.addInventoryItem(item, false, 'shop');
+            Display.addInventoryItem(item, false, 'shop');
         })
-        this.displayGold();
+        Display.displayGold();
     }
 
-    displayGold(){
-        let player = this.entityManager.player;
-        $('.gold-div').text(player.gold+" gold");
+    static displayGold(){
+        $('.gold-div').text(Player.gold+" gold");
     }
 
-    addInventoryItem(item, dungeonMode, inventory){
+    static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
-        let player = this.entityManager.player;
-        let gameMaster = this.entityManager.gameMaster;
-        let shop = gameMaster.shop;
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -317,31 +281,31 @@ class Display{
         }
 
         if(dungeonMode){
-            if(item.weapon && !player.equipped){
+            if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
-            if(item.weapon && player.equipped && player.equipped.slot == slot){
+            if(item.weapon && Player.equipped && Player.equipped.slot == slot){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
             if(item.usable){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('use').on('click',function(){
-                        gameMaster.useItem({type:'item-'+(slot+1)});
+                        GameMaster.useItem({type:'item-'+(slot+1)});
                     })
                 )
             }
         }else if (inventory != 'shop'){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
-                    shop.sellItem(slot);
+                    Shop.sellItem(slot);
                     display.displayShop();
                     display.displayInventory(false);
                 })
@@ -349,7 +313,7 @@ class Display{
         }else if(inventory == 'shop'){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('buy - '+item.price).on('click',function(){
-                    shop.buyItem(slot);
+                    Shop.buyItem(slot);
                     display.displayShop();
                     display.displayInventory(false);
                 })
@@ -358,11 +322,7 @@ class Display{
         
     }
 
-    displayItemInfo(item, inventory){
-        console.log({
-            item:item,
-            inventory:inventory
-        })
+    static displayItemInfo(item, inventory){
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -402,7 +362,6 @@ class Display{
         }
 
         ['jab','swing','strafe'].forEach(function(val){
-            console.log(val);
             if(item[val]){
                 let special = item[val];
                 $('#'+inventory+'-description-body').append(
@@ -420,15 +379,12 @@ class Display{
         })
     }
 
-    setCustomControls(){
+    static setCustomControls(){
         let display = this;
-        let customControls = this.customControls;
         let inputs = InputManager.inputs;
-        //let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
-        
+
         $('#custom-controls-div').html('');
         inputs.forEach((input)=>{
-            console.log(input);
             $('#custom-controls-div').append(
                 $('<div>').addClass('custom-input-divs').append(
                     $('<label>').text(input.name)

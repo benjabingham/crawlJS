@@ -30,6 +30,7 @@ class Player {
     }
 
     static gold = 15;
+    //points to equipped object
     static equipped = false;
 
     static playerInit(){
@@ -180,7 +181,7 @@ class Player {
         if(Player.equipped){
             return;
         }
-        Player.equipped = weapon
+        Player.equipped = weapon;
         EntityManager.equipWeapon('player', weapon);
     }
 

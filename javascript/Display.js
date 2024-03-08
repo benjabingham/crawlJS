@@ -109,7 +109,7 @@ class Display{
 
     }
 
-    static printBoardGrid(){
+    static printBoard(){
         let devMode = true
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
@@ -165,12 +165,6 @@ class Display{
                 gridDiv.text(symbol)
             }
         }
-    }
-    
-    static printBoard(){
-        Display.printBoardGrid();
-        return false;
-        
     }
 
     static nourishmentDiv(){
@@ -387,10 +381,8 @@ class Display{
 
     static setCustomControls(){
         let display = this;
-        let customControls = Display.customControls;
         let inputs = InputManager.inputs;
-        //let defaultCustomControls = ['u','j','i','h','o','l','b','k','n'];
-        
+
         $('#custom-controls-div').html('');
         inputs.forEach((input)=>{
             $('#custom-controls-div').append(

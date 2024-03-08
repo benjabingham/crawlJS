@@ -22,7 +22,6 @@ class Board{
     }
 
     static placeEntities(){
-        console.log('placeEntities');
         let entities = EntityManager.entities;
         //TODO: does boardinit have to happen every time?
         Board.boardInit();
@@ -30,11 +29,9 @@ class Board{
             let x = entity.x;
             let y = entity.y;
             if(Board.entityAt(x,y).id != entity.id && Board.isSpace(x,y)){
-                let itemCase = Board.entityAt(x,y).isItemPile  || entity.isItemPile;
+                let itemCase = Board.entityAt(x,y).isItemPile || entity.isItemPile;
                 if(entity.isWall && !entity.dead){
                     Board.wallArray[y][x] = true;
-                }else{
-                    //Board.wallArray[y][x] = false;
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
@@ -68,14 +65,14 @@ class Board{
     }
 
     static isOccupiedSpace(x,y){
-        return (Board.isSpace(x,y) && Board.entityAt(x,y) && !Board.entityAt(x,y).isItemPile);
+        return (Board.isSpace(x,y) && Board.entityAt(x,y) && !Board.entityAt(x,y).walkable);
     }
 
+    //check if a tile is a valid space within the board
     static isSpace(x,y){
         return (y >= 0 && x >= 0 && y < Board.height && x < Board.width);
     }
 
-    //TODO: rename to entityAt
     static entityAt(x,y){
         if(Board.isSpace(x,y)){
             return Board.boardArray[y][x];
@@ -97,7 +94,6 @@ class Board{
 
     static drawLos(playerx,playery,x,y){
         let lineOfSight = true;
-
         let fromPoint = {x:playerx, y:playery};
         let targetPoint = {x:x, y:y};
 
@@ -110,9 +106,6 @@ class Board{
                     lineOfSight = false;
                 }
             }
-            
-            
-
         })
 
         if(lineOfSight){
@@ -207,8 +200,7 @@ class Board{
         let a2 = Math.abs(pos1.x - pos2.x)**2;
         let b2 = Math.abs(pos1.y - pos2.y)**2;
         let distance = Math.sqrt(a2+b2);
-        //let line = Board.getLine(pos1,pos2);
-        //return line.length;
+
         return Math.floor(distance);
     }
 

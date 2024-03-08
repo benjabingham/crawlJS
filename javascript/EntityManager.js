@@ -150,9 +150,12 @@ class EntityManager{
 
     static loadSnapshot(snapshot){
         let snapshotEntities = snapshot.entities;
-        for (const [id, snapshotEntity] of Object.entries(snapshotEntities)) {
-            let entity = EntityManager.getEntity(id);
-            entity.rewind(snapshotEntity);
+        for (const [id, entity] of Object.entries(EntityManager.entities)) {
+            if(!(entity.isWall && !entity.destructible)){
+                let entity = EntityManager.getEntity(id);
+                entity.rewind(snapshotEntities[id]);
+            }
+            
         }
     }
 

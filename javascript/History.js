@@ -49,8 +49,9 @@ class History{
         //let entities = JSON.stringify(EntityManager.entities);
         let entities = {};
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if(!(entity.isWall && !entity.destructible))
-            entities[key] = JSON.stringify(entity);
+            if(!(entity.isWall && !entity.destructible)){
+                entities[key] = JSON.stringify(entity);
+            }
         }
         let playerJson = Player.getPlayerJson();
         History.snapshots.push({

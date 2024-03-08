@@ -27,11 +27,10 @@ class Board{
         //TODO: does boardinit have to happen every time?
         Board.boardInit();
         for (const [k,entity] of Object.entries(entities)){
-            
             let x = entity.x;
             let y = entity.y;
-            if(Board.itemAt(x,y).id != entity.id && Board.isSpace(x,y)){
-                let itemCase = Board.itemAt(x,y).isItemPile  || entity.isItemPile;
+            if(Board.entityAt(x,y).id != entity.id && Board.isSpace(x,y)){
+                let itemCase = Board.entityAt(x,y).isItemPile  || entity.isItemPile;
                 if(entity.isWall && !entity.dead){
                     Board.wallArray[y][x] = true;
                 }else{
@@ -39,11 +38,11 @@ class Board{
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
-                        if(Board.itemAt(x,y).isItemPile){
-                            entity.pickUpItemPile(Board.itemAt(x,y));
+                        if(Board.entityAt(x,y).isItemPile){
+                            entity.pickUpItemPile(Board.entityAt(x,y));
                             Board.placeEntity(entity, x, y);
-                        }else if(entity.isItemPile && Board.itemAt(x,y)){
-                            Board.itemAt(x,y).pickUpItemPile(entity);
+                        }else if(entity.isItemPile && Board.entityAt(x,y)){
+                            Board.entityAt(x,y).pickUpItemPile(entity);
                         }else{
                             Board.placeEntity(entity, x, y);
                         }
@@ -65,11 +64,11 @@ class Board{
     }
 
     static isOpenSpace(x,y){
-        return (Board.isSpace(x,y) && !Board.wallAt(x,y) && (!Board.itemAt(x,y) || Board.itemAt(x,y).walkable));
+        return (Board.isSpace(x,y) && !Board.wallAt(x,y) && (!Board.entityAt(x,y) || Board.entityAt(x,y).walkable));
     }
 
     static isOccupiedSpace(x,y){
-        return (Board.isSpace(x,y) && Board.itemAt(x,y) && !Board.itemAt(x,y).isItemPile);
+        return (Board.isSpace(x,y) && Board.entityAt(x,y) && !Board.entityAt(x,y).isItemPile);
     }
 
     static isSpace(x,y){
@@ -77,7 +76,7 @@ class Board{
     }
 
     //TODO: rename to entityAt
-    static itemAt(x,y){
+    static entityAt(x,y){
         if(Board.isSpace(x,y)){
             return Board.boardArray[y][x];
         }else{

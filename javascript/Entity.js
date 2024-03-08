@@ -39,8 +39,8 @@ class Entity{
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
             EntityManager.setPosition(this.id,x,y);
             return true;
-        }else if(Board.itemAt(x,y) && Board.itemAt(x,y).isContainer){
-            this.lootContainer(Board.itemAt(x,y));
+        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
+            this.lootContainer(Board.entityAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
             GameMaster.travel(x,y);
@@ -362,7 +362,7 @@ class SwordEntity extends Entity{
         let y = owner.y + translation.y;
 
         if(Board.isOccupiedSpace(x,y)){
-            let target = Board.itemAt(x,y);
+            let target = Board.entityAt(x,y);
             if(target.id != this.id && !target.isWall){
                 if (this.owner == 'player'){  
                     let strikeType = this.getStrikeType();
@@ -464,7 +464,7 @@ class SwordEntity extends Entity{
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
 
-        if(!Board.itemAt(x,y).isWall || Board.isOpenSpace(x,y)){
+        if(!Board.entityAt(x,y).isWall || Board.isOpenSpace(x,y)){
             direction *= -1;
             let rotation = (this.rotation + 8 + direction) % 8;
             translation = EntityManager.translations[rotation];
@@ -472,7 +472,7 @@ class SwordEntity extends Entity{
             y = owner.y + translation.y;
         }
 
-        if(Board.itemAt(x,y).isWall || Board.isOpenSpace(x,y)){
+        if(Board.entityAt(x,y).isWall || Board.isOpenSpace(x,y)){
             this.rotation = rotation;
             this.place();
             return true;
@@ -498,7 +498,7 @@ class SwordEntity extends Entity{
         for(let i = 0; i < 8; i++){
             let distance = (EntityManager.getOrthoDistance({x:x,y:y},pos1)**2)+(EntityManager.getOrthoDistance({x:x,y:y},pos2)**2);
 
-            let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
+            let validSpace = (Board.entityAt(x,y).behavior == 'wall' || !Board.entityAt(x,y))
             if(validSpace){
                 if (distance < bestDistance){
                     bestDistance = distance;
@@ -605,7 +605,7 @@ class Monster extends Entity{
     
         let targetX = this.x+x;
         let targetY = this.y+y
-        let targetItem = Board.itemAt(targetX, targetY);
+        let targetItem = Board.entityAt(targetX, targetY);
 
         if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
             this.attack(targetItem);

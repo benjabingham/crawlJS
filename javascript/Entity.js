@@ -247,6 +247,10 @@ class Entity{
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
             }
         }
+        //check if sword is still equipped
+        if(!targetSword.item){
+            return false
+        }
         let beatChance = 0;
         if(this.behaviorInfo){
             beatChance = this.behaviorInfo.beat;
@@ -254,8 +258,10 @@ class Entity{
 
         let random = Random.roll(1,100);
         if(random <= beatChance || knock){
-            EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger');
-            EntityManager.knockSword(targetSword.id);
+            if (targetSword.knockSword()){
+                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger');
+            }
+            
         }else if(Player.equipped){
             EntityManager.transmitMessage("You hold steady!");
         }     
@@ -444,28 +450,33 @@ class SwordEntity extends Entity{
         this.rotation %= 8;
     }
 
-    knockSword(){
+    //tries to knock your sword either clockwise or counterclockwise, then the other. Will only knock one degree - if Both spots are taken, will not knock.
+    //should sword be disarmed in failcase instead? Or just unequipped?
+    knockSword(direction = false){
+        let owner = EntityManager.getEntity(this.owner);
         //direction is either 1 or -1
-        let direction = (Random.roll(0,1) * 2) - 1;
+        if(!direction){
+            direction = (Random.roll(0,1) * 2) - 1;
+        }
         let rotation = (this.rotation + 8 + direction) % 8;
         let translation = EntityManager.translations[rotation];
-        let x = this.owner.x + translation.x;
-        let y = this.owner.y + translation.y;
-        let counter = 1;
-        while((!Board.itemAt(x,y).isWall && Board.itemAt(x,y)) && counter < 3){
-            rotation = (sword.rotation + 8 + direction) % 8;
+        let x = owner.x + translation.x;
+        let y = owner.y + translation.y;
+
+        if(!Board.itemAt(x,y).isWall || Board.isOpenSpace(x,y)){
+            rotation *= -1
             translation = EntityManager.translations[rotation];
             x = owner.x + translation.x;
             y = owner.y + translation.y;
-        
-            counter++;
         }
 
-        if(Board.itemAt(x,y).isWall || !Board.itemAt(x,y)){
-            EntityManager.transmitMessage('sword knocked!', 'danger');
+        if(Board.itemAt(x,y).isWall || Board.isOpenSpace(x,y)){
             this.rotation = rotation;
             this.place();
+            return true;
         }
+
+        return false;
     }
 
     //place sword in space closest to center between two points

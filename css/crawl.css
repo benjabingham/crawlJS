@@ -85,4 +85,5 @@ button:hover{
 
 h1, h2, h3{
     letter-spacing: .3rem;
+    text-transform: capitalize;
 }

@@ -5,5 +5,7 @@ let mainReleases = [
 
 let devBranches = [
     {name: 'Cleanup', branchName: 'cleanup'},
-    {name: 'Experimental', branchName: 'experimental'}
+    {name: 'Experimental', branchName: 'experimental'},
+    {name: 'Dark Mode', branchName: 'darkmode'}
+
 ]

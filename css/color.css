@@ -1,40 +1,41 @@
 :root{
     /*dungeon*/
     --dark:#222;
-    --floor:#ddd;
-    --darkAccent:#262626;
-    --wall:#666;
-    --wallAccent:#6a6a6a;
+    --floor:#222;
+    --darkAccent:#444;
+    --wall:#444;
+    --wallAccent:#555;
     --exit:#555;
-    --gridLine:#2222221c;
+    --gridLine:#4b4b4b1c;
 
-    --defaultEntity:var(--dark);
+    --defaultEntity:#ddd;
 
     /*hud*/
-    --healthBar:var(--red);
-    --healthBarText:var(--darkRed);
-    --staminaBar:var(--yellow);
-    --staminaBarText:var(--darkYellow);
-    --luckBar:var(--green);
-    --luckBarText:var(--darkGreen);
-
+    --healthBar:var(--darkRed);
+    --healthBarText:var(--red);
+    --staminaBar:var(--darkYellow);
+    --staminaBarText:var(--yellow);
+    --luckBar:var(--darkGreen);
+    --luckBarText:var(--green);
+    --resourceBorder:var(--defaultEntity);
 
     /*menus*/
     --border:var(--gray);
     --menuBack:var(--floor);
-    --menuText:var(--dark);
+    --menuText:var(--defaultEntity);
     --altBack:var(--dark);
-    --altBackText:var(--floor);
+    --altBackText:var(--defaultEntity);
     
-    --red:rgb(231, 46, 0);
-    --darkRed:rgb(117,0,0);
-    --muteRed:rgb(190, 38, 0);
-    --brightPurple:rgb(153, 0, 255);
-    --darkPurple:rgb(90, 0, 150);
-    --blue:blue;
-    --darkBlue:rgb(0, 0, 136);
+    /*colors*/
+    --red:rgb(216, 81, 47);
+    --darkRed:rgb(136, 42, 42);
+    --muteRed:rgb(177, 71, 45);
+    --brightPurple:rgb(191, 116, 241);
+    --darkPurple:rgb(130, 55, 180);
+    --blue:rgb(82, 82, 182);
+    --darkBlue:rgb(56, 56, 151);
     --green:rgb(2, 184, 2);
-    --darkGreen:rgb(0, 105, 0);
+    --darkGreen:rgb(44, 109, 44);
     --yellow:yellow;
     --darkYellow:rgb(110, 110, 0);
 
@@ -42,34 +43,35 @@
     --bone:rgb(160, 138, 105);
     --woodBrown:rgb(133, 102, 66);
     --brown:rgb(95, 65, 31);
-    --redBrown:rgb(95, 49, 31);
+    --redBrown:rgb(124, 66, 43);
     --gray:#4b4b4b;
-    --darkGray:#303030;
-    --lightGray:#636363;
-    --silver:rgb(139, 137, 134);
+    --darkGray:#555454;
+    --lightGray:#797878;
+    --silver:rgb(172, 171, 171);
     --gold:var(--darkYellow);
 
 
     
     /*buttons*/
     --buttonG1:#fde8cc;
-    --buttonG2:#beb79d;
+    --buttonG2:var(--wallAccent);
     --buttonHoverG1:#cab9a3;
     --buttonHoverG2:#a7a089;
 
     /*inventories*/
-    --inventorySlot:#F0DFC2;
-    --inventoryBorder:rgb(124, 117, 52);
-    --inventorySlotHover:#E8D6BD;
-    --shopFresh:#fdd7003a;
+    --inventorySlot:var(--floor);
+    --inventoryBorder:var(--defaultEntity);
+    --inventorySlotHover:#333;
+    --shopFresh:var(--darkYellow);
     
     /*log*/
-    --logFresh:rgba(252, 244, 233, 0.562);
-    --urgentBackground:rgba(250, 0, 0, 0.315);
+    --logFresh:rgba(252, 244, 233, 0.068);
+    --urgentBackground:rgb(241, 56, 56);
+    --urgentText:#411;
     --notice:rgba(255, 196, 0, 0.452);
 
     /*town*/
-    --shopBackground:rgba(252, 143, 0, 0.164);
+    --shopBackground:rgba(252, 143, 0, 0.048);
 }
 
 .clearblue{

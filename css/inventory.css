@@ -76,7 +76,7 @@
 }
 
 .fresh-true{
-    background-color: var(--shopFresh);
+    border-color: var(--shopFresh);
 }
 
 .inventory-description{

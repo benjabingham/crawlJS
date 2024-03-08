@@ -28,7 +28,7 @@
 
 .message-urgent{
     background-color:var(--urgentBackground);
-    color:var(--darkRed);
+    color:var(--urgentText);
     font-weight: 600;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .message-pos{
-    color:var(--blue);
+    color:var(--darkBlue);
 }
 
 .message-fresh.message-danger{

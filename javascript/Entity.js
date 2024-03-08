@@ -481,7 +481,6 @@ class SwordEntity extends Entity{
     }
 
     //place sword in space closest to center between two points
-    //TODO - should prefer point that is equidistant between both points
     findSwordMiddle(pos1,pos2){
         let owner = EntityManager.getEntity(this.owner);
         //direction is either 1 or -1
@@ -493,10 +492,10 @@ class SwordEntity extends Entity{
 
         let bestPos = {x:x, y:y};
         let bestRotation = rotation;
-        let bestDistance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2)
+        let bestDistance = (EntityManager.getOrthoDistance({x:x,y:y},pos1)**2)+(EntityManager.getOrthoDistance({x:x,y:y},pos2)**2);
 
         for(let i = 0; i < 8; i++){
-            let distance = EntityManager.getOrthoDistance({x:x,y:y},pos1)+EntityManager.getOrthoDistance({x:x,y:y},pos2);
+            let distance = (EntityManager.getOrthoDistance({x:x,y:y},pos1)**2)+(EntityManager.getOrthoDistance({x:x,y:y},pos2)**2);
 
             let validSpace = (Board.itemAt(x,y).behavior == 'wall' || !Board.itemAt(x,y))
             if(validSpace){

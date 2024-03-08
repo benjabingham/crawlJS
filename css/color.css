@@ -1,0 +1,114 @@
+:root{
+    /*dungeon*/
+    --dark:#222;
+    --floor:#ddd;
+    --darkAccent:#262626;
+    --wall:#666;
+    --wallAccent:#6a6a6a;
+    --exit:#555;
+
+    --gridLine:#2222221c;
+
+    /*menus*/
+    --menuBack:var(--floor);
+    --menuText:var(--dark);
+    --altBack:var(--dark);
+    --altBackText:var(--floor);
+    
+    --red:rgb(231, 46, 0);
+    --darkRed:rgb(117,0,0);
+    --muteRed:rgb(190, 38, 0);
+    --brightPurple:rgb(153, 0, 255);
+    --darkPurple:rgb(90, 0, 150);
+    --blue:blue;
+    --darkBlue:rgb(0, 0, 136);
+    --green:rgb(2, 184, 2);
+    --darkGreen:rgb(0, 105, 0);
+    --yellow:yellow;
+    --darkYellow:rgb(110, 110, 0);
+
+    --clearBlue:rgba(0, 155, 155, 0.514);
+    --bone:rgb(160, 138, 105);
+    --woodBrown:rgb(133, 102, 66);
+    --brown:rgb(95, 65, 31);
+    --redBrown:rgb(95, 49, 31);
+    --gray:#4b4b4b;
+    --darkGray:#303030;
+    --lightGray:#636363;
+    --silver:rgb(139, 137, 134);
+    --gold:var(--darkYellow);
+
+
+    
+    /*buttons*/
+    --buttonG1:#fde8cc;
+    --buttonG2:#beb79d;
+    --buttonHoverG1:#cab9a3;
+    --buttonHoverG2:#a7a089;
+
+    /*inventories*/
+    --inventorySlot:#F0DFC2;
+    --inventoryBorder:rgb(124, 117, 52);
+    --inventorySlotHover:#E8D6BD;
+
+    --shopFresh:#fdd7003a;
+
+    /*log*/
+    --logFresh:rgba(252, 244, 233, 0.562);
+    --urgentBackground:rgba(250, 0, 0, 0.315);
+    --notice:rgba(255, 196, 0, 0.452);
+
+    /*town*/
+    --shopBackground:rgba(252, 143, 0, 0.164);
+}
+
+.clearblue{
+    color: var(--clearBlue);
+}
+
+.bone{
+    color:var(--bone)
+}
+
+.woodbrown{
+    color:var(--woodBrown);
+}
+
+.brown{
+    color:var(--brown);
+}
+.redbrown{
+    color:var(--redBrown)
+}
+
+.darkgray{
+    color:var(--darkgray)
+}
+
+.gray{
+    color:var(--gray);
+}
+
+.lightgray{
+    color:var(--lightGray);
+}
+
+.silver{
+    color:var(--silver);
+}
+
+.gold{
+    color:var(--gold);
+}
+
+.blue{
+    color:var(--darkBlue)
+}
+
+.purple{
+    color:var(--purple);
+}
+
+.green{
+    color:var(--darkGreen);
+}

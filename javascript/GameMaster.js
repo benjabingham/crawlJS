@@ -18,7 +18,6 @@ class GameMaster{
     static startGame(){
         let entityManager = EntityManager;
         let board = Board;
-
         entityManager.skipBehaviors = false;
         board.placeEntities();
         History.saveSnapshot();
@@ -182,6 +181,7 @@ class GameMaster{
 
         Display.fillBars(Player);
     }
+
 
     static postPlayerAction(){     
         EntityManager.placeSword('player');   

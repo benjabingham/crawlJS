@@ -1,8 +1,8 @@
 #town-screen{
     width:900px;
     margin:auto;
-    background-color:#ddd;
-    color:#222;
+    background-color:var(--menuBack);
+    color:var(--menuText);
 }
 
 #town-title-div{
@@ -26,7 +26,7 @@
     width:875px;
     margin:auto;
     border:1px solid black;
-    background-color: rgba(252, 143, 0, 0.164);
+    background-color: var(--shopBackground)
 }
 
 #download-save-button{

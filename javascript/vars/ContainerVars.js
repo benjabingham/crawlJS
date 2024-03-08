@@ -16,6 +16,7 @@ let containerVars = {
                 chance:100,
                 tier:2
             }
-        }
+        },
+        color:'gold'
     },
 }

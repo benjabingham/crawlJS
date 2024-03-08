@@ -123,7 +123,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                //TODO - directly set element style instead of using color classes
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green clearblue bone woodbrown redbrown darkgray lightgray silver').off('mouseleave mouseenter');
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -149,6 +150,11 @@ class Display{
                                 })
                             }                 
                         }
+                        if(boardArray[y][x].color){
+                            gridDiv.addClass(boardArray[y][x].color)
+                        }else if(boardArray[y][x].item && boardArray[y][x].item.color){
+                            gridDiv.addClass(boardArray[y][x].item.color)
+                        }
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -166,7 +172,7 @@ class Display{
             }
         }
     }
-
+    
     static nourishmentDiv(){
         let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
         let display = this;
@@ -268,7 +274,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').addClass(item.color).text(item.name)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -328,7 +334,7 @@ class Display{
             itemValue = '0';
         }
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').addClass(item.color).attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
@@ -412,5 +418,7 @@ class Display{
             )
         }
     }
+
+    
     
 }

@@ -1,5 +1,4 @@
 class LootManager{
-
     static getEntityLoot(entitySave){
         let lootChances = false;
         let monsterKey = entitySave.value.monsterKey;
@@ -163,6 +162,9 @@ class LootManager{
                         item[key] = Math.floor(item[key]);
                         item[key] = Math.max(item[key], 1);
                     }
+                    break;
+                case 'color':
+                    item[key] = value;
             }
         }
         let lootManager = this;
@@ -183,4 +185,22 @@ class LootManager{
         item.value = Math.max(item.value,1);
     }
 
+    getColor(val){
+        let color;
+        if(val <= 3){
+            color = 'brown';
+        }else if (val <= 15){
+            color = 'gray';
+        }else if (val <= 25){
+            color = 'silver';
+        }else if (val <= 35){
+            color = 'gold';
+        }else if (val <= 50){
+            color = 'gold';
+        }else{
+            color = 'purple';
+        }
+
+        return color;
+    }
 }

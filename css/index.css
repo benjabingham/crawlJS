@@ -4,15 +4,44 @@ html{
 }
 
 body{
-    margin-left:1rem;
+    margin:auto;
+    width:800px;
+    text-align: center;
 }
 
+h1, h2, h3{
+    letter-spacing: .3rem;
+    text-transform: uppercase;
+}
+
+
 h1{
-    margin:auto auto;
+    margin:auto;
     width:fit-content;
     margin-top:1rem;
 }
 
 a{
-    color:#ddf
+    color:#aaf;
+    font-size: large;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+a:visited{
+    color:#88f;
+}
+
+li{
+    width:fit-content;
+    margin:auto;
+    display:inline-block;
+    list-style-type: none;
+    padding: 0.5rem;
+}
+
+ul{
+    padding:0px !important;
 }

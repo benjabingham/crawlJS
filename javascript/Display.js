@@ -4,7 +4,8 @@ class Display{
     static colorScheme = 0;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
-        {scheme:'dark-mode',name:'Dark Mode'}
+        {scheme:'dark-mode',name:'Dark Mode'},
+        {scheme:'light-mode',name:'Light Mode'}
     ]
 
     static displayInit(){

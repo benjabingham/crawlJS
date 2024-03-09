@@ -38,7 +38,7 @@ class Entity{
         y += this.y;
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
-            EntityManager.setPosition(this.id,x,y);
+            this.setPosition(x,y);
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
             this.lootContainer(Board.entityAt(x,y));
@@ -86,16 +86,20 @@ class Entity{
         }
 
         if(furtherSpace && Board.isOpenSpace(x,y)){
-            EntityManager.setPosition(this.id,x,y)
+            this.setPosition(x,y)
         }else if (backupSpace){
-            EntityManager.setPosition(this.id,backupSpace.x,backupSpace.y);
+            this.setPosition(backupSpace.x,backupSpace.y);
         }else{
             EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
-                knocker.setToLastPosition();
-                knocker.place();
+                let lastSword = History.getSnapshotEntity(knocker.id)
+                let lastSwordPos = knocker.getSwordPosition(lastSword.rotation);
+                //should never happen... but just in case
+                if(!knocker.findSwordMiddle(lastSwordPos,knocker)){
+                    knocker.unequip();
+                }
             }
         }
     }
@@ -187,13 +191,22 @@ class Entity{
         Board.placeEntity(this,x,y)
     }
 
+    //returns false if last position is equal to current position.
     setToLastPosition(){
         let lastPosition = History.getSnapshotEntity(this.id);
         if (this.isSword){
-            this.rotation = lastPosition.rotation;
+            if(this.rotation != lastPosition.rotation){
+                this.rotation = lastPosition.rotation;
+                return true;
+            }
         }else{
-            EntityManager.setPosition(this.id,lastPosition.x,lastPosition.y)
+            if(!(this.x == lastPosition.x && this.y == lastPosition.y)){
+                this.setPosition(lastPosition.x,lastPosition.y)
+                return true;
+            }
         }
+
+        return false;
     }
 
     addMortality(mortal){
@@ -385,7 +398,7 @@ class SwordEntity extends Entity{
         }
         //if sword hasn't been placed somewhere else as result of attack...
         if(prevRotation == this.rotation && this.x == prevPosition.x && this.y == prevPosition.y && this.item){
-            EntityManager.setPosition(this.id,x,y);
+            this.setPosition(x,y);
         }
         this.updateSymbol();
     }
@@ -513,8 +526,25 @@ class SwordEntity extends Entity{
             y = owner.y + translation.y;
         }
 
-        this.rotation = bestRotation;
-        this.place();
+        let validSpace = (Board.entityAt(bestPos.x,bestPos.y).isWall|| !Board.entityAt(bestPos.x,bestPos.y))
+        if(validSpace){
+            this.rotation = bestRotation;
+            this.place();
+            return true;
+        }
+
+        return false; 
+    }
+
+    getSwordPosition(rotation){
+        if(!rotation){
+            rotation = this.rotation;
+        }
+        let translation = EntityManager.translations[this.rotation];
+        let x = this.owner.x + translation.x;
+        let y = this.owner.y + translation.y;
+
+        return {x:x, y:y}
     }
 }
 

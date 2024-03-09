@@ -1,6 +1,11 @@
 class Display{
     static entityManager;
     static customControls;
+    static colorScheme = 0;
+    static colorSchemes = [
+        {scheme:'classic', name:'Classic'},
+        {scheme:'dark-mode',name:'Dark Mode'}
+    ]
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -19,6 +24,7 @@ class Display{
         $('#home-screen').show();
         Display.populateLocations();
         Display.giveSaveButtonsBehavior();
+        Display.setColorSchemeButton();
     }
 
     static showTownScreen(){
@@ -419,6 +425,26 @@ class Display{
         }
     }
 
-    
+    static setColorSchemeButton(){
+        Display.applyColorScheme(Display.getColorScheme());
+        $('#color-scheme-button').on('click',()=>{
+            $('html').removeClass(Display.colorSchemes[Display.colorScheme].scheme);
+            Display.colorScheme = Display.getNextColorSchemeIndex();
+            Display.applyColorScheme(Display.getColorScheme());
+        })
+    }
+
+    static getColorScheme(){
+        return Display.colorSchemes[Display.colorScheme]
+    }
+
+    static getNextColorSchemeIndex(){
+        return (Display.colorScheme+1) % Display.colorSchemes.length;
+    }
+
+    static applyColorScheme(scheme){
+        $('html').addClass(scheme.scheme);
+        $('#color-scheme-button').text(Display.colorSchemes[Display.getNextColorSchemeIndex()].name)
+    }
     
 }

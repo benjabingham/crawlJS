@@ -87,3 +87,14 @@ h1, h2, h3{
     letter-spacing: .3rem;
     text-transform: capitalize;
 }
+
+#color-scheme-select{
+    width:fit-content;
+    margin:auto;
+    padding:1rem;
+    button{
+        display:block;
+        margin:auto;
+        padding:5px;
+    }
+}

@@ -21,7 +21,7 @@ let monsterVars = {
                 tier:1
             }
         },
-        color:'green'
+        color:'darkGreen'
     },
     ogre:{
         name:"ogre",

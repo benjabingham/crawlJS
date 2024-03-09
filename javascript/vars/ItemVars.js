@@ -267,7 +267,7 @@ let itemVars = {
                 damage:-1
             },
             value:.25,
-            color:'woodbrown'
+            color:'woodBrown'
         },
         bone:{
             name:'bone',
@@ -305,7 +305,7 @@ let itemVars = {
                 damage:3
             },
             value:1,
-                color:'darkgray'
+                color:'darkGray'
         },
         rubber:{
             name:'rubber',
@@ -326,13 +326,13 @@ let itemVars = {
             edged:{
                 damage:6
             },
-            color:'clearblue'
+            color:'clearBlue'
         },
         bronze:{
             name:'bronze',
             flimsy:2,
             value:1.5,
-            color:'redbrown'
+            color:'redBrown'
         },
         iron:{
             name:'iron',
@@ -346,7 +346,7 @@ let itemVars = {
                 damage:2
             },
             value:2,
-            color:'lightgray'
+            color:'lightGray'
         },
         ironwood:{
             name:'ironwood',
@@ -355,7 +355,7 @@ let itemVars = {
                 damage:2
             },
             value:3,
-            color:'redbrown'
+            color:'redBrown'
         },
         crystal:{
             name:'crystal',
@@ -409,7 +409,7 @@ let itemVars = {
                 damage:2
             },
             value:10,
-            color:'blue'
+            color:'darkBlue'
         }
     },
     treasureMaterials:{
@@ -426,7 +426,7 @@ let itemVars = {
         wood:{
             name:'wooden',
             value:0.3,
-            color:"woodbrown"
+            color:"woodBrown"
         },
         stone:{
             name:'stone',
@@ -442,7 +442,7 @@ let itemVars = {
         steel:{
             name:'steel',
             value:1,
-            color:"lightgray"
+            color:"lightGray"
         },
         bronze:{
             name:'bronze',
@@ -457,17 +457,17 @@ let itemVars = {
         copper:{
             name:'copper',
             value:3,
-            color:"redbrown"
+            color:"redBrown"
         },
         nickel:{
             name:'nickel',
             value:3.5,
-            color:"lightgray"
+            color:"lightGray"
         },
         tin:{
             name:'tin',
             value:4,
-            color:"lightgray"
+            color:"lightGray"
         },
         sterling:{
             name:'sterling silver',

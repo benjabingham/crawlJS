@@ -28,7 +28,7 @@ button:hover{
 .hint-divs{
     text-align:center;
     /*font-style:italic;*/
-    color:var(--menuBack);
+    color:var(--altBackText);
 
     height:1rem;
 

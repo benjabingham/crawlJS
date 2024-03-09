@@ -2,6 +2,7 @@
 class Entity{
     name;
     symbol;
+    color;
     id;
     x;
     y;
@@ -777,7 +778,9 @@ class ItemPile extends Entity{
             return 0;
         });
 
-        this.name = this.inventory.items[this.inventory.items.length-1].name;
+        let topItem = this.inventory.items[this.inventory.items.length-1];
+        this.name = topItem.name;
+        this.color = topItem.color;
     }
 
     addItems(itemArray){

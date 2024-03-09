@@ -1,10 +1,10 @@
 .classic{
     /*dungeon*/
     --dark:#222;
-    --floor:#ddd;
     --darkAccent:#262626;
-    --wall:#666;
-    --wallAccent:#6a6a6a;
+    --floor:#ddd;
+    --wall:#777;
+    --wallAccent:#888;
     --exit:#555;
     --gridLine:#2222221c;
 
@@ -47,7 +47,7 @@
     --darkGray:#303030;
     --lightGray:#636363;
     --silver:rgb(139, 137, 134);
-    --gold:var(--darkYellow);
+    --gold:rgb(172, 118, 20);;
 
 
     

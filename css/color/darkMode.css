@@ -1,0 +1,128 @@
+.dark-mode{
+    /*dungeon*/
+    --dark:#222;
+    --floor:#222;
+    --darkAccent:#444;
+    --wall:#444;
+    --wallAccent:#555;
+    --exit:#555;
+    --gridLine:#4b4b4b1c;
+
+    --defaultEntity:#ddd;
+
+    /*hud*/
+    --healthBar:var(--darkRed);
+    --healthBarText:var(--red);
+    --staminaBar:var(--darkYellow);
+    --staminaBarText:var(--yellow);
+    --luckBar:var(--darkGreen);
+    --luckBarText:var(--green);
+    --resourceBorder:var(--defaultEntity);
+
+    /*menus*/
+    --border:var(--gray);
+    --menuBack:var(--floor);
+    --menuText:var(--defaultEntity);
+    --altBack:var(--dark);
+    --altBackText:var(--defaultEntity);
+    
+    /*colors*/
+    --red:rgb(216, 81, 47);
+    --darkRed:rgb(136, 42, 42);
+    --muteRed:rgb(177, 71, 45);
+    --brightPurple:rgb(191, 116, 241);
+    --darkPurple:rgb(130, 55, 180);
+    --blue:rgb(82, 82, 182);
+    --darkBlue:rgb(56, 56, 151);
+    --green:rgb(2, 184, 2);
+    --darkGreen:rgb(44, 109, 44);
+    --yellow:yellow;
+    --darkYellow:rgb(110, 110, 0);
+
+    --clearBlue:rgba(0, 155, 155, 0.514);
+    --bone:rgb(160, 138, 105);
+    --woodBrown:rgb(133, 102, 66);
+    --brown:rgb(95, 65, 31);
+    --redBrown:rgb(124, 66, 43);
+    --gray:#4b4b4b;
+    --darkGray:#555454;
+    --lightGray:#797878;
+    --silver:rgb(172, 171, 171);
+    --gold:rgb(179, 162, 14);;
+
+
+    
+    /*buttons*/
+    --buttonG1:#fde8cc;
+    --buttonG2:var(--wallAccent);
+    --buttonHoverG1:#cab9a3;
+    --buttonHoverG2:#a7a089;
+
+    /*inventories*/
+    --inventorySlot:var(--floor);
+    --inventoryBorder:var(--defaultEntity);
+    --inventorySlotHover:#333;
+    --shopFreshBorder:var(--defaultEntity);
+    --shopFresh:#2e2d1f;
+
+    
+    /*log*/
+    --logFresh:rgba(252, 244, 233, 0.068);
+    --urgentBackground:rgb(241, 56, 56);
+    --urgentText:#411;
+    --notice:rgba(255, 196, 0, 0.452);
+
+    /*town*/
+    --shopBackground:rgba(252, 143, 0, 0.048);
+}
+
+.clearblue{
+    color: var(--clearBlue);
+}
+
+.bone{
+    color:var(--bone)
+}
+
+.woodbrown{
+    color:var(--woodBrown);
+}
+
+.brown{
+    color:var(--brown);
+}
+.redbrown{
+    color:var(--redBrown)
+}
+
+.darkgray{
+    color:var(--darkgray)
+}
+
+.gray{
+    color:var(--gray);
+}
+
+.lightgray{
+    color:var(--lightGray);
+}
+
+.silver{
+    color:var(--silver);
+}
+
+.gold{
+    color:var(--gold);
+}
+
+.blue{
+    color:var(--darkBlue)
+}
+
+.purple{
+    color:var(--purple);
+}
+
+.green{
+    color:var(--darkGreen);
+}

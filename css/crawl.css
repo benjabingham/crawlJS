@@ -28,7 +28,7 @@ button:hover{
 .hint-divs{
     text-align:center;
     /*font-style:italic;*/
-    color:var(--menuBack);
+    color:var(--altBackText);
 
     height:1rem;
 
@@ -86,4 +86,15 @@ button:hover{
 h1, h2, h3{
     letter-spacing: .3rem;
     text-transform: capitalize;
+}
+
+#color-scheme-select{
+    width:fit-content;
+    margin:auto;
+    padding:1rem;
+    button{
+        display:block;
+        margin:auto;
+        padding:5px;
+    }
 }

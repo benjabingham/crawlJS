@@ -1,19 +1,31 @@
-:root{
+.light-mode{
     /*dungeon*/
     --dark:#222;
+    --darkAccent:#888;
     --floor:#ddd;
-    --darkAccent:#262626;
-    --wall:#666;
-    --wallAccent:#6a6a6a;
+    --wall:#aaa;
+    --wallAccent:#999;
     --exit:#555;
-
     --gridLine:#2222221c;
 
+    --defaultEntity:var(--dark);
+
+    /*hud*/
+    --healthBar:var(--red);
+    --healthBarText:var(--darkRed);
+    --staminaBar:var(--yellow);
+    --staminaBarText:var(--darkYellow);
+    --luckBar:var(--green);
+    --luckBarText:var(--darkGreen);
+    --resourceBorder:var(--defaultEntity);
+
+
     /*menus*/
-    --menuBack:var(--floor);
-    --menuText:var(--dark);
-    --altBack:var(--dark);
-    --altBackText:var(--floor);
+    --border:var(--altBackText);
+    --menuBack:var(--altBack);
+    --menuText:var(--altBackText);
+    --altBack:#eee;
+    --altBackText:#222;
     
     --red:rgb(231, 46, 0);
     --darkRed:rgb(117,0,0);
@@ -36,23 +48,24 @@
     --darkGray:#303030;
     --lightGray:#636363;
     --silver:rgb(139, 137, 134);
-    --gold:var(--darkYellow);
+    --gold:rgb(172, 118, 20);;
 
 
     
     /*buttons*/
-    --buttonG1:#fde8cc;
-    --buttonG2:#beb79d;
-    --buttonHoverG1:#cab9a3;
-    --buttonHoverG2:#a7a089;
+    --buttonG1:var(--altBack);
+    --buttonG2:var(--altBack);
+    --buttonHoverG1:var(--altBack);
+    --buttonHoverG2:#ccc;
 
     /*inventories*/
-    --inventorySlot:#F0DFC2;
-    --inventoryBorder:rgb(124, 117, 52);
-    --inventorySlotHover:#E8D6BD;
-
+    --inventorySlot:#00000000;
+    --inventoryBorder:rgba(124, 117, 52, 0);
+    --inventorySlotHover:#68686825;
     --shopFresh:#fdd7003a;
+    --shopFreshBorder:var(--inventoryBorder);
 
+    
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);
     --urgentBackground:rgba(250, 0, 0, 0.315);

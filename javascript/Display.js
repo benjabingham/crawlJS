@@ -1,6 +1,12 @@
 class Display{
     static entityManager;
     static customControls;
+    static colorScheme = 0;
+    static colorSchemes = [
+        {scheme:'classic', name:'Classic'},
+        {scheme:'dark-mode',name:'Dark Mode'},
+        {scheme:'light-mode',name:'Light Mode'}
+    ]
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -19,6 +25,7 @@ class Display{
         $('#home-screen').show();
         Display.populateLocations();
         Display.giveSaveButtonsBehavior();
+        Display.setColorSchemeButton();
     }
 
     static showTownScreen(){
@@ -123,8 +130,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                //TODO - directly set element style instead of using color classes
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint brown gray gold blue purple green clearblue bone woodbrown redbrown darkgray lightgray silver').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -150,11 +156,7 @@ class Display{
                                 })
                             }                 
                         }
-                        if(boardArray[y][x].color){
-                            gridDiv.addClass(boardArray[y][x].color)
-                        }else if(boardArray[y][x].item && boardArray[y][x].item.color){
-                            gridDiv.addClass(boardArray[y][x].item.color)
-                        }
+                        Display.applyColor(boardArray[y][x], gridDiv);
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -274,13 +276,15 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').addClass(item.color).text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
                 $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
             )
         )
+
+        Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
 
         if(item.uses){
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
@@ -419,6 +423,36 @@ class Display{
         }
     }
 
-    
+    static setColorSchemeButton(){
+        Display.applyColorScheme(Display.getColorScheme());
+        $('#color-scheme-button').on('click',()=>{
+            $('html').removeClass(Display.colorSchemes[Display.colorScheme].scheme);
+            Display.colorScheme = Display.getNextColorSchemeIndex();
+            Display.applyColorScheme(Display.getColorScheme());
+        })
+    }
+
+    static getColorScheme(){
+        return Display.colorSchemes[Display.colorScheme]
+    }
+
+    static getNextColorSchemeIndex(){
+        return (Display.colorScheme+1) % Display.colorSchemes.length;
+    }
+
+    static applyColorScheme(scheme){
+        $('html').addClass(scheme.scheme);
+        $('#color-scheme-button').text(Display.colorSchemes[Display.getNextColorSchemeIndex()].name)
+    }
+
+    static applyColor(object, element){
+        if(object.color){
+            element.css('color', 'var(--'+object.color+')')
+        }else if(object.item && object.item.color){
+            element.css('color', 'var(--'+object.item.color+')')
+        }else{
+            element.css('color', 'var(--defaultEntity)')
+        }
+    }
     
 }

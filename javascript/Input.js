@@ -91,7 +91,7 @@ class InputManager{
         if($(':focus').is('input')){
             return;
         }
-        console.log(EntityManager.entities[EntityManager.entities.player.sword])
+        console.log(newInput);
         newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
         console.log(inputCode);

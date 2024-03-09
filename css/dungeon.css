@@ -5,10 +5,10 @@
 
 #game-window{
     background-color: var(--floor);
-    color: var(--dark);
+    color: var(--defaultEntity);
     display:flex;
     margin:auto;
-    border:1px solid black;
+    border:1px solid var(--border);
     width:fit-content;
     height:510px;
 }

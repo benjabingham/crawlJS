@@ -465,7 +465,7 @@ class SwordEntity extends Entity{
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
 
-        if(!Board.entityAt(x,y).isWall || Board.isOpenSpace(x,y)){
+        if(!Board.entityAt(x,y).isWall && !Board.isOpenSpace(x,y)){
             direction *= -1;
             let rotation = (this.rotation + 8 + direction) % 8;
             translation = EntityManager.translations[rotation];

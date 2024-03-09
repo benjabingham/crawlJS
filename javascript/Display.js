@@ -25,7 +25,7 @@ class Display{
         Display.hideAllScreens();
         $('#hud-div').show();
         $('#town-screen').show();
-        $('#day-div').text('day '+Save.day);
+        $('#day-div').text('Day '+Save.day);
         $('#town-inventory-wrapper').show();
 
         Display.populateLocations();
@@ -176,7 +176,7 @@ class Display{
     static nourishmentDiv(){
         let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
         let display = this;
-        $('#nourishment-level-div').text('you are '+nourishmentLevels[Player.nourishmentLevel]);
+        $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
             {name:'meager meal',cost:3,nourishment:3},

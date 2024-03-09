@@ -62,6 +62,8 @@
     --inventoryBorder:rgb(124, 117, 52);
     --inventorySlotHover:#E8D6BD;
     --shopFresh:#fdd7003a;
+    --shopFreshBorder:var(--inventoryBorder);
+
     
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);

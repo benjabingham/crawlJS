@@ -62,7 +62,9 @@
     --inventorySlot:var(--floor);
     --inventoryBorder:var(--defaultEntity);
     --inventorySlotHover:#333;
-    --shopFresh:var(--darkYellow);
+    --shopFreshBorder:var(--defaultEntity);
+    --shopFresh:#2e2d1f;
+
     
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.068);

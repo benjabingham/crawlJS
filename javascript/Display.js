@@ -338,7 +338,7 @@ class Display{
             itemValue = '0';
         }
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').addClass(item.color).attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )

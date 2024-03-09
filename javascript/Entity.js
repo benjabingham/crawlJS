@@ -494,12 +494,12 @@ class SwordEntity extends Entity{
 
         let bestPos = {x:x, y:y};
         let bestRotation = rotation;
-        let bestDistance = (EntityManager.getOrthoDistance({x:x,y:y},pos1)**2)+(EntityManager.getOrthoDistance({x:x,y:y},pos2)**2);
+        let bestDistance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
+        let distance;
 
         for(let i = 0; i < 8; i++){
-            let distance = (EntityManager.getOrthoDistance({x:x,y:y},pos1)**2)+(EntityManager.getOrthoDistance({x:x,y:y},pos2)**2);
-
-            let validSpace = (Board.entityAt(x,y).behavior == 'wall' || !Board.entityAt(x,y))
+            distance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
+            let validSpace = (Board.entityAt(x,y).isWall|| !Board.entityAt(x,y))
             if(validSpace){
                 if (distance < bestDistance){
                     bestDistance = distance;

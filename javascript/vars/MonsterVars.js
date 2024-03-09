@@ -32,7 +32,7 @@ let monsterVars = {
             enrage:75,
             slow:40,
             beat:30,
-            sturdy:30
+            sturdy:100
         },
         hitDice:5,
         damage:8,

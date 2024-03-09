@@ -196,12 +196,12 @@ class Board{
         Board.height = height;
     }
 
-    static getTrueDistance(pos1, pos2){
+    static getTrueDistance(pos1, pos2, float=false){
         let a2 = Math.abs(pos1.x - pos2.x)**2;
         let b2 = Math.abs(pos1.y - pos2.y)**2;
         let distance = Math.sqrt(a2+b2);
 
-        return Math.floor(distance);
+        return float ? distance : Math.floor(distance);
     }
 
     //TRY - get light from sword's position, not player position

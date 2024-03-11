@@ -317,6 +317,10 @@ class PlayerEntity extends Entity{
 
         return this;
     }
+
+    get rotation(){
+        return this.sword.rotation;
+    }
 }
 
 class SwordEntity extends Entity{
@@ -367,13 +371,12 @@ class SwordEntity extends Entity{
         if (!this.item){
             return false;
         }
-        let owner = EntityManager.getEntity(this.owner);
         let prevPosition = {x:this.x, y:this.y};
         let prevRotation = this.rotation;
 
-        let translation = EntityManager.translations[this.rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
+        let position = this.getSwordPosition(rotation);
+        let x = position.x;
+        let y = position.y;
 
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.entityAt(x,y);
@@ -474,16 +477,16 @@ class SwordEntity extends Entity{
             direction = (Random.roll(0,1) * 2) - 1;
         }
         let rotation = (this.rotation + 8 + direction) % 8;
-        let translation = EntityManager.translations[rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
+        let position = this.getSwordPosition(rotation);
+        let x = position.x;
+        let y = position.y;
 
         if(!Board.entityAt(x,y).isWall && !Board.isOpenSpace(x,y)){
             direction *= -1;
             rotation = (this.rotation + 8 + direction) % 8;
-            translation = EntityManager.translations[rotation];
-            x = owner.x + translation.x;
-            y = owner.y + translation.y;
+            position = this.getSwordPosition(rotation);
+            x = position.x;
+            y = position.y;
         }
 
         if(Board.entityAt(x,y).isWall || Board.isOpenSpace(x,y)){
@@ -501,9 +504,9 @@ class SwordEntity extends Entity{
         //direction is either 1 or -1
         let direction = (Random.roll(0,1) * 2) - 1;
         let rotation = (this.rotation + 8 + direction) % 8;
-        let translation = EntityManager.translations[rotation];
-        let x = owner.x + translation.x;
-        let y = owner.y + translation.y;
+        let position = this.getSwordPosition(rotation);
+        let x = position.x;
+        let y = position.y;
 
         let bestPos = {x:x, y:y};
         let bestRotation = rotation;
@@ -521,9 +524,9 @@ class SwordEntity extends Entity{
                 }
             }
             rotation = (rotation + 8 + direction) % 8;
-            translation = EntityManager.translations[rotation];
-            x = owner.x + translation.x;
-            y = owner.y + translation.y;
+            position = this.getSwordPosition(rotation);
+            x = position.x;
+            y = position.y;
         }
 
         let validSpace = (Board.entityAt(bestPos.x,bestPos.y).isWall|| !Board.entityAt(bestPos.x,bestPos.y))
@@ -540,7 +543,7 @@ class SwordEntity extends Entity{
         if(!rotation){
             rotation = this.rotation;
         }
-        let translation = EntityManager.translations[this.rotation];
+        let translation = EntityManager.translations[rotation];
         let x = this.owner.x + translation.x;
         let y = this.owner.y + translation.y;
 

@@ -105,21 +105,12 @@ class EntityManager{
             }else{
                 //entity.tempSymbol = 'x';
             }
-
-
-
-            if((entity.mortal - entity.threshold) >= entity.threshold/2 && !entity.obliterated && !entity.isSword){
-                entity.dropInventory();
-                entity.obliterate();
-            }
         }
     }
 
     static reapWounded(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            if (entity.mortal > entity.threshold && entity.behavior != 'dead'){
-                entity.kill();
-            }
+            entity.checkForDeath();
         }
         if(Player.health <= 0){
             EntityManager.setProperty('player','symbol', 'x');

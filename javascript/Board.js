@@ -68,6 +68,10 @@ class Board{
         return (Board.isSpace(x,y) && Board.entityAt(x,y) && !Board.entityAt(x,y).walkable);
     }
 
+    static isValidSwordSpace(x,y){
+        return (!Board.entityAt(x,y) || Board.entityAt(x,y).walkable || Board.entityAt(x,y).isWall)
+    }
+
     //check if a tile is a valid space within the board
     static isSpace(x,y){
         return (y >= 0 && x >= 0 && y < Board.height && x < Board.width);

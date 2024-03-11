@@ -92,14 +92,7 @@ class Entity{
         }else{
             EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
             if(knocker.isSword){
-                let owner = EntityManager.getEntity(knocker.owner);
-                owner.setToLastPosition();
-                let lastSword = History.getSnapshotEntity(knocker.id)
-                let lastSwordPos = knocker.getSwordPosition(lastSword.rotation);
-                //should never happen... but just in case
-                if(!knocker.findSwordMiddle(lastSwordPos,knocker)){
-                    knocker.unequip();
-                }
+                //moved to place()
             }
         }
     }
@@ -303,6 +296,18 @@ class Entity{
             }
         }
     };
+
+    checkForDeath(){
+        if (this.mortal > this.threshold && !this.dead){
+            this.kill();
+        }
+
+        if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
+            Board.clearSpace(this.x,this.y);
+            this.dropInventory();
+            this.obliterate();
+        }
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -403,10 +408,40 @@ class SwordEntity extends Entity{
                 this.swordAttack(target);
             }
         }
-        //if sword hasn't been placed somewhere else as result of attack...
-        if(prevRotation == this.rotation && this.x == prevPosition.x && this.y == prevPosition.y && this.item){
+        //check if sword has already been placed elsewhere
+        let swordMoved = !(prevRotation == this.rotation && this.x == prevPosition.x && this.y == prevPosition.y && this.item)
+        if(swordMoved){
+            console.log('escape');
+            this.updateSymbol();
+            return;
+        }
+
+        position = this.getSwordPosition();
+        x = position.x;
+        y = position.y;
+        //check if sword's space is occupiable
+        if(!Board.isValidSwordSpace(x,y) && Board.entityAt(x,y).id != this.id){
+            console.log('sword overwriting');
+            console.log(position);
+            let owner = EntityManager.getEntity(this.owner);
+            owner.setToLastPosition();
+            let snapshot = History.getSnapshotEntity(this.id)
+            let pos = this.getSwordPosition();
+            //TODO - this might not work... what if owner was in different position?
+            let lastPos = this.getSwordPosition(snapshot.rotation);
+            //should never happen... but just in case
+            if(!this.findSwordMiddle(lastPos,pos)){
+                this.unequip();
+            }
+        }
+        
+        if(this.item){
+            position = this.getSwordPosition();
+            x = position.x;
+            y = position.y;
             this.setPosition(x,y);
         }
+
         this.updateSymbol();
     }
 
@@ -460,6 +495,9 @@ class SwordEntity extends Entity{
                 target.enrageAndDaze();   
             }
             target.sturdy(this);
+            
+            target.checkForDeath();
+            
         }
 
         if(this.owner == 'player'){
@@ -504,10 +542,9 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        let owner = EntityManager.getEntity(this.owner);
-        //direction is either 1 or -1
-        let direction = (Random.roll(0,1) * 2) - 1;
-        let rotation = (this.rotation + 8 + direction) % 8;
+        console.log(this);
+        console.log('findSwordMiddle');
+        let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
         let y = position.y;
@@ -515,17 +552,23 @@ class SwordEntity extends Entity{
         let bestPos = {x:x, y:y};
         let bestRotation = rotation;
         let bestDistance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
+
+        //direction is either 1 or -1
+        let direction = (Random.roll(0,1) * 2) - 1;
         let distance;
 
         for(let i = 0; i < 8; i++){
             distance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
-            let validSpace = (Board.entityAt(x,y).isWall|| !Board.entityAt(x,y))
+            let validSpace = (Board.isValidSwordSpace(x,y) || Board.entityAt(x,y).id == this.id)
+            console.log(validSpace);
             if(validSpace){
+                console.log('valid');
                 if (distance < bestDistance){
                     bestDistance = distance;
                     bestPos = {x:x, y:y};
                     bestRotation = rotation;
                 }
+                
             }
             rotation = (rotation + 8 + direction) % 8;
             position = this.getSwordPosition(rotation);
@@ -533,9 +576,10 @@ class SwordEntity extends Entity{
             y = position.y;
         }
 
-        let validSpace = (Board.entityAt(bestPos.x,bestPos.y).isWall|| !Board.entityAt(bestPos.x,bestPos.y))
+        let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)
         if(validSpace){
             this.rotation = bestRotation;
+            console.log(this.rotation);
             this.place();
             return true;
         }
@@ -543,15 +587,16 @@ class SwordEntity extends Entity{
         return false; 
     }
 
-    getSwordPosition(rotation = false){
-        if(!rotation){
+    getSwordPosition(rotation = -1){
+        if(rotation = -1){
             rotation = this.rotation;
         }
+
         let owner = EntityManager.getEntity(this.owner);
         let translation = EntityManager.translations[rotation];
         let x = owner.x + translation.x;
         let y = owner.y + translation.y;
-
+        
         return {x:x, y:y}
     }
 }
@@ -734,7 +779,6 @@ class Monster extends Entity{
             this.stunned ++;
         }
     }
-
 }
 
 class Wall extends Entity{

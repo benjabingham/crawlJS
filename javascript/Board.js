@@ -206,9 +206,9 @@ class Board{
 
     //TRY - get light from sword's position, not player position
     static hasLight(pos){
-        let playerEntity = EntityManager.getEntity('player');
+        let sourceTile = EntityManager.getEntity('player').swordEntity.getSwordPosition();
         let lightDistance = Player.light+1;
-        let distance = Board.getTrueDistance(pos,playerEntity);
+        let distance = Board.getTrueDistance(pos,sourceTile);
 
         return lightDistance >= distance;
         

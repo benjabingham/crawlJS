@@ -319,7 +319,11 @@ class PlayerEntity extends Entity{
     }
 
     get rotation(){
-        return this.sword.rotation;
+        return this.swordEntity.rotation;
+    }
+
+    get swordEntity(){
+        return EntityManager.getEntity(this.sword);
     }
 }
 
@@ -333,7 +337,7 @@ class SwordEntity extends Entity{
     constructor(ownerId, item=false){
         super(false, -1, -1)
         this.owner = ownerId;  
-        this.rotation = 3;
+        this.rotation = 2;
 
         if(item){
             this.equip(item);

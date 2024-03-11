@@ -36,13 +36,12 @@ class Shop{
     static stockInventory(){
         let tiers = [0,0,1,3,4,4];
         let slot = 0;
-        let unallowed = ['stone','bone','obsidian','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
+        let carriedMaterials = ['wooden','copper','bronze','iron','steel'];
         tiers.forEach((tier)=>{
             let priceMultiplier = Random.roll(1,4) + tier;
             let item = LootManager.getWeaponLoot(tier);
-            
-            while(!Shop.itemAllowed(item,unallowed)){
-                item = LootManager.getWeaponLoot(tier);                
+            while(!Shop.itemCarried(item,carriedMaterials)){
+                item = LootManager.getWeaponLoot(tier);
             }
             
             item.price = Math.max(item.value,1) * priceMultiplier;
@@ -58,22 +57,19 @@ class Shop{
         slot++;
     }
 
-    static itemAllowed(item,unallowed){
-        
-        let name = item.name;
-        let result = true;
-        unallowed.forEach((value)=>{
-            if (name.includes(value)){
-                result = false;
+    static itemCarried(item,carriedMaterials){
+        let result = false
+        carriedMaterials.forEach((material)=>{
+            if (item[material]){
+                result = true;
             }
         })
         
-
         return result;
     }
 
     static restockInventory(){
-        let unallowed = ['stone','bone','obsidian','lead','silver','gold','adamantine','lightsteel','ironwood','crystal','glass','rubber'];
+        let carriedMaterials = ['wooden','copper','bronze','iron','steel','ironwood','lightsteel','silver','adamantine'];
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
@@ -86,7 +82,7 @@ class Shop{
                 let random = Random.roll(1,99);
                 if(random < restockChance || item.purchased){
                     let newItem = LootManager.getWeaponLoot(item.tier);
-                    while(!Shop.itemAllowed(newItem,unallowed)){
+                    while(!Shop.itemCarried(newItem,carriedMaterials)){
                         newItem = LootManager.getWeaponLoot(item.tier);                
                     }
                     let priceMultiplier = Random.roll(1,4) + item.tier;

@@ -336,7 +336,7 @@ let itemVars = {
             name:'copper',
             flimsy:3,
             value:2,
-            color:'redbrown'
+            color:'redBrown'
         },
         bronze:{
             name:'bronze',
@@ -363,7 +363,7 @@ let itemVars = {
             },
             value:4.5,
             value:2,
-            color:'lightgray'
+            color:'lightGray'
         },
         ironwood:{
             name:'ironwood',
@@ -376,7 +376,7 @@ let itemVars = {
             },
             value:6,
             value:3,
-            color:'redbrown'
+            color:'redBrown'
         },
         crystal:{
             name:'crystal',

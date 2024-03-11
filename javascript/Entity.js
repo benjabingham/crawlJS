@@ -374,7 +374,7 @@ class SwordEntity extends Entity{
         let prevPosition = {x:this.x, y:this.y};
         let prevRotation = this.rotation;
 
-        let position = this.getSwordPosition(rotation);
+        let position = this.getSwordPosition();
         let x = position.x;
         let y = position.y;
 
@@ -539,13 +539,14 @@ class SwordEntity extends Entity{
         return false; 
     }
 
-    getSwordPosition(rotation){
+    getSwordPosition(rotation = false){
         if(!rotation){
             rotation = this.rotation;
         }
+        let owner = EntityManager.getEntity(this.owner);
         let translation = EntityManager.translations[rotation];
-        let x = this.owner.x + translation.x;
-        let y = this.owner.y + translation.y;
+        let x = owner.x + translation.x;
+        let y = owner.y + translation.y;
 
         return {x:x, y:y}
     }

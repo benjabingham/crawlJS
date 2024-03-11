@@ -1,4 +1,5 @@
 class LootManager{
+
     static getEntityLoot(entitySave){
         let lootChances = false;
         let monsterKey = entitySave.value.monsterKey;
@@ -60,6 +61,9 @@ class LootManager{
             }
         }
 
+        LootManager.getTreasureModifier(treasure, tier);
+
+
         return treasure;
     }
 
@@ -72,9 +76,22 @@ class LootManager{
         return weapon;
     }
 
+    static getTreasureModifier(treasure, tier){
+        let random = Random.roll(1,99);
+        random += tier*5;
+        if(random < 30){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.decrepit)
+        }else if (random < 60){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.distressed)
+        }else if (random >= 90){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.pristine)
+        }
+    }
+
+
     static getWeaponMaterial(tier){
-        let materials = Object.keys(itemVars.weaponMaterials);
-        let nMaterials = materials.length;
+        let materials = Object.keys(itemVars.weaponMaterials);        
+        let nMaterials = materials.length; 
         let nRolls = tier-3;
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
@@ -167,12 +184,11 @@ class LootManager{
                     item[key] = value;
             }
         }
-        let lootManager = this;
         //apply modifier to special strikes
         ['jab','swing','strafe'].forEach(function(val){
             //only do this once!
             if(item[val] && !recursion){
-                lootManager.applyModifier(item[val], modifier);
+                LootManager.applyModifier(item[val], modifier);
             }
         })
     }

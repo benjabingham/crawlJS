@@ -122,8 +122,7 @@ class EntityManager{
     static equipWeapon(wielderId, weapon){
         let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
-        sword.equip(weapon);
-        
+        sword.equip(weapon); 
         EntityManager.transmitMessage('equipped weapon: '+weapon.name);
     }
 

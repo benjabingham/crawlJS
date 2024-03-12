@@ -130,7 +130,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint bloody').off('mouseleave mouseenter');
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -162,8 +162,11 @@ class Display{
                         if(Board.hasAdjacentEmptySpace(x,y)){
                             gridDiv.addClass('grid-exit');
                         }else{
-                            gridDiv.addClass('grid-dark')
+                            gridDiv.addClass('grid-dark');
                         }
+                    }
+                    if(Board.getStain(x,y)){
+                        gridDiv.addClass(Board.getStain(x,y));
                     }
                 //out of sight
                 }else{

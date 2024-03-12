@@ -252,6 +252,9 @@ class Entity{
         if(roster[this.index]){
             roster[this.index].alive = false;
         }
+
+        Board.setStain(this.x, this.y, 'bloody');
+
     };
 
     //has beat% chance to beat sword out of way.

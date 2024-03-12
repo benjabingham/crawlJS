@@ -5,6 +5,7 @@ class Board{
     static boardArray = [];
     static wallArray = [];
     static losArray = [];
+    static stainArray = [];
 
     static destinations = {};
 
@@ -233,6 +234,22 @@ class Board{
         })
 
         return result;
+    }
+
+    static setStain(x,y, stain){
+        if(!Board.stainArray[y]){
+            Board.stainArray[y] = [];
+        }
+
+        Board.stainArray[y][x] = stain;
+    }
+
+    static getStain(x,y){
+        if(!Board.stainArray[y]){
+            return false;
+        }
+
+        return Board.stainArray[y][x];
     }
     
 }

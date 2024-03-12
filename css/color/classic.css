@@ -17,6 +17,7 @@
     --staminaBarText:var(--darkYellow);
     --luckBar:var(--green);
     --luckBarText:var(--darkGreen);
+    --resourceBorder:var(--defaultEntity);
 
 
     /*menus*/

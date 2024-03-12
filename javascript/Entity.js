@@ -219,6 +219,8 @@ class Entity{
             this.mortal = 0;
         }
         this.mortal += mortal;
+
+        this.checkDead();
     }
 
     kill(){
@@ -308,6 +310,18 @@ class Entity{
             }
         }
     };
+
+    checkDead(){
+        if (this.mortal > this.threshold && !this.dead){
+            this.kill();
+        }
+
+        if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
+            Board.clearSpace(this.x,this.y);
+            this.dropInventory();
+            this.obliterate();
+        }
+    }
 }
 
 class PlayerEntity extends Entity{

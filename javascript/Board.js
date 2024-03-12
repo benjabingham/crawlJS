@@ -73,6 +73,10 @@ class Board{
         return (y >= 0 && x >= 0 && y < Board.height && x < Board.width);
     }
 
+    static isValidSwordSpace(x,y){
+        return (!Board.entityAt(x,y) || Board.entityAt(x,y).walkable || Board.entityAt(x,y).isWall)
+    }
+
     static entityAt(x,y){
         if(Board.isSpace(x,y)){
             return Board.boardArray[y][x];

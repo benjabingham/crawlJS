@@ -55,6 +55,9 @@ class Entity{
     //Attempts to knock entity into space further from knocker's space in last frame than current space
     //If no such space is found, defaults to furthest space found.
     knock(knockerId){
+        if(this.obliterated){
+            return false;
+        }
         let knocker = EntityManager.getEntity(knockerId);
         let knockerPos;
         knockerPos = History.getSnapshotEntity(knockerId);

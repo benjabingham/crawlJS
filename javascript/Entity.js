@@ -543,8 +543,8 @@ class SwordEntity extends Entity{
         return false; 
     }
 
-    getSwordPosition(rotation = false){
-        if(!rotation){
+    getSwordPosition(rotation = -1){
+        if(rotation == -1){
             rotation = this.rotation;
         }
         let owner = EntityManager.getEntity(this.owner);

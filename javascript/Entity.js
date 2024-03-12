@@ -93,8 +93,12 @@ class Entity{
         }else if (backupSpace){
             this.setPosition(backupSpace.x,backupSpace.y);
         }else{
-            EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
             //TODO - this probably belongs in SwordEntity.place()
+            this.checkDead();
+            if(this.obliterated){
+                return false;
+            }
+            EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
@@ -220,8 +224,6 @@ class Entity{
             this.mortal = 0;
         }
         this.mortal += mortal;
-
-        this.checkDead();
     }
 
     kill(){

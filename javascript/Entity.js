@@ -95,9 +95,11 @@ class Entity{
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
                 let lastSword = History.getSnapshotEntity(knocker.id)
+                //this may not work - doesn't take into account owner's position on last frame
+                let swordPos = knocker.getSwordPosition()
                 let lastSwordPos = knocker.getSwordPosition(lastSword.rotation);
-                //should never happen... but just in case
-                if(!knocker.findSwordMiddle(lastSwordPos,knocker)){
+                if(!knocker.findSwordMiddle(lastSwordPos,swordPos)){
+                    //should never happen... but just in case
                     knocker.unequip();
                 }
             }

@@ -506,24 +506,24 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        let owner = EntityManager.getEntity(this.owner);
-        //direction is either 1 or -1
-        let direction = (Random.roll(0,1) * 2) - 1;
-        let rotation = (this.rotation + 8 + direction) % 8;
+        
+        let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
         let y = position.y;
-
-        let bestPos = {x:x, y:y};
-        let bestRotation = rotation;
-        let bestDistance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
+        console.log(Board.entityAt(x,y));
+        let bestPos;
+        let bestRotation;
+        let bestDistance = -1;
         let distance;
+        //direction is either 1 or -1
+        let direction = (Random.roll(0,1) * 2) - 1;
 
         for(let i = 0; i < 8; i++){
             distance = (Board.getTrueDistance({x:x,y:y},pos1,true)**2)+(Board.getTrueDistance({x:x,y:y},pos2,true)**2);
             let validSpace = (Board.isValidSwordSpace(x,y) || Board.entityAt(x,y).id == this.id)
             if(validSpace){
-                if (distance < bestDistance){
+                if (bestDistance == -1 || distance < bestDistance){
                     bestDistance = distance;
                     bestPos = {x:x, y:y};
                     bestRotation = rotation;
@@ -536,7 +536,7 @@ class SwordEntity extends Entity{
         }
 
         let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)
-        if(validSpace){
+        if(validSpace && bestDistance != -1){
             this.rotation = bestRotation;
             this.place();
             return true;

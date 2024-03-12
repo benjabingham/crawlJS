@@ -94,6 +94,7 @@ class Entity{
             this.setPosition(backupSpace.x,backupSpace.y);
         }else{
             EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
+            //TODO - this probably belongs in SwordEntity.place()
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();

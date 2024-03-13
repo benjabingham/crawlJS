@@ -36,7 +36,7 @@
     grid-gap: 0px;
     border-collapse: collapse;
 
-    div:not(.grid-dark){
+    .board-grid-div:not(.grid-dark){
         background-color:var(--floor);
     }
 
@@ -55,13 +55,16 @@
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
 
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div{
+        background-color: #00000000;
+        position:absolute;
+    }
 }
 
-.board-grid-div.bloody::after{
-    color:var(--darkRed);
-    content:'౷';
-}
 /*
 .grid-dark::after{
     content:'▓▓';

@@ -254,8 +254,9 @@ class Entity{
         if(roster[this.index]){
             roster[this.index].alive = false;
         }
-
-        Board.setStain(this.x, this.y, 'bloody');
+        if(this.blood){
+            Board.setStain(this.x, this.y, this.blood);
+        }
 
     };
 
@@ -597,6 +598,7 @@ class Monster extends Entity{
     isMonster = true;
     //is used to temporarily change monster's symbol, ex. if stunned or killed
     tempSymbol;
+    blood = 'red';
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);

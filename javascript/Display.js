@@ -84,7 +84,11 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 $('#board').append(
-                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY)
+                    $('<div>').addClass('board-grid-div').attr('id','board-grid-'+displayX+'-'+displayY).append(
+                        $('<div>').addClass('board-stain-div').attr('id','board-stain-'+displayX+'-'+displayY)
+                    ).append(
+                        $('<div>').addClass('board-entity-div').attr('id','board-entity-'+displayX+'-'+displayY)
+                    )
                 )                 
             }
         }
@@ -124,13 +128,15 @@ class Display{
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
+                let stainDiv = $('#board-stain-'+displayX+'-'+displayY);
+                let entityDiv = $('#board-entity-'+displayX+'-'+displayY);
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
                 //don't bother if spot was dark before and is still dark
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint bloody').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -156,7 +162,7 @@ class Display{
                                 })
                             }                 
                         }
-                        Display.applyColor(boardArray[y][x], gridDiv);
+                        Display.applyColor(boardArray[y][x], entityDiv);
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -166,14 +172,17 @@ class Display{
                         }
                     }
                     if(Board.getStain(x,y)){
-                        gridDiv.addClass(Board.getStain(x,y));
+                        stainDiv.text('౷');
+                        Display.applyColor({color:Board.getStain(x,y)}, stainDiv);
+                    }else{
+                        stainDiv.text('');
                     }
                 //out of sight
                 }else{
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
-                gridDiv.text(symbol)
+                entityDiv.text(symbol)
             }
         }
     }

@@ -137,6 +137,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                stainDiv.text('');
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -174,8 +175,6 @@ class Display{
                     if(Board.getStain(x,y)){
                         stainDiv.text('౷');
                         Display.applyColor({color:Board.getStain(x,y)}, stainDiv);
-                    }else{
-                        stainDiv.text('');
                     }
                 //out of sight
                 }else{

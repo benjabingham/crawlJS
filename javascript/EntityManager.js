@@ -16,7 +16,7 @@ class EntityManager{
     static currentMap;
     
     static entityManagerInit(){
-        Board.boardInit(this);
+        Board.boardInit();
     }
 
     static wipeEntities(){
@@ -184,7 +184,8 @@ class EntityManager{
     static loadRoom(json){
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
-        Board.boardInit();
+        Board.boardInit(json);
+
         Board.destinations = json.destinations;
         json.roster.forEach((entitySave)=>{
             let value = entitySave.value;
@@ -219,6 +220,7 @@ class EntityManager{
                 entityObj.inventory.items = entitySave.inventory;
             }
         })
+        
 
         EntityManager.currentMap = json;
         

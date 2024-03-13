@@ -9,7 +9,19 @@ class Board{
 
     static destinations = {};
 
-    static boardInit(){
+    static boardInit(roomJson = false){
+        Board.setBoard();
+
+        if(roomJson && roomJson.stains){
+            Board.stainArray = roomJson.stains;
+        }else{
+            Board.stainArray = new Array(Board.height).fill().map( ()=>
+                Array(Board.width).fill(false)
+            )
+        }
+    }
+
+    static setBoard(){
         Board.boardArray = [];
         Board.wallArray = [];
         for(let i=0;i<Board.height;i++){
@@ -25,7 +37,7 @@ class Board{
     static placeEntities(){
         let entities = EntityManager.entities;
         //TODO: does boardinit have to happen every time?
-        Board.boardInit();
+        Board.setBoard();
         for (const [k,entity] of Object.entries(entities)){
             let x = entity.x;
             let y = entity.y;

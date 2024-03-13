@@ -95,11 +95,29 @@ class Save{
         for(let i = map.lastDay; i < day; i++){
             console.log(i);
             Save.mapRespawn(mapString);
+            Save.degradeStains(mapString);
         }
         map.lastDay = day;
     }
 
-    //TODO: this should be where we give monsters their loot
+    static degradeStains(mapString){
+        let stains = Save.maps[mapString].stains;
+        console.log(stains);
+        let y = 0;
+        stains.forEach((row)=>{
+            let x = 0;
+            row.forEach((tile)=>{
+                if(tile){
+                    if(Random.roll(0,1)){
+                        stains[y][x]--;
+                    }
+                    x++;
+                }
+            })
+            y++;
+        })
+    }
+
     static mapRespawn(mapString){
         let map = Save.maps[mapString];
         map.roster.forEach((entity)=>{
@@ -112,5 +130,4 @@ class Save{
             }
         })
     }
-
 }

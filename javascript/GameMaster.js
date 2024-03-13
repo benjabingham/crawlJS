@@ -68,6 +68,7 @@ class GameMaster{
         if(!destination){
             return false;
         }
+        EntityManager.currentMap.stains = Board.stainArray;
         GameMaster.dungeonId++;
         GameMaster.reset();
 

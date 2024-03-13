@@ -267,13 +267,13 @@ class Entity{
         }
 
         if(this.dead){
-            damage *= 2;
+            damage *= 4;
         }
 
         if(
-            damage >= this.threshold ||
+            damage >= this.threshold*2 ||
             (this.mortal >= this.threshold && weapon.type.edged) ||
-            (damage >= Random.rollN(2,6))
+            (damage >= Random.rollN(2,2))
         ){
             this.splatter();
         }
@@ -297,11 +297,15 @@ class Entity{
             x = this.x;
             y = this.y;
         }
-        let x2 = x + translation.x;
-        let y2 = y + translation.y;
         Board.setStain(x,y,this.blood);
-        if(!Board.wallAt(x2,y2)){
-            Board.smearStain({x:x,y:y},{x:x2,y:y2})
+        if(this.hitDice > Random.roll(0,5)){
+            let x2 = x + translation.x;
+            let y2 = y + translation.y;
+            if(!Board.wallAt(x2,y2)){
+                Board.setStain(x2,y2,this.blood);
+            }else{
+                Board.setStain(x,y,this.blood);
+            }
         }
     }
 
@@ -373,6 +377,9 @@ class Entity{
             this.dropInventory();
             if(this.blood){
                 this.splatter();
+                if(this.hitDice > 0){
+                    this.splatter();
+                }
             }
             this.obliterate();
         }
@@ -673,7 +680,7 @@ class Monster extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
-
+        
         return this;
     }
 

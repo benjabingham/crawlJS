@@ -137,7 +137,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                stainDiv.text('');
+                Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
                 }
@@ -173,8 +173,9 @@ class Display{
                         }
                     }
                     if(Board.getStain(x,y)){
-                        stainDiv.text('౷');
-                        Display.applyColor({color:Board.getStain(x,y)}, stainDiv);
+                        //stainDiv.text('౷');
+                        Display.applyBackgroundColor('red', stainDiv);
+                        Display.applyOpacity(Board.getStain(x,y),stainDiv);
                     }
                 //out of sight
                 }else{
@@ -464,6 +465,18 @@ class Display{
         }else{
             element.css('color', 'var(--defaultEntity)')
         }
+    }
+
+    static applyBackgroundColor(color, element){
+        if(!color){
+            return false;
+        }
+        element.css('background-color', 'var(--'+color+')')
+    }
+
+    //use integer 0-20
+    static applyOpacity(opacity, element){
+        element.css('opacity',opacity/20)
     }
     
 }

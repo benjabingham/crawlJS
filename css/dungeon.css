@@ -61,12 +61,20 @@
 
     div{
         background-color: #00000000;
+    }
+
+    .board-entity-div{
         position:absolute;
     }
 
     .board-stain-div{
         opacity: .5;
         font-weight:700;
+        width:30px;
+        height:30px;
+        margin-top:-1px;
+        margin-left:-1px;
+        margin-right:-1px;
     }
 }
 

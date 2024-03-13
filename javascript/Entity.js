@@ -598,7 +598,7 @@ class Monster extends Entity{
     isMonster = true;
     //is used to temporarily change monster's symbol, ex. if stunned or killed
     tempSymbol;
-    blood = 'red';
+    blood = 1;
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
@@ -623,6 +623,9 @@ class Monster extends Entity{
 
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
+        }
+        if(this.blood){
+            this.blood = this.hitDice+1;
         }
 
         return this;

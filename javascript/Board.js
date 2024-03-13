@@ -240,8 +240,10 @@ class Board{
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }
-
-        Board.stainArray[y][x] = stain;
+        if(!Board.stainArray[y][x]){
+            Board.stainArray[y][x] = 0;
+        }
+        Board.stainArray[y][x] += stain;
     }
 
     static getStain(x,y){

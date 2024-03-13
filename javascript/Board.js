@@ -248,7 +248,7 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, stain){
+    static setStain(x,y, stain = 1){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }
@@ -256,6 +256,29 @@ class Board{
             Board.stainArray[y][x] = 0;
         }
         Board.stainArray[y][x] += stain;
+
+        Board.expandPuddle(x,y, stain);
+        
+    }
+
+    static expandPuddle(x,y, stain){
+        let direction = Random.roll(0,7);
+        let counter = 0;
+        while(counter < 8 && stain > 0){
+            console.log(direction);
+            let translation = EntityManager.translations[direction]
+            let x2 = x + translation.x;
+            let y2 = y + translation.y;
+            let diff = Board.getStain(x,y) - Board.getStain(x2,y2);
+            if(diff > Random.roll(0,20) && !Board.wallAt(x2,y2)){
+                Board.setStain(x,y, -1);
+                Board.setStain(x2,y2);
+                stain--;
+            }
+
+            direction = (direction+1) %8
+            counter++;
+        }
     }
 
     static getStain(x,y){

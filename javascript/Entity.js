@@ -529,12 +529,12 @@ class SwordEntity extends Entity{
                 target.addStunTime(stunAdded);
             }
             target.addMortality(mortality);
+            target.checkSplatter(mortality, weapon);
             target.knock(this.id);
             if(target.enrageAndDaze){
                 target.enrageAndDaze();   
             }
             target.sturdy(this);
-            target.checkSplatter(mortality, weapon);
         }
 
         if(this.owner == 'player'){

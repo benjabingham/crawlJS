@@ -474,9 +474,10 @@ class Display{
         element.css('background-color', 'var(--'+color+')')
     }
 
-    //use integer 0-20
+    //use integer 0-10
     static applyOpacity(opacity, element){
-        element.css('opacity',opacity/20)
+        opacity = Math.min(opacity,7);
+        element.css('opacity',opacity/10)
     }
     
 }

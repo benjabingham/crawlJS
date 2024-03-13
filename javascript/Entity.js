@@ -258,13 +258,22 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
+        if(!damage){
+            return false;
+        }
         if(weapon.type.edged){
-            if(Random.roll(0,1)){
-                this.splatter();
-            }
+            damage *= 2;
         }
 
-        if(damage >= this.threshold){
+        if(this.dead){
+            damage *= 2;
+        }
+
+        if(
+            damage >= this.threshold ||
+            (this.mortal >= this.threshold && weapon.type.edged) ||
+            (damage >= Random.rollN(2,6))
+        ){
             this.splatter();
         }
 
@@ -283,6 +292,10 @@ class Entity{
         }
         let x = this.x + translation.x;
         let y = this.y + translation.y;
+        if(Board.wallAt(x,y)){
+            x = this.x;
+            y = this.y;
+        }
 
         Board.setStain(x,y,this.blood);
     }

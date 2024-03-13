@@ -259,15 +259,21 @@ class Entity{
 
     checkSplatter(damage, weapon){
         if(weapon.type.edged){
-            damage *= 2
+            if(Random.roll(0,1)){
+                this.splatter();
+            }
         }
 
         if(damage >= this.threshold){
             this.splatter();
         }
+
     }
 
     splatter(){
+        if(!this.blood){
+            return false;
+        }
         let random = Random.roll(0,20);
         let translation;
         if(random > 7){
@@ -648,9 +654,6 @@ class Monster extends Entity{
 
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
-        }
-        if(this.blood){
-            this.blood = this.hitDice+1;
         }
 
         return this;

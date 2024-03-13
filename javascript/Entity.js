@@ -254,11 +254,32 @@ class Entity{
         if(roster[this.index]){
             roster[this.index].alive = false;
         }
-        if(this.blood){
-            Board.setStain(this.x, this.y, this.blood);
-        }
 
     };
+
+    checkSplatter(damage, weapon){
+        if(weapon.type.edged){
+            damage *= 2
+        }
+
+        if(damage >= this.threshold){
+            this.splatter();
+        }
+    }
+
+    splatter(){
+        let random = Random.roll(0,20);
+        let translation;
+        if(random > 7){
+            translation = {x:0,y:0}
+        }else{
+            translation = EntityManager.translations[random];
+        }
+        let x = this.x + translation.x;
+        let y = this.y + translation.y;
+
+        Board.setStain(x,y,this.blood);
+    }
 
     //has beat% chance to beat sword out of way.
     //also beats sword out of way if damage exceeds player stamina.
@@ -326,6 +347,9 @@ class Entity{
         if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
+            if(this.blood){
+                this.splatter();
+            }
             this.obliterate();
         }
     }
@@ -486,6 +510,7 @@ class SwordEntity extends Entity{
                 target.enrageAndDaze();   
             }
             target.sturdy(this);
+            target.checkSplatter(mortality, weapon);
         }
 
         if(this.owner == 'player'){

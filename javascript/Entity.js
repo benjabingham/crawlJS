@@ -265,10 +265,11 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
+        let sharp = weapon.type.edged || weapon.type.sword
         if(!damage){
             return false;
         }
-        if(weapon.type.edged){
+        if(sharp){
             damage *= 2;
         }
 
@@ -278,7 +279,7 @@ class Entity{
 
         if(
             damage >= this.threshold*2 ||
-            (this.mortal >= this.threshold && weapon.type.edged) ||
+            (this.mortal >= this.threshold && sharp) ||
             (damage >= Random.rollN(2,2))
         ){
             this.splatter();
@@ -312,6 +313,14 @@ class Entity{
             }else{
                 Board.setStain(x,y,this.blood);
             }
+        }
+    }
+
+    bloodPuddle(){
+        let n = this.blood;
+        while(n > 0){
+            Board.setStain(this.x,this.y,1)
+            n--;
         }
     }
 
@@ -383,9 +392,7 @@ class Entity{
             this.dropInventory();
             if(this.blood){
                 this.splatter();
-                if(this.hitDice > 0){
-                    this.splatter();
-                }
+                this.bloodPuddle();
             }
             this.obliterate();
         }

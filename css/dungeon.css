@@ -62,6 +62,12 @@
     div{
         background-color: #00000000;
         position:absolute;
+
+    }
+
+    .board-stain-div{
+        opacity: .7;
+        font-weight:700;
     }
 }
 

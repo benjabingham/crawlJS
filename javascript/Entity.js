@@ -38,7 +38,9 @@ class Entity{
         y += this.y;
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
-            Board.smearStain(this,{x:x,y:y});
+            if(Board.getStain(this.x,this.y)){
+                Board.smearStain(this,{x:x,y:y});
+            }
             this.setPosition(x,y);
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
@@ -65,23 +67,27 @@ class Entity{
         
         //pick a random adjacent space
         let direction = Random.roll(0,7);
-        let x = this.x + EntityManager.translations[direction].x;
-        let y = this.y + EntityManager.translations[direction].y;
+        let translation = EntityManager.translations[direction];
+        let x = this.x + translation.x;
+        let y = this.y + translation.y;
     
         let tries = 0;
         //space must be open AND further from attacker's last position
         let furtherSpace = (EntityManager.getOrthoDistance(knockerPos, this) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
         let backupSpace = false;
+        let backupTranslation = false;
         while((!Board.isOpenSpace(x,y) || !furtherSpace ) && tries <= 8){
             //backupSpacetracks the furthest space we've found so far
             if(Board.isOpenSpace(x,y) && (!backupSpace || EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}) > EntityManager.getOrthoDistance(knockerPos,backupSpace))){
                 backupSpace = {x:x, y:y};
+                backupTranslation = translation;
             }
 
             //look at next adjacent space
             direction = (direction+1) % 8;
-            x = this.x + EntityManager.translations[direction].x;
-            y = this.y + EntityManager.translations[direction].y;
+            translation = EntityManager.translations[direction];
+            x = this.x + translation.x;
+            y = this.y + translation.y;
 
             //chek again if this space is further from attacker than original space
             furtherSpace = (EntityManager.getOrthoDistance(knockerPos, this) < EntityManager.getOrthoDistance(knockerPos,{x:x, y:y}))
@@ -90,9 +96,9 @@ class Entity{
         }
 
         if(furtherSpace && Board.isOpenSpace(x,y)){
-            this.setPosition(x,y)
+            this.move(translation.x,translation.y)
         }else if (backupSpace){
-            this.setPosition(backupSpace.x,backupSpace.y);
+            this.move(backupTranslation.x,backupTranslation.y);
         }else{
             //TODO - this probably belongs in SwordEntity.place()
             this.checkDead();

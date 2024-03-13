@@ -270,7 +270,7 @@ class Board{
             let x2 = x + translation.x;
             let y2 = y + translation.y;
             let diff = Board.getStain(x,y) - Board.getStain(x2,y2);
-            if(diff > Random.roll(0,20) && !Board.wallAt(x2,y2)){
+            if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
                 Board.setStain(x,y, -1);
                 Board.setStain(x2,y2);
                 stain--;

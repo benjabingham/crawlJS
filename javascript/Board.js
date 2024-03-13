@@ -265,5 +265,17 @@ class Board{
 
         return Board.stainArray[y][x];
     }
+
+    static smearStain(pos1,pos2){
+        let amt = Math.floor((Board.getStain(pos1.x,pos1.y)/2.0)+.5)-Board.getStain(pos2.x,pos2.y);
+        if(amt <= 0){
+            return false;
+        }
+        let random = Random.roll(1,3);
+        if(random < Board.getStain(pos1.x,pos1.y)){
+            Board.setStain(pos1.x,pos1.y,amt*-1);
+            Board.setStain(pos2.x,pos2.y,amt);
+        }
+    }
     
 }

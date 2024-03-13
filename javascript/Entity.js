@@ -38,6 +38,7 @@ class Entity{
         y += this.y;
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
+            Board.smearStain(this,{x:x,y:y});
             this.setPosition(x,y);
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
@@ -296,8 +297,12 @@ class Entity{
             x = this.x;
             y = this.y;
         }
-
+        let x2 = x + translation.x;
+        let y2 = y + translation.y;
         Board.setStain(x,y,this.blood);
+        if(!Board.wallAt(x2,y2)){
+            Board.smearStain({x:x,y:y},{x:x2,y:y2})
+        }
     }
 
     //has beat% chance to beat sword out of way.

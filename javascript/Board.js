@@ -290,7 +290,12 @@ class Board{
     }
 
     static smearStain(pos1,pos2){
-        let amt = Math.floor((Board.getStain(pos1.x,pos1.y)/2.0)+.5)-Board.getStain(pos2.x,pos2.y);
+        let amt = Math.floor(((Board.getStain(pos1.x,pos1.y)-Board.getStain(pos2.x,pos2.y))/2.0)+.5)
+        console.log({
+            amt,
+            tile1:Board.getStain(pos1.x,pos1.y),
+            tile2: Board.getStain(pos2.x,pos2.y)
+        });
         if(amt <= 0){
             return false;
         }

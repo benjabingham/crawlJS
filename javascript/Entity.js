@@ -774,7 +774,8 @@ class Monster extends Entity{
         }
 
         if(target.dead){
-            this.knock(target.id);
+            target.addMortality(mortality);
+            target.knock(this.id);
         }
 
     }

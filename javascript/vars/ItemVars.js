@@ -330,7 +330,7 @@ let itemVars = {
             edged:{
                 damage:6
             },
-            color:'clearblue'
+            color:'clearBlue'
         },
         copper:{
             name:'copper',

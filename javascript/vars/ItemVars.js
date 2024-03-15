@@ -5,7 +5,7 @@ let itemVars = {
             name:"rod",
             damage:2,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true,
                 long:true
@@ -17,14 +17,14 @@ let itemVars = {
             name:"club",
             damage:4,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -36,14 +36,14 @@ let itemVars = {
             name:"mace",
             damage:5,
             stunTime:3,
-            weight:1,
+            weight:2,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -55,14 +55,14 @@ let itemVars = {
             name:"hammer",
             damage:8,
             stunTime:5,
-            weight:2,
+            weight:3,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:4,
-                weight:1,
+                weight:2,
                 type:{
                     blunt:true
                 }
@@ -74,14 +74,14 @@ let itemVars = {
             name:"maul",
             damage:12,
             stunTime:7,
-            weight:3,
+            weight:4,
             type:{
                 blunt:true
             },
             jab:{
                 damage:2,
                 stunTime:5,
-                weight:2,
+                weight:3,
                 type:{
                     blunt:true
                 }
@@ -100,7 +100,7 @@ let itemVars = {
             jab:{
                 damage:8,
                 stunTime:2,
-                weight:1,
+                weight:2,
                 type:{
                     sword:true,
                 },
@@ -112,7 +112,7 @@ let itemVars = {
             name:"shortsword",
             damage:4,
             stunTime:2,
-            weight:1,
+            weight:2,
             type:{
                 sword:true,
                 edged:true
@@ -124,7 +124,7 @@ let itemVars = {
             name:"longsword",
             damage:8,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 sword:true,
                 edged:true
@@ -136,7 +136,7 @@ let itemVars = {
             name:"greatsword",
             damage:12,
             stunTime:4,
-            weight:3,
+            weight:4,
             type:{
                 sword:true,
                 edged:true
@@ -148,14 +148,14 @@ let itemVars = {
             name:"handaxe",
             damage:1,
             stunTime:2,
-            weight:1,
+            weight:2,
             type:{
                 edged:true
             },
             swing:{
                 damage:6,
                 stunTime:4,
-                weight:1,
+                weight:2,
                 type:{
                     edged:true
                 }
@@ -167,14 +167,14 @@ let itemVars = {
             name:"greataxe",
             damage:2,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 edged:true
             },
             swing:{
                 damage:15,
                 stunTime:6,
-                weight:3,
+                weight:4,
                 type:{
                     edged:true
                 }
@@ -186,7 +186,7 @@ let itemVars = {
             name:"halberd",
             damage:10,
             stunTime:3,
-            weight:2,
+            weight:3,
             type:{
                 edged:true,
                 long:true
@@ -194,7 +194,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:4,
+                weight:5,
                 type:{
                     edged:true,
                     long:true
@@ -220,31 +220,31 @@ let itemVars = {
         },
         ring:{
             name:"ring",
-            value:2
+            value:4
         },
         cup:{
             name:"cup",
-            value:3
+            value:6
         },
         plate:{
             name:"plate",
-            value:5
+            value:8
         },
         vase:{
             name:"vase",
-            value:7
+            value:10
         },
         pendant:{
             name:"pendant",
-            value:3
+            value:6
         },
         statuette:{
             name:"statuette",
-            value:8
+            value:12
         },
         crown:{
             name:"crown",
-            value:15
+            value:20
         },
         tiara:{
             name:"tiara",
@@ -254,5 +254,322 @@ let itemVars = {
             name:"coin pouch",
             value:10
         }
+    },
+    weaponMaterials:{
+        wood:{
+            name:'wooden',
+            flimsy:5,
+            stunTime: -2,
+            weight:-1,
+            damage:-4,
+            value:.25,
+            color:'woodBrown'
+
+        },
+        bone:{
+            name:'bone',
+            flimsy:8,
+            stunTime:-2,
+            weight:-1,
+            damage: -3,
+            value:.15,
+            color:'bone'
+        },
+        stone:{
+            name:'stone',
+            flimsy:5,
+            weight:2,
+            stunTime:3,
+            blunt:{
+                damage:4
+            },
+            edged:{
+                damage:2
+            },
+            value:.2,
+            color:'gray'
+        },
+        
+        obsidian:{
+            name:'obsidian',
+            flimsy:5,
+            edged:{
+                damage:2
+            },
+            value:.5
+        },
+        lead:{
+            name:'lead',
+            flimsy:3,
+            weight:1,
+            stunTime:2,
+            blunt:{
+                damage:5
+            },
+            edged:{
+                damage:3
+            },
+            value:2,
+            color:'darkgray'
+        },
+        rubber:{
+            name:'rubber',
+            blunt:{
+                damage:-5,
+                stunTime:2
+            },
+            edged:{
+                damage:-8
+            },
+            value:.5
+        },
+        glass:{
+            name:'glass',
+            flimsy:40,
+            value:3,
+            edged:{
+                damage:6
+            },
+            color:'clearBlue'
+        },
+        copper:{
+            name:'copper',
+            flimsy:3,
+            value:2,
+            color:'redBrown'
+        },
+        bronze:{
+            name:'bronze',
+            flimsy:2,
+            edged:{
+                damage:1
+            },
+            value:3,
+            color:'brown'
+        },
+        iron:{
+            name:'iron',
+            flimsy:1,
+            edged:{
+                damage:1
+            },
+            value:2.5,
+            color:'gray'
+        },
+        steel:{
+            name:'steel',
+            edged:{
+                damage:2
+            },
+            value:4.5,
+            value:2,
+            color:'lightGray'
+        },
+        ironwood:{
+            name:'ironwood',
+            stunTime:2,
+            blunt:{
+                damage:2
+            },
+            edged:{
+                damage:-1
+            },
+            value:6,
+            value:3,
+            color:'redBrown'
+        },
+        crystal:{
+            name:'crystal',
+            flimsy:20,
+            value:8,
+            edged:{
+                damage:8
+            },
+            color:'darkPurple'
+        },
+        lightsteel:{
+            name:'lightsteel',
+            weight:-1,
+            stunTime:-2,
+            blunt:{
+                damage:-2
+            },
+            edged:{
+                damage:2
+            },
+            value:8,
+            color:'silver'
+
+        },
+        silver:{
+            name:'silver',
+            flimsy:5,
+            edged:{
+                damage:-1
+            },
+            value:10,
+            color:'silver'
+        },
+        gold:{
+            name:'gold',
+            weight:1,
+            stunTime:2,
+            flimsy:8,
+            edged:{
+                damage:-2
+            },
+            blunt:{
+                damage:2
+            },
+            value:12,
+            color:'gold'
+        },
+        Adamantine:{
+            name:'adamantine',
+            weight:-1,
+            edged:{
+                damage:2
+            },
+            value:20,
+            color:'blue'
+        }
+    },
+    treasureMaterials:{
+        paper:{
+            name:"tattered paper",
+            value:.05,
+            color:"bone"
+        },
+        bone:{
+            name:"bone",
+            value:0.2,
+            color:"bone"
+        },
+        wood:{
+            name:'wooden',
+            value:0.3,
+            color:"woodBrown"
+        },
+        stone:{
+            name:'stone',
+            value:0.4,
+            color:"gray"
+        },
+        
+        iron:{
+            name:'iron',
+            value:.6,
+            color:"gray"
+        },
+        steel:{
+            name:'steel',
+            value:1,
+            color:"lightGray"
+        },
+        bronze:{
+            name:'bronze',
+            value:1.2,
+            color:"brown"
+        },
+        lead:{
+            name:'lead',
+            value:2,
+            color:"darkgray"
+        },
+        copper:{
+            name:'copper',
+            value:3,
+            color:"redBrown"
+        },
+        nickel:{
+            name:'nickel',
+            value:3.5,
+            color:"lightGray"
+        },
+        tin:{
+            name:'tin',
+            value:4,
+            color:"lightGray"
+        },
+        sterling:{
+            name:'sterling silver',
+            value:5,
+            color:'silver'
+        },
+        silver:{
+            name:'silver',
+            value:8,
+            color:"silver"
+        },
+        gold:{
+            name:'gold',
+            value:10,
+            color:"gold"
+        },
+        platinum:{
+            name:'platinum',
+            value:20,
+            color:"silver"
+        }
+    },
+    weaponModifiers:{
+        worn:{
+            name:'worn',
+            flimsy:1,
+            edged:{
+                damage:-1
+            },
+            value:.4
+        },
+        craftTiers:{
+            poor:{
+                name:'poor',
+                flimsy:3,
+                variance:{
+                    positive:0,
+                    negative:50
+                },
+                value:.4
+            },
+            rustic:{
+                name:'rustic',
+                flimsy:1,
+                variance:{
+                    positive:20,
+                    negative:50
+                },
+                value:.7
+            },
+            artisan:{
+                name:'artisan',
+                variance:{
+                    positive:30,
+                    negative:30
+                },
+                value:1.2
+            },
+            masterwork:{
+                name:'masterwork',
+                variance:{
+                    positive:50,
+                    negative:10
+                },
+                value:5
+            }
+        }
+    },
+    treasureModifiers:{
+        decrepit:{
+            name:'decrepit',
+            value:.4
+        },
+        distressed:{
+            name:'distressed',
+            value:.6
+        },
+        pristine:{
+            name:'pristine',
+            value:1.5
+        } 
     }
 }

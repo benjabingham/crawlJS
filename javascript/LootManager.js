@@ -1,373 +1,151 @@
 class LootManager{
-    constructor(){
-        this.weaponMaterials = {
-            wood:{
-                name:'wooden',
-                flimsy:5,
-                stunTime: -1,
-                edged:{
-                    damage:-2
-                },
-                blunt:{
-                    damage:-1
-                },
-                value:.25
-            },
-            bone:{
-                name:'bone',
-                flimsy:8,
-                stunTime:-1,
-                edged:{
-                    damage:-1
-                },
-                value:.15
-            },
-            stone:{
-                name:'stone',
-                flimsy:5,
-                weight:2,
-                stunTime:3,
-                blunt:{
-                    damage:4
-                },
-                edged:{
-                    damage:2
-                },
-                value:.2
-            },
-            lead:{
-                name:'lead',
-                flimsy:3,
-                weight:1,
-                stunTime:2,
-                blunt:{
-                    damage:5
-                },
-                edged:{
-                    damage:3
-                },
-                value:1
-            },
-            rubber:{
-                name:'rubber',
-                blunt:{
-                    damage:-5,
-                    stunTime:2
-                },
-                edged:{
-                    damage:-8
-                },
-                value:.5
-            },
-            glass:{
-                name:'glass',
-                flimsy:40,
-                value:2,
-                edged:{
-                    damage:6
-                }
-            },
-            bronze:{
-                name:'bronze',
-                flimsy:2,
-                value:1.5
-            },
-            iron:{
-                name:'iron',
-                flimsy:1,
-                value:1.2,
-            },
-            steel:{
-                name:'steel',
-                edged:{
-                    damage:2
-                },
-                value:2
-            },
-            ironwood:{
-                name:'ironwood',
-                stunTime:2,
-                blunt:{
-                    damage:2
-                },
-                value:3
-            },
-            crystal:{
-                name:'crystal',
-                flimsy:20,
-                value:6,
-                edged:{
-                    damage:8
-                }
-            },
-            lightsteel:{
-                name:'lightsteel',
-                weight:-1,
-                stunTime:-2,
-                blunt:{
-                    damage:-2
-                },
-                edged:{
-                    damage:2
-                },
-                value:3
-            },
-            silver:{
-                name:'silver',
-                flimsy:5,
-                edged:{
-                    damage:-1
-                },
-                value:5
-            },
-            gold:{
-                name:'gold',
-                weight:1,
-                stunTime:2,
-                flimsy:8,
-                edged:{
-                    damage:-2
-                },
-                blunt:{
-                    damage:2
-                },
-                value:6
-            },
-            Adamantine:{
-                name:'adamantine',
-                weight:-1,
-                edged:{
-                    damage:2
-                },
-                value:10
+
+    static getEntityLoot(entitySave){
+        let lootChances = false;
+        let monsterKey = entitySave.value.monsterKey;
+        let containerKey = entitySave.value.containerKey;
+        
+        if(entitySave.value.loot){
+            lootChances = entitySave.value.loot;
+        }else if(monsterKey){
+            let template = monsterVars[monsterKey];
+            lootChances = template.loot;
+            if(template.inventory){
+                entitySave.inventory = [...template.inventory];
+            }
+        }else if(containerKey){
+            let template = containerVars[containerKey];
+            lootChances = template.loot;
+            if(template.inventory){
+                entitySave.inventory = [...template.inventory];
             }
         }
 
-        this.treasureMaterials = {
-            paper:{
-                name:"tattered paper",
-                value:.05
-            },
-            bone:{
-                name:"bone",
-                value:0.2
-            },
-            wood:{
-                name:'wooden',
-                value:0.3
-            },
-            stone:{
-                name:'stone',
-                value:0.4
-            },
-            
-            iron:{
-                name:'iron',
-                value:.6
-            },
-            steel:{
-                name:'steel',
-                value:1
-            },
-            bronze:{
-                name:'bronze',
-                value:1.2
-            },
-            lead:{
-                name:'lead',
-                value:2
-            },
-            copper:{
-                name:'copper',
-                value:3
-            },
-            nickel:{
-                name:'nickel',
-                value:3.5
-            },
-            tin:{
-                name:'tin',
-                value:4
-            },
-            sterling:{
-                name:'sterling silver',
-                value:5
-            },
-            silver:{
-                name:'silver',
-                value:8
-            },
-            gold:{
-                name:'gold',
-                value:10
-            },
-            platinum:{
-                name:'platinum',
-                value:20
-            }
+        if(!entitySave.inventory){
+            entitySave.inventory = [];
         }
 
-        this.weaponModifiers = {
-            worn:{
-                name:'worn',
-                flimsy:1,
-                edged:{
-                    damage:-1
-                },
-                value:.4
-            },
-            craftTiers:{
-                poor:{
-                    name:'poor',
-                    flimsy:3,
-                    variance:{
-                        positive:0,
-                        negative:50
-                    },
-                    value:.4
-                },
-                rustic:{
-                    name:'rustic',
-                    flimsy:1,
-                    variance:{
-                        positive:20,
-                        negative:50
-                    },
-                    value:.7
-                },
-                artisan:{
-                    name:'artisan',
-                    variance:{
-                        positive:30,
-                        negative:30
-                    },
-                    value:1.2
-                },
-                masterwork:{
-                    name:'masterwork',
-                    variance:{
-                        positive:50,
-                        negative:10
-                    },
-                    value:5
-                }
-            }
-        }
-    }
-
-    giveMonsterLoot(entity){
-        if(!entity.loot){
+        if(!lootChances){
             return false;
         }
-        if(!entity.inventory){
-            entity.inventory = [];
-        }
-        let weaponLoot = entity.loot.weapon;
+        let weaponLoot = lootChances.weapon;
         if(weaponLoot){
-            if(this.roll(1,99) < weaponLoot.chance){
-                entity.inventory.push(this.getWeaponLoot(weaponLoot.tier));
+            if(Random.roll(1,99) < weaponLoot.chance){
+                entitySave.inventory.push(LootManager.getWeaponLoot(weaponLoot.tier));
             }
         }
 
-        let treasureLoot = entity.loot.treasure;
+        let treasureLoot = lootChances.treasure;
         if(treasureLoot){
-            if(this.roll(1,99) < treasureLoot.chance){
-                entity.inventory.push(this.getTreasureLoot(treasureLoot.tier));
+            if(Random.roll(1,99) < treasureLoot.chance){
+                entitySave.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
             }
         }
     }
 
-    getTreasureLoot(tier){
+    static getTreasureLoot(tier){
         let nRolls = tier-3;
         let greater = (nRolls > 0);
         nRolls = Math.abs(nRolls);
 
-        let treasure = this.getTreasure();
-        let treasureMaterial = this.getTreasureMaterial();
-        this.applyModifier(treasure, treasureMaterial);
+        let treasure = LootManager.getTreasure();
+        let treasureMaterial = LootManager.getTreasureMaterial();
+        LootManager.applyModifier(treasure, treasureMaterial);
 
         for(let i = 0; i < nRolls; i++){
-            let newTreasure = this.getTreasure();
-            treasureMaterial = this.getTreasureMaterial();
-            this.applyModifier(newTreasure, treasureMaterial);
+            let newTreasure = LootManager.getTreasure();
+            treasureMaterial = LootManager.getTreasureMaterial();
+            LootManager.applyModifier(newTreasure, treasureMaterial);
             if((greater && newTreasure.value > treasure.value) || (!greater && newTreasure.value < treasure.value)){
                 treasure = newTreasure;
             }
         }
 
+        LootManager.getTreasureModifier(treasure, tier);
+
+
         return treasure;
     }
 
-    getWeaponLoot(tier){
-        let weapon = this.getWeapon();
-        let weaponMaterial = this.getWeaponMaterial(tier);
-        this.applyModifier(weapon, weaponMaterial);
-        this.getIsWorn(weapon, tier);
+    static getWeaponLoot(tier){
+        let weapon = LootManager.getWeapon();
+        let weaponMaterial = LootManager.getWeaponMaterial(tier);
+        LootManager.applyModifier(weapon, weaponMaterial);
+        LootManager.getIsWorn(weapon, tier);
 
         return weapon;
     }
 
-    getWeaponMaterial(tier){
-        let materials = Object.keys(this.weaponMaterials);
-        let nMaterials = materials.length;
+    static getTreasureModifier(treasure, tier){
+        let random = Random.roll(1,99);
+        random += tier*5;
+        if(random < 30){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.decrepit)
+        }else if (random < 60){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.distressed)
+        }else if (random >= 90){
+            LootManager.applyModifier(treasure, itemVars.treasureModifiers.pristine)
+        }
+    }
+
+
+    static getWeaponMaterial(tier){
+        let materials = Object.keys(itemVars.weaponMaterials);        
+        let nMaterials = materials.length; 
         let nRolls = tier-3;
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
-        let materialIndex = this.roll(0,nMaterials-1);
+        let materialIndex = Random.roll(0,nMaterials-1);
         for(let i = 0; i < nRolls; i++){
-            let newIndex = this.roll(0,nMaterials-1);
+            let newIndex = Random.roll(0,nMaterials-1);
             materialIndex = maxMinFunc(materialIndex,newIndex);
         }
         let key = materials[materialIndex];
-        let material = this.weaponMaterials[key];
+        let material = itemVars.weaponMaterials[key];
 
         return material;
     }
 
-    getTreasureMaterial(){
-        let materials = Object.keys(this.treasureMaterials);
+    static getTreasureMaterial(){
+        let materials = Object.keys(itemVars.treasureMaterials);
         let nMaterials = materials.length;
-        let materialIndex = this.roll(0,nMaterials-1);
+        let materialIndex = Random.roll(0,nMaterials-1);
         let key = materials[materialIndex];
-        let material = this.treasureMaterials[key];
+        let material = itemVars.treasureMaterials[key];
 
         return material;
     }
 
-    getIsWorn(weapon, tier){
+    static getIsWorn(weapon, tier){
         let nonWornChance = 20 * tier;
-        if(this.roll(0,99) >= nonWornChance){
-            this.applyModifier(weapon,this.weaponModifiers.worn);
+        if(Random.roll(0,99) >= nonWornChance){
+            LootManager.applyModifier(weapon,itemVars.weaponModifiers.worn);
         }
     }
 
-    getWeapon(){
+    static getWeapon(){
         let weapons = Object.keys(itemVars.weapons);
         let nWeapons = weapons.length;
-        let weaponIndex = this.roll(0,nWeapons-1);
+        let weaponIndex = Random.roll(0,nWeapons-1);
         
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
 
-        console.log(weapon);
-
         return JSON.parse(JSON.stringify(weapon));
     }
 
-    getTreasure(){
+    static getTreasure(){
         let treasures = Object.keys(itemVars.treasure);
         let nTreasures = treasures.length;
-        let treasureIndex = this.roll(0,nTreasures-1);
+        let treasureIndex = Random.roll(0,nTreasures-1);
         
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
 
-        console.log(treasure);
-
         return JSON.parse(JSON.stringify(treasure));
     }
 
-    applyModifier(item, modifier, recursion = false){
+    static applyModifier(item, modifier, recursion = false){
         item[modifier.name] = true;
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
@@ -391,7 +169,7 @@ class LootManager{
                 case 'blunt':
                 case 'edged':
                     if(item.type[key] || (item.type['sword'] && key == 'edged')){
-                        this.applyModifier(item, value,true);
+                        LootManager.applyModifier(item, value,true);
                     }
                     break;
                 case 'value':
@@ -401,19 +179,21 @@ class LootManager{
                         item[key] = Math.floor(item[key]);
                         item[key] = Math.max(item[key], 1);
                     }
+                    break;
+                case 'color':
+                    item[key] = value;
             }
         }
-        let lootManager = this;
         //apply modifier to special strikes
         ['jab','swing','strafe'].forEach(function(val){
             //only do this once!
             if(item[val] && !recursion){
-                lootManager.applyModifier(item[val], modifier);
+                LootManager.applyModifier(item[val], modifier);
             }
         })
     }
 
-    breakWeapon(item){
+    static breakWeapon(item){
         item.name += " (broken)";
         item.weapon = false;
         item.value *= 0.7;
@@ -421,7 +201,22 @@ class LootManager{
         item.value = Math.max(item.value,1);
     }
 
-    roll(min,max){
-        return Math.floor(Math.random()*(max-min+1))+min;
+    getColor(val){
+        let color;
+        if(val <= 3){
+            color = 'brown';
+        }else if (val <= 15){
+            color = 'gray';
+        }else if (val <= 25){
+            color = 'silver';
+        }else if (val <= 35){
+            color = 'gold';
+        }else if (val <= 50){
+            color = 'gold';
+        }else{
+            color = 'purple';
+        }
+
+        return color;
     }
 }

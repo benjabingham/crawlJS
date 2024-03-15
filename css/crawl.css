@@ -1,6 +1,6 @@
 html{
-    background-color: #222;
-    color: #ddd;
+    background-color: var(--altBack);
+    color: var(--altBackText);
 }
 
 #instructions-div{
@@ -11,12 +11,12 @@ html{
 
 button{
     color: rgb(15, 12, 0);
-    background-image:linear-gradient(#fde8cc,#a7a089)
+    background-image:linear-gradient(var(--buttonG1),var(--buttonG2))
 }
 
 button:hover{
     cursor: pointer;
-    background-image:linear-gradient(#cab9a3,#a7a089)
+    background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
 
 }
 
@@ -28,7 +28,7 @@ button:hover{
 .hint-divs{
     text-align:center;
     /*font-style:italic;*/
-    color:#ddd;
+    color:var(--altBackText);
 
     height:1rem;
 
@@ -42,8 +42,8 @@ button:hover{
     margin:auto;
     text-align:center;
     padding:1rem;
-    background:#ddd;
-    color:#222;
+    background:var(--menuBack);
+    color:var(--menuText);
 }
 
 #custom-controls-div{
@@ -71,4 +71,30 @@ button:hover{
     }
 }
 
+#save-manage-div{
+    width:fit-content;
+    margin:auto;
+}
 
+#new-save-button{
+    font-size:larger;
+    padding:5px;
+    margin:auto;
+    display:block;
+}
+
+h1, h2, h3{
+    letter-spacing: .3rem;
+    text-transform: capitalize;
+}
+
+#color-scheme-select{
+    width:fit-content;
+    margin:auto;
+    padding:1rem;
+    button{
+        display:block;
+        margin:auto;
+        padding:5px;
+    }
+}

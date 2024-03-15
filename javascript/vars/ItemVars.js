@@ -385,7 +385,7 @@ let itemVars = {
             edged:{
                 damage:8
             },
-            color:'purple'
+            color:'darkPurple'
         },
         lightsteel:{
             name:'lightsteel',

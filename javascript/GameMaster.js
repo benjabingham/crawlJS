@@ -82,8 +82,8 @@ class GameMaster{
     static loadTown(){
         GameMaster.nextDay();
         Shop.restockInventory();
-        Display.showTownScreen();
         Player.changeStamina(100);
+        Display.showTownScreen();
         Player.light = 0;
     }
 

@@ -41,26 +41,26 @@ class InputManager{
         })
     }
 
-    static addEventListeners(gameMaster){
+    static addEventListeners(){
         /*
         let directions = ['upleft','up','upright','left','right','downleft','down','downright'];
         directions.forEach((direction)=>{
             $(document).bind(direction,function(event){
-                gameMaster.movePlayer(event);
+                GameMaster.movePlayer(event);
             })
-            //addEventListener(direction, gameMaster.movePlayer);
+            //addEventListener(direction, GameMaster.movePlayer);
         })*/
 
         inputVars.numpad.forEach((input)=>{
             $(document).bind(input.inputName,function(event){
                 if(InputManager.locked) return false;
                 InputManager.locked = true;
-                if(input.movePlayer) gameMaster.movePlayer(event);
-                if(input.wait) gameMaster.wait(event);
-                if(input.rotate) gameMaster.rotate(event);
-                if(input.useItem) gameMaster.useItem(event);
-                if(input.drop) gameMaster.drop(event);
-                if(input.rewind) gameMaster.rewind(event);
+                if(input.movePlayer) GameMaster.movePlayer(event);
+                if(input.wait) GameMaster.wait(event);
+                if(input.rotate) GameMaster.rotate(event);
+                if(input.useItem) GameMaster.useItem(event);
+                if(input.drop) GameMaster.drop(event);
+                if(input.rewind) GameMaster.rewind(event);
                 InputManager.locked = false;
             })
         })
@@ -91,6 +91,7 @@ class InputManager{
         if($(':focus').is('input')){
             return;
         }
+        console.log(newInput);
         newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
         console.log(inputCode);

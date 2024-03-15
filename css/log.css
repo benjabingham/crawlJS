@@ -23,28 +23,40 @@
 }
 
 .message-fresh{
-    background-color:rgba(252, 244, 233, 0.562);
+    background-color:var(--logFresh);
 }
 
 .message-urgent{
-    background-color:rgba(250, 0, 0, 0.315);
-    color:rgb(117, 0, 0);
+    background-color:var(--urgentBackground);
+    color:var(--urgentText);
     font-weight: 600;
 }
 
+.message-danger{
+    color:var(--muteRed);
+}
+
+.message-win{
+    color:var(--darkPurple)
+}
+
+.message-pos{
+    color:var(--darkBlue);
+}
+
 .message-fresh.message-danger{
-    color:rgb(231, 46, 0);
+    color:var(--red);
     font-weight:600;
 }
 
 .message-fresh.message-win{
+    color:var(--brightPurple);
     font-weight:600;
-    color:rgb(153, 0, 255)
 }
 
 
 .message-fresh.message-pos{
-    color:blue;
+    color:var(--blue);
     font-weight:600;
 }
 
@@ -54,7 +66,7 @@
 }
 
 .notice{
-    background-color:rgba(255, 196, 0, 0.452);
+    background-color:var(--notice);
     font-weight: 600;
     text-align:center;
 }

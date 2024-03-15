@@ -2,9 +2,9 @@
     width:900px;
     margin:auto;
     margin-bottom:1rem;
-    background-color:#ddd;
-    background-image:linear-gradient(#a5a5a5,#ddd);
-    color:#222;
+    background-color:var(--menuBack);
+    /*background-image:linear-gradient(#a5a5a5,#ddd)*/;
+    color:var(--menuText);
     padding-bottom:5px;
     font-weight:600;
     display:none;
@@ -39,8 +39,8 @@
 }
 
 .resource-bar-divs{
-    background-color: #222;
-    border:1px solid #222;
+    background-color: var(--dark);
+    border:1px solid var(--resourceBorder);
     height:20px;
     width:150px;
 }
@@ -49,24 +49,21 @@
     /*text-align:center;*/
     height:20px;
     width:100px;
-    border:1px solid gray;
-    color:#222222a9
-
+    border:1px solid var(--resourceBorder);
 }
 
 #stamina-level{
-    background-color: yellow;
-    color:rgb(110, 110, 0);
+    background-color: var(--staminaBar);
+    color:var(--staminaBarText);
 } 
 
 #luck-level{
-    background-color: rgb(2, 184, 2);
-    color: rgb(0, 105, 0);
+    background-color: var(--luckBar);
+    color: var(--luckBarText)
 }
 
 #health-level{
-    background-color: red;
-    color:rgb(117, 0, 0)
-
+    background-color: var(--healthBar);
+    color:var(--healthBarText)
 }
 

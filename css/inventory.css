@@ -1,6 +1,6 @@
 
 #shop{
-    background-color:rgba(252, 143, 0, 0.164);
+    background-color:var(--shopBackground)
 }
 
 .inventory-title{
@@ -15,11 +15,11 @@
 }
 
 .inventory{
-    background-color: #ddd;
-    color: #222;
+    background-color: var(--menuBack);
+    color: var(--menuText);
     display:flex;
     height:10rem;
-    border:1px solid black;
+    border:1px solid var(--border);
 }
 
 .inventory-list{
@@ -36,15 +36,16 @@
     margin-left:3px;
     display:flex;
     height:fit-content;
-    background-image: linear-gradient(#ddcaa4,#c0aa73);
-    border: 1px solid rgb(124, 117, 52);
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
     /*border:1px solid gray*/
 }
 
 .inventory-slot:hover{
     cursor: pointer;
-    background-color: #7272723d;
-    background-image: linear-gradient(#ddcaa4,#aa9665);
+    background-color: var(--inventorySlotHover);
+    /*background-image: linear-gradient(#ddcaa4,#aa9665);*/
 
 }
 
@@ -75,11 +76,12 @@
 }
 
 .fresh-true{
-    background-color: #fdd70052;
+    background-color: var(--shopFresh);
+    border-color: var(--shopFreshBorder);
 }
 
 .inventory-description{
-    outline:1px solid black;
+    outline:1px solid var(--border);
     margin-left:auto;
     width:250px;
     padding:5px;

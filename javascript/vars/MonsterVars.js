@@ -1,7 +1,7 @@
 let monsterVars = {
     goblin:{
         name:"goblin",
-        symbol:"Go",
+        symbol:"G",
         behavior:"chase",
         behaviorInfo:{
             focus:15,
@@ -20,7 +20,8 @@ let monsterVars = {
                 chance:5,
                 tier:1
             }
-        }
+        },
+        color:'darkGreen'
     },
     ogre:{
         name:"ogre",
@@ -45,7 +46,8 @@ let monsterVars = {
                 chance:30,
                 tier:2
             }
-        }
+        },
+        color:'green'
     },
     rat:{
         name:"rat",
@@ -57,7 +59,8 @@ let monsterVars = {
         hitDice:0,
         damage:1,
         inventorySlots: 0,
-        tiny:true
+        tiny:true,
+        color:'gray'
     },
     direRat:{
         name:"dire rat",
@@ -73,8 +76,10 @@ let monsterVars = {
         inventorySlots: 0,
         inventory:[{
             name:"dire rat pelt",
-            value:1
-        }]
+            value:1,
+            color:'brown'
+        }],
+        color:'gray'
     },
     wolf:{
         name:"wolf",
@@ -90,8 +95,10 @@ let monsterVars = {
         inventorySlots: 0,
         inventory:[{
             name:"wolf pelt",
-            value:2
-        }]
+            value:2,
+            color:'brown'
+        }],
+        color:'gray'
     },
     direWolf:{
         name:"dire wolf",
@@ -107,8 +114,10 @@ let monsterVars = {
         inventorySlots: 0,
         inventory:[{
             name:"dire wolf pelt",
-            value:4
-        }]
+            value:4,
+            color:'gray'
+        }],
+        color:'gray'
     },
     dummy:{
         name:"dummy",
@@ -117,25 +126,5 @@ let monsterVars = {
         hitDice:100,
         damage:8,
         inventorySlots: 0,
-    },
-    chest:{
-        name:"chest",
-        symbol:"Ch",
-        behavior:"",
-        hitDice:0,
-        damage:4,
-        inventorySlots: 10,
-        container: true,
-        loot:{
-            weapon:{
-                chance:50,
-                tier:1
-            },
-            treasure:{
-                chance:100,
-                tier:2
-            }
-        }
-    },
-
+    }
 }

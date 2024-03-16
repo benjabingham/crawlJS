@@ -52,10 +52,12 @@ class Display{
     }
 
     static giveSaveButtonsBehavior(){
-        let display = this;
         $('#new-save-button').off().on('click',function(){
             Save.newSave();
-            display.showTownScreen();
+            //Display.showTownScreen();
+            GameMaster.getRoom("cave.json")
+
+            Display.showDungeonScreen();
         })
 
         $('#load-file-input').off().change(function(){

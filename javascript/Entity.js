@@ -188,6 +188,30 @@ class Entity{
         while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
             this.inventory.items.push(container.inventory.items.pop());
         }
+        
+        this.pickUpGold(container.gold);
+        container.gold = 0;
+        let roster = EntityManager.currentMap.roster;
+        if(roster[container.index]){
+            roster[container.index].value.gold = 0;
+        }
+    }
+
+    pickUpGold(gold){
+        if(!gold){
+            return false;
+        }
+        if(!this.gold){
+            this.gold = 0;
+        }
+        this.gold += gold;
+
+        if(PlayerEntity.prototype.isPrototypeOf(this)){
+            Player.gold += gold;
+            Display.displayGold();
+
+            EntityManager.transmitMessage('Found '+gold+' gold!','win')
+        }
     }
 
     obliterate(){

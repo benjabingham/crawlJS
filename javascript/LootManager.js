@@ -41,6 +41,17 @@ class LootManager{
                 entitySave.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
             }
         }
+
+        let goldLoot = lootChances.gold;
+        if(goldLoot){
+            console.log(goldLoot);
+            if(Random.roll(1,99) < goldLoot.chance){
+                entitySave.value.gold = Random.roll(0,goldLoot.amount);
+            }else{
+                entitySave.value.gold = 0;
+            }
+            console.log(entitySave.value.gold);
+        }
     }
 
     static getTreasureLoot(tier){

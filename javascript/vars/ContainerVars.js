@@ -13,8 +13,12 @@ let containerVars = {
                 tier:1
             },
             treasure:{
+                chance:50,
+                tier:1
+            },
+            gold:{
                 chance:100,
-                tier:2
+                amount:5
             }
         },
         color:'gold'

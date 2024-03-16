@@ -180,6 +180,7 @@ class Entity{
         }
         new ItemPile(this.x, this.y, this.inventory.items, this.inventory.gold);
         this.inventory.items = [];
+        this.inventory.gold = 0;
     }
 
     lootContainer(container){
@@ -923,12 +924,12 @@ class ItemPile extends Entity{
     isItemPile = true;
     dropTurn;
 
-    constructor(x,y,inventory = [], gold=0){
+    constructor(x,y,inventoryArray = [], gold=0){
         super('*', x, y);
 
         this.inventory = {
             slots:100,
-            items:inventory,
+            items:inventoryArray,
             gold:gold
         }
         this.dropTurn = Log.turnCounter;

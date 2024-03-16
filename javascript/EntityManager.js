@@ -233,6 +233,8 @@ class EntityManager{
             if(entity.index){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
+                entitySave.inventory.gold = entity.inventory.gold;
+
             }
         }
     }

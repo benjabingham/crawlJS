@@ -155,7 +155,9 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
-        itemPile.checkIsEmpty();
+        if(!itemPile.checkIsEmpty()){
+            itemPile.sortInventory();
+        }
 
     }
 
@@ -952,6 +954,9 @@ class ItemPile extends Entity{
     checkIsEmpty(){
         if(this.inventory.items.length == 0){
             this.obliterate();
+            return true;
         }
+
+        return false;
     }
 }

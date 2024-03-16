@@ -45,7 +45,7 @@ class LootManager{
         let goldLoot = lootChances.gold;
         if(goldLoot){
             if(Random.roll(1,99) < goldLoot.chance){
-                entitySave.value.gold = Random.roll(0,goldLoot.amount);
+                entitySave.value.gold = Random.roll(1,goldLoot.amount);
             }else{
                 entitySave.value.gold = 0;
             }

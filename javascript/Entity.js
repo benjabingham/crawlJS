@@ -195,8 +195,9 @@ class Entity{
             this.inventory.items.push(container.inventory.items.pop());
         }
         
-        this.pickUpGold(container.gold);
-        container.gold = 0;
+        if(this.pickUpGold(container.gold)){
+            container.gold = 0;
+        };
         let roster = EntityManager.currentMap.roster;
         if(roster[container.index]){
             roster[container.index].value.gold = 0;

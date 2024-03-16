@@ -142,6 +142,10 @@ class Entity{
             return false;
         }
 
+        if(!this.inventory){
+            return false;
+        }
+
         if(!this.isItemPile && itemPile.dropTurn >= Log.turnCounter){
             return false;
         }
@@ -206,7 +210,7 @@ class Entity{
     }
 
     pickUpGold(gold){
-        if(!gold || (!this.inventory.slots)){
+        if(!gold || !this.inventory || !this.inventory.slots){
             return false;
         }
         if(!this.inventory.gold){
@@ -460,6 +464,7 @@ class SwordEntity extends Entity{
     //item is the item object the sword entity represents. Is false if no weapon equipped.
     item;
     isSword = true;
+    inventory = false;
 
     constructor(ownerId, item=false){
         super(false, -1, -1)

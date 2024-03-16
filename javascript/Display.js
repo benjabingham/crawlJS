@@ -18,6 +18,7 @@ class Display{
         $('#dungeon-screen').show();
         Display.boardDisplayInit();
         Display.displayInventory(true);
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 
     static showHomeScreen(){
@@ -26,7 +27,7 @@ class Display{
         Display.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
-    }
+        Display.scrollToTop();    }
 
     static showTownScreen(){
         Display.hideAllScreens();
@@ -41,14 +42,18 @@ class Display{
         Display.restButton();
         Display.fillBars(Player);
         Display.nourishmentDiv(Player);
-    }
+        Display.scrollToTop();    }
 
     static hideAllScreens(){
         $('#town-screen').hide();
         $('#town-inventory-wrapper').hide();
         $('#home-screen').hide();
         $('#dungeon-screen').hide();
-        $('#inventory-wrapper').hide();
+        Display.scrollToTop();
+    }
+
+    static scrollToTop(){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 
     static giveSaveButtonsBehavior(){

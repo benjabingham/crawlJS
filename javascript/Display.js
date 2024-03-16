@@ -18,7 +18,7 @@ class Display{
         $('#dungeon-screen').show();
         Display.boardDisplayInit();
         Display.displayInventory(true);
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        Display.scrollToTop();
     }
 
     static showHomeScreen(){
@@ -27,7 +27,8 @@ class Display{
         Display.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
-        Display.scrollToTop();    }
+        Display.scrollToTop();
+    }
 
     static showTownScreen(){
         Display.hideAllScreens();

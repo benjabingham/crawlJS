@@ -15,6 +15,8 @@ class Display{
     static showDungeonScreen(){
         console.log('showDungeonScreen');
         Display.hideAllScreens();
+        $('#hud-div').show();
+        Display.fillBars(Player);
         $('#dungeon-screen').show();
         Display.boardDisplayInit();
         Display.displayInventory(true);
@@ -58,10 +60,13 @@ class Display{
     }
 
     static giveSaveButtonsBehavior(){
-        let display = this;
         $('#new-save-button').off().on('click',function(){
             Save.newSave();
-            display.showTownScreen();
+            if(GameMaster.quickStartMode){
+                GameMaster.quickStart();
+            }else{
+                Display.showTownScreen();
+            }
         })
 
         $('#load-file-input').off().change(function(){

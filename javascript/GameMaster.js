@@ -1,11 +1,18 @@
 class GameMaster{
     static customControls = {};
     static dungeonId = 0;
+    static quickStartMode = true;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
         Shop.shopInit();
         Display.displayInit();
+    }
+
+    static quickStart(){
+        Player.pickUpItem(LootManager.getWeaponLoot(0));
+        GameMaster.getRoom('cave.json');
+
     }
 
     static reset(){

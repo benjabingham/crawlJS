@@ -29,7 +29,7 @@ class Player {
         ]
     }
 
-    static gold = 15;
+    static gold = 0;
     //points to equipped object
     static equipped = false;
 
@@ -175,6 +175,11 @@ class Player {
         }
 
         return false;
+    }
+
+    static pickUpItem(item){
+        Player.inventory.items.push(item);
+        Player.inventoryCleanup();
     }
 
     static equipWeapon(weapon){

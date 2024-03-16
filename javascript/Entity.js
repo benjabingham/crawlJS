@@ -10,6 +10,7 @@ class Entity{
         slots:0,
         items:[]
     }
+    gold;
     //index refers to an entity's index in its map's save array
     index;
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
@@ -138,7 +139,7 @@ class Entity{
     }
 
     pickUpItemPile(itemPile){
-        if(EntityManager.skipBehaviors || !this.inventory.slots){
+        if(EntityManager.skipBehaviors){
             return false;
         }
 
@@ -155,6 +156,9 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
+        this.pickUpGold(itemPile.gold)
+        itemPile.gold = 0;
+
         itemPile.checkIsEmpty();
 
     }
@@ -170,10 +174,10 @@ class Entity{
     }
 
     dropInventory(){
-        if(!this.inventory.items || this.inventory.items.length == 0){
+        if((!this.inventory.items || this.inventory.items.length == 0) && !this.gold){
             return false;
         }
-        new ItemPile(this.x, this.y, this.inventory.items);
+        new ItemPile(this.x, this.y, this.inventory.items, this.gold);
         this.inventory.items = [];
     }
 
@@ -198,7 +202,7 @@ class Entity{
     }
 
     pickUpGold(gold){
-        if(!gold){
+        if(!gold || !this.inventory.slots){
             return false;
         }
         if(!this.gold){
@@ -915,13 +919,14 @@ class ItemPile extends Entity{
     isItemPile = true;
     dropTurn;
 
-    constructor(x,y,inventory = []){
+    constructor(x,y,inventory = [], gold=0){
         super('*', x, y);
 
         this.inventory = {
             slots:100,
             items:inventory
         }
+        this.gold = gold;
         this.dropTurn = Log.turnCounter;
         this.sortInventory();
     }
@@ -936,10 +941,13 @@ class ItemPile extends Entity{
 
             return 0;
         });
-
-        let topItem = this.inventory.items[this.inventory.items.length-1];
-        this.name = topItem.name;
-        this.color = topItem.color;
+        if(this.inventory.items.length){
+            let topItem = this.inventory.items[this.inventory.items.length-1];
+            this.color = topItem.color;
+        }else{
+            this.color = 'gold';
+        }
+        this.setName();
     }
 
     addItems(itemArray){
@@ -950,8 +958,20 @@ class ItemPile extends Entity{
     }
 
     checkIsEmpty(){
-        if(this.inventory.items.length == 0){
+        if(this.inventory.items.length == 0 && this.gold == 0){
             this.obliterate();
         }
+    }
+
+    setName(){
+        let nameArray = [];
+        if(this.gold){
+            nameArray.push(this.gold + ' gold')
+        }
+        this.inventory.items.forEach((item)=>{
+            nameArray.push(item.name)
+        })
+
+        this.name = nameArray.join(', ');
     }
 }

@@ -132,7 +132,7 @@ class Display{
     }
 
     static printBoard(){
-        let devMode = false;
+        let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         

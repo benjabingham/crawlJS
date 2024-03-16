@@ -18,7 +18,11 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:1
+                tier:0
+            },
+            gold:{
+                chance:20,
+                tier:3
             }
         },
         color:'darkGreen'
@@ -44,7 +48,11 @@ let monsterVars = {
             },
             treasure:{
                 chance:30,
-                tier:2
+                tier:1
+            },
+            gold:{
+                chance:45,
+                amount:7
             }
         },
         color:'green'

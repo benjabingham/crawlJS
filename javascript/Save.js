@@ -72,7 +72,9 @@ class Save{
                         alive:true,
                         x:x,
                         y:y,
-                        inventory:[]
+                        inventory:{
+                            items:[]
+                        }
                     }
                     LootManager.getEntityLoot(entitySave);
                     roster.push(entitySave)

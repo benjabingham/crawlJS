@@ -10,7 +10,6 @@ class Entity{
         slots:0,
         items:[]
     }
-    gold;
     //index refers to an entity's index in its map's save array
     index;
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
@@ -156,8 +155,8 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
-        this.pickUpGold(itemPile.gold)
-        itemPile.gold = 0;
+        this.pickUpGold(itemPile.inventory.gold)
+        itemPile.inventory.gold = 0;
 
         if(!itemPile.checkIsEmpty()){
             itemPile.sortInventory();
@@ -176,10 +175,10 @@ class Entity{
     }
 
     dropInventory(){
-        if((!this.inventory.items || this.inventory.items.length == 0) && !this.gold){
+        if((!this.inventory.items || this.inventory.items.length == 0) && !this.inventory.gold){
             return false;
         }
-        new ItemPile(this.x, this.y, this.inventory.items, this.gold);
+        new ItemPile(this.x, this.y, this.inventory.items, this.inventory.gold);
         this.inventory.items = [];
     }
 
@@ -195,30 +194,32 @@ class Entity{
             this.inventory.items.push(container.inventory.items.pop());
         }
         
-        if(this.pickUpGold(container.gold)){
-            container.gold = 0;
+        if(this.pickUpGold(container.inventory.gold)){
+            container.inventory.gold = 0;
+            let roster = EntityManager.currentMap.roster;
+            if(roster[container.index]){
+                roster[container.index].inventory.gold = 0;
+            }
         };
-        let roster = EntityManager.currentMap.roster;
-        if(roster[container.index]){
-            roster[container.index].value.gold = 0;
-        }
+        
     }
 
     pickUpGold(gold){
-        if(!gold || !this.inventory.slots){
+        if(!gold || (!this.inventory.slots)){
             return false;
         }
-        if(!this.gold){
-            this.gold = 0;
+        if(!this.inventory.gold){
+            this.inventory.gold = 0;
         }
-        this.gold += gold;
+        this.inventory.gold += gold;
 
         if(PlayerEntity.prototype.isPrototypeOf(this)){
             Player.gold += gold;
             Display.displayGold();
-
             EntityManager.transmitMessage('Found '+gold+' gold!','win')
         }
+
+        return true;
     }
 
     obliterate(){
@@ -927,9 +928,9 @@ class ItemPile extends Entity{
 
         this.inventory = {
             slots:100,
-            items:inventory
+            items:inventory,
+            gold:gold
         }
-        this.gold = gold;
         this.dropTurn = Log.turnCounter;
         this.sortInventory();
     }
@@ -961,7 +962,7 @@ class ItemPile extends Entity{
     }
 
     checkIsEmpty(){
-        if(this.inventory.items.length == 0 && this.gold == 0){
+        if(this.inventory.items.length == 0 && this.inventory.gold == 0){
             this.obliterate();
             return true;
         }
@@ -971,8 +972,8 @@ class ItemPile extends Entity{
 
     setName(){
         let nameArray = [];
-        if(this.gold){
-            nameArray.push(this.gold + ' gold')
+        if(this.inventory.gold){
+            nameArray.push(this.inventory.gold + ' gold')
         }
         this.inventory.items.forEach((item)=>{
             nameArray.push(item.name)

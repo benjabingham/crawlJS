@@ -11,18 +11,20 @@ class LootManager{
             let template = monsterVars[monsterKey];
             lootChances = template.loot;
             if(template.inventory){
-                entitySave.inventory = [...template.inventory];
+                entitySave.inventory.items = [...template.inventory];
             }
         }else if(containerKey){
             let template = containerVars[containerKey];
             lootChances = template.loot;
             if(template.inventory){
-                entitySave.inventory = [...template.inventory];
+                entitySave.inventory.items = [...template.inventory];
             }
         }
 
         if(!entitySave.inventory){
-            entitySave.inventory = [];
+            entitySave.inventory = {
+                items: []
+            };
         }
 
         if(!lootChances){
@@ -31,24 +33,25 @@ class LootManager{
         let weaponLoot = lootChances.weapon;
         if(weaponLoot){
             if(Random.roll(1,99) < weaponLoot.chance){
-                entitySave.inventory.push(LootManager.getWeaponLoot(weaponLoot.tier));
+                entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
             }
         }
 
         let treasureLoot = lootChances.treasure;
         if(treasureLoot){
             if(Random.roll(1,99) < treasureLoot.chance){
-                entitySave.inventory.push(LootManager.getTreasureLoot(treasureLoot.tier));
+                entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
             }
         }
 
         let goldLoot = lootChances.gold;
         if(goldLoot){
             if(Random.roll(1,99) < goldLoot.chance){
-                entitySave.value.gold = Random.roll(1,goldLoot.amount);
+                entitySave.inventory.gold = Random.roll(1,goldLoot.amount);
             }else{
-                entitySave.value.gold = 0;
+                entitySave.inventory.gold = 0;
             }
+            console.log(entitySave);
         }
     }
 

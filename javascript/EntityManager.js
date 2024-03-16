@@ -217,7 +217,9 @@ class EntityManager{
                 return false;
             }
             if(entitySave.inventory){
-                entityObj.inventory.items = entitySave.inventory;
+                entityObj.inventory.items = entitySave.inventory.items;
+                entityObj.inventory.gold = entitySave.inventory.gold;
+
             }
         })
         
@@ -230,7 +232,7 @@ class EntityManager{
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
             if(entity.index){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
-                entitySave.inventory = entity.inventory.items;
+                entitySave.inventory.items = entity.inventory.items;
             }
         }
     }

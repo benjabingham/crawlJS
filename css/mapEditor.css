@@ -1,0 +1,33 @@
+
+
+#main-content{
+    display:flex;
+    margin:10px;
+}
+
+#map-grid{
+    width:900px;
+    height:800px;
+    background-color: #222;
+    color: #ddd;
+    border:1px solid #222;
+}
+
+#control-panel{
+    width:500px;
+    height:800px;
+    border:1px solid #222;
+    background-color: #ddd;
+}
+
+#menu-bar{
+    width:100%;
+    height:40px;
+    border:1px solid #222;
+    background-color: #ddd;
+
+    button{
+        margin:5px;
+        padding:5px;
+    }
+}

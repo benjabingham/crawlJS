@@ -6,12 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Solidus - Map Editor</title>
     <link rel="stylesheet" href="css/mapEditor.css">
+    <script src="javascript/lib/jquery-3.7.1.js?V=6"></script>
+    <script src="javascript/Map_Editor/mapEditor.js"></script>
+
   </head>
   <body>
     <div id="menu-bar">
-        <button id="download-save-button">Upload Map</button>  
-        <button id="download-save-button">Save Map</button>  
+        <div id="save-buttons">
+            <div id="new-map-div">
+                <button id="new-map-button">New Map</button> 
+                <div id="new-map-dimensions">
+                    Map Dimensions - 
+                    <input type="number" id="new-map-width-input">
+                    x
+                    <input type="number" id="new-map-height-input">
+                </div>
+                <button id="create-map-button">Create Empty Map</button> 
+            </div>
+            <button id="load-map-button">Load Map</button>  
+            <button id="save-map-button">Save Map</button>  
+        </div>
     </div>
+        
     <div id="main-content">
         <div id="map-grid"></div>
         <div id="control-panel"></div>

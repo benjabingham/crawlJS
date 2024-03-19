@@ -22,7 +22,7 @@
 
 #menu-bar{
     width:100%;
-    height:40px;
+    padding:5px;
     border:1px solid #222;
     background-color: #ddd;
 
@@ -30,4 +30,25 @@
         margin:5px;
         padding:5px;
     }
+}
+
+#new-map-div{
+    width:fit-content;
+    display:flex;
+    input{
+        width:2rem;
+    }
+}
+
+#save-buttons{
+    display:flex;
+}
+
+#new-map-dimensions,
+#create-map-button{
+    display: none;
+}
+
+#new-map-dimensions{
+    padding:5px;
 }

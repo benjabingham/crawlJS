@@ -8,24 +8,28 @@
     <link rel="stylesheet" href="css/mapEditor.css">
     <script src="javascript/lib/jquery-3.7.1.js?V=6"></script>
     <script src="javascript/Map_Editor/mapEditor.js"></script>
+    <script src="javascript/Map_Editor/Controls.js"></script>
 
   </head>
   <body>
     <div id="menu-bar">
         <div id="save-buttons">
-            <div id="new-map-div">
-                <button id="new-map-button">New Map</button> 
-                <div id="new-map-dimensions">
-                    Map Dimensions - 
-                    <input type="number" id="new-map-width-input">
-                    x
-                    <input type="number" id="new-map-height-input">
-                </div>
-                <button id="create-map-button">Create Empty Map</button> 
-            </div>
+            <button id="new-map-button">New Map</button> 
             <button id="load-map-button">Load Map</button>  
             <button id="save-map-button">Save Map</button>  
         </div>
+        <div id="new-map-div">
+            <div id="new-map-dimensions">
+                Map Dimensions - 
+                <input type="number" id="new-map-width-input">
+                x
+                <input type="number" id="new-map-height-input">
+            </div>
+            <button id="create-map-button">Create Empty Map</button> 
+            <button id="cancel-new-map-button">Cancel</button>
+        </div>
+            
+        
     </div>
         
     <div id="main-content">

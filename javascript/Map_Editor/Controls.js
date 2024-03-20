@@ -15,7 +15,9 @@ class Controls{
         $('#create-map-button').on('click',()=>{
             let width = parseInt($('#new-map-width-input').val());
             let height = parseInt($('#new-map-height-input').val());
-            console.log(width*height);
+            Grid.init(width,height);
+            $('#save-buttons').show();
+            $('#new-map-div').hide(); 
         })
     
         $('#cancel-new-map-button').on('click',()=>{

@@ -13,7 +13,7 @@ class EntityGroup{
     entityType;
     //connects entity to entity from vars file
     key;
-    symbol = O;
+    symbol = 'O';
     color;
     entityName;
     groupName;

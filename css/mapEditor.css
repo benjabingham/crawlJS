@@ -107,8 +107,13 @@ input[type=number] {
     }
 }
 
+#entity-group-select-div{
+    display:inline;
+}
+
 .control-panel-input-divs{
     padding:5px;
+    display:none;
 
     input[type='number']{
         width:2rem;

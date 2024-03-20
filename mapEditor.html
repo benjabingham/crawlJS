@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Solidus - Map Editor</title>
     <link rel="stylesheet" href="css/mapEditor.css">
+    <link rel="stylesheet" href="css/color/classic.css?v=1">
     <script src="javascript/lib/jquery-3.7.1.js?V=6"></script>
     <script src="javascript/Map_Editor/mapEditor.js"></script>
     <script src="javascript/Map_Editor/Controls.js"></script>
@@ -13,7 +14,7 @@
     <script src="javascript/Map_Editor/EntityGroup.js"></script>
     <script src="javascript/vars/MonsterVars.js"></script>
   </head>
-  <body>
+  <body class='classic'>
     <div id="menu-bar">
         <div id="save-buttons">
             <button id="new-map-button">New Map</button> 
@@ -35,8 +36,10 @@
     </div>
         
     <div id="main-content">
+      <div id="map-grid-container">
         <div id="map-grid"></div>
-        <div id="control-panel"></div>
+      </div>
+      <div id="control-panel"></div>
     </div>
   </body>
 </html>

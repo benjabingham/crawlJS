@@ -24,6 +24,7 @@ class Controls{
             $('#save-buttons').show();
             $('#new-map-div').hide(); 
         })
-    
     }
+
+    
 }

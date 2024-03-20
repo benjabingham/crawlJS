@@ -9,9 +9,11 @@
 
 #control-panel{
     width:500px;
-    height:800px;
+    height:700px;
     border:1px solid #222;
     background-color: #ddd;
+    padding:10px;
+    box-sizing: border-box;
 }
 
 #menu-bar{
@@ -102,5 +104,18 @@ input[type=number] {
 
     .board-entity-div{
         position:absolute;
+    }
+}
+
+.control-panel-input-divs{
+    padding:5px;
+
+    input[type='number']{
+        width:2rem;
+    }
+
+    label{
+        display:block;
+        width:30rem;
     }
 }

@@ -39,7 +39,50 @@
       <div id="map-grid-container">
         <div id="map-grid"></div>
       </div>
-      <div id="control-panel"></div>
+      <div id="control-panel" >
+        <div id="entity-group-controls">
+          <h3>Entity Groups</h3>
+
+          <div id="entity-group-select-div" class="control-panel-input-divs">
+            <select id="entity-group-select">
+              <option value="" disabled selected>Select Entity Group</option>
+            </select>
+            <button id="new-entity-group-button">New Entity Group</button>
+          </div>
+          <div class="control-panel-input-divs">
+            <label for="group-name-input">Group name</label>
+            <input type="text" id="group-name-input">
+          </div>
+          <div class="control-panel-input-divs">
+            <select id="entity-type-dropdown">
+              <option value="" disabled selected>Select Entity Type</option>
+              <option value="monster">Monster</option>
+              <option value="wall">Wall</option>
+              <option value="container">Container</option>
+            </select>
+            <select id="entity-select-dropdown">
+              <option value="" disabled selected>Select Entity</option>
+            </select>
+          </div>
+          <div id="entity-options-cosmetic" class="control-panel-input-divs">
+            <h4>Cosmetic Options</h4>
+            <label for="name-input">Entity name</label>
+            <input type="text" id="entity-name-input">
+            <br>
+            <label for="symbol-input">Entity symbol</label>
+            <input type="text" id="entity-symbol-input">
+          </div>
+          <div id="entity-options" class="control-panel-input-divs">
+            <h4>Spawn Options</h4>
+            <label for="spawn-chance-input">Spawn chance %</label>
+            <input type="number" id="spawn-chance-input">
+            <br>
+            <label for="respawn-chance-input">Respawn chance %</label>
+            <input type="number" id="respawn-chance-input">
+          </div>
+          
+        </div>
+      </div>
     </div>
   </body>
 </html>

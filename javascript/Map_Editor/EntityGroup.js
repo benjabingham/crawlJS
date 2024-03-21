@@ -27,7 +27,7 @@ class EntityGroup{
         EntityGroupManager.groupCount++;
         EntityGroupManager.EntityGroups[this.id] = this;
 
-        this.name = "group"+this.id;
+        this.groupName = "group"+this.id;
     }
 
     setKey(key){

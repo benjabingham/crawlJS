@@ -63,4 +63,12 @@ class Grid{
         let entityGroups = EntityGroupManager.EntityGroups;
     }
 
+    static updateGroup(entityGroup){
+        let instances = entityGroup.instances;
+
+        for(const[key, instance] of Object.entries(instances)){
+            Grid.updateTileDisplay(instance.x, instance.y);
+        }
+    }
+
 }

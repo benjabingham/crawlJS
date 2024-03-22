@@ -4,6 +4,9 @@ class EntityGroupManager{
     static selectedEntityGroup = -1;
 
     static getGroup(id){
+        if(!id){
+            id = EntityGroupManager.selectedEntityGroup;
+        }
         return EntityGroupManager.EntityGroups[id];
     }
 

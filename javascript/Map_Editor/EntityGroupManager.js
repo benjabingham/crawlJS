@@ -80,6 +80,11 @@ class EntityGroupManager{
         group.entityName = entityName;
     }
 
+    static setSymbol(symbol){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.symbol = symbol;
+    }
+
     static setGroupName(groupName){
         let group = EntityGroupManager.getCurrentGroup();
         group.groupName = groupName;

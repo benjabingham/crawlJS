@@ -32,6 +32,8 @@ class Controls{
         Controls.groupNameInput();
         Controls.entityTypeSelect();
         Controls.entitySelect();
+        Controls.entityNameInput();
+        Controls.symbolInput();
     }
 
     static entityGroupSelect(){
@@ -99,6 +101,20 @@ class Controls{
             Controls.showCosmeticOptions();
             Controls.showSpawnOptions();
             
+        })
+    }
+
+    static entityNameInput(){
+        let input = $('#entity-name-input');
+        input.on('change',function(){
+            EntityGroupManager.setEntityName(input.val());
+        })
+    }
+
+    static symbolInput(){
+        let input = $('#entity-symbol-input');
+        input.on('change',function(){
+            EntityGroupManager.setSymbol(input.val());
         })
     }
 

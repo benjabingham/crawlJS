@@ -34,6 +34,8 @@ class Controls{
         Controls.entitySelect();
         Controls.entityNameInput();
         Controls.symbolInput();
+        Controls.spawnChanceInput();
+        Controls.respawnChanceInput();
     }
 
     static entityGroupSelect(){
@@ -117,6 +119,22 @@ class Controls{
             EntityGroupManager.setSymbol(input.val());
         })
     }
+
+    static spawnChanceInput(){
+        let input = $('#spawn-chance-input');
+        input.on('change',function(){
+            EntityGroupManager.setSpawnChance(input.val());
+        })
+    }
+
+    static respawnChanceInput(){
+        let input = $('#respawn-chance-input');
+        input.on('change',function(){
+            EntityGroupManager.setRespawnChance(input.val());
+        })
+    }
+    
+
 
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);

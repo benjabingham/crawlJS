@@ -34,6 +34,7 @@ class Controls{
         Controls.entitySelect();
         Controls.entityNameInput();
         Controls.symbolInput();
+        Controls.colorInput();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
     }
@@ -120,6 +121,18 @@ class Controls{
         })
     }
 
+    static colorInput(){
+        let input = $('#entity-color-input');
+        input.on('change',function(){
+            EntityGroupManager.setColor(input.val());
+            Controls.updateColorPreview();
+        })
+    }
+
+    static updateColorPreview(){
+        $('#entity-color-input').css('color', 'var(--'+EntityGroupManager.currentColor+')')
+    }
+
     static spawnChanceInput(){
         let input = $('#spawn-chance-input');
         input.on('change',function(){
@@ -139,6 +152,8 @@ class Controls{
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
         $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
+        $('#entity-color-input').val(EntityGroupManager.currentColor);
+        Controls.updateColorPreview();
         $('#entity-options-cosmetic').show();
     }
 
@@ -165,12 +180,10 @@ class Controls{
 
         $('.control-panel-input-divs').show();
         $('#group-name-input').val(group.groupName);
-        $('#entity-name-input').val(group.entityName);
-        $('#entity-symbol-input').val(group.symbol);
         $('#entity-type-dropdown').val(group.entityType);
         $('#entity-select-dropdown').val(group.key);
-        $('#spawn-chance-input').val(group.spawnChance);
-        $('#respawn-chance-input').val(group.respawnChance);
+        Controls.showCosmeticOptions();
+        Controls.showSpawnOptions();
     }
 
     

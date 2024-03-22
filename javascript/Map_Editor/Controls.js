@@ -83,6 +83,8 @@ class Controls{
                     break;
                 default: 
                     $('#entity-type-dropdown-div').hide();
+                    $('#entity-options').hide();
+                    $('#entity-options-cosmetic').hide();
             }
         })
     }
@@ -101,9 +103,14 @@ class Controls{
     static entitySelect(){
         $('#entity-select-dropdown').on('change',function(){
             EntityGroupManager.setKey(this.value);
-            Controls.showCosmeticOptions();
-            Controls.showSpawnOptions();
-            
+            if(EntityGroupManager.currentEntityType == 'container' || EntityGroupManager.currentEntityType == 'monster'){
+                Controls.showCosmeticOptions();
+                Controls.showSpawnOptions();
+            }else{
+                $('#entity-type-dropdown-div').hide();
+                $('#entity-options').hide();
+                $('#entity-options-cosmetic').hide();
+            }
         })
     }
 
@@ -169,9 +176,11 @@ class Controls{
         Controls.addEntityGroupOption(group);
         $('#entity-group-select').val(group.id);
         $('.control-panel-input-divs').hide();
+        $('#entity-type-dropdown-div').hide();
         $('#entity-group-select-div').show();
         $('#group-name-div').show();
         $('#entity-type-div').show();
+        $('#entity-type-dropdown').val('');
         $('#group-name-input').val(group.groupName)
     }
 
@@ -181,9 +190,16 @@ class Controls{
         $('.control-panel-input-divs').show();
         $('#group-name-input').val(group.groupName);
         $('#entity-type-dropdown').val(group.entityType);
-        $('#entity-select-dropdown').val(group.key);
-        Controls.showCosmeticOptions();
-        Controls.showSpawnOptions();
+        if(group.entityType == 'container' || group.entityType == 'monster'){
+            $('#entity-select-dropdown').val(group.key);
+            Controls.showCosmeticOptions();
+            Controls.showSpawnOptions();
+        }else{
+            $('#entity-type-dropdown-div').hide();
+            $('#entity-options').hide();
+            $('#entity-options-cosmetic').hide();
+        }
+    
     }
 
     

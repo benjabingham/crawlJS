@@ -31,7 +31,7 @@ class EntityGroup{
     }
 
     newInstance(x,y){
-        new EntityInstance(x,y,this.id);
+        return new EntityInstance(x,y,this.id);
     }
 }
 
@@ -51,4 +51,29 @@ class EntityInstance{
         this.x = x;
         this.y = y;
     }
+
+    get entityGroup(){
+        return EntityGroupManager.getGroup(this.entityGroupId);
+    }
+
+    get symbol(){
+        return this.entityGroup.symbol;
+    }
+
+    get color(){
+        return this.entityGroup.color;
+    }
+
+    get entityName(){
+        return this.entityGroup.entityName;
+    }
+
+    get groupName(){
+        return this.entityGroup.groupName;
+    }
+
+    delete(){
+        delete this.entityGroup.instances[this.id];
+    }
+
 }

@@ -17,9 +17,37 @@ class Grid{
                 $('#map-grid').append(
                     $('<div>').addClass('map-grid-div').attr('id','map-grid-' + x + '-' + y).append(
                         $('<div>').addClass('map-entity-div').attr('id','map-entity-' + x + '-' + y)
-                    )
+                    ).on('click',(e)=>{
+                        e.preventDefault();
+                        if(EntityGroupManager.selectedEntityGroup != -1){
+                            Grid.placeEntity(x,y);
+                        }
+                    })
                 )                 
             }
+        }
+    }
+
+    static placeEntity(x,y){
+        let group = EntityGroupManager.getCurrentGroup();
+        let instance = group.newInstance(x,y);
+        let oldInstance = Grid.getTile(x,y);
+        if(oldInstance){
+            oldInstance.delete();
+        }
+        Grid.setTile(x,y,instance);
+        Grid.updateTileDisplay(x,y);
+    }
+
+    static updateTileDisplay(x,y){
+        let tile = Grid.getTile(x,y)
+        let tileDiv = $('#map-grid-' + x + '-' + y);
+        let entityDiv = $('#map-entity-' + x + '-' + y);
+        if(tile){
+            entityDiv.text(tile.symbol);
+            entityDiv.css('color', 'var(--'+tile.color+')');
+        }else{
+            entityDiv.text('');
         }
     }
 

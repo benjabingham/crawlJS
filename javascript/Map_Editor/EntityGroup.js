@@ -1,12 +1,3 @@
-class EntityGroupManager{
-    static EntityGroups = {};
-    static groupCount = 0;
-
-    static getGroup(id){
-        return EntityGroupManager.EntityGroups[id];
-    }
-}
-
 class EntityGroup{
     id;
     //monster, player, container, wall

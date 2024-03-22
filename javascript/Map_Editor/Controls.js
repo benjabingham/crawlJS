@@ -1,5 +1,4 @@
 class Controls{
-    static selectedEntityGroup = -1;
 
     static init(){
         Controls.newMapSection();
@@ -31,7 +30,7 @@ class Controls{
     static controlPanel(){
         Controls.entityGroupSelect();
         Controls.groupNameInput();
-
+        Controls.entityTypeSelect();
     }
 
     static entityGroupSelect(){
@@ -59,14 +58,45 @@ class Controls{
     static groupNameInput(){
         let input = $('#group-name-input');
         input.on('change',function(){
-            Controls.selectedEntityGroup.groupName = input.val();
-            $('#group-select-option-'+Controls.selectedEntityGroup.id).text(input.val());
+            EntityGroupManager.setGroupName(input.val());
+            $('#group-select-option-'+EntityGroupManager.selectedEntityGroup).text(input.val());
         })
+    }
+
+    static entityTypeSelect(){
+        $('#entity-type-dropdown').on('change',function(){
+            let entityType = this.value;
+            EntityGroupManager.setEntityType(entityType);
+            $('#entity-type-dropdown-div').show();
+            switch(entityType){
+                case 'monster':
+                    Controls.populateEntitySelect(monsterVars)
+                    break;
+                case 'container':
+                    Controls.populateEntitySelect(containerVars)
+                    break;
+                default: 
+                    $('#entity-type-dropdown-div').hide();
+            }
+        })
+    }
+
+    static populateEntitySelect(entityVarsObj){
+        $('#entity-select-dropdown').empty().append(
+            $('<option>').prop('disabled','disabled').attr('value','').text('Select Entity')
+        ).val('');
+        for (const [key, value] of Object.entries(entityVarsObj)){
+            $('#entity-select-dropdown').append(
+                $('<option>').attr('value',key).text(value.name)
+            )
+        }
+
+
     }
 
     static newGroup(){
         let group = new EntityGroup();
-        Controls.selectedEntityGroup = group;
+        EntityGroupManager.selectGroup(group.id);
         Controls.addEntityGroupOption(group);
         $('#entity-group-select').val(group.id);
         $('.control-panel-input-divs').hide();
@@ -77,8 +107,7 @@ class Controls{
     }
 
     static chooseGroup(groupID){
-        let group = EntityGroupManager.getGroup(groupID);
-        Controls.selectedEntityGroup = group;
+        let group = EntityGroupManager.selectGroup(groupID)
 
         $('.control-panel-input-divs').show();
         $('#group-name-input').val(group.groupName);

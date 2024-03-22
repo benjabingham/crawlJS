@@ -12,7 +12,10 @@
     <script src="javascript/Map_Editor/Controls.js"></script>
     <script src="javascript/Map_Editor/Grid.js"></script>
     <script src="javascript/Map_Editor/EntityGroup.js"></script>
+    <script src="javascript/Map_Editor/EntityGroupManager.js"></script>
     <script src="javascript/vars/MonsterVars.js"></script>
+    <script src="javascript/vars/ContainerVars.js"></script>
+
   </head>
   <body class='classic'>
     <div id="menu-bar">
@@ -54,15 +57,21 @@
             <input type="text" id="group-name-input">
           </div>
           <div id="entity-type-div" class="control-panel-input-divs">
-            <select id="entity-type-dropdown">
+              <label for="entity-type-dropdown">Entity Type</label>
+              <select id="entity-type-dropdown">
               <option value="" disabled selected>Select Entity Type</option>
               <option value="monster">Monster</option>
               <option value="wall">Wall</option>
               <option value="container">Container</option>
+              <option value="player">Player</option>
             </select>
-            <select id="entity-select-dropdown">
-              <option value="" disabled selected>Select Entity</option>
-            </select>
+            <div id="entity-type-dropdown-div">
+              <label for="entity-select-dropdown">Entity</label>
+              <select id="entity-select-dropdown">
+                <option value="" disabled selected>Select Entity</option>
+              </select>
+            </div>
+
           </div>
           <div id="entity-options-cosmetic" class="control-panel-input-divs">
             <h4>Cosmetic Options</h4>

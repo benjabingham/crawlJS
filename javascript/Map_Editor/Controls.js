@@ -31,6 +31,7 @@ class Controls{
         Controls.entityGroupSelect();
         Controls.groupNameInput();
         Controls.entityTypeSelect();
+        Controls.entitySelect();
     }
 
     static entityGroupSelect(){
@@ -90,8 +91,27 @@ class Controls{
                 $('<option>').attr('value',key).text(value.name)
             )
         }
+    }
 
+    static entitySelect(){
+        $('#entity-select-dropdown').on('change',function(){
+            EntityGroupManager.setKey(this.value);
+            Controls.showCosmeticOptions();
+            Controls.showSpawnOptions();
+            
+        })
+    }
 
+    static showCosmeticOptions(){
+        $('#entity-name-input').val(EntityGroupManager.currentEntityName);
+        $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
+        $('#entity-options-cosmetic').show();
+    }
+
+    static showSpawnOptions(){
+        $('#entity-options').show();
+        $('#spawn-chance-input').val(EntityGroupManager.currentSpawnChance);
+        $('#respawn-chance-input').val(EntityGroupManager.currentRespawnChance);
     }
 
     static newGroup(){
@@ -111,6 +131,7 @@ class Controls{
 
         $('.control-panel-input-divs').show();
         $('#group-name-input').val(group.groupName);
+        $('#entity-name-input').val(group.entityName);
         $('#entity-symbol-input').val(group.symbol);
         $('#entity-type-dropdown').val(group.entityType);
         $('#entity-select-dropdown').val(group.key);

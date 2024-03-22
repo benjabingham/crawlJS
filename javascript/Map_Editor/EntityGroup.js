@@ -8,8 +8,8 @@ class EntityGroup{
     color;
     entityName;
     groupName;
-    spawnChance;
-    respawnChance;
+    spawnChance = 100;
+    respawnChance = 100;
     instances = {};
     count = 0;
 

@@ -4,7 +4,7 @@ class EntityGroup{
     entityType;
     //connects entity to entity from vars file
     key;
-    symbol = 'O';
+    symbol;
     color;
     entityName;
     groupName;

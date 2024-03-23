@@ -39,16 +39,19 @@ class Grid{
         Grid.updateTileDisplay(x,y);
     }
 
-    static updateTileDisplay(x,y, group = false){
-        if(!group){
-            group = EntityGroupManager.getCurrentGroup();
-        }
+    static updateTileDisplay(x,y){
         let tile = Grid.getTile(x,y)
         let tileDiv = $('#map-grid-' + x + '-' + y);
         let entityDiv = $('#map-entity-' + x + '-' + y);
         if(tile){
+            let group = tile.entityGroup;
             entityDiv.text(tile.symbol);
             entityDiv.css('color', 'var(--'+tile.color+')');
+            if(group.entityType == "wall"){
+                tileDiv.addClass('grid-wall');
+            }else{
+                tileDiv.removeClass('grid-wall')
+            }
         }else{
             entityDiv.text('');
         }
@@ -68,7 +71,6 @@ class Grid{
 
     static updateGroup(entityGroup){
         let instances = entityGroup.instances;
-        console.log(instances);
         for(const[key, instance] of Object.entries(instances)){
             Grid.updateTileDisplay(instance.x, instance.y);
         }

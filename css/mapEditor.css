@@ -109,6 +109,13 @@ input[type=number] {
     }
 }
 
+.grid-wall{
+    background:
+    repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
+}
+
 #entity-group-select-div{
     width:fit-content;
     display: block;

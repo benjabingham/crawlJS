@@ -13,8 +13,14 @@
     height:700px;
     border:1px solid #222;
     background-color: #ddd;
-    padding:10px;
     box-sizing: border-box;
+}
+
+#control-panel>div{
+    padding:10px;
+    width:100%;
+    border:1px solid black;
+    box-sizing: border-box; 
 }
 
 #menu-bar{
@@ -153,4 +159,12 @@ h3,h4{
     letter-spacing: .3rem;
     text-transform: uppercase;
 
+}
+
+#draw-options-div{
+    height:15%;
+}
+
+#entity-group-controls{
+    height:85%;
 }

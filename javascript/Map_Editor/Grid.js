@@ -3,6 +3,7 @@ class Grid{
     static height;
     static width;
     static matrix = [];
+    static rectangleStart = false;
 
     static init(width, height){
         Grid.width = width;
@@ -26,6 +27,16 @@ class Grid{
                         }else{
                             Grid.placeEntity(x,y);
                         }
+                    }).on('mousedown',(e)=>{
+                        e.preventDefault();
+                        if(e.shiftKey){
+                            Grid.rectangleStart = {x:x,y:y};
+                        }
+                    }).on('mouseup',(e)=>{
+                        if(Grid.rectangleStart){
+                            Grid.drawRectangle(Grid.rectangleStart,{x:x,y:y});
+                            Grid.rectangleStart = false;
+                        }
                     })
                 )                 
             }
@@ -41,6 +52,19 @@ class Grid{
         }
         Grid.setTile(x,y,instance);
         Grid.updateTileDisplay(x,y);
+    }
+
+    static drawRectangle(point1, point2){
+        let x1 = Math.min(point1.x, point2.x);
+        let x2 = Math.max(point1.x, point2.x);
+        let y1 = Math.min(point1.y, point2.y);
+        let y2 = Math.max(point1.y, point2.y);
+
+        for(let x = x1; x <= x2; x++){
+            for(let y = y1; y <= y2; y++){
+                Grid.placeEntity(x,y);
+            }
+        }
     }
 
     static eraseEntity(x,y){

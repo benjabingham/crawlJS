@@ -86,6 +86,7 @@ class Controls{
                     $('#entity-options').hide();
                     $('#entity-options-cosmetic').hide();
             }
+            Grid.updateGrid();
         })
     }
 
@@ -111,6 +112,7 @@ class Controls{
                 $('#entity-options').hide();
                 $('#entity-options-cosmetic').hide();
             }
+            Grid.updateGrid();
         })
     }
 

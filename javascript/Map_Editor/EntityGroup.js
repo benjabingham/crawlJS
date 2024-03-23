@@ -42,6 +42,8 @@ class EntityGroup{
         this.entityType = type;
         if(type == 'player'){
             this.symbol = '☺';
+        }else if(type == 'wall'){
+            this.symbol = '';
         }
     }
 

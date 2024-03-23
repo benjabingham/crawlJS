@@ -100,7 +100,7 @@ input[type=number] {
     justify-content: center;
     align-items: center;
 
-    div{
+    div:not(.selected){
         background-color: #00000000;
     }
 
@@ -114,6 +114,12 @@ input[type=number] {
     repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
     50% / 30px;
     background-size:20% 20%;
+}
+
+.selected{
+    background-color: rgba(251, 255, 0, 0.274);
+    width:100%;
+    height:100%;
 }
 
 #entity-group-select-div{

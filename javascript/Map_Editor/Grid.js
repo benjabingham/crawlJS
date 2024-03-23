@@ -4,6 +4,7 @@ class Grid{
     static width;
     static matrix = [];
     static rectangleStart = false;
+    static drawing = false;
 
     static init(width, height){
         Grid.width = width;
@@ -17,8 +18,11 @@ class Grid{
             for(let x=0; x < Grid.width; x++){
                 $('#map-grid').append(
                     $('<div>').addClass('map-grid-div').attr('id','map-grid-' + x + '-' + y).append(
-                        $('<div>').addClass('map-entity-div').attr('id','map-entity-' + x + '-' + y)
+                        $('<div>').addClass('map-highlight-div').attr('id','map-highlight-' + x + '-' + y).append(
+                            $('<div>').addClass('map-entity-div').attr('id','map-entity-' + x + '-' + y)
+                        )
                     ).on('click',(e)=>{
+                        /*
                         e.preventDefault();
                         if(EntityGroupManager.selectedEntityGroup == -1){
                             
@@ -27,15 +31,30 @@ class Grid{
                         }else{
                             Grid.placeEntity(x,y);
                         }
+                        */
                     }).on('mousedown',(e)=>{
                         e.preventDefault();
                         if(e.shiftKey){
                             Grid.rectangleStart = {x:x,y:y};
+                        }else{
+                            Grid.drawing = true;
+                            Grid.placeEntity(x,y);
                         }
                     }).on('mouseup',(e)=>{
                         if(Grid.rectangleStart){
                             Grid.drawRectangle(Grid.rectangleStart,{x:x,y:y});
                             Grid.rectangleStart = false;
+                        }
+                        if(Grid.drawing){
+                            Grid.drawing = false;
+                        }
+                    }).on('mouseenter',(e)=>{
+                        if(Grid.drawing){
+                            Grid.placeEntity(x,y);
+                        }else if(Grid.rectangleStart){
+                            Grid.previewRectangle(Grid.rectangleStart,{x:x,y:y})
+                        }else{
+
                         }
                     })
                 )                 
@@ -67,6 +86,25 @@ class Grid{
         }
     }
 
+    static previewRectangle(point1, point2){
+        Grid.updateGrid();
+        let x1 = Math.min(point1.x, point2.x);
+        let x2 = Math.max(point1.x, point2.x);
+        let y1 = Math.min(point1.y, point2.y);
+        let y2 = Math.max(point1.y, point2.y);
+
+        for(let x = x1; x <= x2; x++){
+            for(let y = y1; y <= y2; y++){
+                Grid.selectTile(x,y);
+            }
+        }
+    }
+
+    static selectTile(x,y){
+        let tileDiv = $('#map-highlight-' + x + '-' + y);
+        tileDiv.addClass('selected');
+    }
+
     static eraseEntity(x,y){
         let instance = Grid.getTile(x,y);
         if(instance){
@@ -80,6 +118,8 @@ class Grid{
         let tile = Grid.getTile(x,y)
         let tileDiv = $('#map-grid-' + x + '-' + y);
         let entityDiv = $('#map-entity-' + x + '-' + y);
+        let highlightDiv = $('#map-highlight-' + x + '-' + y);
+        highlightDiv.removeClass('selected');
         if(tile){
             let group = tile.entityGroup;
             entityDiv.text(tile.symbol);
@@ -100,10 +140,6 @@ class Grid{
 
     static setTile(x,y,val){
         Grid.matrix[y][x] = val;
-    }
-
-    static renderGrid(){
-        let entityGroups = EntityGroupManager.EntityGroups;
     }
 
     static updateGroup(entityGroup){

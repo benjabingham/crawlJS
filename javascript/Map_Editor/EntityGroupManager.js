@@ -65,7 +65,7 @@ class EntityGroupManager{
 
     static setEntityType(entityType){
         let group = EntityGroupManager.getCurrentGroup();
-        group.entityType = entityType;
+        group.setEntityType(entityType);
     }
 
     static setKey(key){

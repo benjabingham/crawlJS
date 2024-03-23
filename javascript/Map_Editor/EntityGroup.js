@@ -22,12 +22,27 @@ class EntityGroup{
     }
 
     setKey(key){
-        this.key = key;
-        let template = monsterVars[key];
+        let template;
+        if(this.entityType == 'monster'){
+            template = monsterVars[key];
+        }else if(this.entityType == 'container'){
+            template = containerVars[key];
+            this.respawnChance = 0;
+        }else{
+            return false;
+        }
 
+        this.key = key;
         this.entityName = template.name;
         this.symbol = template.symbol;
         this.color = template.color;
+    }
+
+    setEntityType(type){
+        this.entityType = type;
+        if(type == 'player'){
+            this.symbol = '☺';
+        }
     }
 
     newInstance(x,y){

@@ -3,8 +3,8 @@ class EntityGroupManager{
     static groupCount = 0;
     static selectedEntityGroup = -1;
 
-    static getGroup(id){
-        if(!id){
+    static getGroup(id = -1){
+        if(id == -1){
             id = EntityGroupManager.selectedEntityGroup;
         }
         return EntityGroupManager.EntityGroups[id];

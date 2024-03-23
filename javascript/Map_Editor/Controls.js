@@ -125,7 +125,7 @@ class Controls{
         let input = $('#entity-symbol-input');
         input.on('change',function(){
             EntityGroupManager.setSymbol(input.val());
-            Grid.updateGroup(EntityGroupManager.getCurrentGroup());
+            Grid.updateGrid();
         })
     }
 
@@ -134,7 +134,7 @@ class Controls{
         input.on('change',function(){
             EntityGroupManager.setColor(input.val());
             Controls.updateColorPreview();
-            Grid.updateGroup(EntityGroupManager.getCurrentGroup());
+            Grid.updateGrid();
         })
     }
 

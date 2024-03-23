@@ -39,7 +39,10 @@ class Grid{
         Grid.updateTileDisplay(x,y);
     }
 
-    static updateTileDisplay(x,y){
+    static updateTileDisplay(x,y, group = false){
+        if(!group){
+            group = EntityGroupManager.getCurrentGroup();
+        }
         let tile = Grid.getTile(x,y)
         let tileDiv = $('#map-grid-' + x + '-' + y);
         let entityDiv = $('#map-entity-' + x + '-' + y);
@@ -65,10 +68,24 @@ class Grid{
 
     static updateGroup(entityGroup){
         let instances = entityGroup.instances;
-
+        console.log(instances);
         for(const[key, instance] of Object.entries(instances)){
             Grid.updateTileDisplay(instance.x, instance.y);
         }
+        
+    }
+
+    static updateGrid(){
+        let x = 0;
+        let y = 0;
+        Grid.matrix.forEach((row)=>{
+            row.forEach((tile)=>{
+                Grid.updateTileDisplay(x,y);
+                x++;
+            })
+            x = 0;
+            y++;
+        })
     }
 
 }

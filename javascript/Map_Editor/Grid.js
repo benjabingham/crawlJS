@@ -19,7 +19,11 @@ class Grid{
                         $('<div>').addClass('map-entity-div').attr('id','map-entity-' + x + '-' + y)
                     ).on('click',(e)=>{
                         e.preventDefault();
-                        if(EntityGroupManager.selectedEntityGroup != -1){
+                        if(EntityGroupManager.selectedEntityGroup == -1){
+                            
+                        }else if(Grid.getTile(x,y) && Grid.getTile(x,y).entityGroupId == EntityGroupManager.selectedEntityGroup){
+                            Grid.eraseEntity(x,y);
+                        }else{
                             Grid.placeEntity(x,y);
                         }
                     })
@@ -36,6 +40,15 @@ class Grid{
             oldInstance.delete();
         }
         Grid.setTile(x,y,instance);
+        Grid.updateTileDisplay(x,y);
+    }
+
+    static eraseEntity(x,y){
+        let instance = Grid.getTile(x,y);
+        if(instance){
+            instance.delete();
+        }
+        Grid.setTile(x,y,false);
         Grid.updateTileDisplay(x,y);
     }
 

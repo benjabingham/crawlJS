@@ -28,6 +28,8 @@ class Controls{
     }
 
     static controlPanel(){
+        Controls.eraseButtons();
+
         Controls.entityGroupSelect();
         Controls.groupNameInput();
         Controls.entityTypeSelect();
@@ -37,6 +39,28 @@ class Controls{
         Controls.colorInput();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
+    }
+
+    static eraseButtons(){
+        $('#erase-selected-checkbox').change(function(){
+            if(this.checked){
+                $('#erase-all-checkbox').prop('checked',false);
+                Grid.erase = {selected:true};
+            }else{
+                Grid.erase = false;
+            }
+            console.log(Grid.erase);
+        })
+
+        $('#erase-all-checkbox').change(function(){
+            if(this.checked){
+                $('#erase-selected-checkbox').prop('checked',false);
+                Grid.erase = {all:true};
+            }else{
+                Grid.erase = false;
+            }
+            console.log(Grid.erase);
+        })
     }
 
     static entityGroupSelect(){

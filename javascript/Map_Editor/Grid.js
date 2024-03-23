@@ -5,6 +5,7 @@ class Grid{
     static matrix = [];
     static rectangleStart = false;
     static drawing = false;
+    static erase = false;
 
     static init(width, height){
         Grid.width = width;
@@ -38,7 +39,7 @@ class Grid{
                             Grid.rectangleStart = {x:x,y:y};
                         }else{
                             Grid.drawing = true;
-                            Grid.placeEntity(x,y);
+                            Grid.draw(x,y);
                         }
                     }).on('mouseup',(e)=>{
                         if(Grid.rectangleStart){
@@ -50,7 +51,7 @@ class Grid{
                         }
                     }).on('mouseenter',(e)=>{
                         if(Grid.drawing){
-                            Grid.placeEntity(x,y);
+                            Grid.draw(x,y);
                         }else if(Grid.rectangleStart){
                             Grid.previewRectangle(Grid.rectangleStart,{x:x,y:y})
                         }else{
@@ -59,6 +60,16 @@ class Grid{
                     })
                 )                 
             }
+        }
+    }
+
+    static draw(x,y){
+        if(!Grid.erase){
+            Grid.placeEntity(x,y);
+        }else if(Grid.erase.all){
+            Grid.eraseEntity(x,y);
+        }else if (Grid.erase.selected && Grid.getTile(x,y).entityGroupId == EntityGroupManager.selectedEntityGroup){
+            Grid.eraseEntity(x,y);
         }
     }
 
@@ -81,9 +92,10 @@ class Grid{
 
         for(let x = x1; x <= x2; x++){
             for(let y = y1; y <= y2; y++){
-                Grid.placeEntity(x,y);
+                Grid.draw(x,y);
             }
         }
+        Grid.updateGrid();
     }
 
     static previewRectangle(point1, point2){
@@ -107,11 +119,17 @@ class Grid{
 
     static eraseEntity(x,y){
         let instance = Grid.getTile(x,y);
+        console.log(instance);
         if(instance){
             instance.delete();
         }
         Grid.setTile(x,y,false);
         Grid.updateTileDisplay(x,y);
+        console.log({
+            action:'erased',
+            x:x,
+            y:y
+        })
     }
 
     static updateTileDisplay(x,y){
@@ -131,6 +149,7 @@ class Grid{
             }
         }else{
             entityDiv.text('');
+            tileDiv.removeClass('grid-wall')
         }
     }
 

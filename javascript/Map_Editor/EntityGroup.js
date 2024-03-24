@@ -13,12 +13,30 @@ class EntityGroup{
     instances = {};
     count = 0;
 
-    constructor(){
+    constructor(empty = false){
+        if(empty){
+            return false;
+        }
         this.id = EntityGroupManager.groupCount;
         EntityGroupManager.groupCount++;
-        EntityGroupManager.EntityGroups[this.id] = this;
+        EntityGroupManager.entityGroups[this.id] = this;
 
         this.groupName = "group"+this.id;
+    }
+
+    load(json){
+        for(const [key,val] of Object.entries(json)){
+            this[key] = val;
+        }
+        this.classifyInstances();
+    }
+
+    classifyInstances(){
+        for(const [key, val] of Object.entries(this.instances)){
+            let instance = new EntityInstance(false, false, false, true);
+            instance.load(val);
+            this.instances[key] = instance;
+        }
     }
 
     setKey(key){
@@ -58,7 +76,10 @@ class EntityInstance{
     x;
     y;
 
-    constructor(x,y,entityGroupId){
+    constructor(x,y,entityGroupId, empty = false){
+        if(empty){
+            return false;
+        }
         let entityGroup = EntityGroupManager.getGroup(entityGroupId);
         this.id = entityGroup.count;
         entityGroup.count++;
@@ -69,11 +90,19 @@ class EntityInstance{
         this.y = y;
     }
 
+    load(json){
+        for(const [key,val] of Object.entries(json)){
+            this[key] = val;
+        }
+    }
+
     get entityGroup(){
         return EntityGroupManager.getGroup(this.entityGroupId);
     }
 
     get symbol(){
+        console.log(this);
+        console.log(EntityGroupManager.entityGroups)
         return this.entityGroup.symbol;
     }
 

@@ -1,8 +1,10 @@
 class Controls{
+    static ctrlDown;
 
     static init(){
         Controls.newMapSection();
         Controls.controlPanel();
+        Controls.hotkeys();
     }
 
     static newMapSection(){
@@ -74,7 +76,7 @@ class Controls{
     }
 
     static populateEntityGroupSelect(){
-        for (const [key, value] of Object.entries(EntityGroupManager.EntityGroups)){
+        for (const [key, value] of Object.entries(EntityGroupManager.entityGroups)){
             Controls.addEntityGroupOption(value);
         }
     }
@@ -182,8 +184,6 @@ class Controls{
         })
     }
     
-
-
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
         $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
@@ -228,6 +228,23 @@ class Controls{
             $('#entity-options-cosmetic').hide();
         }
     
+    }
+
+    static hotkeys(){
+        let ctrlKey = 17,
+            cmdKey = 91,
+            zKey = 90;
+        $(document).keydown(function(e) {
+            if (e.keyCode == ctrlKey || e.keyCode == cmdKey) Controls.ctrlDown = true;
+        }).keyup(function(e) {
+            if (e.keyCode == ctrlKey || e.keyCode == cmdKey) Controls.ctrlDown = false;
+        });
+        $(document).on('keydown',(e)=>{
+            if (Controls.ctrlDown && (e.keyCode == zKey)){
+                e.preventDefault();
+                Save.rewind();
+            }
+        })
     }
 
     

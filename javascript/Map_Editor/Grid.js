@@ -49,6 +49,7 @@ class Grid{
                         if(Grid.drawing){
                             Grid.drawing = false;
                         }
+                        Save.saveSnapshot();
                     }).on('mouseenter',(e)=>{
                         if(Grid.drawing){
                             Grid.draw(x,y);
@@ -82,6 +83,20 @@ class Grid{
         }
         Grid.setTile(x,y,instance);
         Grid.updateTileDisplay(x,y);
+    }
+
+    static placeEntities(){
+        Grid.matrix = new Array(Grid.height).fill().map( ()=>
+            Array(Grid.width).fill(false)
+        )
+        let groups = EntityGroupManager.entityGroups;
+        for(const [groupKey,group] of Object.entries(groups)){
+            let instances = group.instances;
+            for(const [instanceKey,instance] of Object.entries(instances)){
+                Grid.setTile(instance.x,instance.y,instance);
+                Grid.updateTileDisplay(instance.x,instance.y);
+            } 
+        }
     }
 
     static drawRectangle(point1, point2){
@@ -180,6 +195,20 @@ class Grid{
             x = 0;
             y++;
         })
+    }
+
+    static load(json){
+        for(const [key,val] of Object.entries(json)){
+            EntityGroupManager[key] = val;
+        }
+    }
+
+    static getObject(){
+        return {
+            height:Grid.height,
+            width:Grid.width,
+            matrix:Grid.matrix
+        }
     }
 
 }

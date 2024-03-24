@@ -1,5 +1,5 @@
 class EntityGroupManager{
-    static EntityGroups = {};
+    static entityGroups = {};
     static groupCount = 0;
     static selectedEntityGroup = -1;
 
@@ -7,7 +7,7 @@ class EntityGroupManager{
         if(id == -1){
             id = EntityGroupManager.selectedEntityGroup;
         }
-        return EntityGroupManager.EntityGroups[id];
+        return EntityGroupManager.entityGroups[id];
     }
 
     static selectGroup(groupID){
@@ -20,7 +20,7 @@ class EntityGroupManager{
             return false;
         }
 
-        return EntityGroupManager.EntityGroups[EntityGroupManager.selectedEntityGroup];
+        return EntityGroupManager.entityGroups[EntityGroupManager.selectedEntityGroup];
     }
 
     static get currentEntityType(){
@@ -101,5 +101,32 @@ class EntityGroupManager{
     static setRespawnChance(respawnChance){
         let group = EntityGroupManager.getCurrentGroup();
         group.respawnChance = respawnChance;
+    }
+
+    //PROBLEM - entitygroups and instances are losing their methods.
+    static load(json){
+        console.log(json);
+        for(const [key,val] of Object.entries(json)){
+            console.log(val);
+            EntityGroupManager[key] = val;
+            console.log(EntityGroupManager[key]);
+        }
+        EntityGroupManager.classifyEntityGroups();
+    }
+
+    static classifyEntityGroups(){
+        for(const [key, val] of Object.entries(EntityGroupManager.entityGroups)){
+            let entityGroup = new EntityGroup(true);
+            entityGroup.load(val);
+            EntityGroupManager.entityGroups[key] = entityGroup;
+        }
+    }
+
+    static getObject(){
+        return {
+            entityGroups:EntityGroupManager.entityGroups,
+            groupCount:EntityGroupManager.groupCount,
+            selectedEntityGroup:EntityGroupManager.selectedEntityGroup
+        }
     }
 }

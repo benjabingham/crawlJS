@@ -1,0 +1,37 @@
+class Save{
+
+    static history = [];
+    static historyMax = 100;
+
+    static load(json){
+        //Grid.load(JSON.parse(json.grid));
+        console.log(json);
+        EntityGroupManager.load(JSON.parse(json.entityGroups));
+        Grid.placeEntities();
+        Grid.updateGrid();
+        Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);
+        console.log(EntityGroupManager.entityGroups);
+    }
+
+    static saveSnapshot(){
+        let snapshot = {
+            grid: JSON.stringify(Grid.getObject()),
+            entityGroups: JSON.stringify(EntityGroupManager.getObject())
+        }
+
+        Save.history.push(snapshot);
+        console.log(snapshot);
+        if(Save.history.length > Save.historyMax){
+            Save.history.shift();
+        }
+    }
+
+    static rewind(){
+        if(Save.history.length > 1){
+            Save.history.pop()
+            Save.load(Save.history.pop());
+            Save.saveSnapshot();
+        }
+
+    }
+}

@@ -105,11 +105,8 @@ class EntityGroupManager{
 
     //PROBLEM - entitygroups and instances are losing their methods.
     static load(json){
-        console.log(json);
         for(const [key,val] of Object.entries(json)){
-            console.log(val);
             EntityGroupManager[key] = val;
-            console.log(EntityGroupManager[key]);
         }
         EntityGroupManager.classifyEntityGroups();
     }

@@ -134,17 +134,11 @@ class Grid{
 
     static eraseEntity(x,y){
         let instance = Grid.getTile(x,y);
-        console.log(instance);
         if(instance){
             instance.delete();
         }
         Grid.setTile(x,y,false);
         Grid.updateTileDisplay(x,y);
-        console.log({
-            action:'erased',
-            x:x,
-            y:y
-        })
     }
 
     static updateTileDisplay(x,y){

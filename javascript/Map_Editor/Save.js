@@ -5,12 +5,10 @@ class Save{
 
     static load(json){
         //Grid.load(JSON.parse(json.grid));
-        console.log(json);
         EntityGroupManager.load(JSON.parse(json.entityGroups));
         Grid.placeEntities();
         Grid.updateGrid();
         Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);
-        console.log(EntityGroupManager.entityGroups);
     }
 
     static saveSnapshot(){
@@ -20,7 +18,6 @@ class Save{
         }
 
         Save.history.push(snapshot);
-        console.log(snapshot);
         if(Save.history.length > Save.historyMax){
             Save.history.shift();
         }

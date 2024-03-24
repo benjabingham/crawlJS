@@ -8,6 +8,7 @@ class Save{
         EntityGroupManager.load(JSON.parse(json.entityGroups));
         Grid.placeEntities();
         Grid.updateGrid();
+        Controls.populateEntityGroupSelect();
         Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);
     }
 

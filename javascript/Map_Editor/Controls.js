@@ -66,6 +66,7 @@ class Controls{
     }
 
     static entityGroupSelect(){
+        Controls.populateEntityGroupSelect();
         $('#entity-group-select').on('change',function(){
             if(this.value == 'new'){
                 Controls.newGroup();
@@ -76,8 +77,18 @@ class Controls{
     }
 
     static populateEntityGroupSelect(){
+        $('#entity-group-select').empty().append(
+            $('<option>').prop('disabled','disabled').attr('value','').text('Select Entity Group')
+        ).append(
+            $('<option>').attr('value','new').text('New Entity Group')
+        ).val('');
         for (const [key, value] of Object.entries(EntityGroupManager.entityGroups)){
             Controls.addEntityGroupOption(value);
+        }
+
+        if(EntityGroupManager.selectedEntityGroup != -1){
+            $('#entity-group-select').val(EntityGroupManager.selectedEntityGroup)
+            Controls.chooseGroup(EntityGroupManager.selectedEntityGroup)
         }
     }
 

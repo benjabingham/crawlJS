@@ -103,6 +103,7 @@ class Controls{
         input.on('change',function(){
             EntityGroupManager.setGroupName(input.val());
             $('#group-select-option-'+EntityGroupManager.selectedEntityGroup).text(input.val());
+            Save.saveSnapshot();
         })
     }
 
@@ -124,6 +125,7 @@ class Controls{
                     $('#entity-options-cosmetic').hide();
             }
             Grid.updateGrid();
+            Save.saveSnapshot();
         })
     }
 
@@ -150,6 +152,7 @@ class Controls{
                 $('#entity-options-cosmetic').hide();
             }
             Grid.updateGrid();
+            Save.saveSnapshot();
         })
     }
 
@@ -157,6 +160,7 @@ class Controls{
         let input = $('#entity-name-input');
         input.on('change',function(){
             EntityGroupManager.setEntityName(input.val());
+            Save.saveSnapshot();
         })
     }
 
@@ -165,6 +169,7 @@ class Controls{
         input.on('change',function(){
             EntityGroupManager.setSymbol(input.val());
             Grid.updateGrid();
+            Save.saveSnapshot();
         })
     }
 
@@ -174,6 +179,7 @@ class Controls{
             EntityGroupManager.setColor(input.val());
             Controls.updateColorPreview();
             Grid.updateGrid();
+            Save.saveSnapshot();
         })
     }
 
@@ -185,6 +191,7 @@ class Controls{
         let input = $('#spawn-chance-input');
         input.on('change',function(){
             EntityGroupManager.setSpawnChance(input.val());
+            Save.saveSnapshot();
         })
     }
 
@@ -192,6 +199,7 @@ class Controls{
         let input = $('#respawn-chance-input');
         input.on('change',function(){
             EntityGroupManager.setRespawnChance(input.val());
+            Save.saveSnapshot();
         })
     }
     
@@ -221,6 +229,7 @@ class Controls{
         $('#entity-type-div').show();
         $('#entity-type-dropdown').val('');
         $('#group-name-input').val(group.groupName)
+        Save.saveSnapshot();
     }
 
     static chooseGroup(groupID){

@@ -244,7 +244,8 @@ class Controls{
     static hotkeys(){
         let ctrlKey = 17,
             cmdKey = 91,
-            zKey = 90;
+            zKey = 90,
+            yKey = 89;
         $(document).keydown(function(e) {
             if (e.keyCode == ctrlKey || e.keyCode == cmdKey) Controls.ctrlDown = true;
         }).keyup(function(e) {
@@ -254,6 +255,8 @@ class Controls{
             if (Controls.ctrlDown && (e.keyCode == zKey)){
                 e.preventDefault();
                 Save.rewind();
+            }else if(Controls.ctrlDown && (e.keyCode == yKey)){
+                Save.fastForward();  
             }
         })
     }

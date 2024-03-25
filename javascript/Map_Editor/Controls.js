@@ -10,11 +10,18 @@ class Controls{
     static saveButtons(){
         Controls.newMapSection();
         Controls.saveMapButton();
+        Controls.loadMapButton();
     }
 
     static saveMapButton(){
         $('#save-map-button').on('click',()=>{
             Save.downloadMap();
+        })
+    }
+
+    static loadMapButton(){
+        $('#load-map-input').off().change(function(){
+            Save.loadMap($('#load-map-input').prop('files')[0])
         })
     }
 

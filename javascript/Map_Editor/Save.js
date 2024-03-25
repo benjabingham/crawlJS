@@ -50,7 +50,7 @@ class Save{
     }
 
     static downloadMap(){
-        let file = new File([JSON.stringify(Save.getTopFrame)], 'my-map.txt', {
+        let file = new File([JSON.stringify(Save.getTopFrame())], 'my-map.txt', {
             type:'text/plain'
         })
 
@@ -65,5 +65,23 @@ class Save{
 
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
+    }
+
+    static loadMap(file){
+        if(!file){
+            return false;
+        }
+        var reader = new FileReader();
+        reader.readAsText(file,"UTF-8");
+        reader.onload = function (evt) {
+            let fileString = evt.target.result;
+            let fileJson = JSON.parse(fileString);
+            Grid.load(JSON.parse(fileJson.grid));
+            Save.load(fileJson);
+            Save.saveSnapshot();
+        }
+        reader.onerror = function (evt) {
+            $('#load-map-input').append("error reading file");
+        }
     }
 }

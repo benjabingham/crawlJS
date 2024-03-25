@@ -192,16 +192,18 @@ class Grid{
     }
 
     static load(json){
+        Grid.init(json.width,json.height);
+        /*
         for(const [key,val] of Object.entries(json)){
             EntityGroupManager[key] = val;
-        }
+        }*/
     }
 
     static getObject(){
         return {
             height:Grid.height,
             width:Grid.width,
-            matrix:Grid.matrix
+            //matrix:Grid.matrix
         }
     }
 

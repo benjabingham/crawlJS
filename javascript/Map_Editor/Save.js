@@ -44,4 +44,26 @@ class Save{
             Save.history.push(snapshot);
         }
     }
+
+    static getTopFrame(){
+        return Save.history[Save.history.length-1];
+    }
+
+    static downloadMap(){
+        let file = new File([JSON.stringify(Save.getTopFrame)], 'my-map.txt', {
+            type:'text/plain'
+        })
+
+        //create invisible link and click on it for download
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(file);
+
+        link.href = url;
+        link.download = file.name;
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }
 }

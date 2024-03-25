@@ -2,9 +2,20 @@ class Controls{
     static ctrlDown;
 
     static init(){
-        Controls.newMapSection();
+        Controls.saveButtons();
         Controls.controlPanel();
         Controls.hotkeys();
+    }
+
+    static saveButtons(){
+        Controls.newMapSection();
+        Controls.saveMapButton();
+    }
+
+    static saveMapButton(){
+        $('#save-map-button').on('click',()=>{
+            Save.downloadMap();
+        })
     }
 
     static newMapSection(){
@@ -28,6 +39,8 @@ class Controls{
             $('#new-map-div').hide(); 
         })
     }
+
+   
 
     static controlPanel(){
         Controls.eraseButtons();

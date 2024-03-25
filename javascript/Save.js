@@ -37,7 +37,9 @@ class Save{
         let file = new File([JSON.stringify(this)], 'crawlJS-save.txt', {
             type: 'text/plain',
         })
-        
+
+
+        //create invisible link and cause click on it for download
         const link = document.createElement('a')
         const url = URL.createObjectURL(file)
         

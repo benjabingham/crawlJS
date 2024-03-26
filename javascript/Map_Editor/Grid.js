@@ -6,6 +6,7 @@ class Grid{
     static rectangleStart = false;
     static drawing = false;
     static erase = false;
+    static selectedTiles = [];
 
     static init(width, height){
         Grid.width = width;
@@ -114,7 +115,7 @@ class Grid{
     }
 
     static previewRectangle(point1, point2){
-        Grid.updateGrid();
+        Grid.deSelectTiles();
         let x1 = Math.min(point1.x, point2.x);
         let x2 = Math.max(point1.x, point2.x);
         let y1 = Math.min(point1.y, point2.y);
@@ -130,6 +131,15 @@ class Grid{
     static selectTile(x,y){
         let tileDiv = $('#map-highlight-' + x + '-' + y);
         tileDiv.addClass('selected');
+        Grid.selectedTiles.push({x:x,y:y});
+    }
+
+    static deSelectTiles(){
+        while(Grid.selectedTiles.length > 0){
+            let tile = Grid.selectedTiles.pop();
+            let highlightDiv = $('#map-highlight-' + tile.x + '-' + tile.y);
+            highlightDiv.removeClass('selected');
+        }
     }
 
     static eraseEntity(x,y){

@@ -112,9 +112,9 @@ class Grid{
         for(let x = x1; x <= x2; x++){
             for(let y = y1; y <= y2; y++){
                 Grid.draw(x,y);
+                Grid.updateTileDisplay(x,y);
             }
         }
-        Grid.updateGrid();
     }
 
     static previewRectangle(point1, point2){
@@ -192,6 +192,7 @@ class Grid{
     }
 
     static updateGrid(){
+        console.log('updateGrid');
         let x = 0;
         let y = 0;
         Grid.matrix.forEach((row)=>{

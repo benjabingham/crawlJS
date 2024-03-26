@@ -101,8 +101,6 @@ class EntityInstance{
     }
 
     get symbol(){
-        console.log(this);
-        console.log(EntityGroupManager.entityGroups)
         return this.entityGroup.symbol;
     }
 

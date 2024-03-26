@@ -77,6 +77,9 @@ class Grid{
 
     static placeEntity(x,y){
         let group = EntityGroupManager.getCurrentGroup();
+        if(!group){
+            return false;
+        }
         let instance = group.newInstance(x,y);
         let oldInstance = Grid.getTile(x,y);
         if(oldInstance){

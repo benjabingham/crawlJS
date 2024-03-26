@@ -20,6 +20,10 @@ class Controls{
     }
 
     static loadMapButton(){
+        $('#load-map-button').on('click',()=>{
+            $('#load-map-input').click();
+        })
+
         $('#load-map-input').off().change(function(){
             Save.loadMap($('#load-map-input').prop('files')[0])
         })

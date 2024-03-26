@@ -179,3 +179,7 @@ h3,h4{
 #entity-group-controls{
     height:85%;
 }
+
+#load-map-input{
+    display:none;
+}

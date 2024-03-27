@@ -26,6 +26,7 @@ class Controls{
 
         $('#load-map-input').off().change(function(){
             Save.loadMap($('#load-map-input').prop('files')[0])
+            Controls.initNameInput();
         })
     }
 
@@ -41,6 +42,7 @@ class Controls{
             let width = parseInt($('#new-map-width-input').val());
             let height = parseInt($('#new-map-height-input').val());
             Grid.init(width,height);
+            Controls.initNameInput()
             $('#save-buttons').show();
             $('#new-map-div').hide(); 
         })
@@ -291,6 +293,13 @@ class Controls{
             }else if(Controls.ctrlDown && (e.keyCode == yKey)){
                 Save.fastForward();  
             }
+        })
+    }
+
+    static initNameInput(){
+        $('#map-name-input').show().val(Save.mapName).off().on('change',()=>{
+            Save.mapName = $('#map-name-input').val();
+            Save.saveSnapshot();
         })
     }
 

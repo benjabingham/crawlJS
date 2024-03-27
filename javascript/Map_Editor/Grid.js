@@ -36,6 +36,7 @@ class Grid{
                         */
                     }).on('mousedown',(e)=>{
                         e.preventDefault();
+                        $(':focus').trigger('blur');
                         if(e.shiftKey){
                             Grid.rectangleStart = {x:x,y:y};
                         }else{

@@ -3,8 +3,11 @@ class Save{
     static history = [];
     static future = [];
     static historyMax = 100;
+    static mapName = 'untitled map';
 
     static load(json){
+        Save.mapName = json.name;
+        Controls.initNameInput();
         //Grid.load(JSON.parse(json.grid));
         EntityGroupManager.load(JSON.parse(json.entityGroups));
         Grid.placeEntities();
@@ -15,6 +18,7 @@ class Save{
 
     static saveSnapshot(trimFuture = true){
         let snapshot = {
+            name: Save.mapName,
             grid: JSON.stringify(Grid.getObject()),
             entityGroups: JSON.stringify(EntityGroupManager.getObject())
         }
@@ -50,7 +54,7 @@ class Save{
     }
 
     static downloadMap(){
-        let file = new File([JSON.stringify(Save.getTopFrame())], 'my-map.txt', {
+        let file = new File([JSON.stringify(Save.getTopFrame())], Save.mapName+'.txt', {
             type:'text/plain'
         })
 
@@ -71,9 +75,12 @@ class Save{
         if(!file){
             return false;
         }
+        Save.mapName = file.name.split('.txt')[0];
+        console.log(file);
         var reader = new FileReader();
         reader.readAsText(file,"UTF-8");
         reader.onload = function (evt) {
+            console.log(evt);
             let fileString = evt.target.result;
             let fileJson = JSON.parse(fileString);
             Grid.load(JSON.parse(fileJson.grid));

@@ -11,7 +11,7 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('cave.json');
+        GameMaster.getRoom('rats and walls.json');
 
     }
 
@@ -54,7 +54,7 @@ class GameMaster{
             .then((response) => response.json())
             .then((json) => {
                 Save.mapInit(json);
-                EntityManager.loadRoom(Save.maps[roomString]);
+                EntityManager.loadRoom(Save.maps[roomString.split('.json')[0]]);
                 GameMaster.startGame();
             })
         }

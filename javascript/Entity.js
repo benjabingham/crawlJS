@@ -723,7 +723,7 @@ class Monster extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -731,6 +731,8 @@ class Monster extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        this.name = additionalParameters.entityName;
         
         return this;
     }
@@ -910,7 +912,7 @@ class Container extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -918,6 +920,8 @@ class Container extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        this.name = additionalParameters.entityName;
 
         return this;
     }

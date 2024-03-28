@@ -1,20 +1,20 @@
 class LootManager{
 
     static getEntityLoot(entitySave){
+        let entityGroupInfo = entitySave.entityGroupInfo;
         let lootChances = false;
-        let monsterKey = entitySave.value.monsterKey;
-        let containerKey = entitySave.value.containerKey;
+        let key = entityGroupInfo.key;
         
-        if(entitySave.value.loot){
-            lootChances = entitySave.value.loot;
-        }else if(monsterKey){
-            let template = monsterVars[monsterKey];
+        if(entityGroupInfo.loot){
+            lootChances = entityGroupInfo.loot;
+        }else if(entityGroupInfo.entityType == 'monster'){
+            let template = monsterVars[key];
             lootChances = template.loot;
             if(template.inventory){
                 entitySave.inventory.items = [...template.inventory];
             }
-        }else if(containerKey){
-            let template = containerVars[containerKey];
+        }else if(entityGroupInfo.entityType == 'container'){
+            let template = containerVars[key];
             lootChances = template.loot;
             if(template.inventory){
                 entitySave.inventory.items = [...template.inventory];

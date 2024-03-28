@@ -188,23 +188,23 @@ class EntityManager{
 
         Board.destinations = json.destinations;
         json.roster.forEach((entitySave)=>{
-            let value = entitySave.value;
+            let groupInfo = entitySave.entityGroupInfo;
             let entityObj;
             let x = entitySave.x;
             let y = entitySave.y;
             let random = Random.roll(0,99);
             let spawn = (random < entitySave.spawnChance || !entitySave.spawnChance);
-            if(value == "player"){
+            if(groupInfo.entityType == "player"){
                 EntityManager.playerInit(x, y)
-            }else if(value.isMonster){
+            }else if(groupInfo.entityType == "monster"){
                 if(entitySave.alive && spawn){
-                    entityObj = new Monster(value.monsterKey,x,y,value);
+                    entityObj = new Monster(groupInfo.key,x,y,groupInfo);
                 }
-            }else if(value.isWall){
-                entityObj = new Wall(x, y, value.hitDice, value.name, value.destructible);
-            }else if(value.isContainer){
+            }else if(groupInfo.entityType == 'wall'){
+                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible);
+            }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
-                    entityObj = new Container(value.containerKey,x,y,value);
+                    entityObj = new Container(groupInfo.key,x,y,groupInfo);
                 }
             }
             if(entityObj){
@@ -223,7 +223,6 @@ class EntityManager{
             }
         })
         
-
         EntityManager.currentMap = json;
         
     }

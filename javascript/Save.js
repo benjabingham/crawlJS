@@ -54,8 +54,43 @@ class Save{
         console.log(this);
     }
 
-    //TODO: this should be where we give monsters their loot
     static mapInit(json){
+        if(json.legacy){
+            Save.legacyMapInit(json);
+            return true;
+        }
+
+        let roomString = json.name;
+        console.log(roomString);
+        let entityGroups = json.entityGroups.entityGroups;
+        let roster = [];
+        let counter = 0;
+        for(const [key, entityGroup] of Object.entries(entityGroups)){
+            let instances = entityGroup.instances;
+            for(const [key2, instance] of Object.entries(instances)){
+                let entitySave = {
+                    entityGroupId: instance.entityGroupId,
+                    entityGroupInfo:entityGroup,
+                    index:counter,
+                    alive:true,
+                    x:instance.x,
+                    y:instance.y,
+                    inventory:{
+                        items:[]
+                    }
+                }
+                LootManager.getEntityLoot(entitySave);
+                roster.push(entitySave)
+                counter++;
+            }
+        }
+        json.roster = roster;
+        Save.maps[roomString] = json;
+        console.log(Save.maps);
+        console.log('loaded');
+    }
+
+    static legacyMapInit(json){
         let roomString = json.name;
         let board = json.board;
         let values = json.values;
@@ -68,8 +103,10 @@ class Save{
             row.forEach((item)=>{
                 if(item){
                     let entitySave = {
-                        code:item,
-                        value:values[item],
+                        //change code to entityGroupId
+                        entityGroupId:item,
+                        //change value to entityGroupInfo
+                        entityGroupInfo:values[item],
                         index:counter,
                         alive:true,
                         x:x,

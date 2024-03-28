@@ -155,7 +155,7 @@ class Display{
                 let symbol = '';
                 //out of bounds
                 if(Board.hasPlayerLos({x:x, y:y})){
-                    if(boardArray[y][x]){
+                    if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
                             gridDiv.addClass('grid-wall')
                         }
@@ -244,7 +244,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['cave']
+        let maps = ['cave','rats and walls']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(

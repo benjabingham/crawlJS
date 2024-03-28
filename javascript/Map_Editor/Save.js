@@ -19,7 +19,8 @@ class Save{
     static saveSnapshot(trimFuture = true){
         let snapshot = {
             name: Save.mapName,
-            grid: JSON.stringify(Grid.getObject()),
+            height: Grid.height,
+            width: Grid.width,
             entityGroups: JSON.stringify(EntityGroupManager.getObject())
         }
 
@@ -54,7 +55,10 @@ class Save{
     }
 
     static downloadMap(){
-        let file = new File([JSON.stringify(Save.getTopFrame())], Save.mapName+'.txt', {
+        //get deep copy of top frame
+        let json = JSON.parse(JSON.stringify(Save.getTopFrame()));
+        json.entityGroups = JSON.parse(json.entityGroups);
+        let file = new File([JSON.stringify(json)], Save.mapName+'.json', {
             type:'text/plain'
         })
 
@@ -75,7 +79,7 @@ class Save{
         if(!file){
             return false;
         }
-        Save.mapName = file.name.split('.txt')[0];
+        Save.mapName = file.name.split('.json')[0];
         console.log(file);
         var reader = new FileReader();
         reader.readAsText(file,"UTF-8");
@@ -83,7 +87,9 @@ class Save{
             console.log(evt);
             let fileString = evt.target.result;
             let fileJson = JSON.parse(fileString);
-            Grid.load(JSON.parse(fileJson.grid));
+            //stringify so Save.load can load it like any snapshot
+            fileJson.entityGroups = JSON.stringify(fileJson.entityGroups);
+            Grid.load(fileJson);
             Save.load(fileJson);
             Save.saveSnapshot();
         }

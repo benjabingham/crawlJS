@@ -5,6 +5,7 @@ class Controls{
         Controls.saveButtons();
         Controls.controlPanel();
         Controls.hotkeys();
+        Controls.zoomControl();
     }
 
     static saveButtons(){
@@ -301,6 +302,23 @@ class Controls{
             Save.mapName = $('#map-name-input').val();
             Save.saveSnapshot();
         })
+    }
+
+    static zoomControl(){
+        $('#map-grid-container').bind('mousewheel', function(e){
+            if(e.originalEvent.wheelDelta /120 > 0) {
+                e.preventDefault();
+                Grid.gridScale += .01
+            }
+            else{
+                e.preventDefault();
+                Grid.gridScale -= .01
+            }
+            let sizeString = Grid.gridScale*30+'px';
+
+            $('.map-grid-div').css({width:sizeString,height:sizeString})
+        });
+        
     }
 
     

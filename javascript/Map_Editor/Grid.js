@@ -8,6 +8,8 @@ class Grid{
     static erase = false;
     static selectedTiles = [];
 
+    static gridScale = 1.0;
+
     static init(width, height){
         Grid.width = width;
         Grid.height = height;

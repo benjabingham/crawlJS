@@ -11,7 +11,7 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('rats and walls.json');
+        GameMaster.getRoom('map.json');
 
     }
 

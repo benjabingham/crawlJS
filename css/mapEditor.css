@@ -80,6 +80,8 @@ input[type=number] {
     font-size:xx-large;
     float:left;
 
+    width:100%;
+
     display:grid;
     grid-template-columns: repeat(25, 1fr);
     grid-gap: 0px;
@@ -93,8 +95,9 @@ input[type=number] {
 .map-grid-div{
     background-color: #ddd;
     font-size:1.5rem;
-    width:30px;
-    height:30px;
+    width:100%;
+    height:100%;
+    position:relative;
     text-align:center;
     /*overflow:hidden;*/
     border:1px solid var(--gridLine);

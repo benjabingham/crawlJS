@@ -306,6 +306,7 @@ class Controls{
 
     static zoomControl(){
         $('#map-grid-container').bind('mousewheel', function(e){
+            let tileSize = 1/(Grid.width*Grid.height)
             if(e.originalEvent.wheelDelta /120 > 0) {
                 e.preventDefault();
                 Grid.gridScale += .01
@@ -314,9 +315,9 @@ class Controls{
                 e.preventDefault();
                 Grid.gridScale -= .01
             }
-            let sizeString = Grid.gridScale*30+'px';
-
-            $('.map-grid-div').css({width:sizeString,height:sizeString})
+            console.log('updateScale');
+            Grid.updateScale();
+            
         });
         
     }

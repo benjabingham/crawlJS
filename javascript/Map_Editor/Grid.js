@@ -66,6 +66,7 @@ class Grid{
                 )                 
             }
         }
+        Grid.updateScale();
     }
 
     static draw(x,y){
@@ -222,6 +223,14 @@ class Grid{
             width:Grid.width,
             //matrix:Grid.matrix
         }
+    }
+
+    static updateScale(){
+        let widthString = Grid.gridScale*100+'%';
+        let ratio = Grid.height/Grid.width;
+        let heightString = Grid.gridScale*ratio*100+'%';
+
+        $('#map-grid').css({width:widthString,height:heightString})
     }
 
 }

@@ -226,7 +226,19 @@ class Grid{
     }
 
     static updateScale(){
-        $('#map-grid').css('transform','scale('+Grid.gridScale+')');
+        let scale = Grid.gridScale / Grid.width * 20;
+        $('#map-grid').css('transform','scale('+scale+')');
+    }
+
+    static adjustScale(n){
+        console.log('adjustScale')
+        let increment = .1 * n * Grid.gridScale;
+        Grid.gridScale += increment;
+
+        console.log(Grid.gridScale);
+
+        Grid.updateScale();
+
     }
 
 }

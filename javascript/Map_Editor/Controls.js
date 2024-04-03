@@ -306,17 +306,14 @@ class Controls{
 
     static zoomControl(){
         $('#map-grid-container').bind('mousewheel', function(e){
-            let tileSize = 1/(Grid.width*Grid.height)
             if(e.originalEvent.wheelDelta /120 > 0) {
                 e.preventDefault();
-                Grid.gridScale += .01
+                Grid.adjustScale(1);
             }
             else{
                 e.preventDefault();
-                Grid.gridScale -= .01
+                Grid.adjustScale(-1);
             }
-            console.log('updateScale');
-            Grid.updateScale();
             
         });
         

@@ -235,6 +235,9 @@ class Grid{
         let increment = .1 * n * Grid.gridScale;
         Grid.gridScale += increment;
 
+        Grid.gridScale = Math.min(Grid.gridScale,10);
+        Grid.gridScale = Math.max(Grid.gridScale,1.1);
+
         console.log(Grid.gridScale);
 
         Grid.updateScale();

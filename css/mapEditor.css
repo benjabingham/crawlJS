@@ -67,7 +67,9 @@ input[type=number] {
 }
 
 #map-grid-container{
-    overflow:scroll;
+    /*overflow:scroll;*/
+    overflow:hidden;
+    position:relative;
     width:700px;
     height:700px;
     background-color: var(--dark);
@@ -79,8 +81,7 @@ input[type=number] {
     font-family: monospace;
     font-size:xx-large;
     float:left;
-
-    
+    position:absolute;
 
     display:grid;
     grid-template-columns: repeat(25, 1fr);

@@ -73,6 +73,8 @@ input[type=number] {
     width:700px;
     height:700px;
     background-color: var(--dark);
+    border:1px solid #222;
+    box-sizing: border-box;
 }
 
 #map-grid{

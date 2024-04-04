@@ -9,6 +9,8 @@ class Grid{
     static selectedTiles = [];
 
     static gridScale = 1.0;
+    static translateX = 0;
+    static translateY = 0;
 
     static init(width, height){
         Grid.width = width;
@@ -66,7 +68,7 @@ class Grid{
                 )                 
             }
         }
-        Grid.updateScale();
+        Grid.updateTransform();
     }
 
     static draw(x,y){
@@ -225,9 +227,11 @@ class Grid{
         }
     }
 
-    static updateScale(){
+    static updateTransform(){
         let scale = Grid.gridScale / Grid.width * 20;
-        $('#map-grid').css('transform','scale('+scale+')');
+        $('#map-grid').css(
+            'transform','scale('+scale+') translate('+Grid.translateX+'px,'+Grid.translateY+'px)'
+        );
     }
 
     static adjustScale(n){
@@ -240,8 +244,17 @@ class Grid{
 
         console.log(Grid.gridScale);
 
-        Grid.updateScale();
+        Grid.updateTransform();
 
     }
+
+    static pan(x,y){
+        Grid.translateX += x;
+        Grid.translateY += y;
+
+        Grid.updateTransform();
+    }
+
+
 
 }

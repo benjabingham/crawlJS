@@ -321,44 +321,49 @@ class Controls{
     }
 
     static dragGrid() {
-        let elmnt = document.getElementById('map-grid');
+        let element = $('#map-grid-container');
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        //prevent contextmenu
+        element.on('contextmenu',function(){
+            return false;
+        })
         
-        elmnt.onmousedown = dragMouseDown;
-        
-      
-        function dragMouseDown(e) {
-        console.log('dragdown')
-          e = e || window.event;
-          e.preventDefault();
-          // get the mouse cursor position at startup:
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          document.onmouseup = closeDragElement;
-          // call a function whenever the cursor moves:
-          document.onmousemove = elementDrag;
-        }
-      
-        function elementDrag(e) {
-            console.log('elementDrag');
-          e = e || window.event;
-          e.preventDefault();
-          // calculate the new cursor position:
-          pos1 = pos3 - e.clientX;
-          pos2 = pos4 - e.clientY;
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          // set the element's new position:
-          elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-          elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-        }
-      
-        function closeDragElement() {
-          /* stop moving when mouse button is released:*/
-          document.onmouseup = null;
-          document.onmousemove = null;
-        }
-      }
+        element.on('mousedown', function(e){
+            //only trigger on right click
+            if(e.originalEvent.buttons != 2){
+                return false;
+            }
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            $(document).on('mouseup',function(e){
+                console.log(e);
+                if(e.originalEvent.button != 2){
+                    return false;
+                }
+                console.log('up');
+                e.preventDefault();
+                
+                $(document).off('mouseup');
+                $(document).off('mousemove');
+            })
+            // call a function whenever the cursor moves:
+            $(document).on('mousemove',function(e){
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                //elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                //elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                Grid.pan(pos1*-1,pos2*-1);
+                //element.css('transform','translate('+pos2+'px,'+pos1+'px)')
+            })
+        })
+    }
 
     
 }

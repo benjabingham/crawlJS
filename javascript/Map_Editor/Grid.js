@@ -265,6 +265,13 @@ class Grid{
         Grid.translateY = Math.min(Grid.translateY, maxTranslateY);
         Grid.translateY = Math.max(Grid.translateY, maxTranslateY*-1);
 
+        console.log({
+            maxX:maxTranslateX,
+            maxY:maxTranslateY,
+            X:Grid.translateX,
+            Y:Grid.translateY
+        }
+
         Grid.updateTransform();
     }
 

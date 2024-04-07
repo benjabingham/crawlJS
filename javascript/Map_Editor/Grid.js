@@ -256,6 +256,15 @@ class Grid{
         Grid.translateX += x;
         Grid.translateY += y;
 
+        let maxTranslateX = Grid.gridScale * Grid.width;
+        let maxTranslateY = Grid.gridScale * Grid.height;
+
+        Grid.translateX = Math.min(Grid.translateX, maxTranslateX);
+        Grid.translateX = Math.max(Grid.translateX, maxTranslateX*-1);
+
+        Grid.translateY = Math.min(Grid.translateY, maxTranslateY);
+        Grid.translateY = Math.max(Grid.translateY, maxTranslateY*-1);
+
         Grid.updateTransform();
     }
 

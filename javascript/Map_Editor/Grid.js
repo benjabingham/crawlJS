@@ -40,10 +40,6 @@ class Grid{
                         */
                     }).on('mousedown',(e)=>{
                         e.preventDefault();
-                        //only count left click
-                        if(e.originalEvent.buttons != 1){
-                            return false;
-                        }
                         $(':focus').trigger('blur');
                         if(e.shiftKey){
                             Grid.rectangleStart = {x:x,y:y};

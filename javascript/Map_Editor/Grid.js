@@ -270,7 +270,7 @@ class Grid{
             maxY:maxTranslateY,
             X:Grid.translateX,
             Y:Grid.translateY
-        }
+        })
 
         Grid.updateTransform();
     }

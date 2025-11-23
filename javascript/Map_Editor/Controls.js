@@ -282,7 +282,8 @@ class Controls{
         let ctrlKey = 17,
             cmdKey = 91,
             zKey = 90,
-            yKey = 89;
+            yKey = 89,
+            spaceBar = 32;
         $(document).keydown(function(e) {
             if (e.keyCode == ctrlKey || e.keyCode == cmdKey) Controls.ctrlDown = true;
         }).keyup(function(e) {
@@ -294,8 +295,13 @@ class Controls{
                 Save.rewind();
             }else if(Controls.ctrlDown && (e.keyCode == yKey)){
                 Save.fastForward();  
+            }else if(e.keyCode = spaceBar){
+                Grid.translateX = 0;
+                Grid.translateY = 0;
+                Grid.updateTransform();
             }
         })
+
     }
 
     static initNameInput(){

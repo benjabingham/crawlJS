@@ -276,10 +276,11 @@ class Grid{
         })
 */
 
-console.log({
-    X:Grid.translateX,
-    Y:Grid.translateY
-})
+        console.log({
+            X:Grid.translateX,
+            Y:Grid.translateY
+        })
+        
         Grid.updateTransform();
     }
 

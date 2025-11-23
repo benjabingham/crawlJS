@@ -258,6 +258,7 @@ class Grid{
         Grid.translateX += x;
         Grid.translateY += y;
 
+        /*
         let maxTranslateX = Grid.gridScale * Grid.width;
         let maxTranslateY = Grid.gridScale * Grid.height;
 
@@ -273,7 +274,12 @@ class Grid{
             X:Grid.translateX,
             Y:Grid.translateY
         })
+*/
 
+console.log({
+    X:Grid.translateX,
+    Y:Grid.translateY
+})
         Grid.updateTransform();
     }
 

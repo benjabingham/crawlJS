@@ -246,7 +246,7 @@ class Grid{
         Grid.gridScale += increment;
 
         Grid.gridScale = Math.min(Grid.gridScale,10);
-        Grid.gridScale = Math.max(Grid.gridScale,1.1);
+        Grid.gridScale = Math.max(Grid.gridScale,1);
 
         console.log(Grid.gridScale);
 
@@ -280,7 +280,7 @@ class Grid{
             X:Grid.translateX,
             Y:Grid.translateY
         })
-        
+
         Grid.updateTransform();
     }
 

@@ -55,10 +55,6 @@ class Save{
     }
 
     static mapInit(json){
-        if(json.legacy){
-            Save.legacyMapInit(json);
-            return true;
-        }
 
         let roomString = json.name;
         console.log('initializing map - '+roomString);
@@ -87,46 +83,6 @@ class Save{
         json.roster = roster;
         Save.maps[roomString] = json;
         console.log(Save.maps);
-        console.log('loaded');
-    }
-
-    static legacyMapInit(json){
-        let roomString = json.name;
-        let board = json.board;
-        let values = json.values;
-        let roster = [];
-        let counter = 0;
-        let x = 0;
-        let y = 0;
-        //get roster
-        board.forEach((row)=>{
-            row.forEach((item)=>{
-                if(item){
-                    let entitySave = {
-                        //change code to entityGroupId
-                        entityGroupId:item,
-                        //change value to entityGroupInfo
-                        entityGroupInfo:values[item],
-                        index:counter,
-                        alive:true,
-                        x:x,
-                        y:y,
-                        inventory:{
-                            items:[]
-                        }
-                    }
-                    LootManager.getEntityLoot(entitySave);
-                    roster.push(entitySave)
-                    counter++;
-
-                }
-                x++;
-            })
-            y++;
-            x=0;
-        })
-        json.roster = roster;
-        Save.maps[roomString] = json;
         console.log('loaded');
     }
 

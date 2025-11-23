@@ -295,7 +295,7 @@ class Controls{
                 Save.rewind();
             }else if(Controls.ctrlDown && (e.keyCode == yKey)){
                 Save.fastForward();  
-            }else if(e.keyCode == spaceBar){
+            }else if(e.keyCode == spaceBar && !$('input').is(":focus")){
                 Grid.translateX = 0;
                 Grid.translateY = 0;
                 Grid.updateTransform();

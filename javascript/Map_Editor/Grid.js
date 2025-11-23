@@ -41,18 +41,17 @@ class Grid{
                     }).on('mousedown',(e)=>{
                         e.preventDefault();
                         //only count left click
-                        /*
-                        if(e.originalEvent.buttons != 1){
-                            return false;
+                        
+                        if(e.originalEvent.buttons == 1){
+                            $(':focus').trigger('blur');
+                            if(e.shiftKey){
+                                Grid.rectangleStart = {x:x,y:y};
+                            }else{
+                                Grid.drawing = true;
+                                Grid.draw(x,y);
+                            }
                         }
-                        */
-                        $(':focus').trigger('blur');
-                        if(e.shiftKey){
-                            Grid.rectangleStart = {x:x,y:y};
-                        }else{
-                            Grid.drawing = true;
-                            Grid.draw(x,y);
-                        }
+                        
                     }).on('mouseup',(e)=>{
                         if(Grid.rectangleStart){
                             Grid.drawRectangle(Grid.rectangleStart,{x:x,y:y});
@@ -246,7 +245,7 @@ class Grid{
         Grid.gridScale += increment;
 
         Grid.gridScale = Math.min(Grid.gridScale,10);
-        Grid.gridScale = Math.max(Grid.gridScale,1);
+        Grid.gridScale = Math.max(Grid.gridScale,1.1);
 
         console.log(Grid.gridScale);
 
@@ -280,7 +279,7 @@ class Grid{
             X:Grid.translateX,
             Y:Grid.translateY
         })
-
+        
         Grid.updateTransform();
     }
 

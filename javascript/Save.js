@@ -61,7 +61,7 @@ class Save{
         }
 
         let roomString = json.name;
-        console.log(roomString);
+        console.log('initializing map - '+roomString);
         let entityGroups = json.entityGroups.entityGroups;
         let roster = [];
         let counter = 0;

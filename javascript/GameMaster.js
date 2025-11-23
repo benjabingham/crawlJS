@@ -11,7 +11,7 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('map.json');
+        GameMaster.getRoom('testmap.json');
 
     }
 
@@ -53,6 +53,7 @@ class GameMaster{
             fetch('./rooms/'+roomString)
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString.split('.json')[0]]);
                 GameMaster.startGame();
@@ -71,7 +72,12 @@ class GameMaster{
         }else if (y >= Board.height){
             direction = "down"
         }
-        let destination = Board.destinations[direction]
+        let destination = false;
+        if(Board.destinations){
+            destination = Board.destinations[direction];
+        }else{
+            destination = {type: "town"};
+        }
         if(!destination){
             return false;
         }

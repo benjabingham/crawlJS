@@ -182,6 +182,7 @@ class EntityManager{
     }
 
     static loadRoom(json){
+        console.log(json);
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit(json);

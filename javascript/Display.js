@@ -249,7 +249,7 @@ class Display{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
                     $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element+".json")
+                        GameMaster.getRoom(element)
                     })
                 )
             )

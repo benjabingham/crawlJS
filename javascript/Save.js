@@ -117,10 +117,12 @@ class Save{
 
     static mapRespawn(mapString){
         let map = Save.maps[mapString];
+        console.log(map)
         map.roster.forEach((entity)=>{
-            if(!entity.alive && entity.value.respawnChance){
+            console.log(entity);
+            if(!entity.alive && entity.entityGroupInfo.respawnChance){
                 let random = Random.roll(0,99);
-                if(random < entity.value.respawnChance){
+                if(random < entity.entityGroupInfo.respawnChance){
                     entity.alive = true;
                     LootManager.getEntityLoot(entity);
                 }

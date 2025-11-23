@@ -11,7 +11,7 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('Rat Nest.json');
+        GameMaster.getRoom('Rat Nest');
 
     }
 
@@ -50,12 +50,12 @@ class GameMaster{
             GameMaster.startGame();
         }else{
             console.log('loading room '+roomString);
-            fetch('./rooms/'+roomString)
+            fetch('./rooms/'+roomString+'.json')
             .then((response) => response.json())
             .then((json) => {
                 console.log(json);
                 Save.mapInit(json);
-                EntityManager.loadRoom(Save.maps[roomString.split('.json')[0]]);
+                EntityManager.loadRoom(Save.maps[roomString]);
                 GameMaster.startGame();
             })
         }

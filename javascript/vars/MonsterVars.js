@@ -89,6 +89,25 @@ let monsterVars = {
         }],
         color:'gray'
     },
+    kingRat:{
+        name:"king rat",
+        symbol:"Kr",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:25,
+            enrage:30,
+            daze:30
+        },
+        hitDice:4,
+        damage:6,
+        inventorySlots: 0,
+        inventory:[{
+            name:"king rat's skull",
+            value:15,
+            color:'red'
+        }],
+        color:'darkRed'
+    },
     wolf:{
         name:"wolf",
         symbol:"Wo",

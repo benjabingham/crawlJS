@@ -38,7 +38,7 @@ class Player {
         Player.health = Player.healthMax
         Player.luck = Player.luckMax
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
-        Player.nourishment = 0;
+        Player.nourishment = 10;
         Player.inventoryCleanup();
     }
 

@@ -11,7 +11,7 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('Rat Nest');
+        GameMaster.getRoom('Starting Dungeon');
 
     }
 

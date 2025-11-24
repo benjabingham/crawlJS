@@ -88,8 +88,9 @@ class Player {
     }
 
     static rest(){
-        let health = Player.nourishmentLevel-1;
+        let health = Player.nourishmentLevel;
         Player.changeHealth(health);
+        Player.changeNourishment(health*-1);
 
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);
@@ -144,8 +145,13 @@ class Player {
 
     static changeNourishment(n){
         Player.nourishment = Player.nourishment+n;
+        /*
         if(Player.nourishment > Player.nourishmentMax){
             Player.changeLuck(1);
+        }
+        */
+        if(Player.nourishment < n){
+            Player.changeHealth(n - Player.nourishment);
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)

@@ -204,9 +204,8 @@ class Display{
         $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
-            {name:'meager meal',cost:3,nourishment:2},
-            {name:'proper meal',cost:4,nourishment:3},
-            {name:'exquisite meal',cost:6,nourishment:5},
+            {name:'Morsel',cost:1,nourishment:1},
+            {name:'Proper Meal',cost:5,nourishment:100},
         ]
 
         $('#meals-div').html('');

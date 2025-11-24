@@ -83,6 +83,15 @@ class EntityManager{
             let skip = entity.stunned
             if(entity.behaviorInfo){
                 skip += (random <= entity.behaviorInfo.slow);
+                if(entity.behaviorInfo.wait){
+                    if(!EntityManager.hasPlayerLos(entity)){
+                        skip++;
+                        console.log('waiting')
+                    }else{
+                        entity.behaviorInfo.wait = false;
+                        console.log('found you!');
+                    }
+                }
             }
             
             if (!skip){

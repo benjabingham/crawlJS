@@ -37,7 +37,8 @@ class Player {
         Player.stamina = Player.staminaMax;
         Player.health = Player.healthMax
         Player.luck = Player.luckMax
-        Player.nourishment = Math.floor(Player.nourishmentMax/2)
+        //Player.nourishment = Math.floor(Player.nourishmentMax/2)
+        Player.nourishment = 7;
         Player.inventoryCleanup();
     }
 

@@ -6,5 +6,6 @@ let mainReleases = [
 ]
 
 let devBranches = [
+    {name: 'Dev', branchName: 'dev'},
     {name: 'Map Editor 2025', branchName: 'map-editor-2025'},
 ]

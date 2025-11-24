@@ -27,12 +27,40 @@ let monsterVars = {
         },
         color:'darkGreen'
     },
+    goblinBoss:{
+        name:"goblin boss",
+        symbol:"Gb",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:20,
+            enrage:30,
+            daze:15
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 3,
+        loot:{
+            weapon:{
+                chance:30,
+                tier:2
+            },
+            treasure:{
+                chance:30,
+                tier:4
+            },
+            gold:{
+                chance:50,
+                tier:3
+            }
+        },
+        color:'darkGreen'
+    },
     ogre:{
         name:"ogre",
         symbol:"Og",
         behavior:"chase",
         behaviorInfo:{
-            focus:7,
+            focus:10,
             enrage:75,
             slow:40,
             beat:30,
@@ -95,8 +123,7 @@ let monsterVars = {
         behavior:"chase",
         behaviorInfo:{
             focus:25,
-            enrage:30,
-            daze:30
+            enrage:30
         },
         hitDice:4,
         damage:6,

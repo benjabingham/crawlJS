@@ -200,13 +200,14 @@ class GameMaster{
 
 
     static postPlayerAction(){     
-        Player.checkHungerModifiers();
         EntityManager.placeSword('player');   
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }
-
         Board.placeEntities();
+        if(!EntityManager.skipBehaviors){
+            Player.checkHungerModifiers();
+        }
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();

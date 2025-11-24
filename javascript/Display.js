@@ -204,9 +204,9 @@ class Display{
         $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
-            {name:'meager meal',cost:3,nourishment:3},
-            {name:'proper meal',cost:4,nourishment:5},
-            {name:'exquisite meal',cost:6,nourishment:8},
+            {name:'meager meal',cost:3,nourishment:2},
+            {name:'proper meal',cost:4,nourishment:3},
+            {name:'exquisite meal',cost:6,nourishment:5},
         ]
 
         $('#meals-div').html('');
@@ -234,11 +234,13 @@ class Display{
         $('#health-level').css('width',healthPercent*1.5+"px");
         $('#health-level').text(Player.health+"/"+Player.healthMax);
 
-
         let luckPercent = Player.luckPercent;
         $('#luck-level').css('width',luckPercent*1.5+"px");
         $('#luck-level').text(Player.luck+"/"+Player.luckMax);
 
+        let hungerPercent = Player.hungerPercent;
+        $('#hunger-level').css('width',hungerPercent*1.5+"px");
+        $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
 
     }
     

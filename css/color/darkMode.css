@@ -17,6 +17,8 @@
     --staminaBarText:var(--yellow);
     --luckBar:var(--darkGreen);
     --luckBarText:var(--green);
+    --hungerBar:var(--orange);
+    --hungerBarText:far(var(--darkOrange));
     --resourceBorder:var(--defaultEntity);
 
     /*menus*/
@@ -38,6 +40,8 @@
     --darkGreen:rgb(44, 109, 44);
     --yellow:yellow;
     --darkYellow:rgb(110, 110, 0);
+    --orange:orange;
+    --darkOrange:rgb(150,110,0);
 
     --clearBlue:rgba(0, 155, 155, 0.514);
     --bone:rgb(160, 138, 105);

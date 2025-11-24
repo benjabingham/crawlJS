@@ -65,7 +65,10 @@ class Player {
 
     static get luckPercent(){
         return Math.floor((Player.luck/Player.luckMax)*100);
+    }
 
+    static get hungerPercent(){
+        return Math.floor((Player.nourishment/Player.nourishmentMax)*100)
     }
 
     static get nourishmentLevel(){
@@ -91,7 +94,7 @@ class Player {
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);
 
-        Player.changeNourishment(-5);
+        Player.changeNourishment(-3);
 
         console.log(Player.nourishment);
         console.log(Player.nourishmentLevel);
@@ -99,27 +102,32 @@ class Player {
 
 
     static gainStamina(){
-        let stamina;
-        if(Player.nourishment < 4){
-            stamina = 1;
-        }else{
-            stamina = 2;
-        }
         let random = Math.random()*100;
-        if(Player.nourishment == 0 && random < 50){
-            stamina--;
-        }
-        if(Player.nourishment ==10 && random < 50){
+        let stamina = 2;
+        let gainChance = (Player.nourishment - 5)*5;
+        let loseChance = (5 - Player.nourishment)*5;
+        
+        if (random < gainChance){
             stamina++;
+        }else if(random < loseChance){
+            stamina--;
         }
 
         Player.changeStamina(stamina);
     }
 
     static changeStamina(n){
+        let oldStamina = Player.stamina;
+
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Player.stamina+n;
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
+
+        let random = Math.random()*100;
+        let hungerChance = Player.stamina - oldStamina;
+        if(random < hungerChance){
+            Player.changeNourishment(-1);
+        }
     }
 
     static changeHealth(n){
@@ -141,6 +149,11 @@ class Player {
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
+        Display.fillBars();
+    }
+
+    static setNourishment(n){
+        Player.nourishment = n;
     }
 
 

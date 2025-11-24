@@ -125,7 +125,7 @@ class Player {
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
 
         let random = Math.random()*100;
-        let hungerChance = Player.stamina - oldStamina;
+        let hungerChance = (Player.stamina - oldStamina)*2;
         if(random < hungerChance){
             Player.changeNourishment(-1);
         }
@@ -152,6 +152,7 @@ class Player {
         */
         if(Player.nourishment < n){
             Player.changeHealth(n - Player.nourishment);
+            Log.addMessage('You are starving.', urgent);
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)

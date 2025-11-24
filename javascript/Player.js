@@ -150,9 +150,9 @@ class Player {
             Player.changeLuck(1);
         }
         */
-        if(Player.nourishment < n){
-            Player.changeHealth(n - Player.nourishment);
-            Log.addMessage('You are starving.', urgent);
+        if(Player.nourishment < n*-1){
+            Player.changeHealth((n + Player.nourishment));
+            Log.addMessage('You are starving.', 'urgent');
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)

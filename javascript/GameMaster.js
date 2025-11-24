@@ -198,6 +198,7 @@ class GameMaster{
 
 
     static postPlayerAction(){     
+        Player.checkHungerModifiers();
         EntityManager.placeSword('player');   
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();

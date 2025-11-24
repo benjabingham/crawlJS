@@ -105,7 +105,6 @@ class Player {
     static gainStamina(){
         let stamina = 2;
         Player.changeStamina(stamina);
-        Player.checkHungerModifiers();
     }
 
     static checkHungerModifiers(){
@@ -117,8 +116,8 @@ class Player {
         if (random < gainChance){
             if(Player.stamina < Player.staminaMax){
                 Log.addMessage('Your full stomach lends you strength.', 'pos');
+                stamina++;
             }
-            stamina++;
         }else if(random < loseChance){
             stamina--;
             Log.addMessage('Your hunger weakens you...', 'danger');

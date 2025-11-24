@@ -38,7 +38,7 @@ class Player {
         Player.health = Player.healthMax
         Player.luck = Player.luckMax
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
-        Player.nourishment = 7;
+        Player.nourishment = 0;
         Player.inventoryCleanup();
     }
 
@@ -132,6 +132,7 @@ class Player {
 
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Player.stamina+n;
+        Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
 
         let random = Math.random()*100;

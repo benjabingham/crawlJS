@@ -69,6 +69,7 @@ class Controls{
         Controls.colorInput();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
+        Controls.waitInput();
     }
 
     static eraseButtons(){
@@ -230,6 +231,14 @@ class Controls{
             Save.saveSnapshot();
         })
     }
+
+    static waitInput(){
+        let input = $('#wait-checkbox');
+        input.on('change',function(){
+            EntityGroupManager.setWait(input.is(':checked'));
+            Save.saveSnapshot();
+        })
+    }
     
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
@@ -243,6 +252,7 @@ class Controls{
         $('#entity-options').show();
         $('#spawn-chance-input').val(EntityGroupManager.currentSpawnChance);
         $('#respawn-chance-input').val(EntityGroupManager.currentRespawnChance);
+        $('#wait-checkbox').prop('checked',(EntityGroupManager.currentWait));
     }
 
     static newGroup(){
@@ -262,7 +272,7 @@ class Controls{
 
     static chooseGroup(groupID){
         let group = EntityGroupManager.selectGroup(groupID)
-
+        console.log(group);
         $('.control-panel-input-divs').show();
         $('#group-name-input').val(group.groupName);
         $('#entity-type-dropdown').val(group.entityType);

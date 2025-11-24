@@ -63,6 +63,11 @@ class EntityGroupManager{
         return group.respawnChance;
     }
 
+    static get currentWait(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.wait;
+    }
+
     static setEntityType(entityType){
         let group = EntityGroupManager.getCurrentGroup();
         group.setEntityType(entityType);
@@ -101,6 +106,11 @@ class EntityGroupManager{
     static setRespawnChance(respawnChance){
         let group = EntityGroupManager.getCurrentGroup();
         group.respawnChance = respawnChance;
+    }
+
+    static setWait(wait){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.wait = wait;
     }
 
     //PROBLEM - entitygroups and instances are losing their methods.

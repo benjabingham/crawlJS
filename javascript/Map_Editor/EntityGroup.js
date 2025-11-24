@@ -10,6 +10,7 @@ class EntityGroup{
     groupName;
     spawnChance = 100;
     respawnChance = 100;
+    wait = false;
     instances = {};
     count = 0;
 

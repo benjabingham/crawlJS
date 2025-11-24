@@ -23,6 +23,8 @@ class GameMaster{
     }
 
     static startGame(){
+        Log.wipeLog();
+        Log.printLog();
         let entityManager = EntityManager;
         let board = Board;
         entityManager.skipBehaviors = false;

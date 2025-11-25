@@ -120,10 +120,11 @@ class Save{
         console.log(map)
         map.roster.forEach((entity)=>{
             console.log(entity);
-            if(!entity.alive && entity.entityGroupInfo.respawnChance){
+            if((!entity.alive || entity.entityGroupInfo.entitytype == 'container') && entity.entityGroupInfo.respawnChance){
                 let random = Random.roll(0,99);
                 if(random < entity.entityGroupInfo.respawnChance){
                     entity.alive = true;
+                    entity.inventory.items = [];
                     LootManager.getEntityLoot(entity);
                 }
             }

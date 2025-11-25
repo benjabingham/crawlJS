@@ -223,6 +223,8 @@ class EntityManager{
             }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
                     entityObj = new Container(groupInfo.key,x,y,groupInfo);
+                    console.log(groupInfo);
+                    console.log(entityObj);
                 }
             }
             if(entityObj){

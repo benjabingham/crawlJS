@@ -213,12 +213,12 @@ class Player {
         Player.inventoryCleanup();
     }
 
-    static equipWeapon(weapon){
+    static equipWeapon(weapon, verbose=true){
         if(Player.equipped){
             return;
         }
         Player.equipped = weapon;
-        EntityManager.equipWeapon('player', weapon);
+        EntityManager.equipWeapon('player', weapon, verbose);
     }
 
     static unequipWeapon(){

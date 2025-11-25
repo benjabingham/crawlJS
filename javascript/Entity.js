@@ -487,6 +487,9 @@ class SwordEntity extends Entity{
         }else if (this.rotation % 4 == 3){
             symbol = '\\';
         }
+
+        //name needs to regularly updated in case the item becomes worn... This is the best place to do it.
+        this.name = this.item.name;
     
         this.symbol = symbol;
     }

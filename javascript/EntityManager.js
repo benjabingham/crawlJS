@@ -37,12 +37,18 @@ class EntityManager{
         let item = weapon.item;
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
+        console.log(random)
+        console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
-                LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);
-                LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
 
+                LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
+                if(!item.worn){
+                    LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
+                }          
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
+                console.log(item);
+                console.log(Player.equipped);
             }else{
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
@@ -128,11 +134,13 @@ class EntityManager{
         }
     }
 
-    static equipWeapon(wielderId, weapon){
+    static equipWeapon(wielderId, weapon, verbose=true){
         let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
-        EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+        if(verbose){
+            EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+        }
     }
 
     static unequipWeapon(wielderId){

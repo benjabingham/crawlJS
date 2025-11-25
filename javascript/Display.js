@@ -245,7 +245,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Rat Nest', 'Goblin Keep']
+        let maps = ['Rat Nest', 'Goblin Keep', 'Dark Forest']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(

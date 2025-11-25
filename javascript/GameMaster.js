@@ -95,7 +95,8 @@ class GameMaster{
     }
 
     static loadTown(){
-        GameMaster.nextDay();
+        //GameMaster.nextDay();
+        Player.changeExertion(1);
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();

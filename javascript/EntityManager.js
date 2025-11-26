@@ -73,6 +73,15 @@ class EntityManager{
 
     
     static movePlayer(x,y){
+        if(Player.exertion > 1){
+            if(Player.stamina){
+                Player.changeStamina(-1);
+            }else{
+                EntityManager.cancelAction({insuficientStamina:true});
+                return false;
+            }
+
+        }
         if(!EntityManager.moveEntity('player',x,y)){
             EntityManager.cancelAction({blocked:true})
         }

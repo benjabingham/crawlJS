@@ -109,6 +109,9 @@ class Player {
 
     static gainStamina(){
         let stamina = 2;
+        if(Player.exertion){
+            stamina--;
+        }
         Player.changeStamina(stamina);
     }
 

@@ -217,8 +217,7 @@ let itemVars = {
             name: "kindling",
             fuel:true,
             light:1,
-            uses:1,
-            value:0,
+            value:1,
             color:'woodBrown'
         }
     },

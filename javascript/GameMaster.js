@@ -11,7 +11,11 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('Starting Dungeon');
+        GameMaster.getRoom(
+            'Abandoned Village',
+            'You awake in the dead of night to the sounds of violence. \Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)'
+        );
+            
 
     }
 
@@ -22,8 +26,11 @@ class GameMaster{
         EntityManager.wipeEntities();
     }
 
-    static startGame(){
+    static startGame(message=false){
         Log.wipeLog();
+        if(message){
+            Log.addMessage(message,'urgent');
+        }
         Log.printLog();
         let entityManager = EntityManager;
         let board = Board;
@@ -45,7 +52,7 @@ class GameMaster{
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
     }
 
-    static getRoom(roomString){
+    static getRoom(roomString, message=false){
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
@@ -58,7 +65,7 @@ class GameMaster{
                 console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
-                GameMaster.startGame();
+                GameMaster.startGame(message);
             })
         }
     }

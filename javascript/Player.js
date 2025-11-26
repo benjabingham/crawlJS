@@ -11,6 +11,8 @@ class Player {
     static nourishmentMax = 10;
     static nourishment;
 
+    static exertion = 0;
+
     static light = 0;
     static lightMax = 8;
     static lightTime = 0;
@@ -98,6 +100,8 @@ class Player {
 
         Player.changeNourishment(-3);
 
+        Player.setExertion(0);
+
         console.log(Player.nourishment);
         console.log(Player.nourishmentLevel);
     }
@@ -105,6 +109,9 @@ class Player {
 
     static gainStamina(){
         let stamina = 2;
+        if(Player.exertion){
+            stamina--;
+        }
         Player.changeStamina(stamina);
     }
 
@@ -152,6 +159,18 @@ class Player {
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
+    }
+
+    static changeExertion(n){
+        n += Player.exertion;
+        Player.setExertion(n);
+        
+    }
+
+    static setExertion(n){
+        Player.exertion = n;
+        Player.exertion = Math.min(Player.exertion, 2);
+        Player.exertion = Math.max(Player.exertion, 0);
     }
 
     static changeNourishment(n){

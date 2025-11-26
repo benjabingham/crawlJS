@@ -45,7 +45,8 @@ class Display{
         Display.restButton();
         Display.fillBars(Player);
         Display.nourishmentDiv(Player);
-        Display.scrollToTop();    }
+        Display.scrollToTop();
+    }
 
     static hideAllScreens(){
         $('#town-screen').hide();
@@ -223,6 +224,13 @@ class Display{
             )
         })
     }
+
+    static exertionDiv(){
+        let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
+        let exertionColors = {0:'black', 1:'darkOrange',2:'red'}
+        
+        $('#exertion-level-div').text('You are '+exertionLevels[Player.exertion]+'.').css('color', 'var(--'+exertionColors[Player.exertion]+')');
+    }
     
     static fillBars(){
         let staminaPercent = Player.staminaPercent;
@@ -240,6 +248,8 @@ class Display{
         let hungerPercent = Player.hungerPercent;
         $('#hunger-level').css('width',hungerPercent*1.5+"px");
         $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
+
+        Display.exertionDiv();
 
     }
     
@@ -259,6 +269,7 @@ class Display{
 
     static restButton(){
         $('#rest-button').off().on('click',()=>{
+            GameMaster.nextDay();
             GameMaster.loadTown();
         })
     }

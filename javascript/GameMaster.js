@@ -28,6 +28,7 @@ class GameMaster{
 
     static startGame(message=false){
         Log.wipeLog();
+        Log.initialWarnings();
         if(message){
             Log.addMessage(message,'urgent');
         }
@@ -95,6 +96,7 @@ class GameMaster{
         GameMaster.reset();
 
         if(destination.type == "town"){
+            Player.changeExertion(1);
             GameMaster.loadTown();
         }else if(destination.type == "dungeon"){
             GameMaster.getRoom(destination.name);
@@ -102,7 +104,7 @@ class GameMaster{
     }
 
     static loadTown(){
-        GameMaster.nextDay();
+        //GameMaster.nextDay();
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();

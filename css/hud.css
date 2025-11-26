@@ -14,7 +14,7 @@
     }
 }
 
-#day-div, #nourishment-level-div{
+#day-div, #nourishment-level-div, #exertion-level-div{
     margin:auto;
     width:fit-content;
 }

@@ -88,6 +88,7 @@ class GameMaster{
         GameMaster.reset();
 
         if(destination.type == "town"){
+            Player.changeExertion(1);
             GameMaster.loadTown();
         }else if(destination.type == "dungeon"){
             GameMaster.getRoom(destination.name);
@@ -96,7 +97,6 @@ class GameMaster{
 
     static loadTown(){
         //GameMaster.nextDay();
-        Player.changeExertion(1);
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();

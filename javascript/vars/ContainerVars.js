@@ -9,7 +9,7 @@ let containerVars = {
         isContainer: true,
         loot:{
             weapon:{
-                chance:50,
+                chance:30,
                 tier:1
             },
             treasure:{
@@ -53,16 +53,16 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 10,
+        inventorySlots: 1,
         isContainer: true,
         loot:{
-            weapon:{
-                chance:75,
-                tier:-2
-            },
             treasure:{
                 chance:50,
                 tier:-1
+            },
+            weapon:{
+                chance:40,
+                tier:-2
             },
             gold:{
                 chance:25,
@@ -77,7 +77,7 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 10,
+        inventorySlots: 1,
         isContainer: true,
         loot:{
             weapon:{
@@ -107,14 +107,6 @@ let containerVars = {
             weapon:{
                 chance:100,
                 tier:2
-            },
-            treasure:{
-                chance:5,
-                tier:-1
-            },
-            gold:{
-                chance:10,
-                amount:5
             }
         },
         color:'gold'
@@ -131,14 +123,6 @@ let containerVars = {
             weapon:{
                 chance:100,
                 tier:-1
-            },
-            treasure:{
-                chance:5,
-                tier:-1
-            },
-            gold:{
-                chance:5,
-                amount:2
             }
         },
         color:'gold'
@@ -173,12 +157,16 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 10,
+        inventorySlots: 2,
         isContainer: true,
         inventory:[
             {
                 item: itemVars.fuel.kindling,
-                chance: 30
+                chance: 10
+            },
+            {
+                item: itemVars.fuel.kindling,
+                chance: 10
             }
         ],
         loot:{

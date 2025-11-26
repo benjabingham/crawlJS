@@ -1,22 +1,23 @@
 class LootManager{
 
     static getEntityLoot(entitySave){
+        console.log(entitySave);
         let entityGroupInfo = entitySave.entityGroupInfo;
         let lootChances = false;
         let key = entityGroupInfo.key;
         
-        //This is checking for loot defined by map editor, which is not implemented.
-        if(entityGroupInfo.loot){
-            lootChances = entityGroupInfo.loot;
-        }else if(entityGroupInfo.entityType == 'monster'){
-            let template = monsterVars[key];
-            lootChances = template.loot;
-            let inventory = LootManager.getInventoryFromTemplate(template)
-            if(inventory){
-                entitySave.inventory.items = [...inventory];
-            }
-        }else if(entityGroupInfo.entityType == 'container'){
-            let template = containerVars[key];
+        let template = false;
+        switch (entityGroupInfo.entityType){
+            case 'container':
+                template = containerVars[key];
+                break;
+            case 'monster':
+                template = monsterVars[key];
+                break;
+            default:
+        }
+
+        if(template){
             lootChances = template.loot;
             let inventory = LootManager.getInventoryFromTemplate(template)
             if(inventory){
@@ -30,31 +31,42 @@ class LootManager{
             };
         }
 
-        if(!lootChances){
-            return false;
-        }
-        let weaponLoot = lootChances.weapon;
-        if(weaponLoot){
-            if(Random.roll(1,99) < weaponLoot.chance){
-                entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
+        if(lootChances){
+            let weaponLoot = lootChances.weapon;
+            if(weaponLoot){
+                if(Random.roll(1,99) < weaponLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
+                }
             }
+
+            let treasureLoot = lootChances.treasure;
+            if(treasureLoot){
+                if(Random.roll(1,99) < treasureLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
+                }
+            }
+
+            let goldLoot = lootChances.gold;
+            if(goldLoot){
+                if(Random.roll(1,99) < goldLoot.chance){
+                    entitySave.inventory.gold = Random.roll(1,goldLoot.amount);
+                }else{
+                    entitySave.inventory.gold = 0;
+                }
+            }
+        }   
+
+        //trim down to max size
+        entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
+    }
+
+    static trimInventory(items, max){
+        console.log({items:items,max:max})
+        while(items.length > max){
+            console.log(items.pop());
         }
 
-        let treasureLoot = lootChances.treasure;
-        if(treasureLoot){
-            if(Random.roll(1,99) < treasureLoot.chance){
-                entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
-            }
-        }
-
-        let goldLoot = lootChances.gold;
-        if(goldLoot){
-            if(Random.roll(1,99) < goldLoot.chance){
-                entitySave.inventory.gold = Random.roll(1,goldLoot.amount);
-            }else{
-                entitySave.inventory.gold = 0;
-            }
-        }
+        return items;
     }
 
     static getInventoryFromTemplate(template){

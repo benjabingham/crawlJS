@@ -24,6 +24,7 @@ class GameMaster{
 
     static startGame(){
         Log.wipeLog();
+        Log.initialWarnings();
         Log.printLog();
         let entityManager = EntityManager;
         let board = Board;

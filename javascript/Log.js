@@ -12,6 +12,14 @@ class Log{
         Log.notices = [];
     }
 
+    static initialWarnings(){
+        if (Player.exertion == 1){
+            Log.addMessage('You are exerted! Stamina regen dereased.','danger')
+        }else if (Player.exertion > 1){
+            Log.addMessage('You are exhausted! Moving will cost stamina. Stamina regen decreased.','urgent')
+        }
+    }
+
     static addMessage(message, messageClass = false, keywords = false){
         if(!Log.messages[Log.turnCounter]){
             Log.messages[Log.turnCounter] = [];

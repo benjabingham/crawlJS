@@ -19,13 +19,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            {
-                usable:true,
-                name: "oil flask",
-                fuel:true,
-                light:2,
-                uses:3
-            }
+            itemVars.fuel.oilFlask
         ]
     }
 

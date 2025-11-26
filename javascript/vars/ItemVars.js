@@ -487,7 +487,11 @@ let itemVars = {
         wood:{
             name:'wooden',
             value:0.3,
-            color:"woodBrown"
+            color:"woodBrown",
+
+            usable:true,
+            fuel:true,
+            light:1,
         },
         stone:{
             name:'stone',

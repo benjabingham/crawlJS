@@ -51,10 +51,14 @@ class Shop{
             slot++;
         })
 
-        let fuel = Shop.getFuel();
-        fuel.slot = slot;
-        Shop.inventory.push(fuel);
-        slot++;
+        for(let i=0; i<2; i++){
+            let fuel = Shop.getFuel();
+            fuel.slot = slot;
+            Shop.inventory.push(fuel);
+            slot++;
+        }
+
+        
     }
 
     static itemCarried(item,carriedMaterials){
@@ -73,10 +77,12 @@ class Shop{
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
-                let fuel = Shop.getFuel();
-                fuel.slot = slot;
-                fuel.fresh = true;
-                Shop.inventory[slot] = fuel;
+                if(Random.roll(0,4)){
+                    let fuel = Shop.getFuel();
+                    fuel.slot = slot;
+                    fuel.fresh = true;
+                    Shop.inventory[slot] = fuel;
+                }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
@@ -101,8 +107,17 @@ class Shop{
 
     static getFuel(){
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
-        let priceMultiplier = Random.roll(2,4);
+
+        let priceMultiplier = Random.roll(2,5);
         fuel.price = Math.max(fuel.value,1) * priceMultiplier;
+
+        //variance...
+        if(fuel.uses){
+            let useDiff = Random.roll(0,(fuel.uses))-1;
+            fuel.uses -=useDiff
+            fuel.price -= useDiff*(fuel.value-1);
+        }
+        
         fuel.tier = 'fuel';
 
         return fuel;

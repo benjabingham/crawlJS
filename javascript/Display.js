@@ -333,7 +333,7 @@ class Display{
             if(item.usable){
                 let button;
                 if(item.fuel && !itemIsEquipped){
-                    button = $('<button>').addClass('item-button').text('fuel').on('click',function(){
+                    button = $('<button>').addClass('item-button').text('burn').on('click',function(){
                         GameMaster.useFuel({type:'item-'+(slot+1)});
                     })
                 }
@@ -371,6 +371,12 @@ class Display{
         ).append(
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
+
+        if(item.light && !item.weapon){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
+            )
+        }
 
         if(item.flimsy){
             $('#'+inventory+'-description').append(

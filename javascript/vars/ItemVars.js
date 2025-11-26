@@ -218,7 +218,8 @@ let itemVars = {
             fuel:true,
             light:1,
             uses:1,
-            value:0
+            value:0,
+            color:'woodBrown'
         }
     },
     drops:{

@@ -54,7 +54,6 @@ class LootManager{
             }else{
                 entitySave.inventory.gold = 0;
             }
-            console.log(entitySave);
         }
     }
 
@@ -67,7 +66,8 @@ class LootManager{
         templateInventory.forEach((item)=>{
             let random=Random.roll(0,99);
             if(random < item.chance){
-                inventory.push(item.item);
+                let itemCopy = JSON.parse(JSON.stringify(item.item))
+                inventory.push(itemCopy);
             }
         })
 

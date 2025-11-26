@@ -6,6 +6,7 @@ let mainReleases = [
 ]
 
 let devBranches = [
+    {name: 'origin - new starting dungeon', branchName: 'origin'},
     {name: 'Exerted - new exertion mechanic', branchName: 'exerted'},
     {name: 'Dev - new hunger and maps', branchName: 'dev'},
 ]

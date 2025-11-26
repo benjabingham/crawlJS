@@ -217,8 +217,7 @@ let itemVars = {
             name: "kindling",
             fuel:true,
             light:1,
-            uses:1,
-            value:0,
+            value:1,
             color:'woodBrown'
         }
     },
@@ -294,7 +293,11 @@ let itemVars = {
             weight:-1,
             damage:-4,
             value:.25,
-            color:'woodBrown'
+            color:'woodBrown',
+
+            usable:true,
+            fuel:true,
+            light:1,
 
         },
         bone:{
@@ -484,7 +487,11 @@ let itemVars = {
         wood:{
             name:'wooden',
             value:0.3,
-            color:"woodBrown"
+            color:"woodBrown",
+
+            usable:true,
+            fuel:true,
+            light:1,
         },
         stone:{
             name:'stone',

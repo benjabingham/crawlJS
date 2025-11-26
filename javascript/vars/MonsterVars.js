@@ -94,7 +94,7 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
-        inventorySlots: 0,
+        inventorySlots: 1,
         tiny:true,
         color:'gray'
     },
@@ -109,7 +109,7 @@ let monsterVars = {
         },
         hitDice:1,
         damage:4,
-        inventorySlots: 0,
+        inventorySlots: 1,
         inventory:[
             {
                 item: itemVars.drops.direRatPelt,
@@ -128,7 +128,7 @@ let monsterVars = {
         },
         hitDice:4,
         damage:6,
-        inventorySlots: 0,
+        inventorySlots: 1,
         inventory:[{
             item: itemVars.drops.kingRatSkull,
             chance:100
@@ -146,7 +146,7 @@ let monsterVars = {
         },
         hitDice:1,
         damage:5,
-        inventorySlots: 0,
+        inventorySlots: 1,
         inventory:[
             {
                 item: itemVars.drops.wolfPelt,
@@ -166,7 +166,7 @@ let monsterVars = {
         },
         hitDice:3,
         damage:8,
-        inventorySlots: 0,
+        inventorySlots: 1,
         inventory:[
             {
                 item: itemVars.drops.direWolfPelt,

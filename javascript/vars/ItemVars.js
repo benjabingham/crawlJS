@@ -211,6 +211,36 @@ let itemVars = {
             light:2,
             uses:3,
             value:5
+        },
+        kindling:{
+            usable:true,
+            name: "kindling",
+            fuel:true,
+            light:1,
+            uses:1,
+            value:0
+        }
+    },
+    drops:{
+        direRatPelt:{
+            name:"dire rat pelt",
+            value:1,
+            color:'brown'
+        },
+        wolfPelt:{
+            name:"wolf pelt",
+            value:2,
+            color:'brown'
+        },
+        direWolfPelt:{
+            name:"dire wolf pelt",
+            value:4,
+            color:'gray'
+        },
+        kingRatSkull:{
+            name:"king rat's skull",
+            value:15,
+            color:'red'
         }
     },
     treasure:{
@@ -275,9 +305,9 @@ let itemVars = {
             value:.15,
             color:'bone'
         },
-        stone:{
-            name:'stone',
-            flimsy:5,
+        limestone:{
+            name:'limestone',
+            flimsy:6,
             weight:2,
             stunTime:3,
             blunt:{
@@ -287,12 +317,17 @@ let itemVars = {
                 damage:2
             },
             value:.2,
-            color:'gray'
+            color:'silver'
         },
-        
+        flint:{
+            name:'flint',
+            flimsy:4,
+            value:.3,
+            color:'darkGray'
+        },
         obsidian:{
             name:'obsidian',
-            flimsy:5,
+            flimsy:6,
             edged:{
                 damage:2
             },

@@ -110,11 +110,12 @@ let monsterVars = {
         hitDice:1,
         damage:4,
         inventorySlots: 0,
-        inventory:[{
-            name:"dire rat pelt",
-            value:1,
-            color:'brown'
-        }],
+        inventory:[
+            {
+                item: itemVars.drops.direRatPelt,
+                chance:100
+            }
+        ],
         color:'gray'
     },
     kingRat:{
@@ -129,9 +130,8 @@ let monsterVars = {
         damage:6,
         inventorySlots: 0,
         inventory:[{
-            name:"king rat's skull",
-            value:15,
-            color:'red'
+            item: itemVars.drops.kingRatSkull,
+            chance:100
         }],
         color:'darkRed'
     },
@@ -147,11 +147,12 @@ let monsterVars = {
         hitDice:1,
         damage:5,
         inventorySlots: 0,
-        inventory:[{
-            name:"wolf pelt",
-            value:2,
-            color:'brown'
-        }],
+        inventory:[
+            {
+                item: itemVars.drops.wolfPelt,
+                chance:100
+            }
+        ],
         color:'gray'
     },
     direWolf:{
@@ -166,11 +167,12 @@ let monsterVars = {
         hitDice:3,
         damage:8,
         inventorySlots: 0,
-        inventory:[{
-            name:"dire wolf pelt",
-            value:4,
-            color:'gray'
-        }],
+        inventory:[
+            {
+                item: itemVars.drops.direWolfPelt,
+                chance:100
+            }
+        ],
         color:'gray'
     },
     dummy:{

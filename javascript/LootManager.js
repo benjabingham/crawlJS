@@ -5,19 +5,22 @@ class LootManager{
         let lootChances = false;
         let key = entityGroupInfo.key;
         
+        //This is checking for loot defined by map editor, which is not implemented.
         if(entityGroupInfo.loot){
             lootChances = entityGroupInfo.loot;
         }else if(entityGroupInfo.entityType == 'monster'){
             let template = monsterVars[key];
             lootChances = template.loot;
-            if(template.inventory){
-                entitySave.inventory.items = [...template.inventory];
+            let inventory = LootManager.getInventoryFromTemplate(template)
+            if(inventory){
+                entitySave.inventory.items = [...inventory];
             }
         }else if(entityGroupInfo.entityType == 'container'){
             let template = containerVars[key];
             lootChances = template.loot;
-            if(template.inventory){
-                entitySave.inventory.items = [...template.inventory];
+            let inventory = LootManager.getInventoryFromTemplate(template)
+            if(inventory){
+                entitySave.inventory.items = [...inventory];
             }
         }
 
@@ -53,6 +56,22 @@ class LootManager{
             }
             console.log(entitySave);
         }
+    }
+
+    static getInventoryFromTemplate(template){
+        let templateInventory=template.inventory;
+        if(!templateInventory){
+            return false;
+        }
+        let inventory = [];
+        templateInventory.forEach((item)=>{
+            let random=Random.roll(0,99);
+            if(random < item.chance){
+                inventory.push(item.item);
+            }
+        })
+
+        return inventory;
     }
 
     static getTreasureLoot(tier){
@@ -108,6 +127,7 @@ class LootManager{
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
         let materialIndex = Random.roll(0,nMaterials-1);
+        //material rarity is based on its position in the list of weapon materials
         for(let i = 0; i < nRolls; i++){
             let newIndex = Random.roll(0,nMaterials-1);
             materialIndex = maxMinFunc(materialIndex,newIndex);
@@ -143,6 +163,7 @@ class LootManager{
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
 
+        //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(weapon));
     }
 
@@ -154,6 +175,7 @@ class LootManager{
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
 
+        //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(treasure));
     }
 

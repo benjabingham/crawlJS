@@ -167,4 +167,30 @@ let containerVars = {
         },
         color:'gold'
     },
+    shrub:{
+        name:"shrub",
+        symbol:"o",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.fuel.kindling,
+                chance: 30
+            }
+        ],
+        loot:{
+            treasure:{
+                chance:1,
+                tier:-1
+            },
+            gold:{
+                chance:1,
+                amount:1
+            }
+        },
+        color:'darkGreen'
+    },
 }

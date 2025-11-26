@@ -92,8 +92,9 @@ class Player {
 
     static rest(){
         let health = Player.nourishmentLevel;
+        let oldHealth = Player.health;
         Player.changeHealth(health);
-        Player.changeNourishment(health*-1);
+        Player.changeNourishment((Player.health-oldHealth)*-1);
 
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);

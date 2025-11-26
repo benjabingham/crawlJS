@@ -322,7 +322,8 @@ class Display{
                     })
                 )
             }
-            if(item.weapon && Player.equipped && Player.equipped.slot == slot){
+            let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+            if(item.weapon && itemIsEquipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
                         GameMaster.useItem({type:'item-'+(slot+1)});
@@ -330,10 +331,14 @@ class Display{
                 )
             }
             if(item.usable){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('use').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
+                let button;
+                if(item.fuel && !itemIsEquipped){
+                    button = $('<button>').addClass('item-button').text('fuel').on('click',function(){
+                        GameMaster.useFuel({type:'item-'+(slot+1)});
                     })
+                }
+                $('#'+inventory+'-item-buttons-'+slot).append(
+                    button
                 )
             }
         }else if (inventory != 'shop'){

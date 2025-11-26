@@ -293,7 +293,11 @@ let itemVars = {
             weight:-1,
             damage:-4,
             value:.25,
-            color:'woodBrown'
+            color:'woodBrown',
+
+            usable:true,
+            fuel:true,
+            light:1,
 
         },
         bone:{

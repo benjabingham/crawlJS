@@ -195,17 +195,17 @@ class Player {
         if(!item){
             return false;
         }
-        if(item.fuel){
-            Player.addFuel(item);
-            return true;
-        }else if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
+        
+        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            Player.unequipWeapon();
            return true;
         }else if(item.weapon && !Player.equipped){
             Player.equipWeapon(item);
             return true;
+        }else if(item.fuel){
+            Player.addFuel(item);
+            return true;
         }
-
         return false;
     }
 

@@ -131,6 +131,7 @@ class GameMaster{
         */
     }
 
+    //general case use item - will work for any item.
     static useItem(event){
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
@@ -141,6 +142,16 @@ class GameMaster{
                 GameMaster.dropMode = false;
             }
         }else if(!Player.useItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        GameMaster.postPlayerAction();
+    }
+
+    static useFuel(event){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.addFuel(Player.inventory.items[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }

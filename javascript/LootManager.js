@@ -228,6 +228,9 @@ class LootManager{
                     break;
                 case 'color':
                     item[key] = value;
+                    break;
+                default:
+                    item[key] = value;
             }
         }
         //apply modifier to special strikes

@@ -630,6 +630,13 @@ let itemVars = {
             usable: true,
             food:1,
             value:1
+        },
+        provisions:{
+            name:'provisions',
+            usable:true,
+            food:1,
+            value:1,
+            uses:3
         }
     }
 }

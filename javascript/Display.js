@@ -314,6 +314,18 @@ class Display{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
+        if(item.usable){
+            let button;
+            if(item.food && !itemIsEquipped){
+                button = $('<button>').addClass('item-button').text('eat').on('click',function(){
+                    GameMaster.eatItem({type:'item-'+(slot+1)});
+                })
+            }
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                button
+            )
+        }
+
         if(dungeonMode){
             if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
@@ -335,11 +347,6 @@ class Display{
                 if(item.fuel && !itemIsEquipped){
                     button = $('<button>').addClass('item-button').text('burn').on('click',function(){
                         GameMaster.useFuel({type:'item-'+(slot+1)});
-                    })
-                }
-                if(item.food && !itemIsEquipped){
-                    button = $('<button>').addClass('item-button').text('eat').on('click',function(){
-                        GameMaster.eatItem({type:'item-'+(slot+1)});
                     })
                 }
                 $('#'+inventory+'-item-buttons-'+slot).append(
@@ -380,6 +387,12 @@ class Display{
         if(item.light && !item.weapon){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
+            )
+        }
+
+        if(item.food && !item.weapon){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
             )
         }
 

@@ -11,7 +11,13 @@ let monsterVars = {
         },
         hitDice:1,
         damage:4,
-        inventorySlots: 1,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:5
+            }
+        ],
         loot:{
             weapon:{
                 chance:5,
@@ -41,6 +47,12 @@ let monsterVars = {
         hitDice:3,
         damage:6,
         inventorySlots: 3,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:10
+            }
+        ],
         loot:{
             weapon:{
                 chance:30,
@@ -71,6 +83,16 @@ let monsterVars = {
         hitDice:5,
         damage:8,
         inventorySlots: 10,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            },
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            }
+        ],
         loot:{
             weapon:{
                 chance:20,

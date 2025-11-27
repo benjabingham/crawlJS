@@ -21,7 +21,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            itemVars.fuel.oilFlask
+            itemVars.fuel.oilFlask,
         ]
     }
 
@@ -34,7 +34,7 @@ class Player {
         Player.health = Player.healthMax
         Player.luck = Player.luckMax
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
-        Player.nourishment = 10;
+        Player.nourishment = 7;
         Player.inventoryCleanup();
     }
 
@@ -210,14 +210,13 @@ class Player {
         }
         
         if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
-           Player.unequipWeapon();
-           return true;
+           return Player.unequipWeapon();
         }else if(item.weapon && !Player.equipped){
-            Player.equipWeapon(item);
-            return true;
+            return Player.equipWeapon(item);
         }else if(item.fuel){
-            Player.addFuel(item);
-            return true;
+            return Player.addFuel(item);
+        }else if(item.food){
+            return Player.eatItem(item);
         }
         return false;
     }
@@ -229,18 +228,20 @@ class Player {
 
     static equipWeapon(weapon, verbose=true){
         if(Player.equipped){
-            return;
+            return false;
         }
         Player.equipped = weapon;
         EntityManager.equipWeapon('player', weapon, verbose);
+        return true;
     }
 
     static unequipWeapon(){
         if (!Player.equipped){
-            return;
+            return false;
         }
         Player.equipped = false;
         EntityManager.unequipWeapon('player');
+        return true;
     }
 
     static addFuel(fuel){
@@ -254,7 +255,16 @@ class Player {
             Player.lightTime = Math.max(Player.lightTime,0);
         }
 
+        return Player.consume(slot);
+    }
+
+    static eatItem(item){
+        let slot = item.slot;
+        Player.changeNourishment(item.food);
+        Log.addMessage('You eat the '+item.name+".");
         Player.consume(slot);
+
+        return true;
     }
 
     static consume(slot){
@@ -264,6 +274,9 @@ class Player {
         }else{
             Player.inventory.items[slot] = false;
         }
+
+        Player.inventoryCleanup();
+        return true;
     }
 
     static lightDown(){

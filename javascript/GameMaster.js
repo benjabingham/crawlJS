@@ -2,6 +2,7 @@ class GameMaster{
     static customControls = {};
     static dungeonId = 0;
     static quickStartMode = true;
+    static dungeonMode = false;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
@@ -27,6 +28,7 @@ class GameMaster{
     }
 
     static startGame(message=false){
+        GameMaster.dungeonMode = true;
         Log.wipeLog();
         Log.initialWarnings();
         if(message){
@@ -105,6 +107,7 @@ class GameMaster{
 
     static loadTown(){
         //GameMaster.nextDay();
+        GameMaster.dungeonMode = false;
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();
@@ -142,6 +145,9 @@ class GameMaster{
 
     //general case use item - will work for any item.
     static useItem(event){
+        if(!GameMaster.dungeonMode){
+            return false;
+        }
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
@@ -166,6 +172,18 @@ class GameMaster{
         }
 
         GameMaster.postPlayerAction();
+    }
+
+    static eatItem(event, dungeonMode=true){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.eatItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        if(dungeonMode){
+            GameMaster.postPlayerAction();
+        }
     }
 
     static wait(event){

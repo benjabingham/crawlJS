@@ -205,7 +205,11 @@ class Display{
         $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
-            {name:'Morsel',cost:1,nourishment:1},
+            {
+                name:'Morsel',
+                cost:1,
+                item: itemVars.food.morsel
+            },
             {name:'Proper Meal',cost:5,nourishment:100},
         ]
 
@@ -215,10 +219,20 @@ class Display{
             $('#meals-div').append(
                 $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
                     if(Player.gold >= meal.cost){
-                        Player.changeNourishment(meal.nourishment);
+                        if(meal.item){
+                            if(Player.inventory.items.length < Player.inventory.slots){
+                                let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                                Player.pickUpItem(itemCopy);
+                            }else{
+                                Player.changeNourishment(item.food);
+                            }
+                        }else{
+                            Player.changeNourishment(meal.nourishment);
+                        }
                         Player.gold-= meal.cost;
                         display.nourishmentDiv();
                         display.displayGold();
+                        display.displayInventory(false);
                     }
                 })
             )
@@ -303,10 +317,11 @@ class Display{
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
+        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         if(!itemValue){
             itemValue = '0';
         }
-        
+        //add item
         $('#'+inventory+'-list').append(
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
@@ -325,6 +340,21 @@ class Display{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
+        //add buttons
+
+        if(item.usable){
+            let button;
+            if(item.food && !itemIsEquipped){
+                button = $('<button>').addClass('item-button').text('eat').on('click',function(){
+                    GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
+                    Display.displayInventory(dungeonMode);
+                })
+            }
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                button
+            )
+        }
+
         if(dungeonMode){
             if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
@@ -333,7 +363,6 @@ class Display{
                     })
                 )
             }
-            let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
             if(item.weapon && itemIsEquipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
@@ -386,6 +415,12 @@ class Display{
         if(item.light && !item.weapon){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
+            )
+        }
+
+        if(item.food && !item.weapon){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
             )
         }
 

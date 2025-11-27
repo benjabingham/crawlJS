@@ -7,13 +7,27 @@ let containerVars = {
         damage:4,
         inventorySlots: 10,
         isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:10
+            },
+            {
+                item: itemVars.food.provisions,
+                chance:5
+            },
+            {
+                item: itemVars.fuel.kindling,
+                chance:15
+            }
+        ],
         loot:{
             weapon:{
-                chance:30,
+                chance:25,
                 tier:1
             },
             treasure:{
-                chance:50,
+                chance:45,
                 tier:1
             },
             gold:{
@@ -23,6 +37,40 @@ let containerVars = {
         },
         color:'gold'
     },
+    foodChest:{
+        name:"chest",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:80
+            },
+            {
+                item: itemVars.food.morsel,
+                chance:50
+            },
+            {
+                item: itemVars.food.provisions,
+                chance:25
+            }
+        ],
+        loot:{
+            treasure:{
+                chance:5,
+                tier:-1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            }
+        },
+        color:'woodBrown'
+    },
     rareChest:{
         name:"rare chest",
         symbol:"Ch",
@@ -31,6 +79,12 @@ let containerVars = {
         damage:4,
         inventorySlots: 10,
         isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
         loot:{
             weapon:{
                 chance:15,
@@ -55,6 +109,16 @@ let containerVars = {
         damage:4,
         inventorySlots: 1,
         isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:15
+            },
+            {
+                item: itemVars.fuel.kindling,
+                chance:15
+            }
+        ],
         loot:{
             treasure:{
                 chance:50,
@@ -79,6 +143,12 @@ let containerVars = {
         damage:4,
         inventorySlots: 1,
         isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:2
+            }
+        ],
         loot:{
             weapon:{
                 chance:2,
@@ -166,6 +236,10 @@ let containerVars = {
             },
             {
                 item: itemVars.fuel.kindling,
+                chance: 10
+            },
+            {
+                item: itemVars.food.berries,
                 chance: 10
             }
         ],

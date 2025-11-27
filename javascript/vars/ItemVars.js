@@ -623,20 +623,23 @@ let itemVars = {
         morsel:{
             name:'morsel',
             usable: true,
-            food:1
+            food:1,
+            color:'brown'
         },
         berries:{
             name:'berries',
             usable: true,
             food:1,
-            value:1
+            value:1,
+            color:'red'
         },
         provisions:{
             name:'provisions',
             usable:true,
             food:1,
             value:1,
-            uses:3
+            uses:3,
+            color:'brown'
         }
     }
 }

@@ -228,7 +228,12 @@ class Player {
         let slot = fuel.slot;
         Player.light += fuel.light;
         Player.light = Math.min(Player.lightMax, Player.light);
-        Player.lightTime = 0;
+        if(fuel.paper){
+            Player.lightTime += 400;
+        }else{
+            Player.lightTime -= 200;
+            Player.lightTime = Math.max(Player.lightTime,0);
+        }
 
         Player.consume(slot);
     }
@@ -250,9 +255,11 @@ class Player {
         let random = Math.random()*1500;
         if (random < Player.lightTime-150){
             Player.light--;
-            Player.lightTime = 0;
+            Player.lightTime -= 200;
+            Player.lightTime = Math.max(Player.lightTime,0)
             Log.addMessage('Your light dims...');
         }
+        console.log('lighttime: '+Player.lightTime);
     }
 
     

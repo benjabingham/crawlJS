@@ -475,9 +475,13 @@ let itemVars = {
     },
     treasureMaterials:{
         paper:{
-            name:"tattered paper",
+            name:"paper",
             value:.05,
-            color:"bone"
+            color:"bone",
+
+            usable:true,
+            fuel:true,
+            light:2,
         },
         bone:{
             name:"bone",

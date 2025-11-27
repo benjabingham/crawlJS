@@ -4,9 +4,10 @@ let monsterVars = {
         symbol:"G",
         behavior:"chase",
         behaviorInfo:{
-            focus:15,
-            enrage:20,
-            daze:30
+            focus:20,
+            enrage:10,
+            daze:40,
+            beat:10
         },
         hitDice:1,
         damage:4,
@@ -32,9 +33,10 @@ let monsterVars = {
         symbol:"Gb",
         behavior:"chase",
         behaviorInfo:{
-            focus:20,
-            enrage:30,
-            daze:15
+            focus:25,
+            enrage:20,
+            daze:30,
+            beat:20
         },
         hitDice:3,
         damage:6,
@@ -105,7 +107,7 @@ let monsterVars = {
         behaviorInfo:{
             focus:20,
             enrage:30,
-            daze:30
+            daze:20
         },
         hitDice:1,
         damage:4,
@@ -142,7 +144,7 @@ let monsterVars = {
         behaviorInfo:{
             focus:25,
             enrage:40,
-            daze:30
+            daze:15
         },
         hitDice:1,
         damage:5,
@@ -162,7 +164,7 @@ let monsterVars = {
         behaviorInfo:{
             focus:25,
             enrage:75,
-            daze:15
+            daze:10
         },
         hitDice:3,
         damage:8,

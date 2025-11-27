@@ -159,6 +159,16 @@ class GameMaster{
         GameMaster.postPlayerAction();
     }
 
+    static eatItem(event){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.eatItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        GameMaster.postPlayerAction();
+    }
+
     static wait(event){
         Player.gainStamina();
         GameMaster.postPlayerAction();

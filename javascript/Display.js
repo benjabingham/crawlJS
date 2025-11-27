@@ -337,6 +337,11 @@ class Display{
                         GameMaster.useFuel({type:'item-'+(slot+1)});
                     })
                 }
+                if(item.food && !itemIsEquipped){
+                    button = $('<button>').addClass('item-button').text('eat').on('click',function(){
+                        GameMaster.eatItem({type:'item-'+(slot+1)});
+                    })
+                }
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     button
                 )

@@ -618,5 +618,12 @@ let itemVars = {
             name:'pristine',
             value:1.5
         } 
+    },
+    food:{
+        morsel:{
+            name:'morsel',
+            usable: true,
+            food:1
+        }
     }
 }

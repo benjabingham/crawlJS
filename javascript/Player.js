@@ -256,6 +256,7 @@ class Player {
             Player.inventory.items[slot] = false;
         }
 
+        Player.inventoryCleanup();
         return true;
     }
 

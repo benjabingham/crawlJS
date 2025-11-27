@@ -368,11 +368,13 @@ class Entity{
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...");
             let damage = Random.roll(0,this.damage);
-            Player.changeStamina(damage * -1);
-            if(Player.stamina < 0){
+            if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
+            }else{
+                Player.changeStamina(damage * -1);
             }
+
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
             }

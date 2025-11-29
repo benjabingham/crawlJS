@@ -138,6 +138,7 @@ class Entity{
     }
 
     pickUpItemPile(itemPile){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(EntityManager.skipBehaviors){
             return false;
         }
@@ -153,9 +154,15 @@ class Entity{
         while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
             let item = itemPile.inventory.items.pop()
             this.inventory.items.push(item);
-            if(PlayerEntity.prototype.isPrototypeOf(this)){
+            if(isPlayer){
                 Log.addMessage('Picked up '+item.name+'.')
             }
+        }
+
+        if(isPlayer && itemPile.inventory.items.length > 0){
+            itemPile.inventory.items.forEach((item)=>{
+                Log.addMessage('Not enough space for '+item.name+'...');
+            })
         }
 
         if(ItemPile.prototype.isPrototypeOf(this)){
@@ -192,6 +199,7 @@ class Entity{
     }
 
     lootContainer(container){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if (!container.inventory.items){
             return false;
         }
@@ -202,9 +210,15 @@ class Entity{
         while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
             let item = container.inventory.items.pop();
             this.inventory.items.push(item);
-            if(PlayerEntity.prototype.isPrototypeOf(this)){
+            if(isPlayer){
                 Log.addMessage('Found '+item.name+'.');
             }
+        }
+
+        if(isPlayer && container.inventory.items.length > 0){
+            container.inventory.items.forEach((item)=>{
+                Log.addMessage('Not enough space for '+item.name+'...');
+            })
         }
         
         if(this.pickUpGold(container.inventory.gold)){

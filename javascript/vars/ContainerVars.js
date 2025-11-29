@@ -158,6 +158,10 @@ let containerVars = {
                 chance:5,
                 tier:-1
             },
+            potion:{
+                chance:100,
+                tier:3
+            },
             gold:{
                 chance:5,
                 amount:1

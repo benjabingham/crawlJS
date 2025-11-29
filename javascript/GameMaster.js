@@ -187,6 +187,18 @@ class GameMaster{
         }
     }
 
+    static drinkItem(event, dungeonMode=true){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.drinkItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        if(dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+    }
+
     static wait(event){
         Player.gainStamina();
         GameMaster.postPlayerAction();

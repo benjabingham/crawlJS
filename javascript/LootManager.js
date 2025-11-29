@@ -46,6 +46,13 @@ class LootManager{
                 }
             }
 
+            let potionLoot = lootChances.potion;
+            if(potionLoot){
+                if(Random.roll(1,99) < potionLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getPotionLoot(potionLoot.tier));
+                }
+            }
+
             let goldLoot = lootChances.gold;
             if(goldLoot){
                 if(Random.roll(1,99) < goldLoot.chance){

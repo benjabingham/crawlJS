@@ -21,7 +21,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            itemVars.fuel.oilFlask,
+            itemVars.fuel.oilFlask        
         ]
     }
 
@@ -217,6 +217,8 @@ class Player {
             return Player.addFuel(item);
         }else if(item.food){
             return Player.eatItem(item);
+        }else if (item.potable){
+            return Player.drinkItem(item);
         }
         return false;
     }

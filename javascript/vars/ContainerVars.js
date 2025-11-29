@@ -17,8 +17,8 @@ let containerVars = {
                 chance:5
             },
             {
-                item: itemVars.fuel.kindling,
-                chance:15
+                item: itemVars.potions.unlabeled,
+                chance:5
             }
         ],
         loot:{
@@ -33,6 +33,10 @@ let containerVars = {
             gold:{
                 chance:100,
                 amount:5
+            },
+            potion:{
+                chance:5,
+                tier:1
             }
         },
         color:'gold'
@@ -57,12 +61,20 @@ let containerVars = {
             {
                 item: itemVars.food.provisions,
                 chance:25
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 5
             }
         ],
         loot:{
             treasure:{
                 chance:5,
                 tier:-1
+            },
+            potion:{
+                chance:10,
+                tier:0
             },
             gold:{
                 chance:10,
@@ -94,6 +106,10 @@ let containerVars = {
                 chance:75,
                 tier:3
             },
+            potion:{
+                chance:50,
+                tier:3
+            },
             gold:{
                 chance:100,
                 amount:20
@@ -117,6 +133,10 @@ let containerVars = {
             {
                 item: itemVars.fuel.kindling,
                 chance:15
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance:3
             }
         ],
         loot:{
@@ -147,7 +167,7 @@ let containerVars = {
             {
                 item: itemVars.food.morsel,
                 chance:2
-            }
+            },
         ],
         loot:{
             weapon:{
@@ -157,10 +177,6 @@ let containerVars = {
             treasure:{
                 chance:5,
                 tier:-1
-            },
-            potion:{
-                chance:100,
-                tier:3
             },
             gold:{
                 chance:5,
@@ -222,6 +238,32 @@ let containerVars = {
                 chance:100,
                 amount:30
             }
+        },
+        color:'gold'
+    },
+    potionChest:{
+        name:"potion chest",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 50
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 20
+            }
+        ],
+        loot:{
+            potion:{
+                chance:100,
+                tier:0
+            },
         },
         color:'gold'
     },

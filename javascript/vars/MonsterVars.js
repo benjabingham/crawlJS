@@ -16,7 +16,11 @@ let monsterVars = {
             {
                 item: itemVars.food.morsel,
                 chance:5
-            }
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 1
+            },
         ],
         loot:{
             weapon:{
@@ -29,7 +33,7 @@ let monsterVars = {
             },
             gold:{
                 chance:20,
-                tier:3
+                amount:3
             }
         },
         color:'darkGreen'
@@ -51,11 +55,15 @@ let monsterVars = {
             {
                 item: itemVars.food.morsel,
                 chance:10
-            }
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 5
+            },
         ],
         loot:{
             weapon:{
-                chance:30,
+                chance:10,
                 tier:2
             },
             treasure:{
@@ -64,7 +72,11 @@ let monsterVars = {
             },
             gold:{
                 chance:50,
-                tier:3
+                amount:20
+            },
+            potion:{
+                chance:20,
+                tier:1
             }
         },
         color:'darkGreen'
@@ -105,6 +117,10 @@ let monsterVars = {
             gold:{
                 chance:45,
                 amount:7
+            },
+            potion:{
+                chance: 10,
+                tier: 2
             }
         },
         color:'green'

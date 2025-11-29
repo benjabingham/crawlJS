@@ -34,6 +34,7 @@ class GameMaster{
         if(message){
             Log.addMessage(message,'urgent');
         }
+        Log.addTip();
         Log.printLog();
         let entityManager = EntityManager;
         let board = Board;

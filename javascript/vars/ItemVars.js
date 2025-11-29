@@ -641,5 +641,125 @@ let itemVars = {
             uses:3,
             color:'brown'
         }
+    },
+    potions:{
+
+        poison:{
+            name:'potion of poison',
+            usable: true,
+            potable: true,
+            color: 'darkGreen',
+            health: -4,
+            value: 3,
+            message:'your health is drained.'
+        },
+        illFortune:{
+            name:'potion of ill fortune',
+            usable: true,
+            potable: true,
+            color: 'darkPurple',
+            luck: -3,
+            value: 3,
+            message: 'Your luck drains away.'
+        },
+        fatigue:{
+            name:'potion of fatigue',
+            usable: true,
+            potable: true,
+            color: 'orange',
+            stamina: -5,
+            value: 3,
+            message: 'Your energy is sapped.'
+        },
+        unlabeled:{
+            name:'unlabeled potion',
+            usable: true,
+            potable: true,
+            color:'darkPurple',
+            unlabeled: true,
+            value: 5,
+            tier: 3
+        },
+        healthTincture:{
+            name:'health tincture',
+            usable: true,
+            potable: true,
+            health: 2,
+            value: 8,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        healthPotion:{
+            name:'health potion',
+            usable: true,
+            potable: true,
+            health: 5,
+            value: 20,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        greaterHealthPotion:{
+            name:'greater health potion',
+            usable: true,
+            potable: true,
+            health: 10,
+            value: 40,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        staminaTincture:{
+            name:'stamina tincture',
+            usable: true,
+            potable: true,
+            stamina: 4,
+            value: 10,
+            color: 'yellow',
+            message:'You feel a surge of energy.'
+        },
+        staminaPotion:{
+            name:'stamina potion',
+            usable: true,
+            potable: true,
+            stamina: 6,
+            value: 20,
+            color: 'yellow',
+            message:'You feel a surge of energy.'
+        },
+        greaterStaminaPotion:{
+            name:'greater stamina potion',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            value: 40,
+            color: 'yellow',
+            message:'You feel a surge of energy.'
+        },
+        luckTincture:{
+            name:'luck tincture',
+            usable: true,
+            potable: true,
+            luck: 1,
+            value: 10,
+            color: 'green',
+            message:'Your luck returns to you.'
+        },
+        healthPotion:{
+            name:'luck potion',
+            usable: true,
+            potable: true,
+            luck: 3,
+            value: 30,
+            color: 'green',
+            message:'Your luck returns to you.'
+        },
+        greaterLuckPotion:{
+            name:'greater health potion',
+            usable: true,
+            potable: true,
+            luck: 6,
+            value: 70,
+            color: 'green',
+            message:'Your luck returns to you.'
+        }
     }
 }

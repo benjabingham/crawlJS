@@ -110,6 +110,40 @@ class LootManager{
         return treasure;
     }
 
+    static getPotionLoot(tier){
+        let nRolls = tier-3;
+        let greater = (nRolls > 0);
+        nRolls = Math.abs(nRolls);
+
+        let potion = LootManager.getPotion();
+
+        for(let i = 0; i < nRolls; i++){
+            let newPotion = LootManager.getPotion();
+            if((greater && newPotion.value > potion.value) || (!greater && newPotion.value < potion.value)){
+                potion = newPotion;
+            }
+        }
+
+        if(potion.unlabeled){
+            potion.tier = tier;
+        }
+
+        return potion;
+        
+    }
+
+    static getPotion(){
+        let potions = Object.keys(itemVars.potions);
+        let nPotions = potions.length;
+        let potionIndex = Random.roll(0,nPotions-1);
+        
+        let key = potions[potionIndex];
+        let potion = itemVars.potions[key];
+
+        //this is to make a copy of the object - this way it isn't passed by reference.
+        return JSON.parse(JSON.stringify(potion));
+    }
+
     static getWeaponLoot(tier){
         let weapon = LootManager.getWeapon();
         let weaponMaterial = LootManager.getWeaponMaterial(tier);

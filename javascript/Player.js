@@ -267,6 +267,30 @@ class Player {
         return true;
     }
 
+    static drinkItem(item){
+        let slot = item.slot;
+
+        Log.addMessage('You drink the '+item.name+".");
+        while(item.unlabeled){
+            item = LootManager.getPotionLoot(item.tier);
+        }
+        if(item.stamina){
+            Player.changeStamina(item.stamina);
+        }
+        if(item.health){
+            Player.changeHealth(item.health);
+        }
+        if(item.luck){
+            Player.changeLuck(item.luck);
+        }
+        if(item.message){
+            Log.addMessage(item.message);
+        }
+        Player.consume(slot);
+
+        return true;
+    }
+
     static consume(slot){
         let item = Player.inventory.items[slot];
         if(item.uses > 1){

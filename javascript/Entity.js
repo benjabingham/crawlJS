@@ -151,7 +151,11 @@ class Entity{
         }
 
         while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            this.inventory.items.push(itemPile.inventory.items.pop());
+            let item = itemPile.inventory.items.pop()
+            this.inventory.items.push(item);
+            if(PlayerEntity.prototype.isPrototypeOf(this)){
+                Log.addMessage('Picked up '+item.name+'.')
+            }
         }
 
         if(ItemPile.prototype.isPrototypeOf(this)){
@@ -196,7 +200,11 @@ class Entity{
         }
 
         while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            this.inventory.items.push(container.inventory.items.pop());
+            let item = container.inventory.items.pop();
+            this.inventory.items.push(item);
+            if(PlayerEntity.prototype.isPrototypeOf(this)){
+                Log.addMessage('Found '+item.name+'.');
+            }
         }
         
         if(this.pickUpGold(container.inventory.gold)){

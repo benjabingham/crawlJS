@@ -1,0 +1,23 @@
+Classes
+    Troglodyte
+        unarmed attack - (need to be facing in right direciton? Perhaps highlight viable tiles while unarmed?)
+        Light level always 1
+        Eat monsters?
+            When you use an unarmed attack on a corpse, chance to gain nourishment
+            tiny monsters drop as edible items
+    Lightfoot -
+        extra luck (or chance to keep luck on use)
+        less health/stamina/inventory?
+    Brute - 
+        More max stamina/health
+        Can't move diagonally backwards
+
+Injuries
+    Chance of injury on damage. chance increases with damage dealt, decreases with current health.
+        Leg - chance to lose turn when moving
+        Arm - chance to lose turn when rotating
+        Body - chance to lose turn when resting
+        Head - chance to take different action when moving
+    Different options from different damage types?
+        Artery - chance to lose health each turn unless bandaged?
+    Perhaps all damage types do leg, arm, body, head. Then each type has a special injury as well. Concussion for blunt, artery for edged. 

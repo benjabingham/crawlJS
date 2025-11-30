@@ -23,6 +23,12 @@ Injuries
     Perhaps all damage types do leg, arm, body, head. Then each type has a special injury as well. Concussion for blunt, artery for edged. 
 
 
-Spawn village
+Spawn village?
     add wild animals with 1-5% spawn chance
     edit map save on exit to decrease goblin spawn chance and increase wild animal spawn chance
+
+Monster update
+    chaseNatural - remember last place spotted player. If player out of los, treat that spot as target. Forget when reach target.
+    chaseBinary - move in direction of player each turn. Optionally need los.
+    chaseBinary monsters should usually have a slow value. Maybe even have it increase when they take damage. (skeleton, zombie)
+    chasebinary monsters with no slow value and decent health will be very scary

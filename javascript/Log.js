@@ -43,10 +43,10 @@ class Log{
             "Scroll over an object with your mouse to see what it is.",
             "Scroll over a keyword in the log to see what it means.",
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
-            "Paper burns bright, but not very long. Burn it if you need a quick burst of light."
+            "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
         ]
 
-        let tip = tips[Random.roll(0,tips.length)]
+        let tip = tips[Random.roll(0,tips.length-1)]
 
         Log.addMessage("TIP - "+tip,'win');
     }

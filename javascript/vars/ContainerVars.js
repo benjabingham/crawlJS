@@ -278,15 +278,15 @@ let containerVars = {
         inventory:[
             {
                 item: itemVars.fuel.kindling,
-                chance: 10
+                chance: 7
             },
             {
-                item: itemVars.fuel.kindling,
-                chance: 10
+                item: itemVars.drops.branch,
+                chance: 7
             },
             {
                 item: itemVars.food.berries,
-                chance: 10
+                chance: 7
             }
         ],
         loot:{

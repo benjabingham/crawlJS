@@ -241,7 +241,20 @@ let itemVars = {
             name:"king rat's skull",
             value:15,
             color:'red'
-        }
+        },
+        branch:{
+            weapon:true,
+            name:"branch",
+            damage:1,
+            stunTime:1,
+            weight:1,
+            type:{
+                blunt:true
+            },
+            value:0,
+            wood:true,
+            light:1
+        },
     },
     treasure:{
         thimble:{

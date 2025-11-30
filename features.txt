@@ -21,3 +21,8 @@ Injuries
     Different options from different damage types?
         Artery - chance to lose health each turn unless bandaged?
     Perhaps all damage types do leg, arm, body, head. Then each type has a special injury as well. Concussion for blunt, artery for edged. 
+
+
+Spawn village
+    add wild animals with 1-5% spawn chance
+    edit map save on exit to decrease goblin spawn chance and increase wild animal spawn chance

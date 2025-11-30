@@ -39,7 +39,7 @@ class Player {
     }
 
     static getPlayerJson(){
-        return{
+        return JSON.parse(JSON.stringify({
             stamina:Player.stamina,
             health:Player.health,
             luck:Player.luck,
@@ -49,7 +49,9 @@ class Player {
             inventory:Player.inventory,
             gold:Player.gold,
             equipped:Player.equipped
-        }
+        }))
+            
+        
     }
 
     static get staminaPercent(){

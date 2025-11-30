@@ -44,6 +44,8 @@ class Log{
             "Scroll over a keyword in the log to see what it means.",
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
             "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
+            "The contents of unlabeled potions are undetermined until the moment you drink them. Use luck to make better use of them.",
+            "Some lootable objects like shrubs and rat stashes have a chance to restock as days pass."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

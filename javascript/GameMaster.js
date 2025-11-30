@@ -11,11 +11,7 @@ class GameMaster{
     }
 
     static quickStart(){
-        let starterWeapon = LootManager.getWeaponLoot(1)
-        if(!starterWeapon.flimsy){
-            starterWeapon.flimsy = 1
-        }
-        starterWeapon.flimsy += 5;
+        let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         GameMaster.getRoom(
             'Abandoned Village',

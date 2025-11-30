@@ -76,6 +76,7 @@ class LootManager{
         return items;
     }
 
+
     static getInventoryFromTemplate(template){
         let templateInventory=template.inventory;
         if(!templateInventory){
@@ -281,6 +282,20 @@ class LootManager{
                 LootManager.applyModifier(item[val], modifier);
             }
         })
+    }
+
+    static getStarterWeapon(){
+        
+        let starterWeapon = LootManager.getWeaponLoot(1)
+        while(starterWeapon.value > 5){
+            starterWeapon = LootManager.getWeaponLoot(1)
+        }
+        if(!starterWeapon.flimsy){
+            starterWeapon.flimsy = 1
+        }
+        starterWeapon.flimsy += 5;
+
+        return starterWeapon
     }
 
     static breakWeapon(item){

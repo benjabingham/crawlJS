@@ -16,9 +16,9 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         GameMaster.getRoom(
             'Abandoned Village',
-            'You awake in the dead of night to the sounds of violence. \Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)'
+            'You awake in the dead of night to the sounds of violence. \Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
+            {x:50,y:42}
         );
-            
 
     }
 
@@ -29,7 +29,7 @@ class GameMaster{
         EntityManager.wipeEntities();
     }
 
-    static startGame(message=false){
+    static startGame(message=false, position=false){
         GameMaster.dungeonMode = true;
         Log.wipeLog();
         Log.initialWarnings();
@@ -41,12 +41,16 @@ class GameMaster{
         let entityManager = EntityManager;
         let board = Board;
         entityManager.skipBehaviors = false;
+        Display.showDungeonScreen();
+        if(position){
+            EntityManager.playerEntity.setPosition(position.x,position.y);
+        }
         board.placeEntities();
         History.saveSnapshot();
 
         board.calculateLosArray(entityManager.getEntity('player'));
 
-        Display.showDungeonScreen();
+        
         Display.printBoard();
 
 
@@ -58,11 +62,11 @@ class GameMaster{
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
     }
 
-    static getRoom(roomString, message=false){
+    static getRoom(roomString, message=false, startingPosition=false){
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
-            GameMaster.startGame();
+            GameMaster.startGame(message, startingPosition);
         }else{
             console.log('loading room '+roomString);
             fetch('./rooms/'+roomString+'.json')
@@ -71,7 +75,7 @@ class GameMaster{
                 console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
-                GameMaster.startGame(message);
+                GameMaster.startGame(message, startingPosition);
             })
         }
     }

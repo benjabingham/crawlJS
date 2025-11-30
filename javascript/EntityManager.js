@@ -14,6 +14,8 @@ class EntityManager{
     ];
 
     static currentMap;
+
+    static playerEntity;
     
     static entityManagerInit(){
         Board.boardInit();
@@ -222,7 +224,7 @@ class EntityManager{
             let random = Random.roll(0,99);
             let spawn = (random < entitySave.spawnChance || !entitySave.spawnChance);
             if(groupInfo.entityType == "player"){
-                EntityManager.playerInit(x, y)
+                EntityManager.playerEntity = EntityManager.playerInit(x, y)
             }else if(groupInfo.entityType == "monster"){
                 if(entitySave.alive && spawn){
                     entityObj = new Monster(groupInfo.key,x,y,groupInfo);

@@ -173,7 +173,7 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 1,
+        inventorySlots: 10,
         isContainer: true,
         inventory:[
             {
@@ -193,6 +193,10 @@ let containerVars = {
             gold:{
                 chance:5,
                 amount:1
+            },
+            potion:{
+                chance:1,
+                tier:0
             }
         },
         color:'woodBrown'
@@ -274,7 +278,7 @@ let containerVars = {
         loot:{
             potion:{
                 chance:100,
-                tier:0
+                tier:2
             },
         },
         color:'gold'

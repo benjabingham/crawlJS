@@ -698,7 +698,8 @@ let itemVars = {
             color: 'darkGreen',
             health: -4,
             value: 3,
-            message:'your health is drained.'
+            negative:true,
+            message:'your life force weakens.'
         },
         illFortune:{
             name:'potion of ill fortune',
@@ -707,6 +708,7 @@ let itemVars = {
             color: 'darkPurple',
             luck: -3,
             value: 3,
+            negative:true,
             message: 'Your luck drains away.'
         },
         fatigue:{
@@ -716,7 +718,19 @@ let itemVars = {
             color: 'orange',
             stamina: -5,
             value: 3,
+            negative:true,
             message: 'Your energy is sapped.'
+        },
+        vomitingPotion:{
+            name:'potion of vomiting',
+            usable: true,
+            potable: true,
+            color: 'darkGreen',
+            stamina: -2,
+            hunger: -6,
+            value: 3,
+            negative:true,
+            message: 'You empty your stomach onto the floor.'
         },
         unlabeled:{
             name:'unlabeled potion',
@@ -760,7 +774,7 @@ let itemVars = {
             potable: true,
             stamina: 4,
             value: 10,
-            color: 'yellow',
+            color: 'darkYellow',
             message:'You feel a surge of energy.'
         },
         staminaPotion:{
@@ -769,7 +783,7 @@ let itemVars = {
             potable: true,
             stamina: 6,
             value: 20,
-            color: 'yellow',
+            color: 'darkYellow',
             message:'You feel a surge of energy.'
         },
         greaterStaminaPotion:{
@@ -778,7 +792,7 @@ let itemVars = {
             potable: true,
             stamina: 10,
             value: 40,
-            color: 'yellow',
+            color: 'darkYellow',
             message:'You feel a surge of energy.'
         },
         luckTincture:{
@@ -819,6 +833,36 @@ let itemVars = {
             color: 'orange',
             message:"You digest your stomach's contents in an instant."
         },
+        unHallowedStrength:{
+            name:'potion of unhallowed strength',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            luck: -10,
+            value: 12,
+            color: 'orange',
+            message:"You feel reinvigorated, but something's wrong..."
+        },
+        unHallowedHealth:{
+            name:'potion of unhallowed health',
+            usable: true,
+            potable: true,
+            health: 10,
+            luck: -10,
+            value: 12,
+            color: 'darkRed',
+            message:"Your wounds close, but something's wrong..."
+        },
+        unHallowedNourishment:{
+            name:'potion of unhallowed nourishment',
+            usable: true,
+            potable: true,
+            hunger: 10,
+            luck: -10,
+            value: 4,
+            color: 'darkOrange',
+            message:"Your stomach fills, but still you feel empty..."
+        },
         fatestealerElixir:{
             name:'fatestealer elixir',
             usable: true,
@@ -829,7 +873,7 @@ let itemVars = {
             value: 75,
             hunger: 10,
             color: 'brightPurple',
-            message:"You feel reinvigorated, but something's wrong..."
+            message:"You feel fully renewed, but something's wrong..."
         },
         nectar:{
             name:'nectar',
@@ -855,6 +899,15 @@ let itemVars = {
             color: 'darkOrange',
             message:"You feel reborn."
         },
+        nourishmentPotion:{
+            name:'nourishment potion',
+            usable: true,
+            potable: true,
+            value: 8,
+            hunger: 10,
+            color: 'darkOrange',
+            message:"Your stomach fills."
+        }
         
 
     }

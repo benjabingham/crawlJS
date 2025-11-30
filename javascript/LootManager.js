@@ -132,6 +132,13 @@ class LootManager{
             }
         }
 
+        //be nice... Lower chance to find negative potions
+        if(potion.negative){
+            if(Random.roll(0,tier)){
+                potion = JSON.parse(JSON.stringify(itemVars.potions.unlabeled))
+            }
+        }
+
         if(potion.unlabeled){
             potion.tier = tier;
         }

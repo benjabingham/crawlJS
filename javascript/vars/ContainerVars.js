@@ -42,12 +42,12 @@ let containerVars = {
         color:'gold'
     },
     foodChest:{
-        name:"chest",
+        name:"pantry",
         symbol:"Ch",
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 10,
+        inventorySlots: 3,
         isContainer: true,
         inventory:[
             {
@@ -65,7 +65,19 @@ let containerVars = {
             {
                 item: itemVars.potions.unlabeled,
                 chance: 5
-            }
+            },
+            {
+                item: itemVars.food.baguette,
+                chance: 10
+            },
+            {
+                item: itemVars.food.cookingOil,
+                chance: 10
+            },
+            {
+                item: itemVars.food.berries,
+                chance: 10
+            },
         ],
         loot:{
             treasure:{
@@ -123,16 +135,16 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 1,
+        inventorySlots: 2,
         isContainer: true,
         inventory:[
             {
                 item: itemVars.food.morsel,
-                chance:15
+                chance:25
             },
             {
                 item: itemVars.fuel.kindling,
-                chance:15
+                chance:5
             },
             {
                 item: itemVars.potions.unlabeled,
@@ -145,7 +157,7 @@ let containerVars = {
                 tier:-1
             },
             weapon:{
-                chance:40,
+                chance:15,
                 tier:-2
             },
             gold:{

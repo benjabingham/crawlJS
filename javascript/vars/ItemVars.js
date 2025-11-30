@@ -305,7 +305,7 @@ let itemVars = {
     weaponMaterials:{
         wood:{
             name:'wooden',
-            flimsy:5,
+            flimsy:6,
             stunTime: -2,
             weight:-1,
             blunt:{
@@ -324,7 +324,7 @@ let itemVars = {
         },
         bone:{
             name:'bone',
-            flimsy:8,
+            flimsy:10,
             stunTime:-1,
             weight:-1,
             damage: -2,
@@ -353,7 +353,7 @@ let itemVars = {
         },
         obsidian:{
             name:'obsidian',
-            flimsy:6,
+            flimsy:7,
             edged:{
                 damage:2
             },
@@ -662,7 +662,32 @@ let itemVars = {
             value:1,
             uses:3,
             color:'brown'
-        }
+        },
+        baguette:{
+            name:'stale baguette',
+            usable: true,
+            food:1,
+            color:'bone',
+
+            weapon:true,
+            damage:1,
+            stunTime:1,
+            weight:1,
+            type:{
+                blunt:true,
+                long:true
+            },
+            value:1
+        },
+        cookingOil:{
+            name:'cooking oil',
+            uses:3,
+            usable: true,
+            food:1,
+            light:1,
+            color:'gold',
+            value:5
+        },
     },
     potions:{
 

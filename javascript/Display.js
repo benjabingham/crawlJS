@@ -443,36 +443,85 @@ class Display{
             )
         }
 
-        if(item.weapon){
-            $('#'+inventory+'-description-body').append(
-                $('<div>').addClass('item-stats-normal').append(
-                    $('<div>').addClass('item-title').text('Normal:')
-                ).append(
-                    $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
-                ).append(
-                    $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
-                ).append(
-                    $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
-                )
-            )            
+        if(item.potable){
+            let effects = ['stamina','luck','hunger','health']
+            effects.forEach((effect)=>{
+                let power = item[effect]
+                if(power){
+                    let gainLose
+                    if (power > 0){
+                        gainLose = 'gain'
+                    }else{
+                        gainLose = 'lose'
+                        power *= -1;
+                    }
+                    $('#'+inventory+'-description-body').append(
+                        $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
+                    )
+                }
+            })
         }
 
-        ['jab','swing','strafe'].forEach(function(val){
-            if(item[val]){
-                let special = item[val];
-                $('#'+inventory+'-description-body').append(
+
+        if(item.weapon){
+            let attackTypes = ['jab','swing','strafe']
+            let special = false;
+            let specialName = false;
+            attackTypes.forEach(function(val){
+                if(item[val]){
+                    special = item[val];
+                    specialName = val;
+                }
+            })
+
+            $('#'+inventory+'-description-body').append(
+                $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
                     $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(val+":")
+                        $('<div>').addClass('item-title').text('Normal:')
+                    ).append(
+                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
+                    ).append(
+                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
+                    ).append(
+                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
+                    )
+                ).append(
+                    special?($('<div>').addClass('item-stats-normal').append(
+                        $('<div>').addClass('item-title').text(specialName+":")
                     ).append(
                         $('<div>').addClass('item-damage').text('Damage: '+special.damage)
                     ).append(
                         $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
                     ).append(
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                    )
+                    )):false
                 )
-            }
-        })
+            )
+            console.log('#'+inventory+'-weapon-description');
+            
+            attackTypes.forEach(function(val){
+                if(item[val]){
+                    let special = item[val];
+                    console.log(val);
+                    $('#'+inventory+'-weapon-description').append(
+                        $('<div>').addClass('item-stats-normal').append(
+                            $('<div>').addClass('item-title').text(val+":")
+                        ).append(
+                            $('<div>').addClass('item-damage').text('Damage: '+special.damage)
+                        ).append(
+                            $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
+                        ).append(
+                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                        )
+                    )
+                }
+            })    
+        }
+
+        
+        
+
+        
     }
 
     static setCustomControls(){

@@ -743,7 +743,7 @@ let itemVars = {
             color: 'green',
             message:'Your luck returns to you.'
         },
-        healthPotion:{
+        luckPotion:{
             name:'luck potion',
             usable: true,
             potable: true,
@@ -760,6 +760,55 @@ let itemVars = {
             value: 70,
             color: 'green',
             message:'Your luck returns to you.'
-        }
+        },
+        metabolismPotion:{
+            name:'metabolism potion',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 3,
+            hunger: -6,
+            value: 10,
+            color: 'orange',
+            message:"You digest your stomach's contents in an instant."
+        },
+        fatestealerElixir:{
+            name:'fatestealer elixir',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 10,
+            luck: -10,
+            value: 75,
+            hunger: 10,
+            color: 'brightPurple',
+            message:"You feel reinvigorated, but something's wrong..."
+        },
+        nectar:{
+            name:'nectar',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 10,
+            luck: 10,
+            value: 150,
+            hunger: 10,
+            color: 'gold',
+            message:"You feel reinvigorated."
+        },
+        ritualBrew:{
+            name:'ritual brew',
+            usable: true,
+            potable: true,
+            stamina: -5,
+            health: -5,
+            luck: 10,
+            value: 55,
+            hunger: -10,
+            color: 'darkOrange',
+            message:"You feel reborn."
+        },
+        
+
     }
 }

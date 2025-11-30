@@ -444,7 +444,7 @@ class Display{
         }
 
         if(item.potable){
-            let effects = ['stamina','luck','hunger','health']
+            let effects = ['health','stamina','luck','hunger',]
             effects.forEach((effect)=>{
                 let power = item[effect]
                 if(power){

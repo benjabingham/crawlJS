@@ -21,7 +21,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            itemVars.fuel.oilFlask        
+            itemVars.fuel.oilFlask,
         ]
     }
 
@@ -284,6 +284,9 @@ class Player {
         }
         if(item.luck){
             Player.changeLuck(item.luck);
+        }
+        if(item.hunger){
+            Player.changeNourishment(item.hunger);
         }
         if(item.message){
             Log.addMessage(item.message);

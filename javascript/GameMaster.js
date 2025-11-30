@@ -11,7 +11,9 @@ class GameMaster{
     }
 
     static quickStart(){
-        Player.pickUpItem(LootManager.getWeaponLoot(0));
+        let starterWeapon = LootManager.getWeaponLoot(1)
+        starterWeapon.flimsy += 5;
+        Player.pickUpItem(starterWeapon);
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. \Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)'

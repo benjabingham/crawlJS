@@ -21,7 +21,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            itemVars.fuel.oilFlask,
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
         ]
     }
 

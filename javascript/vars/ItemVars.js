@@ -217,7 +217,7 @@ let itemVars = {
             name: "kindling",
             fuel:true,
             light:1,
-            value:1,
+            value:0,
             color:'woodBrown'
         }
     },
@@ -253,7 +253,11 @@ let itemVars = {
             },
             value:0,
             wood:true,
-            light:1
+            usable:true,
+            fuel:true,
+            light:1,
+            color:'woodBrown',
+            flimsy:30
         },
     },
     treasure:{
@@ -304,7 +308,12 @@ let itemVars = {
             flimsy:5,
             stunTime: -2,
             weight:-1,
-            damage:-4,
+            blunt:{
+                damage:-2
+            },
+            edged:{
+                damage:-4
+            },            
             value:.25,
             color:'woodBrown',
 
@@ -316,9 +325,9 @@ let itemVars = {
         bone:{
             name:'bone',
             flimsy:8,
-            stunTime:-2,
+            stunTime:-1,
             weight:-1,
-            damage: -3,
+            damage: -2,
             value:.15,
             color:'bone'
         },

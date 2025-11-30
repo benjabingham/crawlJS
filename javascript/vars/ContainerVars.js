@@ -173,7 +173,7 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 10,
+        inventorySlots: 1,
         isContainer: true,
         inventory:[
             {

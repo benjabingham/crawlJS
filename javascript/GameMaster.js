@@ -11,7 +11,8 @@ class GameMaster{
 
     static quickStart(){
         Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('cave.json');
+        /*GameMaster.getRoom('Starting Dungeon');*/
+        GameMaster.getRoom('andy_starting_map');
 
     }
 
@@ -23,6 +24,8 @@ class GameMaster{
     }
 
     static startGame(){
+        Log.wipeLog();
+        Log.printLog();
         let entityManager = EntityManager;
         let board = Board;
         entityManager.skipBehaviors = false;
@@ -50,9 +53,10 @@ class GameMaster{
             GameMaster.startGame();
         }else{
             console.log('loading room '+roomString);
-            fetch('./rooms/'+roomString)
+            fetch('./rooms/'+roomString+'.json')
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
                 GameMaster.startGame();
@@ -71,7 +75,12 @@ class GameMaster{
         }else if (y >= Board.height){
             direction = "down"
         }
-        let destination = Board.destinations[direction]
+        let destination = false;
+        if(Board.destinations){
+            destination = Board.destinations[direction];
+        }else{
+            destination = {type: "town"};
+        }
         if(!destination){
             return false;
         }
@@ -196,8 +205,10 @@ class GameMaster{
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }
-
         Board.placeEntities();
+        if(!EntityManager.skipBehaviors){
+            Player.checkHungerModifiers();
+        }
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();

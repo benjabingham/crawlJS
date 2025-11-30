@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Solidus - Map Editor</title>
+    <link rel="stylesheet" href="css/mapEditor.css">
+    <link rel="stylesheet" href="css/color/classic.css?v=1">
+    <script src="javascript/lib/jquery-3.7.1.js?V=6"></script>
+    <script src="javascript/Map_Editor/mapEditor.js"></script>
+    <script src="javascript/Map_Editor/Controls.js"></script>
+    <script src="javascript/Map_Editor/Grid.js"></script>
+    <script src="javascript/Map_Editor/EntityGroup.js"></script>
+    <script src="javascript/Map_Editor/EntityGroupManager.js"></script>
+    <script src="javascript/Map_Editor/Save.js"></script>
+    <script src="javascript/vars/MonsterVars.js"></script>
+    <script src="javascript/vars/ContainerVars.js"></script>
+
+  </head>
+  <body class='classic'>
+    <div id="menu-bar">
+        <input type="text" id="map-name-input">
+        <div id="save-buttons">
+            <button id="new-map-button">New Map</button>
+            <button id="load-map-button">Load Map</button> 
+            <input type="file" id="load-map-input">
+            <button id="save-map-button">Save Map</button>  
+        </div>
+        <div id="new-map-div">
+            <div id="new-map-dimensions">
+                Map Dimensions - 
+                <input type="number" id="new-map-width-input">
+                x
+                <input type="number" id="new-map-height-input">
+            </div>
+            <button id="create-map-button">Create Empty Map</button> 
+            <button id="cancel-new-map-button">Cancel</button>
+        </div>
+        
+    </div>
+        
+    <div id="main-content">
+      <div id="map-grid-container">
+        <div id="map-grid"></div>
+      </div>
+      <div id="control-panel" >
+        <div id="draw-options-div">
+          <h3>Placement Options</h3>
+          <div id="erase-selected-div">
+            <label for="erase-mode-checkbox">Erase</label>
+            <input type="checkbox" id="erase-selected-checkbox">
+          </div>
+          <div id="erase-all-div">
+            <label for="erase-mode-checkbox">Erase All</label>
+            <input type="checkbox" id="erase-all-checkbox">
+          </div>
+          
+        </div>
+        <div id="entity-group-controls">
+          <h3>Entity Groups</h3>
+          <div id="entity-group-select-div" class="control-panel-input-divs">
+            <select id="entity-group-select">
+            </select>
+          </div>
+          <div id="group-name-div" class="control-panel-input-divs">
+            <label for="group-name-input">Group Name</label>
+            <input type="text" id="group-name-input">
+          </div>
+          <div id="entity-type-div" class="control-panel-input-divs">
+              <label for="entity-type-dropdown">Entity Type</label>
+              <select id="entity-type-dropdown">
+              <option value="" disabled selected>Select Entity Type</option>
+              <option value="monster">Monster</option>
+              <option value="wall">Wall</option>
+              <option value="container">Container</option>
+              <option value="player">Player</option>
+            </select>
+            <div id="entity-type-dropdown-div">
+              <label for="entity-select-dropdown">Entity</label>
+              <select id="entity-select-dropdown">
+                <option value="" disabled selected>Select Entity</option>
+              </select>
+            </div>
+
+          </div>
+          <div id="entity-options-cosmetic" class="control-panel-input-divs">
+            <h4>Cosmetic Options</h4>
+            <label for="name-input">Entity Name</label>
+            <input type="text" id="entity-name-input">
+            <br>
+            <label for="symbol-input">Entity Symbol</label>
+            <input type="text" id="entity-symbol-input">
+            <label for="symbol-input">Entity Color</label>
+            <input type="text" id="entity-color-input">
+          </div>
+          <div id="entity-options" class="control-panel-input-divs">
+            <h4>Other Options</h4>
+            <div id="spawn-options">
+              <label for="spawn-chance-input">Spawn Chance %</label>
+              <input type="number" id="spawn-chance-input">
+              <br>
+              <label for="respawn-chance-input">Respawn Chance %</label>
+              <input type="number" id="respawn-chance-input">
+            </div>
+            <div id="behavior-options">
+              Wait for LOS <input type="checkbox" id="wait-checkbox">
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

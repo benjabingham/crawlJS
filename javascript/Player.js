@@ -37,7 +37,8 @@ class Player {
         Player.stamina = Player.staminaMax;
         Player.health = Player.healthMax
         Player.luck = Player.luckMax
-        Player.nourishment = Player.nourishmentMax
+        //Player.nourishment = Math.floor(Player.nourishmentMax/2)
+        Player.nourishment = 10;
         Player.inventoryCleanup();
     }
 
@@ -65,7 +66,10 @@ class Player {
 
     static get luckPercent(){
         return Math.floor((Player.luck/Player.luckMax)*100);
+    }
 
+    static get hungerPercent(){
+        return Math.floor((Player.nourishment/Player.nourishmentMax)*100)
     }
 
     static get nourishmentLevel(){
@@ -85,13 +89,15 @@ class Player {
     }
 
     static rest(){
-        let health = Player.nourishmentLevel-1;
+        let health = Player.nourishmentLevel;
+        let oldHealth = Player.health;
         Player.changeHealth(health);
+        Player.changeNourishment((Player.health-oldHealth)*-1);
 
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);
 
-        Player.changeNourishment(-5);
+        Player.changeNourishment(-3);
 
         console.log(Player.nourishment);
         console.log(Player.nourishmentLevel);
@@ -99,27 +105,42 @@ class Player {
 
 
     static gainStamina(){
-        let stamina;
-        if(Player.nourishment < 4){
-            stamina = 1;
-        }else{
-            stamina = 2;
-        }
+        let stamina = 2;
+        Player.changeStamina(stamina);
+    }
+
+    static checkHungerModifiers(){
+        let stamina = 0;
         let random = Math.random()*100;
-        if(Player.nourishment == 0 && random < 50){
+        let gainChance = (Player.nourishment - 8)*5;
+        let loseChance = (4 - Player.nourishment)*8;
+
+        if (random < gainChance){
+            if(Player.stamina < Player.staminaMax){
+                Log.addMessage('Your full stomach lends you strength.', 'pos');
+                stamina++;
+            }
+        }else if(random < loseChance){
             stamina--;
-        }
-        if(Player.nourishment ==10 && random < 50){
-            stamina++;
+            Log.addMessage('Your hunger weakens you...', 'danger');
         }
 
         Player.changeStamina(stamina);
     }
 
     static changeStamina(n){
+        let oldStamina = Player.stamina;
+
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Player.stamina+n;
+        Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
+
+        let random = Math.random()*100;
+        let hungerChance = (Player.stamina - oldStamina)*2;
+        if(random < hungerChance){
+            Player.changeNourishment(-1);
+        }
     }
 
     static changeHealth(n){
@@ -136,11 +157,22 @@ class Player {
 
     static changeNourishment(n){
         Player.nourishment = Player.nourishment+n;
+        /*
         if(Player.nourishment > Player.nourishmentMax){
             Player.changeLuck(1);
         }
+        */
+        if(Player.nourishment < 0){
+            Player.changeHealth((Player.nourishment));
+            Log.addMessage('You are starving.', 'urgent');
+        }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
+        Display.fillBars();
+    }
+
+    static setNourishment(n){
+        Player.nourishment = n;
     }
 
 
@@ -182,12 +214,12 @@ class Player {
         Player.inventoryCleanup();
     }
 
-    static equipWeapon(weapon){
+    static equipWeapon(weapon, verbose=true){
         if(Player.equipped){
             return;
         }
         Player.equipped = weapon;
-        EntityManager.equipWeapon('player', weapon);
+        EntityManager.equipWeapon('player', weapon, verbose);
     }
 
     static unequipWeapon(){

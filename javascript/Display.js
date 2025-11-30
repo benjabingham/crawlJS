@@ -52,6 +52,7 @@ class Display{
         $('#town-inventory-wrapper').hide();
         $('#home-screen').hide();
         $('#dungeon-screen').hide();
+        $('#container-inventory-window').hide();
         Display.scrollToTop();
     }
 
@@ -155,7 +156,7 @@ class Display{
                 let symbol = '';
                 //out of bounds
                 if(Board.hasPlayerLos({x:x, y:y})){
-                    if(boardArray[y][x]){
+                    if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
                             gridDiv.addClass('grid-wall')
                         }
@@ -204,9 +205,8 @@ class Display{
         $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
-            {name:'meager meal',cost:3,nourishment:3},
-            {name:'proper meal',cost:4,nourishment:5},
-            {name:'exquisite meal',cost:6,nourishment:8},
+            {name:'Morsel',cost:1,nourishment:1},
+            {name:'Proper Meal',cost:5,nourishment:100},
         ]
 
         $('#meals-div').html('');
@@ -234,22 +234,24 @@ class Display{
         $('#health-level').css('width',healthPercent*1.5+"px");
         $('#health-level').text(Player.health+"/"+Player.healthMax);
 
-
         let luckPercent = Player.luckPercent;
         $('#luck-level').css('width',luckPercent*1.5+"px");
         $('#luck-level').text(Player.luck+"/"+Player.luckMax);
 
+        let hungerPercent = Player.hungerPercent;
+        $('#hunger-level').css('width',hungerPercent*1.5+"px");
+        $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
 
     }
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['cave']
+        let maps = ['Rat Nest', 'Goblin Keep', 'Dark Forest']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
                     $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element+".json")
+                        GameMaster.getRoom(element)
                     })
                 )
             )
@@ -262,13 +264,38 @@ class Display{
         })
     }
 
-    static displayInventory(dungeonMode=true){
-        let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
+    static displayInventory(dungeonMode=true,isContainer=false,lootEntity=false){
+        
         //$('#inventory-wrapper').show();
-        $('#'+inventoryId+'-list').html('');
-        let inventory = Player.inventory.items;
-        inventory.forEach((item) =>{
+        if (isContainer){
+            $('#container-inventory-list').html('');
+            let inventory = lootEntity.inventory.items;
+            let inventoryId = "container-inventory"
+            let itemSlot = 0;
+            inventory.forEach((item) =>{
+                item.slot = itemSlot;
+                Display.addInventoryItem(item, dungeonMode, inventoryId,isContainer);
+                itemSlot += 1;
+        })
+        }
+        else{
+			let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
+            $('#'+inventoryId+'-list').html('');
+            let inventory = Player.inventory.items;
+            inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
+        })
+        }
+        
+        
+        Display.displayGold();
+    }
+
+    static displayLootInventoryMenu(lootEntity){
+        $('container-inventory-window').show();
+        
+        inventory.forEach((item) =>{
+            Display.addContainerInventoryItem(item);
         })
         Display.displayGold();
     }
@@ -287,7 +314,7 @@ class Display{
         $('.gold-div').text(Player.gold+" gold");
     }
 
-    static addInventoryItem(item, dungeonMode, inventory){
+    static addInventoryItem(item, dungeonMode, inventory, isContainer=false){
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
@@ -313,7 +340,7 @@ class Display{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
-        if(dungeonMode){
+        if(dungeonMode && !isContainer){
             if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('equip').on('click',function(){
@@ -335,11 +362,11 @@ class Display{
                     })
                 )
             }
-        }else if (inventory != 'shop'){
+        }else if (isContainer){
             $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
-                    Shop.sellItem(slot);
-                    display.displayShop();
+                $('<button>').addClass('item-button').text('transfer').on('click',function(){
+                    display.addInventoryItem(item,true,'dungeon-inventory',)
+                 
                     display.displayInventory(false);
                 })
             )

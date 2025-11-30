@@ -37,12 +37,18 @@ class EntityManager{
         let item = weapon.item;
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
+        console.log(random)
+        console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
-                LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);
-                LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
 
+                LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
+                if(!item.worn){
+                    LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
+                }          
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
+                console.log(item);
+                console.log(Player.equipped);
             }else{
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
@@ -84,6 +90,15 @@ class EntityManager{
             if(entity.behaviorInfo){
                 skip += (random <= entity.behaviorInfo.slow);
             }
+            if(entity.wait){
+                if(!EntityManager.hasPlayerLos(entity)){
+                    skip++;
+                    console.log('waiting')
+                }else{
+                    entity.wait = false;
+                    console.log('found you!');
+                }
+            }
             
             if (!skip){
                 switch(entity.behavior){
@@ -119,11 +134,13 @@ class EntityManager{
         }
     }
 
-    static equipWeapon(wielderId, weapon){
+    static equipWeapon(wielderId, weapon, verbose=true){
         let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
-        EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+        if(verbose){
+            EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+        }
     }
 
     static unequipWeapon(wielderId){
@@ -182,29 +199,32 @@ class EntityManager{
     }
 
     static loadRoom(json){
+        console.log(json);
         Save.catchUpMap(json.name);
         Board.setDimensions(json.width,json.height)
         Board.boardInit(json);
 
         Board.destinations = json.destinations;
         json.roster.forEach((entitySave)=>{
-            let value = entitySave.value;
+            let groupInfo = entitySave.entityGroupInfo;
             let entityObj;
             let x = entitySave.x;
             let y = entitySave.y;
             let random = Random.roll(0,99);
             let spawn = (random < entitySave.spawnChance || !entitySave.spawnChance);
-            if(value == "player"){
+            if(groupInfo.entityType == "player"){
                 EntityManager.playerInit(x, y)
-            }else if(value.isMonster){
+            }else if(groupInfo.entityType == "monster"){
                 if(entitySave.alive && spawn){
-                    entityObj = new Monster(value.monsterKey,x,y,value);
+                    entityObj = new Monster(groupInfo.key,x,y,groupInfo);
                 }
-            }else if(value.isWall){
-                entityObj = new Wall(x, y, value.hitDice, value.name, value.destructible);
-            }else if(value.isContainer){
+            }else if(groupInfo.entityType == 'wall'){
+                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible);
+            }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
-                    entityObj = new Container(value.containerKey,x,y,value);
+                    entityObj = new Container(groupInfo.key,x,y,groupInfo);
+                    console.log(groupInfo);
+                    console.log(entityObj);
                 }
             }
             if(entityObj){
@@ -223,7 +243,6 @@ class EntityManager{
             }
         })
         
-
         EntityManager.currentMap = json;
         
     }

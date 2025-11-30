@@ -36,6 +36,11 @@ class Entity{
     move(x, y){
         x += this.x;
         y += this.y;
+        
+
+        
+        $('#log-window').show();
+        $('#container-inventory-window').hide();
     
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
             if(Board.getStain(this.x,this.y)){
@@ -44,6 +49,16 @@ class Entity{
             this.setPosition(x,y);
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
+
+            // Open the container inventory and hide the log
+            $('#log-window').hide();
+            $('#container-inventory-window').show();
+            Display.displayInventory(true,true,Board.entityAt(x,y));
+            /* Entry to create loot menu
+            
+            
+            */
+
             this.lootContainer(Board.entityAt(x,y));
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
@@ -186,6 +201,28 @@ class Entity{
         this.inventory.items = [];
         this.inventory.gold = 0;
     }
+
+    /*lootContainer(container){
+        if (!container.inventory.items){
+            return false;
+        }
+        if(!this.inventory.items){
+            this.inventory.items = [];
+        }
+
+        while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
+            this.inventory.items.push(container.inventory.items.pop());
+        }
+        
+        if(this.pickUpGold(container.inventory.gold)){
+            container.inventory.gold = 0;
+            let roster = EntityManager.currentMap.roster;
+            if(roster[container.index]){
+                roster[container.index].inventory.gold = 0;
+            }
+        };
+        
+    }*/
 
     lootContainer(container){
         if (!container.inventory.items){
@@ -368,11 +405,13 @@ class Entity{
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...");
             let damage = Random.roll(0,this.damage);
-            Player.changeStamina(damage * -1);
-            if(Player.stamina < 0){
+            if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
+            }else{
+                Player.changeStamina(damage * -1);
             }
+
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
             }
@@ -487,6 +526,9 @@ class SwordEntity extends Entity{
         }else if (this.rotation % 4 == 3){
             symbol = '\\';
         }
+
+        //name needs to regularly updated in case the item becomes worn... This is the best place to do it.
+        this.name = this.item.name;
     
         this.symbol = symbol;
     }
@@ -723,7 +765,7 @@ class Monster extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -731,6 +773,8 @@ class Monster extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        this.name = additionalParameters.entityName;
         
         return this;
     }
@@ -910,7 +954,7 @@ class Container extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -918,6 +962,8 @@ class Container extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        this.name = additionalParameters.entityName;
 
         return this;
     }

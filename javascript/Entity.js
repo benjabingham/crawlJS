@@ -201,12 +201,12 @@ class Entity{
     lootContainer(container){
         let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(isPlayer){
-            Log.addMessage('you search the '+container.name+'.')
+            Log.addMessage('you search the '+container.name+'...')
         }
         console.log(container);
         if (!container.inventory.items.length){
             if(isPlayer){
-                Log.addMessage(container.name+' is empty.')
+                Log.addMessage("nothing.")
             }
             return false;
         }

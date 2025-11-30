@@ -7,6 +7,7 @@ class Board{
     static losArray = [];
     static stainArray = [];
 
+<<<<<<< HEAD
     static destinations = {};
 
     static boardInit(roomJson = false){
@@ -19,6 +20,13 @@ class Board{
                 Array(Board.width).fill(false)
             )
         }
+=======
+        this.entityManager = entityManager;
+        this.destinations = {};
+        //Look, it's a hidden comment written by andy!
+        // I keeep writing these comments!!
+        //lijawdfjlkeklFJDsfanlk
+>>>>>>> 9e8b41449c125895890bc0908587d17524c7133c
     }
 
     static setBoard(){

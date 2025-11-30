@@ -701,6 +701,16 @@ let itemVars = {
             negative:true,
             message:'your life force weakens.'
         },
+        darkness:{
+            name:'potion of darkness',
+            usable: true,
+            potable: true,
+            color: 'black',
+            light: -10,
+            value: 3,
+            negative:true,
+            message:'your light is extinguished.'
+        },
         illFortune:{
             name:'potion of ill fortune',
             usable: true,
@@ -838,8 +848,9 @@ let itemVars = {
             usable: true,
             potable: true,
             stamina: 10,
-            luck: -10,
-            value: 12,
+            luck: -5,
+            light:-1,
+            value: 9,
             color: 'orange',
             message:"You feel reinvigorated, but something's wrong..."
         },
@@ -849,20 +860,23 @@ let itemVars = {
             potable: true,
             health: 10,
             luck: -10,
-            value: 12,
+            light:-1,
+            value: 10,
             color: 'darkRed',
             message:"Your wounds close, but something's wrong..."
         },
+        /*
         unHallowedNourishment:{
             name:'potion of unhallowed nourishment',
             usable: true,
             potable: true,
             hunger: 10,
             luck: -10,
-            value: 4,
+            light:-1,
+            value: 3,
             color: 'darkOrange',
             message:"Your stomach fills, but still you feel empty..."
-        },
+        },*/
         fatestealerElixir:{
             name:'fatestealer elixir',
             usable: true,
@@ -870,8 +884,8 @@ let itemVars = {
             stamina: 10,
             health: 10,
             luck: -10,
-            value: 75,
             hunger: 10,
+            value: 75,
             color: 'brightPurple',
             message:"You feel fully renewed, but something's wrong..."
         },
@@ -897,7 +911,7 @@ let itemVars = {
             value: 55,
             hunger: -10,
             color: 'darkOrange',
-            message:"You feel reborn."
+            message:"Your life force is rended from you. You feel reborn."
         },
         nourishmentPotion:{
             name:'nourishment potion',
@@ -907,7 +921,27 @@ let itemVars = {
             hunger: 10,
             color: 'darkOrange',
             message:"Your stomach fills."
-        }
+        },
+        lightPotion:{
+            name:'potion of light',
+            usable: true,
+            potable: true,
+            value: 8,
+            light: 10,
+            color: 'gold',
+            message:"Your lantern roars to life."
+        },
+        darkVigor:{
+            name:'potion of dark vigor',
+            usable: true,
+            potable: true,
+            value: 8,
+            light: -10,
+            stamina: 10,
+            color: 'darkPurple',
+            message:"You feel a surge of strength as your lantern is extinguished."
+        },
+
         
 
     }

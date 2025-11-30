@@ -246,10 +246,11 @@ class Player {
         return true;
     }
 
-    static addFuel(fuel){
+    static addFuel(fuel, consume=true){
         let slot = fuel.slot;
         Player.light += fuel.light;
         Player.light = Math.min(Player.lightMax, Player.light);
+        Player.light = Math.max(Player.light,0);
         if(fuel.paper){
             Player.lightTime += 400;
         }else{
@@ -257,7 +258,9 @@ class Player {
             Player.lightTime = Math.max(Player.lightTime,0);
         }
 
-        return Player.consume(slot);
+        if(consume){
+            return Player.consume(slot);
+        }
     }
 
     static eatItem(item){
@@ -287,6 +290,9 @@ class Player {
         }
         if(item.hunger){
             Player.changeNourishment(item.hunger);
+        }
+        if(item.light){
+            Player.addFuel(item,false);
         }
         if(item.message){
             Log.addMessage(item.message);

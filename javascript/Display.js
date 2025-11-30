@@ -444,7 +444,7 @@ class Display{
         }
 
         if(item.potable){
-            let effects = ['health','stamina','luck','hunger',]
+            let effects = ['health','stamina','luck','hunger','light']
             effects.forEach((effect)=>{
                 let power = item[effect]
                 if(power){
@@ -460,6 +460,12 @@ class Display{
                     )
                 }
             })
+
+            if(item.unlabeled){
+                $('#'+inventory+'-description-body').append(
+                    $('<div>').addClass('potion-description').text('unknown effect...')
+                )
+            }
         }
 
 

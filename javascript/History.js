@@ -84,7 +84,17 @@ class History{
         
         Player.setPlayerInfo(snapshot.player);
         EntityManager.syncPlayerInventory();
-       
-        Player.luck = Math.max(0,luck);
+
+        console.log({
+            luck:luck,
+            playerLuck:Player.luck
+        })
+        Player.luck = Math.min(luck,Player.luck-1);
+        if (Player.luck < 0){
+            Log.addMessage("You've angered fate.", 'urgent')
+            Player.luck = 0;
+            Player.luckMax -= 3;
+        }
+        Player.luck = Math.max(0,Player.luck);
     }
 }

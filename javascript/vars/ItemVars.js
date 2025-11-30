@@ -800,11 +800,11 @@ let itemVars = {
             message:'Your luck returns to you.'
         },
         greaterLuckPotion:{
-            name:'greater health potion',
+            name:'greater luck potion',
             usable: true,
             potable: true,
             luck: 6,
-            value: 70,
+            value: 110,
             color: 'green',
             message:'Your luck returns to you.'
         },

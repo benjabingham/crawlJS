@@ -275,6 +275,10 @@ let itemVars = {
             name:"thimble",
             value:1
         },
+        bead:{
+            name:"bead",
+            value:1.5
+        },
         ring:{
             name:"ring",
             value:4
@@ -283,33 +287,37 @@ let itemVars = {
             name:"cup",
             value:6
         },
+        pendant:{
+            name:"pendant",
+            value:6
+        },
         plate:{
             name:"plate",
             value:8
+        },
+        bowl:{
+            name:"bowl",
+            value:9
         },
         vase:{
             name:"vase",
             value:10
         },
-        pendant:{
-            name:"pendant",
-            value:6
+        coinPouch:{
+            name:"coin pouch",
+            value:10
         },
         statuette:{
             name:"statuette",
             value:12
         },
-        crown:{
-            name:"crown",
-            value:20
-        },
         tiara:{
             name:"tiara",
             value:12
         },
-        coinPouch:{
-            name:"coin pouch",
-            value:10
+        crown:{
+            name:"crown",
+            value:20
         }
     },
     weaponMaterials:{
@@ -394,15 +402,6 @@ let itemVars = {
             },
             value:.5
         },
-        glass:{
-            name:'glass',
-            flimsy:40,
-            value:3,
-            edged:{
-                damage:6
-            },
-            color:'clearBlue'
-        },
         copper:{
             name:'copper',
             flimsy:3,
@@ -435,6 +434,22 @@ let itemVars = {
             value:4.5,
             value:2,
             color:'lightGray'
+        },
+        glass:{
+            name:'glass',
+            flimsy:40,
+            value:3,
+            edged:{
+                damage:6
+            },
+            color:'clearBlue'
+        },
+        sigiledBone:{
+            name:'sigiled bone',
+            flimsy:10,
+            weight:-1,
+            value:3,
+            color:'bone'
         },
         ironwood:{
             name:'ironwood',
@@ -470,7 +485,6 @@ let itemVars = {
             },
             value:8,
             color:'silver'
-
         },
         silver:{
             name:'silver',
@@ -554,6 +568,11 @@ let itemVars = {
             name:'lead',
             value:2,
             color:"darkgray"
+        },
+        sigiledBone:{
+            name:"sigiled bone",
+            value:2.5,
+            color:"bone"
         },
         copper:{
             name:'copper',

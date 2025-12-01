@@ -264,7 +264,7 @@ let monsterVars = {
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
-        inventorySlots: 1,
+        inventorySlots: 2,
         inventory:[
             {
                 item: itemVars.drops.sigiledSkull,
@@ -277,58 +277,25 @@ let monsterVars = {
         ],
         loot:{
             weapon:{
-                chance:2,
-                tier:2
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
             },
             treasure:{
-                chance:2,
-                tier:2
+                chance:15,
+                tier:1
             },
             gold:{
                 chance:10,
-                amount:10
+                amount:5
             },
             potion:{
-                chance:2,
+                chance:1,
                 tier:1
             }
         },
         blood:0,
-        color:'bone'},
-        zombie:{
-        name:"zombie",
-        symbol:"Zo",
-        behavior:"chaseBinary",
-        behaviorInfo:{
-            slow:35
-        },
-        hitDice:3,
-        damage:4,
-        inventorySlots: 1,
-        inventory:[
-        ],
-        loot:{
-            weapon:{
-                chance:1,
-                tier:1
-            },
-            treasure:{
-                chance:5,
-                tier:1
-            },
-            gold:{
-                chance:5,
-                amount:10
-            },
-            potion:{
-                chance:2,
-                tier:1
-            }
-        },
-        reconstitute:2,
-        reconstituteBehavior:'chaseBinary',
-        reconstituteChance:50,
-        color:'darkGreen'
+        color:'bone'
     },
     ghoul:{
         name:"ghoul",

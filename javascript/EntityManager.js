@@ -323,14 +323,10 @@ class EntityManager{
             return false;
         }
 
-        console.log(entityObj);
-
         for(let i = 0; i < spawner.inventory.items.length; i++){
             if(Math.random()*100 < 50){
                 let item = spawner.inventory.items.splice(i,1)[0];
-                console.log(item);
                 entityObj.inventory.items.push(item);
-                console.log(JSON.parse(JSON.stringify(entityObj)));
             }
         }
 
@@ -344,11 +340,9 @@ class EntityManager{
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
             if(entity.spawnerID && !entity.dead){
-                console.log('getting back in');
                 let spawner = EntityManager.getEntity(entity.spawnerID)
                 //get back into spawner
                 spawner.spawnCapacity++;
-                console.log({spawner:spawner})
                 //give items and gold back
                 spawner.inventory.items = spawner.inventory.items.concat(entity.inventory.items);
                 spawner.inventory.gold += entity.inventory.gold;

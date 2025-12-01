@@ -203,7 +203,6 @@ class Entity{
         if(isPlayer){
             Log.addMessage('you search the '+container.name+'...')
         }
-        console.log(container);
         if (!container.inventory.items.length){
             if(isPlayer){
                 Log.addMessage("nothing.")
@@ -739,7 +738,11 @@ class Monster extends Entity{
     isMonster = true;
     //is used to temporarily change monster's symbol, ex. if stunned or killed
     tempSymbol;
+    //do it bleed?
     blood = 1;
+    //Where did I last see the player
+    lastSeen = false;
+
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
@@ -777,11 +780,24 @@ class Monster extends Entity{
         let playerEntity = EntityManager.getEntity('player');
         //creature is less focused the further they are
         let focus = this.behaviorInfo.focus;
-        focus -= EntityManager.getDistance(this, playerEntity);
-        if(!EntityManager.hasPlayerLos(this)){
-            focus -= 20;
+        if(EntityManager.hasPlayerLos(this)){
+            this.lastSeen = {x:playerEntity.x, y:playerEntity.y}
+        }else{
+            //if you can't see the player...
+            focus -= 7;
         }
-        focus =  Math.max(focus, 4);
+        let target = false;
+        //go towards where you last saw the player, or otherwise towards player.
+        if(this.lastSeen){
+            target = this.lastSeen;
+        }else{
+            //if you have little clue where the player is...
+            target = playerEntity;
+            focus -= 15;
+        }
+        focus -= EntityManager.getDistance(this, target);
+        focus =  Math.max(focus,4);
+
         let x = 0;
         let y = 0;
 
@@ -793,9 +809,9 @@ class Monster extends Entity{
             x = 1;
         }else if (random == 3 || random == 4){
             //do nothing
-        }else if(this.x > playerEntity.x){
+        }else if(this.x > target.x){
             x = -1;
-        }else if (this.x < playerEntity.x){
+        }else if (this.x < target.x){
             x = 1;
         }
         
@@ -806,25 +822,31 @@ class Monster extends Entity{
             y = 1;
         }else if (random == 3 || random == 4){
             //do nothing
-        }else if(this.y > playerEntity.y){
+        }else if(this.y > target.y){
             y = -1;
-        }else if (this.y < playerEntity.y){
+        }else if (this.y < target.y){
             y = 1;
         }
     
         let targetX = this.x+x;
         let targetY = this.y+y
         let targetItem = Board.entityAt(targetX, targetY);
+        
 
         if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
             this.attack(targetItem);
         }
     
         if(!this.move(x, y)){
+            let message = [target,x,y,'failed']
             this.move(0, y);
-            this.move(x, 0);
+            this.move(x, 0); 
         }
-        
+
+        //forget last seen location if you reach it
+        if(this.x == this.lastSeen.x && this.y == this.lastSeen.y){
+            this.lastSeen = false;
+        } 
     }
 
     attack(target){

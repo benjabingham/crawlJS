@@ -849,6 +849,44 @@ class Monster extends Entity{
         } 
     }
 
+    chaseBinary(){
+        let playerEntity = EntityManager.getEntity('player');
+        if(!EntityManager.hasPlayerLos(this)){
+            return false;
+        }
+        
+        let x = 0;
+        let y = 0;
+
+        if(this.x > playerEntity.x){
+            x = -1;
+        }else if (this.x < playerEntity.x){
+            x = 1;
+        }
+        
+        if(this.y > playerEntity.y){
+            y = -1;
+        }else if (this.y < playerEntity.y){
+            y = 1;
+        }
+    
+        let targetX = this.x+x;
+        let targetY = this.y+y
+        let targetItem = Board.entityAt(targetX, targetY);
+        
+
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+            this.attack(targetItem);
+        }
+    
+        if(!this.move(x, y)){
+            let message = [target,x,y,'failed']
+            this.move(0, y);
+            this.move(x, 0); 
+        }
+
+    }
+
     attack(target){
         if(target.isSword){
             this.beat(target);

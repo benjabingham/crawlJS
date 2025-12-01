@@ -101,6 +101,7 @@ class GameMaster{
             return false;
         }
         EntityManager.currentMap.stains = Board.stainArray;
+        EntityManager.currentMap = false;
         GameMaster.dungeonId++;
         GameMaster.reset();
 

@@ -255,6 +255,29 @@ class Entity{
         return true;
     }
 
+    setSpawnCapacity(n){
+        if(!this.spawnEntities){
+            return false;
+        }
+
+        if(typeof n != 'undefined'){
+            this.spawnCapacity = n;
+        }else if(typeof this.spawnCapacity == 'undefined'){
+            this.spawnCapacity = Random.roll(this.spawnEntities.minCapacity,this.spawnEntities.maxCapacity);
+        }else{
+            return false;
+        }
+          
+        if(EntityManager.currentMap){
+            let roster = EntityManager.currentMap.roster;
+            if(roster[this.index]){
+                roster[this.index].spawnCapacity = this.spawnCapacity;
+            }
+        }
+        
+        return true;
+    }
+
     obliterate(){
         this.obliterated = true;
         this.x = -1;
@@ -784,10 +807,16 @@ class Monster extends Entity{
 
         this.threshold = Math.max(this.threshold,1);
 
-        this.name = additionalParameters.entityName;
+        this.setSpawnCapacity();        
+
+        if(additionalParameters.entityName){
+            this.name = additionalParameters.entityName;
+        }
+        
         
         return this;
     }
+
 
     //base behavior for monsters - move straight toward player, with some randomness.
     //Randomness depends on creature's behaviorinfo.focus, and increases based on distance from the player and line of sight.
@@ -1045,6 +1074,8 @@ class Container extends Entity{
                 this[key] = val;
             }
         }
+
+        this.setSpawnCapacity();        
 
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);

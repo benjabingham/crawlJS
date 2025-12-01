@@ -250,7 +250,7 @@ let monsterVars = {
         reconstituteChance:50,
         color:'darkGreen'
     },
-    skeleton:{
+    skeletonPile:{
         name:"skeleton",
         symbol:"Sk",
         behavior:"chaseBinary",
@@ -260,6 +260,53 @@ let monsterVars = {
         threshold:16,
         hitDice:0,
         mortal:23,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    skeleton:{
+        name:"skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        behaviorInfo:{
+            slow:20
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:14,
         damage:4,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',

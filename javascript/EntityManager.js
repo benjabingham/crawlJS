@@ -97,7 +97,10 @@ class EntityManager{
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
             let random = Random.roll(1,100);
-            let skip = entity.stunned
+            let skip = 0;
+            if(entity.stunned){
+                skip+= entity.stunned;
+            }
             if(entity.behaviorInfo){
                 skip += (random <= entity.behaviorInfo.slow);
             }
@@ -122,6 +125,9 @@ class EntityManager{
                 }
                 if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
                     entity.reconstituteFn(entity.reconstitute);
+                }
+                if(entity.spawnEntities){
+                    EntityManager.spawnEntity(entity);
                 }
             }
             if (entity.behavior != 'dead'){
@@ -261,6 +267,56 @@ class EntityManager{
         
         EntityManager.currentMap = json;
         
+    }
+
+    //function used for entities spawning other entities
+    static spawnEntity(spawner){
+        let spawnEntities = spawner.spawnEntities;
+        if(Math.random()*100 > spawnEntities.spawnChance){
+            return false;
+        }
+
+        if(!spawner.spawnCapacity){
+            return false
+        }
+
+        //find spawn location
+        let directionIndex = Random.roll(0,7);
+        let translations = EntityManager.translations;
+        let space = {
+            x : spawner.x + translations[directionIndex].x,
+            y: spawner.y + translations[directionIndex].y
+        }
+        let foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+        let i = 0;
+        //while we haven't checked every space, and current space is not open
+        while(i < 8 && !foundSpace){
+            i++;
+            directionIndex = (directionIndex+1)%8
+            console.log(directionIndex);
+            space = {
+                x : spawner.x + translations[directionIndex].x,
+                y: spawner.y + translations[directionIndex].y
+            }
+            foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+        }
+
+        //no valid spaces
+        if(!foundSpace){
+            return false;
+        }
+
+        let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
+        let entityObj = new Monster(monsterKey,space.x,space.y);
+        if(!entityObj){
+            console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
+            return false;
+        }
+
+        spawner.setSpawnCapacity(spawner.spawnCapacity-1);
+
+        return true;
+
     }
 
     static updateSavedInventories(){

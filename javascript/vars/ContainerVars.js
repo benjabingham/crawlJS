@@ -317,4 +317,40 @@ let containerVars = {
         },
         color:'darkGreen'
     },
+    tomb:{
+        name:"tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:3,
+            entities:[
+                'skeleton',
+                'zombie'
+            ],
+            spawnChance: 20,
+        },
+        hitDice:0,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.fuel.kindling,
+                chance: 7
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:1,
+                tier:-1
+            },
+            gold:{
+                chance:1,
+                amount:1
+            }
+        },
+        color:'darkGray'
+    },
+
 }

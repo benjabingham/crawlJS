@@ -215,6 +215,22 @@ let monsterVars = {
         ],
         color:'gray'
     },
+    zombie:{
+        name:"zombie",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        behaviorInfo:{
+            slow:35
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        color:'darkGreen'
+    },
     dummy:{
         name:"dummy",
         symbol:"Du",

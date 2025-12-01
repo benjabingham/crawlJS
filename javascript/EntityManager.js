@@ -120,8 +120,8 @@ class EntityManager{
                         entity.chaseBinary();
                     default:
                 }
-                if(entity.reconstitute){
-                    entity.reconstitute();
+                if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
+                    entity.reconstituteFn(entity.reconstitute);
                 }
             }
             if (entity.behavior != 'dead'){

@@ -880,25 +880,27 @@ class Monster extends Entity{
         }
     
         if(!this.move(x, y)){
-            let message = [target,x,y,'failed']
             this.move(0, y);
             this.move(x, 0); 
         }
 
     }
 
-    reconstitute(n){
-        if(this.behavior != 'dead'){
+    reconstituteFn(n){
+        console.log('checking');
+        //check if it's been dead for a turn
+        if(!History.getSnapshotEntity(this.id).dead){
             return false;
         }
-        this.mortal -= n;
+        console.log('reconstituting')
+        this.mortal -= Random.roll(0,n);
         if(this.mortal <= this.threshold){
             this.behavior = this.reconstituteBehavior;
             this.tempSymbol = false;
             this.dead = false;
             this.container = false;
             this.name = this.name.split(' corpse')[0];
-            this.stunned++;
+            this.stunTime++;
             if(EntityManager.hasPlayerLos(this)){
                 Log.addMessage(this.name+' rises...')
             }

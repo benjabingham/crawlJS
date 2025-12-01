@@ -231,6 +231,9 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         color:'darkGreen'
     },
+    skeleton:{
+        //new keyword - start with some mortality. Has reconstitute. So if wait = on, will wait for player los then start to rise.
+    },
     dummy:{
         name:"dummy",
         symbol:"Du",

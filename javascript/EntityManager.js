@@ -116,7 +116,12 @@ class EntityManager{
                     case "chase":
                         entity.chaseNatural();
                         break;
+                    case "chaseBinary":
+                        entity.chaseBinary();
                     default:
+                }
+                if(entity.reconstitute){
+                    entity.reconstitute();
                 }
             }
             if (entity.behavior != 'dead'){

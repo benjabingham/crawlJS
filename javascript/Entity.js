@@ -887,6 +887,24 @@ class Monster extends Entity{
 
     }
 
+    reconstitute(n){
+        if(this.behavior != 'dead'){
+            return false;
+        }
+        this.mortal -= n;
+        if(this.mortal <= this.threshold){
+            this.behavior = this.reconstituteBehavior;
+            this.tempSymbol = false;
+            this.dead = false;
+            this.container = false;
+            this.name = this.name.split(' corpse')[0];
+            this.stunned++;
+            if(EntityManager.hasPlayerLos(this)){
+                Log.addMessage(this.name+' rises...')
+            }
+        }
+    }
+
     attack(target){
         if(target.isSword){
             this.beat(target);

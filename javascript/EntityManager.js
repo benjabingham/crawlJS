@@ -330,6 +330,10 @@ class EntityManager{
             }
         }
 
+        if(EntityManager.hasPlayerLos(entityObj)){
+            Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
+        }
+
         spawner.setSpawnCapacity(spawner.spawnCapacity-1);
 
 

@@ -330,7 +330,7 @@ let containerVars = {
             ],
             spawnChance: 20,
         },
-        hitDice:0,
+        hitDice:3,
         damage:4,
         inventorySlots: 2,
         isContainer: true,
@@ -361,5 +361,165 @@ let containerVars = {
         },
         color:'darkGray'
     },
+    sleepyTomb:{
+        name:"sleepy tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:1,
+            entities:[
+                'skeleton',
+                'zombie'
+            ],
+            spawnChance: 1,
+        },
+        hitDice:2,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 2
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 1
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    ghoulTomb:{
+        name:"ghoul tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:1,
+            maxCapacity:1,
+            entities:[
+                'ghoul'
+            ],
+            spawnChance: 10,
+        },
+        hitDice:4,
+        damage:4,
+        inventorySlots: 3,
+        isContainer: true,
+        inventory:[],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:2,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+            },
+            treasure:{
+                chance:25,
+                tier:2
+            },
+            gold:{
+                chance:25,
+                amount:10
+            },
+            potion:{
+                chance:15,
+                tier:1
+            }
+        },
+        color:'darkGray'
+    },
+    ratTomb:{
+        name:"rat tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:5,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 20,
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 2
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 1
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    emptyTomb:{
+        name:"empty tomb",
+        symbol:"▣",
+        behavior:"",
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 2
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 1
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    }
 
 }

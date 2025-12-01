@@ -259,6 +259,16 @@ let itemVars = {
             color:'woodBrown',
             flimsy:30
         },
+        sigiledBone:{
+            name:"sigiled bone",
+            value:1,
+            color:'bone'
+        },
+        sigiledSkull:{
+            name:"sigiled skull",
+            value:3,
+            color:'bone'
+        },
     },
     treasure:{
         thimble:{

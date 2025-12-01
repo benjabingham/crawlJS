@@ -259,6 +259,12 @@ class Entity{
         this.obliterated = true;
         this.x = -1;
         this.y = -1;
+
+        let roster = EntityManager.currentMap.roster;
+        if(roster[this.index]){
+            roster[this.index].alive = false;
+        }
+
     }
 
     removeFromBoard(){
@@ -307,6 +313,12 @@ class Entity{
             this.behavior = 'dead';
             this.dead = true;
             this.stunned = 0;
+
+            if(this.reconstituteChance){
+                if(Math.random()*100 > this.reconstituteChance){
+                    this.reconstitute = 0;
+                }
+            }
         }else{
             if(Board.hasPlayerLos(this)){
                 EntityManager.transmitMessage(this.name+" is destroyed!")
@@ -323,7 +335,8 @@ class Entity{
         }
         */
         let roster = EntityManager.currentMap.roster;
-        if(roster[this.index]){
+        //update roster, but not if monster can reconstitute
+        if(roster[this.index] && !this.reconstituteBehavior){
             roster[this.index].alive = false;
         }
 
@@ -732,7 +745,7 @@ class Monster extends Entity{
     //mortal - the amount of damage it has taken
     mortal = 0;
     //threshold - the amount of damage that will destroy it
-    threshold = 1;
+    threshold = 0;
     //damage - determines the amount of damage done by this monsters attacks
     damage = 0;
     isMonster = true;
@@ -766,8 +779,10 @@ class Monster extends Entity{
         }
 
         if(this.hitDice){
-            this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
+            this.threshold += Random.rollN(this.hitDice,1,8);
         }
+
+        this.threshold = Math.max(this.threshold,1);
 
         this.name = additionalParameters.entityName;
         

@@ -227,13 +227,74 @@ let monsterVars = {
         inventorySlots: 1,
         inventory:[
         ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
         color:'darkGreen'
     },
     skeleton:{
-        //new keyword - start with some mortality. Has reconstitute. So if wait = on, will wait for player los then start to rise.
-    },
+        name:"skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        behaviorInfo:{
+            slow:20
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:23,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:2,
+                tier:2
+            },
+            treasure:{
+                chance:2,
+                tier:2
+            },
+            gold:{
+                chance:10,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'},
     dummy:{
         name:"dummy",
         symbol:"Du",

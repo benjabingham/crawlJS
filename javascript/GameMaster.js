@@ -44,6 +44,7 @@ class GameMaster{
         if(position){
             EntityManager.playerEntity.setPosition(position.x,position.y);
         }
+        EntityManager.reapWounded();
         board.placeEntities();
         History.saveSnapshot();
 

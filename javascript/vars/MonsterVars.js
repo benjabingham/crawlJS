@@ -295,6 +295,76 @@ let monsterVars = {
         },
         blood:0,
         color:'bone'},
+        zombie:{
+        name:"zombie",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        behaviorInfo:{
+            slow:35
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        color:'darkGreen'
+    },
+    ghoul:{
+        name:"ghoul",
+        symbol:"Gh",
+        behavior:"chaseBinary",
+        behaviorInfo:{
+            slow:10
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 2,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:5,
+                tier:2
+            },
+            treasure:{
+                chance:15,
+                tier:2
+            },
+            gold:{
+                chance:10,
+                amount:10
+            },
+            potion:{
+                chance:15,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:25,
+        color:'white'
+    },
     dummy:{
         name:"dummy",
         symbol:"Du",

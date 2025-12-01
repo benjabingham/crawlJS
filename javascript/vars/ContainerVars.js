@@ -323,7 +323,7 @@ let containerVars = {
         behavior:"",
         spawnEntities:{
             minCapacity:0,
-            maxCapacity:3,
+            maxCapacity:1,
             entities:[
                 'skeleton',
                 'zombie'
@@ -336,19 +336,28 @@ let containerVars = {
         isContainer: true,
         inventory:[
             {
-                item: itemVars.fuel.kindling,
-                chance: 7
+                item: itemVars.drops.sigiledBone,
+                chance: 40
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 15
             },
         ],
         loot:{
             treasure:{
-                chance:1,
-                tier:-1
+                chance:15,
+                tier:2
             },
             gold:{
-                chance:1,
-                amount:1
-            }
+                chance:50,
+                amount:10
+            },
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
         },
         color:'darkGray'
     },

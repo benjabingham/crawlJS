@@ -101,9 +101,9 @@ class GameMaster{
             return false;
         }
         EntityManager.currentMap.stains = Board.stainArray;
-        EntityManager.currentMap = false;
         GameMaster.dungeonId++;
         GameMaster.reset();
+        EntityManager.currentMap = false;
 
         if(destination.type == "town"){
             Player.changeExertion(1);

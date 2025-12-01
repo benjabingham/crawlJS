@@ -269,7 +269,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'zombietest']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
@@ -407,6 +407,7 @@ class Display{
     }
 
     static displayItemInfo(item, inventory){
+        console.log(item);
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';

@@ -190,6 +190,7 @@ class Entity{
     }
 
     dropInventory(){
+        console.log(JSON.parse(JSON.stringify(this.inventory)))
         if((!this.inventory.items || this.inventory.items.length == 0) && !this.inventory.gold){
             return false;
         }
@@ -261,13 +262,16 @@ class Entity{
         }
 
         if(typeof n != 'undefined'){
-            this.spawnCapacity = n;
+            this.spawnCapacity = n
         }else if(typeof this.spawnCapacity == 'undefined'){
             this.spawnCapacity = Random.roll(this.spawnEntities.minCapacity,this.spawnEntities.maxCapacity);
         }else{
             return false;
         }
           
+        //this is a little quirky but it has the behavior I want.
+        //when they are initially generated, currentmap isnt set yet. So spawners wont actually save their capacity until this is called again when they spawn a unit.
+        //this means they'll keep trying to populate until they've spawned at least 1 unit.
         if(EntityManager.currentMap){
             let roster = EntityManager.currentMap.roster;
             if(roster[this.index]){
@@ -807,8 +811,6 @@ class Monster extends Entity{
 
         this.threshold = Math.max(this.threshold,1);
 
-        this.setSpawnCapacity();        
-
         if(additionalParameters.entityName){
             this.name = additionalParameters.entityName;
         }
@@ -1075,8 +1077,6 @@ class Container extends Entity{
             }
         }
 
-        this.setSpawnCapacity();        
-
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
@@ -1101,8 +1101,11 @@ class ItemPile extends Entity{
             items:inventoryArray,
             gold:gold
         }
+        console.log(JSON.parse(JSON.stringify(this)));
         this.dropTurn = Log.turnCounter;
         this.sortInventory();
+        console.log(JSON.parse(JSON.stringify(this)));
+
     }
 
     sortInventory(){

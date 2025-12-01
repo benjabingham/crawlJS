@@ -509,7 +509,7 @@ let itemVars = {
             value:12,
             color:'gold'
         },
-        Adamantine:{
+        adamantine:{
             name:'adamantine',
             weight:-1,
             edged:{

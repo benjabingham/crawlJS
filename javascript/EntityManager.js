@@ -261,7 +261,13 @@ class EntityManager{
             if(entitySave.inventory){
                 entityObj.inventory.items = entitySave.inventory.items;
                 entityObj.inventory.gold = entitySave.inventory.gold;
+            }
 
+            if(entityObj.spawnEntities){
+                entityObj.setSpawnCapacity(entitySave.spawnCapacity);
+                if(entitySave.containedEntity){
+                    entityObj.spawnEntities.entities = [entitySave.containedEntity];
+                }
             }
         })
         
@@ -270,6 +276,7 @@ class EntityManager{
     }
 
     //function used for entities spawning other entities
+    //if they live when you leave the dungeon, their loot is returned to their container
     static spawnEntity(spawner){
         let spawnEntities = spawner.spawnEntities;
         if(Math.random()*100 > spawnEntities.spawnChance){
@@ -307,13 +314,28 @@ class EntityManager{
         }
 
         let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
+        //remember monsterkey for later
+        EntityManager.currentMap.roster[spawner.index].containedEntity = monsterKey;
         let entityObj = new Monster(monsterKey,space.x,space.y);
+        entityObj.spawnerID = spawner.id;
         if(!entityObj){
             console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
             return false;
         }
 
+        console.log(entityObj);
+
+        for(let i = 0; i < spawner.inventory.items.length; i++){
+            if(Math.random()*100 < 50){
+                let item = spawner.inventory.items.splice(i,1)[0];
+                console.log(item);
+                entityObj.inventory.items.push(item);
+                console.log(JSON.parse(JSON.stringify(entityObj)));
+            }
+        }
+
         spawner.setSpawnCapacity(spawner.spawnCapacity-1);
+
 
         return true;
 
@@ -321,11 +343,26 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if(entity.index){
+            if(entity.spawnerID && !entity.dead){
+                console.log('getting back in');
+                let spawner = EntityManager.getEntity(entity.spawnerID)
+                //get back into spawner
+                spawner.spawnCapacity++;
+                console.log({spawner:spawner})
+                //give items and gold back
+                spawner.inventory.items = spawner.inventory.items.concat(entity.inventory.items);
+                spawner.inventory.gold += entity.inventory.gold;
+                let spawnerSave = EntityManager.currentMap.roster[spawner.index];
+                spawnerSave.inventory.items = spawner.inventory.items;
+                spawnerSave.inventory.gold = spawner.inventory.gold;
+                spawnerSave.spawnCapacity = spawner.spawnCapacity;
+            }else if(entity.index){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
                 entitySave.inventory.gold = entity.inventory.gold;
-
+                if(entity.spawnEntities){
+                    console.log(entitySave);
+                }
             }
         }
     }

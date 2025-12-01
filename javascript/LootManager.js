@@ -41,7 +41,7 @@ class LootManager{
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,weaponLoot.allowedMaterials));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials));
                 }
             }
 
@@ -166,6 +166,7 @@ class LootManager{
     static getWeaponLoot(tier, allowedMaterials=false){
         let weapon = LootManager.getWeapon();
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
+        console.log(weaponMaterial);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
 
@@ -205,6 +206,7 @@ class LootManager{
         let key = materials[materialIndex];
         let material = itemVars.weaponMaterials[key];
 
+        console.log(materialIndex);
         return material;
     }
 

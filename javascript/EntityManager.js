@@ -330,7 +330,7 @@ class EntityManager{
             }
         }
 
-        if(EntityManager.hasPlayerLos(entityObj)){
+        if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
             Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
         }
 

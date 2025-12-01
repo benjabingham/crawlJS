@@ -190,7 +190,6 @@ class Entity{
     }
 
     dropInventory(){
-        console.log(JSON.parse(JSON.stringify(this.inventory)))
         if((!this.inventory.items || this.inventory.items.length == 0) && !this.inventory.gold){
             return false;
         }
@@ -948,7 +947,7 @@ class Monster extends Entity{
             this.name = this.name.split(' corpse')[0];
             this.stunTime++;
             if(EntityManager.hasPlayerLos(this)){
-                Log.addMessage(this.name+' rises...')
+                Log.addMessage(this.name+' rises...', 'danger')
             }
         }
     }
@@ -1101,11 +1100,8 @@ class ItemPile extends Entity{
             items:inventoryArray,
             gold:gold
         }
-        console.log(JSON.parse(JSON.stringify(this)));
         this.dropTurn = Log.turnCounter;
         this.sortInventory();
-        console.log(JSON.parse(JSON.stringify(this)));
-
     }
 
     sortInventory(){

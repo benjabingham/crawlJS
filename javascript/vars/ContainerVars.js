@@ -381,11 +381,11 @@ let containerVars = {
         inventory:[
             {
                 item: itemVars.drops.sigiledBone,
-                chance: 2
+                chance: 10
             },
             {
                 item: itemVars.drops.sigiledSkull,
-                chance: 1
+                chance: 3
             },
         ],
         loot:{

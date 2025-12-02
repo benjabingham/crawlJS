@@ -126,6 +126,9 @@ class GameMaster{
     }
 
     static rewind(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         if(History.canRewind()){
             console.log('rewind');
             History.rewind();
@@ -138,6 +141,9 @@ class GameMaster{
     }
 
     static drop(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         if(!GameMaster.dropMode){
             GameMaster.dropMode = true;
         }else{
@@ -193,6 +199,7 @@ class GameMaster{
     }
 
     static drinkItem(event, dungeonMode=true){
+        
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.drinkItem(Player.inventory.items[slot])){
             //skip behaviors if invalid item
@@ -205,11 +212,17 @@ class GameMaster{
     }
 
     static wait(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         Player.gainStamina();
         GameMaster.postPlayerAction();
     }
 
     static rotate(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         let direction = event.type == 'clockwise'? 1 : -1;
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
@@ -219,6 +232,9 @@ class GameMaster{
 
     //should belong to input once classes are static
     static movePlayer(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         let dungeonId = GameMaster.dungeonId;
         let direction = event.type;
 

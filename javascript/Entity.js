@@ -236,7 +236,7 @@ class Entity{
         };
 
         if(container.spawnEntities && container.spawnEntities.disturbChance){
-            EntityManager.spawnEntity(container,container.spawnEntities.disturbChance);
+            container.disturb();
         }
         
     }
@@ -287,6 +287,7 @@ class Entity{
 
     obliterate(){
         this.obliterated = true;
+        this.dead = true;
         this.x = -2;
         this.y = -2;
 
@@ -507,6 +508,19 @@ class Entity{
             this.obliterate();
         }
     }
+
+    disturb(){
+        if(!this.spawnEntities){
+            return false;
+        }
+        if(this.spawnEntities.disturbChance > Math.random()*100){
+            if(!this.disturbed){
+                this.disturbed = 0;
+            } 
+            console.log('DISTURBED');
+            this.disturbed++;
+        }
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -670,7 +684,8 @@ class SwordEntity extends Entity{
             }
             target.sturdy(this);
             if(target.spawnEntities && target.spawnEntities.disturbChance){
-                EntityManager.spawnEntity(target,target.spawnEntities.disturbChance);
+                console.log('gonna disturb...')
+                target.disturb();
             }
         }
 

@@ -203,7 +203,10 @@ class Entity{
         if(isPlayer){
             Log.addMessage('you search the '+container.name+'...')
         }
-        if (!container.inventory.items.length){
+        if(container.spawnEntities && container.spawnEntities.disturbChance){
+            Log.addMessage("a "+container.spawnEntities.entities[0]+'!','danger')
+            container.disturb();
+        }else if (!container.inventory.items.length){
             if(isPlayer){
                 Log.addMessage("nothing.")
             }
@@ -235,9 +238,7 @@ class Entity{
             }
         };
 
-        if(container.spawnEntities && container.spawnEntities.disturbChance){
-            container.disturb();
-        }
+        
         
     }
 

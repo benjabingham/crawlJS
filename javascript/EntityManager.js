@@ -265,9 +265,10 @@ class EntityManager{
 
             if(entityObj.spawnEntities){
                 entityObj.setSpawnCapacity(entitySave.spawnCapacity);
-                if(entitySave.containedEntity){
-                    entityObj.spawnEntities.entities = [entitySave.containedEntity];
+                if(!entitySave.containedEntity){
+                    entitySave.containedEntity = entityObj.spawnEntities.entities[Random.roll(0,entityObj.spawnEntities.entities.length-1)];
                 }
+                entityObj.spawnEntities.entities = [entitySave.containedEntity];
             }
         })
         
@@ -314,8 +315,6 @@ class EntityManager{
         }
 
         let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
-        //remember monsterkey for later
-        EntityManager.currentMap.roster[spawner.index].containedEntity = monsterKey;
         let entityObj = new Monster(monsterKey,space.x,space.y);
         entityObj.spawnerID = spawner.id;
         if(!entityObj){

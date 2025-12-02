@@ -274,14 +274,22 @@ class Entity{
         if(typeof n != 'undefined'){
             this.spawnCapacity = n
         }else if(typeof this.spawnCapacity == 'undefined'){
-            this.spawnCapacity = Random.roll(this.spawnEntities.minCapacity,this.spawnEntities.maxCapacity);
+            //set default capacity values to 1
+            let minCapacity = this.spawnEntities.minCapacity;
+            let maxCapacity = this.spawnEntities.maxCapacity;
+            console.log([minCapacity,maxCapacity])
+            minCapacity = typeof minCapacity != 'undefined' ? minCapacity: 1;
+            maxCapacity = maxCapacity ? maxCapacity: 1;
+            maxCapacity = Math.max(minCapacity,maxCapacity);
+            minCapacity = Math.min(minCapacity,maxCapacity);
+            console.log([minCapacity,maxCapacity])
+            this.spawnCapacity = Random.roll(minCapacity, maxCapacity);
+            console.log(this.spawnCapacity);
         }else{
             return false;
         }
           
-        //this is a little quirky but it has the behavior I want.
-        //when they are initially generated, currentmap isnt set yet. So spawners wont actually save their capacity until this is called again when they spawn a unit.
-        //this means they'll keep trying to populate until they've spawned at least 1 unit.
+        //Note - this doesnt work during map generation. EntityManager takes care of it.
         if(EntityManager.currentMap){
             let roster = EntityManager.currentMap.roster;
             if(roster[this.index]){

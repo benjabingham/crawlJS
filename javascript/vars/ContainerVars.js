@@ -322,7 +322,7 @@ let containerVars = {
         symbol:"▣",
         behavior:"",
         spawnEntities:{
-            minCapacity:0,
+            minCapacity:1,
             maxCapacity:1,
             entities:[
                 'skeleton',
@@ -367,8 +367,7 @@ let containerVars = {
         symbol:"▣",
         behavior:"",
         spawnEntities:{
-            minCapacity:0,
-            maxCapacity:1,
+            occupiedChance:100,
             entities:[
                 'skeleton',
                 'zombie'
@@ -412,8 +411,6 @@ let containerVars = {
         symbol:"▣",
         behavior:"",
         spawnEntities:{
-            minCapacity:1,
-            maxCapacity:1,
             entities:[
                 'ghoul'
             ],

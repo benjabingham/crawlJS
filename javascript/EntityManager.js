@@ -264,20 +264,43 @@ class EntityManager{
             }
 
             if(entityObj.spawnEntities){
-                entityObj.setSpawnCapacity(entitySave.spawnCapacity);
-                //lock in one type of possible entity, unless set to be random.
-                if(!entitySave.containedEntity && !entityObj.spawnEntities.randomEntities){
-                    entitySave.containedEntity = entityObj.spawnEntities.entities[Random.roll(0,entityObj.spawnEntities.entities.length-1)];
-                }
-                if(entitySave.containedEntity){
-                    entityObj.spawnEntities.entities = [entitySave.containedEntity];
-                    entityObj.containedEntity = entitySave.containedEntity;
-                }
+                EntityManager.populateSpawner(entityObj,entitySave)
             }
         })
         
         EntityManager.currentMap = json;
         
+    }
+
+    //loads spawnerEntity (Entity) info from saved information.
+    //generates appropriate values if unset
+    static populateSpawner(spawnerEntity, spawnerSave){
+        let spawnSettings = spawnerEntity.spawnEntities
+        let occupiedChance = spawnSettings.occupiedChance;
+        //first time spawner is populated, check if it should be empty
+        if(occupiedChance && occupiedChance < Math.random()*100 && typeof spawnerSave.spawnCapacity == 'undefined'){
+            console.log('SETTING 0')
+            spawnerSave.spawnCapacity = 0;
+        }
+        //this function sets capacity to passed value. if passed undefined, generates appropriate fresh value
+        spawnerEntity.setSpawnCapacity(spawnerSave.spawnCapacity);
+        
+        console.log('SPAWNCAPACITY: '+spawnerEntity.spawnCapacity)
+        //lock in one type of possible entity, unless set to be random.
+        if(!spawnerSave.containedEntity && !spawnSettings.randomEntities){
+            spawnerSave.containedEntity = spawnSettings.entities[Random.roll(0,spawnSettings.entities.length-1)];
+        }
+        if(spawnerSave.containedEntity){
+            spawnSettings.entities = [spawnerSave.containedEntity];
+            spawnerEntity.containedEntity = spawnerSave.containedEntity;
+        }
+
+        spawnerSave.spawnCapacity = spawnerEntity.spawnCapacity;
+
+        console.log(JSON.parse(JSON.stringify({
+            entity:spawnerEntity,
+            save:spawnerSave
+        })))
     }
 
     //function used for entities spawning other entities
@@ -354,12 +377,12 @@ class EntityManager{
 
     
             spawner.setSpawnCapacity(spawner.spawnCapacity-1);
-            if(spawner.disturbed){
-                spawner.disturbed--;
-            }
+            
         }
 
-        
+        if(spawner.disturbed){
+            spawner.disturbed--;
+        }
 
         return true;
 

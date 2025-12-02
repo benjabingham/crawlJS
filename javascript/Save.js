@@ -128,8 +128,7 @@ class Save{
                     LootManager.getEntityLoot(entity);
                     //reset spawner...
                     if(entity.spawnEntities){
-                        entity.spawnCapacity = undefined;
-                        entity.containedEntity = false;
+                        entity.containedEntities = false;
                     }
                 }
             }

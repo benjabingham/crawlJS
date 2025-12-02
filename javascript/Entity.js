@@ -203,14 +203,8 @@ class Entity{
         if(isPlayer){
             Log.addMessage('you search the '+container.name+'...')
         }
-        if(container.spawnEntities && container.spawnEntities.disturbChance && container.spawnCapacity){
-            let message
-            if(container.containedEntity){
-                message = "a "+monsterVars[container.containedEntity].name+'!';
-            }else{
-                message = "something moves!";
-            }
-            Log.addMessage(message,'danger')
+        if(container.spawnEntities && container.seeNextContainedEntity()){
+            Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
         }else if (!container.inventory.items.length){
             if(isPlayer){
@@ -266,6 +260,56 @@ class Entity{
         return true;
     }
 
+    //called the first time a spawner is generated
+    generateContainedEntities(){
+        if(!this.spawnEntities){
+            console.log({message:'NOT A SPAWNENTITY',entity:this})
+            return false;
+        }
+
+        let spawnSettings = this.spawnEntities;
+        let occupiedChance = spawnSettings.occupiedChance;
+        this.containedEntities = [];
+        if(occupiedChance && occupiedChance < Math.random*100){
+            return true;
+        }
+
+        let minCapacity = this.spawnEntities.minCapacity;
+        let maxCapacity = this.spawnEntities.maxCapacity;
+        minCapacity = typeof minCapacity != 'undefined' ? minCapacity: 1;
+        maxCapacity = maxCapacity ? maxCapacity: 1;
+        maxCapacity = Math.max(minCapacity,maxCapacity);
+        minCapacity = Math.min(minCapacity,maxCapacity);
+        let nEntities = Random.roll(minCapacity, maxCapacity);
+
+        for(let i = 0; i < nEntities; i++){
+            this.containedEntities.push(spawnSettings.entities[Random.roll(0,spawnSettings.entities.length-1)])
+        }
+
+    }
+
+    //returns name of next entity
+    seeNextContainedEntity(){
+        if(!this.containedEntities || !this.containedEntities.length){
+            return false;
+        }
+        return monsterVars[this.containedEntities[this.containedEntities.length-1]].name
+    }
+
+    removeContainedEntity(){
+        if(!this.containedEntities){
+            return false;
+        }
+
+        return this.containedEntities.pop();
+    }
+
+    returnContainedEntity(entity){
+        this.containedEntities.push(entity.key);
+        this.inventory.items = this.inventory.items.concat(entity.inventory.items);
+        this.inventory.gold += entity.inventory.gold;
+    }
+
     setSpawnCapacity(n){
         if(!this.spawnEntities){
             return false;
@@ -277,14 +321,11 @@ class Entity{
             //set default capacity values to 1
             let minCapacity = this.spawnEntities.minCapacity;
             let maxCapacity = this.spawnEntities.maxCapacity;
-            console.log([minCapacity,maxCapacity])
             minCapacity = typeof minCapacity != 'undefined' ? minCapacity: 1;
             maxCapacity = maxCapacity ? maxCapacity: 1;
             maxCapacity = Math.max(minCapacity,maxCapacity);
             minCapacity = Math.min(minCapacity,maxCapacity);
-            console.log([minCapacity,maxCapacity])
             this.spawnCapacity = Random.roll(minCapacity, maxCapacity);
-            console.log(this.spawnCapacity);
         }else{
             return false;
         }
@@ -852,6 +893,7 @@ class Monster extends Entity{
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
+        this.key = monsterKey;
         if(monsterVars[monsterKey]){
             let monster = JSON.parse(JSON.stringify(monsterVars[monsterKey]));
             //copy monster vars from template
@@ -1124,6 +1166,7 @@ class Container extends Entity{
     constructor(containerKey, x, y, additionalParameters = {}){
         //console.log(additionalParameters);
         super('Ch',x,y, 'chest');
+        this.key = containerKey;
         if(containerVars[containerKey]){
             let container = JSON.parse(JSON.stringify(containerVars[containerKey]));
             //copy chest vars from template

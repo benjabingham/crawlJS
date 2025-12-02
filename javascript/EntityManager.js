@@ -264,7 +264,15 @@ class EntityManager{
             }
 
             if(entityObj.spawnEntities){
-                EntityManager.populateSpawner(entityObj,entitySave)
+                console.log(JSON.parse(JSON.stringify(entityObj)))
+            }
+            if(entityObj.spawnEntities){
+                if(entitySave.containedEntities){
+                    entityObj.containedEntities = entitySave.containedEntities;
+                }else{
+                    entityObj.generateContainedEntities();
+                }
+                console.log(entityObj.containedEntities);
             }
         })
         
@@ -322,7 +330,7 @@ class EntityManager{
         let nSpawn = Random.roll(minSpawn,maxSpawn);
 
         for(let i = 0; i < nSpawn; i++){
-            if(!spawner.spawnCapacity){
+            if(!spawner.seeNextContainedEntity()){
                 return false
             }
     
@@ -339,7 +347,7 @@ class EntityManager{
             while(j < 8 && !foundSpace){
                 j++;
                 directionIndex = (directionIndex+1)%8
-                console.log(directionIndex);
+                //console.log(directionIndex);
                 space = {
                     x : spawner.x + translations[directionIndex].x,
                     y: spawner.y + translations[directionIndex].y
@@ -351,9 +359,9 @@ class EntityManager{
             if(!foundSpace){
                 return false;
             }
-    
             
-            let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
+            //spawn it
+            let monsterKey = spawner.removeContainedEntity();
             let entityObj = new Monster(monsterKey,space.x,space.y);
             entityObj.setPosition();
             entityObj.spawnerID = spawner.id;
@@ -375,8 +383,6 @@ class EntityManager{
                 Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
             }
 
-    
-            spawner.setSpawnCapacity(spawner.spawnCapacity-1);
             
         }
 
@@ -390,24 +396,22 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if(entity.spawnerID && !entity.dead){
+            if(entity.spawnerID && !entity.dead && !entity.obliterated){
                 let spawner = EntityManager.getEntity(entity.spawnerID)
-                //get back into spawner
-                spawner.spawnCapacity++;
-                //give items and gold back
-                spawner.inventory.items = spawner.inventory.items.concat(entity.inventory.items);
-                spawner.inventory.gold += entity.inventory.gold;
+                spawner.returnContainedEntity(entity);
                 let spawnerSave = EntityManager.currentMap.roster[spawner.index];
                 spawnerSave.inventory.items = spawner.inventory.items;
                 spawnerSave.inventory.gold = spawner.inventory.gold;
-                spawnerSave.spawnCapacity = spawner.spawnCapacity;
+                spawnerSave.containedEntities = spawner.containedEntities;
             }else if(entity.index){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
                 entitySave.inventory.gold = entity.inventory.gold;
                 if(entity.spawnEntities){
+                    entitySave.containedEntities = entity.containedEntities;
                     console.log(entitySave);
                 }
+
             }
         }
     }

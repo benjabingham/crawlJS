@@ -5,7 +5,7 @@ $(document).ready(function(){
     InputManager.addEventListeners()
     Display.setCustomControls();
     Display.showHomeScreen();  
-    Stats.logStats();
+    //Stats.logStats();
 });
 
 

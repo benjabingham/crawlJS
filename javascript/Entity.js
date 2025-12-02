@@ -234,6 +234,10 @@ class Entity{
                 roster[container.index].inventory.gold = 0;
             }
         };
+
+        if(container.spawnEntities && container.spawnEntities.disturbChance){
+            EntityManager.spawnEntity(container,container.spawnEntities.disturbChance);
+        }
         
     }
 
@@ -665,6 +669,9 @@ class SwordEntity extends Entity{
                 target.enrageAndDaze();   
             }
             target.sturdy(this);
+            if(target.spawnEntities && target.spawnEntities.disturbChance){
+                EntityManager.spawnEntity(target,target.spawnEntities.disturbChance);
+            }
         }
 
         if(this.owner == 'player'){

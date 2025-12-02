@@ -277,9 +277,12 @@ class EntityManager{
 
     //function used for entities spawning other entities
     //if they live when you leave the dungeon, their loot is returned to their container
-    static spawnEntity(spawner){
+    static spawnEntity(spawner, chance = undefined){
         let spawnEntities = spawner.spawnEntities;
-        if(Math.random()*100 > spawnEntities.spawnChance){
+        if(typeof chance == 'undefined'){
+            chance = spawnEntities.spawnChance;
+        }
+        if(Math.random()*100 > chance){
             return false;
         }
 

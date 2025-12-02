@@ -329,6 +329,7 @@ let containerVars = {
                 'zombie'
             ],
             spawnChance: 20,
+            disturbChance:100
         },
         hitDice:3,
         damage:4,
@@ -373,6 +374,7 @@ let containerVars = {
                 'zombie'
             ],
             spawnChance: 1,
+            disturbChance:100
         },
         hitDice:2,
         damage:4,
@@ -416,6 +418,7 @@ let containerVars = {
                 'ghoul'
             ],
             spawnChance: 10,
+            disturbChance:100
         },
         hitDice:4,
         damage:4,
@@ -454,6 +457,7 @@ let containerVars = {
                 'rat'
             ],
             spawnChance: 20,
+            disturbChance:100
         },
         hitDice:3,
         damage:4,

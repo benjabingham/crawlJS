@@ -219,6 +219,7 @@ let monsterVars = {
         name:"zombie",
         symbol:"Zo",
         behavior:"chaseBinary",
+        vulnerabilities:['silver'],
         behaviorInfo:{
             slow:35
         },
@@ -254,6 +255,7 @@ let monsterVars = {
         name:"skeleton",
         symbol:"Sk",
         behavior:"chaseBinary",
+        vulnerabilities:['silver'],
         behaviorInfo:{
             slow:20
         },
@@ -301,6 +303,7 @@ let monsterVars = {
         name:"skeleton",
         symbol:"Sk",
         behavior:"chaseBinary",
+        vulnerabilities:['silver'],
         behaviorInfo:{
             slow:20
         },
@@ -348,6 +351,7 @@ let monsterVars = {
         name:"ghoul",
         symbol:"Gh",
         behavior:"chaseBinary",
+        vulnerabilities:['silver'],
         behaviorInfo:{
             slow:10
         },

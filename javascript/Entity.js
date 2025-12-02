@@ -528,6 +528,27 @@ class Entity{
             this.disturbed++;
         }
     }
+
+    isVulnerable(weapon, strikeType = false){
+        if(!this.vulnerabilities){
+            return false;
+        }
+
+        let vulnerable = 0;
+        this.vulnerabilities.forEach((vulnerability)=>{
+            if(weapon[vulnerability]){
+                vulnerable++;
+            }
+            if(weapon.type && weapon.type[vulnerability]){
+                vulnerable++;
+            }
+            if(strikeType && strikeType == vulnerability){
+                vulnerable++;
+            }
+        })
+
+        return vulnerable;
+    }
 }
 
 class PlayerEntity extends Entity{
@@ -664,8 +685,14 @@ class SwordEntity extends Entity{
         }
         let damageDice = 1;
         if(target.stunned){
-            damageDice=2;
+            damageDice++;
         }
+
+
+        let vulnerability = target.isVulnerable(this.item, strikeType);
+        damageDice += vulnerability;
+        stunTime += vulnerability;
+
         let stunAdded = 0;
         if (stunTime){
             stunAdded = Random.roll(1,stunTime);
@@ -679,6 +706,9 @@ class SwordEntity extends Entity{
         }else{
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" is struck!");
+                if(vulnerability){
+                    Log.addMessage(target.name+" recoils!",'pos')
+                }
             }
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);

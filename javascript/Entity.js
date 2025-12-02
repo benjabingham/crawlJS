@@ -287,8 +287,8 @@ class Entity{
 
     obliterate(){
         this.obliterated = true;
-        this.x = -1;
-        this.y = -1;
+        this.x = -2;
+        this.y = -2;
 
         let roster = EntityManager.currentMap.roster;
         if(roster[this.index]){

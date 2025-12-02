@@ -524,6 +524,67 @@ let containerVars = {
             },
         },
         color:'darkGray'
+    },
+    overflowingCrypt:{
+        name:"overflowingCrypt",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{ 
+            minCapacity:5,
+            maxCapacity:8,
+            minSpawn:1,
+            maxSpawn:3,
+            entities:[
+                'skeleton',
+                'zombie',
+                'ghoul',
+                'rat'
+            ],
+            randomEntities:true,
+            spawnChance: 20,
+            disturbChance:100,
+        },
+        hitDice:5,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 100
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 50
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 50
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 25
+            },
+        ],
+        loot:{
+            weapon:{
+                chance:25,
+                tier:2,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+            },
+            treasure:{
+                chance:70,
+                tier:2
+            },
+            gold:{
+                chance:100,
+                amount:20
+            },
+            potion:{
+                chance:15,
+                tier:2
+            }
+        },
     }
 
 }

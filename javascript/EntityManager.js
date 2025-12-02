@@ -339,8 +339,10 @@ class EntityManager{
                 return false;
             }
     
+            //cant take more than half the items because inventory length updates as they are taken
+            //i like this
             for(let j = 0; j < spawner.inventory.items.length; j++){
-                if(Math.random()*100 < 50){
+                if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
                     let item = spawner.inventory.items.splice(j,1)[0];
                     entityObj.inventory.items.push(item);
                 }

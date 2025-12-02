@@ -134,7 +134,7 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
-        inventorySlots: 1,
+        inventorySlots: 0,
         tiny:true,
         color:'gray'
     },
@@ -311,7 +311,7 @@ let monsterVars = {
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
-        inventorySlots: 2,
+        inventorySlots: 1,
         inventory:[
             {
                 item: itemVars.drops.sigiledSkull,

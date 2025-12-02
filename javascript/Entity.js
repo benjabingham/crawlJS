@@ -204,7 +204,13 @@ class Entity{
             Log.addMessage('you search the '+container.name+'...')
         }
         if(container.spawnEntities && container.spawnEntities.disturbChance && container.spawnCapacity){
-            Log.addMessage("a "+container.spawnEntities.entities[0]+'!','danger')
+            let message
+            if(container.containedEntity){
+                message = "a "+monsterVars[container.containedEntity].name+'!';
+            }else{
+                message = "something moves!";
+            }
+            Log.addMessage(message,'danger')
             container.disturb();
         }else if (!container.inventory.items.length){
             if(isPlayer){
@@ -304,7 +310,7 @@ class Entity{
         this.setPosition(-1,-1);
     }
 
-    setPosition(x,y){
+    setPosition(x = this.x, y = this.y){
         Board.clearSpace(this.x,this.y) 
         this.x = x;
         this.y = y;

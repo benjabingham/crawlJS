@@ -265,10 +265,14 @@ class EntityManager{
 
             if(entityObj.spawnEntities){
                 entityObj.setSpawnCapacity(entitySave.spawnCapacity);
-                if(!entitySave.containedEntity){
+                //lock in one type of possible entity, unless set to be random.
+                if(!entitySave.containedEntity && !entityObj.spawnEntities.randomEntities){
                     entitySave.containedEntity = entityObj.spawnEntities.entities[Random.roll(0,entityObj.spawnEntities.entities.length-1)];
                 }
-                entityObj.spawnEntities.entities = [entitySave.containedEntity];
+                if(entitySave.containedEntity){
+                    entityObj.spawnEntities.entities = [entitySave.containedEntity];
+                    entityObj.containedEntity = entitySave.containedEntity;
+                }
             }
         })
         
@@ -284,59 +288,76 @@ class EntityManager{
             return false;
         }
 
-        if(!spawner.spawnCapacity){
-            return false
+        let minSpawn = 1, maxSpawn = 1;
+        if(spawner.spawnEntities.minSpawn){
+            minSpawn = spawner.spawnEntities.minSpawn;
+        }
+        if(spawner.spawnEntities.maxSpawn){
+            maxSpawn = spawner.spawnEntities.maxSpawn;
         }
 
-        //find spawn location
-        let directionIndex = Random.roll(0,7);
-        let translations = EntityManager.translations;
-        let space = {
-            x : spawner.x + translations[directionIndex].x,
-            y: spawner.y + translations[directionIndex].y
-        }
-        let foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
-        let i = 0;
-        //while we haven't checked every space, and current space is not open
-        while(i < 8 && !foundSpace){
-            i++;
-            directionIndex = (directionIndex+1)%8
-            console.log(directionIndex);
-            space = {
+        let nSpawn = Random.roll(minSpawn,maxSpawn);
+
+        for(let i = 0; i < nSpawn; i++){
+            if(!spawner.spawnCapacity){
+                return false
+            }
+    
+            //find spawn location
+            let directionIndex = Random.roll(0,7);
+            let translations = EntityManager.translations;
+            let space = {
                 x : spawner.x + translations[directionIndex].x,
                 y: spawner.y + translations[directionIndex].y
             }
-            foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
-        }
+            let foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+            let j = 0;
+            //while we haven't checked every space, and current space is not open
+            while(j < 8 && !foundSpace){
+                j++;
+                directionIndex = (directionIndex+1)%8
+                console.log(directionIndex);
+                space = {
+                    x : spawner.x + translations[directionIndex].x,
+                    y: spawner.y + translations[directionIndex].y
+                }
+                foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+            }
+    
+            //no valid spaces
+            if(!foundSpace){
+                return false;
+            }
+    
+            
+            let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
+            let entityObj = new Monster(monsterKey,space.x,space.y);
+            entityObj.setPosition();
+            entityObj.spawnerID = spawner.id;
+            if(!entityObj){
+                console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
+                return false;
+            }
+    
+            for(let j = 0; j < spawner.inventory.items.length; j++){
+                if(Math.random()*100 < 50){
+                    let item = spawner.inventory.items.splice(j,1)[0];
+                    entityObj.inventory.items.push(item);
+                }
+            }
+    
+            if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
+                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
+            }
 
-        //no valid spaces
-        if(!foundSpace){
-            return false;
-        }
-
-        let monsterKey = spawnEntities.entities[Random.roll(0,spawnEntities.entities.length-1)]
-        let entityObj = new Monster(monsterKey,space.x,space.y);
-        entityObj.spawnerID = spawner.id;
-        if(!entityObj){
-            console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
-            return false;
-        }
-
-        for(let i = 0; i < spawner.inventory.items.length; i++){
-            if(Math.random()*100 < 50){
-                let item = spawner.inventory.items.splice(i,1)[0];
-                entityObj.inventory.items.push(item);
+    
+            spawner.setSpawnCapacity(spawner.spawnCapacity-1);
+            if(spawner.disturbed){
+                spawner.disturbed--;
             }
         }
 
-        if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
-            Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
-        }
-
-        spawner.setSpawnCapacity(spawner.spawnCapacity-1);
-        if(spawner.disturbed){
-            spawner.disturbed--;
-        }
+        
 
         return true;
 

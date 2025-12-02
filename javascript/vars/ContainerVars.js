@@ -367,7 +367,7 @@ let containerVars = {
         symbol:"▣",
         behavior:"",
         spawnEntities:{
-            minCapacity:1,
+            minCapacity:0,
             maxCapacity:1,
             entities:[
                 'skeleton',

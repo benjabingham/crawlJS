@@ -71,9 +71,9 @@ class LootManager{
     }
 
     static trimInventory(items, max){
-        console.log({items:items,max:max})
+        //console.log({items:items,max:max})
         while(items.length > max){
-            console.log(items.pop());
+            items.pop();
         }
 
         return items;

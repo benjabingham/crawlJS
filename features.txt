@@ -32,3 +32,8 @@ Monster update
     chaseBinary - move in direction of player each turn. Optionally need los.
     chaseBinary monsters should usually have a slow value. Maybe even have it increase when they take damage. (skeleton, zombie)
     chasebinary monsters with no slow value and decent health will be very scary
+
+Cartography tools
+    Use to 'record' a percentage of tiles you can see. Just records if there is wall or floor.
+    See recorded walls/floors outside of view as faded image
+    minimap that shows recorded portions of current map?

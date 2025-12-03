@@ -375,6 +375,9 @@ let containerVars = {
             spawnChance: 1,
             disturbChance:100
         },
+        behaviorInfo:{
+            slow:70
+        },
         hitDice:2,
         damage:4,
         inventorySlots: 2,

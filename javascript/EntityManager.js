@@ -100,7 +100,8 @@ class EntityManager{
                 skip += (random <= entity.behaviorInfo.slow);
             }
             if(entity.wait){
-                if(!EntityManager.hasPlayerLos(entity)){
+                //wait until is within screen AND has player los
+                if(!EntityManager.hasPlayerLos(entity) || EntityManager.getDistance(entity,EntityManager.playerEntity) > 8){
                     skip++;
                 }else{
                     entity.wait = false;

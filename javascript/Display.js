@@ -2,6 +2,7 @@ class Display{
     static entityManager;
     static customControls;
     static colorScheme = 0;
+    static displayedInventorySlot;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
         {scheme:'dark-mode',name:'Dark Mode'},
@@ -296,6 +297,9 @@ class Display{
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
+        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
+        Display.displayItemInfo(displayedItem, inventoryId)
+        
         Display.displayGold();
     }
 
@@ -407,6 +411,12 @@ class Display{
     }
 
     static displayItemInfo(item, inventory){
+        if(!item){
+            $('#'+inventory+'-description').html('')
+            return false;
+        }
+        Display.displayedInventorySlot = item.slot;
+        console.log(inventory);
         console.log(item);
         let itemValue = item.value;
         if(!itemValue){

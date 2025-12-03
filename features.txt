@@ -37,3 +37,13 @@ Cartography tools
     Use to 'record' a percentage of tiles you can see. Just records if there is wall or floor.
     See recorded walls/floors outside of view as faded image
     minimap that shows recorded portions of current map?
+
+techniques
+     new unlockable movement options. Perhaps one for each strike type, unlocked by using that strike type?
+    can only have one
+
+crazy weapon - extends from both ends of you. doable? worth implementing?
+
+controls diagram visible on screen
+
+stat boost potions

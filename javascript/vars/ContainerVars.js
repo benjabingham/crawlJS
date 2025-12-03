@@ -450,10 +450,12 @@ let containerVars = {
         spawnEntities:{
             minCapacity:0,
             maxCapacity:5,
+            minSpawn:1,
+            maxSpawn:3,
             entities:[
                 'rat'
             ],
-            spawnChance: 20,
+            spawnChance: 10,
             disturbChance:100
         },
         hitDice:3,

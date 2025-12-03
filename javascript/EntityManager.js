@@ -39,18 +39,13 @@ class EntityManager{
         let item = weapon.item;
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
-        console.log(random)
-        console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
-
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
                 }          
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
-                console.log(item);
-                console.log(Player.equipped);
             }else{
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
@@ -107,10 +102,8 @@ class EntityManager{
             if(entity.wait){
                 if(!EntityManager.hasPlayerLos(entity)){
                     skip++;
-                    console.log('waiting')
                 }else{
                     entity.wait = false;
-                    console.log('found you!');
                 }
             }
             
@@ -245,8 +238,6 @@ class EntityManager{
             }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
                     entityObj = new Container(groupInfo.key,x,y,groupInfo);
-                    console.log(groupInfo);
-                    console.log(entityObj);
                 }
             }
             if(entityObj){
@@ -396,20 +387,19 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if(entity.spawnerID && !entity.dead && !entity.obliterated){
+            if((typeof entity.spawnerID != 'undefined' )&& !entity.dead && !entity.obliterated){
                 let spawner = EntityManager.getEntity(entity.spawnerID)
                 spawner.returnContainedEntity(entity);
                 let spawnerSave = EntityManager.currentMap.roster[spawner.index];
                 spawnerSave.inventory.items = spawner.inventory.items;
                 spawnerSave.inventory.gold = spawner.inventory.gold;
                 spawnerSave.containedEntities = spawner.containedEntities;
-            }else if(entity.index){
+            }else if(typeof entity.index != 'undefined'){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
                 entitySave.inventory.gold = entity.inventory.gold;
                 if(entity.spawnEntities){
                     entitySave.containedEntities = entity.containedEntities;
-                    console.log(entitySave);
                 }
 
             }

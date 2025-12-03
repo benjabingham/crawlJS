@@ -239,6 +239,14 @@ class Player {
         return true;
     }
 
+    static updateEquippedEntityReference(){
+        let slot = Player.equipped.slot;
+        let weaponEntity = EntityManager.playerEntity.swordEntity;
+        let equippedItem = Player.inventory.items[slot];
+        console.log(weaponEntity);
+        weaponEntity.equip(equippedItem);
+    }
+
     static unequipWeapon(){
         if (!Player.equipped){
             return false;

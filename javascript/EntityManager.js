@@ -61,8 +61,13 @@ class EntityManager{
         if(!item.flimsy){
             item.flimsy = 0;
         }
+        console.log(item.flimsy)
         item.flimsy +=n;
-        EntityManager.transmitMessage(item.name + ' is corroding...', 'danger');
+        console.log(item.flimsy)
+        console.log(item);
+        if(n){
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger');
+        }
     }
 
     static placeSword(ownerId){
@@ -220,6 +225,7 @@ class EntityManager{
         }
         if(Player.equipped){
             Player.equipped = Player.inventory.items[Player.equipped.slot];
+            Player.updateEquippedEntityReference();
         }
     }
 

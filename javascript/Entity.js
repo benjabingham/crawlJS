@@ -204,7 +204,7 @@ class Entity{
             Log.addMessage('you search the '+container.name+'...')
         }
         console.log(container);
-        if (!container.inventory.items.length){
+        if (!container.inventory.items.length && !container.inventory.gold){
             if(isPlayer){
                 Log.addMessage("nothing.")
             }

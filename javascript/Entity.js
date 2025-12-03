@@ -170,8 +170,9 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
-        this.pickUpGold(itemPile.inventory.gold)
-        itemPile.inventory.gold = 0;
+        if(this.pickUpGold(itemPile.inventory.gold)){
+            itemPile.inventory.gold = 0;
+        }
 
         if(!itemPile.checkIsEmpty()){
             itemPile.sortInventory();
@@ -239,15 +240,22 @@ class Entity{
     }
 
     pickUpGold(gold){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(!gold || !this.inventory || !this.inventory.slots){
             return false;
         }
+
+        //don't let entities pickup gold if their inventory is full
+        if(!isPlayer && this.inventory.items.length >= this.inventory.slots){
+            return false
+        }
+
         if(!this.inventory.gold){
             this.inventory.gold = 0;
         }
         this.inventory.gold += gold;
 
-        if(PlayerEntity.prototype.isPrototypeOf(this)){
+        if(isPlayer){
             Player.gold += gold;
             Display.displayGold();
             EntityManager.transmitMessage('Found '+gold+' gold!','win')
@@ -766,6 +774,11 @@ class Monster extends Entity{
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
 
+        //turn on to let entities pick up items...
+        if(this.inventorySlots){
+            //this.inventory.slots = this.inventorySlots;
+        }
+
         this.name = additionalParameters.entityName;
         
         return this;
@@ -971,7 +984,7 @@ class ItemPile extends Entity{
         super('*', x, y);
 
         this.inventory = {
-            slots:100,
+            slots:1000,
             items:inventoryArray,
             gold:gold
         }

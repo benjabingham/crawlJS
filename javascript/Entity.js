@@ -506,6 +506,9 @@ class Entity{
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
             }
+            if(this.corrosive){
+                EntityManager.corrodeItem(targetSword, this.corrosive);
+            }
         }
         //check if sword is still equipped
         if(!targetSword.item){
@@ -777,6 +780,9 @@ class SwordEntity extends Entity{
 
         if(this.owner == 'player'){
             EntityManager.degradeItem(this,0,0.25);
+            if(target.corrosive){
+                EntityManager.corrodeItem(this, target.corrosive);
+            }
         }
     }
 

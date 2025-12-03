@@ -55,6 +55,16 @@ class EntityManager{
         }
     }
 
+    static corrodeItem(weapon, n){
+        let item = weapon.item;
+        n = Random.roll(0,n);
+        if(!item.flimsy){
+            item.flimsy = 0;
+        }
+        item.flimsy +=n;
+        EntityManager.transmitMessage(item.name + ' is corroding...', 'danger');
+    }
+
     static placeSword(ownerId){
         let owner = EntityManager.getEntity(ownerId);
         let swordId = owner.sword;

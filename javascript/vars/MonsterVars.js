@@ -383,6 +383,19 @@ let monsterVars = {
         reconstituteChance:25,
         color:'white'
     },
+    ooze:{
+        name:"ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        corrosive:1,
+        blood:1,
+        behaviorInfo:{
+            slow:35
+        },
+        inventorySlots: 0,
+    },
     dummy:{
         name:"dummy",
         symbol:"Du",

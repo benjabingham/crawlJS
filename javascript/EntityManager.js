@@ -57,6 +57,9 @@ class EntityManager{
 
     static corrodeItem(weapon, n){
         let item = weapon.item;
+        if(!weapon.item){
+            return false;
+        }
         n = Random.roll(0,n);
         if(!item.flimsy){
             item.flimsy = 0;

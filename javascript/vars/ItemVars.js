@@ -685,6 +685,7 @@ let itemVars = {
             usable: true,
             food:1,
             light:1,
+            fuel:1,
             color:'gold',
             value:5
         },

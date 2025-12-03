@@ -935,10 +935,7 @@ class Monster extends Entity{
         //creature is less focused the further they are
         let focus = this.behaviorInfo.focus;
         if(EntityManager.hasPlayerLos(this)){
-            this.lastSeen = {x:playerEntity.x, y:playerEntity.y}
-        }else{
-            //if you can't see the player...
-            focus -= 7;
+            this.lastSeen = {x:playerEntity.x, y:playerEntity.y, turn:Log.turnCounter}
         }
         let target = false;
         //go towards where you last saw the player, or otherwise towards player.
@@ -947,65 +944,28 @@ class Monster extends Entity{
         }else{
             //if you have little clue where the player is...
             target = playerEntity;
-            focus -= 15;
+            focus -= 20;
         }
-        focus -= EntityManager.getDistance(this, target);
-        focus =  Math.max(focus,4);
+        focus -= EntityManager.getDistance(this, playerEntity);
 
-        let x = 0;
-        let y = 0;
-
-        //the higher focus is, the less likely the creature is to move randomly
-        let random = Random.roll(1,focus);
-        if(random == 1){
-            x = -1;
-        }else if (random == 2){
-            x = 1;
-        }else if (random == 3 || random == 4){
-            //do nothing
-        }else if(this.x > target.x){
-            x = -1;
-        }else if (this.x < target.x){
-            x = 1;
-        }
-        
-        random = Random.roll(1,focus);
-        if(random == 1){
-            y = -1;
-        }else if (random == 2){
-            y = 1;
-        }else if (random == 3 || random == 4){
-            //do nothing
-        }else if(this.y > target.y){
-            y = -1;
-        }else if (this.y < target.y){
-            y = 1;
-        }
-    
-        let targetX = this.x+x;
-        let targetY = this.y+y
-        let targetItem = Board.entityAt(targetX, targetY);
-        
-
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
-            this.attack(targetItem);
-        }
-    
-        if(!this.move(x, y)){
-            let message = [target,x,y,'failed']
-            this.move(0, y);
-            this.move(x, 0); 
-        }
+        this.moveNatural(target, focus);
 
         //forget last seen location if you reach it
         if(this.x == this.lastSeen.x && this.y == this.lastSeen.y){
             this.lastSeen = false;
         } 
+
+        //forget after a little while
+        let turnsSinceSeen = Log.turnCounter - this.lastSeen.turn;
+        if(Random.roll(0,turnsSinceSeen > 7)){
+            this.lastSeen = false;
+        }
     }
 
     chaseBinary(){
         let playerEntity = EntityManager.getEntity('player');
         if(!EntityManager.hasPlayerLos(this)){
+            this.moveNatural();
             return false;
         }
         
@@ -1038,6 +998,58 @@ class Monster extends Entity{
             this.move(x, 0); 
         }
 
+    }
+
+    
+    moveNatural(target = false, focus = 4){
+
+        let x = 0;
+        let y = 0;
+
+        if(!focus || focus < 4 || !target){
+            focus = 4;
+            target = {x:0,y:0};
+        }
+        let random = Random.roll(1,focus);
+        if(random == 1){
+            x = -1;
+        }else if (random == 2){
+            x = 1;
+        }else if (random == 3 || random == 4){
+            //do nothing
+        }else if(this.x > target.x){
+            x = -1;
+        }else if (this.x < target.x){
+            x = 1;
+        }
+        
+        random = Random.roll(1,focus);
+        if(random == 1){
+            y = -1;
+        }else if (random == 2){
+            y = 1;
+        }else if (random == 3 || random == 4){
+            //do nothing
+        }else if(this.y > target.y){
+            y = -1;
+        }else if (this.y < target.y){
+            y = 1;
+        }
+
+        let targetX = this.x+x;
+        let targetY = this.y+y
+        let targetItem = Board.entityAt(targetX, targetY);
+        
+
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+            this.attack(targetItem);
+        }
+    
+        if(!this.move(x, y)){
+            let message = [target,x,y,'failed']
+            this.move(0, y);
+            this.move(x, 0); 
+        }
     }
 
     reconstituteFn(n){

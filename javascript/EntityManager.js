@@ -271,37 +271,6 @@ class EntityManager{
         
     }
 
-    //loads spawnerEntity (Entity) info from saved information.
-    //generates appropriate values if unset
-    static populateSpawner(spawnerEntity, spawnerSave){
-        let spawnSettings = spawnerEntity.spawnEntities
-        let occupiedChance = spawnSettings.occupiedChance;
-        //first time spawner is populated, check if it should be empty
-        if(occupiedChance && occupiedChance < Math.random()*100 && typeof spawnerSave.spawnCapacity == 'undefined'){
-            console.log('SETTING 0')
-            spawnerSave.spawnCapacity = 0;
-        }
-        //this function sets capacity to passed value. if passed undefined, generates appropriate fresh value
-        spawnerEntity.setSpawnCapacity(spawnerSave.spawnCapacity);
-        
-        console.log('SPAWNCAPACITY: '+spawnerEntity.spawnCapacity)
-        //lock in one type of possible entity, unless set to be random.
-        if(!spawnerSave.containedEntity && !spawnSettings.randomEntities){
-            spawnerSave.containedEntity = spawnSettings.entities[Random.roll(0,spawnSettings.entities.length-1)];
-        }
-        if(spawnerSave.containedEntity){
-            spawnSettings.entities = [spawnerSave.containedEntity];
-            spawnerEntity.containedEntity = spawnerSave.containedEntity;
-        }
-
-        spawnerSave.spawnCapacity = spawnerEntity.spawnCapacity;
-
-        console.log(JSON.parse(JSON.stringify({
-            entity:spawnerEntity,
-            save:spawnerSave
-        })))
-    }
-
     //function used for entities spawning other entities
     //if they live when you leave the dungeon, their loot is returned to their container
     static spawnEntity(spawner){
@@ -315,10 +284,22 @@ class EntityManager{
             minSpawn = spawner.spawnEntities.minSpawn;
         }
         if(spawner.spawnEntities.maxSpawn){
-            maxSpawn = spawner.spawnEntities.maxSpawn;
+            maxSpawn = Math.max(spawner.spawnEntities.maxSpawn,minSpawn);
         }
 
         let nSpawn = Random.roll(minSpawn,maxSpawn);
+        if(!nSpawn){
+            return false;
+        }
+
+        //check if we should wait a turn... Use average slow value of spawned entities
+        let keysToSpawn = spawner.containedEntities.slice(nSpawn*-1)
+        if(Math.random()*100 < EntityManager.getAverageSlow(keysToSpawn)){
+            if(!spawner.disturbed){
+                spawner.disturbed = 1;
+            }
+            return false;
+        }
 
         for(let i = 0; i < nSpawn; i++){
             if(!spawner.seeNextContainedEntity()){
@@ -383,6 +364,18 @@ class EntityManager{
 
         return true;
 
+    }
+
+    //get the average slow value from an array of monster keys
+    static getAverageSlow(keyArr){
+        let total = 0;
+        keyArr.forEach((monsterKey)=>{
+            if(monsterVars[monsterKey] && monsterVars[monsterKey].behaviorInfo && monsterVars[monsterKey].behaviorInfo.slow){
+                total += monsterVars[monsterKey].behaviorInfo.slow
+            }
+        })
+
+        return total/keyArr.length;
     }
 
     static updateSavedInventories(){

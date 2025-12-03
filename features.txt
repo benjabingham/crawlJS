@@ -47,3 +47,7 @@ crazy weapon - extends from both ends of you. doable? worth implementing?
 controls diagram visible on screen
 
 stat boost potions
+
+doors - walls that can be attacked and "open" or disappear upon bumping into them.
+some entities can do this, others cant.
+how to close... ???

@@ -43,18 +43,19 @@ class EntityManager{
         console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
+                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
 
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
                 }          
-                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
                 console.log(item);
                 console.log(Player.equipped);
             }else{
+                EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
+
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
-                EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
                 weapon.unequip();
             }
         }

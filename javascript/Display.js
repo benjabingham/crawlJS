@@ -417,7 +417,7 @@ class Display{
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
 
-        if(item.light && !item.weapon){
+        if(item.light && item.fuel && !item.weapon){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
             )

@@ -691,7 +691,6 @@ let itemVars = {
         },
     },
     potions:{
-
         poison:{
             name:'potion of poison',
             usable: true,
@@ -849,7 +848,7 @@ let itemVars = {
             usable: true,
             potable: true,
             stamina: 10,
-            luck: -5,
+            luck: -3,
             light:-1,
             value: 9,
             color: 'orange',
@@ -860,24 +859,23 @@ let itemVars = {
             usable: true,
             potable: true,
             health: 10,
-            luck: -10,
+            luck: -5,
             light:-1,
             value: 10,
             color: 'darkRed',
             message:"Your wounds close, but something's wrong..."
-        },
-        /*
+        },   
         unHallowedNourishment:{
             name:'potion of unhallowed nourishment',
             usable: true,
             potable: true,
             hunger: 10,
-            luck: -10,
+            luck: -2,
             light:-1,
             value: 3,
             color: 'darkOrange',
             message:"Your stomach fills, but still you feel empty..."
-        },*/
+        },
         fatestealerElixir:{
             name:'fatestealer elixir',
             usable: true,
@@ -899,6 +897,7 @@ let itemVars = {
             luck: 10,
             value: 150,
             hunger: 10,
+            light:2,
             color: 'gold',
             message:"You feel reinvigorated."
         },
@@ -918,7 +917,7 @@ let itemVars = {
             name:'nourishment potion',
             usable: true,
             potable: true,
-            value: 8,
+            value: 4,
             hunger: 10,
             color: 'darkOrange',
             message:"Your stomach fills."
@@ -941,9 +940,6 @@ let itemVars = {
             stamina: 10,
             color: 'darkPurple',
             message:"You feel a surge of strength as your lantern is extinguished."
-        },
-
-        
-
+        }
     }
 }

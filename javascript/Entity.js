@@ -314,7 +314,6 @@ class Entity{
             }
             this.name += " corpse";
             this.behavior = 'dead';
-            this.dead = true;
             this.stunned = 0;
         }else{
             if(Board.hasPlayerLos(this)){
@@ -322,6 +321,7 @@ class Entity{
             }
             this.name = "destroyed "+this.name;
         }
+        this.dead = true;
         this.tempSymbol = 'x';
         this.isContainer = true;
         /*

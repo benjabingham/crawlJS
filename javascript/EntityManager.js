@@ -120,7 +120,7 @@ class EntityManager{
                     default:
                 }
             }
-            if (entity.behavior != 'dead'){
+            if (!entity.dead){
                 if(entity.stunned > 0){
                     entity.stunned--;
                 }
@@ -251,7 +251,6 @@ class EntityManager{
             if(entitySave.inventory){
                 entityObj.inventory.items = entitySave.inventory.items;
                 entityObj.inventory.gold = entitySave.inventory.gold;
-
             }
         })
         

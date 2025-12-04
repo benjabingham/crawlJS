@@ -16,7 +16,7 @@ class Board{
             Board.stainArray = roomJson.stains;
         }else{
             Board.stainArray = new Array(Board.height).fill().map( ()=>
-                Array(Board.width).fill(false)
+                Array(Board.width).fill({color:{r:0,g:0,b:0}, level:0})
             )
         }
     }
@@ -251,7 +251,7 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, stain = 1, color = {r:231, g:46, b:0}){
+    static setStain(x,y, level = 1, color = {r:231, g:46, b:0}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }
@@ -261,29 +261,32 @@ class Board{
                 color:{r:0,g:0,b:0}
             };
         }
-        if(stain < 0){
-            Board.stainArray[y][x].level += stain;    
+        if(level < 0){
+            Board.stainArray[y][x].level += level;    
         }else{
-            Board.stainArray[y][x] = Board.getCombinedStain({level:stain, color:color},Board.stainArray[y][x]);
+            Board.stainArray[y][x] = Board.getCombinedStain({level:level, color:color},Board.stainArray[y][x]);
         }
 
-        Board.expandPuddle(x,y, stain);
+        Board.expandPuddle(x,y, level);
     }
 
-    static expandPuddle(x,y, stain){
+    static expandPuddle(x,y, level){
         let direction = Random.roll(0,7);
         let counter = 0;
-        while(counter < 8 && stain.level > 0){
+        while(counter < 8 && level > 0){
             let translation = EntityManager.translations[direction]
             let x2 = x + translation.x;
             let y2 = y + translation.y;
-            let diff = Board.getStain(x,y).level - Board.getStain(x2,y2).level;
-            if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
-                Board.setStain(x,y, -1);
-                Board.setStain(x2,y2, 1, Board.stainArray[y][x].color);
-                stain--;
+            let stain1 = Board.getStain(x,y)
+            let stain2 = Board.getStain(x2,y2)
+            if(stain1 && stain2){
+                let diff =  stain1.level - stain2.level;
+                if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
+                    Board.setStain(x,y, -1);
+                    Board.setStain(x2,y2, 1, Board.stainArray[y][x].color);
+                    level--;
+                }    
             }
-
             direction = (direction+1) %8
             counter++;
         }

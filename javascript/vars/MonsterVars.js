@@ -395,6 +395,8 @@ let monsterVars = {
             slow:35
         },
         inventorySlots: 0,
+        color:"blue",
+        bloodColor:{r:0,g:0,b:200}
     },
     dummy:{
         name:"dummy",

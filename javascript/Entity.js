@@ -469,14 +469,14 @@ class Entity{
             x = this.x;
             y = this.y;
         }
-        Board.setStain(x,y,this.blood);
+        Board.setStain(x,y,this.blood, this.bloodColor);
         if(this.hitDice > Random.roll(0,5)){
             let x2 = x + translation.x;
             let y2 = y + translation.y;
             if(!Board.wallAt(x2,y2)){
-                Board.setStain(x2,y2,this.blood);
+                Board.setStain(x2,y2,this.blood, this.bloodColor);
             }else{
-                Board.setStain(x,y,this.blood);
+                Board.setStain(x,y,this.blood, this.bloodColor);
             }
         }
     }
@@ -484,7 +484,7 @@ class Entity{
     bloodPuddle(){
         let n = this.blood;
         while(n > 0){
-            Board.setStain(this.x,this.y,1)
+            Board.setStain(this.x,this.y,1, this.bloodColor)
             n--;
         }
     }

@@ -187,8 +187,8 @@ class Display{
                     }
                     if(Board.getStain(x,y)){
                         //stainDiv.text('౷');
-                        Display.applyBackgroundColor('red', stainDiv);
-                        Display.applyOpacity(Board.getStain(x,y),stainDiv);
+                        Display.applyBackgroundColorRGB(Board.getStain(x,y).color, stainDiv);
+                        Display.applyOpacity(Board.getStain(x,y).level,stainDiv);
                     }
                 //out of sight
                 }else{
@@ -407,7 +407,6 @@ class Display{
                 })
             )
         }
-        
     }
 
     static displayItemInfo(item, inventory){
@@ -612,6 +611,13 @@ class Display{
             return false;
         }
         element.css('background-color', 'var(--'+color+')')
+    }
+
+    static applyBackgroundColorRGB(color, element){
+        if(!color){
+            return false;
+        }
+        element.css('background-color', 'rgb('+color.r+','+color.g+','+color.b+')')
     }
 
     //use integer 0-10

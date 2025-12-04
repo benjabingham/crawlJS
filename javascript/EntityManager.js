@@ -114,8 +114,10 @@ class EntityManager{
             if(entity.stunned){
                 skip+= entity.stunned;
             }
+            let slow = 0;
             if(entity.behaviorInfo){
-                skip += (random <= entity.behaviorInfo.slow);
+                slow += (random <= entity.behaviorInfo.slow);
+                skip += slow;
             }
             if(entity.wait){
                 //wait until is within screen AND has player los
@@ -138,9 +140,10 @@ class EntityManager{
                 if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
                     entity.reconstituteFn(entity.reconstitute);
                 }
-                if(entity.spawnEntities){
-                    EntityManager.spawnEntity(entity);
-                }
+                
+            }
+            if(entity.spawnEntities && !slow){
+                EntityManager.spawnEntity(entity);
             }
             if (entity.behavior != 'dead'){
                 if(entity.stunned > 0){

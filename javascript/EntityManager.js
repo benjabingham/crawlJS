@@ -55,6 +55,24 @@ class EntityManager{
         }
     }
 
+    static corrodeItem(weapon, n){
+        let item = weapon.item;
+        if(!weapon.item){
+            return false;
+        }
+        n = Random.roll(0,n);
+        if(!item.flimsy){
+            item.flimsy = 0;
+        }
+        console.log(item.flimsy)
+        item.flimsy +=n;
+        console.log(item.flimsy)
+        console.log(item);
+        if(n){
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',["corrode"]);
+        }
+    }
+
     static placeSword(ownerId){
         let owner = EntityManager.getEntity(ownerId);
         let swordId = owner.sword;
@@ -211,6 +229,7 @@ class EntityManager{
         }
         if(Player.equipped){
             Player.equipped = Player.inventory.items[Player.equipped.slot];
+            Player.updateEquippedEntityReference();
         }
     }
 

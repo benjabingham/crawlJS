@@ -469,14 +469,14 @@ class Entity{
             x = this.x;
             y = this.y;
         }
-        Board.setStain(x,y,this.blood);
+        Board.setStain(x,y,this.blood, this.bloodColor);
         if(this.hitDice > Random.roll(0,5)){
             let x2 = x + translation.x;
             let y2 = y + translation.y;
             if(!Board.wallAt(x2,y2)){
-                Board.setStain(x2,y2,this.blood);
+                Board.setStain(x2,y2,this.blood, this.bloodColor);
             }else{
-                Board.setStain(x,y,this.blood);
+                Board.setStain(x,y,this.blood, this.bloodColor);
             }
         }
     }
@@ -484,7 +484,7 @@ class Entity{
     bloodPuddle(){
         let n = this.blood;
         while(n > 0){
-            Board.setStain(this.x,this.y,1)
+            Board.setStain(this.x,this.y,1, this.bloodColor)
             n--;
         }
     }
@@ -505,6 +505,13 @@ class Entity{
 
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
+            }
+            if(this.corrosive){
+                EntityManager.corrodeItem(targetSword, this.corrosive);
+            }
+
+            if(Monster.prototype.isPrototypeOf(this)){
+                this.checkStealWeapon();
             }
         }
         //check if sword is still equipped
@@ -761,6 +768,7 @@ class SwordEntity extends Entity{
             }
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
+                target.checkStealWeapon();
             }
             target.addMortality(mortality);
             target.checkSplatter(mortality, weapon);
@@ -777,6 +785,9 @@ class SwordEntity extends Entity{
 
         if(this.owner == 'player'){
             EntityManager.degradeItem(this,0,0.25);
+            if(target.corrosive){
+                EntityManager.corrodeItem(this, target.corrosive);
+            }
         }
     }
 
@@ -922,7 +933,10 @@ class Monster extends Entity{
         if(additionalParameters.entityName){
             this.name = additionalParameters.entityName;
         }
-        
+
+        if(this.inventorySlots){
+            this.inventory.slots = this.inventorySlots;
+        }
         
         return this;
     }
@@ -1149,6 +1163,32 @@ class Monster extends Entity{
             }
             this.behaviorInfo.beat -=7;
             this.stunned ++;
+        }
+    }
+
+    checkStealWeapon(){
+        if(!this.grabby){
+            return false;
+        }
+
+        console.log(this.inventory)
+
+        if(this.inventory.items.length >= this.inventory.slots){
+            return false;
+        }
+
+        if(Player.stamina < this.grabby){
+            Player.stamina = 0;
+            let slot = Player.equipped.slot;
+            let item = Player.inventory.items.splice(slot,1)[0];
+
+            Player.unequipWeapon();
+            this.inventory.items.push(item);
+            Log.addMessage(this.name+' absorbs your weapon!','urgent')
+        }else{
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger',['grabby'])
+
+            Player.changeStamina(this.grabby * -1)
         }
     }
 

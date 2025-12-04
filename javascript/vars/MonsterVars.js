@@ -419,6 +419,26 @@ let monsterVars = {
         color:"orange",
         bloodColor:{r:211,g:147,b:28}
     },
+    //should spawn ....
+    elderGoo:{
+        name:"elder goo",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:5,
+        damage:3,
+        blood:1,
+        grabby:1,
+        corrosive:1,
+        inventorySlots:5,
+        reconstitute:3,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        behaviorInfo:{
+            slow:35
+        },
+        color:"brightPurple",
+        bloodColor:{r:173,g:26,b:202}
+    },
     dummy:{
         name:"dummy",
         symbol:"Du",

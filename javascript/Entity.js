@@ -509,6 +509,10 @@ class Entity{
             if(this.corrosive){
                 EntityManager.corrodeItem(targetSword, this.corrosive);
             }
+
+            if(Monster.prototype.isPrototypeOf(this)){
+                this.checkStealWeapon();
+            }
         }
         //check if sword is still equipped
         if(!targetSword.item){
@@ -764,6 +768,7 @@ class SwordEntity extends Entity{
             }
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
+                target.checkStealWeapon();
             }
             target.addMortality(mortality);
             target.checkSplatter(mortality, weapon);
@@ -928,7 +933,10 @@ class Monster extends Entity{
         if(additionalParameters.entityName){
             this.name = additionalParameters.entityName;
         }
-        
+
+        if(this.inventorySlots){
+            this.inventory.slots = this.inventorySlots;
+        }
         
         return this;
     }
@@ -1143,6 +1151,32 @@ class Monster extends Entity{
             }
             this.behaviorInfo.beat -=7;
             this.stunned ++;
+        }
+    }
+
+    checkStealWeapon(){
+        if(!this.grabby){
+            return false;
+        }
+
+        console.log(this.inventory)
+
+        if(this.inventory.items.length >= this.inventory.slots){
+            return false;
+        }
+
+        if(Player.stamina < this.grabby){
+            Player.stamina = 0;
+            let slot = Player.equipped.slot;
+            let item = Player.inventory.items.splice(slot,1)[0];
+
+            Player.unequipWeapon();
+            this.inventory.items.push(item);
+            Log.addMessage(this.name+' absorbs your weapon!','urgent')
+        }else{
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger',['grabby'])
+
+            Player.changeStamina(this.grabby * -1)
         }
     }
 

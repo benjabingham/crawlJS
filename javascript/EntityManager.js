@@ -69,7 +69,7 @@ class EntityManager{
         console.log(item.flimsy)
         console.log(item);
         if(n){
-            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger');
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',["corrode"]);
         }
     }
 

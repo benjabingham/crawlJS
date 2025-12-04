@@ -383,20 +383,41 @@ let monsterVars = {
         reconstituteChance:25,
         color:'white'
     },
-    ooze:{
-        name:"ooze",
+    corrosiveOose:{
+        name:"corrosive ooze",
         symbol:"Oo",
         behavior:"chaseBinary",
         hitDice:1,
         damage:1,
         corrosive:1,
         blood:1,
+        inventorySlots:3,
         behaviorInfo:{
             slow:35
         },
-        inventorySlots: 0,
-        color:"blue",
-        bloodColor:{r:0,g:0,b:200}
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        color:"green",
+        bloodColor:{r:29,g:189,b:66}
+    },
+    AbsorbentOoze:{
+        name:"absorbent ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        blood:1,
+        grabby:1,
+        inventorySlots:3,
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        behaviorInfo:{
+            slow:35
+        },
+        color:"orange",
+        bloodColor:{r:211,g:147,b:28}
     },
     dummy:{
         name:"dummy",

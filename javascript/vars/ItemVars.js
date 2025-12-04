@@ -269,6 +269,40 @@ let itemVars = {
             value:3,
             color:'bone'
         },
+        blueGoo:{
+            name:'blue goo',
+            usable: true,
+            food:1,
+            fuel:1,
+            light:1,
+            color:'blue',
+            value:1
+        },
+        orangeGoo:{
+            name:'orange goo',
+            usable: true,
+            food:2,
+            fuel:1,
+            light:1,
+            color:'orange',
+            value:2
+        },
+        greenGoo:{
+            name:'green goo',
+            usable: true,
+            fuel:1,
+            light:2,
+            color:'green',
+            value:3
+        },
+        purpleGoo:{
+            name:'purple goo',
+            usable: true,
+            fuel:3,
+            light:3,
+            color:'brightPurple',
+            value:4
+        },
     },
     treasure:{
         thimble:{

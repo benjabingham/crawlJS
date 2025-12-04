@@ -392,6 +392,12 @@ let monsterVars = {
         corrosive:1,
         blood:1,
         inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.greenGoo,
+                chance:100
+            },
+        ],
         behaviorInfo:{
             slow:35
         },
@@ -410,6 +416,12 @@ let monsterVars = {
         blood:1,
         grabby:1,
         inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.orangeGoo,
+                chance:100
+            },
+        ],
         reconstitute:1,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:20,
@@ -419,7 +431,38 @@ let monsterVars = {
         color:"orange",
         bloodColor:{r:211,g:147,b:28}
     },
-    //should spawn ....
+    mitoticOoze:{
+        name:"mitotic ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        blood:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.blueGoo,
+                chance:100
+            },
+        ],
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        behaviorInfo:{
+            slow:35
+        },
+        spawnEntities:{ 
+            minCapacity:1,
+            maxCapacity:1,
+            entities:[
+                "mitoticOoze"
+            ],
+            spawnChance: 0,
+            disturbChance:70,
+        },
+        color:"blue",
+        bloodColor:{r:39,g:66,b:183}
+    },
     elderGoo:{
         name:"elder goo",
         symbol:"Oo",
@@ -430,6 +473,20 @@ let monsterVars = {
         grabby:1,
         corrosive:1,
         inventorySlots:5,
+        inventory:[
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:100
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:75
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:25
+            },
+        ],
         reconstitute:3,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:100,
@@ -445,9 +502,8 @@ let monsterVars = {
                 "absorbentOoze",
                 "corrosiveOoze"
             ],
-            randomEntities:true,
-            spawnChance: 1,
-            disturbChance:100,
+            spawnChance: 0,
+            disturbChance:70,
         },
         color:"brightPurple",
         bloodColor:{r:173,g:26,b:202}

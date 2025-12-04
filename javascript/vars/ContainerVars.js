@@ -542,7 +542,6 @@ let containerVars = {
                 'ghoul',
                 'rat'
             ],
-            randomEntities:true,
             spawnChance: 20,
             disturbChance:100,
         },

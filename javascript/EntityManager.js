@@ -278,15 +278,11 @@ class EntityManager{
             }
 
             if(entityObj.spawnEntities){
-                console.log(JSON.parse(JSON.stringify(entityObj)))
-            }
-            if(entityObj.spawnEntities){
                 if(entitySave.containedEntities){
                     entityObj.containedEntities = entitySave.containedEntities;
                 }else{
                     entityObj.generateContainedEntities();
                 }
-                console.log(entityObj.containedEntities);
             }
         })
         
@@ -298,6 +294,11 @@ class EntityManager{
     //if they live when you leave the dungeon, their loot is returned to their container
     static spawnEntity(spawner){
         let spawnEntities = spawner.spawnEntities;
+
+        if(!spawner.containedEntities.length){
+            return false
+        }
+
         if(Math.random()*100 > spawnEntities.spawnChance && !spawner.disturbed){
             return false;
         }
@@ -358,6 +359,9 @@ class EntityManager{
             //spawn it
             let monsterKey = spawner.removeContainedEntity();
             let entityObj = new Monster(monsterKey,space.x,space.y);
+            if(entityObj.spawnEntities){
+                entityObj.generateContainedEntities();
+            }
             entityObj.setPosition();
             entityObj.spawnerID = spawner.id;
             if(!entityObj){

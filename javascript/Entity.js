@@ -293,7 +293,8 @@ class Entity{
         if(!this.containedEntities || !this.containedEntities.length){
             return false;
         }
-        return monsterVars[this.containedEntities[this.containedEntities.length-1]].name
+        let monster = monsterVars[this.containedEntities[this.containedEntities.length-1]]
+        return monster.name;
     }
 
     removeContainedEntity(){

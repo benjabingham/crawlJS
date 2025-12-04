@@ -383,7 +383,7 @@ let monsterVars = {
         reconstituteChance:25,
         color:'white'
     },
-    corrosiveOose:{
+    corrosiveOoze:{
         name:"corrosive ooze",
         symbol:"Oo",
         behavior:"chaseBinary",
@@ -401,7 +401,7 @@ let monsterVars = {
         color:"green",
         bloodColor:{r:29,g:189,b:66}
     },
-    AbsorbentOoze:{
+    absorbentOoze:{
         name:"absorbent ooze",
         symbol:"Oo",
         behavior:"chaseBinary",
@@ -424,9 +424,9 @@ let monsterVars = {
         name:"elder goo",
         symbol:"Oo",
         behavior:"chaseBinary",
-        hitDice:5,
+        hitDice:6,
         damage:3,
-        blood:1,
+        blood:2,
         grabby:1,
         corrosive:1,
         inventorySlots:5,
@@ -435,6 +435,19 @@ let monsterVars = {
         reconstituteChance:100,
         behaviorInfo:{
             slow:35
+        },
+        spawnEntities:{ 
+            minCapacity:3,
+            maxCapacity:8,
+            minSpawn:1,
+            maxSpawn:2,
+            entities:[
+                "absorbentOoze",
+                "corrosiveOoze"
+            ],
+            randomEntities:true,
+            spawnChance: 1,
+            disturbChance:100,
         },
         color:"brightPurple",
         bloodColor:{r:173,g:26,b:202}

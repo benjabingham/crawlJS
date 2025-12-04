@@ -211,7 +211,54 @@ let itemVars = {
             light:2,
             uses:3,
             value:5
+        },
+        kindling:{
+            usable:true,
+            name: "kindling",
+            fuel:true,
+            light:1,
+            value:0,
+            color:'woodBrown'
         }
+    },
+    drops:{
+        direRatPelt:{
+            name:"dire rat pelt",
+            value:1,
+            color:'brown'
+        },
+        wolfPelt:{
+            name:"wolf pelt",
+            value:2,
+            color:'brown'
+        },
+        direWolfPelt:{
+            name:"dire wolf pelt",
+            value:4,
+            color:'gray'
+        },
+        kingRatSkull:{
+            name:"king rat's skull",
+            value:15,
+            color:'red'
+        },
+        branch:{
+            weapon:true,
+            name:"branch",
+            damage:1,
+            stunTime:1,
+            weight:1,
+            type:{
+                blunt:true
+            },
+            value:0,
+            wood:true,
+            usable:true,
+            fuel:true,
+            light:1,
+            color:'woodBrown',
+            flimsy:30
+        },
     },
     treasure:{
         thimble:{
@@ -258,26 +305,35 @@ let itemVars = {
     weaponMaterials:{
         wood:{
             name:'wooden',
-            flimsy:5,
+            flimsy:6,
             stunTime: -2,
             weight:-1,
-            damage:-4,
+            blunt:{
+                damage:-2
+            },
+            edged:{
+                damage:-4
+            },            
             value:.25,
-            color:'woodBrown'
+            color:'woodBrown',
+
+            usable:true,
+            fuel:true,
+            light:1,
 
         },
         bone:{
             name:'bone',
-            flimsy:8,
-            stunTime:-2,
+            flimsy:10,
+            stunTime:-1,
             weight:-1,
-            damage: -3,
+            damage: -2,
             value:.15,
             color:'bone'
         },
-        stone:{
-            name:'stone',
-            flimsy:5,
+        limestone:{
+            name:'limestone',
+            flimsy:6,
             weight:2,
             stunTime:3,
             blunt:{
@@ -287,12 +343,17 @@ let itemVars = {
                 damage:2
             },
             value:.2,
-            color:'gray'
+            color:'silver'
         },
-        
+        flint:{
+            name:'flint',
+            flimsy:4,
+            value:.3,
+            color:'darkGray'
+        },
         obsidian:{
             name:'obsidian',
-            flimsy:5,
+            flimsy:7,
             edged:{
                 damage:2
             },
@@ -436,9 +497,13 @@ let itemVars = {
     },
     treasureMaterials:{
         paper:{
-            name:"tattered paper",
+            name:"paper",
             value:.05,
-            color:"bone"
+            color:"bone",
+
+            usable:true,
+            fuel:true,
+            light:2,
         },
         bone:{
             name:"bone",
@@ -448,7 +513,11 @@ let itemVars = {
         wood:{
             name:'wooden',
             value:0.3,
-            color:"woodBrown"
+            color:"woodBrown",
+
+            usable:true,
+            fuel:true,
+            light:1,
         },
         stone:{
             name:'stone',
@@ -571,5 +640,306 @@ let itemVars = {
             name:'pristine',
             value:1.5
         } 
+    },
+    food:{
+        morsel:{
+            name:'morsel',
+            usable: true,
+            food:1,
+            color:'brown'
+        },
+        berries:{
+            name:'berries',
+            usable: true,
+            food:1,
+            value:1,
+            color:'red'
+        },
+        provisions:{
+            name:'provisions',
+            usable:true,
+            food:1,
+            value:1,
+            uses:3,
+            color:'brown'
+        },
+        baguette:{
+            name:'stale baguette',
+            usable: true,
+            food:1,
+            color:'bone',
+
+            weapon:true,
+            damage:1,
+            stunTime:1,
+            weight:1,
+            type:{
+                blunt:true,
+                long:true
+            },
+            value:1
+        },
+        cookingOil:{
+            name:'cooking oil',
+            uses:3,
+            usable: true,
+            food:1,
+            light:1,
+            fuel:1,
+            color:'gold',
+            value:5
+        },
+    },
+    potions:{
+        poison:{
+            name:'potion of poison',
+            usable: true,
+            potable: true,
+            color: 'darkGreen',
+            health: -4,
+            value: 3,
+            negative:true,
+            message:'your life force weakens.'
+        },
+        darkness:{
+            name:'potion of darkness',
+            usable: true,
+            potable: true,
+            color: 'black',
+            light: -10,
+            value: 3,
+            negative:true,
+            message:'your light is extinguished.'
+        },
+        illFortune:{
+            name:'potion of ill fortune',
+            usable: true,
+            potable: true,
+            color: 'darkPurple',
+            luck: -3,
+            value: 3,
+            negative:true,
+            message: 'Your luck drains away.'
+        },
+        fatigue:{
+            name:'potion of fatigue',
+            usable: true,
+            potable: true,
+            color: 'orange',
+            stamina: -5,
+            value: 3,
+            negative:true,
+            message: 'Your energy is sapped.'
+        },
+        vomitingPotion:{
+            name:'potion of vomiting',
+            usable: true,
+            potable: true,
+            color: 'darkGreen',
+            stamina: -2,
+            hunger: -6,
+            value: 3,
+            negative:true,
+            message: 'You empty your stomach onto the floor.'
+        },
+        unlabeled:{
+            name:'unlabeled potion',
+            usable: true,
+            potable: true,
+            color:'darkPurple',
+            unlabeled: true,
+            value: 5,
+            tier: 3
+        },
+        healthTincture:{
+            name:'health tincture',
+            usable: true,
+            potable: true,
+            health: 2,
+            value: 8,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        healthPotion:{
+            name:'health potion',
+            usable: true,
+            potable: true,
+            health: 5,
+            value: 20,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        greaterHealthPotion:{
+            name:'greater health potion',
+            usable: true,
+            potable: true,
+            health: 10,
+            value: 40,
+            color: 'red',
+            message:'Your wounds close.'
+        },
+        staminaTincture:{
+            name:'stamina tincture',
+            usable: true,
+            potable: true,
+            stamina: 4,
+            value: 10,
+            color: 'darkYellow',
+            message:'You feel a surge of energy.'
+        },
+        staminaPotion:{
+            name:'stamina potion',
+            usable: true,
+            potable: true,
+            stamina: 6,
+            value: 20,
+            color: 'darkYellow',
+            message:'You feel a surge of energy.'
+        },
+        greaterStaminaPotion:{
+            name:'greater stamina potion',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            value: 40,
+            color: 'darkYellow',
+            message:'You feel a surge of energy.'
+        },
+        luckTincture:{
+            name:'luck tincture',
+            usable: true,
+            potable: true,
+            luck: 1,
+            value: 10,
+            color: 'green',
+            message:'Your luck returns to you.'
+        },
+        luckPotion:{
+            name:'luck potion',
+            usable: true,
+            potable: true,
+            luck: 3,
+            value: 30,
+            color: 'green',
+            message:'Your luck returns to you.'
+        },
+        greaterLuckPotion:{
+            name:'greater luck potion',
+            usable: true,
+            potable: true,
+            luck: 6,
+            value: 110,
+            color: 'green',
+            message:'Your luck returns to you.'
+        },
+        metabolismPotion:{
+            name:'metabolism potion',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 3,
+            hunger: -6,
+            value: 10,
+            color: 'orange',
+            message:"You digest your stomach's contents in an instant."
+        },
+        unHallowedStrength:{
+            name:'potion of unhallowed strength',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            luck: -3,
+            light:-1,
+            value: 9,
+            color: 'orange',
+            message:"You feel reinvigorated, but something's wrong..."
+        },
+        unHallowedHealth:{
+            name:'potion of unhallowed health',
+            usable: true,
+            potable: true,
+            health: 10,
+            luck: -5,
+            light:-1,
+            value: 10,
+            color: 'darkRed',
+            message:"Your wounds close, but something's wrong..."
+        },   
+        unHallowedNourishment:{
+            name:'potion of unhallowed nourishment',
+            usable: true,
+            potable: true,
+            hunger: 10,
+            luck: -2,
+            light:-1,
+            value: 3,
+            color: 'darkOrange',
+            message:"Your stomach fills, but still you feel empty..."
+        },
+        fatestealerElixir:{
+            name:'fatestealer elixir',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 10,
+            luck: -10,
+            hunger: 10,
+            value: 75,
+            color: 'brightPurple',
+            message:"You feel fully renewed, but something's wrong..."
+        },
+        nectar:{
+            name:'nectar',
+            usable: true,
+            potable: true,
+            stamina: 10,
+            health: 10,
+            luck: 10,
+            value: 150,
+            hunger: 10,
+            light:2,
+            color: 'gold',
+            message:"You feel reinvigorated."
+        },
+        ritualBrew:{
+            name:'ritual brew',
+            usable: true,
+            potable: true,
+            stamina: -5,
+            health: -5,
+            luck: 10,
+            value: 55,
+            hunger: -10,
+            color: 'darkOrange',
+            message:"Your life force is rended from you. You feel reborn."
+        },
+        nourishmentPotion:{
+            name:'nourishment potion',
+            usable: true,
+            potable: true,
+            value: 4,
+            hunger: 10,
+            color: 'darkOrange',
+            message:"Your stomach fills."
+        },
+        lightPotion:{
+            name:'potion of light',
+            usable: true,
+            potable: true,
+            value: 8,
+            light: 10,
+            color: 'gold',
+            message:"Your lantern roars to life."
+        },
+        darkVigor:{
+            name:'potion of dark vigor',
+            usable: true,
+            potable: true,
+            value: 8,
+            light: -10,
+            stamina: 10,
+            color: 'darkPurple',
+            message:"You feel a surge of strength as your lantern is extinguished."
+        }
     }
 }

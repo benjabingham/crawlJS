@@ -14,7 +14,7 @@
     }
 }
 
-#day-div, #nourishment-level-div{
+#day-div, #nourishment-level-div, #exertion-level-div{
     margin:auto;
     width:fit-content;
 }
@@ -66,4 +66,10 @@
     background-color: var(--healthBar);
     color:var(--healthBarText)
 }
+
+#hunger-level{
+    background-color: var(--hungerBar);
+    color:var(--hungerBarText)
+}
+
 

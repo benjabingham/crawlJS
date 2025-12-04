@@ -199,6 +199,9 @@ class Board{
     }
 
     static setLineOfSight(x,y, los){
+        if(!Board.losArray[y]){
+            return false;
+        }
         Board.losArray[y][x] = los;
     }
 

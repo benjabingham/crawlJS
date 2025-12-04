@@ -45,7 +45,8 @@ class Display{
         Display.restButton();
         Display.fillBars(Player);
         Display.nourishmentDiv(Player);
-        Display.scrollToTop();    }
+        Display.scrollToTop();
+    }
 
     static hideAllScreens(){
         $('#town-screen').hide();
@@ -155,7 +156,7 @@ class Display{
                 let symbol = '';
                 //out of bounds
                 if(Board.hasPlayerLos({x:x, y:y})){
-                    if(boardArray[y][x]){
+                    if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
                             gridDiv.addClass('grid-wall')
                         }
@@ -204,9 +205,12 @@ class Display{
         $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
-            {name:'meager meal',cost:3,nourishment:3},
-            {name:'proper meal',cost:4,nourishment:5},
-            {name:'exquisite meal',cost:6,nourishment:8},
+            {
+                name:'Morsel',
+                cost:1,
+                item: itemVars.food.morsel
+            },
+            {name:'Proper Meal',cost:5,nourishment:100},
         ]
 
         $('#meals-div').html('');
@@ -215,14 +219,31 @@ class Display{
             $('#meals-div').append(
                 $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
                     if(Player.gold >= meal.cost){
-                        Player.changeNourishment(meal.nourishment);
+                        if(meal.item){
+                            if(Player.inventory.items.length < Player.inventory.slots){
+                                let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                                Player.pickUpItem(itemCopy);
+                            }else{
+                                Player.changeNourishment(item.food);
+                            }
+                        }else{
+                            Player.changeNourishment(meal.nourishment);
+                        }
                         Player.gold-= meal.cost;
                         display.nourishmentDiv();
                         display.displayGold();
+                        display.displayInventory(false);
                     }
                 })
             )
         })
+    }
+
+    static exertionDiv(){
+        let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
+        let exertionColors = {0:'black', 1:'darkOrange',2:'red'}
+        
+        $('#exertion-level-div').text('You are '+exertionLevels[Player.exertion]+'.').css('color', 'var(--'+exertionColors[Player.exertion]+')');
     }
     
     static fillBars(){
@@ -234,22 +255,26 @@ class Display{
         $('#health-level').css('width',healthPercent*1.5+"px");
         $('#health-level').text(Player.health+"/"+Player.healthMax);
 
-
         let luckPercent = Player.luckPercent;
         $('#luck-level').css('width',luckPercent*1.5+"px");
         $('#luck-level').text(Player.luck+"/"+Player.luckMax);
 
+        let hungerPercent = Player.hungerPercent;
+        $('#hunger-level').css('width',hungerPercent*1.5+"px");
+        $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
+
+        Display.exertionDiv();
 
     }
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['cave']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
                     $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element+".json")
+                        GameMaster.getRoom(element)
                     })
                 )
             )
@@ -258,6 +283,7 @@ class Display{
 
     static restButton(){
         $('#rest-button').off().on('click',()=>{
+            GameMaster.nextDay();
             GameMaster.loadTown();
         })
     }
@@ -291,10 +317,11 @@ class Display{
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
+        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         if(!itemValue){
             itemValue = '0';
         }
-        
+        //add item
         $('#'+inventory+'-list').append(
             $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
@@ -313,6 +340,26 @@ class Display{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
+        //add buttons
+
+        if(item.usable){
+            let button;
+            if(item.food && !itemIsEquipped){
+                button = $('<button>').addClass('item-button').text('eat').on('click',function(){
+                    GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
+                    Display.displayInventory(dungeonMode);
+                })
+            } else if(item.potable && !itemIsEquipped){
+                button = $('<button>').addClass('item-button').text('drink').on('click',function(){
+                    GameMaster.drinkItem({type:'item-'+(slot+1)},dungeonMode);
+                    Display.displayInventory(dungeonMode);
+                })
+            }
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                button
+            )
+        }
+
         if(dungeonMode){
             if(item.weapon && !Player.equipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
@@ -321,7 +368,7 @@ class Display{
                     })
                 )
             }
-            if(item.weapon && Player.equipped && Player.equipped.slot == slot){
+            if(item.weapon && itemIsEquipped){
                 $('#'+inventory+'-item-buttons-'+slot).append(
                     $('<button>').addClass('item-button').text('unequip').on('click',function(){
                         GameMaster.useItem({type:'item-'+(slot+1)});
@@ -329,10 +376,14 @@ class Display{
                 )
             }
             if(item.usable){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('use').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
+                let button;
+                if(item.fuel && !itemIsEquipped){
+                    button = $('<button>').addClass('item-button').text('burn').on('click',function(){
+                        GameMaster.useFuel({type:'item-'+(slot+1)});
                     })
+                }
+                $('#'+inventory+'-item-buttons-'+slot).append(
+                    button
                 )
             }
         }else if (inventory != 'shop'){
@@ -366,6 +417,18 @@ class Display{
             $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
         )
 
+        if(item.light && item.fuel && !item.weapon){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
+            )
+        }
+
+        if(item.food && !item.weapon){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
+            )
+        }
+
         if(item.flimsy){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
@@ -380,36 +443,91 @@ class Display{
             )
         }
 
-        if(item.weapon){
-            $('#'+inventory+'-description-body').append(
-                $('<div>').addClass('item-stats-normal').append(
-                    $('<div>').addClass('item-title').text('Normal:')
-                ).append(
-                    $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
-                ).append(
-                    $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
-                ).append(
-                    $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
+        if(item.potable){
+            let effects = ['health','stamina','luck','hunger','light']
+            effects.forEach((effect)=>{
+                let power = item[effect]
+                if(power){
+                    let gainLose
+                    if (power > 0){
+                        gainLose = 'gain'
+                    }else{
+                        gainLose = 'lose'
+                        power *= -1;
+                    }
+                    $('#'+inventory+'-description-body').append(
+                        $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
+                    )
+                }
+            })
+
+            if(item.unlabeled){
+                $('#'+inventory+'-description-body').append(
+                    $('<div>').addClass('potion-description').text('unknown effect...')
                 )
-            )            
+            }
         }
 
-        ['jab','swing','strafe'].forEach(function(val){
-            if(item[val]){
-                let special = item[val];
-                $('#'+inventory+'-description-body').append(
+
+        if(item.weapon){
+            let attackTypes = ['jab','swing','strafe']
+            let special = false;
+            let specialName = false;
+            attackTypes.forEach(function(val){
+                if(item[val]){
+                    special = item[val];
+                    specialName = val;
+                }
+            })
+
+            $('#'+inventory+'-description-body').append(
+                $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
                     $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(val+":")
+                        $('<div>').addClass('item-title').text('Normal:')
+                    ).append(
+                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
+                    ).append(
+                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
+                    ).append(
+                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
+                    )
+                ).append(
+                    special?($('<div>').addClass('item-stats-normal').append(
+                        $('<div>').addClass('item-title').text(specialName+":")
                     ).append(
                         $('<div>').addClass('item-damage').text('Damage: '+special.damage)
                     ).append(
                         $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
                     ).append(
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                    )
+                    )):false
                 )
-            }
-        })
+            )
+            console.log('#'+inventory+'-weapon-description');
+            
+            attackTypes.forEach(function(val){
+                if(item[val]){
+                    let special = item[val];
+                    console.log(val);
+                    $('#'+inventory+'-weapon-description').append(
+                        $('<div>').addClass('item-stats-normal').append(
+                            $('<div>').addClass('item-title').text(val+":")
+                        ).append(
+                            $('<div>').addClass('item-damage').text('Damage: '+special.damage)
+                        ).append(
+                            $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
+                        ).append(
+                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                        )
+                    )
+                }
+            })    
+        }
+
+        
+        
+
+        
     }
 
     static setCustomControls(){

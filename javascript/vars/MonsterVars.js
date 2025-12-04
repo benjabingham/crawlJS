@@ -4,13 +4,24 @@ let monsterVars = {
         symbol:"G",
         behavior:"chase",
         behaviorInfo:{
-            focus:15,
-            enrage:20,
-            daze:30
+            focus:20,
+            enrage:10,
+            daze:40,
+            beat:10
         },
         hitDice:1,
         damage:4,
-        inventorySlots: 1,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:5
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 1
+            },
+        ],
         loot:{
             weapon:{
                 chance:5,
@@ -22,7 +33,50 @@ let monsterVars = {
             },
             gold:{
                 chance:20,
-                tier:3
+                amount:3
+            }
+        },
+        color:'darkGreen'
+    },
+    goblinBoss:{
+        name:"goblin boss",
+        symbol:"Gb",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:25,
+            enrage:20,
+            daze:30,
+            beat:20
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 3,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:10
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 5
+            },
+        ],
+        loot:{
+            weapon:{
+                chance:10,
+                tier:2
+            },
+            treasure:{
+                chance:30,
+                tier:4
+            },
+            gold:{
+                chance:50,
+                amount:20
+            },
+            potion:{
+                chance:20,
+                tier:1
             }
         },
         color:'darkGreen'
@@ -32,7 +86,7 @@ let monsterVars = {
         symbol:"Og",
         behavior:"chase",
         behaviorInfo:{
-            focus:7,
+            focus:10,
             enrage:75,
             slow:40,
             beat:30,
@@ -41,6 +95,16 @@ let monsterVars = {
         hitDice:5,
         damage:8,
         inventorySlots: 10,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            },
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            }
+        ],
         loot:{
             weapon:{
                 chance:20,
@@ -53,6 +117,10 @@ let monsterVars = {
             gold:{
                 chance:45,
                 amount:7
+            },
+            potion:{
+                chance: 10,
+                tier: 2
             }
         },
         color:'green'
@@ -66,7 +134,7 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
-        inventorySlots: 0,
+        inventorySlots: 1,
         tiny:true,
         color:'gray'
     },
@@ -77,17 +145,35 @@ let monsterVars = {
         behaviorInfo:{
             focus:20,
             enrage:30,
-            daze:30
+            daze:20
         },
         hitDice:1,
         damage:4,
-        inventorySlots: 0,
-        inventory:[{
-            name:"dire rat pelt",
-            value:1,
-            color:'brown'
-        }],
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.direRatPelt,
+                chance:100
+            }
+        ],
         color:'gray'
+    },
+    kingRat:{
+        name:"king rat",
+        symbol:"Kr",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:25,
+            enrage:30
+        },
+        hitDice:4,
+        damage:6,
+        inventorySlots: 1,
+        inventory:[{
+            item: itemVars.drops.kingRatSkull,
+            chance:100
+        }],
+        color:'darkRed'
     },
     wolf:{
         name:"wolf",
@@ -96,16 +182,17 @@ let monsterVars = {
         behaviorInfo:{
             focus:25,
             enrage:40,
-            daze:30
+            daze:15
         },
         hitDice:1,
         damage:5,
-        inventorySlots: 0,
-        inventory:[{
-            name:"wolf pelt",
-            value:2,
-            color:'brown'
-        }],
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.wolfPelt,
+                chance:100
+            }
+        ],
         color:'gray'
     },
     direWolf:{
@@ -115,16 +202,17 @@ let monsterVars = {
         behaviorInfo:{
             focus:25,
             enrage:75,
-            daze:15
+            daze:10
         },
         hitDice:3,
         damage:8,
-        inventorySlots: 0,
-        inventory:[{
-            name:"dire wolf pelt",
-            value:4,
-            color:'gray'
-        }],
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.direWolfPelt,
+                chance:100
+            }
+        ],
         color:'gray'
     },
     dummy:{

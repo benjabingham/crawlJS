@@ -1,23 +1,27 @@
 class LootManager{
 
     static getEntityLoot(entitySave){
+        console.log(entitySave);
+        let entityGroupInfo = entitySave.entityGroupInfo;
         let lootChances = false;
-        let monsterKey = entitySave.value.monsterKey;
-        let containerKey = entitySave.value.containerKey;
+        let key = entityGroupInfo.key;
         
-        if(entitySave.value.loot){
-            lootChances = entitySave.value.loot;
-        }else if(monsterKey){
-            let template = monsterVars[monsterKey];
+        let template = false;
+        switch (entityGroupInfo.entityType){
+            case 'container':
+                template = containerVars[key];
+                break;
+            case 'monster':
+                template = monsterVars[key];
+                break;
+            default:
+        }
+
+        if(template){
             lootChances = template.loot;
-            if(template.inventory){
-                entitySave.inventory.items = [...template.inventory];
-            }
-        }else if(containerKey){
-            let template = containerVars[containerKey];
-            lootChances = template.loot;
-            if(template.inventory){
-                entitySave.inventory.items = [...template.inventory];
+            let inventory = LootManager.getInventoryFromTemplate(template)
+            if(inventory){
+                entitySave.inventory.items = [...inventory];
             }
         }
 
@@ -27,32 +31,67 @@ class LootManager{
             };
         }
 
-        if(!lootChances){
+        if(lootChances){
+            let weaponLoot = lootChances.weapon;
+            if(weaponLoot){
+                if(Random.roll(1,99) < weaponLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
+                }
+            }
+
+            let treasureLoot = lootChances.treasure;
+            if(treasureLoot){
+                if(Random.roll(1,99) < treasureLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
+                }
+            }
+
+            let potionLoot = lootChances.potion;
+            if(potionLoot){
+                if(Random.roll(1,99) < potionLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getPotionLoot(potionLoot.tier));
+                }
+            }
+
+            let goldLoot = lootChances.gold;
+            if(goldLoot){
+                if(Random.roll(1,99) < goldLoot.chance){
+                    entitySave.inventory.gold = Random.roll(1,goldLoot.amount);
+                }else{
+                    entitySave.inventory.gold = 0;
+                }
+            }
+        }   
+
+        //trim down to max size
+        entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
+    }
+
+    static trimInventory(items, max){
+        console.log({items:items,max:max})
+        while(items.length > max){
+            console.log(items.pop());
+        }
+
+        return items;
+    }
+
+
+    static getInventoryFromTemplate(template){
+        let templateInventory=template.inventory;
+        if(!templateInventory){
             return false;
         }
-        let weaponLoot = lootChances.weapon;
-        if(weaponLoot){
-            if(Random.roll(1,99) < weaponLoot.chance){
-                entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
+        let inventory = [];
+        templateInventory.forEach((item)=>{
+            let random=Random.roll(0,99);
+            if(random < item.chance){
+                let itemCopy = JSON.parse(JSON.stringify(item.item))
+                inventory.push(itemCopy);
             }
-        }
+        })
 
-        let treasureLoot = lootChances.treasure;
-        if(treasureLoot){
-            if(Random.roll(1,99) < treasureLoot.chance){
-                entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
-            }
-        }
-
-        let goldLoot = lootChances.gold;
-        if(goldLoot){
-            if(Random.roll(1,99) < goldLoot.chance){
-                entitySave.inventory.gold = Random.roll(1,goldLoot.amount);
-            }else{
-                entitySave.inventory.gold = 0;
-            }
-            console.log(entitySave);
-        }
+        return inventory;
     }
 
     static getTreasureLoot(tier){
@@ -77,6 +116,47 @@ class LootManager{
 
 
         return treasure;
+    }
+
+    static getPotionLoot(tier){
+        let nRolls = tier-3;
+        let greater = (nRolls > 0);
+        nRolls = Math.abs(nRolls);
+
+        let potion = LootManager.getPotion();
+
+        for(let i = 0; i < nRolls; i++){
+            let newPotion = LootManager.getPotion();
+            if((greater && newPotion.value > potion.value) || (!greater && newPotion.value < potion.value)){
+                potion = newPotion;
+            }
+        }
+
+        //be nice... Lower chance to find negative potions
+        if(potion.negative){
+            if(Random.roll(0,tier)){
+                potion = JSON.parse(JSON.stringify(itemVars.potions.unlabeled))
+            }
+        }
+
+        if(potion.unlabeled){
+            potion.tier = tier;
+        }
+
+        return potion;
+        
+    }
+
+    static getPotion(){
+        let potions = Object.keys(itemVars.potions);
+        let nPotions = potions.length;
+        let potionIndex = Random.roll(0,nPotions-1);
+        
+        let key = potions[potionIndex];
+        let potion = itemVars.potions[key];
+
+        //this is to make a copy of the object - this way it isn't passed by reference.
+        return JSON.parse(JSON.stringify(potion));
     }
 
     static getWeaponLoot(tier){
@@ -108,6 +188,7 @@ class LootManager{
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
         let materialIndex = Random.roll(0,nMaterials-1);
+        //material rarity is based on its position in the list of weapon materials
         for(let i = 0; i < nRolls; i++){
             let newIndex = Random.roll(0,nMaterials-1);
             materialIndex = maxMinFunc(materialIndex,newIndex);
@@ -143,6 +224,7 @@ class LootManager{
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
 
+        //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(weapon));
     }
 
@@ -154,6 +236,7 @@ class LootManager{
         let key = treasures[treasureIndex];
         let treasure = itemVars.treasure[key];
 
+        //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(treasure));
     }
 
@@ -194,6 +277,9 @@ class LootManager{
                     break;
                 case 'color':
                     item[key] = value;
+                    break;
+                default:
+                    item[key] = value;
             }
         }
         //apply modifier to special strikes
@@ -203,6 +289,20 @@ class LootManager{
                 LootManager.applyModifier(item[val], modifier);
             }
         })
+    }
+
+    static getStarterWeapon(){
+        
+        let starterWeapon = LootManager.getWeaponLoot(1)
+        while(starterWeapon.value > 5){
+            starterWeapon = LootManager.getWeaponLoot(1)
+        }
+        if(!starterWeapon.flimsy){
+            starterWeapon.flimsy = 1
+        }
+        starterWeapon.flimsy += 5;
+
+        return starterWeapon
     }
 
     static breakWeapon(item){

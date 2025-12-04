@@ -47,8 +47,11 @@
     <div id ='home-screen'>
         <div id="save-manage-div">
             <h1>S O L I D U S</h1>
-            <button id="new-save-button">New Game</button>
-            <!--
+            <div id="menu-buttons-div">
+                <button id="new-save-button">New Game</button>
+                <a id="map-editor-link" href="https://htmlpreview.github.io/?https://github.com/benjabingham/crawlJS/blob/dev/mapEditor.html">Map Editor</a>    
+            </div>
+             <!--
             <input type="file" id="load-file-input" />
             -->
         </div>
@@ -80,14 +83,24 @@
                 </div>
             </div>
 
+            <div class="resource-bar-containers">
+                <div id="hunger-number-div" class="resource-number-divs"></div>
+                <div class="resource-label-divs">Hunger</div>
+                <div id = "hunger-bar" class="resource-bar-divs">
+                    <div id = "hunger-level" class="resource-level-divs"></div>
+                </div>
+            </div>
+
         </div>
-        <div id="nourishment-level-div"></div>
+        <!--<div id="nourishment-level-div"></div>-->
+        <div id="exertion-level-div"></div>
         <div id="gold-div"class="gold-div"></div>
 
 
     </div>
     <div id="town-screen">
         <div id="town-title-div">You are in town.</div>
+        <div class="hint-text">You are safe here. Find and sell treasure to feed yourself. Survive.</div>
 
         <div id="tavern-wrapper-div">
             Tavern
@@ -102,7 +115,7 @@
                 <button id="rest-button">rest</button>
                 <br>
                 <div class="hint-text">
-                    The day will end.
+                    Rest to reset exertion.
                 </div>
             </div>
         </div>
@@ -116,7 +129,7 @@
         </div>
         <div id="travel-locations-wrapper-div">
             <div id="travel-locations-title-div">Nearby Dungeons</div>
-            <div id="travel-locations-hint-div" class="hint-text">Be sure you're prepared before traveling to a dungeon.</div>
+            <div id="travel-locations-hint-div" class="hint-text">Be sure you're rested and prepared before traveling to a dungeon.</div>
             <div name="travel-locations-div" id="travel-locations-div"></div>
         </div>
         <!--

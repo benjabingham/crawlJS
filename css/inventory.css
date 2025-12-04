@@ -89,6 +89,10 @@
 
 .inventory-description-body{
     height:100px;
+    
+}
+
+.weapon-description{
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0px;

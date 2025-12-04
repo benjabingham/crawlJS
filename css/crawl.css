@@ -9,12 +9,14 @@ html{
     padding:1rem;
 }
 
-button{
+button,
+#map-editor-link{
     color: rgb(15, 12, 0);
     background-image:linear-gradient(var(--buttonG1),var(--buttonG2))
 }
 
-button:hover{
+button:hover,
+#map-editor-link:hover{
     cursor: pointer;
     background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
 
@@ -97,4 +99,23 @@ h1, h2, h3{
         margin:auto;
         padding:5px;
     }
+}
+
+#map-editor-link{
+    display: block;
+    width:fit-content;
+    padding:5px;
+    border:2px solid;
+    border-left-color:#666;
+    border-top-color:#666;
+    font-family:arial;
+    font-weight:400;
+    text-decoration: none;
+    font-size: larger;
+    margin:auto; 
+    
+}
+
+#menu-buttons-div{
+    display:flex;
 }

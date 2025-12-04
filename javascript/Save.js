@@ -37,7 +37,9 @@ class Save{
         let file = new File([JSON.stringify(this)], 'crawlJS-save.txt', {
             type: 'text/plain',
         })
-        
+
+
+        //create invisible link and cause click on it for download
         const link = document.createElement('a')
         const url = URL.createObjectURL(file)
         
@@ -52,42 +54,35 @@ class Save{
         console.log(this);
     }
 
-    //TODO: this should be where we give monsters their loot
     static mapInit(json){
+
         let roomString = json.name;
-        let board = json.board;
-        let values = json.values;
+        console.log('initializing map - '+roomString);
+        let entityGroups = json.entityGroups.entityGroups;
         let roster = [];
         let counter = 0;
-        let x = 0;
-        let y = 0;
-        //get roster
-        board.forEach((row)=>{
-            row.forEach((item)=>{
-                if(item){
-                    let entitySave = {
-                        code:item,
-                        value:values[item],
-                        index:counter,
-                        alive:true,
-                        x:x,
-                        y:y,
-                        inventory:{
-                            items:[]
-                        }
+        for(const [key, entityGroup] of Object.entries(entityGroups)){
+            let instances = entityGroup.instances;
+            for(const [key2, instance] of Object.entries(instances)){
+                let entitySave = {
+                    entityGroupId: instance.entityGroupId,
+                    entityGroupInfo:entityGroup,
+                    index:counter,
+                    alive:true,
+                    x:instance.x,
+                    y:instance.y,
+                    inventory:{
+                        items:[]
                     }
-                    LootManager.getEntityLoot(entitySave);
-                    roster.push(entitySave)
-                    counter++;
-
                 }
-                x++;
-            })
-            y++;
-            x=0;
-        })
+                LootManager.getEntityLoot(entitySave);
+                roster.push(entitySave)
+                counter++;
+            }
+        }
         json.roster = roster;
         Save.maps[roomString] = json;
+        console.log(Save.maps);
         console.log('loaded');
     }
 
@@ -122,11 +117,14 @@ class Save{
 
     static mapRespawn(mapString){
         let map = Save.maps[mapString];
+        console.log(map)
         map.roster.forEach((entity)=>{
-            if(!entity.alive && entity.value.respawnChance){
+            console.log(entity);
+            if((!entity.alive || entity.entityGroupInfo.entitytype == 'container') && entity.entityGroupInfo.respawnChance){
                 let random = Random.roll(0,99);
-                if(random < entity.value.respawnChance){
+                if(random < entity.entityGroupInfo.respawnChance){
                     entity.alive = true;
+                    entity.inventory.items = [];
                     LootManager.getEntityLoot(entity);
                 }
             }

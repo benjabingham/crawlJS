@@ -2,6 +2,7 @@ class GameMaster{
     static customControls = {};
     static dungeonId = 0;
     static quickStartMode = true;
+    static dungeonMode = false;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
@@ -10,8 +11,13 @@ class GameMaster{
     }
 
     static quickStart(){
-        Player.pickUpItem(LootManager.getWeaponLoot(0));
-        GameMaster.getRoom('cave.json');
+        let starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        GameMaster.getRoom(
+            'Abandoned Village',
+            'You awake in the dead of night to the sounds of violence. \Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
+            {x:50,y:42}
+        );
 
     }
 
@@ -22,16 +28,28 @@ class GameMaster{
         EntityManager.wipeEntities();
     }
 
-    static startGame(){
+    static startGame(message=false, position=false){
+        GameMaster.dungeonMode = true;
+        Log.wipeLog();
+        Log.initialWarnings();
+        if(message){
+            Log.addMessage(message,'urgent');
+        }
+        Log.addTip();
+        Log.printLog();
         let entityManager = EntityManager;
         let board = Board;
         entityManager.skipBehaviors = false;
+        Display.showDungeonScreen();
+        if(position){
+            EntityManager.playerEntity.setPosition(position.x,position.y);
+        }
         board.placeEntities();
         History.saveSnapshot();
 
         board.calculateLosArray(entityManager.getEntity('player'));
 
-        Display.showDungeonScreen();
+        
         Display.printBoard();
 
 
@@ -43,19 +61,20 @@ class GameMaster{
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
     }
 
-    static getRoom(roomString){
+    static getRoom(roomString, message=false, startingPosition=false){
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
-            GameMaster.startGame();
+            GameMaster.startGame(message, startingPosition);
         }else{
             console.log('loading room '+roomString);
-            fetch('./rooms/'+roomString)
+            fetch('./rooms/'+roomString+'.json')
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
-                GameMaster.startGame();
+                GameMaster.startGame(message, startingPosition);
             })
         }
     }
@@ -71,7 +90,12 @@ class GameMaster{
         }else if (y >= Board.height){
             direction = "down"
         }
-        let destination = Board.destinations[direction]
+        let destination = false;
+        if(Board.destinations){
+            destination = Board.destinations[direction];
+        }else{
+            destination = {type: "town"};
+        }
         if(!destination){
             return false;
         }
@@ -80,6 +104,7 @@ class GameMaster{
         GameMaster.reset();
 
         if(destination.type == "town"){
+            Player.changeExertion(1);
             GameMaster.loadTown();
         }else if(destination.type == "dungeon"){
             GameMaster.getRoom(destination.name);
@@ -87,7 +112,8 @@ class GameMaster{
     }
 
     static loadTown(){
-        GameMaster.nextDay();
+        //GameMaster.nextDay();
+        GameMaster.dungeonMode = false;
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();
@@ -100,6 +126,9 @@ class GameMaster{
     }
 
     static rewind(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         if(History.canRewind()){
             console.log('rewind');
             History.rewind();
@@ -112,6 +141,9 @@ class GameMaster{
     }
 
     static drop(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         if(!GameMaster.dropMode){
             GameMaster.dropMode = true;
         }else{
@@ -123,7 +155,11 @@ class GameMaster{
         */
     }
 
+    //general case use item - will work for any item.
     static useItem(event){
+        if(!GameMaster.dungeonMode){
+            return false;
+        }
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
@@ -140,12 +176,53 @@ class GameMaster{
         GameMaster.postPlayerAction();
     }
 
+    static useFuel(event){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.addFuel(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        GameMaster.postPlayerAction();
+    }
+
+    static eatItem(event, dungeonMode=true){
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.eatItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        if(dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+    }
+
+    static drinkItem(event, dungeonMode=true){
+        
+        let slot = parseInt(event.type.split('-')[1])-1;
+        if(!Player.drinkItem(Player.inventory.items[slot])){
+            //skip behaviors if invalid item
+            EntityManager.skipBehaviors = true;
+        }
+
+        if(dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+    }
+
     static wait(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         Player.gainStamina();
         GameMaster.postPlayerAction();
     }
 
     static rotate(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         let direction = event.type == 'clockwise'? 1 : -1;
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
@@ -155,6 +232,9 @@ class GameMaster{
 
     //should belong to input once classes are static
     static movePlayer(event){
+        if (!GameMaster.dungeonMode){
+            return false
+        }
         let dungeonId = GameMaster.dungeonId;
         let direction = event.type;
 
@@ -196,8 +276,10 @@ class GameMaster{
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }
-
         Board.placeEntities();
+        if(!EntityManager.skipBehaviors){
+            Player.checkHungerModifiers();
+        }
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();

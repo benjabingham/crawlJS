@@ -138,6 +138,7 @@ class Entity{
     }
 
     pickUpItemPile(itemPile){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(EntityManager.skipBehaviors){
             return false;
         }
@@ -151,7 +152,17 @@ class Entity{
         }
 
         while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            this.inventory.items.push(itemPile.inventory.items.pop());
+            let item = itemPile.inventory.items.pop()
+            this.inventory.items.push(item);
+            if(isPlayer){
+                Log.addMessage('Picked up '+item.name+'.')
+            }
+        }
+
+        if(isPlayer && itemPile.inventory.items.length > 0){
+            itemPile.inventory.items.forEach((item)=>{
+                Log.addMessage('Not enough space for '+item.name+'...');
+            })
         }
 
         if(ItemPile.prototype.isPrototypeOf(this)){
@@ -159,8 +170,9 @@ class Entity{
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)
         }
 
-        this.pickUpGold(itemPile.inventory.gold)
-        itemPile.inventory.gold = 0;
+        if(this.pickUpGold(itemPile.inventory.gold)){
+            itemPile.inventory.gold = 0;
+        }
 
         if(!itemPile.checkIsEmpty()){
             itemPile.sortInventory();
@@ -188,7 +200,15 @@ class Entity{
     }
 
     lootContainer(container){
-        if (!container.inventory.items){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
+        if(isPlayer){
+            Log.addMessage('you search the '+container.name+'...')
+        }
+        console.log(container);
+        if (!container.inventory.items.length && !container.inventory.gold){
+            if(isPlayer){
+                Log.addMessage("nothing.")
+            }
             return false;
         }
         if(!this.inventory.items){
@@ -196,7 +216,17 @@ class Entity{
         }
 
         while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            this.inventory.items.push(container.inventory.items.pop());
+            let item = container.inventory.items.pop();
+            this.inventory.items.push(item);
+            if(isPlayer){
+                Log.addMessage('Found '+item.name+'.');
+            }
+        }
+
+        if(isPlayer && container.inventory.items.length > 0){
+            container.inventory.items.forEach((item)=>{
+                Log.addMessage('Not enough space for '+item.name+'...');
+            })
         }
         
         if(this.pickUpGold(container.inventory.gold)){
@@ -210,15 +240,22 @@ class Entity{
     }
 
     pickUpGold(gold){
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(!gold || !this.inventory || !this.inventory.slots){
             return false;
         }
+
+        //don't let entities pickup gold if their inventory is full
+        if(!isPlayer && this.inventory.items.length >= this.inventory.slots){
+            return false
+        }
+
         if(!this.inventory.gold){
             this.inventory.gold = 0;
         }
         this.inventory.gold += gold;
 
-        if(PlayerEntity.prototype.isPrototypeOf(this)){
+        if(isPlayer){
             Player.gold += gold;
             Display.displayGold();
             EntityManager.transmitMessage('Found '+gold+' gold!','win')
@@ -277,7 +314,6 @@ class Entity{
             }
             this.name += " corpse";
             this.behavior = 'dead';
-            this.dead = true;
             this.stunned = 0;
         }else{
             if(Board.hasPlayerLos(this)){
@@ -285,6 +321,7 @@ class Entity{
             }
             this.name = "destroyed "+this.name;
         }
+        this.dead = true;
         this.tempSymbol = 'x';
         this.isContainer = true;
         /*
@@ -368,11 +405,13 @@ class Entity{
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...");
             let damage = Random.roll(0,this.damage);
-            Player.changeStamina(damage * -1);
-            if(Player.stamina < 0){
+            if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
+            }else{
+                Player.changeStamina(damage * -1);
             }
+
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
             }
@@ -487,6 +526,9 @@ class SwordEntity extends Entity{
         }else if (this.rotation % 4 == 3){
             symbol = '\\';
         }
+
+        //name needs to regularly updated in case the item becomes worn... This is the best place to do it.
+        this.name = this.item.name;
     
         this.symbol = symbol;
     }
@@ -723,7 +765,7 @@ class Monster extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -731,6 +773,13 @@ class Monster extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        //turn on to let entities pick up items...
+        if(this.inventorySlots){
+            //this.inventory.slots = this.inventorySlots;
+        }
+
+        this.name = additionalParameters.entityName;
         
         return this;
     }
@@ -910,7 +959,7 @@ class Container extends Entity{
         //copy additional parameters...
         for (const [key, val] of Object.entries(additionalParameters)) { 
             //if legal key...
-            if(!['inventory','id','x','y'].includes(key)){
+            if(!['inventory','id','x','y','instances'].includes(key)){
                 this[key] = val;
             }
         }
@@ -918,6 +967,8 @@ class Container extends Entity{
         if(this.hitDice){
             this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
         }
+
+        this.name = additionalParameters.entityName;
 
         return this;
     }
@@ -933,7 +984,7 @@ class ItemPile extends Entity{
         super('*', x, y);
 
         this.inventory = {
-            slots:100,
+            slots:1000,
             items:inventoryArray,
             gold:gold
         }

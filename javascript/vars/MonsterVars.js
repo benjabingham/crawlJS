@@ -390,6 +390,7 @@ let monsterVars = {
         hitDice:1,
         damage:1,
         corrosive:1,
+        targetWeapon:true,
         blood:1,
         inventorySlots:3,
         inventory:[
@@ -411,10 +412,11 @@ let monsterVars = {
         name:"absorbent ooze",
         symbol:"Oo",
         behavior:"chaseBinary",
-        hitDice:1,
+        hitDice:2,
         damage:1,
         blood:1,
         grabby:3,
+        targetWeapon:true,
         inventorySlots:3,
         inventory:[
             {
@@ -438,7 +440,7 @@ let monsterVars = {
         hitDice:1,
         damage:1,
         blood:1,
-        inventorySlots:3,
+        inventorySlots:1,
         inventory:[
             {
                 item: itemVars.drops.blueGoo,

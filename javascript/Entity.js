@@ -958,7 +958,7 @@ class Monster extends Entity{
     }
 
     getTarget(){
-        if(this.weaponTarget){
+        if(this.targetWeapon){
             return EntityManager.playerEntity.swordEntity;
         }
 

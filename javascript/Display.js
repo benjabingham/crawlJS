@@ -335,7 +335,7 @@ class Display{
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh+', selected-'+itemIsSelected+', primed-'+primed).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
@@ -525,13 +525,10 @@ class Display{
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false
                 )
-            )
-            console.log('#'+inventory+'-weapon-description');
-            
+            )            
             attackTypes.forEach(function(val){
                 if(item[val]){
                     let special = item[val];
-                    console.log(val);
                     $('#'+inventory+'-weapon-description').append(
                         $('<div>').addClass('item-stats-normal').append(
                             $('<div>').addClass('item-title').text(val+":")
@@ -610,13 +607,16 @@ class Display{
     }
 
     static applyColor(object, element){
+        let colorString;
         if(object.color){
-            element.css('color', 'var(--'+object.color+')')
+            colorString = 'var(--'+object.color+')'
         }else if(object.item && object.item.color){
-            element.css('color', 'var(--'+object.item.color+')')
+            colorString =  'var(--'+object.item.color+')'
         }else{
-            element.css('color', 'var(--defaultEntity)')
-        }
+            colorString =  'var(--defaultEntity)'        }
+
+        element.css('color', colorString)
+        element.css('text-decoration-color', colorString)
     }
 
     static applyBackgroundColor(color, element){

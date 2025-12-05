@@ -122,7 +122,7 @@ class EntityManager{
             }
             if(entity.wait){
                 //wait until is within screen AND has player los
-                if(!EntityManager.hasPlayerLos(entity) || EntityManager.getDistance(entity,EntityManager.playerEntity) > 8){
+                if(!EntityManager.hasPlayerLos(entity)){
                     skip++;
                 }else{
                     entity.wait = false;
@@ -486,6 +486,7 @@ class EntityManager{
         console.log(message);
     }
 
+    //does this entity have line of sight of player (DOES NOT INCLUDE LIGHT, BUT RETURNS FALSE IF OUTSIDE OF VIEW WINDOW)
     static hasPlayerLos(entity){
         return Board.getLineOfSight(entity.x,entity.y);
     }

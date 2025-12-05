@@ -957,26 +957,32 @@ class Monster extends Entity{
         return this;
     }
 
+    getTarget(){
+        if(this.weaponTarget){
+            return EntityManager.playerEntity.swordEntity;
+        }
+
+        return EntityManager.playerEntity;
+    }
+
 
     //base behavior for monsters - move straight toward player, with some randomness.
     //Randomness depends on creature's behaviorinfo.focus, and increases based on distance from the player and line of sight.
     chaseNatural(){
-        let playerEntity = EntityManager.getEntity('player');
+        let target = this.getTarget();
         //creature is less focused the further they are
         let focus = this.behaviorInfo.focus;
-        if(EntityManager.hasPlayerLos(this)){
-            this.lastSeen = {x:playerEntity.x, y:playerEntity.y, turn:Log.turnCounter}
+        if(Board.hasLos(this,target)){
+            this.lastSeen = {x:target.x, y:target.y, turn:Log.turnCounter}
         }
-        let target = false;
         //go towards where you last saw the player, or otherwise towards player.
         if(this.lastSeen){
             target = this.lastSeen;
         }else{
             //if you have little clue where the player is...
-            target = playerEntity;
             focus -= 20;
         }
-        focus -= EntityManager.getDistance(this, playerEntity);
+        focus -= EntityManager.getDistance(this, target);
 
         this.moveNatural(target, focus);
 
@@ -993,8 +999,8 @@ class Monster extends Entity{
     }
 
     chaseBinary(){
-        let playerEntity = EntityManager.getEntity('player');
-        if(!EntityManager.hasPlayerLos(this)){
+        let target = this.getTarget();
+        if(!Board.hasLos(this,target)){
             this.moveNatural();
             return false;
         }
@@ -1002,15 +1008,15 @@ class Monster extends Entity{
         let x = 0;
         let y = 0;
 
-        if(this.x > playerEntity.x){
+        if(this.x > target.x){
             x = -1;
-        }else if (this.x < playerEntity.x){
+        }else if (this.x < target.x){
             x = 1;
         }
         
-        if(this.y > playerEntity.y){
+        if(this.y > target.y){
             y = -1;
-        }else if (this.y < playerEntity.y){
+        }else if (this.y < target.y){
             y = 1;
         }
     

@@ -109,6 +109,26 @@ class Board{
         Board.placeEntity(false, x, y);
     }
 
+    //does one point have line of sight to another
+    static hasLos(pos1,pos2, maxDistance = 8){
+        if(EntityManager.getDistance(pos1,pos2) > maxDistance){
+            return false;
+        }
+        let lineOfSight = true;
+
+        let line = Board.getLine(pos1,pos2);
+
+        line.forEach((point) =>{
+            if(lineOfSight){
+                if(Board.wallAt(point.x,point.y)){
+                    lineOfSight = false;
+                }
+            }
+        })
+
+        return lineOfSight;
+    }
+
     static drawLos(playerx,playery,x,y){
         let lineOfSight = true;
         let fromPoint = {x:playerx, y:playery};
@@ -150,6 +170,7 @@ class Board{
         let losDistance = 25
         let losMin = 8-losDistance
         let losMax = 8+losDistance
+        //for each edge of the view window, draw a line from the player to that edge.
         for(let displayY=losMin;displayY<=losMax;displayY++){
             for(let displayX=losMin;displayX<=losMax;displayX++){
                 if(displayX == losMin || displayY == losMin || displayX == losMax || displayY == losMax){
@@ -234,6 +255,7 @@ class Board{
         
     }
 
+    //can the player see this position (INCLUDES LIGHT)
     static hasPlayerLos(pos){
         return Board.hasLight(pos) && Board.getLineOfSight(pos.x, pos.y);
     }

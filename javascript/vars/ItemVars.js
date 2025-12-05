@@ -762,7 +762,8 @@ let itemVars = {
             health: -4,
             value: 3,
             negative:true,
-            message:'your life force weakens.'
+            message:'your life force weakens.',
+            tip: 'You lost health'
         },
         darkness:{
             name:'potion of darkness',
@@ -792,7 +793,8 @@ let itemVars = {
             stamina: -5,
             value: 3,
             negative:true,
-            message: 'Your energy is sapped.'
+            message: 'Your energy is sapped.',
+            tip: 'You lost stamina'
         },
         vomitingPotion:{
             name:'potion of vomiting',
@@ -803,7 +805,9 @@ let itemVars = {
             hunger: -6,
             value: 3,
             negative:true,
-            message: 'You empty your stomach onto the floor.'
+            message: 'You empty your stomach onto the floor.',
+            tip: 'You lost hunger'
+
         },
         unlabeled:{
             name:'unlabeled potion',
@@ -848,7 +852,8 @@ let itemVars = {
             stamina: 4,
             value: 10,
             color: 'darkYellow',
-            message:'You feel a surge of energy.'
+            message:'You feel a surge of energy.',
+            tip: 'You gained stamina'
         },
         staminaPotion:{
             name:'stamina potion',
@@ -857,7 +862,8 @@ let itemVars = {
             stamina: 6,
             value: 20,
             color: 'darkYellow',
-            message:'You feel a surge of energy.'
+            message:'You feel a surge of energy.',
+            tip: 'You gained stamina'
         },
         greaterStaminaPotion:{
             name:'greater stamina potion',
@@ -866,7 +872,8 @@ let itemVars = {
             stamina: 10,
             value: 40,
             color: 'darkYellow',
-            message:'You feel a surge of energy.'
+            message:'You feel a surge of energy.',
+            tip: 'You gained stamina'
         },
         luckTincture:{
             name:'luck tincture',
@@ -904,7 +911,8 @@ let itemVars = {
             hunger: -6,
             value: 10,
             color: 'orange',
-            message:"You digest your stomach's contents in an instant."
+            message:"You digest your stomach's contents in an instant.",
+            tip: 'You gained stamina and health, at the cost of hunger.'
         },
         unHallowedStrength:{
             name:'potion of unhallowed strength',
@@ -915,7 +923,8 @@ let itemVars = {
             light:-1,
             value: 9,
             color: 'orange',
-            message:"You feel reinvigorated, but something's wrong..."
+            message:"You feel reinvigorated, but something's wrong...",
+            tip: 'You gained stamina at the cost of luck.'
         },
         unHallowedHealth:{
             name:'potion of unhallowed health',
@@ -926,7 +935,8 @@ let itemVars = {
             light:-1,
             value: 10,
             color: 'darkRed',
-            message:"Your wounds close, but something's wrong..."
+            message:"Your wounds close, but something's wrong...",
+            tip: 'You gained health at the cost of luck.'
         },   
         unHallowedNourishment:{
             name:'potion of unhallowed nourishment',
@@ -937,7 +947,8 @@ let itemVars = {
             light:-1,
             value: 3,
             color: 'darkOrange',
-            message:"Your stomach fills, but still you feel empty..."
+            message:"Your stomach fills, but still you feel empty...",
+            tip: 'You gained hunger at the cost of luck.'
         },
         fatestealerElixir:{
             name:'fatestealer elixir',
@@ -949,7 +960,8 @@ let itemVars = {
             hunger: 10,
             value: 75,
             color: 'brightPurple',
-            message:"You feel fully renewed, but something's wrong..."
+            message:"You feel fully renewed, but something's wrong...",
+            tip: 'You gained hunger, stamina, and health at the cost of luck.'
         },
         nectar:{
             name:'nectar',
@@ -962,7 +974,8 @@ let itemVars = {
             hunger: 10,
             light:2,
             color: 'gold',
-            message:"You feel reinvigorated."
+            message:"You feel reinvigorated.",
+            tip: 'You gained stamina, health, luck, and hunger.'
         },
         ritualBrew:{
             name:'ritual brew',
@@ -974,7 +987,8 @@ let itemVars = {
             value: 55,
             hunger: -10,
             color: 'darkOrange',
-            message:"Your life force is rended from you. You feel reborn."
+            message:"Your life force is rended from you. You feel reborn.",
+            tip: 'You gained luck at the cost of stamina, health, and hunger'
         },
         nourishmentPotion:{
             name:'nourishment potion',
@@ -1002,7 +1016,8 @@ let itemVars = {
             light: -10,
             stamina: 10,
             color: 'darkPurple',
-            message:"You feel a surge of strength as your lantern is extinguished."
+            message:"You feel a surge of strength as your lantern is extinguished.",
+            tip: 'You gained stamina.'
         }
     }
 }

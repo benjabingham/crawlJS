@@ -1,0 +1,53 @@
+Classes
+    Troglodyte
+        unarmed attack - (need to be facing in right direciton? Perhaps highlight viable tiles while unarmed?)
+        Light level always 1
+        Eat monsters?
+            When you use an unarmed attack on a corpse, chance to gain nourishment
+            tiny monsters drop as edible items
+    Lightfoot -
+        extra luck (or chance to keep luck on use)
+        less health/stamina/inventory?
+    Brute - 
+        More max stamina/health
+        Can't move diagonally backwards
+
+Injuries
+    Chance of injury on damage. chance increases with damage dealt, decreases with current health.
+        Leg - chance to lose turn when moving
+        Arm - chance to lose turn when rotating
+        Body - chance to lose turn when resting
+        Head - chance to take different action when moving
+    Different options from different damage types?
+        Artery - chance to lose health each turn unless bandaged?
+    Perhaps all damage types do leg, arm, body, head. Then each type has a special injury as well. Concussion for blunt, artery for edged. 
+
+
+Spawn village?
+    add wild animals with 1-5% spawn chance
+    edit map save on exit to decrease goblin spawn chance and increase wild animal spawn chance
+
+Monster update
+    chaseNatural - remember last place spotted player. If player out of los, treat that spot as target. Forget when reach target.
+    chaseBinary - move in direction of player each turn. Optionally need los.
+    chaseBinary monsters should usually have a slow value. Maybe even have it increase when they take damage. (skeleton, zombie)
+    chasebinary monsters with no slow value and decent health will be very scary
+
+Cartography tools
+    Use to 'record' a percentage of tiles you can see. Just records if there is wall or floor.
+    See recorded walls/floors outside of view as faded image
+    minimap that shows recorded portions of current map?
+
+techniques
+     new unlockable movement options. Perhaps one for each strike type, unlocked by using that strike type?
+    can only have one
+
+crazy weapon - extends from both ends of you. doable? worth implementing?
+
+controls diagram visible on screen
+
+stat boost potions
+
+doors - walls that can be attacked and "open" or disappear upon bumping into them.
+some entities can do this, others cant.
+how to close... ???

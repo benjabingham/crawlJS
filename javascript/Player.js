@@ -120,12 +120,12 @@ class Player {
 
         if (random < gainChance){
             if(Player.stamina < Player.staminaMax){
-                Log.addMessage('Your full stomach lends you strength.', 'pos');
+                Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to gain stamina each turn.");
                 stamina++;
             }
         }else if(random < loseChance){
             stamina--;
-            Log.addMessage('Your hunger weakens you...', 'danger');
+            Log.addMessage('Your hunger weakens you...', 'danger',false,"You have a chance to lose stamina each turn. Refill your hunger bar to end this effect.");
         }
 
         Player.changeStamina(stamina);
@@ -258,6 +258,7 @@ class Player {
 
     static addFuel(fuel, consume=true){
         let slot = fuel.slot;
+        let previousLight = Player.light;
         Player.light += fuel.light;
         Player.light = Math.min(Player.lightMax, Player.light);
         Player.light = Math.max(Player.light,0);
@@ -267,6 +268,28 @@ class Player {
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0);
         }
+
+        if(!consume){
+            return false;
+        }
+        Log.addMessage('you feed '+fuel.name+' into your lantern.')
+
+        if(!previousLight){
+            if(fuel.light > 1){
+                Log.addMessage('your lantern roars to life.')
+            }else if (fuel.light > 0){
+                Log.addMessage('your lantern comes alive')
+            }
+        }
+
+        if(!Player.lightTime){
+            Log.addMessage('the burn is steady.')
+        }
+
+        if(Player.lightTime > 95){
+            Log.addMessage('the fuel is burning fast.')
+        }
+        
 
         if(consume){
             return Player.consume(slot);
@@ -305,7 +328,7 @@ class Player {
             Player.addFuel(item,false);
         }
         if(item.message){
-            Log.addMessage(item.message);
+            Log.addMessage(item.message,false,false,item.tip);
         }
         Player.consume(slot);
 
@@ -332,11 +355,15 @@ class Player {
         let random = Math.random()*1500;
         if (random < Player.lightTime-150){
             Player.light--;
+            console.log(Player.lightTime);
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0)
-            Log.addMessage('Your light dims...');
+            Log.addMessage('Your light dims.');
         }
-        console.log('lighttime: '+Player.lightTime);
+
+        if(random < Player.lightTime-100){
+            Log.addMessage('your light flickers...',false,['flickers'])
+        }
     }
 
     

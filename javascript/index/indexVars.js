@@ -8,4 +8,5 @@ let mainReleases = [
 
 let devBranches = [
     {name: 'Dev', branchName: 'dev'},
+    {name: 'Logs', branchName: 'logs'},
 ]

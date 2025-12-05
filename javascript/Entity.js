@@ -949,7 +949,7 @@ class Monster extends Entity{
 
         //turn on to let entities pick up items... Including from containers
         if(this.inventorySlots){
-            //this.inventory.slots = this.inventorySlots;
+            this.inventory.slots = this.inventorySlots;
         }
         
         return this;
@@ -1184,7 +1184,7 @@ class Monster extends Entity{
         if(!this.grabby){
             return false;
         }
-
+        console.log('GRABBING')
         console.log(this.inventory)
 
         if(this.inventory.items.length >= this.inventory.slots){
@@ -1200,7 +1200,7 @@ class Monster extends Entity{
             this.inventory.items.push(item);
             Log.addMessage(this.name+' absorbs your weapon!','urgent')
         }else{
-            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attampts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.")
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.")
 
             Player.changeStamina(this.grabby * -1)
         }

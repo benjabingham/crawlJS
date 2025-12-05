@@ -64,19 +64,32 @@ class Log{
         for (const [turn, messages] of Object.entries(Log.messages)) {
             if(messages){
                 messages.forEach((message) => {
-                    log.prepend(
-                        $('<p>').text("> "+message.message).addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
-                            if(message.keywords){
-                                message.keywords.forEach((keyword)=>{
-                                    $('.hint-divs').append(
-                                        $('<p>').text(keywordVars[keyword].hintText)
-                                    )
-                                })
-                            }
-                        }).on('mouseleave',()=>{
-                            $('.hint-divs').html('');
-                        }).addClass((message.keywords) ? 'message-keyword' : '')
-                    )
+                    let keyword = false;
+                    //only expect one keyword for now ...
+                    let messageElement;
+                    if(message.keywords){
+                        keyword = message.keywords[0];
+                        let splitMessage = message.message.split(keyword);
+                        messageElement = $('<div>').append(
+                            $('<span>').text("> "+ splitMessage[0])
+                        ).append(
+                            $('<strong>').text(keyword)
+                        ).append(
+                            $('<span>').text(splitMessage[1])
+                        )
+                    }else{
+                        messageElement = $('<p>').text("> "+message.message);
+                    }
+                    messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
+                        if(keyword){
+                            $('.hint-divs').append(
+                                $('<p>').text(keywordVars[keyword].hintText)
+                            )
+                        }
+                    }).on('mouseleave',()=>{
+                        $('.hint-divs').html('');
+                    }).addClass((message.keywords) ? 'message-keyword' : '')
+                    log.prepend(messageElement)
                     message.fresh = false;
                 })
                 log.prepend(

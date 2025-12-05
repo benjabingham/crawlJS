@@ -250,6 +250,7 @@ class Player {
 
     static addFuel(fuel, consume=true){
         let slot = fuel.slot;
+        let previousLight = Player.light;
         Player.light += fuel.light;
         Player.light = Math.min(Player.lightMax, Player.light);
         Player.light = Math.max(Player.light,0);
@@ -259,6 +260,25 @@ class Player {
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0);
         }
+
+        Log.addMessage('you feed '+fuel.name+' into your lantern.')
+
+        if(!previousLight){
+            if(fuel.light > 1){
+                Log.addMessage('your lantern roars to life.')
+            }else if (fuel.light > 0){
+                Log.addMessage('your lantern comes alive')
+            }
+        }
+
+        if(!Player.lightTime){
+            Log.addMessage('the burn is steady.')
+        }
+
+        if(Player.lightTime > 95){
+            Log.addMessage('the fuel is burning fast.')
+        }
+        
 
         if(consume){
             return Player.consume(slot);
@@ -324,11 +344,15 @@ class Player {
         let random = Math.random()*1500;
         if (random < Player.lightTime-150){
             Player.light--;
+            console.log(Player.lightTime);
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0)
-            Log.addMessage('Your light dims...');
+            Log.addMessage('Your light dims.');
         }
-        console.log('lighttime: '+Player.lightTime);
+
+        if(random < Player.lightTime-100){
+            Log.addMessage('your light flickers...',false,['flickers'])
+        }
     }
 
     

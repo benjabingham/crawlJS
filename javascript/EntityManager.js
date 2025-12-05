@@ -43,7 +43,7 @@ class EntityManager{
         console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
-                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
+                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.');
 
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
@@ -52,7 +52,7 @@ class EntityManager{
                 console.log(item);
                 console.log(Player.equipped);
             }else{
-                EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
+                EntityManager.transmitMessage(item.name + ' has broken!', 'urgent','broken','This item can no longer be used. Use a point of luck to extend its life.');
 
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
@@ -323,8 +323,8 @@ class EntityManager{
         return xdif + ydif;
     }
 
-    static transmitMessage(message, messageClass = false, keywords = false){
-        Log.addMessage(message, messageClass, keywords);
+    static transmitMessage(message, messageClass = false, keyword = false, tipText = false){
+        Log.addMessage(message, messageClass, keyword, tipText);
         console.log(message);
     }
 

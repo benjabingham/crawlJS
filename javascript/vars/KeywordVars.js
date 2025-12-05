@@ -7,5 +7,8 @@ keywordVars = {
     },
     flickers:{
         hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
+    },
+    flickers:{
+        hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
     }
 }

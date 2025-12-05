@@ -91,7 +91,7 @@ class History{
         })
         Player.luck = Math.min(luck,Player.luck-1);
         if (Player.luck < 0){
-            Log.addMessage("You've angered fate.", 'urgent')
+            Log.addMessage("You've angered fate.", 'urgent',false,"You used luck you didn't have. Maximum luck decreased.")
             Player.luck = 0;
             Player.luckMax -= 3;
         }

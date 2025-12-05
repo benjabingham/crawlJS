@@ -120,12 +120,12 @@ class Player {
 
         if (random < gainChance){
             if(Player.stamina < Player.staminaMax){
-                Log.addMessage('Your full stomach lends you strength.', 'pos');
+                Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to gain stamina each turn.");
                 stamina++;
             }
         }else if(random < loseChance){
             stamina--;
-            Log.addMessage('Your hunger weakens you...', 'danger');
+            Log.addMessage('Your hunger weakens you...', 'danger',false,"You have a chance to lose stamina each turn. Refill your hunger bar to end this effect.");
         }
 
         Player.changeStamina(stamina);
@@ -261,6 +261,9 @@ class Player {
             Player.lightTime = Math.max(Player.lightTime,0);
         }
 
+        if(!consume){
+            return false;
+        }
         Log.addMessage('you feed '+fuel.name+' into your lantern.')
 
         if(!previousLight){
@@ -317,7 +320,7 @@ class Player {
             Player.addFuel(item,false);
         }
         if(item.message){
-            Log.addMessage(item.message);
+            Log.addMessage(item.message,false,false,item.tip);
         }
         Player.consume(slot);
 

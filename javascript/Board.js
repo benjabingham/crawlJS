@@ -6,6 +6,7 @@ class Board{
     static wallArray = [];
     static losArray = [];
     static stainArray = [];
+    static lightSourceIDs = [];
 
     static destinations = {};
 
@@ -21,6 +22,7 @@ class Board{
         }
     }
 
+    //this is called each frame
     static setBoard(){
         Board.boardArray = [];
         Board.wallArray = [];
@@ -245,14 +247,27 @@ class Board{
         return float ? distance : Math.floor(distance);
     }
 
-    //TRY - get light from sword's position, not player position
     static hasLight(pos){
-        let sourceTile = EntityManager.getEntity('player').swordEntity.getSwordPosition();
-        let lightDistance = Player.light+1;
-        let distance = Board.getTrueDistance(pos,sourceTile);
-
-        return lightDistance >= distance;
+        let hasLight = false
+        let playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        let sources = [{
+            x:playerLightPos.x,
+            y:playerLightPos.y,
+            lightStrength:Player.light+1
+        }]
+        Board.lightSourceIDs.forEach((id)=>{
+            sources.push(EntityManager.getEntity(id))
+        })
         
+        
+        sources.forEach((source)=>{
+            let distance = Board.getTrueDistance(pos,source);
+            if (source.lightStrength >= distance){
+                hasLight = true;
+            }
+        })
+
+        return hasLight;        
     }
 
     //can the player see this position (INCLUDES LIGHT)

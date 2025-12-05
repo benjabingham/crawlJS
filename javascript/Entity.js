@@ -953,6 +953,10 @@ class Monster extends Entity{
         if(this.inventorySlots){
             this.inventory.slots = this.inventorySlots;
         }
+
+        if(this.lightStrength){
+            Board.lightSourceIDs.push(this.id);
+        }
         
         return this;
     }

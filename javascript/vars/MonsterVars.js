@@ -402,6 +402,7 @@ let monsterVars = {
         behaviorInfo:{
             slow:35
         },
+        lightStrength:1,
         reconstitute:1,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:20,

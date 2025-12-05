@@ -119,6 +119,8 @@ class Board{
         let lineOfSight = true;
 
         let line = Board.getLine(pos1,pos2);
+        //remove the last item - walls shouldnt block los to themselves
+        line.pop();
 
         line.forEach((point) =>{
             if(lineOfSight){
@@ -281,7 +283,8 @@ class Board{
             
                 let line = Board.getLine(entity, source, 2);
                 let betweenTile = line[1];
-                if(!EntityManager.hasPlayerLos(betweenTile) && !Board.entityAt(betweenTile.x,betweenTile.y).isWall){
+                if(!EntityManager.hasPlayerLos(betweenTile) || Board.entityAt(betweenTile.x,betweenTile.y).isWall){
+                    
                     return false;
                 }
             }

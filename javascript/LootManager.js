@@ -1,7 +1,7 @@
 class LootManager{
 
     static getEntityLoot(entitySave){
-        console.log(entitySave);
+        //console.log(entitySave);
         let entityGroupInfo = entitySave.entityGroupInfo;
         let lootChances = false;
         let key = entityGroupInfo.key;
@@ -17,32 +17,31 @@ class LootManager{
             default:
         }
 
-        if(template){
-            lootChances = template.loot;
-            let inventory = LootManager.getInventoryFromTemplate(template)
-            if(inventory){
-                entitySave.inventory.items = [...inventory];
-            }
-        }
-
         if(!entitySave.inventory){
             entitySave.inventory = {
                 items: []
             };
         }
 
+        if(!template){
+            console.log('NO TEMPLATE FOUND FOR '+key)
+            return false;
+        }
+
+        lootChances = template.loot;
+
         if(lootChances){
             let weaponLoot = lootChances.weapon;
             if(weaponLoot){
                 if(Random.roll(1,99) < weaponLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier));
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials));
                 }
             }
 
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials));
                 }
             }
 
@@ -63,14 +62,18 @@ class LootManager{
             }
         }   
 
+        let inventory = LootManager.getInventoryFromTemplate(template)
+        if(inventory){
+            entitySave.inventory.items = entitySave.inventory.items.concat(inventory);
+        }
         //trim down to max size
         entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
     }
 
     static trimInventory(items, max){
-        console.log({items:items,max:max})
+        //console.log({items:items,max:max})
         while(items.length > max){
-            console.log(items.pop());
+            items.pop();
         }
 
         return items;
@@ -94,18 +97,18 @@ class LootManager{
         return inventory;
     }
 
-    static getTreasureLoot(tier){
+    static getTreasureLoot(tier, allowedMaterials){
         let nRolls = tier-3;
         let greater = (nRolls > 0);
         nRolls = Math.abs(nRolls);
 
         let treasure = LootManager.getTreasure();
-        let treasureMaterial = LootManager.getTreasureMaterial();
+        let treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
         LootManager.applyModifier(treasure, treasureMaterial);
 
         for(let i = 0; i < nRolls; i++){
             let newTreasure = LootManager.getTreasure();
-            treasureMaterial = LootManager.getTreasureMaterial();
+            treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
             if((greater && newTreasure.value > treasure.value) || (!greater && newTreasure.value < treasure.value)){
                 treasure = newTreasure;
@@ -159,9 +162,10 @@ class LootManager{
         return JSON.parse(JSON.stringify(potion));
     }
 
-    static getWeaponLoot(tier){
+    //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
+    static getWeaponLoot(tier, allowedMaterials=false){
         let weapon = LootManager.getWeapon();
-        let weaponMaterial = LootManager.getWeaponMaterial(tier);
+        let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
 
@@ -181,8 +185,13 @@ class LootManager{
     }
 
 
-    static getWeaponMaterial(tier){
-        let materials = Object.keys(itemVars.weaponMaterials);        
+    static getWeaponMaterial(tier, allowedMaterials = false){
+        let materials;
+        if(allowedMaterials){
+            materials = allowedMaterials;
+        }else{
+            materials = Object.keys(itemVars.weaponMaterials);        
+        }
         let nMaterials = materials.length; 
         let nRolls = tier-3;
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
@@ -199,8 +208,14 @@ class LootManager{
         return material;
     }
 
-    static getTreasureMaterial(){
-        let materials = Object.keys(itemVars.treasureMaterials);
+    //allowedMaterials is an array of keys of materials
+    static getTreasureMaterial(allowedMaterials = false){
+        let materials;
+        if(allowedMaterials){
+            materials = allowedMaterials;
+        }else{
+            materials = Object.keys(itemVars.treasureMaterials);
+        }
         let nMaterials = materials.length;
         let materialIndex = Random.roll(0,nMaterials-1);
         let key = materials[materialIndex];
@@ -293,7 +308,8 @@ class LootManager{
 
     static getStarterWeapon(){
         
-        let starterWeapon = LootManager.getWeaponLoot(1)
+        let starterWeapon = LootManager.getWeaponLoot(5)
+        /*
         while(starterWeapon.value > 5){
             starterWeapon = LootManager.getWeaponLoot(1)
         }
@@ -302,6 +318,7 @@ class LootManager{
         }
         starterWeapon.flimsy += 5;
 
+        */
         return starterWeapon
     }
 

@@ -134,7 +134,7 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
-        inventorySlots: 1,
+        inventorySlots: 0,
         tiny:true,
         color:'gray'
     },
@@ -214,6 +214,299 @@ let monsterVars = {
             }
         ],
         color:'gray'
+    },
+    zombie:{
+        name:"zombie",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:35
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        color:'darkGreen'
+    },
+    skeletonPile:{
+        name:"skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:20
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:23,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    skeleton:{
+        name:"skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:20
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    ghoul:{
+        name:"ghoul",
+        symbol:"Gh",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:10
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 2,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:5,
+                tier:2
+            },
+            treasure:{
+                chance:15,
+                tier:2
+            },
+            gold:{
+                chance:10,
+                amount:10
+            },
+            potion:{
+                chance:15,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:25,
+        color:'white'
+    },
+    corrosiveOoze:{
+        name:"corrosive ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        corrosive:1,
+        blood:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.greenGoo,
+                chance:100
+            },
+        ],
+        behaviorInfo:{
+            slow:35
+        },
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        color:"green",
+        bloodColor:{r:29,g:189,b:66}
+    },
+    absorbentOoze:{
+        name:"absorbent ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        blood:1,
+        grabby:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.orangeGoo,
+                chance:100
+            },
+        ],
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        behaviorInfo:{
+            slow:35
+        },
+        color:"orange",
+        bloodColor:{r:211,g:147,b:28}
+    },
+    mitoticOoze:{
+        name:"mitotic ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        blood:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.blueGoo,
+                chance:100
+            },
+        ],
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        behaviorInfo:{
+            slow:35
+        },
+        spawnEntities:{ 
+            minCapacity:1,
+            maxCapacity:1,
+            entities:[
+                "mitoticOoze"
+            ],
+            spawnChance: 0,
+            disturbChance:70,
+        },
+        color:"blue",
+        bloodColor:{r:39,g:66,b:183}
+    },
+    elderGoo:{
+        name:"elder goo",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:6,
+        damage:3,
+        blood:2,
+        grabby:1,
+        corrosive:1,
+        inventorySlots:5,
+        inventory:[
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:100
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:75
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:25
+            },
+        ],
+        reconstitute:3,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        behaviorInfo:{
+            slow:35
+        },
+        spawnEntities:{ 
+            minCapacity:3,
+            maxCapacity:8,
+            minSpawn:1,
+            maxSpawn:2,
+            entities:[
+                "absorbentOoze",
+                "corrosiveOoze"
+            ],
+            spawnChance: 0,
+            disturbChance:70,
+        },
+        color:"brightPurple",
+        bloodColor:{r:173,g:26,b:202}
     },
     dummy:{
         name:"dummy",

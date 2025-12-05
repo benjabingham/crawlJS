@@ -91,12 +91,12 @@ class InputManager{
         if($(':focus').is('input')){
             return;
         }
-        console.log(newInput);
+        //console.log(newInput);
         newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
-        console.log(inputCode);
+        //console.log(inputCode);
         let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));
-        console.log(theInput);
+        //console.log(theInput);
         if(theInput){
             theInput.onInput();
         }

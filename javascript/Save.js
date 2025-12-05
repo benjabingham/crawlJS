@@ -126,6 +126,10 @@ class Save{
                     entity.alive = true;
                     entity.inventory.items = [];
                     LootManager.getEntityLoot(entity);
+                    //reset spawner...
+                    if(entity.spawnEntities){
+                        entity.containedEntities = false;
+                    }
                 }
             }
         })

@@ -2,6 +2,7 @@ class Display{
     static entityManager;
     static customControls;
     static colorScheme = 0;
+    static displayedInventorySlot;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
         {scheme:'dark-mode',name:'Dark Mode'},
@@ -186,8 +187,8 @@ class Display{
                     }
                     if(Board.getStain(x,y)){
                         //stainDiv.text('౷');
-                        Display.applyBackgroundColor('red', stainDiv);
-                        Display.applyOpacity(Board.getStain(x,y),stainDiv);
+                        Display.applyBackgroundColorRGB(Board.getStain(x,y).color, stainDiv);
+                        Display.applyOpacity(Board.getStain(x,y).level,stainDiv);
                     }
                 //out of sight
                 }else{
@@ -269,7 +270,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'tombTest', 'ratTomb']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
@@ -296,6 +297,9 @@ class Display{
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
+        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
+        Display.displayItemInfo(displayedItem, inventoryId)
+        
         Display.displayGold();
     }
 
@@ -403,10 +407,16 @@ class Display{
                 })
             )
         }
-        
     }
 
     static displayItemInfo(item, inventory){
+        if(!item){
+            $('#'+inventory+'-description').html('')
+            return false;
+        }
+        Display.displayedInventorySlot = item.slot;
+        console.log(inventory);
+        console.log(item);
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -601,6 +611,13 @@ class Display{
             return false;
         }
         element.css('background-color', 'var(--'+color+')')
+    }
+
+    static applyBackgroundColorRGB(color, element){
+        if(!color){
+            return false;
+        }
+        element.css('background-color', 'rgb('+color.r+','+color.g+','+color.b+')')
     }
 
     //use integer 0-10

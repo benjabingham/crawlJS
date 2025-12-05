@@ -16,7 +16,7 @@ class Board{
             Board.stainArray = roomJson.stains;
         }else{
             Board.stainArray = new Array(Board.height).fill().map( ()=>
-                Array(Board.width).fill(false)
+                Array(Board.width).fill({color:{r:0,g:0,b:0}, level:0})
             )
         }
     }
@@ -251,34 +251,42 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, stain = 1){
+    static setStain(x,y, level = 1, color = {r:231, g:46, b:0}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }
         if(!Board.stainArray[y][x]){
-            Board.stainArray[y][x] = 0;
+            Board.stainArray[y][x] = {
+                level:0,
+                color:{r:0,g:0,b:0}
+            };
         }
-        Board.stainArray[y][x] += stain;
+        if(level < 0){
+            Board.stainArray[y][x].level += level;    
+        }else{
+            Board.stainArray[y][x] = Board.getCombinedStain({level:level, color:color},Board.stainArray[y][x]);
+        }
 
-        Board.expandPuddle(x,y, stain);
-        
+        Board.expandPuddle(x,y, level);
     }
 
-    static expandPuddle(x,y, stain){
+    static expandPuddle(x,y, level){
         let direction = Random.roll(0,7);
         let counter = 0;
-        while(counter < 8 && stain > 0){
-            console.log(direction);
+        while(counter < 8 && level > 0){
             let translation = EntityManager.translations[direction]
             let x2 = x + translation.x;
             let y2 = y + translation.y;
-            let diff = Board.getStain(x,y) - Board.getStain(x2,y2);
-            if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
-                Board.setStain(x,y, -1);
-                Board.setStain(x2,y2);
-                stain--;
+            let stain1 = Board.getStain(x,y)
+            let stain2 = Board.getStain(x2,y2)
+            if(stain1 && stain2){
+                let diff =  stain1.level - stain2.level;
+                if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
+                    Board.setStain(x,y, -1);
+                    Board.setStain(x2,y2, 1, Board.stainArray[y][x].color);
+                    level--;
+                }    
             }
-
             direction = (direction+1) %8
             counter++;
         }
@@ -293,20 +301,34 @@ class Board{
     }
 
     static smearStain(pos1,pos2){
-        let amt = Math.floor(((Board.getStain(pos1.x,pos1.y)-Board.getStain(pos2.x,pos2.y))/2.0)+.5)
-        console.log({
-            amt,
-            tile1:Board.getStain(pos1.x,pos1.y),
-            tile2: Board.getStain(pos2.x,pos2.y)
-        });
-        if(amt <= 0){
+        let level1 = Board.getStain(pos1.x,pos1.y).level;
+        level1 = level1 ? level1 : 0;
+        let level2 = Board.getStain(pos2.x,pos2.y).level;
+        level2 = level2 ? level2 : 0;
+        let amt = Math.floor(((level1 - level2)/2.0)+.5);
+        if(!amt || amt <= 0){
             return false;
         }
         let random = Random.roll(1,3);
-        if(random < Board.getStain(pos1.x,pos1.y)){
+        if(random < Board.getStain(pos1.x,pos1.y).level){
+            console.log('smear');
             Board.setStain(pos1.x,pos1.y,amt*-1);
-            Board.setStain(pos2.x,pos2.y,amt);
+            Board.setStain(pos2.x,pos2.y,amt, Board.stainArray[pos1.y][pos1.x].color);
         }
+    }
+
+    //get two stains in the form of {level:n, color:{r:x, g:y, b:z}}.
+    //returns a color with averaged values and combined levels
+    static getCombinedStain(stain1, stain2){
+        let totalLevel = stain1.level + stain2.level
+        let result = {level:totalLevel, color:{r:0,g:0,b:0}};
+        ['r','g','b'].forEach((key)=>{
+            let sum = (stain1.color[key]*stain1.level) + (stain2.color[key]*stain2.level);
+            let avg = Math.floor(sum/totalLevel);
+            result.color[key] = avg;
+        })
+
+        return result;
     }
     
 }

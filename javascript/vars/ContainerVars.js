@@ -317,4 +317,275 @@ let containerVars = {
         },
         color:'darkGreen'
     },
+    tomb:{
+        name:"tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:1,
+            maxCapacity:1,
+            entities:[
+                'skeleton',
+                'zombie'
+            ],
+            spawnChance: 20,
+            disturbChance:100
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 40
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 15
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:2
+            },
+            gold:{
+                chance:50,
+                amount:10
+            },
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    sleepyTomb:{
+        name:"sleepy tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            occupiedChance:100,
+            entities:[
+                'skeleton',
+                'zombie'
+            ],
+            spawnChance: 1,
+            disturbChance:100
+        },
+        behaviorInfo:{
+            slow:70
+        },
+        hitDice:2,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 10
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 3
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    ghoulTomb:{
+        name:"ghoul tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            entities:[
+                'ghoul'
+            ],
+            spawnChance: 10,
+            disturbChance:100
+        },
+        hitDice:4,
+        damage:4,
+        inventorySlots: 3,
+        isContainer: true,
+        inventory:[],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:2,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+            },
+            treasure:{
+                chance:25,
+                tier:2
+            },
+            gold:{
+                chance:25,
+                amount:10
+            },
+            potion:{
+                chance:15,
+                tier:1
+            }
+        },
+        color:'darkGray'
+    },
+    ratTomb:{
+        name:"rat tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:5,
+            minSpawn:1,
+            maxSpawn:3,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 10,
+            disturbChance:100
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 2
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 1
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    emptyTomb:{
+        name:"empty tomb",
+        symbol:"▣",
+        behavior:"",
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 2
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 1
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:15,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    overflowingCrypt:{
+        name:"overflowingCrypt",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{ 
+            minCapacity:5,
+            maxCapacity:8,
+            minSpawn:1,
+            maxSpawn:3,
+            entities:[
+                'skeleton',
+                'zombie',
+                'ghoul',
+                'rat'
+            ],
+            spawnChance: 20,
+            disturbChance:100,
+        },
+        hitDice:5,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 100
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 50
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 50
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 25
+            },
+        ],
+        loot:{
+            weapon:{
+                chance:25,
+                tier:2,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+            },
+            treasure:{
+                chance:70,
+                tier:2
+            },
+            gold:{
+                chance:100,
+                amount:20
+            },
+            potion:{
+                chance:15,
+                tier:2
+            }
+        },
+    }
+
 }

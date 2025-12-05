@@ -39,18 +39,13 @@ class EntityManager{
         let item = weapon.item;
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
-        console.log(random)
-        console.log(degradeChance);
         if(random < degradeChance){
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent');
-
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
                 }          
-                console.log(item);
-                console.log(Player.equipped);
             }else{
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent');
 
@@ -58,6 +53,24 @@ class EntityManager{
                 Player.unequipWeapon();
                 weapon.unequip();
             }
+        }
+    }
+
+    static corrodeItem(weapon, n){
+        let item = weapon.item;
+        if(!weapon.item){
+            return false;
+        }
+        n = Random.roll(0,n);
+        if(!item.flimsy){
+            item.flimsy = 0;
+        }
+        console.log(item.flimsy)
+        item.flimsy +=n;
+        console.log(item.flimsy)
+        console.log(item);
+        if(n){
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',["corrode"]);
         }
     }
 
@@ -98,17 +111,21 @@ class EntityManager{
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
             let random = Random.roll(1,100);
-            let skip = entity.stunned
+            let skip = 0;
+            if(entity.stunned){
+                skip+= entity.stunned;
+            }
+            let slow = 0;
             if(entity.behaviorInfo){
-                skip += (random <= entity.behaviorInfo.slow);
+                slow += (random <= entity.behaviorInfo.slow);
+                skip += slow;
             }
             if(entity.wait){
-                if(!EntityManager.hasPlayerLos(entity)){
+                //wait until is within screen AND has player los
+                if(!EntityManager.hasPlayerLos(entity) || EntityManager.getDistance(entity,EntityManager.playerEntity) > 8){
                     skip++;
-                    console.log('waiting')
                 }else{
                     entity.wait = false;
-                    console.log('found you!');
                 }
             }
             
@@ -117,8 +134,17 @@ class EntityManager{
                     case "chase":
                         entity.chaseNatural();
                         break;
+                    case "chaseBinary":
+                        entity.chaseBinary();
                     default:
                 }
+                if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
+                    entity.reconstituteFn(entity.reconstitute);
+                }
+                
+            }
+            if(entity.spawnEntities && !slow){
+                EntityManager.spawnEntity(entity);
             }
             if (!entity.dead){
                 if(entity.stunned > 0){
@@ -207,6 +233,7 @@ class EntityManager{
         }
         if(Player.equipped){
             Player.equipped = Player.inventory.items[Player.equipped.slot];
+            Player.updateEquippedEntityReference();
         }
     }
 
@@ -235,8 +262,6 @@ class EntityManager{
             }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
                     entityObj = new Container(groupInfo.key,x,y,groupInfo);
-                    console.log(groupInfo);
-                    console.log(entityObj);
                 }
             }
             if(entityObj){
@@ -252,18 +277,151 @@ class EntityManager{
                 entityObj.inventory.items = entitySave.inventory.items;
                 entityObj.inventory.gold = entitySave.inventory.gold;
             }
+
+            if(entityObj.spawnEntities){
+                if(entitySave.containedEntities){
+                    entityObj.containedEntities = entitySave.containedEntities;
+                }else{
+                    entityObj.generateContainedEntities();
+                }
+            }
         })
         
         EntityManager.currentMap = json;
         
     }
 
+    //function used for entities spawning other entities
+    //if they live when you leave the dungeon, their loot is returned to their container
+    static spawnEntity(spawner){
+        let spawnEntities = spawner.spawnEntities;
+
+        if(!spawner.containedEntities.length){
+            return false
+        }
+
+        if(Math.random()*100 > spawnEntities.spawnChance && !spawner.disturbed){
+            return false;
+        }
+
+        let minSpawn = 1, maxSpawn = 1;
+        if(spawner.spawnEntities.minSpawn){
+            minSpawn = spawner.spawnEntities.minSpawn;
+        }
+        if(spawner.spawnEntities.maxSpawn){
+            maxSpawn = Math.max(spawner.spawnEntities.maxSpawn,minSpawn);
+        }
+
+        let nSpawn = Random.roll(minSpawn,maxSpawn);
+        if(!nSpawn){
+            return false;
+        }
+
+        //check if we should wait a turn... Use average slow value of spawned entities
+        let keysToSpawn = spawner.containedEntities.slice(nSpawn*-1)
+        if(Math.random()*100 < EntityManager.getAverageSlow(keysToSpawn)){
+            if(!spawner.disturbed){
+                spawner.disturbed = 1;
+            }
+            return false;
+        }
+
+        for(let i = 0; i < nSpawn; i++){
+            if(!spawner.seeNextContainedEntity()){
+                return false
+            }
+    
+            //find spawn location
+            let directionIndex = Random.roll(0,7);
+            let translations = EntityManager.translations;
+            let space = {
+                x : spawner.x + translations[directionIndex].x,
+                y: spawner.y + translations[directionIndex].y
+            }
+            let foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+            let j = 0;
+            //while we haven't checked every space, and current space is not open
+            while(j < 8 && !foundSpace){
+                j++;
+                directionIndex = (directionIndex+1)%8
+                //console.log(directionIndex);
+                space = {
+                    x : spawner.x + translations[directionIndex].x,
+                    y: spawner.y + translations[directionIndex].y
+                }
+                foundSpace = (Board.isSpace(space.x,space.y) && Board.isOpenSpace(space.x,space.y));
+            }
+    
+            //no valid spaces
+            if(!foundSpace){
+                return false;
+            }
+            
+            //spawn it
+            let monsterKey = spawner.removeContainedEntity();
+            let entityObj = new Monster(monsterKey,space.x,space.y);
+            if(entityObj.spawnEntities){
+                entityObj.generateContainedEntities();
+            }
+            entityObj.setPosition();
+            entityObj.spawnerID = spawner.id;
+            if(!entityObj){
+                console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
+                return false;
+            }
+    
+            //cant take more than half the items because inventory length updates as they are taken
+            //i like this
+            for(let j = 0; j < spawner.inventory.items.length; j++){
+                if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
+                    let item = spawner.inventory.items.splice(j,1)[0];
+                    entityObj.inventory.items.push(item);
+                }
+            }
+    
+            if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
+                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
+            }
+
+            
+        }
+
+        if(spawner.disturbed){
+            spawner.disturbed--;
+        }
+
+        return true;
+
+    }
+
+    //get the average slow value from an array of monster keys
+    static getAverageSlow(keyArr){
+        let total = 0;
+        keyArr.forEach((monsterKey)=>{
+            if(monsterVars[monsterKey] && monsterVars[monsterKey].behaviorInfo && monsterVars[monsterKey].behaviorInfo.slow){
+                total += monsterVars[monsterKey].behaviorInfo.slow
+            }
+        })
+
+        return total/keyArr.length;
+    }
+
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if(entity.index){
+            if((typeof entity.spawnerID != 'undefined' )&& !entity.dead && !entity.obliterated){
+                let spawner = EntityManager.getEntity(entity.spawnerID)
+                spawner.returnContainedEntity(entity);
+                let spawnerSave = EntityManager.currentMap.roster[spawner.index];
+                spawnerSave.inventory.items = spawner.inventory.items;
+                spawnerSave.inventory.gold = spawner.inventory.gold;
+                spawnerSave.containedEntities = spawner.containedEntities;
+            }else if(typeof entity.index != 'undefined'){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
                 entitySave.inventory.gold = entity.inventory.gold;
+                if(entity.spawnEntities){
+                    entitySave.containedEntities = entity.containedEntities;
+                }
 
             }
         }

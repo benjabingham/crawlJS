@@ -204,8 +204,10 @@ class Entity{
         if(isPlayer){
             Log.addMessage('you search the '+container.name+'...')
         }
-        console.log(container);
-        if (!container.inventory.items.length && !container.inventory.gold){
+        if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
+            Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
+            container.disturb();
+        }else if (!container.inventory.items.length){
             if(isPlayer){
                 Log.addMessage("nothing.")
             }
@@ -236,6 +238,8 @@ class Entity{
                 roster[container.index].inventory.gold = 0;
             }
         };
+
+        
         
     }
 
@@ -264,10 +268,99 @@ class Entity{
         return true;
     }
 
+    //called the first time a spawner is generated
+    generateContainedEntities(){
+        if(!this.spawnEntities){
+            console.log({message:'NOT A SPAWNENTITY',entity:this})
+            return false;
+        }
+
+        let spawnSettings = this.spawnEntities;
+        let occupiedChance = spawnSettings.occupiedChance;
+        this.containedEntities = [];
+        if(occupiedChance && occupiedChance < Math.random*100){
+            return true;
+        }
+
+        let minCapacity = this.spawnEntities.minCapacity;
+        let maxCapacity = this.spawnEntities.maxCapacity;
+        minCapacity = typeof minCapacity != 'undefined' ? minCapacity: 1;
+        maxCapacity = maxCapacity ? maxCapacity: 1;
+        maxCapacity = Math.max(minCapacity,maxCapacity);
+        minCapacity = Math.min(minCapacity,maxCapacity);
+        let nEntities = Random.roll(minCapacity, maxCapacity);
+
+        for(let i = 0; i < nEntities; i++){
+            this.containedEntities.push(spawnSettings.entities[Random.roll(0,spawnSettings.entities.length-1)])
+        }
+
+    }
+
+    //returns name of next entity
+    seeNextContainedEntity(){
+        if(!this.containedEntities || !this.containedEntities.length){
+            return false;
+        }
+        let monster = monsterVars[this.containedEntities[this.containedEntities.length-1]]
+        return monster.name;
+    }
+
+    removeContainedEntity(){
+        if(!this.containedEntities){
+            return false;
+        }
+
+        return this.containedEntities.pop();
+    }
+
+    returnContainedEntity(entity){
+        this.containedEntities.push(entity.key);
+        this.inventory.items = this.inventory.items.concat(entity.inventory.items);
+        this.inventory.gold += entity.inventory.gold;
+    }
+
+    setSpawnCapacity(n){
+        if(!this.spawnEntities){
+            return false;
+        }
+
+        if(typeof n != 'undefined'){
+            this.spawnCapacity = n
+        }else if(typeof this.spawnCapacity == 'undefined'){
+            //set default capacity values to 1
+            let minCapacity = this.spawnEntities.minCapacity;
+            let maxCapacity = this.spawnEntities.maxCapacity;
+            minCapacity = typeof minCapacity != 'undefined' ? minCapacity: 1;
+            maxCapacity = maxCapacity ? maxCapacity: 1;
+            maxCapacity = Math.max(minCapacity,maxCapacity);
+            minCapacity = Math.min(minCapacity,maxCapacity);
+            this.spawnCapacity = Random.roll(minCapacity, maxCapacity);
+        }else{
+            return false;
+        }
+          
+        //Note - this doesnt work during map generation. EntityManager takes care of it.
+        if(EntityManager.currentMap){
+            let roster = EntityManager.currentMap.roster;
+            if(roster[this.index]){
+                roster[this.index].spawnCapacity = this.spawnCapacity;
+            }
+        }
+        
+        return true;
+    }
+
     obliterate(){
         this.obliterated = true;
-        this.x = -1;
-        this.y = -1;
+        this.dead = true;
+        this.x = -2;
+        this.y = -2;
+
+        let roster = EntityManager.currentMap.roster;
+        if(roster[this.index]){
+            roster[this.index].alive = false;
+        }
+
     }
 
     removeFromBoard(){
@@ -275,7 +368,7 @@ class Entity{
         this.setPosition(-1,-1);
     }
 
-    setPosition(x,y){
+    setPosition(x = this.x, y = this.y){
         Board.clearSpace(this.x,this.y) 
         this.x = x;
         this.y = y;
@@ -315,6 +408,12 @@ class Entity{
             this.name += " corpse";
             this.behavior = 'dead';
             this.stunned = 0;
+
+            if(this.reconstituteChance){
+                if(Math.random()*100 > this.reconstituteChance){
+                    this.reconstitute = 0;
+                }
+            }
         }else{
             if(Board.hasPlayerLos(this)){
                 EntityManager.transmitMessage(this.name+" is destroyed!")
@@ -332,7 +431,8 @@ class Entity{
         }
         */
         let roster = EntityManager.currentMap.roster;
-        if(roster[this.index]){
+        //update roster, but not if monster can reconstitute
+        if(roster[this.index] && !this.reconstituteBehavior){
             roster[this.index].alive = false;
         }
 
@@ -378,14 +478,14 @@ class Entity{
             x = this.x;
             y = this.y;
         }
-        Board.setStain(x,y,this.blood);
+        Board.setStain(x,y,this.blood, this.bloodColor);
         if(this.hitDice > Random.roll(0,5)){
             let x2 = x + translation.x;
             let y2 = y + translation.y;
             if(!Board.wallAt(x2,y2)){
-                Board.setStain(x2,y2,this.blood);
+                Board.setStain(x2,y2,this.blood, this.bloodColor);
             }else{
-                Board.setStain(x,y,this.blood);
+                Board.setStain(x,y,this.blood, this.bloodColor);
             }
         }
     }
@@ -393,7 +493,7 @@ class Entity{
     bloodPuddle(){
         let n = this.blood;
         while(n > 0){
-            Board.setStain(this.x,this.y,1)
+            Board.setStain(this.x,this.y,1, this.bloodColor)
             n--;
         }
     }
@@ -414,6 +514,13 @@ class Entity{
 
             if(damage > 1){
                 EntityManager.degradeItem(targetSword, damage*0.25, 1);
+            }
+            if(this.corrosive){
+                EntityManager.corrodeItem(targetSword, this.corrosive);
+            }
+
+            if(Monster.prototype.isPrototypeOf(this)){
+                this.checkStealWeapon();
             }
         }
         //check if sword is still equipped
@@ -472,6 +579,40 @@ class Entity{
             }
             this.obliterate();
         }
+    }
+
+    disturb(){
+        if(!this.spawnEntities){
+            return false;
+        }
+        if(this.spawnEntities.disturbChance > Math.random()*100){
+            if(!this.disturbed){
+                this.disturbed = 0;
+            } 
+            console.log('DISTURBED');
+            this.disturbed++;
+        }
+    }
+
+    isVulnerable(weapon, strikeType = false){
+        if(!this.vulnerabilities){
+            return false;
+        }
+
+        let vulnerable = 0;
+        this.vulnerabilities.forEach((vulnerability)=>{
+            if(weapon[vulnerability]){
+                vulnerable++;
+            }
+            if(weapon.type && weapon.type[vulnerability]){
+                vulnerable++;
+            }
+            if(strikeType && strikeType == vulnerability){
+                vulnerable++;
+            }
+        })
+
+        return vulnerable;
     }
 }
 
@@ -609,8 +750,14 @@ class SwordEntity extends Entity{
         }
         let damageDice = 1;
         if(target.stunned){
-            damageDice=2;
+            damageDice++;
         }
+
+
+        let vulnerability = target.isVulnerable(this.item, strikeType);
+        damageDice += vulnerability;
+        stunTime += vulnerability;
+
         let stunAdded = 0;
         if (stunTime){
             stunAdded = Random.roll(1,stunTime);
@@ -624,9 +771,13 @@ class SwordEntity extends Entity{
         }else{
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" is struck!");
+                if(vulnerability){
+                    Log.addMessage(target.name+" recoils!",'pos')
+                }
             }
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
+                target.checkStealWeapon();
             }
             target.addMortality(mortality);
             target.checkSplatter(mortality, weapon);
@@ -635,10 +786,17 @@ class SwordEntity extends Entity{
                 target.enrageAndDaze();   
             }
             target.sturdy(this);
+            if(target.spawnEntities && target.spawnEntities.disturbChance){
+                console.log('gonna disturb...')
+                target.disturb();
+            }
         }
 
         if(this.owner == 'player'){
             EntityManager.degradeItem(this,0,0.25);
+            if(target.corrosive){
+                EntityManager.corrodeItem(this, target.corrosive);
+            }
         }
     }
 
@@ -741,16 +899,21 @@ class Monster extends Entity{
     //mortal - the amount of damage it has taken
     mortal = 0;
     //threshold - the amount of damage that will destroy it
-    threshold = 1;
+    threshold = 0;
     //damage - determines the amount of damage done by this monsters attacks
     damage = 0;
     isMonster = true;
     //is used to temporarily change monster's symbol, ex. if stunned or killed
     tempSymbol;
+    //do it bleed?
     blood = 1;
+    //Where did I last see the player
+    lastSeen = false;
+
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
+        this.key = monsterKey;
         if(monsterVars[monsterKey]){
             let monster = JSON.parse(JSON.stringify(monsterVars[monsterKey]));
             //copy monster vars from template
@@ -771,18 +934,24 @@ class Monster extends Entity{
         }
 
         if(this.hitDice){
-            this.threshold = Math.max(Random.rollN(this.hitDice,1,8),1);
+            this.threshold += Random.rollN(this.hitDice,1,8);
         }
 
-        //turn on to let entities pick up items...
+
+        this.threshold = Math.max(this.threshold,1);
+
+        if(additionalParameters.entityName){
+            this.name = additionalParameters.entityName;
+        }
+
+        //turn on to let entities pick up items... Including from containers
         if(this.inventorySlots){
             //this.inventory.slots = this.inventorySlots;
         }
-
-        this.name = additionalParameters.entityName;
         
         return this;
     }
+
 
     //base behavior for monsters - move straight toward player, with some randomness.
     //Randomness depends on creature's behaviorinfo.focus, and increases based on distance from the player and line of sight.
@@ -790,15 +959,82 @@ class Monster extends Entity{
         let playerEntity = EntityManager.getEntity('player');
         //creature is less focused the further they are
         let focus = this.behaviorInfo.focus;
-        focus -= EntityManager.getDistance(this, playerEntity);
-        if(!EntityManager.hasPlayerLos(this)){
+        if(EntityManager.hasPlayerLos(this)){
+            this.lastSeen = {x:playerEntity.x, y:playerEntity.y, turn:Log.turnCounter}
+        }
+        let target = false;
+        //go towards where you last saw the player, or otherwise towards player.
+        if(this.lastSeen){
+            target = this.lastSeen;
+        }else{
+            //if you have little clue where the player is...
+            target = playerEntity;
             focus -= 20;
         }
-        focus =  Math.max(focus, 4);
+        focus -= EntityManager.getDistance(this, playerEntity);
+
+        this.moveNatural(target, focus);
+
+        //forget last seen location if you reach it
+        if(this.x == this.lastSeen.x && this.y == this.lastSeen.y){
+            this.lastSeen = false;
+        } 
+
+        //forget after a little while
+        let turnsSinceSeen = Log.turnCounter - this.lastSeen.turn;
+        if(Random.roll(0,turnsSinceSeen > 7)){
+            this.lastSeen = false;
+        }
+    }
+
+    chaseBinary(){
+        let playerEntity = EntityManager.getEntity('player');
+        if(!EntityManager.hasPlayerLos(this)){
+            this.moveNatural();
+            return false;
+        }
+        
         let x = 0;
         let y = 0;
 
-        //the higher focus is, the less likely the creature is to move randomly
+        if(this.x > playerEntity.x){
+            x = -1;
+        }else if (this.x < playerEntity.x){
+            x = 1;
+        }
+        
+        if(this.y > playerEntity.y){
+            y = -1;
+        }else if (this.y < playerEntity.y){
+            y = 1;
+        }
+    
+        let targetX = this.x+x;
+        let targetY = this.y+y
+        let targetItem = Board.entityAt(targetX, targetY);
+        
+
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+            this.attack(targetItem);
+        }
+    
+        if(!this.move(x, y)){
+            this.move(0, y);
+            this.move(x, 0); 
+        }
+
+    }
+
+    
+    moveNatural(target = false, focus = 4){
+
+        let x = 0;
+        let y = 0;
+
+        if(!focus || focus < 4 || !target){
+            focus = 4;
+            target = {x:0,y:0};
+        }
         let random = Random.roll(1,focus);
         if(random == 1){
             x = -1;
@@ -806,9 +1042,9 @@ class Monster extends Entity{
             x = 1;
         }else if (random == 3 || random == 4){
             //do nothing
-        }else if(this.x > playerEntity.x){
+        }else if(this.x > target.x){
             x = -1;
-        }else if (this.x < playerEntity.x){
+        }else if (this.x < target.x){
             x = 1;
         }
         
@@ -819,25 +1055,47 @@ class Monster extends Entity{
             y = 1;
         }else if (random == 3 || random == 4){
             //do nothing
-        }else if(this.y > playerEntity.y){
+        }else if(this.y > target.y){
             y = -1;
-        }else if (this.y < playerEntity.y){
+        }else if (this.y < target.y){
             y = 1;
         }
-    
+
         let targetX = this.x+x;
         let targetY = this.y+y
         let targetItem = Board.entityAt(targetX, targetY);
+        
 
         if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
             this.attack(targetItem);
         }
     
         if(!this.move(x, y)){
+            let message = [target,x,y,'failed']
             this.move(0, y);
-            this.move(x, 0);
+            this.move(x, 0); 
         }
-        
+    }
+
+    reconstituteFn(n){
+        console.log('checking');
+        //check if it's been dead for a turn
+        if(!History.getSnapshotEntity(this.id).dead){
+            return false;
+        }
+        console.log('reconstituting')
+        this.mortal -= Random.roll(0,n);
+        if(this.mortal <= this.threshold){
+            this.behavior = this.reconstituteBehavior;
+            this.tempSymbol = false;
+            this.dead = false;
+            this.container = false;
+            this.name = this.name.split(' corpse')[0];
+            this.stunTime++;
+            if(EntityManager.hasPlayerLos(this)){
+                Log.addMessage(this.name+' rises...', 'danger')
+            }
+        }
     }
 
     attack(target){
@@ -919,6 +1177,32 @@ class Monster extends Entity{
         }
     }
 
+    checkStealWeapon(){
+        if(!this.grabby){
+            return false;
+        }
+
+        console.log(this.inventory)
+
+        if(this.inventory.items.length >= this.inventory.slots){
+            return false;
+        }
+
+        if(Player.stamina < this.grabby){
+            Player.stamina = 0;
+            let slot = Player.equipped.slot;
+            let item = Player.inventory.items.splice(slot,1)[0];
+
+            Player.unequipWeapon();
+            this.inventory.items.push(item);
+            Log.addMessage(this.name+' absorbs your weapon!','urgent')
+        }else{
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger',['grabby'])
+
+            Player.changeStamina(this.grabby * -1)
+        }
+    }
+
 }
 
 class Wall extends Entity{
@@ -945,6 +1229,7 @@ class Container extends Entity{
     constructor(containerKey, x, y, additionalParameters = {}){
         //console.log(additionalParameters);
         super('Ch',x,y, 'chest');
+        this.key = containerKey;
         if(containerVars[containerKey]){
             let container = JSON.parse(JSON.stringify(containerVars[containerKey]));
             //copy chest vars from template

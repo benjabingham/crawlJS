@@ -157,6 +157,19 @@ class GameMaster{
         */
     }
 
+    //function for inventory slot hotkeys
+    static slotKey(event){
+
+        if(InputManager.lastEvent && InputManager.lastEvent.type == event.type){
+            GameMaster.useItem(event)
+            return true;
+        }
+        let slot = parseInt(event.type.split('-')[1])-1;
+        Display.displayedInventorySlot = slot;
+        Display.displayInventory(GameMaster.dungeonMode)
+
+    }
+
     //general case use item - will work for any item.
     static useItem(event){
         if(!GameMaster.dungeonMode){

@@ -80,6 +80,14 @@
     border-color: var(--shopFreshBorder);
 }
 
+.selected-true{
+    color:red;
+}
+
+.primed-true{
+    border: 2px solid black;
+}
+
 .inventory-description{
     outline:1px solid var(--border);
     margin-left:auto;

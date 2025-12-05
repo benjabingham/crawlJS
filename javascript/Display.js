@@ -294,11 +294,12 @@ class Display{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
+        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
+        Display.displayItemInfo(displayedItem, inventoryId)
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
-        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
-        Display.displayItemInfo(displayedItem, inventoryId)
+        
         
         Display.displayGold();
     }
@@ -316,18 +317,25 @@ class Display{
     static displayGold(){
         $('.gold-div').text(Player.gold+" gold");
     }
+    
 
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+        let itemIsSelected = slot == Display.displayedInventorySlot;
+        //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
+        let primed = InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(item.slot+1) : false;
+        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
+            primed = false
+        }
         if(!itemValue){
             itemValue = '0';
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+', selected-'+itemIsSelected+', primed-'+primed).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)

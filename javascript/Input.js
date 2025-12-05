@@ -1,5 +1,8 @@
 //Creates an event called through name, which is called with onInput()
 class Input {
+    static lastEvent;
+    static currentEvent;
+
     constructor(_name, _key) {
         this.name = _name
         this.key = _key
@@ -53,15 +56,17 @@ class InputManager{
 
         inputVars.numpad.forEach((input)=>{
             $(document).bind(input.inputName,function(event){
+                InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
                 InputManager.locked = true;
                 if(input.movePlayer) GameMaster.movePlayer(event);
                 if(input.wait) GameMaster.wait(event);
                 if(input.rotate) GameMaster.rotate(event);
-                if(input.useItem) GameMaster.useItem(event);
+                if(input.slotKey) GameMaster.slotKey(event);
                 if(input.drop) GameMaster.drop(event);
                 if(input.rewind) GameMaster.rewind(event);
                 InputManager.locked = false;
+                InputManager.lastEvent = event;
             })
         })
     }

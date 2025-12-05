@@ -184,7 +184,7 @@ class Board{
         }
     }
 
-    static getLine(point1,point2){
+    static getLine(point1,point2, nPoints = false){
         let xdif = point2.x - point1.x;
         let ydif = point2.y - point1.y;
         
@@ -208,6 +208,10 @@ class Board{
             line.push({
                 x:Math.floor(x+.5), y:Math.floor(y+.5)
             });
+
+            if(line.length == nPoints){
+                return line;
+            }
         }
 
         return line;
@@ -253,18 +257,46 @@ class Board{
         let sources = [{
             x:playerLightPos.x,
             y:playerLightPos.y,
-            lightStrength:Player.light+1
+            lightStrength:Player.light+1,
+            isPlayerSource: true
         }]
         Board.lightSourceIDs.forEach((id)=>{
             sources.push(EntityManager.getEntity(id))
         })
-        
-        
+           
         sources.forEach((source)=>{
+            if(source.obliterated){
+                return false;
+            }
             let distance = Board.getTrueDistance(pos,source);
-            if (source.lightStrength >= distance){
+            let entity = Board.entityAt(pos.x,pos.y);
+            
+            if (source.lightStrength < distance){
+                return false;
+            }
+
+            // if is wall, get direction from wall to source. Look at tile next to wall in the direction. If player doesnt have los of that tile, should not have los of wall.
+            //this stops light from shining through walls.
+            if(entity.isWall && !source.isPlayerSource){
+            
+                let line = Board.getLine(entity, source, 2);
+                let betweenTile = line[1];
+                if(!EntityManager.hasPlayerLos(betweenTile) && !Board.entityAt(betweenTile.x,betweenTile.y).isWall){
+                    return false;
+                }
+            }
+
+            let hasLos = false;
+            if(source.isPlayerSource){
+                hasLos = EntityManager.hasPlayerLos(pos)
+            }else{
+                hasLos = Board.hasLos(source,pos)
+            }
+
+            if(hasLos){
                 hasLight = true;
             }
+        
         })
 
         return hasLight;        

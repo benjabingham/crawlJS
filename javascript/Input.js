@@ -1,7 +1,5 @@
 //Creates an event called through name, which is called with onInput()
 class Input {
-    static lastEvent;
-    static currentEvent;
 
     constructor(_name, _key) {
         this.name = _name
@@ -35,6 +33,8 @@ class Input {
 class InputManager{
     static inputs = []
     static locked = false;
+    static lastEvent;
+    static currentEvent;
 
     static setInputPreset(presetName){
         let preset = inputVars[presetName];
@@ -93,6 +93,7 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
+        console.log(newInput);
         if($(':focus').is('input')){
             return;
         }

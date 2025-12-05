@@ -60,6 +60,13 @@ class GameMaster{
         });
         */
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
+        $(document).off('click').on("click", (event)=>{
+            InputManager.currentEvent = event;
+            Display.displayInventory(this.dungeonMode);
+            InputManager.lastEvent = event;
+
+        });
+
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
@@ -151,6 +158,8 @@ class GameMaster{
         }else{
             GameMaster.dropMode = false;
         }
+
+        Display.displayInventory();
         /*
         EntityManager.skipBehaviors = true;
         GameMaster.postPlayerAction();

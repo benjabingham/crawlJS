@@ -290,6 +290,7 @@ class Display{
     }
 
     static displayInventory(dungeonMode=true){
+        console.log('displayInventory');
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
@@ -423,8 +424,6 @@ class Display{
             return false;
         }
         Display.displayedInventorySlot = item.slot;
-        console.log(inventory);
-        console.log(item);
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';

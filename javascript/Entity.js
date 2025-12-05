@@ -1186,14 +1186,12 @@ class Monster extends Entity{
         if(!this.grabby){
             return false;
         }
-        console.log('GRABBING')
-        console.log(this.inventory)
-
-        if(this.inventory.items.length >= this.inventory.slots){
+        let grabStrength = Random.roll(0,this.grabby);
+        if(this.inventory.items.length >= this.inventory.slots || !grabStrength){
             return false;
         }
 
-        if(Player.stamina < this.grabby){
+        if(Player.stamina < grabStrength){
             Player.stamina = 0;
             let slot = Player.equipped.slot;
             let item = Player.inventory.items.splice(slot,1)[0];
@@ -1204,7 +1202,7 @@ class Monster extends Entity{
         }else{
             Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.")
 
-            Player.changeStamina(this.grabby * -1)
+            Player.changeStamina(grabStrength * -1)
         }
     }
 

@@ -414,7 +414,7 @@ let monsterVars = {
         hitDice:1,
         damage:1,
         blood:1,
-        grabby:1,
+        grabby:3,
         inventorySlots:3,
         inventory:[
             {

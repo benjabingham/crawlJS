@@ -202,9 +202,11 @@ class Entity{
 
     lootContainer(container){
         let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
-        if(isPlayer){
-            Log.addMessage('you search the '+container.name+'...')
+        if(!isPlayer){
+            return false;
         }
+        Log.addMessage('you search the '+container.name+'...')
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();

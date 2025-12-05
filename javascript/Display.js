@@ -290,7 +290,6 @@ class Display{
     }
 
     static displayInventory(dungeonMode=true){
-        console.log('displayInventory');
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
@@ -428,10 +427,17 @@ class Display{
         if(!itemValue){
             itemValue = '0';
         }
+        let descriptionBodyElement;
+        if(item.weapon || item.potable){
+            descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
+        }else{
+            descriptionBodyElement = '';
+        }
+
         $('#'+inventory+'-description').html('').append(
             $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
-            $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
+            descriptionBodyElement
         )
 
         if(item.light && item.fuel && !item.weapon){

@@ -93,9 +93,7 @@ class Log{
                     }
                     messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
                         if(tipText){
-                            $('.hint-divs').append(
-                                $('<p>').text(tipText)
-                            )
+                            $('.hint-divs').text(tipText)  
                         }
                     }).on('mouseleave',()=>{
                         $('.hint-divs').html('');

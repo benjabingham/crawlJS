@@ -113,6 +113,9 @@ class Board{
 
     //does one point have line of sight to another
     static hasLos(pos1,pos2, maxDistance = 8){
+        if( !Board.isSpace(pos1.x,pos1.y) || !Board.isSpace(pos2.x,pos2.y)){
+            return false;
+        }
         if(EntityManager.getDistance(pos1,pos2) > maxDistance){
             return false;
         }

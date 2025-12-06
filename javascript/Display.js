@@ -22,6 +22,7 @@ class Display{
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
+        Display.dropButton();
     }
 
     static showHomeScreen(){
@@ -317,6 +318,21 @@ class Display{
     static displayGold(){
         $('.gold-div').text(Player.gold+" gold");
     }
+
+    //checks if an inventory slot is primed.
+    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
+    static isPrimed(slot, inventory){
+        if(inventory == 'shop'){
+            return false;
+        }
+
+        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
+            return false
+        }
+
+        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
+        
+    }
     
 
     static addInventoryItem(item, dungeonMode, inventory){
@@ -325,17 +341,14 @@ class Display{
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let itemIsSelected = slot == Display.displayedInventorySlot;
-        //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
-        let primed = InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(item.slot+1) : false;
-        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
-            primed = false
-        }
+        let primed = Display.isPrimed(item.slot);
+
         if(!itemValue){
             itemValue = '0';
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
@@ -353,6 +366,16 @@ class Display{
         }
 
         //add buttons
+
+        if(GameMaster.dropMode){
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                $('<button>').addClass('item-button').text('drop').on('click',function(){
+                    GameMaster.dropItem(slot);
+                })
+            )
+
+            return;
+        }
 
         if(item.usable){
             let button;
@@ -422,7 +445,9 @@ class Display{
             $('#'+inventory+'-description').html('')
             return false;
         }
-        Display.displayedInventorySlot = item.slot;
+        if(inventory != 'shop'){
+            Display.displayedInventorySlot = item.slot;
+        }
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -637,6 +662,12 @@ class Display{
     static applyOpacity(opacity, element){
         opacity = Math.min(opacity,7);
         element.css('opacity',opacity/10)
+    }
+
+    static dropButton(){
+        $('#drop-items-button').off().on('click',(event)=>{
+            GameMaster.drop(event);
+        })
     }
     
 }

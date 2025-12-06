@@ -85,6 +85,14 @@
     text-decoration: underline;
 }
 
+.drop-true{
+    background-color: var(--lightRed);
+}
+
+.drop-true:hover{
+    background-color: var(--muteRed);
+}
+
 .primed-true{
     border: 2px solid black;
 }

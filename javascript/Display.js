@@ -342,13 +342,13 @@ class Display{
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let itemIsSelected = slot == Display.displayedInventorySlot;
         let primed = Display.isPrimed(item.slot);
-    
+
         if(!itemValue){
             itemValue = '0';
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
@@ -366,6 +366,16 @@ class Display{
         }
 
         //add buttons
+
+        if(GameMaster.dropMode){
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                $('<button>').addClass('item-button').text('drop').on('click',function(){
+                    GameMaster.dropItem(slot);
+                })
+            )
+
+            return;
+        }
 
         if(item.usable){
             let button;

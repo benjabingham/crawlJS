@@ -368,18 +368,11 @@ class Board{
     }
 
     static getStain(x,y){
-        let nullStain = {
-            color:{r:0,g:0,b:0},
-            level:0
-        }
         if(!Board.stainArray[y]){
-            return nullStain;
-        }
-        if(Board.stainArray[y][x]){
-            return Board.stainArray[y][x]
+            return false;
         }
 
-        return nullStain;
+        return Board.stainArray[y][x];
     }
 
     static smearStain(pos1,pos2){

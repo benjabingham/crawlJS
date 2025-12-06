@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class GameMaster{
     static customControls = {};
     static dungeonId = 0;
@@ -318,7 +317,6 @@ class GameMaster{
         EntityManager.skipBehaviors = false;
     }
     
-=======
 class GameMaster{
     static customControls = {};
     static dungeonId = 0;
@@ -643,5 +641,4 @@ class GameMaster{
         EntityManager.skipBehaviors = false;
     }
     
->>>>>>> ui
 }

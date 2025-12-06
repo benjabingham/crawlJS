@@ -632,6 +632,25 @@ class Entity{
 
         return vulnerable;
     }
+
+    //get {x,y} pairs for each adjacent tile, starting with a random tile and proceeding clockwise.
+    getAdjacentTiles(){
+        let startingDirection =  Random.roll(0,7)
+        let directions = EntityManager.translations;
+        let tiles = []
+        for(let i = 0; i < 8; i++){
+            let direction = (startingDirection+i)%8;
+            tiles.push(
+                {
+                    x:this.x + directions[direction].x,
+                    y:this.y + directions[direction].y
+                }
+            )
+        }
+
+        return tiles;
+    }
+    
 }
 
 class PlayerEntity extends Entity{
@@ -927,6 +946,8 @@ class Monster extends Entity{
     blood = 1;
     //Where did I last see the player
     lastSeen = false;
+    //how far can i see
+    sightDistance = 8;
 
 
     constructor(monsterKey,x,y, additionalParameters = {}){
@@ -974,12 +995,32 @@ class Monster extends Entity{
         return this;
     }
 
-    getTarget(){
-
-        console.log(Player.light);
-        if(this.lightSeeking && !Player.light){
-            return false
+    //returns adjacent tile target most recently occupied. Search backwards n turns.
+    track(target){
+        if(!this.tracking){
+            return false;
         }
+        let adjacentTiles = this.getAdjacentTiles();
+        let targetTile = false;
+        for(let i = 1; i < this.tracking; i++){
+            adjacentTiles.forEach((tile)=>{
+                    if(targetTile){
+                        return;
+                    }
+                    let targetSnapshot = History.getSnapshotEntity(target.id, i);
+
+                    if(targetSnapshot.x == tile.x && targetSnapshot.y == tile.y){
+                        targetTile = tile;
+                    }
+            })
+            if(targetTile){
+                break;
+            }
+        }
+        return targetTile;
+    }
+
+    getTarget(){
 
         if(this.targetWeapon){
             return EntityManager.playerEntity.swordEntity;
@@ -995,17 +1036,24 @@ class Monster extends Entity{
         let target = this.getTarget();
         //creature is less focused the further they are
         let focus = this.behaviorInfo.focus;
-        if(Board.hasLos(this,target)){
+
+        //use distance from target, not lastSeen
+        let targetDistance = EntityManager.getDistance(this, target)
+        focus -= targetDistance;
+
+        if(this.hasLos(target)){
             this.lastSeen = {x:target.x, y:target.y, turn:Log.turnCounter}
         }
         //go towards where you last saw the player, or otherwise towards player.
+        let trackedTile = this.track(target);
         if(this.lastSeen){
             target = this.lastSeen;
-        }else{
+        }else if(trackedTile){
+            target = trackedTile;
+        }else {
             //if you have little clue where the player is...
             focus -= 20;
         }
-        focus -= EntityManager.getDistance(this, target);
 
         this.moveNatural(target, focus);
 
@@ -1023,9 +1071,14 @@ class Monster extends Entity{
 
     chaseBinary(){
         let target = this.getTarget();
-        if(!Board.hasLos(this,target)){
-            this.moveNatural();
-            return false;
+        let trackTile = this.track(target)        
+        if(!this.hasLos(target)){
+            if( trackTile ){
+                target = trackTile;
+            }else{
+                this.moveNatural();
+                return false;
+            }
         }
         
         let x = 0;
@@ -1109,6 +1162,20 @@ class Monster extends Entity{
             this.move(0, y);
             this.move(x, 0); 
         }
+    }
+
+    hasLos(pos){
+        let sightDistance = this.sightDistance;
+        let targetDistance = EntityManager.getDistance(this, pos)
+        if(this.lightSeeking && Player.light){
+            sightDistance += Player.light+1;
+        }
+        let hasLos = (
+            Board.hasLos(this,pos) && 
+            sightDistance >= targetDistance
+        );
+
+        return hasLos;
     }
 
     reconstituteFn(n){

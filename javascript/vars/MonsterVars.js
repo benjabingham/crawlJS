@@ -184,6 +184,7 @@ let monsterVars = {
             enrage:40,
             daze:15
         },
+        tracking:12,
         hitDice:1,
         damage:5,
         inventorySlots: 1,
@@ -199,6 +200,7 @@ let monsterVars = {
         name:"dire wolf",
         symbol:"Dw",
         behavior:"chase",
+        tracking:12,
         behaviorInfo:{
             focus:25,
             enrage:75,
@@ -393,6 +395,8 @@ let monsterVars = {
         targetWeapon:true,
         blood:1,
         inventorySlots:3,
+        sightDistance:2,
+        tracking:5,
         inventory:[
             {
                 item: itemVars.drops.greenGoo,
@@ -419,6 +423,8 @@ let monsterVars = {
         grabby:3,
         targetWeapon:true,
         inventorySlots:3,
+        sightDistance:2,
+        tracking:5,
         inventory:[
             {
                 item: itemVars.drops.orangeGoo,
@@ -442,6 +448,8 @@ let monsterVars = {
         damage:1,
         blood:1,
         inventorySlots:1,
+        sightDistance:2,
+        tracking:3,
         inventory:[
             {
                 item: itemVars.drops.blueGoo,
@@ -450,7 +458,7 @@ let monsterVars = {
         ],
         reconstitute:1,
         reconstituteBehavior:'chaseBinary',
-        reconstituteChance:20,
+        reconstituteChance:10,
         behaviorInfo:{
             slow:35
         },
@@ -480,6 +488,8 @@ let monsterVars = {
                 chance:100
             },
         ],
+        sightDistance:0,
+        //tracking:5,
         lightSeeking:10,
         lightDrain:true,
         reconstitute:2,

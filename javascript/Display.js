@@ -317,6 +317,21 @@ class Display{
     static displayGold(){
         $('.gold-div').text(Player.gold+" gold");
     }
+
+    //checks if an inventory slot is primed.
+    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
+    static isPrimed(slot, inventory){
+        if(inventory == 'shop'){
+            return false;
+        }
+
+        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
+            return false
+        }
+
+        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
+        
+    }
     
 
     static addInventoryItem(item, dungeonMode, inventory){
@@ -325,11 +340,8 @@ class Display{
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let itemIsSelected = slot == Display.displayedInventorySlot;
-        //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
-        let primed = InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(item.slot+1) : false;
-        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
-            primed = false
-        }
+        let primed = Display.isPrimed(item.slot);
+    
         if(!itemValue){
             itemValue = '0';
         }

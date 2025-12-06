@@ -22,6 +22,7 @@ class Display{
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
+        Display.dropButton();
     }
 
     static showHomeScreen(){
@@ -651,6 +652,12 @@ class Display{
     static applyOpacity(opacity, element){
         opacity = Math.min(opacity,7);
         element.css('opacity',opacity/10)
+    }
+
+    static dropButton(){
+        $('#drop-items-button').off().on('click',(event)=>{
+            GameMaster.drop(event);
+        })
     }
     
 }

@@ -466,6 +466,31 @@ let monsterVars = {
         color:"blue",
         bloodColor:{r:39,g:66,b:183}
     },
+    blackOoze:{
+        name:"black ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:3,
+        damage:5,
+        blood:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.blackGoo,
+                chance:100
+            },
+        ],
+        lightSeeking:10,
+        lightDrain:true,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:70,
+        behaviorInfo:{
+            slow:30
+        },
+        color:"black",
+        bloodColor:{r:0,g:0,b:0}
+    },
     elderGoo:{
         name:"elder goo",
         symbol:"Oo",

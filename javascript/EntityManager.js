@@ -117,7 +117,7 @@ class EntityManager{
             }
             let slow = 0;
             if(entity.behaviorInfo){
-                slow += (random <= entity.behaviorInfo.slow);
+                slow += (random <= entity.slow);
                 skip += slow;
             }
             if(entity.wait){

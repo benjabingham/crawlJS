@@ -278,6 +278,14 @@ let itemVars = {
             color:'blue',
             value:1
         },
+        blackGoo:{
+            name:'black goo',
+            usable: true,
+            fuel:1,
+            light:-3,
+            color:'black',
+            value:4
+        },
         orangeGoo:{
             name:'orange goo',
             usable: true,

@@ -33,6 +33,19 @@ class Entity{
         return this;
     }
 
+    get slow(){
+        if(!this.behaviorInfo){
+            return 0
+        }
+        let slow = this.behaviorInfo.slow
+        if(this.lightSeeking){
+            slow -= Player.light*this.lightSeeking;
+        }
+
+        return slow;
+    }
+
+
     move(x, y){
         x += this.x;
         y += this.y;
@@ -962,6 +975,12 @@ class Monster extends Entity{
     }
 
     getTarget(){
+
+        console.log(Player.light);
+        if(this.lightSeeking && !Player.light){
+            return false
+        }
+
         if(this.targetWeapon){
             return EntityManager.playerEntity.swordEntity;
         }
@@ -1128,6 +1147,11 @@ class Monster extends Entity{
                 EntityManager.transmitMessage(this.name+" misses!");
             }else{
                 Player.changeHealth(mortality * -1);
+                if (this.lightDrain){
+                    console.log('lightdrain')
+                    Player.light = Math.max(Player.light-1,0)
+                    EntityManager.transmitMessage('your light is drained.','danger')
+                }
             }
         }else if(target.isWall && target.destructible){
             EntityManager.addMortality(target.id, mortality);

@@ -371,14 +371,19 @@ class Board{
         if(!Board.stainArray[y]){
             return false;
         }
+        if(Board.stainArray[y][x]){
+            return Board.stainArray[y][x]
+        }
 
-        return Board.stainArray[y][x];
+        return false;
     }
 
     static smearStain(pos1,pos2){
-        let level1 = Board.getStain(pos1.x,pos1.y).level;
+        let stain1 = Board.getStain(pos1.x,pos1.y)
+        let level1 = stain1 ? stain1.level : 0;
         level1 = level1 ? level1 : 0;
-        let level2 = Board.getStain(pos2.x,pos2.y).level;
+        let stain2 = Board.getStain(pos2.x,pos2.y)
+        let level2 = stain2 ? stain2.level : 0;
         level2 = level2 ? level2 : 0;
         let amt = Math.floor(((level1 - level2)/2.0)+.5);
         if(!amt || amt <= 0){

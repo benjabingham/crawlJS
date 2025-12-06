@@ -717,7 +717,8 @@ let itemVars = {
             name:'morsel',
             usable: true,
             food:1,
-            color:'brown'
+            color:'brown',
+            value:0
         },
         berries:{
             name:'berries',

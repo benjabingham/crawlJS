@@ -434,7 +434,9 @@ class Display{
             $('#'+inventory+'-description').html('')
             return false;
         }
-        Display.displayedInventorySlot = item.slot;
+        if(inventory != 'shop'){
+            Display.displayedInventorySlot = item.slot;
+        }
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';

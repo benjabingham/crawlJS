@@ -66,7 +66,7 @@ class InputManager{
                 if(input.drop) GameMaster.drop(event);
                 if(input.rewind) GameMaster.rewind(event);
                 InputManager.locked = false;
-                InputManager.lastEvent = event;
+                InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })
         })
     }

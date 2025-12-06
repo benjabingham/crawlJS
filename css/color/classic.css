@@ -68,6 +68,7 @@
     --inventorySlotHover:#E8D6BD;
     --shopFresh:#fdd7003a;
     --shopFreshBorder:var(--inventoryBorder);
+    --selectedSlot:#f3e3b6;
 
     
     /*log*/

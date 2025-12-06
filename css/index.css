@@ -3,6 +3,33 @@ html{
     color: #ddd;
 }
 
+#inspirations-div{
+    background-color: #ddd;
+    color: #222;
+    width:100%;
+
+    padding: 10px;
+    a{
+        color:rgb(103, 103, 172);
+        font-size: large;
+    }
+}
+
+#versions-div{
+    margin-bottom:200px;
+    li{
+        width:fit-content;
+        margin:auto;
+        display:inline-block;
+        list-style-type: none;
+        padding: 0.5rem;
+    }
+    
+    ul{
+        padding:0px !important;
+    }
+}
+
 body{
     margin:auto;
     width:800px;
@@ -34,14 +61,3 @@ a:visited{
     color:#88f;
 }
 
-li{
-    width:fit-content;
-    margin:auto;
-    display:inline-block;
-    list-style-type: none;
-    padding: 0.5rem;
-}
-
-ul{
-    padding:0px !important;
-}

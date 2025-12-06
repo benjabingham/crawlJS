@@ -46,7 +46,11 @@ class Log{
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
             "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
             "The contents of unlabeled potions are undetermined until the moment you drink them. Use luck to make better use of them.",
-            "Some lootable objects like shrubs and rat stashes have a chance to restock as days pass."
+            "Some lootable objects like shrubs and rat stashes have a chance to restock as days pass.",
+            "Most oozes have a low sight radius. Keep your distance if you don't want to fight them.",
+            "Corrosive(green) and absorbent(orange) oozes track your weapon instead of you. Put it away and they'll leave you alone!",
+            "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
+            "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

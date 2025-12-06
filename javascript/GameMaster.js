@@ -169,8 +169,13 @@ class GameMaster{
     //function for inventory slot hotkeys
     static slotKey(event){
 
+        console.log('event: '+event.type);
+        console.log(InputManager.lastEvent);
+
         if(InputManager.lastEvent && InputManager.lastEvent.type == event.type){
+            console.log('lastevent: '+InputManager.lastEvent.type)
             GameMaster.useItem(event)
+            InputManager.currentEvent.type = "forget"
             return true;
         }
         let slot = parseInt(event.type.split('-')[1])-1;

@@ -416,11 +416,18 @@ class EntityManager{
                     delete EntityManager.entities[key];
                 }else{
                     let spawner = EntityManager.getEntity(entity.spawnerID)
-                    spawner.returnContainedEntity(entity);
-                    let spawnerSave = EntityManager.currentMap.roster[spawner.index];
-                    spawnerSave.inventory.items = spawner.inventory.items;
-                    spawnerSave.inventory.gold = spawner.inventory.gold;
-                    spawnerSave.containedEntities = spawner.containedEntities;
+                    let spawnerSave = false;
+                    if(spawner){
+                        spawner.returnContainedEntity(entity);
+                        spawnerSave = EntityManager.currentMap.roster[spawner.index];
+                    }
+                    //if spawner was spawned, don't bother
+                    if(spawnerSave && !spawnerSave.spawnerID){
+                        spawnerSave.inventory.items = spawner.inventory.items;
+                        spawnerSave.inventory.gold = spawner.inventory.gold;
+                        spawnerSave.containedEntities = spawner.containedEntities;
+                    }
+                   
                 }
                 
             }else if(typeof entity.index != 'undefined'){

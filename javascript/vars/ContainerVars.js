@@ -326,7 +326,8 @@ let containerVars = {
             maxCapacity:1,
             entities:[
                 'skeleton',
-                'zombie'
+                'zombie',
+                'infestedHusk'
             ],
             spawnChance: 20,
             disturbChance:100

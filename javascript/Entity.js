@@ -417,10 +417,13 @@ class Entity{
         this.mortal += mortal;
     }
 
-    kill(){
+    kill(message = false){
         if(this.isMonster){
+            if(!message){
+                message = this.name+" is slain!"
+            }
             if(Board.hasPlayerLos(this)){
-                EntityManager.transmitMessage(this.name+" is slain!", 'win');
+                EntityManager.transmitMessage(message, 'win');
             }
             this.name += " corpse";
             this.behavior = 'dead';
@@ -430,6 +433,10 @@ class Entity{
                 if(Math.random()*100 > this.reconstituteChance){
                     this.reconstitute = 0;
                 }
+            }
+
+            if(this.corpseless){
+                this.obliterate();
             }
         }else{
             if(Board.hasPlayerLos(this)){
@@ -447,6 +454,10 @@ class Entity{
             this.tempSymbol = '*';
         }
         */
+        //don't track as dead if reconstituting
+        if(this.reconstitute){
+            return;
+        }
         let roster = EntityManager.currentMap.roster;
         //update roster, but not if monster can reconstitute
         if(roster[this.index] && !this.reconstituteBehavior){
@@ -583,9 +594,9 @@ class Entity{
         }
     };
 
-    checkDead(){
+    checkDead(message = false){
         if (this.mortal > this.threshold && !this.dead){
-            this.kill();
+            this.kill(message);
         }
 
         if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
@@ -817,6 +828,7 @@ class SwordEntity extends Entity{
                 target.checkStealWeapon();
             }
             target.addMortality(mortality);
+            target.checkDead();
             target.checkSplatter(mortality, weapon);
             target.knock(this.id);
             if(target.enrageAndDaze){
@@ -948,11 +960,14 @@ class Monster extends Entity{
     lastSeen = false;
     //how far can i see
     sightDistance = 8;
+    //turn spawned
+    spawnTurn = 0;
 
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);
         this.key = monsterKey;
+        this.spawnTurn = EntityManager.turnCounter;
         if(monsterVars[monsterKey]){
             let monster = JSON.parse(JSON.stringify(monsterVars[monsterKey]));
             //copy monster vars from template
@@ -993,6 +1008,32 @@ class Monster extends Entity{
         }
         
         return this;
+    }
+
+    //not tested or implemented.
+    checkExpiration(){
+        if(!this.lifetime){
+            return false;
+        }
+
+        if(this.spawnTurn + this.lifetime >= EntityManager.turnCounter){
+            this.obliterate();
+        }
+    }
+
+    triggerDecay(){
+        if(!this.decay || this.dead){
+            return false;
+        }
+
+        //checks if I was dead last turn
+        if(History.getSnapshotEntity(this.id).dead){
+            return false;
+        }
+
+        this.addMortality(Random.roll(0,this.decay));
+
+        this.checkDead(this.name + ' wastes away.')
     }
 
     //returns adjacent tile target most recently occupied. Search backwards n turns.
@@ -1179,14 +1220,21 @@ class Monster extends Entity{
     }
 
     reconstituteFn(n){
-        console.log('checking');
+        //console.log('checking');
         //check if it's been dead for a turn
         if(!History.getSnapshotEntity(this.id).dead){
+            return false;
+        }
+        if(this.reconstitute < this.decay){
             return false;
         }
         console.log('reconstituting')
         this.mortal -= Random.roll(0,n);
         if(this.mortal <= this.threshold){
+            if(this.reconstituteDecay){
+                let addDecay = this.reconstituteDecay;
+                this.decay = this.decay ? this.decay+addDecay : addDecay;
+            }
             this.behavior = this.reconstituteBehavior;
             this.tempSymbol = false;
             this.dead = false;

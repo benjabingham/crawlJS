@@ -4,5 +4,11 @@ keywordVars = {
     },
     dazed:{
         hintText:'When a creature becomes dazed, it is stunned for an additional turn and it becomes slower and less aggressive.'
+    },
+    flickers:{
+        hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
+    },
+    flickers:{
+        hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
     }
 }

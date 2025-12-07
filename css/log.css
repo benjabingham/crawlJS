@@ -29,7 +29,15 @@
 .message-urgent{
     background-color:var(--urgentBackground);
     color:var(--urgentText);
-    font-weight: 600;
+    font-weight: bold;
+}
+
+.log-hoverable{
+    font-weight: bolder;
+}
+
+.log-hoverable:hover{
+    cursor: pointer;
 }
 
 .message-danger{
@@ -58,11 +66,6 @@
 .message-fresh.message-pos{
     color:var(--blue);
     font-weight:600;
-}
-
-
-.message-keyword:hover{
-    cursor: pointer;
 }
 
 .notice{

@@ -105,7 +105,7 @@ class Entity{
             if(this.obliterated){
                 return false;
             }
-            EntityManager.transmitMessage(this.name + " is cornered!", 'pos');
+            EntityManager.transmitMessage(this.name + " is cornered!", 'pos','cornered','This enemy had no empty space to be knocked into by your attack.');
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
@@ -161,7 +161,8 @@ class Entity{
 
         if(isPlayer && itemPile.inventory.items.length > 0){
             itemPile.inventory.items.forEach((item)=>{
-                Log.addMessage('Not enough space for '+item.name+'...');
+                let tipText = "value - "+item.value;
+                Log.addMessage('Not enough space for '+item.name+'...',false,item.name,tipText);
             })
         }
 
@@ -225,7 +226,8 @@ class Entity{
 
         if(isPlayer && container.inventory.items.length > 0){
             container.inventory.items.forEach((item)=>{
-                Log.addMessage('Not enough space for '+item.name+'...');
+                let tipText = "value - "+item.value;
+                Log.addMessage('Not enough space for '+item.name+'...',false,item.name,tipText);
             })
         }
         
@@ -403,7 +405,7 @@ class Entity{
     beat(targetSword){
         let knock = false;
         if(targetSword.owner == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks your weapon...");
+            EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.");
             let damage = Random.roll(0,this.damage);
             if(damage > Player.stamina){
                 Player.stamina = 0;
@@ -428,7 +430,8 @@ class Entity{
         let random = Random.roll(1,100);
         if(random <= beatChance || knock){
             if (targetSword.knockSword()){
-                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger');
+                let tipText = knock ? 'You did not have enough stamina to hold your weapon steady.' : 'this monster has a chance to push your weapon aside even if you have stamina remaining.'
+                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText);
             }
             
         }else if(Player.equipped){
@@ -453,7 +456,7 @@ class Entity{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
             if(!this.dead){
-                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger');
+                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.');
             }
         }
     };
@@ -883,7 +886,7 @@ class Monster extends Entity{
 
         let random = Random.roll(1,100);
         if(random <= enrageChance){
-            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', ['enraged']);
+            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', 'enraged');
             this.behaviorInfo.focus += 5;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;
@@ -901,7 +904,7 @@ class Monster extends Entity{
         }
         random = Random.roll(1,100);
         if(random <= dazeChance){
-            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', ['dazed']);
+            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', 'dazed');
             this.behaviorInfo.focus -= 7;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;

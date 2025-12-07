@@ -20,7 +20,7 @@ class Log{
         }
     }
 
-    static addMessage(message, messageClass = false, keywords = false){
+    static addMessage(message, messageClass = false, keyword = false, tipText = false){
         if(!Log.messages[Log.turnCounter]){
             Log.messages[Log.turnCounter] = [];
         }
@@ -28,7 +28,8 @@ class Log{
             message:message,
             fresh:true,
             messageClass: messageClass,
-            keywords: keywords
+            keyword: keyword,
+            tipText: tipText
         });
     }
 
@@ -64,19 +65,40 @@ class Log{
         for (const [turn, messages] of Object.entries(Log.messages)) {
             if(messages){
                 messages.forEach((message) => {
-                    log.prepend(
-                        $('<p>').text("> "+message.message).addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
-                            if(message.keywords){
-                                message.keywords.forEach((keyword)=>{
-                                    $('.hint-divs').append(
-                                        $('<p>').text(keywordVars[keyword].hintText)
-                                    )
-                                })
-                            }
-                        }).on('mouseleave',()=>{
-                            $('.hint-divs').html('');
-                        }).addClass((message.keywords) ? 'message-keyword' : '')
-                    )
+                    let keyword = false;
+                    //only expect one keyword for now ...
+                    let messageElement;
+                    let tipText;
+                    if(message.keyword){
+                        keyword = message.keyword;
+                        let splitMessage = message.message.split(keyword);
+                        messageElement = $('<div>').append(
+                            $('<span>').text("> "+ splitMessage[0])
+                        ).append(
+                            $('<strong>').text(keyword).addClass('log-hoverable')
+                        ).append(
+                            $('<span>').text(splitMessage[1])
+                        )
+                        if(keywordVars[keyword]){
+                            tipText = keywordVars[keyword].hintText;
+                        }
+                    }else{
+                        messageElement = $('<p>').text("> "+message.message);
+                    }
+                    if(message.tipText){
+                        tipText = message.tipText;
+                        if(!keyword){
+                            messageElement.addClass('log-hoverable');
+                        }
+                    }
+                    messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
+                        if(tipText){
+                            $('.hint-divs').text(tipText)  
+                        }
+                    }).on('mouseleave',()=>{
+                        $('.hint-divs').html('');
+                    })
+                    log.prepend(messageElement)
                     message.fresh = false;
                 })
                 log.prepend(

@@ -220,6 +220,10 @@ class Entity{
         }
         Log.addMessage('you search the '+container.name+'...')
 
+        if(container.checkTransform('onSearchChance')){
+            return false;
+        }
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
@@ -616,11 +620,12 @@ class Entity{
         this.changeForms.forEach((form)=>{
             console.log(form);
             if(!transformed && form[trigger] > Math.random()*100){
-                EntityManager.transformEntity(this, form.formKey, form.message)
+                EntityManager.transformEntity(this, form)
                 transformed = true;
             }
         })
-        
+
+        return transformed;
     }
 
     disturb(){
@@ -674,8 +679,6 @@ class Entity{
 
         return tiles;
     }
-
-    
     
 }
 
@@ -1110,6 +1113,9 @@ class Monster extends Entity{
         }else {
             //if you have little clue where the player is...
             focus -= 20;
+            if(this.checkTransform('noTargetChance')){
+                return false;
+            };
         }
 
         this.moveNatural(target, focus);
@@ -1133,6 +1139,9 @@ class Monster extends Entity{
             if( trackTile ){
                 target = trackTile;
             }else{
+                if(this.checkTransform('noTargetChance')){
+                    return false;
+                }
                 this.moveNatural();
                 return false;
             }

@@ -506,16 +506,29 @@ class EntityManager{
         return Board.getLineOfSight(entity.x,entity.y);
     }
 
-    static transformEntity(entity, newEntityKey, message = false){
-        console.log('transformentity');
-        let newEntity = new Monster(newEntityKey,entity.x,entity.y);
+    static transformEntity(entity, formInfo){
+        let newEntity;
+        if(formInfo.container){
+            newEntity = new Container(formInfo.formKey,entity.x,entity.y)
+        }else{
+            newEntity = new Monster(formInfo.formKey,entity.x,entity.y);
+        }
         let newID = newEntity.id;
         newEntity.mortal = entity.mortal;
         newEntity.inventory = entity.inventory;
         newEntity.index = entity.index;
         newEntity.id = entity.id;
-        if(message){
-            Log.addMessage(entity.name+message);
+        //its possible for new form to roll a lower threshold than current mortal.
+        //this makes sure it's always alive if it was before.
+        if(!entity.dead && newEntity.mortal >= newEntity.threshold){
+            newEntity.threshold = newEntity.mortal+1
+        }
+        
+        if(formInfo.name){
+            newEntity.name = formInfo.name
+        }
+        if(formInfo.message){
+            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass);
         }
         EntityManager.entities[entity.id] = newEntity;
 

@@ -369,6 +369,18 @@ let monsterVars = {
                 chance:100
             }
         ],
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
         loot:{
             weapon:{
                 chance:15,
@@ -742,6 +754,35 @@ let monsterVars = {
         },
         color:"brightPurple",
         bloodColor:{r:173,g:26,b:202}
+    },
+    mimic:{
+        name:"mimic",
+        symbol:"Mi",
+        behavior:"chase",
+        hitDice:3,
+        damage:6,
+        blood:1,
+        //grabby:3,
+        //targetWeapon:true,
+        inventorySlots:10,
+        sightDistance:3,
+        tracking:5,
+        //inventory:containerVars.mimic.inventory,
+        //loot:containerVars.mimic.loot,
+        reconstituteBehavior:'chaseBinary',
+        behaviorInfo:{
+            focus:25,
+        },
+        changeForms:[
+            {
+                noTargetChance:50,
+                container:true,
+                formKey:'mimic',
+                name:'chest'
+            },
+        ],
+        color:"gold",
+        bloodColor:{r:211,g:147,b:28}
     },
     dummy:{
         name:"dummy",

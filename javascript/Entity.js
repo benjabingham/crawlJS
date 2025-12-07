@@ -419,10 +419,7 @@ class Entity{
 
     kill(message = false){
         if(this.isMonster){
-            if(!message){
-                message = this.name+" is slain!"
-            }
-            if(Board.hasPlayerLos(this)){
+            if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win');
             }
             this.name += " corpse";
@@ -610,6 +607,22 @@ class Entity{
         }
     }
 
+    //take trigger (ex. 'onHitChance')
+    checkTransform(trigger){
+        if(!this.changeForms || this.obliterated){
+            return false;
+        }
+        let transformed = false;
+        this.changeForms.forEach((form)=>{
+            console.log(form);
+            if(!transformed && form[trigger] > Math.random()*100){
+                EntityManager.transformEntity(this, form.formKey, form.message)
+                transformed = true;
+            }
+        })
+        
+    }
+
     disturb(){
         if(!this.spawnEntities){
             return false;
@@ -661,6 +674,8 @@ class Entity{
 
         return tiles;
     }
+
+    
     
 }
 
@@ -828,7 +843,7 @@ class SwordEntity extends Entity{
                 target.checkStealWeapon();
             }
             target.addMortality(mortality);
-            target.checkDead();
+            target.checkDead(target.name+" is slain!");
             target.checkSplatter(mortality, weapon);
             target.knock(this.id);
             if(target.enrageAndDaze){
@@ -839,6 +854,7 @@ class SwordEntity extends Entity{
                 console.log('gonna disturb...')
                 target.disturb();
             }
+            target.checkTransform('onHitChance');
         }
 
         if(this.owner == 'player'){

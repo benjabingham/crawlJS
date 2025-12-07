@@ -344,7 +344,7 @@ let monsterVars = {
         color:'white'
     },
     skeletonPile:{
-        name:"skeleton",
+        name:"skeleton pile",
         symbol:"Sk",
         behavior:"chaseBinary",
         vulnerabilities:['silver'],
@@ -403,6 +403,66 @@ let monsterVars = {
         hitDice:0,
         mortal:14,
         damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
+        blood:0,
+        color:'bone'
+    },
+    leglessSkeleton:{
+        name:"legless skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:80
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:2,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,

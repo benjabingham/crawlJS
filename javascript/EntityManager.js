@@ -506,4 +506,21 @@ class EntityManager{
         return Board.getLineOfSight(entity.x,entity.y);
     }
 
+    static transformEntity(entity, newEntityKey, message = false){
+        console.log('transformentity');
+        let newEntity = new Monster(newEntityKey,entity.x,entity.y);
+        let newID = newEntity.id;
+        newEntity.mortal = entity.mortal;
+        newEntity.inventory = entity.inventory;
+        newEntity.index = entity.index;
+        newEntity.id = entity.id;
+        if(message){
+            Log.addMessage(entity.name+message);
+        }
+        EntityManager.entities[entity.id] = newEntity;
+
+        //otherwise entitymanager will have two pointers to the same entity
+        delete EntityManager.entities[newID]
+        Board.placeEntity(newEntity,newEntity.x,newEntity.y);    }
+
 }

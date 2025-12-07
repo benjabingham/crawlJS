@@ -273,7 +273,7 @@ let monsterVars = {
         behaviorInfo:{
             slow:50
         },
-        hitDice:4,
+        hitDice:3,
         damage:2,
         inventorySlots: 1,
         inventory:[
@@ -298,7 +298,7 @@ let monsterVars = {
         },
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
-        reconstituteChance:50,
+        reconstituteChance:30,
         bloodColor:{r:136,g:62,b:63},
         color:'brown'
     },
@@ -319,7 +319,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:3
+                tier:3,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold']
             },
             treasure:{
                 chance:20,
@@ -411,6 +412,52 @@ let monsterVars = {
                 item: itemVars.drops.sigiledSkull,
                 chance:20
             },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    headlessSkeleton:{
+        name:"headless skeleton",
+        symbol:"Sk",
+        behavior:"chase",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:20,
+            focus:28,
+        },
+        sightDistance:1,
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chase',
+        reconstituteChance:75,
+        inventorySlots: 1,
+        inventory:[
             {
                 item: itemVars.drops.sigiledBone,
                 chance:100

@@ -327,7 +327,8 @@ let containerVars = {
             entities:[
                 'skeleton',
                 'zombie',
-                'infestedHusk'
+                'infestedHusk',
+                'headlessSkeleton'
             ],
             spawnChance: 20,
             disturbChance:100
@@ -371,7 +372,8 @@ let containerVars = {
             occupiedChance:100,
             entities:[
                 'skeleton',
-                'zombie'
+                'zombie',
+                'headlessSkeleton'
             ],
             spawnChance: 1,
             disturbChance:100

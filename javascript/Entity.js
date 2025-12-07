@@ -220,6 +220,10 @@ class Entity{
         }
         Log.addMessage('you search the '+container.name+'...')
 
+        if(container.checkTransform('onSearchChance')){
+            return false;
+        }
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
@@ -419,10 +423,7 @@ class Entity{
 
     kill(message = false){
         if(this.isMonster){
-            if(!message){
-                message = this.name+" is slain!"
-            }
-            if(Board.hasPlayerLos(this)){
+            if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win');
             }
             this.name += " corpse";
@@ -608,6 +609,23 @@ class Entity{
             }
             this.obliterate();
         }
+    }
+
+    //take trigger (ex. 'onHitChance')
+    checkTransform(trigger){
+        if(!this.changeForms || this.obliterated){
+            return false;
+        }
+        let transformed = false;
+        this.changeForms.forEach((form)=>{
+            console.log(form);
+            if(!transformed && form[trigger] > Math.random()*100){
+                EntityManager.transformEntity(this, form)
+                transformed = true;
+            }
+        })
+
+        return transformed;
     }
 
     disturb(){
@@ -828,7 +846,7 @@ class SwordEntity extends Entity{
                 target.checkStealWeapon();
             }
             target.addMortality(mortality);
-            target.checkDead();
+            target.checkDead(target.name+" is slain!");
             target.checkSplatter(mortality, weapon);
             target.knock(this.id);
             if(target.enrageAndDaze){
@@ -839,6 +857,7 @@ class SwordEntity extends Entity{
                 console.log('gonna disturb...')
                 target.disturb();
             }
+            target.checkTransform('onHitChance');
         }
 
         if(this.owner == 'player'){
@@ -1094,6 +1113,9 @@ class Monster extends Entity{
         }else {
             //if you have little clue where the player is...
             focus -= 20;
+            if(this.checkTransform('noTargetChance')){
+                return false;
+            };
         }
 
         this.moveNatural(target, focus);
@@ -1117,6 +1139,9 @@ class Monster extends Entity{
             if( trackTile ){
                 target = trackTile;
             }else{
+                if(this.checkTransform('noTargetChance')){
+                    return false;
+                }
                 this.moveNatural();
                 return false;
             }

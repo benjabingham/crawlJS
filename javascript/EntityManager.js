@@ -416,11 +416,18 @@ class EntityManager{
                     delete EntityManager.entities[key];
                 }else{
                     let spawner = EntityManager.getEntity(entity.spawnerID)
-                    spawner.returnContainedEntity(entity);
-                    let spawnerSave = EntityManager.currentMap.roster[spawner.index];
-                    spawnerSave.inventory.items = spawner.inventory.items;
-                    spawnerSave.inventory.gold = spawner.inventory.gold;
-                    spawnerSave.containedEntities = spawner.containedEntities;
+                    let spawnerSave = false;
+                    if(spawner){
+                        spawner.returnContainedEntity(entity);
+                        spawnerSave = EntityManager.currentMap.roster[spawner.index];
+                    }
+                    //if spawner was spawned, don't bother
+                    if(spawnerSave && !spawnerSave.spawnerID){
+                        spawnerSave.inventory.items = spawner.inventory.items;
+                        spawnerSave.inventory.gold = spawner.inventory.gold;
+                        spawnerSave.containedEntities = spawner.containedEntities;
+                    }
+                   
                 }
                 
             }else if(typeof entity.index != 'undefined'){
@@ -498,5 +505,35 @@ class EntityManager{
     static hasPlayerLos(entity){
         return Board.getLineOfSight(entity.x,entity.y);
     }
+
+    static transformEntity(entity, formInfo){
+        let newEntity;
+        if(formInfo.container){
+            newEntity = new Container(formInfo.formKey,entity.x,entity.y)
+        }else{
+            newEntity = new Monster(formInfo.formKey,entity.x,entity.y);
+        }
+        let newID = newEntity.id;
+        newEntity.mortal = entity.mortal;
+        newEntity.inventory = entity.inventory;
+        newEntity.index = entity.index;
+        newEntity.id = entity.id;
+        //its possible for new form to roll a lower threshold than current mortal.
+        //this makes sure it's always alive if it was before.
+        if(!entity.dead && newEntity.mortal >= newEntity.threshold){
+            newEntity.threshold = newEntity.mortal+1
+        }
+        
+        if(formInfo.name){
+            newEntity.name = formInfo.name
+        }
+        if(formInfo.message){
+            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass);
+        }
+        EntityManager.entities[entity.id] = newEntity;
+
+        //otherwise entitymanager will have two pointers to the same entity
+        delete EntityManager.entities[newID]
+        Board.placeEntity(newEntity,newEntity.x,newEntity.y);    }
 
 }

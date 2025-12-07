@@ -273,7 +273,7 @@ let monsterVars = {
         behaviorInfo:{
             slow:50
         },
-        hitDice:4,
+        hitDice:3,
         damage:2,
         inventorySlots: 1,
         inventory:[
@@ -298,7 +298,7 @@ let monsterVars = {
         },
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
-        reconstituteChance:50,
+        reconstituteChance:30,
         bloodColor:{r:136,g:62,b:63},
         color:'brown'
     },
@@ -319,7 +319,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:3
+                tier:3,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold']
             },
             treasure:{
                 chance:20,
@@ -343,7 +344,7 @@ let monsterVars = {
         color:'white'
     },
     skeletonPile:{
-        name:"skeleton",
+        name:"skeleton pile",
         symbol:"Sk",
         behavior:"chaseBinary",
         vulnerabilities:['silver'],
@@ -366,6 +367,18 @@ let monsterVars = {
             {
                 item: itemVars.drops.sigiledBone,
                 chance:100
+            }
+        ],
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
             }
         ],
         loot:{
@@ -411,6 +424,112 @@ let monsterVars = {
                 item: itemVars.drops.sigiledSkull,
                 chance:20
             },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
+        blood:0,
+        color:'bone'
+    },
+    leglessSkeleton:{
+        name:"legless skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:80
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:2,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    headlessSkeleton:{
+        name:"headless skeleton",
+        symbol:"Sk",
+        behavior:"chase",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:20,
+            focus:28,
+        },
+        sightDistance:1,
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chase',
+        reconstituteChance:75,
+        inventorySlots: 1,
+        inventory:[
             {
                 item: itemVars.drops.sigiledBone,
                 chance:100
@@ -635,6 +754,35 @@ let monsterVars = {
         },
         color:"brightPurple",
         bloodColor:{r:173,g:26,b:202}
+    },
+    mimic:{
+        name:"mimic",
+        symbol:"Mi",
+        behavior:"chase",
+        hitDice:3,
+        damage:6,
+        blood:1,
+        //grabby:3,
+        //targetWeapon:true,
+        inventorySlots:10,
+        sightDistance:3,
+        tracking:5,
+        //inventory:containerVars.mimic.inventory,
+        //loot:containerVars.mimic.loot,
+        reconstituteBehavior:'chaseBinary',
+        behaviorInfo:{
+            focus:25,
+        },
+        changeForms:[
+            {
+                noTargetChance:50,
+                container:true,
+                formKey:'mimic',
+                name:'chest'
+            },
+        ],
+        color:"gold",
+        bloodColor:{r:211,g:147,b:28}
     },
     dummy:{
         name:"dummy",

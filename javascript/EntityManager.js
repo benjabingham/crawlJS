@@ -143,6 +143,9 @@ class EntityManager{
                 }
                 
             }
+            if(entity.decay && !slow){
+                entity.triggerDecay();
+            }
             if(entity.spawnEntities && !slow){
                 EntityManager.spawnEntity(entity);
             }
@@ -408,13 +411,18 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
-            if((typeof entity.spawnerID != 'undefined' )&& !entity.dead && !entity.obliterated){
-                let spawner = EntityManager.getEntity(entity.spawnerID)
-                spawner.returnContainedEntity(entity);
-                let spawnerSave = EntityManager.currentMap.roster[spawner.index];
-                spawnerSave.inventory.items = spawner.inventory.items;
-                spawnerSave.inventory.gold = spawner.inventory.gold;
-                spawnerSave.containedEntities = spawner.containedEntities;
+            if(typeof entity.spawnerID != 'undefined' ){
+                if ((entity.dead && !entity.reconstitute) || entity.obliterated){
+                    delete EntityManager.entities[key];
+                }else{
+                    let spawner = EntityManager.getEntity(entity.spawnerID)
+                    spawner.returnContainedEntity(entity);
+                    let spawnerSave = EntityManager.currentMap.roster[spawner.index];
+                    spawnerSave.inventory.items = spawner.inventory.items;
+                    spawnerSave.inventory.gold = spawner.inventory.gold;
+                    spawnerSave.containedEntities = spawner.containedEntities;
+                }
+                
             }else if(typeof entity.index != 'undefined'){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;

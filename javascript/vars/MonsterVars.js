@@ -251,7 +251,96 @@ let monsterVars = {
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
+        bloodColor:{r:136,g:62,b:63},
         color:'darkGreen'
+    },
+    infestedHusk:{
+        name:"infested husk",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        spawnEntities:{
+            minCapacity:2,
+            maxCapacity:4,
+            minSpawn:1,
+            maxSpawn:2,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 1,
+            disturbChance:70
+        },
+        behaviorInfo:{
+            slow:50
+        },
+        hitDice:4,
+        damage:2,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        bloodColor:{r:136,g:62,b:63},
+        color:'brown'
+    },
+    revenant:{
+        name:"revenant",
+        symbol:"Re",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            knock:30,
+            sturdy:30
+        },
+        hitDice:3,
+        damage:8,
+        inventorySlots: 3,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:3
+            },
+            treasure:{
+                chance:20,
+                tier:3
+            },
+            gold:{
+                chance:80,
+                amount:10
+            },
+            potion:{
+                chance:20,
+                tier:1
+            }
+        },
+        tracking:12,
+        reconstitute:24,
+        reconstituteDecay:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        bloodColor:{r:136,g:62,b:63},
+        color:'white'
     },
     skeletonPile:{
         name:"skeleton",
@@ -383,6 +472,7 @@ let monsterVars = {
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:25,
+        bloodColor:{r:136,g:62,b:63},
         color:'white'
     },
     corrosiveOoze:{

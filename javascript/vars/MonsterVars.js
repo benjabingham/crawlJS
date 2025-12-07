@@ -776,12 +776,63 @@ let monsterVars = {
         changeForms:[
             {
                 noTargetChance:50,
-                container:true,
-                formKey:'mimic',
+                formKey:'mimicChest',
                 name:'chest'
             },
         ],
         color:"gold",
+        bloodColor:{r:211,g:147,b:28}
+    },
+    mimicChest:{
+        name:"mimicChest",
+        symbol:"Ch",
+        behavior:"chase",
+        behaviorInfo:{
+            slow:99.5,
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            },
+            {
+                onSearchChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            }
+        ],
+        color:'gold',
         bloodColor:{r:211,g:147,b:28}
     },
     dummy:{

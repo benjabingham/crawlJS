@@ -110,7 +110,7 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = Random.roll(1,100);
+            let random = Math.random()*100;
             let skip = 0;
             if(entity.stunned){
                 skip+= entity.stunned;
@@ -518,6 +518,7 @@ class EntityManager{
         newEntity.inventory = entity.inventory;
         newEntity.index = entity.index;
         newEntity.id = entity.id;
+        newEntity.stunned = entity.stunned
         //its possible for new form to roll a lower threshold than current mortal.
         //this makes sure it's always alive if it was before.
         if(!entity.dead && newEntity.mortal >= newEntity.threshold){

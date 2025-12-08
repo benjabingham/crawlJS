@@ -123,7 +123,7 @@ class Entity{
             if(this.obliterated){
                 return false;
             }
-            EntityManager.transmitMessage(this.name + " is cornered!", 'pos','cornered','This enemy had no empty space to be knocked into by your attack.');
+            EntityManager.transmitMessage(this.name + " is cornered!", 'pos','cornered','This enemy had no empty space to be knocked into by your attack.',this.id);
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
@@ -223,7 +223,7 @@ class Entity{
         if(!isPlayer){
             return false;
         }
-        Log.addMessage('you search the '+container.name+'...')
+        Log.addMessage('you search the '+container.name+'...',false,false,false,container.id)
 
         if(container.checkTransform('onSearchChance')){
             return false;
@@ -429,7 +429,7 @@ class Entity{
     kill(message = false){
         if(this.isMonster){
             if(Board.hasPlayerLos(this) && message){
-                EntityManager.transmitMessage(message, 'win');
+                EntityManager.transmitMessage(message, 'win',false,false,this.id);
             }
             this.name += " corpse";
             this.behavior = 'dead';
@@ -446,7 +446,7 @@ class Entity{
             }
         }else{
             if(Board.hasPlayerLos(this)){
-                EntityManager.transmitMessage(this.name+" is destroyed!")
+                EntityManager.transmitMessage(this.name+" is destroyed!",false,false,false,this.id)
             }
             this.name = "destroyed "+this.name;
         }
@@ -537,7 +537,7 @@ class Entity{
     beat(targetSword){
         let knock = false;
         if(targetSword.owner == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.");
+            EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage);
             if(damage > Player.stamina){
                 Player.stamina = 0;
@@ -570,7 +570,7 @@ class Entity{
         if(random <= beatChance || knock){
             if (targetSword.knockSword()){
                 let tipText = knock ? 'You did not have enough stamina to hold your weapon steady.' : 'this monster has a chance to push your weapon aside even if you have stamina remaining.'
-                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText);
+                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText, this.id);
             }
             
         }else if(Player.equipped){
@@ -595,7 +595,7 @@ class Entity{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
             if(!this.dead){
-                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.');
+                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
             }
         }
     };
@@ -841,9 +841,9 @@ class SwordEntity extends Entity{
             Player.changeHealth(mortality * -1);
         }else{
             if(!target.dead){
-                EntityManager.transmitMessage(target.name+" is struck!");
+                EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
                 if(vulnerability){
-                    Log.addMessage(target.name+" recoils!",'pos')
+                    Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
             if(Monster.prototype.isPrototypeOf(target)){
@@ -1272,7 +1272,7 @@ class Monster extends Entity{
             this.name = this.name.split(' corpse')[0];
             this.stunTime++;
             if(EntityManager.hasPlayerLos(this)){
-                Log.addMessage(this.name+' rises...', 'danger')
+                Log.addMessage(this.name+' rises...', 'danger',false,false,this.id)
             }
         }
     }
@@ -1325,7 +1325,7 @@ class Monster extends Entity{
 
         let random = Random.roll(1,100);
         if(random <= enrageChance){
-            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', 'enraged');
+            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', 'enraged', false, this.id);
             this.behaviorInfo.focus += 5;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;
@@ -1343,7 +1343,7 @@ class Monster extends Entity{
         }
         random = Random.roll(1,100);
         if(random <= dazeChance){
-            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', 'dazed');
+            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', 'dazed', false, this.id);
             this.behaviorInfo.focus -= 7;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;
@@ -1377,9 +1377,9 @@ class Monster extends Entity{
 
             Player.unequipWeapon();
             this.inventory.items.push(item);
-            Log.addMessage(this.name+' absorbs your weapon!','urgent')
+            Log.addMessage(this.name+' absorbs your weapon!','urgent', false, false, this.id)
         }else{
-            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.")
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.",this.id)
 
             Player.changeStamina(grabStrength * -1)
         }

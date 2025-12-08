@@ -41,7 +41,7 @@ class EntityManager{
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
             if(!item.worn){
-                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.');
+                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
@@ -70,7 +70,7 @@ class EntityManager{
         console.log(item.flimsy)
         console.log(item);
         if(n){
-            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',"corroding");
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',"corroding",false,weapon.id);
         }
     }
 
@@ -180,7 +180,7 @@ class EntityManager{
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
         if(verbose){
-            EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+            EntityManager.transmitMessage('equipped weapon: '+weapon.name, false, false, false, sword.id);
         }
     }
 
@@ -383,7 +383,7 @@ class EntityManager{
             }
     
             if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
-                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
+                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger', false, false, entityObj.id);
             }
 
             
@@ -529,7 +529,7 @@ class EntityManager{
             newEntity.name = formInfo.name
         }
         if(formInfo.message){
-            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass);
+            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass, false, false, entity.id);
         }
         EntityManager.entities[entity.id] = newEntity;
 

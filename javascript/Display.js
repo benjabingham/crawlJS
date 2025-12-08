@@ -187,6 +187,9 @@ class Display{
                         let highlightedAdjacents = boardArray[y][x].highlightedAdjacents;
                         if(highlighted || highlightedAdjacents){
                             Display.addHighlights({x:displayX,y:displayY}, highlighted,highlightedAdjacents)
+                            //reset each frame
+                            boardArray[y][x].highlighted = false;
+                            boardArray[y][x].highlightedAdjacents = [];
                         }
                     }
                     if(!Board.isSpace(x,y)){

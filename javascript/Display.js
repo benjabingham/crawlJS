@@ -8,6 +8,7 @@ class Display{
         {scheme:'dark-mode',name:'Dark Mode'},
         {scheme:'light-mode',name:'Light Mode'}
     ]
+    static highlightedCells=[];
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -140,6 +141,7 @@ class Display{
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
+        Display.addDirectionHighlight();
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -153,6 +155,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -180,6 +183,11 @@ class Display{
                             }                 
                         }
                         Display.applyColor(boardArray[y][x], entityDiv);
+                        let highlighted = boardArray[y][x].highlighted;
+                        let highlightedAdjacents = boardArray[y][x].highlightedAdjacents;
+                        if(highlighted || highlightedAdjacents){
+                            Display.addHighlights({x:displayX,y:displayY}, highlighted,highlightedAdjacents)
+                        }
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -198,9 +206,52 @@ class Display{
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
-                entityDiv.text(symbol)
+                entityDiv.text(symbol)       
             }
         }
+        Display.applyHighlights();
+    }
+
+    //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells
+    static addHighlights(pos,highlighted = false,highlightedAdjacents = []){
+        if(highlighted){
+            Display.highlightedCells.push(pos)
+        }
+
+        if(!highlightedAdjacents){
+            highlightedAdjacents = [];
+        }
+
+        highlightedAdjacents.forEach((direction)=>{
+            let coords = {
+                x:pos.x+direction.x,
+                y:pos.y+direction.y
+            }
+            if(coords.x >= 0 && coords.x < 17 && coords.y >=0 && coords.x < 17){
+                Display.highlightedCells.push(coords)
+            }
+
+        })
+    }
+
+    static addDirectionHighlight(){
+        let playerEntity = EntityManager.getEntity('player');
+        let swordEntity = playerEntity.swordEntity;
+        //this is how we tell if it's equipped
+        if(swordEntity.item){
+            playerEntity.highlightedAdjacents = [];
+            return false;
+        }
+        let direction = EntityManager.translations[swordEntity.rotation];
+        playerEntity.highlightedAdjacents = [direction]
+    }
+
+    static applyHighlights(){
+        Display.highlightedCells.forEach((cell)=>{
+            $('#board-entity-'+cell.x+'-'+cell.y).addClass('grid-highlighted')
+        })
+
+        Display.highlightedCells = [];
     }
     
     static nourishmentDiv(){

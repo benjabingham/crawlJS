@@ -65,6 +65,13 @@
 
     .board-entity-div{
         position:absolute;
+        width:30px;
+        height:30px;
+    }
+
+    .board-entity-div.grid-highlighted{
+        background-color: rgba(255, 236, 66, 0.288); /* Semi-transparent black */
+        
     }
 
     .board-stain-div{

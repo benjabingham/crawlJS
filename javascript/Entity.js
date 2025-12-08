@@ -12,6 +12,11 @@ class Entity{
     }
     //index refers to an entity's index in its map's save array
     index;
+    //should this entity be highlighted?
+    highlighted = false;
+    //array of x,y pairs of directions of adjacent cells that should be highlighted
+    highlightedAdjacents = [];
+
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
             id = EntityManager.entityCounter;

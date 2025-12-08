@@ -536,6 +536,28 @@ class EntityManager{
 
         //otherwise entitymanager will have two pointers to the same entity
         delete EntityManager.entities[newID]
-        Board.placeEntity(newEntity,newEntity.x,newEntity.y);    }
+        Board.placeEntity(newEntity,newEntity.x,newEntity.y);
+    }
+
+    static getDamageText(target,damage){
+        if(!damage){
+            return 'a negligible strike...'
+        }
+        let ratio = damage/target.threshold
+
+        if(ratio <= 0.2){
+            return 'a pitiful strike...'
+        }
+
+        if(ratio <= 0.4){
+            return 'a solid strike.'
+        }
+
+        if(ratio <= 0.7){
+            return 'a powerful blow!'
+        }
+
+        return 'a devastating blow!'
+    }
 
 }

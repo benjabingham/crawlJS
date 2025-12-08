@@ -747,7 +747,7 @@ class PlayerEntity extends Entity{
             damageDice++;
         }
 
-        let vulnerability = target.isVulnerable("unarmed");
+        let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
         damageDice += vulnerability;
         stunTime += vulnerability;
 
@@ -760,6 +760,7 @@ class PlayerEntity extends Entity{
        
         if(!target.dead){
             EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+            EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(vulnerability){
                 Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
             }
@@ -910,6 +911,7 @@ class SwordEntity extends Entity{
         }else{
             if(!target.dead){
                 EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+                EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
                 if(vulnerability){
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }

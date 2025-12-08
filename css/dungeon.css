@@ -72,7 +72,7 @@
     /*this is where the player is*/
     #board-entity-8-8{
         /*make directional nicer*/
-        border-radius:30px;
+        border-radius:30pxq;
     }
 
     .board-entity-div.grid-highlighted{

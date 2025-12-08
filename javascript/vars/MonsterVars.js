@@ -767,8 +767,30 @@ let monsterVars = {
         inventorySlots:10,
         sightDistance:3,
         tracking:5,
-        //inventory:containerVars.mimic.inventory,
-        //loot:containerVars.mimic.loot,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
+            }
+        },
         reconstituteBehavior:'chaseBinary',
         behaviorInfo:{
             focus:25,

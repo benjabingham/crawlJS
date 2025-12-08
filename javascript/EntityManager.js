@@ -86,7 +86,6 @@ class EntityManager{
         let entity = EntityManager.getEntity(id);
         return entity.move(x,y);
     }
-
     
     static movePlayer(x,y){
         if(Player.exertion > 1){
@@ -98,7 +97,9 @@ class EntityManager{
             }
 
         }
-        if(!EntityManager.moveEntity('player',x,y)){
+        let playerEntity = EntityManager.getEntity("player");
+        let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
+        if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){
             EntityManager.cancelAction({blocked:true})
         }
     }

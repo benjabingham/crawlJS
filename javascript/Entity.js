@@ -473,7 +473,10 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
-        let sharp = weapon.type.edged || weapon.type.sword
+        let sharp = false;
+        if(weapon){
+            sharp = weapon.type.edged || weapon.type.sword
+        }
         if(!damage){
             return false;
         }
@@ -578,12 +581,12 @@ class Entity{
         }     
     };
 
-    sturdy(attacker){
-        if(!this.behaviorInfo || this.dead){
-            return;
+    sturdy(attacker, bonus=0){
+        let sturdyChance = bonus;
+        if(this.behaviorInfo && this.behaviorInfo.sturdy && !this.dead){
+            sturdyChance += this.behaviorInfo.sturdy;
         }
-        let sturdyChance = this.behaviorInfo.sturdy;
-
+        console.log(sturdyChance);
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
@@ -707,6 +710,72 @@ class PlayerEntity extends Entity{
     get swordEntity(){
         return EntityManager.getEntity(this.sword);
     }
+
+    get directionFacing(){
+        return EntityManager.translations[this.rotation]
+    }
+
+    //strike if moving into tile you are facing, which contains a monster
+    checkUnarmedStrike(x,y){
+        if(Player.equipped){
+            return false;
+        }
+        if(x != this.directionFacing.x && y != this.directionFacing.y){
+            return false;
+        }
+        let targetEntity = Board.entityAt(this.x+x,this.y+y)
+        if(!targetEntity || !Monster.prototype.isPrototypeOf(targetEntity)){
+            return false;
+        }
+
+        return this.unarmedStrike(targetEntity);
+    }
+
+    unarmedStrike(target){
+        if(target.id == this.id || target.isWall){
+            return false;  
+        }
+        let weight = 1;
+        if(Player.stamina < weight){
+            return false;
+        }
+        Player.changeStamina(weight * -1);   
+        let damage = 1;
+        let stunTime = 1;
+        let damageDice = 1;
+        if(target.stunned){
+            damageDice++;
+        }
+
+        let vulnerability = target.isVulnerable("unarmed");
+        damageDice += vulnerability;
+        stunTime += vulnerability;
+
+        let sizeBonus = Math.min(target.threshold*5,90);
+        let stunAdded = Random.roll(1,stunTime);
+        let mortality = Random.rollN(damageDice,0,damage);
+        if(sizeBonus > Math.random()*100){
+            stunAdded --;
+        }
+       
+        if(!target.dead){
+            EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+            if(vulnerability){
+                Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
+            }
+        }
+        if(Monster.prototype.isPrototypeOf(target)){
+            target.addStunTime(stunAdded);
+        }
+        target.addMortality(mortality);
+        target.checkDead(target.name+" is slain!");
+        target.checkSplatter(mortality);
+        target.knock(this.id);
+        target.onHit(this, sizeBonus); 
+        
+        return true;
+    }
+
 }
 
 class SwordEntity extends Entity{
@@ -824,7 +893,6 @@ class SwordEntity extends Entity{
             damageDice++;
         }
 
-
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
         stunTime += vulnerability;
@@ -854,15 +922,7 @@ class SwordEntity extends Entity{
             target.checkDead(target.name+" is slain!");
             target.checkSplatter(mortality, weapon);
             target.knock(this.id);
-            if(target.enrageAndDaze){
-                target.enrageAndDaze();   
-            }
-            target.sturdy(this);
-            if(target.spawnEntities && target.spawnEntities.disturbChance){
-                console.log('gonna disturb...')
-                target.disturb();
-            }
-            target.checkTransform('onHitChance');
+            target.onHit(this); 
         }
 
         if(this.owner == 'player'){
@@ -1032,6 +1092,19 @@ class Monster extends Entity{
         }
         
         return this;
+    }
+
+    onHit(attacker = false, sturdyBonus = 0){
+        if(this.enrageAndDaze){
+            this.enrageAndDaze();   
+        }
+        console.log(sturdyBonus)
+        this.sturdy(attacker, sturdyBonus);
+        if(this.spawnEntities && this.spawnEntities.disturbChance){
+            console.log('gonna disturb...')
+            this.disturb();
+        }
+        this.checkTransform('onHitChance');
     }
 
     //not tested or implemented.

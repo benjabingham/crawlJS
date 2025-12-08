@@ -586,6 +586,9 @@ class Entity{
         if(this.behaviorInfo && this.behaviorInfo.sturdy && !this.dead){
             sturdyChance += this.behaviorInfo.sturdy;
         }
+        if(this.dead){
+            return false;
+        }
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
@@ -598,6 +601,8 @@ class Entity{
             }
             if(!this.dead){
                 EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
+            }else{
+                EntityManager.transmitMessage(this.name+" won't budge...", false, "won't budge",'this object has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
             }
         }
     };
@@ -612,6 +617,7 @@ class Entity{
             overkill -= this.threshold*this.sturdyCorpse;
         }
         if(overkill >= this.threshold/2 && !this.obliterated && !this.isSword){
+            console.log('obliterating');
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
             if(this.blood){
@@ -774,10 +780,9 @@ class PlayerEntity extends Entity{
         if(sizeBonus > Math.random()*100){
             stunAdded --;
         }
-       
-        if(!target.dead){
-            EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
-            EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
+        EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+        EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
+        if(!target.dead){     
             if(vulnerability){
                 Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
             }
@@ -926,9 +931,9 @@ class SwordEntity extends Entity{
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
             Player.changeHealth(mortality * -1);
         }else{
+            EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+            EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
-                EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
-                EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
                 if(vulnerability){
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }

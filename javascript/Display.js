@@ -285,16 +285,23 @@ class Display{
         })
     }
 
+    static getRestHintText(){
+        let restInfo = Player.getRestInfo();
+        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
+
+        return hintText;
+    }
+
     static restButton(){
         let restButton = $('#rest-button')
         restButton.off().on('click',()=>{
             GameMaster.nextDay();
             GameMaster.loadTown();
+            let restInfo = Player.getRestInfo();
+            $('.hint-divs').text(Display.getRestHintText());
         })
-
-        let hintText = 'test';
-
-        Display.setHintText(restButton, hintText)
+        
+        Display.setHintText(restButton, Display.getRestHintText())
     }
 
     static setHintText(element, hintText){

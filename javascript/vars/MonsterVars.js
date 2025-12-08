@@ -344,16 +344,17 @@ let monsterVars = {
         color:'white'
     },
     skeletonPile:{
-        name:"skeleton pile",
+        name:"skeleton corpse",
         symbol:"Sk",
         behavior:"chaseBinary",
         vulnerabilities:['silver'],
         behaviorInfo:{
             slow:20
         },
-        threshold:16,
+        sturdyCorpse:1,
+        threshold:2,
         hitDice:0,
-        mortal:23,
+        mortal:9,
         damage:4,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
@@ -411,9 +412,9 @@ let monsterVars = {
         behaviorInfo:{
             slow:20
         },
-        threshold:16,
+        sturdyCorpse:2,
+        threshold:2,
         hitDice:0,
-        mortal:14,
         damage:4,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
@@ -471,9 +472,9 @@ let monsterVars = {
         behaviorInfo:{
             slow:80
         },
-        threshold:16,
         hitDice:0,
-        mortal:14,
+        sturdyCorpse:2,
+        threshold:2,
         damage:2,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
@@ -521,9 +522,9 @@ let monsterVars = {
             focus:28,
         },
         sightDistance:1,
-        threshold:16,
         hitDice:0,
-        mortal:14,
+        sturdyCorpse:2,
+        threshold:2,
         damage:4,
         reconstitute:2,
         reconstituteBehavior:'chase',

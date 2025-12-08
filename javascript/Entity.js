@@ -607,7 +607,11 @@ class Entity{
             this.kill(message);
         }
 
-        if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
+        let overkill = this.mortal - this.threshold;
+        if(this.sturdyCorpse){
+            overkill -= this.threshold*this.sturdyCorpse;
+        }
+        if(overkill >= this.threshold/2 && !this.obliterated && !this.isSword){
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
             if(this.blood){
@@ -685,6 +689,19 @@ class Entity{
         }
 
         return tiles;
+    }
+
+    onHit(attacker = false, sturdyBonus = 0){
+        if(this.enrageAndDaze){
+            this.enrageAndDaze();   
+        }
+        console.log(sturdyBonus)
+        this.sturdy(attacker, sturdyBonus);
+        if(this.spawnEntities && this.spawnEntities.disturbChance){
+            console.log('gonna disturb...')
+            this.disturb();
+        }
+        this.checkTransform('onHitChance');
     }
     
 }
@@ -1096,18 +1113,7 @@ class Monster extends Entity{
         return this;
     }
 
-    onHit(attacker = false, sturdyBonus = 0){
-        if(this.enrageAndDaze){
-            this.enrageAndDaze();   
-        }
-        console.log(sturdyBonus)
-        this.sturdy(attacker, sturdyBonus);
-        if(this.spawnEntities && this.spawnEntities.disturbChance){
-            console.log('gonna disturb...')
-            this.disturb();
-        }
-        this.checkTransform('onHitChance');
-    }
+    
 
     //not tested or implemented.
     checkExpiration(){

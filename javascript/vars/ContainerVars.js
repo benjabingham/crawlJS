@@ -590,5 +590,95 @@ let containerVars = {
             }
         },
     },
+    t0Treasure:{
+        name:"t0 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:0
+            },
+        },
+    },
+    t1Treasure:{
+        name:"t1 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:1
+            },
+        },
+    },
+    t2Treasure:{
+        name:"t2 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:2
+            },
+        },
+    },
+    t3Treasure:{
+        name:"t3 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:3
+            },
+        },
+    },
+    t4Treasure:{
+        name:"t4 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:4
+            },
+        },
+    },
+    t6Treasure:{
+        name:"t6 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:6
+            },
+        },
+    },
 
 }

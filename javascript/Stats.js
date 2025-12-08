@@ -31,7 +31,7 @@ class Stats{
                 console.log({
                     key:key,
                     average:total/n,
-                    mean:all[Math.floor(n/2)],
+                    median:all[Math.floor(n/2)],
                     all:all
                 })
             })

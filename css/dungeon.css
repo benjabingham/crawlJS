@@ -69,9 +69,30 @@
         height:30px;
     }
 
+    /*this is where the player is*/
+    #board-entity-8-8{
+        /*make directional nicer*/
+        border-radius:30px;
+    }
+
     .board-entity-div.grid-highlighted{
-        background-color: rgba(236, 218, 51, 0.315); /* Semi-transparent black */
-        
+        background-color: var(--highlight); /* Semi-transparent black */
+    }
+
+    .board-entity-div.highlight-down{
+        border-bottom: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-up{
+        border-top: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-left{
+        border-left: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-right{
+        border-right: 2px solid var(--directionalHighlight);
     }
 
     .board-stain-div{

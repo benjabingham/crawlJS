@@ -7,6 +7,9 @@
     --wallAccent:#888;
     --exit:#555;
     --gridLine:#2222221c;
+    --highlight:#ecda3350;
+    --directionalHighlight:#b4a834ab;
+    
 
     --defaultEntity:var(--dark);
 

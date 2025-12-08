@@ -155,7 +155,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted');
+                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -217,24 +217,13 @@ class Display{
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells
     static addHighlights(pos,highlighted = false,highlightedAdjacents = []){
-        if(highlighted){
-            Display.highlightedCells.push(pos)
+        let highlight = {
+            x:pos.x,
+            y:pos.y,
+            highlighted:highlighted,
+            highlightedAdjacents:highlightedAdjacents
         }
-
-        if(!highlightedAdjacents){
-            highlightedAdjacents = [];
-        }
-
-        highlightedAdjacents.forEach((direction)=>{
-            let coords = {
-                x:pos.x+direction.x,
-                y:pos.y+direction.y
-            }
-            if(coords.x >= 0 && coords.x < 17 && coords.y >=0 && coords.x < 17){
-                Display.highlightedCells.push(coords)
-            }
-
-        })
+        Display.highlightedCells.push(highlight)
     }
 
     static addDirectionHighlight(){
@@ -251,7 +240,27 @@ class Display{
 
     static applyHighlights(){
         Display.highlightedCells.forEach((cell)=>{
-            $('#board-entity-'+cell.x+'-'+cell.y).addClass('grid-highlighted')
+            let cellElement = $('#board-entity-'+cell.x+'-'+cell.y)
+            if(cell.highlighted){
+                cellElement.addClass('grid-highlighted')
+            }
+            if(cell.highlightedAdjacents){
+                console.log(cell.highlightedAdjacents)
+                cell.highlightedAdjacents.forEach((direction)=>{
+                    if(direction.x == 1){
+                        cellElement.addClass('highlight-right')
+                    }
+                    if(direction.x == -1){
+                        cellElement.addClass('highlight-left')
+                    }
+                    if(direction.y == 1){
+                        cellElement.addClass('highlight-down')
+                    }
+                    if(direction.y == -1){
+                        cellElement.addClass('highlight-up')
+                    }
+                })
+            }
         })
 
         Display.highlightedCells = [];

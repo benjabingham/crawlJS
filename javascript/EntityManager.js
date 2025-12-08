@@ -496,8 +496,8 @@ class EntityManager{
         return xdif + ydif;
     }
 
-    static transmitMessage(message, messageClass = false, keyword = false, tipText = false){
-        Log.addMessage(message, messageClass, keyword, tipText);
+    static transmitMessage(message, messageClass = false, keyword = false, tipText = false, id=-1){
+        Log.addMessage(message, messageClass, keyword, tipText, id);
         console.log(message);
     }
 

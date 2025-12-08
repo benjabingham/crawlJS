@@ -1287,7 +1287,7 @@ class Monster extends Entity{
         let mortality = Random.roll(0,damage);
 
         if (target.id == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks you!");
+            EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
             if(mortality == 0){
                 EntityManager.transmitMessage(this.name+" misses!");
             }else{

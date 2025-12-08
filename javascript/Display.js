@@ -19,6 +19,7 @@ class Display{
         $('#hud-div').show();
         Display.fillBars(Player);
         $('#dungeon-screen').show();
+        $('#town-hint-div').hide().html('');
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
@@ -40,6 +41,7 @@ class Display{
         $('#town-screen').show();
         $('#day-div').text('Day '+Save.day);
         $('#town-inventory-wrapper').show();
+        $('#town-hint-div').show().html('');
 
         Display.populateLocations();
         Display.displayInventory(false);
@@ -284,9 +286,22 @@ class Display{
     }
 
     static restButton(){
-        $('#rest-button').off().on('click',()=>{
+        let restButton = $('#rest-button')
+        restButton.off().on('click',()=>{
             GameMaster.nextDay();
             GameMaster.loadTown();
+        })
+
+        let hintText = 'test';
+
+        Display.setHintText(restButton, hintText)
+    }
+
+    static setHintText(element, hintText){
+        element.on('mouseenter',()=>{
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
         })
     }
 

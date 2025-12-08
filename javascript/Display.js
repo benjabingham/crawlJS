@@ -19,6 +19,7 @@ class Display{
         $('#hud-div').show();
         Display.fillBars(Player);
         $('#dungeon-screen').show();
+        $('#town-hint-div').hide().html('');
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
@@ -40,6 +41,7 @@ class Display{
         $('#town-screen').show();
         $('#day-div').text('Day '+Save.day);
         $('#town-inventory-wrapper').show();
+        $('#town-hint-div').show().html('');
 
         Display.populateLocations();
         Display.displayInventory(false);
@@ -283,10 +285,30 @@ class Display{
         })
     }
 
+    static getRestHintText(){
+        let restInfo = Player.getRestInfo();
+        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
+
+        return hintText;
+    }
+
     static restButton(){
-        $('#rest-button').off().on('click',()=>{
+        let restButton = $('#rest-button')
+        restButton.off().on('click',()=>{
             GameMaster.nextDay();
             GameMaster.loadTown();
+            let restInfo = Player.getRestInfo();
+            $('.hint-divs').text(Display.getRestHintText());
+        })
+        
+        Display.setHintText(restButton, Display.getRestHintText())
+    }
+
+    static setHintText(element, hintText){
+        element.on('mouseenter',()=>{
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
         })
     }
 

@@ -86,6 +86,39 @@ class Player {
         return level;
     }
 
+    static getRestInfo(){
+        let healthChange = Player.nourishmentLevel;
+        let oldHealth = Player.health;
+        let newHealth = Math.min(oldHealth+healthChange,Player.healthMax)
+
+        let nourishmentChange = (newHealth - oldHealth)*-1;
+        nourishmentChange -=3;
+
+        if((nourishmentChange*-1) > Player.nourishment){
+            healthChange += (Player.nourishment + nourishmentChange)
+        }
+
+        let exertionChange = Player.exertion*-1
+
+        if((Player.health+healthChange) > Player.healthMax){
+            healthChange = Player.healthMax - Player.health;
+        }
+
+        if((Player.health + healthChange) < 0){
+            healthChange = Player.health*-1;
+        }
+
+        if((Player.nourishment + nourishmentChange) < 0){
+            nourishmentChange = Player.nourishment*-1;
+        }
+
+        return{
+            healthChange:healthChange,
+            nourishmentChange:nourishmentChange,
+            exertionChange:exertionChange
+        }
+    }
+
     static rest(){
         let health = Player.nourishmentLevel;
         let oldHealth = Player.health;

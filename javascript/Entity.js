@@ -743,7 +743,7 @@ class PlayerEntity extends Entity{
             return false;
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
-        if(rotationalDistance > 1 ){
+        if(rotationalDistance > 0 ){
             return false;
         }
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
@@ -758,13 +758,13 @@ class PlayerEntity extends Entity{
         if(target.id == this.id || target.isWall){
             return false;  
         }
-        let weight = 1;
+        let weight = 3;
         if(Player.stamina < weight){
             return false;
         }
         Player.changeStamina(weight * -1);   
-        let damage = 1;
-        let stunTime = 1;
+        let damage = 3;
+        let stunTime = 2;
         let damageDice = 1;
         if(target.stunned){
             damageDice++;

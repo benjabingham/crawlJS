@@ -8,7 +8,9 @@
     --exit:#555;
     --gridLine:#2222221c;
     --highlight:#ecda3350;
+    /*--directionalHighlight:var(--dark);*/
     --directionalHighlight:#b4a834ab;
+    /*--directionalHighlight:#b4a834ab;*/
     
 
     --defaultEntity:var(--dark);

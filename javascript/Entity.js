@@ -586,7 +586,6 @@ class Entity{
         if(this.behaviorInfo && this.behaviorInfo.sturdy && !this.dead){
             sturdyChance += this.behaviorInfo.sturdy;
         }
-        console.log(sturdyChance);
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
@@ -720,7 +719,8 @@ class PlayerEntity extends Entity{
         if(Player.equipped){
             return false;
         }
-        if(x != this.directionFacing.x && y != this.directionFacing.y){
+        let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
+        if(rotationalDistance > 1 ){
             return false;
         }
         let targetEntity = Board.entityAt(this.x+x,this.y+y)

@@ -1,6 +1,6 @@
 class Stats{
     static logStats(){
-        let n = 100000;
+        let n = 5000;
         [{array:monsterVars, type:'monster'},{array:containerVars,type:'container'}].forEach((category)=>{
             Object.keys(category.array).forEach((key)=>{
                 let total = 0;
@@ -10,8 +10,8 @@ class Stats{
                     LootManager.getEntityLoot(entity);
                     let inventory = entity.inventory.items;
                     let inventoryValue = 0;
-                    if(inventory.gold){
-                        inventoryValue += inventory.gold;
+                    if(entity.inventory.gold){
+                        inventoryValue += entity.inventory.gold;
                     }
                     inventory.forEach((item)=>{
                         if(item.value){

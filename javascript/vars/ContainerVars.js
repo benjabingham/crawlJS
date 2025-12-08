@@ -589,6 +589,6 @@ let containerVars = {
                 tier:2
             }
         },
-    }
+    },
 
 }

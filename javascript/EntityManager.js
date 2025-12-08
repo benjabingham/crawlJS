@@ -110,7 +110,7 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = Random.roll(1,100);
+            let random = Math.random()*100;
             let skip = 0;
             if(entity.stunned){
                 skip+= entity.stunned;
@@ -505,5 +505,36 @@ class EntityManager{
     static hasPlayerLos(entity){
         return Board.getLineOfSight(entity.x,entity.y);
     }
+
+    static transformEntity(entity, formInfo){
+        let newEntity;
+        if(formInfo.container){
+            newEntity = new Container(formInfo.formKey,entity.x,entity.y)
+        }else{
+            newEntity = new Monster(formInfo.formKey,entity.x,entity.y);
+        }
+        let newID = newEntity.id;
+        newEntity.mortal = entity.mortal;
+        newEntity.inventory = entity.inventory;
+        newEntity.index = entity.index;
+        newEntity.id = entity.id;
+        newEntity.stunned = entity.stunned
+        //its possible for new form to roll a lower threshold than current mortal.
+        //this makes sure it's always alive if it was before.
+        if(!entity.dead && newEntity.mortal >= newEntity.threshold){
+            newEntity.threshold = newEntity.mortal+1
+        }
+        
+        if(formInfo.name){
+            newEntity.name = formInfo.name
+        }
+        if(formInfo.message){
+            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass);
+        }
+        EntityManager.entities[entity.id] = newEntity;
+
+        //otherwise entitymanager will have two pointers to the same entity
+        delete EntityManager.entities[newID]
+        Board.placeEntity(newEntity,newEntity.x,newEntity.y);    }
 
 }

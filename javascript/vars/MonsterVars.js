@@ -344,7 +344,7 @@ let monsterVars = {
         color:'white'
     },
     skeletonPile:{
-        name:"skeleton",
+        name:"skeleton pile",
         symbol:"Sk",
         behavior:"chaseBinary",
         vulnerabilities:['silver'],
@@ -367,6 +367,18 @@ let monsterVars = {
             {
                 item: itemVars.drops.sigiledBone,
                 chance:100
+            }
+        ],
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
             }
         ],
         loot:{
@@ -403,6 +415,66 @@ let monsterVars = {
         hitDice:0,
         mortal:14,
         damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:0,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
+        blood:0,
+        color:'bone'
+    },
+    leglessSkeleton:{
+        name:"legless skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver'],
+        behaviorInfo:{
+            slow:80
+        },
+        threshold:16,
+        hitDice:0,
+        mortal:14,
+        damage:2,
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
@@ -682,6 +754,86 @@ let monsterVars = {
         },
         color:"brightPurple",
         bloodColor:{r:173,g:26,b:202}
+    },
+    mimic:{
+        name:"mimic",
+        symbol:"Mi",
+        behavior:"chase",
+        hitDice:3,
+        damage:6,
+        blood:1,
+        //grabby:3,
+        //targetWeapon:true,
+        inventorySlots:10,
+        sightDistance:3,
+        tracking:5,
+        //inventory:containerVars.mimic.inventory,
+        //loot:containerVars.mimic.loot,
+        reconstituteBehavior:'chaseBinary',
+        behaviorInfo:{
+            focus:25,
+        },
+        changeForms:[
+            {
+                noTargetChance:50,
+                formKey:'mimicChest',
+                name:'chest'
+            },
+        ],
+        color:"gold",
+        bloodColor:{r:211,g:147,b:28}
+    },
+    mimicChest:{
+        name:"mimicChest",
+        symbol:"Ch",
+        behavior:"chase",
+        behaviorInfo:{
+            slow:99.5,
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            },
+            {
+                onSearchChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            }
+        ],
+        color:'gold',
+        bloodColor:{r:211,g:147,b:28}
     },
     dummy:{
         name:"dummy",

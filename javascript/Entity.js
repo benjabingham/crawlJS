@@ -440,10 +440,6 @@ class Entity{
                     this.reconstitute = 0;
                 }
             }
-
-            if(this.corpseless){
-                this.obliterate();
-            }
         }else{
             if(Board.hasPlayerLos(this)){
                 EntityManager.transmitMessage(this.name+" is destroyed!",false,false,false,this.id)
@@ -608,15 +604,17 @@ class Entity{
     };
 
     checkDead(message = false){
-        if (this.mortal > this.threshold && !this.dead){
+        if (this.mortal >= this.threshold && !this.dead){
             this.kill(message);
+        }else{
+            return false;
         }
 
         let overkill = this.mortal - this.threshold;
         if(this.sturdyCorpse){
             overkill -= this.threshold*this.sturdyCorpse;
         }
-        if(overkill >= this.threshold/2 && !this.obliterated && !this.isSword){
+        if((overkill >= this.threshold/2 || this.corpseless) && !this.obliterated && !this.isSword){
             console.log('obliterating');
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
@@ -764,7 +762,7 @@ class PlayerEntity extends Entity{
         }
         Player.changeStamina(weight * -1);   
         let damage = 3;
-        let stunTime = 2;
+        let stunTime = 3;
         let damageDice = 1;
         if(target.stunned){
             damageDice++;
@@ -775,7 +773,7 @@ class PlayerEntity extends Entity{
         stunTime += vulnerability;
 
         let sizeBonus = Math.min(target.threshold*5,90);
-        let stunAdded = Random.roll(1,stunTime);
+        let stunAdded = Random.roll(0,stunTime);
         let mortality = Random.rollN(damageDice,0,damage);
         if(sizeBonus > Math.random()*100){
             stunAdded --;

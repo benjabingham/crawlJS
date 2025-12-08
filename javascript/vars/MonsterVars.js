@@ -134,6 +134,7 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
+        corpseless:true,
         inventorySlots: 0,
         tiny:true,
         color:'gray'

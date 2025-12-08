@@ -155,7 +155,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right');
+                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -238,6 +238,7 @@ class Display{
         playerEntity.highlightedAdjacents = [direction]
     }
 
+    //directional highlights are just for showing player where they are looking. Will need to be different for walls.
     static applyHighlights(){
         Display.highlightedCells.forEach((cell)=>{
             let cellElement = $('#board-entity-'+cell.x+'-'+cell.y)
@@ -249,15 +250,24 @@ class Display{
                 cell.highlightedAdjacents.forEach((direction)=>{
                     if(direction.x == 1){
                         cellElement.addClass('highlight-right')
-                    }
-                    if(direction.x == -1){
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                    }else if(direction.x == -1){
                         cellElement.addClass('highlight-left')
-                    }
-                    if(direction.y == 1){
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                    }else if(direction.y == 1){
                         cellElement.addClass('highlight-down')
-                    }
-                    if(direction.y == -1){
-                        cellElement.addClass('highlight-up')
+                    }else if(direction.y == -1){
+                        cellElement.addClass('highlight-up')          
                     }
                 })
             }

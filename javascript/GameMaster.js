@@ -14,7 +14,7 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         GameMaster.getRoom(
-            'revenanttest',
+            'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
             //{x:50,y:42}
         );
@@ -26,6 +26,7 @@ class GameMaster{
         Player.unequipWeapon();
         Log.wipeLog();
         EntityManager.wipeEntities();
+        GameMaster.stopDrop();
     }
 
     static startGame(message=false, position=false){
@@ -60,6 +61,13 @@ class GameMaster{
         });
         */
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
+        $(document).off('click').on("click", (event)=>{
+            InputManager.currentEvent = event;
+            Display.displayInventory(this.dungeonMode);
+            InputManager.lastEvent = event;
+
+        });
+
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
@@ -148,13 +156,53 @@ class GameMaster{
         }
         if(!GameMaster.dropMode){
             GameMaster.dropMode = true;
+            $('#drop-items-button').text('stop dropping');
         }else{
-            GameMaster.dropMode = false;
+            GameMaster.stopDrop();
         }
+
+        Display.displayInventory();
         /*
         EntityManager.skipBehaviors = true;
         GameMaster.postPlayerAction();
         */
+    }
+
+    static stopDrop(){
+        GameMaster.dropMode = false;
+        $('#drop-items-button').text('drop items');
+    }
+
+    static dropItem(slot){
+        if(!Player.dropItem(slot)){
+            //EntityManager.skipBehaviors = true;
+            //GameMaster.dropMode = false;
+        }
+        GameMaster.postPlayerAction();
+    }
+
+    //function for inventory slot hotkeys
+    static slotKey(event){
+        let slot = false;
+        if(event.type){
+            slot = parseInt(event.type.split('-')[1])-1;
+        }
+
+        if(GameMaster.dropMode){
+            GameMaster.dropItem(slot);
+            return false;
+        }
+
+
+        if(InputManager.lastEvent && InputManager.lastEvent.type == event.type){
+            console.log('lastevent: '+InputManager.lastEvent.type)
+            GameMaster.useItem(event)
+            InputManager.currentEvent.type = "forget"
+            return true;
+        }
+        Display.displayedInventorySlot = slot;
+        Display.displayInventory(GameMaster.dungeonMode)
+
     }
 
     //general case use item - will work for any item.
@@ -166,10 +214,7 @@ class GameMaster{
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
         if(GameMaster.dropMode){
-            if(!Player.dropItem(slot)){
-                //EntityManager.skipBehaviors = true;
-                GameMaster.dropMode = false;
-            }
+            GameMaster.dropItem(slot);
         }else if(!Player.useItem(Player.inventory.items[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
@@ -214,6 +259,7 @@ class GameMaster{
     }
 
     static wait(event){
+        GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
             return false
         }
@@ -222,6 +268,7 @@ class GameMaster{
     }
 
     static rotate(event){
+        GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
             return false
         }
@@ -234,6 +281,7 @@ class GameMaster{
 
     //should belong to input once classes are static
     static movePlayer(event){
+        GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
             return false
         }

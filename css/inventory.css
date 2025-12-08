@@ -80,11 +80,29 @@
     border-color: var(--shopFreshBorder);
 }
 
+.selected-true>.item-name{
+    /*background-color:var(--selectedSlot);*/
+    text-decoration: underline;
+}
+
+.drop-true{
+    background-color: var(--lightRed);
+}
+
+.drop-true:hover{
+    background-color: var(--muteRed);
+}
+
+.primed-true{
+    border: 2px solid black;
+}
+
 .inventory-description{
     outline:1px solid var(--border);
     margin-left:auto;
     width:250px;
     padding:5px;
+    text-align:left;
 }
 
 .inventory-description-body{

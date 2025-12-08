@@ -22,6 +22,7 @@ class Display{
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
+        Display.dropButton();
     }
 
     static showHomeScreen(){
@@ -294,11 +295,12 @@ class Display{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
+        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
+        Display.displayItemInfo(displayedItem, inventoryId)
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
-        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
-        Display.displayItemInfo(displayedItem, inventoryId)
+        
         
         Display.displayGold();
     }
@@ -317,17 +319,36 @@ class Display{
         $('.gold-div').text(Player.gold+" gold");
     }
 
+    //checks if an inventory slot is primed.
+    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
+    static isPrimed(slot, inventory){
+        if(inventory == 'shop'){
+            return false;
+        }
+
+        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
+            return false
+        }
+
+        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
+        
+    }
+    
+
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+        let itemIsSelected = slot == Display.displayedInventorySlot;
+        let primed = Display.isPrimed(item.slot);
+
         if(!itemValue){
             itemValue = '0';
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
@@ -345,6 +366,16 @@ class Display{
         }
 
         //add buttons
+
+        if(GameMaster.dropMode){
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                $('<button>').addClass('item-button').text('drop').on('click',function(){
+                    GameMaster.dropItem(slot);
+                })
+            )
+
+            return;
+        }
 
         if(item.usable){
             let button;
@@ -414,17 +445,24 @@ class Display{
             $('#'+inventory+'-description').html('')
             return false;
         }
-        Display.displayedInventorySlot = item.slot;
-        console.log(inventory);
-        console.log(item);
+        if(inventory != 'shop'){
+            Display.displayedInventorySlot = item.slot;
+        }
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
         }
+        let descriptionBodyElement;
+        if(item.weapon || item.potable){
+            descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
+        }else{
+            descriptionBodyElement = '';
+        }
+
         $('#'+inventory+'-description').html('').append(
             $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
-            $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
+            descriptionBodyElement
         )
 
         if(item.light && item.fuel && !item.weapon){
@@ -512,13 +550,10 @@ class Display{
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false
                 )
-            )
-            console.log('#'+inventory+'-weapon-description');
-            
+            )            
             attackTypes.forEach(function(val){
                 if(item[val]){
                     let special = item[val];
-                    console.log(val);
                     $('#'+inventory+'-weapon-description').append(
                         $('<div>').addClass('item-stats-normal').append(
                             $('<div>').addClass('item-title').text(val+":")
@@ -597,13 +632,16 @@ class Display{
     }
 
     static applyColor(object, element){
+        let colorString;
         if(object.color){
-            element.css('color', 'var(--'+object.color+')')
+            colorString = 'var(--'+object.color+')'
         }else if(object.item && object.item.color){
-            element.css('color', 'var(--'+object.item.color+')')
+            colorString =  'var(--'+object.item.color+')'
         }else{
-            element.css('color', 'var(--defaultEntity)')
-        }
+            colorString =  'var(--defaultEntity)'        }
+
+        element.css('color', colorString)
+        element.css('text-decoration-color', colorString)
     }
 
     static applyBackgroundColor(color, element){
@@ -624,6 +662,12 @@ class Display{
     static applyOpacity(opacity, element){
         opacity = Math.min(opacity,7);
         element.css('opacity',opacity/10)
+    }
+
+    static dropButton(){
+        $('#drop-items-button').off().on('click',(event)=>{
+            GameMaster.drop(event);
+        })
     }
     
 }

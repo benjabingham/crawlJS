@@ -138,6 +138,7 @@ class Display{
     }
 
     static printBoard(){
+        console.log(Board.boardArray);
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
@@ -229,8 +230,8 @@ class Display{
     static addDirectionHighlight(){
         let playerEntity = EntityManager.getEntity('player');
         let swordEntity = playerEntity.swordEntity;
-        //this is how we tell if it's equipped
-        if(swordEntity.item){
+        //this is how we tell if it's equipped, or outside of the map
+        if(Board.isSpace(swordEntity.x,swordEntity.y)){
             playerEntity.highlightedAdjacents = [];
             return false;
         }

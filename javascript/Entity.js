@@ -735,34 +735,49 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
-    //strike if moving into tile you are facing, which contains a monster
+    //strike if moving into tile you are facing which is attackable.
+    //monsters are attackable in adjacent tiles, but those attacks deal pitiful damage.
     checkUnarmedStrike(x,y){
         if(Player.equipped){
             return false;
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
-        if(rotationalDistance > 0 ){
+        let targetEntity = Board.entityAt(this.x+x,this.y+y)
+        if(!targetEntity){
             return false;
         }
-        let targetEntity = Board.entityAt(this.x+x,this.y+y)
-        if(!targetEntity || !Monster.prototype.isPrototypeOf(targetEntity)){
+        if(rotationalDistance > 1){
+            return false
+        }
+        if(rotationalDistance > 0 && targetEntity.isContainer){
             return false;
+        }
+        
+
+        let weapon = {
+            damage:3,
+            stun:2,
+            weight:3
         }
 
-        return this.unarmedStrike(targetEntity);
+        if(rotationalDistance > 0){
+            weapon.damage -=2;
+        }
+
+        return this.unarmedStrike(targetEntity, weapon);
     }
 
-    unarmedStrike(target){
+    unarmedStrike(target, weapon){
         if(target.id == this.id || target.isWall){
             return false;  
         }
-        let weight = 3;
+        let weight = weapon.weight;
         if(Player.stamina < weight){
             return false;
         }
         Player.changeStamina(weight * -1);   
-        let damage = 3;
-        let stunTime = 3;
+        let damage = weapon.damage;
+        let stunTime = weapon.stun;
         let damageDice = 1;
         if(target.stunned){
             damageDice++;

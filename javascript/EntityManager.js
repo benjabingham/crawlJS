@@ -150,10 +150,8 @@ class EntityManager{
             if(entity.spawnEntities && !slow){
                 EntityManager.spawnEntity(entity);
             }
-            if (!entity.dead){
-                if(entity.stunned > 0){
-                    entity.stunned--;
-                }
+            entity.stunned = Math.max(entity.stunned-1, 0);
+            if (!entity.dead){ 
                 if(entity.stunned > 0){
                     entity.tempSymbol = entity.symbol.toLowerCase();
                 }else{

@@ -246,7 +246,6 @@ class Display{
                 cellElement.addClass('grid-highlighted')
             }
             if(cell.highlightedAdjacents){
-                console.log(cell.highlightedAdjacents)
                 cell.highlightedAdjacents.forEach((direction)=>{
                     if(direction.x == 1){
                         cellElement.addClass('highlight-right')

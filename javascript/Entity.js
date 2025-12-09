@@ -762,6 +762,7 @@ class PlayerEntity extends Entity{
 
         if(rotationalDistance > 0){
             weapon.damage -=2;
+            weapon.stun +=1;
         }
 
         return this.unarmedStrike(targetEntity, weapon);

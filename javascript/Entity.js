@@ -462,7 +462,7 @@ class Entity{
     };
 
     checkDead(){
-        if (this.mortal > this.threshold && !this.dead){
+        if (this.mortal >= this.threshold && !this.dead){
             this.kill();
         }
 

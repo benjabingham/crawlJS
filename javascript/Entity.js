@@ -826,13 +826,34 @@ class SwordEntity extends Entity{
     constructor(ownerId, item=false){
         super(false, -1, -1)
         this.owner = ownerId;  
-        this.rotation = 2;
+        this.pointTowardsCenter();
 
         if(item){
             this.equip(item);
         }
 
         return this;
+    }
+
+    get ownerEntity(){
+        return EntityManager.getEntity(this.owner);
+    }
+
+    getRotationFromPosition(pos){
+        let relativePos ={
+            x: pos.x - this.ownerEntity.x,
+            y: pos.y - this.ownerEntity.y
+        } 
+        let rotation = false;
+        let i = 0;
+        EntityManager.translations.forEach((translation)=>{
+            if(translation.x == relativePos.x && translation.y == relativePos.y){
+                rotation = i;
+            }
+            i++;
+        })
+
+        return rotation;
     }
 
     updateSymbol(){
@@ -974,6 +995,20 @@ class SwordEntity extends Entity{
     rotate(direction){
         this.rotation += 8 + direction;
         this.rotation %= 8;
+    }
+
+    pointTowardsCenter(){
+        let midpoint = {
+            x:Math.floor(Board.boardArray[0].length/2),
+            y:Math.floor(Board.boardArray.length/2)
+        }
+
+        this.pointTowards(midpoint);
+    }
+
+    pointTowards(coords){
+        let point = Board.getLine(this.ownerEntity, coords, 2)[1];
+        this.rotation = this.getRotationFromPosition(point);
     }
 
     //tries to knock your sword either clockwise or counterclockwise, then the other. Will only knock one degree - if Both spots are taken, will not knock.

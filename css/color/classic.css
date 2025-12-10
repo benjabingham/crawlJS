@@ -2,19 +2,25 @@
     /*dungeon*/
     --dark:#222;
     --darkAccent:#262626;
-    --floor:#ddd;
-    --grassFloor:#94b597;
-    --dirtFloor:#968652;
+    /*
+    --floor:#c2c2c2;
+q
+    --grassFloor:#a7c0a8;
+    --dirtFloor:#c9c0af;
+    */
+    --floor:#c9c9c9;
+    --grassFloor:#bcccbd;
+    --dirtFloor:#cec7ba;
     --wall:#777;
     --wallAccent:#888;
     --exit:#555;
-    --gridLine:#2222221c;
+    --gridLine:#22222210;
     --highlight:#ecda3350;
     /*--directionalHighlight:var(--dark);*/
-    --directionalHighlight:#b4a834ab;
+    --directionalHighlight:#00000075;
     /*--directionalHighlight:#b4a834ab;*/
-    
-
+    --outline:#ffffff6c;
+    /*--outline:var(--gridLine);*/
     --defaultEntity:var(--dark);
 
     /*hud*/
@@ -44,7 +50,7 @@
     --darkPurple:rgb(90, 0, 150);
     --blue:blue;
     --darkBlue:rgb(0, 0, 136);
-    --green:rgb(2, 184, 2);
+    --green:rgb(16, 167, 16);
     --darkGreen:rgb(0, 105, 0);
     --yellow:yellow;
     --darkYellow:rgb(110, 110, 0);

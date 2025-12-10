@@ -138,7 +138,6 @@ class Display{
     }
 
     static printBoard(){
-        console.log(Board.boardArray);
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
@@ -170,13 +169,8 @@ class Display{
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
-                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
-                                $('.hint-divs').html('').append(
-                                    $('<p>').text(boardArray[y][x].name)
-                                )
-                            }).off('mouseleave').on('mouseleave',()=>{
-                                $('.hint-divs').html('');
-                            })
+                            gridDiv.addClass('grid-hint').off('mouseenter')
+                            Display.setHintText(gridDiv, boardArray[y][x].name);
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -214,6 +208,7 @@ class Display{
             }
         }
         Display.applyHighlights();
+        Display.setHintText($('.grid-exit'),'EXIT')
     }
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells

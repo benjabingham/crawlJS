@@ -157,6 +157,10 @@
     border:none;
 }
 
+.grid-exit:hover{
+    cursor:pointer;
+}
+
 .grid-hint:hover{
     cursor: pointer;
 }

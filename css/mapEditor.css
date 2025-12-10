@@ -95,8 +95,19 @@ input[type=number] {
     }
 }
 
+.stoneFloor{
+    background-color: var(--floor);
+}
+
+.grassFloor{
+    background-color: var(--grassFloor);
+}
+
+.dirtFloor{
+    background-color: var(--dirtFloor);
+}
+
 .map-grid-div{
-    background-color: #ddd;
     font-size:1.5rem;
     width:30px;
     height:30px;

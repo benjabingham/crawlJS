@@ -11,6 +11,7 @@ class Save{
         //Grid.load(JSON.parse(json.grid));
         EntityGroupManager.load(JSON.parse(json.entityGroups));
         Grid.placeEntities();
+        Grid.floorMatrix = JSON.parse(json.floorMatrix)
         Grid.updateGrid();
         Controls.populateEntityGroupSelect();
         Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);
@@ -21,7 +22,8 @@ class Save{
             name: Save.mapName,
             height: Grid.height,
             width: Grid.width,
-            entityGroups: JSON.stringify(EntityGroupManager.getObject())
+            entityGroups: JSON.stringify(EntityGroupManager.getObject()),
+            floorMatrix: JSON.stringify(Grid.floorMatrix)
         }
 
         Save.history.push(snapshot);

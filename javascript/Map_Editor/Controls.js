@@ -1,5 +1,8 @@
 class Controls{
     static ctrlDown;
+    static floorMode = false;
+    static entityMode = true;
+    static selectedFloor;
 
     static init(){
         Controls.saveButtons();
@@ -7,6 +10,8 @@ class Controls{
         Controls.hotkeys();
         Controls.zoomControl();
         Controls.dragGrid();
+        Controls.floorModeButton();
+        Controls.entityModeButton();
     }
 
     static saveButtons(){
@@ -71,6 +76,8 @@ class Controls{
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
+
+        Controls.floorTypeSelect();
     }
 
     static eraseButtons(){
@@ -332,6 +339,41 @@ class Controls{
             $('#wall-options').hide();
         }
     
+    }
+
+    static floorModeButton(){
+        $('#floor-controls-button').on('click',()=>{
+            $('#entity-group-controls').hide();
+            $('#draw-options-div').hide();
+
+            $('#floor-controls').show();
+            Controls.entityMode = false;
+            Controls.floorMode = true;
+        })
+    }
+
+    static entityModeButton(){
+        $('#entity-controls-button').on('click',()=>{
+            $('#floor-controls').hide();
+            $('#entity-group-controls').show();
+            $('#draw-options-div').show();
+
+            Controls.floorMode = false;
+            Controls.entityMode = true;
+        })
+    }
+
+    static floorTypeSelect(){
+        ['stone','grass','dirt'].forEach((type)=>{
+            $('#floor-type-dropdown').append(
+                $('<option>').attr('value',type).text(type).attr('id','floor-type-option-'+type)
+            )
+        })
+
+        $('#floor-type-dropdown').on('change',function(){
+            Controls.selectedFloor = this.value;
+            console.log(Controls.selectedFloor);
+        })
     }
 
     static hotkeys(){

@@ -3,6 +3,7 @@ class Grid{
     static height;
     static width;
     static matrix = [];
+    static floorMatrix = [];
     static rectangleStart = false;
     static drawing = false;
     static erase = false;
@@ -16,6 +17,10 @@ class Grid{
         Grid.width = width;
         Grid.height = height;
         Grid.matrix = new Array(Grid.height).fill().map( ()=>
+            Array(Grid.width).fill(false)
+        )
+
+        Grid.floorMatrix = new Array(Grid.height).fill().map( ()=>
             Array(Grid.width).fill(false)
         )
 
@@ -74,9 +79,18 @@ class Grid{
             }
         }
         Grid.updateTransform();
+        Grid.updateGrid();
     }
 
     static draw(x,y){
+        if(Controls.entityMode){
+            Grid.drawEntity(x,y);
+        }else if(Controls.floorMode){
+            Grid.drawFloor(x,y);
+        }
+    }
+
+    static drawEntity(x,y){
         if(!Grid.erase){
             Grid.placeEntity(x,y);
         }else if(Grid.erase.all){
@@ -84,6 +98,12 @@ class Grid{
         }else if (Grid.erase.selected && Grid.getTile(x,y).entityGroupId == EntityGroupManager.selectedEntityGroup){
             Grid.eraseEntity(x,y);
         }
+    }
+
+    static drawFloor(x,y){
+        Grid.floorMatrix[y][x] = Controls.selectedFloor;
+        console.log(Grid.floorMatrix);
+        Grid.updateTileDisplay(x,y);
     }
 
     static placeEntity(x,y){
@@ -166,6 +186,7 @@ class Grid{
     }
 
     static updateTileDisplay(x,y){
+        console.log('update');
         let tile = Grid.getTile(x,y)
         let tileDiv = $('#map-grid-' + x + '-' + y);
         let entityDiv = $('#map-entity-' + x + '-' + y);
@@ -190,7 +211,19 @@ class Grid{
         }else{
             entityDiv.text('');
             tileDiv.removeClass('grid-wall')
+            tileDiv.removeClass('grid-tree')
         }
+        let floorType = Grid.getFloor(x,y);
+        if(!floorType){
+            floorType = 'stone'
+        }
+        tileDiv.removeClass('stoneFloor grassFloor dirtFloor')
+        tileDiv.addClass(floorType+'Floor')
+        console.log(floorType)
+    }
+
+    static getFloor(x,y){
+        return Grid.floorMatrix[y][x]
     }
 
     static getTile(x,y){

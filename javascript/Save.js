@@ -81,7 +81,9 @@ class Save{
             }
         }
         json.roster = roster;
-        json.floorMatrix = JSON.parse(json.floorMatrix);
+        if(json.floorMatrix){
+            json.floorMatrix = JSON.parse(json.floorMatrix);
+        }
         Save.maps[roomString] = json;
         console.log(json);
         console.log(Save.maps);

@@ -102,7 +102,7 @@ class Board{
     }
 
     static getFloor(x,y){
-        if (Board.floorArray[y] && Board.floorArray[y][x]){
+        if ( Board.floorArray && Board.floorArray[y] && Board.floorArray[y][x]){
             return Board.floorArray[y][x]
         }
 

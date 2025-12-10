@@ -142,6 +142,8 @@ class Display{
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         Display.addDirectionHighlight();
+        console.log(boardArray)
+        console.log(Board.wallArray);
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -154,7 +156,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-tree grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
                 entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
@@ -165,7 +167,11 @@ class Display{
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
-                            gridDiv.addClass('grid-wall')
+                            if(Board.wallArray[y][x].wallType == 'tree'){
+                                gridDiv.addClass('grid-tree')
+                            }else{
+                                gridDiv.addClass('grid-wall')
+                            }
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){

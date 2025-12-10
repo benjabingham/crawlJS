@@ -63,10 +63,11 @@ class Controls{
         Controls.entityGroupSelect();
         Controls.groupNameInput();
         Controls.entityTypeSelect();
-        Controls.entitySelect();
+        Controls.entitySelectDropdown();
         Controls.entityNameInput();
         Controls.symbolInput();
         Controls.colorInput();
+        Controls.wallTypeDropdown();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
@@ -144,6 +145,12 @@ class Controls{
                 $('#entity-options').hide();
                 $('#entity-options-cosmetic').hide();
             }
+
+            if(entityType == 'wall'){
+                Controls.showWallOptions();
+            }else{
+                $('#wall-options').hide();
+            }
              
             Grid.updateGrid();
             Save.saveSnapshot();
@@ -176,7 +183,7 @@ class Controls{
         return true;
     }
 
-    static entitySelect(){
+    static entitySelectDropdown(){
         $('#entity-select-dropdown').on('change',function(){
             EntityGroupManager.setKey(this.value);
             if(EntityGroupManager.currentEntityType == 'container' || EntityGroupManager.currentEntityType == 'monster'){
@@ -219,6 +226,26 @@ class Controls{
         })
     }
 
+    static wallTypeDropdown(){
+        let input = $('#wall-type-dropdown');
+        input.on('change',function(){
+            console.log(this.value);
+            EntityGroupManager.setWallType(this.value);
+            Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+
+        Controls.populateWallTypeDropdown();
+    }
+
+    static populateWallTypeDropdown(){
+        ['wall','tree'].forEach((type)=>{
+            $('#wall-type-dropdown').append(
+                $('<option>').attr('value',type).text(type).attr('id','wall-type-option-'+type)
+            )
+        })
+    }
+
     static updateColorPreview(){
         $('#entity-color-input').css('color', 'var(--'+EntityGroupManager.currentColor+')')
     }
@@ -255,6 +282,11 @@ class Controls{
         $('#entity-options-cosmetic').show();
     }
 
+    static showWallOptions(){
+        $('#wall-type-dropdown').val(EntityGroupManager.currentWallType)
+        $('#wall-options').show();
+    }
+
     static showSpawnOptions(){
         $('#entity-options').show();
         $('#spawn-chance-input').val(EntityGroupManager.currentSpawnChance);
@@ -288,11 +320,16 @@ class Controls{
             $('#entity-select-dropdown').val(group.key);
             Controls.showCosmeticOptions();
             Controls.showSpawnOptions();
-            
         }else{
             $('#entity-type-dropdown-div').hide();
             $('#entity-options').hide();
             $('#entity-options-cosmetic').hide();
+        }
+
+        if(group.entityType == 'wall'){
+            Controls.showWallOptions();
+        }else{
+            $('#wall-options').hide();
         }
     
     }

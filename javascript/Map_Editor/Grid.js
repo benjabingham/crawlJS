@@ -176,9 +176,16 @@ class Grid{
             entityDiv.text(tile.symbol);
             entityDiv.css('color', 'var(--'+tile.color+')');
             if(group.entityType == "wall"){
-                tileDiv.addClass('grid-wall');
+                if(group.wallType == 'tree'){
+                    tileDiv.addClass('grid-tree');
+                    tileDiv.removeClass('grid-wall')
+                }else{
+                    tileDiv.addClass('grid-wall');
+                    tileDiv.removeClass('grid-tree')
+                }
             }else{
                 tileDiv.removeClass('grid-wall')
+                tileDiv.removeClass('grid-tree')
             }
         }else{
             entityDiv.text('');

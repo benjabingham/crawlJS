@@ -68,6 +68,11 @@ class EntityGroupManager{
         return group.wait;
     }
 
+    static get currentWallType(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.wallType;
+    }
+
     static setEntityType(entityType){
         let group = EntityGroupManager.getCurrentGroup();
         group.setEntityType(entityType);
@@ -111,6 +116,12 @@ class EntityGroupManager{
     static setWait(wait){
         let group = EntityGroupManager.getCurrentGroup();
         group.wait = wait;
+    }
+
+    static setWallType(wallType){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.wallType = wallType;
+        group.name = wallType;
     }
 
     //PROBLEM - entitygroups and instances are losing their methods.

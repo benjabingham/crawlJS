@@ -149,6 +149,11 @@
     background-size:20% 20%;
 }
 
+.grid-tree{
+    background:repeating-conic-gradient(rgb(109 83 53) 6% 16%, rgb(133, 102, 66) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+}
+
 .grid-exit{
     background: 
     repeating-conic-gradient(var(--exit) 0% 25%, transparent 0% 50%) 

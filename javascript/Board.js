@@ -46,7 +46,7 @@ class Board{
             if(Board.entityAt(x,y).id != entity.id && Board.isSpace(x,y)){
                 let itemCase = Board.entityAt(x,y).isItemPile || entity.isItemPile;
                 if(entity.isWall && !entity.dead){
-                    Board.wallArray[y][x] = true;
+                    Board.wallArray[y][x] = {wallType:entity.wallType};
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){

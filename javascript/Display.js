@@ -156,7 +156,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-tree grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-tree grid-wall grid-exit grid-hint stoneFloor grassFloor dirtFloor').off('mouseleave mouseenter');
                 entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
@@ -192,6 +192,14 @@ class Display{
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
                         }
+                    }
+                    if(Board.wallArray[y] && !Board.wallArray[y][x]){
+                        //floor stuff
+                        let floorType = Board.getFloor(x,y);
+                        if(!floorType){
+                            floorType = 'stone';
+                        }
+                        gridDiv.addClass(floorType+'Floor')
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){

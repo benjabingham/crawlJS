@@ -36,10 +36,23 @@
     grid-gap: 0px;
     border-collapse: collapse;
 
+    /*
     .board-grid-div:not(.grid-dark){
         background-color:var(--floor);
-    }
+    }*/
 
+}
+
+.stoneFloor{
+    background-color: var(--floor);
+}
+
+.grassFloor{
+    background-color: var(--grassFloor);
+}
+
+.dirtFloor{
+    background-color: var(--dirtFloor);
 }
 
 .board-grid-div{

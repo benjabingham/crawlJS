@@ -6,6 +6,7 @@ class Board{
     static wallArray = [];
     static losArray = [];
     static stainArray = [];
+    static floorArray = [];
     static lightSourceIDs = [];
 
     static destinations = {};
@@ -98,6 +99,14 @@ class Board{
         }else{
             return false;
         }
+    }
+
+    static getFloor(x,y){
+        if (Board.floorArray[y] && Board.floorArray[y][x]){
+            return Board.floorArray[y][x]
+        }
+
+        return false;
     }
 
     static placeEntity(entity, x, y){

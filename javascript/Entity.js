@@ -609,13 +609,11 @@ class Entity{
         }
 
         let overkill = this.mortal - this.threshold;
-        if (overkill < 1){
-            return false;
-        }
+        
         if(this.sturdyCorpse){
             overkill -= this.threshold*this.sturdyCorpse;
         }
-        if((overkill >= this.threshold/2 || this.corpseless) && !this.obliterated && !this.isSword){
+        if((overkill >= this.threshold/2 || this.corpseless) && this.dead && !this.obliterated && !this.isSword){
             console.log('obliterating');
             Board.clearSpace(this.x,this.y);
             this.dropInventory();

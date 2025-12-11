@@ -606,11 +606,12 @@ class Entity{
     checkDead(message = false){
         if (this.mortal >= this.threshold && !this.dead){
             this.kill(message);
-        }else{
-            return false;
         }
 
         let overkill = this.mortal - this.threshold;
+        if (overkill < 1){
+            return false;
+        }
         if(this.sturdyCorpse){
             overkill -= this.threshold*this.sturdyCorpse;
         }

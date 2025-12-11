@@ -142,9 +142,6 @@ class Display{
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         Display.addDirectionHighlight();
-        console.log(boardArray)
-        console.log(Board.wallArray);
-        
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);

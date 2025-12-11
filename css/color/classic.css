@@ -15,6 +15,9 @@ q
     --wallAccent:#888;
     --exit:#555;
     --gridLine:#22222210;
+    --dirtGrid:#a8997f23;
+    --grassGrid:#86a3882d;
+
     --highlight:#ecda3350;
     /*--directionalHighlight:var(--dark);*/
     --directionalHighlight:#00000075;

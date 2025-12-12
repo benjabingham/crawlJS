@@ -153,14 +153,15 @@
     50% / 30px;
     background-size:20% 20%;
     border:1px solid var(--gridLine);
-    text-shadow: 0 0 white;
-}
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
 
 .grid-tree{
     background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
     background-size:20% 20%;
-    border:1px solid rgb(109 83 53);
+    border:1px solid var(--treeBorder);
     border-radius:20px;
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
 }
 
 .stoneFloor{

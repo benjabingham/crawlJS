@@ -21,12 +21,13 @@ q
     --grassGrid:#87a58927;
     --tree:rgb(109 83 53);
     --treeAccent:rgb(72, 121, 58);
+    --treeBorder:rgb(30, 75, 25);
 
     --highlight:#ecda3350;
     /*--directionalHighlight:var(--dark);*/
     --directionalHighlight:#00000075;
     /*--directionalHighlight:#b4a834ab;*/
-    --outline:#ffffff6c;
+    --outline:#f3f3f338;
     /*--outline:var(--gridLine);*/
     --defaultEntity:var(--dark);
 

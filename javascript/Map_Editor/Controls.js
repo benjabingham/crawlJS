@@ -246,7 +246,7 @@ class Controls{
     }
 
     static populateWallTypeDropdown(){
-        ['wall','tree'].forEach((type)=>{
+        ['wall','tree','wood'].forEach((type)=>{
             $('#wall-type-dropdown').append(
                 $('<option>').attr('value',type).text(type).attr('id','wall-type-option-'+type)
             )

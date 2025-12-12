@@ -198,20 +198,20 @@ class Grid{
             entityDiv.css('color', 'var(--'+tile.color+')');
             if(group.entityType == "wall"){
                 if(group.wallType == 'tree'){
-                    tileDiv.addClass('grid-tree');
-                    tileDiv.removeClass('grid-wall')
+                    entityDiv.addClass('grid-tree');
+                    entityDiv.removeClass('grid-wall')
                 }else{
-                    tileDiv.addClass('grid-wall');
-                    tileDiv.removeClass('grid-tree')
+                    entityDiv.addClass('grid-wall');
+                    entityDiv.removeClass('grid-tree')
                 }
             }else{
-                tileDiv.removeClass('grid-wall')
-                tileDiv.removeClass('grid-tree')
+                entityDiv.removeClass('grid-wall')
+                entityDiv.removeClass('grid-tree')
             }
         }else{
             entityDiv.text('');
-            tileDiv.removeClass('grid-wall')
-            tileDiv.removeClass('grid-tree')
+            entityDiv.removeClass('grid-wall')
+            entityDiv.removeClass('grid-tree')
         }
         let floorType = Grid.getFloor(x,y);
         if(!floorType){

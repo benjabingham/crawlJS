@@ -19,9 +19,15 @@ q
     --gridLine:#22222210;
     --dirtGrid:#a8997f23;
     --grassGrid:#87a58927;
+
     --tree:rgb(109 83 53);
     --treeAccent:rgb(72, 121, 58);
     --treeBorder:rgb(30, 75, 25);
+
+    --woodWall:#6d4c27;
+    --woodWallAccent:#5c4021;
+    --woodWallGrid:#3d2b153d;
+
 
     --highlight:#ecda3350;
     /*--directionalHighlight:var(--dark);*/

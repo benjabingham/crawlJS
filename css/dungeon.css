@@ -156,6 +156,15 @@
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
     }
 
+.grid-wood{
+    background:
+    repeating-linear-gradient(var(--woodWall) 0% 25%, var(--woodWallAccent) 0% 40%) 
+    50% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodWallGrid);
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
+
 .grid-tree{
     background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
     background-size:20% 20%;

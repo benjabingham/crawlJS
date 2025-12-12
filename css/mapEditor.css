@@ -95,18 +95,53 @@ input[type=number] {
     }
 }
 
+.grid-wall{
+    background:
+    repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
+    border:1px solid var(--gridLine);
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
+
+.grid-wood{
+    background:
+    repeating-linear-gradient(var(--woodWall) 0% 25%, var(--woodWallAccent) 0% 40%) 
+    50% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodWallGrid);
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
+
+.grid-tree{
+    background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+    border:1px solid var(--treeBorder);
+    border-radius:20px;
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+}
+
 .stoneFloor{
     background-color: var(--floor);
+    
+    border:1px solid var(--gridLine)
 }
 
 .grassFloor{
     background-color: var(--grassFloor);
+    border:1px solid var(--grassGrid);
+    background:repeating-conic-gradient(var(--grassFloor) 0% 25%, var(--grassAccent) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+
 }
 
 .dirtFloor{
     background-color: var(--dirtFloor);
+    border:1px solid var(--dirtGrid);
+    background: repeating-conic-gradient(var(--dirtFloor) 0% 25%, var(--dirtAccent) 20% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
 }
-
 .map-grid-div{
     font-size:1.5rem;
     width:30px;
@@ -129,21 +164,12 @@ input[type=number] {
         background-color: #00000000;
     }
 
-    .board-entity-div{
+    .map-entity-div{
         position:absolute;
+        width:100%;
+        height:100%;
+        box-sizing: border-box;
     }
-}
-
-.grid-wall{
-    background:
-    repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
-    50% / 30px;
-    background-size:20% 20%;
-}
-
-.grid-tree{
-    background:repeating-conic-gradient(rgb(109 83 53) 6% 16%, rgb(133, 102, 66) 0% 50%) 50% / 30px;
-    background-size:20% 20%;
 }
 
 .selected{
@@ -207,3 +233,9 @@ h3,h4{
 #load-map-input{
     display:none;
 }
+
+.map-highlight-div{
+    width:100%;
+    height:100%;
+}
+

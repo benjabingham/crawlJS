@@ -9,13 +9,18 @@ q
     --dirtFloor:#c9c0af;
     */
     --floor:#c9c9c9;
+
     --grassFloor:#bbcabb;
     --grassAccent:#b1c4b1;
-    --dirtFloor:#ceb4a4;
-    --dirtAccent:#c9b9ae;
+
+    --dirtFloor:#cec3a4;
+    --dirtAccent:#c9c0ae;
+
     --wall:#777;
     --wallAccent:#888;
+
     --exit:#555;
+    
     --gridLine:#22222210;
     --dirtGrid:#a8997f23;
     --grassGrid:#87a58927;

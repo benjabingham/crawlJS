@@ -114,6 +114,7 @@ class Controls{
     }
 
     static populateEntityGroupSelect(){
+        console.log('populating')
         $('#entity-group-select').empty().append(
             $('<option>').prop('disabled','disabled').attr('value','').text('Select Entity Group')
         ).append(
@@ -121,6 +122,7 @@ class Controls{
         ).val('');
         for (const [key, value] of Object.entries(EntityGroupManager.entityGroups)){
             Controls.addEntityGroupOption(value);
+            console.log(value);
         }
 
         if(EntityGroupManager.selectedEntityGroup != -1){

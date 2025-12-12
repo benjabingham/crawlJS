@@ -11,7 +11,9 @@ class Save{
         //Grid.load(JSON.parse(json.grid));
         EntityGroupManager.load(JSON.parse(json.entityGroups));
         Grid.placeEntities();
-        Grid.floorMatrix = JSON.parse(json.floorMatrix)
+        if(json.floorMatrix){
+            Grid.floorMatrix = JSON.parse(json.floorMatrix)
+        }
         Grid.updateGrid();
         Controls.populateEntityGroupSelect();
         Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);

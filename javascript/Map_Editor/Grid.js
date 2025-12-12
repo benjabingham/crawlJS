@@ -186,7 +186,7 @@ class Grid{
     }
 
     static updateTileDisplay(x,y){
-        console.log('update');
+        //console.log('update');
         let tile = Grid.getTile(x,y)
         let tileDiv = $('#map-grid-' + x + '-' + y);
         let entityDiv = $('#map-entity-' + x + '-' + y);
@@ -214,7 +214,7 @@ class Grid{
         }
         tileDiv.removeClass('stoneFloor grassFloor dirtFloor')
         tileDiv.addClass(floorType+'Floor')
-        console.log(floorType)
+        //console.log(floorType)
     }
 
     static getFloor(x,y){
@@ -309,12 +309,12 @@ class Grid{
             Y:Grid.translateY
         })
 */
-
+/*
         console.log({
             X:Grid.translateX,
             Y:Grid.translateY
         })
-        
+  */      
         Grid.updateTransform();
     }
 

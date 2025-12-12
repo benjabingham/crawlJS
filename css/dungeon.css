@@ -43,6 +43,14 @@
 
 }
 
+#board:after{
+    content:"";
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.418);
+    position:absolute;
+    width: 510px;
+    height:510px;
+    pointer-events: none;
+}
 
 
 .board-grid-div{
@@ -66,12 +74,15 @@
     }
 
     .board-entity-div{
+        /*box-shadow: inset 0 0 0 1000px rgba(22, 15, 0, 0.308);*/
+
         position:absolute;
         /*text-shadow:1px var(--dark);*/
         /*text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);*/
         /*text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);*/
         width:30px;
         height:30px;
+        box-sizing: border-box;
     }
 
     /*this is where the player is*/
@@ -90,7 +101,10 @@
     }
 
     .board-entity-div.grid-highlighted{
-        background-color: var(--highlight); /* Semi-transparent black */
+        background-color: var(--highlight);
+    }
+
+    .board-entity-div.grid-highlighted{
     }
 
     .board-entity-div.highlight-down:before{

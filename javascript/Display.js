@@ -137,7 +137,30 @@ class Display{
 
     }
 
+    //LEARNED - hasClass is marginally faster than the others, but removing all classes at once is WAY FASTER than one at a time.
+    static checkTime(){
+        /*
+        for(let i = 0; i < 100000; i++){
+            $('#board-entity-8-8').hasClass('grid-dark');
+        }*/
+
+        /*
+        for(let i = 0; i < 100000; i++){
+        $('#board-entity-8-8').addClass('grid-dark');
+        }
+       */
+        for(let i = 0; i < 100000; i++){
+        $('#board-entity-8-8').removeClass('grid-dark');
+        $('#board-entity-8-8').removeClass('grid-wall');
+
+        $('#board-entity-8-8').removeClass('grid-tree');
+
+        }
+    }
+
     static printBoard(){
+        //Display.checkTime();
+        console.log(Board.wallArray)
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
@@ -153,8 +176,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint ').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -164,12 +187,21 @@ class Display{
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
+                            console.log(Board.wallArray[y][x])
                             let wallType = Board.wallArray[y][x].wallType;
                             if(!wallType){
                                 wallType = 'wall'
                             }
-                            entityDiv.addClass('grid-'+wallType)
                             
+                            if(!entityDiv.hasClass('grid-'+wallType)){
+                                Display.removeWallClasses(entityDiv)
+                                entityDiv.addClass('grid-'+wallType)
+                            }
+
+                            
+                        }else{
+                            console.log('else');
+                            Display.removeWallClasses(entityDiv)
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
@@ -190,6 +222,8 @@ class Display{
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
                         }
+                    }else{
+                        Display.removeWallClasses(entityDiv);
                     }
                     if(Board.isSpace(x,y)){
                         //floor stuff
@@ -197,7 +231,10 @@ class Display{
                         if(!floorType){
                             floorType = 'stone';
                         }
-                        gridDiv.addClass(floorType+'Floor')
+                        if(!gridDiv.hasClass(floorType+'Floor')){
+                            Display.removeFloorClasses(gridDiv);
+                            gridDiv.addClass(floorType+'Floor')
+                        }
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -213,6 +250,8 @@ class Display{
                     }
                 //out of sight
                 }else{
+                    Display.removeWallClasses(entityDiv);
+                    Display.removeFloorClasses(gridDiv);
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
@@ -221,6 +260,14 @@ class Display{
         }
         Display.applyHighlights();
         Display.setHintText($('.grid-exit'),'EXIT')
+    }
+
+    static removeWallClasses(div){
+        div.removeClass('grid-tree grid-wall grid-wood');
+    }
+
+    static removeFloorClasses(div){
+        div.removeClass('stoneFloor grassFloor dirtFloor woodFloor');
     }
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells

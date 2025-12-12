@@ -153,8 +153,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-tree grid-wall grid-exit grid-hint stoneFloor grassFloor dirtFloor').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -165,9 +165,9 @@ class Display{
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
                             if(Board.wallArray[y][x].wallType == 'tree'){
-                                gridDiv.addClass('grid-tree')
+                                entityDiv.addClass('grid-tree')
                             }else{
-                                gridDiv.addClass('grid-wall')
+                                entityDiv.addClass('grid-wall')
                             }
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
@@ -190,7 +190,7 @@ class Display{
                             boardArray[y][x].highlightedAdjacents = [];
                         }
                     }
-                    if(Board.wallArray[y] && !Board.wallArray[y][x]){
+                    if(Board.isSpace(x,y)){
                         //floor stuff
                         let floorType = Board.getFloor(x,y);
                         if(!floorType){

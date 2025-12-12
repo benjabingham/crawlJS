@@ -9,14 +9,18 @@ q
     --dirtFloor:#c9c0af;
     */
     --floor:#c9c9c9;
-    --grassFloor:#bcccbd;
-    --dirtFloor:#cec7ba;
+    --grassFloor:#bbcabb;
+    --grassAccent:#b1c4b1;
+    --dirtFloor:#ceb4a4;
+    --dirtAccent:#c9b9ae;
     --wall:#777;
     --wallAccent:#888;
     --exit:#555;
     --gridLine:#22222210;
     --dirtGrid:#a8997f23;
-    --grassGrid:#86a3882d;
+    --grassGrid:#87a58927;
+    --tree:rgb(109 83 53);
+    --treeAccent:rgb(72, 121, 58);
 
     --highlight:#ecda3350;
     /*--directionalHighlight:var(--dark);*/

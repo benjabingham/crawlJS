@@ -43,20 +43,7 @@
 
 }
 
-.stoneFloor{
-    background-color: var(--floor);
-    border:1px solid var(--gridLine)
-}
 
-.grassFloor{
-    background-color: var(--grassFloor);
-    border:1px solid var(--grassGrid)
-}
-
-.dirtFloor{
-    background-color: var(--dirtFloor);
-    border:1px solid var(--dirtGrid)
-}
 
 .board-grid-div{
     font-size:1.5rem;
@@ -165,13 +152,36 @@
     repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
     50% / 30px;
     background-size:20% 20%;
-    border:1px solid var(--gridLine)
+    border:1px solid var(--gridLine);
+    text-shadow: 0 0 white;
 }
 
 .grid-tree{
-    background:repeating-conic-gradient(rgb(109 83 53) 6% 16%, rgb(133, 102, 66) 0% 50%) 50% / 30px;
+    background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
     background-size:20% 20%;
     border:1px solid rgb(109 83 53)
+}
+
+.stoneFloor{
+    background-color: var(--floor);
+    
+    border:1px solid var(--gridLine)
+}
+
+.grassFloor{
+    background-color: var(--grassFloor);
+    border:1px solid var(--grassGrid);
+    background:repeating-conic-gradient(var(--grassFloor) 0% 25%, var(--grassAccent) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+
+}
+
+.dirtFloor{
+    background-color: var(--dirtFloor);
+    border:1px solid var(--dirtGrid);
+    background: repeating-conic-gradient(var(--dirtFloor) 0% 25%, var(--dirtAccent) 20% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
 }
 
 .grid-exit{

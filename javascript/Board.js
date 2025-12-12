@@ -335,7 +335,7 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, level = 1, color = {r:231, g:46, b:0}){
+    static setStain(x,y, level = 1, color = {r:185, g:80, b:53}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }

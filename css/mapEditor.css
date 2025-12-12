@@ -142,6 +142,14 @@ input[type=number] {
     50% / 30px;
     background-size:20% 20%;
 }
+
+.woodFloor{
+    background:
+    repeating-linear-gradient(var(--woodFloor) 0% 25%, var(--woodFloorAccent) 0% 40%) 
+    50% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodFloorGrid);
+}
 .map-grid-div{
     font-size:1.5rem;
     width:30px;

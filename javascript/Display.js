@@ -153,8 +153,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -164,11 +164,12 @@ class Display{
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
-                            if(Board.wallArray[y][x].wallType == 'tree'){
-                                entityDiv.addClass('grid-tree')
-                            }else{
-                                entityDiv.addClass('grid-wall')
+                            let wallType = Board.wallArray[y][x].wallType;
+                            if(!wallType){
+                                wallType = 'wall'
                             }
+                            entityDiv.addClass('grid-'+wallType)
+                            
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){

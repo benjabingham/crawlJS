@@ -173,10 +173,20 @@
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
 }
 
+
+
 .stoneFloor{
     background-color: var(--floor);
     
     border:1px solid var(--gridLine)
+}
+
+.woodFloor{
+    background:
+    repeating-linear-gradient(var(--woodFloor) 0% 25%, var(--woodFloorAccent) 0% 40%) 
+    70% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodFloorGrid);
 }
 
 .grassFloor{

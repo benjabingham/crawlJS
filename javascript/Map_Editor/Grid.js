@@ -192,21 +192,16 @@ class Grid{
         let entityDiv = $('#map-entity-' + x + '-' + y);
         let highlightDiv = $('#map-highlight-' + x + '-' + y);
         highlightDiv.removeClass('selected');
+        entityDiv.removeClass('grid-wall grid-tree grid-wood')
         if(tile){
             let group = tile.entityGroup;
             entityDiv.text(tile.symbol);
             entityDiv.css('color', 'var(--'+tile.color+')');
             if(group.entityType == "wall"){
-                if(group.wallType == 'tree'){
-                    entityDiv.addClass('grid-tree');
-                    entityDiv.removeClass('grid-wall')
-                }else{
-                    entityDiv.addClass('grid-wall');
-                    entityDiv.removeClass('grid-tree')
+                if(!group.wallType){
+                    group.wallType = "wall";
                 }
-            }else{
-                entityDiv.removeClass('grid-wall')
-                entityDiv.removeClass('grid-tree')
+                entityDiv.addClass('grid-'+group.wallType)
             }
         }else{
             entityDiv.text('');

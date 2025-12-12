@@ -364,7 +364,7 @@ class Controls{
     }
 
     static floorTypeSelect(){
-        ['stone','grass','dirt'].forEach((type)=>{
+        ['stone','grass','dirt','wood'].forEach((type)=>{
             $('#floor-type-dropdown').append(
                 $('<option>').attr('value',type).text(type).attr('id','floor-type-option-'+type)
             )

@@ -403,6 +403,12 @@ class Board{
         let totalLevel = stain1.level + stain2.level
         let result = {level:totalLevel, color:{r:0,g:0,b:0}};
         ['r','g','b'].forEach((key)=>{
+            if(!stain1.color[key]){
+                stain1.color[key] = 0;
+            }
+            if(!stain2.color[key]){
+                stain2.color[key] = 0;
+            }
             let sum = (stain1.color[key]*stain1.level) + (stain2.color[key]*stain2.level);
             let avg = Math.floor(sum/totalLevel);
             result.color[key] = avg;

@@ -573,10 +573,16 @@ class Display{
             )
         }
 
+        if(item.resistant){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('resistant-text').text('Resistant to corrosion.')
+            )
+        }
+
         if(itemValue){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value:').append(itemValue)
+                    $('<div>').text('Sell Value: ').append(itemValue)
                 )
             )
         }
@@ -640,7 +646,8 @@ class Display{
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false
                 )
-            )            
+            ).append("<hr>")
+             /*           
             attackTypes.forEach(function(val){
                 if(item[val]){
                     let special = item[val];
@@ -656,7 +663,7 @@ class Display{
                         )
                     )
                 }
-            })    
+            })    */
         }
 
         

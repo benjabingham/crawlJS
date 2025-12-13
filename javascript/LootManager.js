@@ -308,7 +308,8 @@ class LootManager{
 
     static getStarterWeapon(){
         
-        let starterWeapon = LootManager.getWeaponLoot(5)
+        let starterWeapon = LootManager.getWeaponLoot(5, ['platinum'])
+        LootManager.applyModifier(starterWeapon,itemVars.weaponModifiers.worn);
         /*
         while(starterWeapon.value > 5){
             starterWeapon = LootManager.getWeaponLoot(1)

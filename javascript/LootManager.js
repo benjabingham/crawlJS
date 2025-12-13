@@ -15,6 +15,7 @@ class LootManager{
                 template = monsterVars[key];
                 break;
             default:
+                return false;
         }
 
         if(!entitySave.inventory){
@@ -25,6 +26,7 @@ class LootManager{
 
         if(!template){
             console.log('NO TEMPLATE FOUND FOR '+key)
+            console.log(entitySave)
             return false;
         }
 

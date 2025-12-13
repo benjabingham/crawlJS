@@ -929,7 +929,7 @@ class SwordEntity extends Entity{
         if(lastSwordPos.rotation != this.rotation){
             return "swing";
         }
-        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y)){
+        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) && EntityManager.getDistance(lastSwordPos,ownerPos) <= 1){
             return "jab";
         }
 

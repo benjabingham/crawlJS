@@ -614,7 +614,7 @@ class Display{
 
 
         if(item.weapon){
-            let attackTypes = ['jab','swing','strafe']
+            let attackTypes = ['jab','swing','strafe','draw']
             let special = false;
             let specialName = false;
             attackTypes.forEach(function(val){

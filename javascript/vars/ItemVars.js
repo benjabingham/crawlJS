@@ -107,6 +107,27 @@ let itemVars = {
             },
             value:7
         },
+        scimitar:{
+            weapon:true,
+            name:"scimitar",
+            damage:6,
+            stunTime:2,
+            weight:3,
+            strafe:{
+                damage:7,
+                stunTime:2,
+                weight:2,
+                type:{
+                    sword:true,
+                    edged:true
+                },
+            },
+            type:{
+                sword:true,
+                edged:true
+            },
+            value:7
+        },
         shortsword:{
             weapon:true,
             name:"shortsword",
@@ -130,6 +151,28 @@ let itemVars = {
                 edged:true
             },
             value:7
+        },
+        katana:{
+            weapon:true,
+            name:"katana",
+            damage:8,
+            stunTime:1,
+            weight:3,
+            type:{
+                sword:true,
+                edged:true
+            },
+            draw:{
+                damage:8,
+                stunTime:5,
+                weight:3,
+                type:{
+                    sword:true,
+                    edged:true
+                },
+            },
+            flimsy:1,
+            value:10
         },
         greatsword:{
             weapon:true,

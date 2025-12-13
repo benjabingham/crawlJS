@@ -590,53 +590,95 @@ let containerVars = {
             }
         },
     },
-    mimic:{
-        name:"mimic",
+    t0Treasure:{
+        name:"t0 treasure",
         symbol:"Ch",
         behavior:"",
-        hitDice:3,
-        damage:6,
+        hitDice:0,
+        damage:4,
         inventorySlots: 10,
         isContainer: true,
-        inventory:[
-            {
-                item: itemVars.food.provisions,
-                chance:20
-            }
-        ],
         loot:{
-            weapon:{
-                chance:15,
-                tier:5
-            },
             treasure:{
-                chance:75,
-                tier:3
-            },
-            potion:{
-                chance:50,
-                tier:3
-            },
-            gold:{
                 chance:100,
-                amount:20
-            }
-        },
-        changeForms:[
-            {
-                onHitChance:100,
-                formKey:'mimic',
-                message:" is a mimic!",
-                messageClass:'danger'
+                tier:0
             },
-            {
-                onSearchChance:100,
-                formKey:'mimic',
-                message:" is a mimic!",
-                messageClass:'danger'
-            }
-        ],
-        color:'gold'
+        },
+    },
+    t1Treasure:{
+        name:"t1 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:1
+            },
+        },
+    },
+    t2Treasure:{
+        name:"t2 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:2
+            },
+        },
+    },
+    t3Treasure:{
+        name:"t3 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:3
+            },
+        },
+    },
+    t4Treasure:{
+        name:"t4 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:4
+            },
+        },
+    },
+    t6Treasure:{
+        name:"t6 treasure",
+        symbol:"Ch",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            treasure:{
+                chance:100,
+                tier:6
+            },
+        },
     },
 
 }

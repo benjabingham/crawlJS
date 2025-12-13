@@ -65,6 +65,51 @@
 
     .board-entity-div{
         position:absolute;
+        width:30px;
+        height:30px;
+    }
+
+    /*this is where the player is*/
+    #board-entity-8-8:before{
+        /*make directional nicer*/
+        border-radius:30px;
+        position:absolute;
+        width:30px;
+        height:30px;
+        content:'';
+        transform:translate(-9px);
+    }
+
+    #board-entity-8-8>text{
+        width:30px;
+    }
+
+    .board-entity-div.grid-highlighted{
+        background-color: var(--highlight); /* Semi-transparent black */
+    }
+
+    .board-entity-div.highlight-down:before{
+        border-bottom: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-up:before{
+        border-top: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-left:before{
+        border-left: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-right:before{
+        border-right: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-counterclockwise:before{
+        transform:translate(-9px) rotate(-45deg) !important;
+    }
+
+    .board-entity-div.highlight-clockwise:before{
+        transform:translate(-9px) rotate(45deg)  !important;
     }
 
     .board-stain-div{
@@ -110,6 +155,10 @@
       50% / 20px;
     background-size:100% 100%;
     border:none;
+}
+
+.grid-exit:hover{
+    cursor:pointer;
 }
 
 .grid-hint:hover{

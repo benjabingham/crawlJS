@@ -63,6 +63,7 @@ class EntityGroup{
             this.symbol = '☺';
         }else if(type == 'wall'){
             this.symbol = '';
+            this.name = 'wall'
         }
     }
 

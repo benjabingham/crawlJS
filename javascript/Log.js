@@ -20,7 +20,7 @@ class Log{
         }
     }
 
-    static addMessage(message, messageClass = false, keyword = false, tipText = false){
+    static addMessage(message, messageClass = false, keyword = false, tipText = false, highlightID = -1){
         if(!Log.messages[Log.turnCounter]){
             Log.messages[Log.turnCounter] = [];
         }
@@ -29,7 +29,8 @@ class Log{
             fresh:true,
             messageClass: messageClass,
             keyword: keyword,
-            tipText: tipText
+            tipText: tipText,
+            highlightID:highlightID
         });
     }
 
@@ -93,15 +94,32 @@ class Log{
                         tipText = message.tipText;
                         if(!keyword){
                             messageElement.addClass('log-hoverable');
+                            messageElement.addClass('log-bold');
                         }
+                    }
+                    let highlightID = message.highlightID;
+                    if(highlightID != -1){
+                        messageElement.addClass('log-hoverable');
                     }
                     messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
                         if(tipText){
                             $('.hint-divs').text(tipText)  
                         }
+                        if(highlightID != -1){
+                            console.log('highlight');
+                            EntityManager.getEntity(highlightID).highlighted = true;
+                            Display.printBoard();
+                        }
                     }).on('mouseleave',()=>{
                         $('.hint-divs').html('');
+                        if(highlightID != -1){
+                            EntityManager.getEntity(highlightID).highlighted = false;
+                            Display.printBoard();
+                        }
                     })
+
+                    
+
                     log.prepend(messageElement)
                     message.fresh = false;
                 })

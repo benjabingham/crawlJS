@@ -95,7 +95,6 @@ class Controls{
     }
 
     static entityGroupSelect(){
-        Controls.populateEntityGroupSelect();
         $('#entity-group-select').on('change',function(){
             if(this.value == 'new'){
                 Controls.newGroup();
@@ -103,6 +102,7 @@ class Controls{
                 Controls.chooseGroup(this.value);
             }
         });
+        Controls.populateEntityGroupSelect();
     }
 
     static populateEntityGroupSelect(){
@@ -140,25 +140,30 @@ class Controls{
         $('#entity-type-dropdown').on('change',function(){
             let entityType = this.value;
             EntityGroupManager.setEntityType(entityType);
-            $('#entity-type-dropdown-div').show();
-            switch(entityType){
-                case 'monster':
-                    Controls.populateEntitySelect(monsterVars)
-                    break;
-                case 'container':
-                    Controls.populateEntitySelect(containerVars)
-                    break;
-                default: 
-                    $('#entity-type-dropdown-div').hide();
-                    $('#entity-options').hide();
-                    $('#entity-options-cosmetic').hide();
+            if(!Controls.populateEntitySelect(entityType)){
+                $('#entity-options').hide();
+                $('#entity-options-cosmetic').hide();
             }
+             
             Grid.updateGrid();
             Save.saveSnapshot();
         })
     }
 
-    static populateEntitySelect(entityVarsObj){
+    static populateEntitySelect(entityType){
+        $('#entity-type-dropdown-div').show();
+        let entityVarsObj = false;
+        switch(entityType){
+            case 'monster':
+                entityVarsObj = monsterVars
+                break;
+            case 'container':
+                entityVarsObj = containerVars
+                break;
+            default: 
+                $('#entity-type-dropdown-div').hide();
+                return false;
+        }
         $('#entity-select-dropdown').empty().append(
             $('<option>').prop('disabled','disabled').attr('value','').text('Select Entity')
         ).val('');
@@ -167,6 +172,8 @@ class Controls{
                 $('<option>').attr('value',key).text(value.name)
             )
         }
+
+        return true;
     }
 
     static entitySelect(){
@@ -277,9 +284,11 @@ class Controls{
         $('#group-name-input').val(group.groupName);
         $('#entity-type-dropdown').val(group.entityType);
         if(group.entityType == 'container' || group.entityType == 'monster'){
+            Controls.populateEntitySelect(group.entityType);
             $('#entity-select-dropdown').val(group.key);
             Controls.showCosmeticOptions();
             Controls.showSpawnOptions();
+            
         }else{
             $('#entity-type-dropdown-div').hide();
             $('#entity-options').hide();

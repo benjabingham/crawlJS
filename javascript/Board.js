@@ -401,8 +401,21 @@ class Board{
     //returns a color with averaged values and combined levels
     static getCombinedStain(stain1, stain2){
         let totalLevel = stain1.level + stain2.level
-        let result = {level:totalLevel, color:{r:0,g:0,b:0}};
-        ['r','g','b'].forEach((key)=>{
+        let emptyStain = {level:0, color:{r:0,g:0,b:0}}
+        let result = JSON.parse(JSON.stringify(emptyStain));
+        result.level = totalLevel;
+        [stain1, stain2].forEach((stain)=>{
+            if(!stain || !stain.color || !stain.color.r){
+                stain = JSON.parse(JSON.stringify(emptyStain));
+            }
+        })
+        console.log({
+            1:stain1,
+            2:stain2
+        })
+        const colors = ['r','g','b'];
+        colors.forEach((key)=>{
+            console.log(key);
             let sum = (stain1.color[key]*stain1.level) + (stain2.color[key]*stain2.level);
             let avg = Math.floor(sum/totalLevel);
             result.color[key] = avg;

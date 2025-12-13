@@ -8,6 +8,7 @@ class Display{
         {scheme:'dark-mode',name:'Dark Mode'},
         {scheme:'light-mode',name:'Light Mode'}
     ]
+    static highlightedCells=[];
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -19,6 +20,7 @@ class Display{
         $('#hud-div').show();
         Display.fillBars(Player);
         $('#dungeon-screen').show();
+        $('#town-hint-div').hide().html('');
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
@@ -40,6 +42,7 @@ class Display{
         $('#town-screen').show();
         $('#day-div').text('Day '+Save.day);
         $('#town-inventory-wrapper').show();
+        $('#town-hint-div').show().html('');
 
         Display.populateLocations();
         Display.displayInventory(false);
@@ -138,6 +141,7 @@ class Display{
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
+        Display.addDirectionHighlight();
         
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -151,6 +155,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -164,13 +169,8 @@ class Display{
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
-                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
-                                $('.hint-divs').html('').append(
-                                    $('<p>').text(boardArray[y][x].name)
-                                )
-                            }).off('mouseleave').on('mouseleave',()=>{
-                                $('.hint-divs').html('');
-                            })
+                            gridDiv.addClass('grid-hint').off('mouseenter')
+                            Display.setHintText(gridDiv, boardArray[y][x].name);
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -178,6 +178,14 @@ class Display{
                             }                 
                         }
                         Display.applyColor(boardArray[y][x], entityDiv);
+                        let highlighted = boardArray[y][x].highlighted;
+                        let highlightedAdjacents = boardArray[y][x].highlightedAdjacents;
+                        if(highlighted || highlightedAdjacents){
+                            Display.addHighlights({x:displayX,y:displayY}, highlighted,highlightedAdjacents)
+                            //reset each frame
+                            boardArray[y][x].highlighted = false;
+                            boardArray[y][x].highlightedAdjacents = [];
+                        }
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -196,9 +204,71 @@ class Display{
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
-                entityDiv.text(symbol)
+                entityDiv.text(symbol)       
             }
         }
+        Display.applyHighlights();
+        Display.setHintText($('.grid-exit'),'EXIT')
+    }
+
+    //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells
+    static addHighlights(pos,highlighted = false,highlightedAdjacents = []){
+        let highlight = {
+            x:pos.x,
+            y:pos.y,
+            highlighted:highlighted,
+            highlightedAdjacents:highlightedAdjacents
+        }
+        Display.highlightedCells.push(highlight)
+    }
+
+    static addDirectionHighlight(){
+        let playerEntity = EntityManager.getEntity('player');
+        let swordEntity = playerEntity.swordEntity;
+        //this is how we tell if it's equipped, or outside of the map
+        if(Board.isSpace(swordEntity.x,swordEntity.y)){
+            playerEntity.highlightedAdjacents = [];
+            return false;
+        }
+        let direction = EntityManager.translations[swordEntity.rotation];
+        playerEntity.highlightedAdjacents = [direction]
+    }
+
+    //directional highlights are just for showing player where they are looking. Will need to be different for walls.
+    static applyHighlights(){
+        Display.highlightedCells.forEach((cell)=>{
+            let cellElement = $('#board-entity-'+cell.x+'-'+cell.y)
+            if(cell.highlighted){
+                cellElement.addClass('grid-highlighted')
+            }
+            if(cell.highlightedAdjacents){
+                cell.highlightedAdjacents.forEach((direction)=>{
+                    if(direction.x == 1){
+                        cellElement.addClass('highlight-right')
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                    }else if(direction.x == -1){
+                        cellElement.addClass('highlight-left')
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                    }else if(direction.y == 1){
+                        cellElement.addClass('highlight-down')
+                    }else if(direction.y == -1){
+                        cellElement.addClass('highlight-up')          
+                    }
+                })
+            }
+        })
+
+        Display.highlightedCells = [];
     }
     
     static nourishmentDiv(){
@@ -271,7 +341,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'tombTest', 'ratTomb']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'tombTest', 'ratTomb', 'mimictest']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
@@ -283,10 +353,30 @@ class Display{
         })
     }
 
+    static getRestHintText(){
+        let restInfo = Player.getRestInfo();
+        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
+
+        return hintText;
+    }
+
     static restButton(){
-        $('#rest-button').off().on('click',()=>{
+        let restButton = $('#rest-button')
+        restButton.off().on('click',()=>{
             GameMaster.nextDay();
             GameMaster.loadTown();
+            let restInfo = Player.getRestInfo();
+            $('.hint-divs').text(Display.getRestHintText());
+        })
+        
+        Display.setHintText(restButton, Display.getRestHintText())
+    }
+
+    static setHintText(element, hintText){
+        element.on('mouseenter',()=>{
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
         })
     }
 
@@ -483,10 +573,16 @@ class Display{
             )
         }
 
+        if(item.resistant){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('resistant-text').text('Resistant to corrosion.')
+            )
+        }
+
         if(itemValue){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value:').append(itemValue)
+                    $('<div>').text('Sell Value: ').append(itemValue)
                 )
             )
         }
@@ -518,7 +614,7 @@ class Display{
 
 
         if(item.weapon){
-            let attackTypes = ['jab','swing','strafe']
+            let attackTypes = ['jab','swing','strafe','draw']
             let special = false;
             let specialName = false;
             attackTypes.forEach(function(val){
@@ -550,7 +646,8 @@ class Display{
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false
                 )
-            )            
+            ).append("<hr>")
+             /*           
             attackTypes.forEach(function(val){
                 if(item[val]){
                     let special = item[val];
@@ -566,7 +663,7 @@ class Display{
                         )
                     )
                 }
-            })    
+            })    */
         }
 
         

@@ -41,7 +41,7 @@ class EntityManager{
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
             if(!item.worn){
-                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.');
+                EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
@@ -61,16 +61,16 @@ class EntityManager{
         if(!weapon.item){
             return false;
         }
+        if(item.resistant){
+            return false;
+        }
         n = Random.roll(0,n);
         if(!item.flimsy){
             item.flimsy = 0;
         }
-        console.log(item.flimsy)
         item.flimsy +=n;
-        console.log(item.flimsy)
-        console.log(item);
         if(n){
-            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',"corroding");
+            EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',"corroding",false,weapon.id);
         }
     }
 
@@ -86,7 +86,6 @@ class EntityManager{
         let entity = EntityManager.getEntity(id);
         return entity.move(x,y);
     }
-
     
     static movePlayer(x,y){
         if(Player.exertion > 1){
@@ -98,7 +97,9 @@ class EntityManager{
             }
 
         }
-        if(!EntityManager.moveEntity('player',x,y)){
+        let playerEntity = EntityManager.getEntity("player");
+        let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
+        if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){
             EntityManager.cancelAction({blocked:true})
         }
     }
@@ -110,7 +111,7 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = Random.roll(1,100);
+            let random = Math.random()*100;
             let skip = 0;
             if(entity.stunned){
                 skip+= entity.stunned;
@@ -149,10 +150,8 @@ class EntityManager{
             if(entity.spawnEntities && !slow){
                 EntityManager.spawnEntity(entity);
             }
-            if (!entity.dead){
-                if(entity.stunned > 0){
-                    entity.stunned--;
-                }
+            entity.stunned = Math.max(entity.stunned-1, 0);
+            if (!entity.dead){ 
                 if(entity.stunned > 0){
                     entity.tempSymbol = entity.symbol.toLowerCase();
                 }else{
@@ -180,7 +179,7 @@ class EntityManager{
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
         if(verbose){
-            EntityManager.transmitMessage('equipped weapon: '+weapon.name);
+            EntityManager.transmitMessage('equipped weapon: '+weapon.name, false, false, false, sword.id);
         }
     }
 
@@ -383,7 +382,7 @@ class EntityManager{
             }
     
             if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
-                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger');
+                Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger', false, false, entityObj.id);
             }
 
             
@@ -496,8 +495,8 @@ class EntityManager{
         return xdif + ydif;
     }
 
-    static transmitMessage(message, messageClass = false, keyword = false, tipText = false){
-        Log.addMessage(message, messageClass, keyword, tipText);
+    static transmitMessage(message, messageClass = false, keyword = false, tipText = false, id=-1){
+        Log.addMessage(message, messageClass, keyword, tipText, id);
         console.log(message);
     }
 
@@ -518,6 +517,7 @@ class EntityManager{
         newEntity.inventory = entity.inventory;
         newEntity.index = entity.index;
         newEntity.id = entity.id;
+        newEntity.stunned = entity.stunned
         //its possible for new form to roll a lower threshold than current mortal.
         //this makes sure it's always alive if it was before.
         if(!entity.dead && newEntity.mortal >= newEntity.threshold){
@@ -528,12 +528,62 @@ class EntityManager{
             newEntity.name = formInfo.name
         }
         if(formInfo.message){
-            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass);
+            Log.addMessage(entity.name + formInfo.message, formInfo.messageClass, false, false, entity.id);
         }
         EntityManager.entities[entity.id] = newEntity;
 
         //otherwise entitymanager will have two pointers to the same entity
         delete EntityManager.entities[newID]
-        Board.placeEntity(newEntity,newEntity.x,newEntity.y);    }
+        Board.placeEntity(newEntity,newEntity.x,newEntity.y);
+    }
+
+    static sendStrikeMessage(strikeType, weapon, target){
+        let message = '';
+        let tipText = '';
+        switch (strikeType){
+            case "swing":
+                message = 'you swing your weapon into the '+target.name+"."
+                tipText = "A swing is a strike that has you rotating your weapon into a target."
+                break;
+            case "jab":
+                message = "you jab the "+target.name+'.'
+                tipText = "A target is jabbed when you strike them by advancing towards them."
+                break;
+            case "strafe":
+                message = "you deliver a strafing strike to the "+target.name+"."
+                strikeType = "strafing"
+                tipText = "A strafing strike is one where you strike while moving sideways or backwards diagonally"
+                break;
+            case "draw":
+                message = 'you draw your weapon, striking the '+target.name+"."
+                tipText = "a draw strike occurs when you draw your weapon into a target."
+                break;
+            default:    
+                message = "you strike the "+target.name+".";
+
+        }
+        EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
+    }
+
+    static getDamageText(target,damage){
+        if(!damage){
+            return 'a negligible strike...'
+        }
+        let ratio = damage/target.threshold
+
+        if(ratio <= 0.2){
+            return 'a pitiful strike...'
+        }
+
+        if(ratio <= 0.4){
+            return 'a solid strike.'
+        }
+
+        if(ratio <= 0.7){
+            return 'a powerful blow!'
+        }
+
+        return 'a devastating blow!'
+    }
 
 }

@@ -12,6 +12,11 @@ class Entity{
     }
     //index refers to an entity's index in its map's save array
     index;
+    //should this entity be highlighted?
+    highlighted = false;
+    //array of x,y pairs of directions of adjacent cells that should be highlighted
+    highlightedAdjacents = [];
+
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
             id = EntityManager.entityCounter;
@@ -118,7 +123,7 @@ class Entity{
             if(this.obliterated){
                 return false;
             }
-            EntityManager.transmitMessage(this.name + " is cornered!", 'pos','cornered','This enemy had no empty space to be knocked into by your attack.');
+            EntityManager.transmitMessage(this.name + " is cornered!", 'pos','cornered','This enemy had no empty space to be knocked into by your attack.',this.id);
             if(knocker.isSword){
                 let owner = EntityManager.getEntity(knocker.owner);
                 owner.setToLastPosition();
@@ -218,7 +223,7 @@ class Entity{
         if(!isPlayer){
             return false;
         }
-        Log.addMessage('you search the '+container.name+'...')
+        Log.addMessage('you search the '+container.name+'...',false,false,false,container.id)
 
         if(container.checkTransform('onSearchChance')){
             return false;
@@ -424,7 +429,7 @@ class Entity{
     kill(message = false){
         if(this.isMonster){
             if(Board.hasPlayerLos(this) && message){
-                EntityManager.transmitMessage(message, 'win');
+                EntityManager.transmitMessage(message, 'win',false,false,this.id);
             }
             this.name += " corpse";
             this.behavior = 'dead';
@@ -435,13 +440,9 @@ class Entity{
                     this.reconstitute = 0;
                 }
             }
-
-            if(this.corpseless){
-                this.obliterate();
-            }
         }else{
             if(Board.hasPlayerLos(this)){
-                EntityManager.transmitMessage(this.name+" is destroyed!")
+                EntityManager.transmitMessage(this.name+" is destroyed!",false,false,false,this.id)
             }
             this.name = "destroyed "+this.name;
         }
@@ -468,7 +469,10 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
-        let sharp = weapon.type.edged || weapon.type.sword
+        let sharp = false;
+        if(weapon){
+            sharp = weapon.type.edged || weapon.type.sword
+        }
         if(!damage){
             return false;
         }
@@ -532,7 +536,7 @@ class Entity{
     beat(targetSword){
         let knock = false;
         if(targetSword.owner == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.");
+            EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage);
             if(damage > Player.stamina){
                 Player.stamina = 0;
@@ -565,7 +569,7 @@ class Entity{
         if(random <= beatChance || knock){
             if (targetSword.knockSword()){
                 let tipText = knock ? 'You did not have enough stamina to hold your weapon steady.' : 'this monster has a chance to push your weapon aside even if you have stamina remaining.'
-                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText);
+                EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText, this.id);
             }
             
         }else if(Player.equipped){
@@ -573,12 +577,14 @@ class Entity{
         }     
     };
 
-    sturdy(attacker){
-        if(!this.behaviorInfo || this.dead){
-            return;
+    sturdy(attacker, bonus=0){
+        let sturdyChance = bonus;
+        if(this.behaviorInfo && this.behaviorInfo.sturdy && !this.dead){
+            sturdyChance += this.behaviorInfo.sturdy;
         }
-        let sturdyChance = this.behaviorInfo.sturdy;
-
+        if(this.dead){
+            return false;
+        }
         let random = Random.roll(1,100);
         if (random <= sturdyChance){
             EntityManager.removeEntity(attacker.id);
@@ -590,17 +596,25 @@ class Entity{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
             if(!this.dead){
-                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.');
+                EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
+            }else{
+                EntityManager.transmitMessage(this.name+" won't budge...", false, "won't budge",'this object has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
             }
         }
     };
 
     checkDead(message = false){
-        if (this.mortal > this.threshold && !this.dead){
+        if (this.mortal >= this.threshold && !this.dead){
             this.kill(message);
         }
 
-        if((this.mortal - this.threshold) >= this.threshold/2 && !this.obliterated && !this.isSword){
+        let overkill = this.mortal - this.threshold;
+        
+        if(this.sturdyCorpse){
+            overkill -= this.threshold*this.sturdyCorpse;
+        }
+        if((overkill >= this.threshold/2 || this.corpseless) && this.dead && !this.obliterated && !this.isSword){
+            console.log('obliterating');
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
             if(this.blood){
@@ -679,6 +693,19 @@ class Entity{
 
         return tiles;
     }
+
+    onHit(attacker = false, sturdyBonus = 0){
+        if(this.enrageAndDaze){
+            this.enrageAndDaze();   
+        }
+        console.log(sturdyBonus)
+        this.sturdy(attacker, sturdyBonus);
+        if(this.spawnEntities && this.spawnEntities.disturbChance){
+            console.log('gonna disturb...')
+            this.disturb();
+        }
+        this.checkTransform('onHitChance');
+    }
     
 }
 
@@ -702,6 +729,89 @@ class PlayerEntity extends Entity{
     get swordEntity(){
         return EntityManager.getEntity(this.sword);
     }
+
+    get directionFacing(){
+        return EntityManager.translations[this.rotation]
+    }
+
+    //strike if moving into tile you are facing which is attackable.
+    //monsters are attackable in adjacent tiles, but those attacks deal pitiful damage.
+    checkUnarmedStrike(x,y){
+        if(Player.equipped){
+            return false;
+        }
+        let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
+        let targetEntity = Board.entityAt(this.x+x,this.y+y)
+        if(!targetEntity || targetEntity.isItemPile){
+            return false;
+        }
+        if(rotationalDistance > 1){
+            return false
+        }
+        if(rotationalDistance > 0 && targetEntity.isContainer){
+            return false;
+        }
+        
+
+        let weapon = {
+            damage:3,
+            stun:2,
+            weight:3
+        }
+
+        if(rotationalDistance > 0){
+            weapon.damage -=2;
+            weapon.stun +=1;
+        }
+
+        return this.unarmedStrike(targetEntity, weapon);
+    }
+
+    unarmedStrike(target, weapon){
+        if(target.id == this.id || target.isWall){
+            return false;  
+        }
+        let weight = weapon.weight;
+        if(Player.stamina < weight){
+            return false;
+        }
+        Player.changeStamina(weight * -1);   
+        let damage = weapon.damage;
+        let stunTime = weapon.stun;
+        let damageDice = 1;
+        if(target.stunned){
+            damageDice++;
+        }
+
+        let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
+        damageDice += vulnerability;
+        stunTime += vulnerability;
+
+        let sizeBonus = Math.min(target.threshold*5,90);
+        let stunAdded = Random.roll(0,stunTime);
+        let mortality = Random.rollN(damageDice,0,damage);
+        if(sizeBonus > Math.random()*100){
+            stunAdded --;
+        }
+        EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+        EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
+        if(!target.dead){     
+            if(vulnerability){
+                Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
+            }
+        }
+        if(Monster.prototype.isPrototypeOf(target)){
+            target.addStunTime(stunAdded);
+        }
+        target.addMortality(mortality);
+        target.checkDead(target.name+" is slain!");
+        target.checkSplatter(mortality);
+        target.knock(this.id);
+        target.onHit(this, sizeBonus); 
+        
+        return true;
+    }
+
 }
 
 class SwordEntity extends Entity{
@@ -715,13 +825,34 @@ class SwordEntity extends Entity{
     constructor(ownerId, item=false){
         super(false, -1, -1)
         this.owner = ownerId;  
-        this.rotation = 2;
+        this.pointTowardsCenter();
 
         if(item){
             this.equip(item);
         }
 
         return this;
+    }
+
+    get ownerEntity(){
+        return EntityManager.getEntity(this.owner);
+    }
+
+    getRotationFromPosition(pos){
+        let relativePos ={
+            x: pos.x - this.ownerEntity.x,
+            y: pos.y - this.ownerEntity.y
+        } 
+        let rotation = false;
+        let i = 0;
+        EntityManager.translations.forEach((translation)=>{
+            if(translation.x == relativePos.x && translation.y == relativePos.y){
+                rotation = i;
+            }
+            i++;
+        })
+
+        return rotation;
     }
 
     updateSymbol(){
@@ -798,8 +929,12 @@ class SwordEntity extends Entity{
         if(lastSwordPos.rotation != this.rotation){
             return "swing";
         }
-        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) || (lastOwnerPos.x == ownerPos.x && lastOwnerPos.y == ownerPos.y)){
+        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) && EntityManager.getDistance(lastSwordPos,ownerPos) <= 1){
             return "jab";
+        }
+
+        if(lastOwnerPos.x == ownerPos.x && lastOwnerPos.y == ownerPos.y){
+            return "draw";
         }
 
         return "strafe";
@@ -819,7 +954,6 @@ class SwordEntity extends Entity{
             damageDice++;
         }
 
-
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
         stunTime += vulnerability;
@@ -835,10 +969,11 @@ class SwordEntity extends Entity{
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
             Player.changeHealth(mortality * -1);
         }else{
+            EntityManager.sendStrikeMessage(strikeType, weapon, target)
+            EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
-                EntityManager.transmitMessage(target.name+" is struck!");
                 if(vulnerability){
-                    Log.addMessage(target.name+" recoils!",'pos')
+                    Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
             if(Monster.prototype.isPrototypeOf(target)){
@@ -849,15 +984,7 @@ class SwordEntity extends Entity{
             target.checkDead(target.name+" is slain!");
             target.checkSplatter(mortality, weapon);
             target.knock(this.id);
-            if(target.enrageAndDaze){
-                target.enrageAndDaze();   
-            }
-            target.sturdy(this);
-            if(target.spawnEntities && target.spawnEntities.disturbChance){
-                console.log('gonna disturb...')
-                target.disturb();
-            }
-            target.checkTransform('onHitChance');
+            target.onHit(this); 
         }
 
         if(this.owner == 'player'){
@@ -871,6 +998,20 @@ class SwordEntity extends Entity{
     rotate(direction){
         this.rotation += 8 + direction;
         this.rotation %= 8;
+    }
+
+    pointTowardsCenter(){
+        let midpoint = {
+            x:Math.floor(Board.boardArray[0].length/2),
+            y:Math.floor(Board.boardArray.length/2)
+        }
+
+        this.pointTowards(midpoint);
+    }
+
+    pointTowards(coords){
+        let point = Board.getLine(this.ownerEntity, coords, 2)[1];
+        this.rotation = this.getRotationFromPosition(point);
     }
 
     //tries to knock your sword either clockwise or counterclockwise, then the other. Will only knock one degree - if Both spots are taken, will not knock.
@@ -1028,6 +1169,8 @@ class Monster extends Entity{
         
         return this;
     }
+
+    
 
     //not tested or implemented.
     checkExpiration(){
@@ -1267,7 +1410,7 @@ class Monster extends Entity{
             this.name = this.name.split(' corpse')[0];
             this.stunTime++;
             if(EntityManager.hasPlayerLos(this)){
-                Log.addMessage(this.name+' rises...', 'danger')
+                Log.addMessage(this.name+' rises...', 'danger',false,false,this.id)
             }
         }
     }
@@ -1282,7 +1425,7 @@ class Monster extends Entity{
         let mortality = Random.roll(0,damage);
 
         if (target.id == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks you!");
+            EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
             if(mortality == 0){
                 EntityManager.transmitMessage(this.name+" misses!");
             }else{
@@ -1320,7 +1463,7 @@ class Monster extends Entity{
 
         let random = Random.roll(1,100);
         if(random <= enrageChance){
-            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', 'enraged');
+            EntityManager.transmitMessage(this.name+" is enraged!", 'danger', 'enraged', false, this.id);
             this.behaviorInfo.focus += 5;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;
@@ -1338,7 +1481,7 @@ class Monster extends Entity{
         }
         random = Random.roll(1,100);
         if(random <= dazeChance){
-            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', 'dazed');
+            EntityManager.transmitMessage(this.name+" is dazed!", 'pos', 'dazed', false, this.id);
             this.behaviorInfo.focus -= 7;
             if(!this.behaviorInfo.slow){
                 this.behaviorInfo.slow = 0;
@@ -1372,9 +1515,9 @@ class Monster extends Entity{
 
             Player.unequipWeapon();
             this.inventory.items.push(item);
-            Log.addMessage(this.name+' absorbs your weapon!','urgent')
+            Log.addMessage(this.name+' absorbs your weapon!','urgent', false, false, this.id)
         }else{
-            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.")
+            Log.addMessage(this.name+' attempts to absorb your weapon!','danger','attempts to absorb',"Attacking and defending against this creature costs extra stamina. If you don't have enough, it will steal your weapon.",this.id)
 
             Player.changeStamina(grabStrength * -1)
         }

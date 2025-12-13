@@ -315,7 +315,7 @@ class LootManager{
             }
         }
         //apply modifier to special strikes
-        ['jab','swing','strafe'].forEach(function(val){
+        ['jab','swing','strafe','draw'].forEach(function(val){
             //only do this once!
             if(item[val] && !recursion){
                 LootManager.applyModifier(item[val], modifier);

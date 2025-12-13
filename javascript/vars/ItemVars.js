@@ -110,11 +110,11 @@ let itemVars = {
         scimitar:{
             weapon:true,
             name:"scimitar",
-            damage:6,
+            damage:7,
             stunTime:2,
             weight:3,
             strafe:{
-                damage:7,
+                damage:6,
                 stunTime:2,
                 weight:2,
                 type:{

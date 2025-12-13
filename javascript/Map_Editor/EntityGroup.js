@@ -13,6 +13,7 @@ class EntityGroup{
     wait = false;
     instances = {};
     count = 0;
+    wallType = false;
 
     constructor(empty = false){
         if(empty){

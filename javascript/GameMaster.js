@@ -74,6 +74,7 @@ class GameMaster{
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
+            Board.floorArray = Save.maps[roomString].floorMatrix;
             GameMaster.startGame(message, startingPosition);
         }else{
             console.log('loading room '+roomString);
@@ -83,6 +84,7 @@ class GameMaster{
                 console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
+                Board.floorArray = Save.maps[roomString].floorMatrix;
                 GameMaster.startGame(message, startingPosition);
             })
         }

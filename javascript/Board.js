@@ -6,6 +6,7 @@ class Board{
     static wallArray = [];
     static losArray = [];
     static stainArray = [];
+    static floorArray = [];
     static lightSourceIDs = [];
 
     static destinations = {};
@@ -46,7 +47,7 @@ class Board{
             if(Board.entityAt(x,y).id != entity.id && Board.isSpace(x,y)){
                 let itemCase = Board.entityAt(x,y).isItemPile || entity.isItemPile;
                 if(entity.isWall && !entity.dead){
-                    Board.wallArray[y][x] = true;
+                    Board.wallArray[y][x] = {wallType:entity.wallType};
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
@@ -98,6 +99,14 @@ class Board{
         }else{
             return false;
         }
+    }
+
+    static getFloor(x,y){
+        if ( Board.floorArray && Board.floorArray[y] && Board.floorArray[y][x]){
+            return Board.floorArray[y][x]
+        }
+
+        return false;
     }
 
     static placeEntity(entity, x, y){
@@ -326,7 +335,7 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, level = 1, color = {r:231, g:46, b:0}){
+    static setStain(x,y, level = 1, color = {r:185, g:80, b:53}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }

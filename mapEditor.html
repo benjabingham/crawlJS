@@ -38,6 +38,11 @@
             <button id="create-map-button">Create Empty Map</button> 
             <button id="cancel-new-map-button">Cancel</button>
         </div>
+
+        <div id="control-select">
+          <button id="entity-controls-button">Entity/Wall Controls</button> 
+            <button id="floor-controls-button">Floor controls</button>
+        </div>
         
     </div>
         
@@ -95,6 +100,12 @@
             <label for="symbol-input">Entity Color</label>
             <input type="text" id="entity-color-input">
           </div>
+          <div id="wall-options" class="control-panel-input-divs">
+            <label for="wall-type-dropdown">Wall Type</label>
+            <select id="wall-type-dropdown">
+              <option value="" disabled selected>Select Wall Type</option>
+            </select>
+          </div>
           <div id="entity-options" class="control-panel-input-divs">
             <h4>Other Options</h4>
             <div id="spawn-options">
@@ -110,6 +121,13 @@
             
           </div>
           
+        </div>
+        <div id = "floor-controls">
+          <h3>Floor Controls</h3>
+          <label for="floor-type-dropdown">Floor Type</label>
+            <select id="floor-type-dropdown">
+              <option value="" disabled selected>Select Floor Type</option>
+            </select>
         </div>
       </div>
     </div>

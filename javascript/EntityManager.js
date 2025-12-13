@@ -260,7 +260,7 @@ class EntityManager{
                     entityObj = new Monster(groupInfo.key,x,y,groupInfo);
                 }
             }else if(groupInfo.entityType == 'wall'){
-                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible);
+                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible, groupInfo.wallType);
             }else if(groupInfo.entityType == 'container'){
                 if(entitySave.alive){
                     entityObj = new Container(groupInfo.key,x,y,groupInfo);

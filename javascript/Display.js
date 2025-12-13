@@ -142,7 +142,6 @@ class Display{
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
         Display.addDirectionHighlight();
-        
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
@@ -154,8 +153,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -165,7 +164,12 @@ class Display{
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
-                            gridDiv.addClass('grid-wall')
+                            let wallType = Board.wallArray[y][x].wallType;
+                            if(!wallType){
+                                wallType = 'wall'
+                            }
+                            entityDiv.addClass('grid-'+wallType)
+                            
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
@@ -186,6 +190,14 @@ class Display{
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
                         }
+                    }
+                    if(Board.isSpace(x,y)){
+                        //floor stuff
+                        let floorType = Board.getFloor(x,y);
+                        if(!floorType){
+                            floorType = 'stone';
+                        }
+                        gridDiv.addClass(floorType+'Floor')
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){

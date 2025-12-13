@@ -1,5 +1,8 @@
 class Controls{
     static ctrlDown;
+    static floorMode = false;
+    static entityMode = true;
+    static selectedFloor;
 
     static init(){
         Controls.saveButtons();
@@ -7,6 +10,8 @@ class Controls{
         Controls.hotkeys();
         Controls.zoomControl();
         Controls.dragGrid();
+        Controls.floorModeButton();
+        Controls.entityModeButton();
     }
 
     static saveButtons(){
@@ -63,13 +68,16 @@ class Controls{
         Controls.entityGroupSelect();
         Controls.groupNameInput();
         Controls.entityTypeSelect();
-        Controls.entitySelect();
+        Controls.entitySelectDropdown();
         Controls.entityNameInput();
         Controls.symbolInput();
         Controls.colorInput();
+        Controls.wallTypeDropdown();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
+
+        Controls.floorTypeSelect();
     }
 
     static eraseButtons(){
@@ -106,6 +114,7 @@ class Controls{
     }
 
     static populateEntityGroupSelect(){
+        console.log('populating')
         $('#entity-group-select').empty().append(
             $('<option>').prop('disabled','disabled').attr('value','').text('Select Entity Group')
         ).append(
@@ -113,6 +122,7 @@ class Controls{
         ).val('');
         for (const [key, value] of Object.entries(EntityGroupManager.entityGroups)){
             Controls.addEntityGroupOption(value);
+            console.log(value);
         }
 
         if(EntityGroupManager.selectedEntityGroup != -1){
@@ -143,6 +153,12 @@ class Controls{
             if(!Controls.populateEntitySelect(entityType)){
                 $('#entity-options').hide();
                 $('#entity-options-cosmetic').hide();
+            }
+
+            if(entityType == 'wall'){
+                Controls.showWallOptions();
+            }else{
+                $('#wall-options').hide();
             }
              
             Grid.updateGrid();
@@ -176,7 +192,7 @@ class Controls{
         return true;
     }
 
-    static entitySelect(){
+    static entitySelectDropdown(){
         $('#entity-select-dropdown').on('change',function(){
             EntityGroupManager.setKey(this.value);
             if(EntityGroupManager.currentEntityType == 'container' || EntityGroupManager.currentEntityType == 'monster'){
@@ -219,6 +235,26 @@ class Controls{
         })
     }
 
+    static wallTypeDropdown(){
+        let input = $('#wall-type-dropdown');
+        input.on('change',function(){
+            console.log(this.value);
+            EntityGroupManager.setWallType(this.value);
+            Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+
+        Controls.populateWallTypeDropdown();
+    }
+
+    static populateWallTypeDropdown(){
+        ['wall','tree','wood'].forEach((type)=>{
+            $('#wall-type-dropdown').append(
+                $('<option>').attr('value',type).text(type).attr('id','wall-type-option-'+type)
+            )
+        })
+    }
+
     static updateColorPreview(){
         $('#entity-color-input').css('color', 'var(--'+EntityGroupManager.currentColor+')')
     }
@@ -255,6 +291,11 @@ class Controls{
         $('#entity-options-cosmetic').show();
     }
 
+    static showWallOptions(){
+        $('#wall-type-dropdown').val(EntityGroupManager.currentWallType)
+        $('#wall-options').show();
+    }
+
     static showSpawnOptions(){
         $('#entity-options').show();
         $('#spawn-chance-input').val(EntityGroupManager.currentSpawnChance);
@@ -288,13 +329,53 @@ class Controls{
             $('#entity-select-dropdown').val(group.key);
             Controls.showCosmeticOptions();
             Controls.showSpawnOptions();
-            
         }else{
             $('#entity-type-dropdown-div').hide();
             $('#entity-options').hide();
             $('#entity-options-cosmetic').hide();
         }
+
+        if(group.entityType == 'wall'){
+            Controls.showWallOptions();
+        }else{
+            $('#wall-options').hide();
+        }
     
+    }
+
+    static floorModeButton(){
+        $('#floor-controls-button').on('click',()=>{
+            $('#entity-group-controls').hide();
+            $('#draw-options-div').hide();
+
+            $('#floor-controls').show();
+            Controls.entityMode = false;
+            Controls.floorMode = true;
+        })
+    }
+
+    static entityModeButton(){
+        $('#entity-controls-button').on('click',()=>{
+            $('#floor-controls').hide();
+            $('#entity-group-controls').show();
+            $('#draw-options-div').show();
+
+            Controls.floorMode = false;
+            Controls.entityMode = true;
+        })
+    }
+
+    static floorTypeSelect(){
+        ['stone','grass','dirt','wood'].forEach((type)=>{
+            $('#floor-type-dropdown').append(
+                $('<option>').attr('value',type).text(type).attr('id','floor-type-option-'+type)
+            )
+        })
+
+        $('#floor-type-dropdown').on('change',function(){
+            Controls.selectedFloor = this.value;
+            console.log(Controls.selectedFloor);
+        })
     }
 
     static hotkeys(){

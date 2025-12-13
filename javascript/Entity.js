@@ -1532,10 +1532,11 @@ class Wall extends Entity{
     threshold = 100;
     isWall = true;
 
-    constructor(x,y,hitDice = 10, name=false, destructible = false){
+    constructor(x,y,hitDice = 10, name=false, destructible = false, wallType = false){
         super('',x,y,name);
         this.threshold = Math.max(Random.rollN(hitDice,1,20),1);
         this.destructible = destructible;
+        this.wallType = wallType
 
         return this;
     }

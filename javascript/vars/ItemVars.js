@@ -469,7 +469,7 @@ let itemVars = {
             blunt:{
                 flimsy:6,
             },
-            sharp:{
+            edged:{
                 flimsy:4,
             },
             value:.3,

@@ -742,7 +742,7 @@ class PlayerEntity extends Entity{
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
-        if(!targetEntity){
+        if(!targetEntity || targetEntity.isItemPile){
             return false;
         }
         if(rotationalDistance > 1){

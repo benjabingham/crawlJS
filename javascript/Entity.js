@@ -573,7 +573,7 @@ class Entity{
             }
             
         }else if(Player.equipped){
-            EntityManager.transmitMessage("You hold steady!");
+            EntityManager.transmitMessage("You hold steady! You may counterattack.","false", 'counterattack');
             this.parryable = true;
         }     
     };
@@ -964,7 +964,6 @@ class SwordEntity extends Entity{
         let stunAdded = 0;
         if(target.parryable){
             stunAdded++;
-            target.parryable = false;
         }
 
         if (stunTime){
@@ -977,6 +976,10 @@ class SwordEntity extends Entity{
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
             Player.changeHealth(mortality * -1);
         }else{
+            if(target.parryable){
+                EntityManager.transmitMessage('You counterattack!','pos','counterattack')
+                target.parryable = false;
+            }
             EntityManager.sendStrikeMessage(strikeType, weapon, target)
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
@@ -1435,7 +1438,7 @@ class Monster extends Entity{
         if (target.id == 'player'){
             EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
             if(mortality == 0){
-                EntityManager.transmitMessage(this.name+" misses!");
+                EntityManager.transmitMessage(this.name+" misses! You may counterattack.",false, "counterattack",false,this.id);
                 this.parryable = true;
             }else{
                 Player.changeHealth(mortality * -1);

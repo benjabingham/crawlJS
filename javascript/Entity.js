@@ -906,6 +906,9 @@ class SwordEntity extends Entity{
                     }else{
                         weight = this.item.weight;
                     }
+                    if(target.parryable){
+                        weight = Math.max(0,weight-1);
+                    }
                     if(Player.stamina < weight){
                         EntityManager.cancelAction({insuficientStamina:true});
                         return false;
@@ -958,10 +961,14 @@ class SwordEntity extends Entity{
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
         stunTime += vulnerability;
-
         let stunAdded = 0;
+        if(target.parryable){
+            stunAdded++;
+            target.parryable = false;
+        }
+
         if (stunTime){
-            stunAdded = Random.roll(1,stunTime);
+            stunAdded += Random.roll(1,stunTime);
         }
         let mortality = Random.rollN(damageDice,0,damage);
 

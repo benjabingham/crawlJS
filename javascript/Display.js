@@ -190,6 +190,9 @@ class Display{
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
                         }
+                        if(boardArray[y][x].parryable){
+                            entityDiv.addClass('parryable')
+                        }
                     }
                     if(Board.isSpace(x,y)){
                         //floor stuff

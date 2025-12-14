@@ -106,7 +106,6 @@ class Log{
                             $('.hint-divs').text(tipText)  
                         }
                         if(highlightID != -1){
-                            console.log('highlight');
                             EntityManager.getEntity(highlightID).highlighted = true;
                             Display.printBoard();
                         }

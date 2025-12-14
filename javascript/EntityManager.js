@@ -593,10 +593,6 @@ class EntityManager{
         let weaponPos = playerPos.swordEntity;
         let possibleStrikes = [];
         console.log(weaponPos,target);
-        if(EntityManager.getDistance(weaponPos,target) > 1){
-            console.log('distance > 1')
-            return possibleStrikes;
-        }
 
         let swordToTarget = {
             x:target.x - weaponPos.x,
@@ -609,7 +605,7 @@ class EntityManager{
         }
 
 
-        if(Player.equipped){
+        if(Player.equipped && EntityManager.getDistance(weaponPos,target) == 1){
             console.log('equipped');
             //the space the player would have to move into to make a moving attack
             let moveSpace = {x: target.x - playerToWeapon.x, y: target.y - playerToWeapon.y}

@@ -221,18 +221,34 @@ class Display{
     }
 
     static parryInRange(x,y){
-        if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(x,y)){
+        console.log({x:x,y:y})
+        let playerEntity = EntityManager.playerEntity;
+        let playerToTarget = {x:x-playerEntity.x, y:y-playerEntity.y}
+        if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(playerToTarget.x,playerToTarget.y)){
+            console.log('not in range')
+            console.log(EntityManager.playerEntity.canUnarmedStrike(x,y))
             return false
         }
 
         let possibleStrikes = EntityManager.getPossibleStrikes({x,y})
-        let weaponItem = EntityManager.playerEntity.swordEntity.item;
-        let weight = weaponItem.weight;
+        console.log(possibleStrikes);
+        let weaponItem = EntityManager.playerEntity.swordEntity.item
+        let weight = 99999
+        if(weaponItem){
+            weight = weaponItem.weight;
+        }
         possibleStrikes.forEach((strike)=>{
-            if (weaponItem[strike]){
-                weight = Math.min(weight, weaponItem[strike].weight)
+            if (weaponItem && weaponItem[strike]){
+                weight = Math.min(weight, weaponItem[strike].weight);
+            }
+
+            if(strike == 'unarmed'){
+                weight = Math.min(weight,3);
             }
         })
+
+        //because parrys cost 1 less...
+        weight-=1;
 
         return weight <= Player.stamina;
     }

@@ -221,8 +221,20 @@ class Display{
     }
 
     static parryInRange(x,y){
-        //would be AWESOME to detect which strikes are possible and only show if have enough stamina for one
-        return (EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) == 1 || EntityManager.playerEntity.canUnarmedStrike(x,y))
+        if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(x,y)){
+            return false
+        }
+
+        let possibleStrikes = EntityManager.getPossibleStrikes({x,y})
+        let weaponItem = EntityManager.playerEntity.swordEntity.item;
+        let weight = weaponItem.weight;
+        possibleStrikes.forEach((strike)=>{
+            if (weaponItem[strike]){
+                weight = Math.min(weight, weaponItem[strike].weight)
+            }
+        })
+
+        return weight <= Player.stamina;
     }
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells

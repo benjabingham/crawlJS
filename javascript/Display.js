@@ -186,9 +186,7 @@ class Display{
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
                         }
-                        if(boardArray[y][x].parryable){
-                            entityDiv.addClass('parryable')
-                        }
+                        Display.showParryHighlight(x,y, entityDiv);
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -212,6 +210,19 @@ class Display{
         }
         Display.applyHighlights();
         Display.setHintText($('.grid-exit'),'EXIT')
+    }
+
+    static showParryHighlight(x,y, entityDiv){
+        if(
+            Board.boardArray[y][x].parryable && Display.parryInRange(x,y)
+        ){
+            entityDiv.addClass('parryable')
+        }
+    }
+
+    static parryInRange(x,y){
+        //would be AWESOME to detect which strikes are possible and only show if have enough stamina for one
+        return (EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) == 1 || EntityManager.playerEntity.canUnarmedStrike(x,y))
     }
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells

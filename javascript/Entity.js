@@ -740,12 +740,15 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
+    //x and y are RELATIVE TO PLAYER
     canUnarmedStrike(x,y){
         if(Player.equipped){
             return false;
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
+        console.log(targetEntity)
+        console.log(rotationalDistance)
         if(!targetEntity || targetEntity.isItemPile){
             return false;
         }
@@ -756,17 +759,19 @@ class PlayerEntity extends Entity{
             return false;
         }
 
-        return true;
+        return {rotationalDistance:rotationalDistance};
     }
 
     //strike if moving into tile you are facing which is attackable.
     //monsters are attackable in adjacent tiles, but those attacks deal pitiful damage.
+    //x and y are RELATIVE TO PLAYER
     checkUnarmedStrike(x,y){
-        if(!this.canUnarmedStrike(x,y)){
+        let canUnarmedStrike = this.canUnarmedStrike(x,y);
+        if(!canUnarmedStrike){
             return false;
         }
 
-        let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
+        let rotationalDistance = canUnarmedStrike.rotationalDistance;
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         
         let weapon = {
@@ -788,6 +793,8 @@ class PlayerEntity extends Entity{
             return false;  
         }
         let weight = weapon.weight;
+        if(target.parryable){weight = Math.max(0,weight-1)}
+        
         if(Player.stamina < weight){
             return false;
         }
@@ -807,7 +814,12 @@ class PlayerEntity extends Entity{
         let stunAdded = Random.roll(0,stunTime);
         let mortality = Random.rollN(damageDice,0,damage);
         if(sizeBonus > Math.random()*100){
-            stunAdded --;
+            stunAdded = Math.max(0,stunAdded-1);
+        }
+        if(target.parryable){
+            EntityManager.transmitMessage('You counterattack!','pos','counterattack')
+            target.parryable = false;
+            stunAdded++;
         }
         EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
         EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
@@ -1452,7 +1464,6 @@ class Monster extends Entity{
 
         if (target.id == 'player'){
             EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
-            console.log(EntityManager.getPossibleStrikes(this));
             if(mortality == 0){
                 if(Display.parryInRange(this.x,this.y)){
                     EntityManager.transmitMessage(this.name+" misses! You may counterattack.",false, "counterattack",false,this.id);

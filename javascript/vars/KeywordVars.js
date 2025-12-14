@@ -11,4 +11,7 @@ keywordVars = {
     flickers:{
         hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
     },
+    counterattack:{
+        hintText:"Counterattacks cost 1 less stamina and stun for +1 turn."
+    }
 }

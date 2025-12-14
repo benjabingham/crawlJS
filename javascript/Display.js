@@ -231,6 +231,9 @@ class Display{
         }
 
         let possibleStrikes = EntityManager.getPossibleStrikes({x,y})
+        if(!possibleStrikes.length){
+            return false;
+        }
         console.log(possibleStrikes);
         let weaponItem = EntityManager.playerEntity.swordEntity.item
         let weight = 99999

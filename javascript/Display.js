@@ -155,7 +155,7 @@ class Display{
                     continue;
                 }
                 gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
-                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise');
+                entityDiv.removeClass('grid-highlighted highlight-up highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -185,6 +185,9 @@ class Display{
                             //reset each frame
                             boardArray[y][x].highlighted = false;
                             boardArray[y][x].highlightedAdjacents = [];
+                        }
+                        if(boardArray[y][x].parryable){
+                            entityDiv.addClass('parryable')
                         }
                     }
                     if(!Board.isSpace(x,y)){

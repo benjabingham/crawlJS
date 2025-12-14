@@ -574,6 +574,7 @@ class Entity{
             
         }else if(Player.equipped){
             EntityManager.transmitMessage("You hold steady!");
+            this.parryable = true;
         }     
     };
 
@@ -1428,6 +1429,7 @@ class Monster extends Entity{
             EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
             if(mortality == 0){
                 EntityManager.transmitMessage(this.name+" misses!");
+                this.parryable = true;
             }else{
                 Player.changeHealth(mortality * -1);
                 if (this.lightDrain){

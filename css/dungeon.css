@@ -84,6 +84,10 @@
         width:30px;
     }
 
+    .parryable{
+        text-shadow: -2px -2px 0 var(--parryable), 2px -2px 0 var(--parryable), -2px 2px 0 var(--parryable), 2px 2px 0 var(--parryable);
+    }
+
     .board-entity-div.grid-highlighted{
         background-color: var(--highlight); /* Semi-transparent black */
     }

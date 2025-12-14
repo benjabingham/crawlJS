@@ -45,6 +45,9 @@ q
     /*--directionalHighlight:#b4a834ab;*/
     --outline:#f3f3f338;
     /*--outline:var(--gridLine);*/
+    --parryable:#fdbe3588;
+    
+
     --defaultEntity:var(--dark);
 
     /*hud*/

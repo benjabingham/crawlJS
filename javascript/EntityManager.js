@@ -131,6 +131,7 @@ class EntityManager{
             }
             
             if (!skip){
+                entity.parryable = false;
                 switch(entity.behavior){
                     case "chase":
                         entity.chaseNatural();

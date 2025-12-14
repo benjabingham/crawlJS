@@ -573,7 +573,12 @@ class Entity{
             }
             
         }else if(Player.equipped){
-            EntityManager.transmitMessage("You hold steady! You may counterattack.","false", 'counterattack');
+            if(Display.parryInRange(this.x,this.y)){
+                EntityManager.transmitMessage("You hold steady! You may counterattack.",false, 'counterattack');
+                console.log(EntityManager.getPossibleStrikes(this))
+            }else{
+                EntityManager.transmitMessage("You hold steady!");
+            }
             this.parryable = true;
         }     
     };
@@ -735,9 +740,7 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
-    //strike if moving into tile you are facing which is attackable.
-    //monsters are attackable in adjacent tiles, but those attacks deal pitiful damage.
-    checkUnarmedStrike(x,y){
+    canUnarmedStrike(x,y){
         if(Player.equipped){
             return false;
         }
@@ -752,8 +755,20 @@ class PlayerEntity extends Entity{
         if(rotationalDistance > 0 && targetEntity.isContainer){
             return false;
         }
-        
 
+        return true;
+    }
+
+    //strike if moving into tile you are facing which is attackable.
+    //monsters are attackable in adjacent tiles, but those attacks deal pitiful damage.
+    checkUnarmedStrike(x,y){
+        if(!this.canUnarmedStrike(x,y)){
+            return false;
+        }
+
+        let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
+        let targetEntity = Board.entityAt(this.x+x,this.y+y)
+        
         let weapon = {
             damage:3,
             stun:2,
@@ -1437,8 +1452,13 @@ class Monster extends Entity{
 
         if (target.id == 'player'){
             EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
+            console.log(EntityManager.getPossibleStrikes(this));
             if(mortality == 0){
-                EntityManager.transmitMessage(this.name+" misses! You may counterattack.",false, "counterattack",false,this.id);
+                if(Display.parryInRange(this.x,this.y)){
+                    EntityManager.transmitMessage(this.name+" misses! You may counterattack.",false, "counterattack",false,this.id);
+                }else{
+                    EntityManager.transmitMessage(this.name+" misses!",false,false,false,this.id);
+                }
                 this.parryable = true;
             }else{
                 Player.changeHealth(mortality * -1);

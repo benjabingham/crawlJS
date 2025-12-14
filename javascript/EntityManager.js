@@ -587,4 +587,66 @@ class EntityManager{
         return 'a devastating blow!'
     }
 
+    static getPossibleStrikes(target){
+        let playerPos = EntityManager.playerEntity;
+        console.log(playerPos);
+        let weaponPos = playerPos.swordEntity;
+        let possibleStrikes = [];
+        console.log(weaponPos,target);
+        if(EntityManager.getDistance(weaponPos,target) > 1){
+            console.log('distance > 1')
+            return possibleStrikes;
+        }
+
+        let swordToTarget = {
+            x:target.x - weaponPos.x,
+            y:target.y - weaponPos.y
+        }
+
+        let playerToWeapon = {
+            x: weaponPos.x - playerPos.x,
+            y: weaponPos.y - playerPos.y
+        }
+
+
+        if(Player.equipped){
+            console.log('equipped');
+            //the space the player would have to move into to make a moving attack
+            let moveSpace = {x: target.x - playerToWeapon.x, y: target.y - playerToWeapon.y}
+            let canMoveStrike = Board.isOpenSpace(moveSpace.x, moveSpace.y) || Board.entityAt(moveSpace.x,moveSpace.y).id == playerPos.swordEntity.id
+            //is target in same direction by any axis, and would that result in player stepping in open space?
+            if(
+                (swordToTarget.x == playerToWeapon.x || swordToTarget.y == playerToWeapon.y) &&
+                canMoveStrike
+            ){
+                possibleStrikes.push('jab')
+            }
+
+            //if target has the same x or y as weapon and target is adjacent to player
+            if(
+                (!swordToTarget.x || !swordToTarget.y) &&
+                EntityManager.getDistance(playerPos,target) == 1
+            ){
+                possibleStrikes.push('swing');
+            }
+
+            if(
+                EntityManager.getDistance(playerPos,target) == 1 &&
+                canMoveStrike
+            ){
+                possibleStrikes.push('strafe');
+            }
+        }else{
+            if(!swordToTarget.x && !swordToTarget.y){
+                possibleStrikes.push('draw');
+            }
+
+            if(playerPos.canUnarmedStrike){
+                possibleStrikes.push('unarmed');
+            }
+        }
+
+        return possibleStrikes
+    }
+
 }

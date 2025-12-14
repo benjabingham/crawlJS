@@ -43,10 +43,11 @@ q
     /*--directionalHighlight:var(--dark);*/
     --directionalHighlight:#00000075;
     /*--directionalHighlight:#b4a834ab;*/
+
     --outline:#f3f3f338;
     /*--outline:var(--gridLine);*/
-    --parryable:#fdbe3588;
-    
+    /*--parryable:#fdbe3588;*/
+    --parryable:#fccb61;
 
     --defaultEntity:var(--dark);
 

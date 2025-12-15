@@ -153,7 +153,7 @@ let itemVars = {
             weapon:true,
             name:"longsword",
             damage:8,
-            stunTime:3,
+            stunTime:2,
             weight:3,
             type:{
                 sword:true,
@@ -241,7 +241,7 @@ let itemVars = {
         halberd:{
             weapon:true,
             name:"halberd",
-            damage:10,
+            damage:8,
             stunTime:3,
             weight:4,
             type:{

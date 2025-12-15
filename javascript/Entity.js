@@ -428,6 +428,7 @@ class Entity{
 
     kill(message = false){
         if(this.isMonster){
+            console.log({message:'kill',entity:this})
             if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win',false,false,this.id);
             }
@@ -632,7 +633,7 @@ class Entity{
         }
         let transformed = false;
         this.changeForms.forEach((form)=>{
-            console.log(form);
+            //console.log(form);
             if(!transformed && form[trigger] > Math.random()*100){
                 EntityManager.transformEntity(this, form)
                 transformed = true;
@@ -1398,7 +1399,7 @@ class Monster extends Entity{
         }
         console.log('reconstituting')
         this.mortal -= Random.roll(0,n);
-        if(this.mortal <= this.threshold){
+        if(this.mortal < this.threshold){
             if(this.reconstituteDecay){
                 let addDecay = this.reconstituteDecay;
                 this.decay = this.decay ? this.decay+addDecay : addDecay;
@@ -1412,6 +1413,7 @@ class Monster extends Entity{
             if(EntityManager.hasPlayerLos(this)){
                 Log.addMessage(this.name+' rises...', 'danger',false,false,this.id)
             }
+            console.log(JSON.parse(JSON.stringify(this)))
         }
     }
 

@@ -166,8 +166,8 @@ class LootManager{
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
     static getWeaponLoot(tier, allowedMaterials=false){
-        let weapon = LootManager.getWeapon();
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
+        let weapon = LootManager.getWeapon(weaponMaterial);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
 
@@ -248,13 +248,22 @@ class LootManager{
         }
     }
 
-    static getWeapon(){
+    static getWeapon(material = false){
         let weapons = Object.keys(itemVars.weapons);
         let nWeapons = weapons.length;
         let weaponIndex = Random.roll(0,nWeapons-1);
         
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
+        let i = 0;
+        while(material && weapon.disallowedMaterials && weapon.disallowedMaterials.includes(material)){
+            weaponIndex = Random.roll(0,nWeapons-1);
+            key = weapons[weaponIndex];
+            weapon = itemVars.weapons[key];
+            if(i > 10){
+                return JSON.parse(JSON.stringify(itemVars.food.baguette))
+            }
+        }
 
         //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(weapon));
@@ -326,7 +335,7 @@ class LootManager{
     static getStarterWeapon(){
         
         let starterWeapon = LootManager.getWeaponLoot(1)
-        /*
+    
         while(starterWeapon.value > 5){
             starterWeapon = LootManager.getWeaponLoot(1)
         }
@@ -335,7 +344,6 @@ class LootManager{
         }
         starterWeapon.flimsy += 5;
 
-        */
         return starterWeapon
     }
 

@@ -222,7 +222,7 @@ let monsterVars = {
         name:"zombie",
         symbol:"Zo",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:35
         },
@@ -259,7 +259,7 @@ let monsterVars = {
         name:"infested husk",
         symbol:"Zo",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         spawnEntities:{
             minCapacity:2,
             maxCapacity:4,
@@ -307,7 +307,7 @@ let monsterVars = {
         name:"revenant",
         symbol:"Re",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             knock:30,
             sturdy:30
@@ -348,7 +348,7 @@ let monsterVars = {
         name:"skeleton corpse",
         symbol:"Sk",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:20
         },
@@ -409,7 +409,7 @@ let monsterVars = {
         name:"skeleton",
         symbol:"Sk",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:20
         },
@@ -469,7 +469,7 @@ let monsterVars = {
         name:"legless skeleton",
         symbol:"Sk",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:80
         },
@@ -517,7 +517,7 @@ let monsterVars = {
         name:"headless skeleton",
         symbol:"Sk",
         behavior:"chase",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:20,
             focus:28,
@@ -563,7 +563,7 @@ let monsterVars = {
         name:"ghoul",
         symbol:"Gh",
         behavior:"chaseBinary",
-        vulnerabilities:['silver'],
+        vulnerabilities:['silver', 'sigiled bone'],
         behaviorInfo:{
             slow:10
         },

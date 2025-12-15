@@ -982,7 +982,7 @@ class SwordEntity extends Entity{
             stunTime = weapon[strikeType].stunTime;
         }
         let damageDice = 1;
-        if(target.stunned){
+        if(target.stunned || target.dead){
             damageDice++;
         }
 
@@ -1448,7 +1448,7 @@ class Monster extends Entity{
             this.container = false;
             this.name = this.name.split(' corpse')[0];
             this.stunTime++;
-            if(EntityManager.hasPlayerLos(this)){
+            if(Board.hasPlayerLos(this)){
                 Log.addMessage(this.name+' rises...', 'danger',false,false,this.id)
             }
             console.log(JSON.parse(JSON.stringify(this)))

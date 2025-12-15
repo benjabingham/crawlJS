@@ -170,6 +170,9 @@ class LootManager{
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
+        if(!weapon.flimsy || weapon.flimsy < 0){
+            weapon.flimsy = 0;
+        }
 
         return weapon;
     }

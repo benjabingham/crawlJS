@@ -6,6 +6,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:2,
+            flimsy:-1,
             type:{
                 blunt:true,
                 long:true
@@ -18,6 +19,7 @@ let itemVars = {
             damage:4,
             stunTime:3,
             weight:2,
+            flimsy:-2,
             type:{
                 blunt:true
             },
@@ -37,6 +39,7 @@ let itemVars = {
             damage:5,
             stunTime:3,
             weight:2,
+            flimsy:-1,
             type:{
                 blunt:true
             },
@@ -56,6 +59,7 @@ let itemVars = {
             damage:8,
             stunTime:5,
             weight:3,
+            flimsy:-1,
             type:{
                 blunt:true
             },
@@ -75,6 +79,7 @@ let itemVars = {
             damage:12,
             stunTime:7,
             weight:4,
+            flimsy:-1,
             type:{
                 blunt:true
             },

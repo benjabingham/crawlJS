@@ -832,7 +832,7 @@ let itemVars = {
             usable: true,
             potable: true,
             health: 2,
-            value: 8,
+            value: 5,
             color: 'red',
             message:'Your wounds close.'
         },
@@ -841,7 +841,7 @@ let itemVars = {
             usable: true,
             potable: true,
             health: 5,
-            value: 20,
+            value: 10,
             color: 'red',
             message:'Your wounds close.'
         },
@@ -850,7 +850,7 @@ let itemVars = {
             usable: true,
             potable: true,
             health: 10,
-            value: 40,
+            value: 20,
             color: 'red',
             message:'Your wounds close.'
         },
@@ -859,7 +859,7 @@ let itemVars = {
             usable: true,
             potable: true,
             stamina: 4,
-            value: 10,
+            value: 5,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
             tip: 'You gained stamina'
@@ -869,7 +869,7 @@ let itemVars = {
             usable: true,
             potable: true,
             stamina: 6,
-            value: 20,
+            value: 7,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
             tip: 'You gained stamina'
@@ -879,7 +879,7 @@ let itemVars = {
             usable: true,
             potable: true,
             stamina: 10,
-            value: 40,
+            value: 11,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
             tip: 'You gained stamina'
@@ -889,7 +889,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 1,
-            value: 10,
+            value: 7,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -898,7 +898,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 3,
-            value: 30,
+            value: 20,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -907,7 +907,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 6,
-            value: 110,
+            value: 40,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -918,11 +918,12 @@ let itemVars = {
             stamina: 10,
             health: 3,
             hunger: -6,
-            value: 10,
+            value: 7,
             color: 'orange',
             message:"You digest your stomach's contents in an instant.",
             tip: 'You gained stamina and health, at the cost of hunger.'
         },
+        /*
         unHallowedStrength:{
             name:'potion of unhallowed strength',
             usable: true,
@@ -959,6 +960,7 @@ let itemVars = {
             message:"Your stomach fills, but still you feel empty...",
             tip: 'You gained hunger at the cost of luck.'
         },
+        */
         fatestealerElixir:{
             name:'fatestealer elixir',
             usable: true,
@@ -967,7 +969,7 @@ let itemVars = {
             health: 10,
             luck: -10,
             hunger: 10,
-            value: 75,
+            value: 20,
             color: 'brightPurple',
             message:"You feel fully renewed, but something's wrong...",
             tip: 'You gained hunger, stamina, and health at the cost of luck.'
@@ -979,7 +981,7 @@ let itemVars = {
             stamina: 10,
             health: 10,
             luck: 10,
-            value: 150,
+            value: 50,
             hunger: 10,
             light:2,
             color: 'gold',
@@ -993,7 +995,7 @@ let itemVars = {
             stamina: -5,
             health: -5,
             luck: 10,
-            value: 55,
+            value: 20,
             hunger: -10,
             color: 'darkOrange',
             message:"Your life force is rended from you. You feel reborn.",
@@ -1021,7 +1023,7 @@ let itemVars = {
             name:'potion of dark vigor',
             usable: true,
             potable: true,
-            value: 8,
+            value: 6,
             light: -10,
             stamina: 10,
             color: 'darkPurple',

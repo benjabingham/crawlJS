@@ -78,7 +78,7 @@ let itemVars = {
             name:"maul",
             damage:12,
             stunTime:7,
-            weight:4,
+            weight:5,
             flimsy:-1,
             type:{
                 blunt:true
@@ -190,7 +190,7 @@ let itemVars = {
             name:"greatsword",
             damage:12,
             stunTime:4,
-            weight:4,
+            weight:5,
             type:{
                 sword:true,
                 edged:true
@@ -230,7 +230,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:6,
-                weight:4,
+                weight:5,
                 type:{
                     edged:true
                 }
@@ -243,7 +243,7 @@ let itemVars = {
             name:"halberd",
             damage:10,
             stunTime:3,
-            weight:3,
+            weight:4,
             type:{
                 edged:true,
                 long:true
@@ -251,7 +251,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:5,
+                weight:6,
                 type:{
                     edged:true,
                     long:true

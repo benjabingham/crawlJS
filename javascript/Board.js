@@ -404,11 +404,12 @@ class Board{
         let emptyStain = {level:0, color:{r:0,g:0,b:0}}
         let result = JSON.parse(JSON.stringify(emptyStain));
         result.level = totalLevel;
-        [stain1, stain2].forEach((stain)=>{
-            if(!stain || stain == -1 || !stain.color || !stain.color.r){
-                stain = JSON.parse(JSON.stringify(emptyStain));
-            }
-        })
+        if(!stain1 || stain1 == -1 || !stain1.color || !stain1.color.r){
+            stain1 = JSON.parse(JSON.stringify(emptyStain));
+        }
+        if(!stain2 || stain2 == -1 || !stain2.color || !stain2.color.r){
+            stain2 = JSON.parse(JSON.stringify(emptyStain));
+        }
         console.log({
             1:stain1,
             2:stain2

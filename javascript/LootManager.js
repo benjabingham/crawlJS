@@ -167,7 +167,7 @@ class LootManager{
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
     static getWeaponLoot(tier, allowedMaterials=false){
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
-        let weapon = LootManager.getWeapon(weaponMaterial);
+        let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
 
@@ -221,6 +221,7 @@ class LootManager{
         }
         let key = materials[materialIndex];
         let material = itemVars.weaponMaterials[key];
+        material.key = key;
 
         return material;
     }

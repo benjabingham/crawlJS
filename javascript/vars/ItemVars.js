@@ -129,7 +129,7 @@ let itemVars = {
                 sword:true,
                 edged:true
             },
-            disallowedMaterials:["flint","limestone","rubber","ceramic"],
+            disallowedMaterials:["flint","limestone","rubber","ceramic","bone"],
             value:7
         },
         shortsword:{
@@ -154,7 +154,7 @@ let itemVars = {
                 sword:true,
                 edged:true
             },
-            disallowedMaterials:["flint"],
+            disallowedMaterials:["flint","bone"],
             value:7
         },
         katana:{
@@ -230,7 +230,7 @@ let itemVars = {
                     edged:true
                 }
             },
-            disallowedMaterials:["flint","ceramic"],
+            disallowedMaterials:["flint","ceramic","bone"],
             value:9
         },
         halberd:{
@@ -252,7 +252,7 @@ let itemVars = {
                     long:true
                 }
             },
-            disallowedMaterials:["flint","limestone","rubber","ceramic"],
+            disallowedMaterials:["flint","limestone","rubber","ceramic","bone"],
             value:8
         },
     },
@@ -517,9 +517,6 @@ let itemVars = {
             weight:1,
             stunTime:2,
             blunt:{
-                damage:2
-            },
-            edged:{
                 damage:1
             },
             value:2,

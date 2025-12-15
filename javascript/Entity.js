@@ -304,7 +304,7 @@ class Entity{
         let spawnSettings = this.spawnEntities;
         let occupiedChance = spawnSettings.occupiedChance;
         this.containedEntities = [];
-        if(occupiedChance && occupiedChance < Math.random*100){
+        if(occupiedChance && occupiedChance < Math.random()*100){
             return true;
         }
 

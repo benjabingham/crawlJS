@@ -201,6 +201,17 @@ let containerVars = {
         },
         color:'woodBrown'
     },
+    fence:{
+        name:"fence",
+        symbol:"⩸",
+        behavior:"",
+        hitDice:2,
+        behaviorInfo:{sturdy:60},
+        damage:4,
+        inventorySlots: 0,
+        isContainer: true,
+        color:'woodBrown'
+    },
     weaponChest:{
         name:"weapon chest",
         symbol:"Ch",
@@ -285,7 +296,7 @@ let containerVars = {
     },
     shrub:{
         name:"shrub",
-        symbol:"o",
+        symbol:"❧",
         behavior:"",
         hitDice:0,
         damage:4,

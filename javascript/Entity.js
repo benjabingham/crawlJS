@@ -602,7 +602,7 @@ class Entity{
             }else{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
-            if(!this.dead){
+            if(!this.dead && !this.isContainer){
                 EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
             }else{
                 EntityManager.transmitMessage(this.name+" won't budge...", false, "won't budge",'this object has a chance not to be knocked away by your weapon. It still takes damage.', this.id);

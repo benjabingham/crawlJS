@@ -321,6 +321,7 @@ let containerVars = {
         name:"tomb",
         symbol:"▣",
         behavior:"",
+        behaviorInfo:{sturdy:90},
         spawnEntities:{
             minCapacity:1,
             maxCapacity:1,
@@ -328,7 +329,8 @@ let containerVars = {
                 'skeleton',
                 'zombie',
                 'infestedHusk',
-                'headlessSkeleton'
+                'headlessSkeleton',
+                'ghoul'
             ],
             spawnChance: 20,
             disturbChance:100
@@ -373,15 +375,15 @@ let containerVars = {
             entities:[
                 'skeleton',
                 'zombie',
-                'headlessSkeleton'
             ],
             spawnChance: 1,
             disturbChance:100
         },
         behaviorInfo:{
-            slow:70
+            slow:70,
+            sturdy:90
         },
-        hitDice:2,
+        hitDice:3,
         damage:4,
         inventorySlots: 2,
         isContainer: true,
@@ -416,6 +418,7 @@ let containerVars = {
         name:"ghoul tomb",
         symbol:"▣",
         behavior:"",
+        behaviorInfo:{sturdy:90},
         spawnEntities:{
             entities:[
                 'ghoul'
@@ -453,6 +456,7 @@ let containerVars = {
         name:"rat tomb",
         symbol:"▣",
         behavior:"",
+        behaviorInfo:{sturdy:90},
         spawnEntities:{
             minCapacity:0,
             maxCapacity:5,
@@ -499,10 +503,19 @@ let containerVars = {
         name:"empty tomb",
         symbol:"▣",
         behavior:"",
+        behaviorInfo:{sturdy:70},
         hitDice:3,
         damage:4,
         inventorySlots: 1,
         isContainer: true,
+        spawnEntities:{
+            occupiedChance:5,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 0,
+            disturbChance:100
+        },
         inventory:[
             {
                 item: itemVars.drops.sigiledBone,
@@ -534,6 +547,7 @@ let containerVars = {
         name:"overflowingCrypt",
         symbol:"▣",
         behavior:"",
+        behaviorInfo:{sturdy:95},
         spawnEntities:{ 
             minCapacity:5,
             maxCapacity:8,
@@ -543,7 +557,9 @@ let containerVars = {
                 'skeleton',
                 'zombie',
                 'ghoul',
-                'rat'
+                'rat',
+                'headlessSkeleton',
+                'infestedHusk'
             ],
             spawnChance: 20,
             disturbChance:100,

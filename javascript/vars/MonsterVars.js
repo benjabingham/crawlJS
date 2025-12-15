@@ -342,7 +342,7 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:100,
         bloodColor:{r:136,g:62,b:63},
-        color:'white'
+        color:'silver'
     },
     skeletonPile:{
         name:"skeleton corpse",
@@ -592,9 +592,9 @@ let monsterVars = {
         },
         reconstitute:2,
         reconstituteBehavior:'chaseBinary',
-        reconstituteChance:25,
+        reconstituteChance:35,
         bloodColor:{r:136,g:62,b:63},
-        color:'white'
+        color:'silver'
     },
     corrosiveOoze:{
         name:"corrosive ooze",

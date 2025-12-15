@@ -247,13 +247,14 @@ class EntityManager{
         Board.boardInit(json);
 
         Board.destinations = json.destinations;
+        console.log(json.roster)
         json.roster.forEach((entitySave)=>{
             let groupInfo = entitySave.entityGroupInfo;
             let entityObj;
             let x = entitySave.x;
             let y = entitySave.y;
             let random = Random.roll(0,99);
-            let spawn = (random < entitySave.spawnChance || !entitySave.spawnChance);
+            let spawn = (random < groupInfo.spawnChance || !groupInfo.spawnChance);
             if(groupInfo.entityType == "player"){
                 EntityManager.playerEntity = EntityManager.playerInit(x, y)
             }else if(groupInfo.entityType == "monster"){

@@ -72,4 +72,12 @@
     color:var(--hungerBarText)
 }
 
+.preview{
+    animation: pulse 900ms ease-in-out infinite alternate;
+}
+@keyframes pulse {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
 

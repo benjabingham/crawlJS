@@ -59,7 +59,7 @@ q
     --luckBar:var(--green);
     --luckBarText:var(--darkGreen);
     --hungerBar:var(--orange);
-    --hungerBarText:far(var(--darkOrange));
+    --hungerBarText:var(--darkOrange);
     --resourceBorder:var(--defaultEntity);
 
 

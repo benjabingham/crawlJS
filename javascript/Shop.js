@@ -34,7 +34,7 @@ class Shop{
 
 
     static stockInventory(){
-        let tiers = [0,0,1,3,4,4];
+        let tiers = [0,0,1,2,3,4];
         let slot = 0;
         let carriedMaterials = ['wood','copper','bronze','iron','steel'];
         tiers.forEach((tier)=>{
@@ -52,6 +52,13 @@ class Shop{
             let fuel = Shop.getFuel();
             fuel.slot = slot;
             Shop.inventory.push(fuel);
+            slot++;
+        }
+
+        for(let i=0; i<2; i++){
+            let potion = Shop.getPotion();
+            potion.slot = slot;
+            Shop.inventory.push(potion);
             slot++;
         }
 
@@ -74,16 +81,23 @@ class Shop{
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
-                if(Random.roll(0,4)){
+                if(Random.roll(0,2)){
                     let fuel = Shop.getFuel();
                     fuel.slot = slot;
                     fuel.fresh = true;
                     Shop.inventory[slot] = fuel;
                 }
+            }else if(item.tier == 'potion'){
+                if(Random.roll(0,2)){
+                    let potion = Shop.getPotion();
+                    potion.slot = slot;
+                    potion.fresh = true;
+                    Shop.inventory[slot] = potion;
+                }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
-                if(random < restockChance || item.purchased){
+                if(random < restockChance){
                     let newItem = LootManager.getWeaponLoot(item.tier, carriedMaterials);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value,1) * priceMultiplier;
@@ -115,6 +129,15 @@ class Shop{
         fuel.tier = 'fuel';
 
         return fuel;
+    }
+
+    static getPotion(){
+        let tier = Random.roll(0,4);
+        let potion = LootManager.getPotionLoot(tier);
+        potion.price = potion.value * (tier+1);
+        potion.tier = 'potion'
+
+        return potion;
     }
 
     static buyItem(slot){

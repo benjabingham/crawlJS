@@ -106,7 +106,7 @@
 }
 
 .inventory-description-body{
-    height:100px;
+    height:80px;
     
 }
 
@@ -115,6 +115,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0px;
     grid-auto-rows: 2rem;
+    height:68px;
 }
 
 .item-stats-normal{

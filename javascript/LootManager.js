@@ -15,6 +15,7 @@ class LootManager{
                 template = monsterVars[key];
                 break;
             default:
+                return false;
         }
 
         if(!entitySave.inventory){
@@ -25,6 +26,7 @@ class LootManager{
 
         if(!template){
             console.log('NO TEMPLATE FOUND FOR '+key)
+            console.log(entitySave)
             return false;
         }
 
@@ -164,8 +166,8 @@ class LootManager{
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
     static getWeaponLoot(tier, allowedMaterials=false){
-        let weapon = LootManager.getWeapon();
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
+        let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsWorn(weapon, tier);
         if(!weapon.flimsy || weapon.flimsy < 0){
@@ -187,15 +189,30 @@ class LootManager{
         }
     }
 
-
-    static getWeaponMaterial(tier, allowedMaterials = false){
+    static getWeightedWeaponMaterials(allowedMaterials = false){
         let materials;
+        let weightedMaterials = [];
         if(allowedMaterials){
             materials = allowedMaterials;
         }else{
             materials = Object.keys(itemVars.weaponMaterials);        
         }
+
+        materials.forEach((key)=>{
+            let material = itemVars.weaponMaterials[key];
+            for(let i = 0; i < material.frequency; i++){
+                weightedMaterials.push(key);
+            }
+        })
+
+        return weightedMaterials;
+    }
+
+
+    static getWeaponMaterial(tier, allowedMaterials = false){
+        let materials = LootManager.getWeightedWeaponMaterials(allowedMaterials);
         let nMaterials = materials.length; 
+        //nrolls represents number of EXTRA rolls.
         let nRolls = tier-3;
         let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
         nRolls = Math.abs(nRolls);
@@ -207,6 +224,7 @@ class LootManager{
         }
         let key = materials[materialIndex];
         let material = itemVars.weaponMaterials[key];
+        material.key = key;
 
         return material;
     }
@@ -234,13 +252,22 @@ class LootManager{
         }
     }
 
-    static getWeapon(){
+    static getWeapon(material = false){
         let weapons = Object.keys(itemVars.weapons);
         let nWeapons = weapons.length;
         let weaponIndex = Random.roll(0,nWeapons-1);
         
         let key = weapons[weaponIndex];
         let weapon = itemVars.weapons[key];
+        let i = 0;
+        while(material && weapon.disallowedMaterials && weapon.disallowedMaterials.includes(material)){
+            weaponIndex = Random.roll(0,nWeapons-1);
+            key = weapons[weaponIndex];
+            weapon = itemVars.weapons[key];
+            if(i > 10){
+                return JSON.parse(JSON.stringify(itemVars.food.baguette))
+            }
+        }
 
         //this is to make a copy of the object - this way it isn't passed by reference.
         return JSON.parse(JSON.stringify(weapon));
@@ -301,7 +328,7 @@ class LootManager{
             }
         }
         //apply modifier to special strikes
-        ['jab','swing','strafe'].forEach(function(val){
+        ['jab','swing','strafe','draw'].forEach(function(val){
             //only do this once!
             if(item[val] && !recursion){
                 LootManager.applyModifier(item[val], modifier);
@@ -311,8 +338,8 @@ class LootManager{
 
     static getStarterWeapon(){
         
-        let starterWeapon = LootManager.getWeaponLoot(5)
-        /*
+        let starterWeapon = LootManager.getWeaponLoot(1)
+    
         while(starterWeapon.value > 5){
             starterWeapon = LootManager.getWeaponLoot(1)
         }
@@ -321,7 +348,6 @@ class LootManager{
         }
         starterWeapon.flimsy += 5;
 
-        */
         return starterWeapon
     }
 

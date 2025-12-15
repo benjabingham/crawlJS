@@ -61,14 +61,14 @@ class EntityManager{
         if(!weapon.item){
             return false;
         }
+        if(item.resistant){
+            return false;
+        }
         n = Random.roll(0,n);
         if(!item.flimsy){
             item.flimsy = 0;
         }
-        console.log(item.flimsy)
         item.flimsy +=n;
-        console.log(item.flimsy)
-        console.log(item);
         if(n){
             EntityManager.transmitMessage(item.name + ' is corroding...', 'danger',"corroding",false,weapon.id);
         }
@@ -535,6 +535,34 @@ class EntityManager{
         //otherwise entitymanager will have two pointers to the same entity
         delete EntityManager.entities[newID]
         Board.placeEntity(newEntity,newEntity.x,newEntity.y);
+    }
+
+    static sendStrikeMessage(strikeType, weapon, target){
+        let message = '';
+        let tipText = '';
+        switch (strikeType){
+            case "swing":
+                message = 'you swing your weapon into the '+target.name+"."
+                tipText = "A swing is a strike that has you rotating your weapon into a target."
+                break;
+            case "jab":
+                message = "you jab the "+target.name+'.'
+                tipText = "A target is jabbed when you strike them by advancing towards them."
+                break;
+            case "strafe":
+                message = "you deliver a strafing strike to the "+target.name+"."
+                strikeType = "strafing"
+                tipText = "A strafing strike is one where you strike while moving sideways or backwards diagonally"
+                break;
+            case "draw":
+                message = 'you draw your weapon, striking the '+target.name+"."
+                tipText = "a draw strike occurs when you draw your weapon into a target."
+                break;
+            default:    
+                message = "you strike the "+target.name+".";
+
+        }
+        EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
     }
 
     static getDamageText(target,damage){

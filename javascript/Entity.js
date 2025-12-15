@@ -742,7 +742,7 @@ class PlayerEntity extends Entity{
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
-        if(!targetEntity){
+        if(!targetEntity || targetEntity.isItemPile){
             return false;
         }
         if(rotationalDistance > 1){
@@ -929,8 +929,12 @@ class SwordEntity extends Entity{
         if(lastSwordPos.rotation != this.rotation){
             return "swing";
         }
-        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) || (lastOwnerPos.x == ownerPos.x && lastOwnerPos.y == ownerPos.y)){
+        if((lastSwordPos.x == ownerPos.x || lastSwordPos.y == ownerPos.y) && EntityManager.getDistance(lastSwordPos,ownerPos) <= 1){
             return "jab";
+        }
+
+        if(lastOwnerPos.x == ownerPos.x && lastOwnerPos.y == ownerPos.y){
+            return "draw";
         }
 
         return "strafe";
@@ -965,7 +969,7 @@ class SwordEntity extends Entity{
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
             Player.changeHealth(mortality * -1);
         }else{
-            EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+            EntityManager.sendStrikeMessage(strikeType, weapon, target)
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
                 if(vulnerability){

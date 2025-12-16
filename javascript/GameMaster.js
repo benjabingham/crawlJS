@@ -27,6 +27,7 @@ class GameMaster{
         Log.wipeLog();
         EntityManager.wipeEntities();
         GameMaster.stopDrop();
+        Board.lightSourceIDs = [];
     }
 
     static startGame(message=false, position=false){

@@ -181,7 +181,8 @@ let containerVars = {
                 'rat'
             ],
             spawnChance: 5,
-            disturbChance:100
+            disturbChance:100,
+            audioDisturbChance:20
         },
         inventory:[
             {
@@ -226,7 +227,8 @@ let containerVars = {
                 'rat'
             ],
             spawnChance: 10,
-            disturbChance:100
+            disturbChance:100,
+            audioDisturbChance:5
         },
         inventory:[
             {
@@ -464,8 +466,9 @@ let containerVars = {
                 'headlessSkeleton',
                 'ghoul'
             ],
-            spawnChance: 20,
-            disturbChance:100
+            spawnChance: 10,
+            disturbChance:100,
+            audioDisturbChance:10
         },
         hitDice:3,
         damage:4,
@@ -492,7 +495,7 @@ let containerVars = {
             },
             weapon:{
                 chance:15,
-                tier:0,
+                tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
             },
         },
@@ -509,7 +512,57 @@ let containerVars = {
                 'zombie',
             ],
             spawnChance: 1,
-            disturbChance:100
+            disturbChance:100,
+            audioDisturbChance:8
+        },
+        behaviorInfo:{
+            slow:60,
+            sturdy:90
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance: 10
+            },
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance: 3
+            },
+        ],
+        loot:{
+            treasure:{
+                chance:8,
+                tier:2
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            weapon:{
+                chance:5,
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+            },
+        },
+        color:'darkGray'
+    },
+    sleepingTomb:{
+        name:"sleeping tomb",
+        symbol:"▣",
+        behavior:"",
+        spawnEntities:{
+            occupiedChance:80,
+            entities:[
+                'skeleton',
+                'zombie',
+            ],
+            spawnChance: 0,
+            disturbChance:100,
+            audioDisturbChance:5
         },
         behaviorInfo:{
             slow:70,
@@ -556,7 +609,8 @@ let containerVars = {
                 'ghoul'
             ],
             spawnChance: 10,
-            disturbChance:100
+            disturbChance:100,
+            audioDisturbChance:10
         },
         hitDice:4,
         damage:4,
@@ -597,8 +651,9 @@ let containerVars = {
             entities:[
                 'rat'
             ],
-            spawnChance: 10,
-            disturbChance:100
+            spawnChance: 5,
+            disturbChance:100,
+            audioDisturbChance:2
         },
         hitDice:3,
         damage:4,
@@ -646,7 +701,8 @@ let containerVars = {
                 'rat'
             ],
             spawnChance: 0,
-            disturbChance:100
+            disturbChance:100,
+            audioDisturbChance:1
         },
         inventory:[
             {
@@ -693,8 +749,9 @@ let containerVars = {
                 'headlessSkeleton',
                 'infestedHusk'
             ],
-            spawnChance: 20,
+            spawnChance: 15,
             disturbChance:100,
+            audioDisturbChance: 10
         },
         hitDice:5,
         damage:4,
@@ -756,6 +813,7 @@ let containerVars = {
             ],
             spawnChance: 2,
             disturbChance:70,
+            audioDisturbChance:15
         },
         hitDice:3,
         damage:4,

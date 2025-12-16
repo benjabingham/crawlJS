@@ -718,6 +718,22 @@ class Entity{
         }
         this.checkTransform('onHitChance');
     }
+
+    //audioDisturbChance is multiplied by volume-distance, and added to spawnchance.
+    //
+    hearSound(volume){
+        if(this.spawnEntities && this.spawnEntities.audioDisturbChance){
+            let disturbChance = this.spawnEntities.audioDisturbChance;
+            if(volume > 1){
+                disturbChance *= volume;
+            }
+            if(!this.spawnChance){
+                this.spawnChance = 0;
+            } 
+            this.spawnEntities.spawnChance += disturbChance;
+            
+        }
+    }
     
 }
 
@@ -815,6 +831,8 @@ class PlayerEntity extends Entity{
         let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
         damageDice += vulnerability;
         stunTime += vulnerability;
+
+        EntityManager.emitSound(target,2);            
 
         let sizeBonus = Math.min(target.threshold*5,90);
         let stunAdded = Random.roll(0,stunTime);
@@ -980,11 +998,13 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
+        let weight = weapon.weight;
         let stunTime = weapon.stunTime;
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
             stunTime = weapon[strikeType].stunTime;
+            weight = weapon[strikeType].weight
         }
         let damageDice = 1;
         if(target.stunned || target.dead){
@@ -1020,6 +1040,7 @@ class SwordEntity extends Entity{
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
+            EntityManager.emitSound(target,weight);            
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
                 target.checkStealWeapon();

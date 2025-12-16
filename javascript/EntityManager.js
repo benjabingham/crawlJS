@@ -660,4 +660,23 @@ class EntityManager{
         return possibleStrikes
     }
 
+    static emitSound(pos,volume){
+        let entity;
+        for(let x = pos.x-volume; x <= pos.x+volume; x++){
+            for(let y = pos.y-volume; y <= pos.y+volume; y++){
+                //check for true distance - this way it's a circle, not a square.
+                let trueDistance = Board.getTrueDistance({x:x,y:y},pos);
+                if(trueDistance > volume){
+                    continue;
+                }
+                entity = Board.entityAt(x,y);
+                if(!entity || entity.isWall || !Board.hasLos({x:x,y:y},pos)){
+                    continue;
+                }
+
+                entity.hearSound(volume - trueDistance);
+            }
+        }
+    }
+
 }

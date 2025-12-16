@@ -154,7 +154,8 @@ class EntityManager{
             if(entity.decay && !slow){
                 entity.triggerDecay();
             }
-            if(entity.spawnEntities && !slow){
+            //can still spawn if stunned
+            if(entity.spawnEntities && !slow && !entity.wait){
                 EntityManager.spawnEntity(entity);
             }
             entity.stunned = Math.max(entity.stunned-1, 0);

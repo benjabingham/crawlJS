@@ -1,13 +1,22 @@
 class LootManager{
 
-    static getEntityLoot(entitySave){
+    static getEntityLoot(entitySave, entityType = false){
         //console.log(entitySave);
         let entityGroupInfo = entitySave.entityGroupInfo;
         let lootChances = false;
-        let key = entityGroupInfo.key;
+        let key;
+        if(entitySave.key){
+            key = entitySave.key
+        }else{
+            key = entityGroupInfo.key;
+        }
+
+        if(!entityType){
+            entityType = entityGroupInfo.entityType
+        }
         
         let template = false;
-        switch (entityGroupInfo.entityType){
+        switch (entityType){
             case 'container':
                 template = containerVars[key];
                 break;

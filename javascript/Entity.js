@@ -470,7 +470,12 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
+        console.log('checksplatter')
+        if(!this.blood){
+            return false;
+        }
         let sharp = false;
+        damage *= this.blood;
         if(weapon){
             sharp = weapon.type.edged || weapon.type.sword
         }
@@ -481,7 +486,7 @@ class Entity{
             damage *= 2;
         }
 
-        if(this.dead){
+        if(this.dead || this.isContainer){
             damage *= 4;
         }
 
@@ -602,7 +607,7 @@ class Entity{
             }else{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
-            if(!this.dead && !this.isContainer){
+            if(!this.dead && Monster.prototype.isPrototypeOf(this)){
                 EntityManager.transmitMessage(this.name+" holds its footing!", 'danger', 'holds its footing','this enemy has a chance not to be knocked away by your weapon. It still takes damage.', this.id);
             }else{
                 EntityManager.transmitMessage(this.name+" won't budge...", false, "won't budge",'this object has a chance not to be knocked away by your weapon. It still takes damage.', this.id);

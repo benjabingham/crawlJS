@@ -444,11 +444,11 @@ class Controls{
             pos3 = e.clientX;
             pos4 = e.clientY;
             $(document).on('mouseup',function(e){
-                console.log(e);
+                //console.log(e);
                 if(e.originalEvent.button != 2){
                     return false;
                 }
-                console.log('up');
+                //console.log('up');
                 e.preventDefault();
                 
                 $(document).off('mouseup');

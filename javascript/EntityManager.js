@@ -128,6 +128,12 @@ class EntityManager{
                 }else{
                     entity.wait = false;
                 }
+            }else if(entity.wakeupChance && !entity.awake){
+                if(Math.random()*100 < entity.wakeupChance){
+                    entity.awake = true;
+                }else{
+                    skip++
+                }
             }
             
             if (!skip){
@@ -373,15 +379,22 @@ class EntityManager{
                 console.log('SPAWNER FAILED TO INSTANTIATE ENTITY')
                 return false;
             }
-    
-            //cant take more than half the items because inventory length updates as they are taken
-            //i like this
-            for(let j = 0; j < spawner.inventory.items.length; j++){
-                if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
-                    let item = spawner.inventory.items.splice(j,1)[0];
-                    entityObj.inventory.items.push(item);
+
+            if(spawner.spawnEntities.items){
+                LootManager.getEntityLoot(entityObj, 'monster');
+            }else{
+                //take items from spawner
+                //cant take more than half the items because inventory length updates as they are taken
+                //i like this
+                for(let j = 0; j < spawner.inventory.items.length; j++){
+                    if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
+                        let item = spawner.inventory.items.splice(j,1)[0];
+                        entityObj.inventory.items.push(item);
+                    }
                 }
             }
+    
+            
     
             if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
                 Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger', false, false, entityObj.id);
@@ -423,7 +436,7 @@ class EntityManager{
                         spawnerSave = EntityManager.currentMap.roster[spawner.index];
                     }
                     //if spawner was spawned, don't bother
-                    if(spawnerSave && !spawnerSave.spawnerID){
+                    if(spawnerSave && !spawnerSave.spawnerID && !spawner.spawnEntities.items){
                         spawnerSave.inventory.items = spawner.inventory.items;
                         spawnerSave.inventory.gold = spawner.inventory.gold;
                         spawnerSave.containedEntities = spawner.containedEntities;

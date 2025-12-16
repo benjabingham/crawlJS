@@ -167,6 +167,97 @@ let containerVars = {
         },
         color:'gold'
     },
+    goblinbedroll:{
+        name:"bedroll",
+        symbol:"▮",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        spawnEntities:{
+            occupiedChance:10,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 5,
+            disturbChance:100
+        },
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:40
+            }
+        ],
+        loot:{
+            treasure:{
+                chance:20,
+                tier:1
+            },
+            weapon:{
+                chance:20,
+                tier:0
+            },
+            gold:{
+                chance:25,
+                amount:3
+            },
+            potion:{
+                chance:10,
+                tier:0
+            }
+        },
+        color:'brown'
+    },
+    ratstash:{
+        name:"rat stash",
+        symbol:"#",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        spawnEntities:{
+            maxCapacity:3,
+            minSpawn:1,
+            maxSpawn:3,
+            occupiedChance:30,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 10,
+            disturbChance:100
+        },
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            },
+            {
+                item: itemVars.fuel.kindling,
+                chance:10
+            }
+        ],
+        loot:{
+            treasure:{
+                chance:35,
+                tier:-1
+            },
+            weapon:{
+                chance:3,
+                tier:-2
+            },
+            gold:{
+                chance:10,
+                amount:1
+            },
+            potion:{
+                chance:2,
+                tier:0
+            }
+        },
+        color:'gray'
+    },
     Prop:{
         name:"prop",
         symbol:"▤",
@@ -228,6 +319,35 @@ let containerVars = {
         },
         color:'gold'
     },
+    slainAdventurer:{
+        name:"slain adventurer",
+        symbol:"x",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        loot:{
+            weapon:{
+                chance:100,
+                tier:2
+            },
+            gold:{
+                chance:80,
+                amount:10
+            },
+            potion:{
+                chance:10,
+                tier:2
+            },
+            treasure:{
+                chance:10,
+                tier:1
+            }
+        },
+        blood:1,
+        color:'darkRed'
+    },
     BadWeaponChest:{
         name:"bad weapon chest",
         symbol:"Ch",
@@ -254,12 +374,13 @@ let containerVars = {
         isContainer: true,
         loot:{
             weapon:{
-                chance:2,
-                tier:-2
+                chance:15,
+                tier:1,
+                allowedMaterials:['gold']
             },
             treasure:{
-                chance:2,
-                tier:-1
+                chance:5,
+                tier:3
             },
             gold:{
                 chance:100,
@@ -539,15 +660,15 @@ let containerVars = {
         ],
         loot:{
             treasure:{
-                chance:15,
-                tier:0
+                chance:3,
+                tier:2
             },
             gold:{
-                chance:25,
-                amount:3
+                chance:5,
+                amount:6
             },
             weapon:{
-                chance:5,
+                chance:4,
                 tier:0,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
             },
@@ -616,6 +737,58 @@ let containerVars = {
                 tier:2
             }
         },
+    },
+    goopile:{
+        name:"pile of goo",
+        symbol:"☁",
+        behavior:"",
+        behaviorInfo:{sturdy:20},
+        isContainer:false,
+        spawnEntities:{ 
+            items:true,
+            minCapacity:1,
+            maxCapacity:3,
+            entities:[
+                'corrosiveOoze',
+                'absorbentOoze',
+                'mitoticOoze',
+                'blackOoze',
+            ],
+            spawnChance: 2,
+            disturbChance:70,
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 3,
+        inventory:[
+            {
+                item: itemVars.drops.purpleGoo,
+                chance: 100
+            },
+            {
+                item: itemVars.drops.greenGoo,
+                chance:25
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance: 25
+            },
+            {
+                item: itemVars.drops.orangeGoo,
+                chance:25
+            },
+            {
+                item: itemVars.drops.blueGoo,
+                chance:25
+            },
+            {
+                item: itemVars.drops.blackGoo,
+                chance:25
+            },
+        ],
+        blood:2,
+        bloodColor:{r:173,g:26,b:202},
+        color:'darkPurple'
     },
     t0Treasure:{
         name:"t0 treasure",

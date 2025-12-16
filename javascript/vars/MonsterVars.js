@@ -163,6 +163,15 @@ let monsterVars = {
         name:"king rat",
         symbol:"Kr",
         behavior:"chase",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:3,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 0,
+            disturbChance:30
+        },
         behaviorInfo:{
             focus:25,
             enrage:30
@@ -355,20 +364,21 @@ let monsterVars = {
         sturdyCorpse:1,
         threshold:2,
         hitDice:0,
-        mortal:9,
+        mortal:3,
         damage:4,
         reconstitute:2,
+        wakeupChance:1.5,
         reconstituteBehavior:'chaseBinary',
-        reconstituteChance:50,
+        reconstituteChance:100,
         inventorySlots: 2,
         inventory:[
             {
                 item: itemVars.drops.sigiledSkull,
-                chance:20
+                chance:5
             },
             {
                 item: itemVars.drops.sigiledBone,
-                chance:100
+                chance:20
             }
         ],
         changeForms:[
@@ -385,16 +395,16 @@ let monsterVars = {
         ],
         loot:{
             weapon:{
-                chance:15,
+                chance:5,
                 tier:0,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
             },
             treasure:{
-                chance:15,
+                chance:1,
                 tier:1
             },
             gold:{
-                chance:10,
+                chance:5,
                 amount:5
             },
             potion:{
@@ -674,6 +684,7 @@ let monsterVars = {
             slow:35
         },
         spawnEntities:{ 
+            items:true,
             minCapacity:1,
             maxCapacity:1,
             entities:[

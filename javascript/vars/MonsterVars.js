@@ -125,6 +125,50 @@ let monsterVars = {
         },
         color:'green'
     },
+    redOgre:{
+        name:"red ogre",
+        symbol:"Og",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:20,
+            enrage:75,
+            slow:40,
+            beat:30,
+            sturdy:30
+        },
+        hitDice:5,
+        damage:8,
+        inventorySlots: 10,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            },
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:30,
+                tier:2
+            },
+            treasure:{
+                chance:40,
+                tier:2
+            },
+            gold:{
+                chance:55,
+                amount:12
+            },
+            potion:{
+                chance: 15,
+                tier: 2
+            }
+        },
+        color:'red'
+    },
     rat:{
         name:"rat",
         symbol:"Ra",

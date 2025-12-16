@@ -1,7 +1,7 @@
 let containerVars = {
     chest:{
         name:"chest",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -43,7 +43,7 @@ let containerVars = {
     },
     foodChest:{
         name:"pantry",
-        symbol:"Ch",
+        symbol:"⽬",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -97,7 +97,7 @@ let containerVars = {
     },
     rareChest:{
         name:"rare chest",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -131,7 +131,7 @@ let containerVars = {
     },
     garbageChest:{
         name:"garbage chest",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -306,8 +306,8 @@ let containerVars = {
         color:'woodBrown'
     },
     weaponChest:{
-        name:"weapon chest",
-        symbol:"Ch",
+        name:"weapon rack",
+        symbol:"⧦",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -351,8 +351,8 @@ let containerVars = {
         color:'darkRed'
     },
     BadWeaponChest:{
-        name:"bad weapon chest",
-        symbol:"Ch",
+        name:"bad weapon rack",
+        symbol:"⧦",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -368,7 +368,7 @@ let containerVars = {
     },
     goldChest:{
         name:"gold chest",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -392,8 +392,8 @@ let containerVars = {
         color:'gold'
     },
     potionChest:{
-        name:"potion chest",
-        symbol:"Ch",
+        name:"potion rack",
+        symbol:"⧦",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -539,11 +539,11 @@ let containerVars = {
                 tier:2
             },
             gold:{
-                chance:25,
+                chance:50,
                 amount:3
             },
             weapon:{
-                chance:5,
+                chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
             },
@@ -575,7 +575,7 @@ let containerVars = {
         inventory:[
             {
                 item: itemVars.drops.sigiledBone,
-                chance: 10
+                chance: 15
             },
             {
                 item: itemVars.drops.sigiledSkull,
@@ -585,7 +585,7 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:15,
-                tier:0
+                tier:1
             },
             gold:{
                 chance:25,
@@ -850,7 +850,7 @@ let containerVars = {
     },
     t0Treasure:{
         name:"t0 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -865,7 +865,7 @@ let containerVars = {
     },
     t1Treasure:{
         name:"t1 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -880,7 +880,7 @@ let containerVars = {
     },
     t2Treasure:{
         name:"t2 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -895,7 +895,7 @@ let containerVars = {
     },
     t3Treasure:{
         name:"t3 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -910,7 +910,7 @@ let containerVars = {
     },
     t4Treasure:{
         name:"t4 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,
@@ -925,7 +925,7 @@ let containerVars = {
     },
     t6Treasure:{
         name:"t6 treasure",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"",
         hitDice:0,
         damage:4,

@@ -347,9 +347,9 @@ class LootManager{
 
     static getStarterWeapon(){
         
-        let starterWeapon = LootManager.getWeaponLoot(5)
+        let starterWeapon = LootManager.getWeaponLoot(1)
     
-        while(starterWeapon.value > 500){
+        while(starterWeapon.value > 5){
             starterWeapon = LootManager.getWeaponLoot(1)
         }
         if(!starterWeapon.flimsy){

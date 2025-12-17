@@ -172,11 +172,8 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
 
-        let random = Math.random()*100;
         let hungerChance = (Player.stamina - oldStamina)*2;
-        if(random < hungerChance){
-            Player.changeNourishment(-1);
-        }
+        Player.checkChangeNourishment(hungerChance);
     }
 
     static changeHealth(n){
@@ -229,6 +226,16 @@ class Player {
             Player[key] = value;
         }
         
+    }
+
+    static checkChangeNourishment(hungerChance){
+        let random = Math.random()*100;
+        console.log((Player.hungerPercent/150)+.66);
+        hungerChance *= (Player.hungerPercent/150)+.66
+        console.log(hungerChance);
+        if(random < hungerChance){
+            Player.changeNourishment(-1);
+        }
     }
 
     static reset(){

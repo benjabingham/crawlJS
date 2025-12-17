@@ -339,7 +339,7 @@ class Display{
                 cost:1,
                 item: itemVars.food.morsel
             },
-            {name:'Proper Meal',cost:5,nourishment:100},
+            {name:'Proper Meal',cost:6,nourishment:100},
         ]
 
         $('#meals-div').html('');

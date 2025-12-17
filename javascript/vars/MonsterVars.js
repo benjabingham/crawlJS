@@ -373,8 +373,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:3,
-                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold']
+                tier:4,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:20,
@@ -440,8 +441,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:5,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:1,
@@ -488,8 +490,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:15,
@@ -548,8 +551,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:15,
@@ -594,8 +598,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:15,
@@ -629,7 +634,9 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:5,
-                tier:2
+                tier:2,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier:3
             },
             treasure:{
                 chance:15,

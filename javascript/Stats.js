@@ -1,6 +1,6 @@
 class Stats{
     static logStats(){
-        let n = 5000;
+        let n = 300;
         [{array:monsterVars, type:'monster'},{array:containerVars,type:'container'}].forEach((category)=>{
             Object.keys(category.array).forEach((key)=>{
                 let total = 0;
@@ -18,6 +18,10 @@ class Stats{
                             inventoryValue += item.value;
                         }
                     })
+                    if(entity.entityGroupInfo.key == "weaponChest"){
+                        console.log(inventory[0].name);
+                        console.log(inventory[0].value);
+                    }
                     total += inventoryValue;
                     all.push(inventoryValue);
                 }

@@ -495,8 +495,9 @@ let containerVars = {
             },
             weapon:{
                 chance:15,
-                tier:1,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:2,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
         },
         color:'darkGray'
@@ -544,8 +545,9 @@ let containerVars = {
             },
             weapon:{
                 chance:15,
-                tier:1,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:2,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
         },
         color:'darkGray'
@@ -593,8 +595,9 @@ let containerVars = {
             },
             weapon:{
                 chance:5,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
         },
         color:'darkGray'
@@ -620,8 +623,9 @@ let containerVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:2,
-                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+                tier:3,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:25,
@@ -681,7 +685,7 @@ let containerVars = {
             weapon:{
                 chance:5,
                 tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver']
             },
         },
         color:'darkGray'
@@ -725,8 +729,9 @@ let containerVars = {
             },
             weapon:{
                 chance:4,
-                tier:0,
-                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron']
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
             },
         },
         color:'darkGray'
@@ -778,8 +783,9 @@ let containerVars = {
         loot:{
             weapon:{
                 chance:25,
-                tier:2,
-                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+                tier:3,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','silver'],
+                curseMultiplier: 3
             },
             treasure:{
                 chance:70,

@@ -1,6 +1,6 @@
 class History{
     static snapshots = [];
-    static snapshotLimit = 10;
+    static snapshotLimit = 11;
     static trackedEntities = [];
 
     static reset(){

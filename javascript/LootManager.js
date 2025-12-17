@@ -45,7 +45,7 @@ class LootManager{
             let weaponLoot = lootChances.weapon;
             if(weaponLoot){
                 if(Random.roll(1,99) < weaponLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials));
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials, weaponLoot.curseMultiplier));
                 }
             }
 
@@ -174,10 +174,16 @@ class LootManager{
     }
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
-    static getWeaponLoot(tier, allowedMaterials=false){
+    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1){
+        //extra curse bonus...
+        if(Random.roll(1,20) <= curseMultiplier){
+            tier+= 3
+            curseMultiplier = 999;
+        }        
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
+        LootManager.getIsCursed(weapon,tier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
         if(!weapon.flimsy || weapon.flimsy < 0){
             weapon.flimsy = 0;
@@ -254,11 +260,26 @@ class LootManager{
         return material;
     }
 
+    //checks to apply worn to weapon
     static getIsWorn(weapon, tier){
         let nonWornChance = 20 * tier;
         if(Random.roll(0,99) >= nonWornChance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.worn);
         }
+    }
+
+    //checks to apply cursed to a weapon
+    static getIsCursed(weapon, tier, multiplier = 1){
+        let notCursedChance = (20 * tier) / multiplier;
+        if(Random.roll(0,99) < notCursedChance){
+            return false;
+        }
+        let chance = (weapon.value) * multiplier
+        if(Random.roll(0,99) < chance){
+            LootManager.applyModifier(weapon,itemVars.weaponModifiers.cursed);
+        }
+
+        return true;
     }
 
     static getWeapon(material = false){

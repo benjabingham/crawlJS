@@ -845,6 +845,11 @@ let itemVars = {
             },
             value:.4
         },
+        cursed:{
+            name: 'cursed',
+            unlucky:true,
+            value: .3
+        },
         craftTiers:{
             poor:{
                 name:'poor',

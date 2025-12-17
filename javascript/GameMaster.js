@@ -142,15 +142,30 @@ class GameMaster{
         if (!GameMaster.dungeonMode){
             return false
         }
-        if(History.canRewind()){
-            console.log('rewind');
-            History.rewind();
-            EntityManager.skipBehaviors = true;
-            Log.turnCounter--;
-            Log.messages[log.turnCounter] = false;
+        if(Player.equipped && Player.equipped.unlucky){
+            Log.addNotice("Can't Rewind")
+            Log.addNotice("something you're holding is unlucky!")
+            Log.printLog();  
+            Log.clearNotices();
+            return false;
         }
-
+        if(!History.canRewind()){
+            Log.addNotice("Can't Rewind")
+            if(!Player.luck){
+                Log.addNotice('Out of luck!')
+            }
+            Log.printLog();  
+            Log.clearNotices();
+            return false;
+        }
+        console.log('rewind');
+        History.rewind();
+        EntityManager.skipBehaviors = true;
+        Log.turnCounter--;
+        Log.messages[log.turnCounter] = false;
         GameMaster.postPlayerAction();
+        
+
     }
 
     static drop(event){

@@ -1,18 +1,5 @@
 let itemVars = {
     weapons:{
-        rod:{
-            weapon:true,
-            name:"rod",
-            damage:2,
-            stunTime:3,
-            weight:2,
-            flimsy:-1,
-            type:{
-                blunt:true,
-                long:true
-            },
-            value:3
-        },
         club:{
             weapon:true,
             name:"club",
@@ -196,6 +183,30 @@ let itemVars = {
                 edged:true
             },
             disallowedMaterials:["ceramic", "flint","bone"],
+
+            value:10
+        },
+        goliathSword:{
+            weapon:true,
+            name:"goliath sword",
+            damage:20,
+            stunTime:6,
+            weight:7,
+            draw:{
+                damage:25,
+                stunTime:8,
+                weight:9,
+                type:{
+                    sword:true,
+                    edged:true
+                },
+            },
+            type:{
+                sword:true,
+                edged:true
+            },
+            disallowedMaterials:["wood","bone","ceramic","flint","bone", "rubber", "lightsteel"],
+            unwieldy:1,
 
             value:10
         },

@@ -86,8 +86,8 @@ class EntityManager{
         let entity = EntityManager.getEntity(id);
         return entity.move(x,y);
     }
-    
-    static movePlayer(x,y){
+
+    static checkPlayerExertion(){
         if(Player.exertion > 1){
             if(Player.stamina){
                 Player.changeStamina(-1);
@@ -95,8 +95,33 @@ class EntityManager{
                 EntityManager.cancelAction({insuficientStamina:true});
                 return false;
             }
-
         }
+
+        return true;
+    }
+
+    static checkUnwieldy(){
+        if(Player.equipped && Player.equipped.unwieldy){
+            if(Player.stamina){
+                Player.changeStamina(Player.equipped.unwieldy*-1);
+            }else{
+                EntityManager.cancelAction({insuficientStamina:true});
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    static movePlayer(x,y){
+        if(!EntityManager.checkPlayerExertion()){
+            return false;
+        }
+
+        if(!EntityManager.checkUnwieldy()){
+            return false;
+        }
+
         let playerEntity = EntityManager.getEntity("player");
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
         if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){

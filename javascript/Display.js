@@ -671,6 +671,12 @@ class Display{
             )
         }
 
+        if(item.unwieldy){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('resistant-text').text('Costs '+item.unwieldy+' stamina to move while equipped.')
+            )
+        }
+
         if(itemValue){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-value').append(

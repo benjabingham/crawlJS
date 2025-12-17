@@ -644,6 +644,21 @@ let itemVars = {
             color:'gray',
             frequency:1
         },
+        gravsteel:{
+            name:'gravsteel',
+            weight:3,
+            stuntime:6,
+            edged:{
+                damage:8
+            },
+            blunt:{
+                damage: 12
+            },
+            unwieldy:1,
+            value:8,
+            color:'black',
+            frequency:1
+        },
         lightsteel:{
             name:'lightsteel',
             weight:-1,

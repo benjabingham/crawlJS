@@ -333,7 +333,14 @@ class LootManager{
                     item[key] = value;
                     break;
                 default:
-                    item[key] = value;
+                    if(typeof(value) == "number"){
+                        if(!item[key]){
+                            item[key] = 0;
+                        }
+                        item[key]+= value;
+                    }else{
+                        item[key] = value;
+                    }
             }
         }
         //apply modifier to special strikes

@@ -63,6 +63,24 @@ class LootManager{
                 }
             }
 
+            let supplyLoot = lootChances.supplies;
+            if(supplyLoot){
+                if(Random.roll(1,99) < supplyLoot.chance){
+                    entitySave.inventory.items.push(LootManager.getSupplyLoot(supplyLoot.tier));
+                }
+            }
+
+            let foodLoot = lootChances.food;
+            if(foodLoot){
+                if(Random.roll(1,99) < foodLoot.chance){
+                    if(!foodLoot.maxNumber){
+                        foodLoot.maxNumber = 1;
+                    }
+                    let n = Random.roll(1,foodLoot.maxNumber)
+                    entitySave.inventory.items.push(LootManager.getFoodLoot(foodLoot.tier, n));
+                }
+            }
+
             let goldLoot = lootChances.gold;
             if(goldLoot){
                 if(Random.roll(1,99) < goldLoot.chance){
@@ -184,6 +202,56 @@ class LootManager{
         }
 
         return weapon;
+    }
+
+    static getFoodLoot(tier = 0, n=1){
+        let foods = Object.keys(itemVars.food);
+        let nFoods = foods.length; 
+        //nrolls represents number of EXTRA rolls.
+        let nRolls = tier-3;
+        let maxMinFunc = (nRolls > 0) ? Math.max : Math.min;
+        nRolls = Math.abs(nRolls);
+        let foodIndex = Random.roll(0,nFoods-1);
+        //food rarity is based on its position in the list of foods
+        for(let i = 0; i < nRolls; i++){
+            let newIndex = Random.roll(0,nFoods-1);
+            foodIndex = maxMinFunc(foodIndex,newIndex);
+        }
+        let foodKey = foods[foodIndex]
+        let food = JSON.parse(JSON.stringify(itemVars.food[foodKey]));
+
+        return food;
+    }
+
+    static getSupplyLoot(tier = 1){
+        let random = Random.roll(0,99)
+        let item;
+        if(random < 50){
+            item = LootManager.getFoodLoot(tier);
+        }else if (random < 70){
+            item = JSON.parse(JSON.stringify(itemVars.fuel.kindling))
+        }else if(random < 80){
+            item = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask))
+            let n = Random.roll(0,2);
+            for(let i = 0; i < n; i++){
+                LootManager.expendUse(item);
+            }
+        }else if (random < 90){
+            let weapons = ['shortsword','club','handaxe']
+            let weapon = itemVars.weapons[weapons[Random.roll(0,weapons.length-1)]];
+            weapon = JSON.parse(JSON.stringify(weapon));
+            let material = LootManager.getWeaponMaterial(tier,['wood','copper','iron','steel']);
+            LootManager.applyModifier(weapon,material);
+            if(Random < 86){
+                LootManager.applyModifier(itemVars.weaponModifiers.worn)
+            }
+            item = weapon;
+        }else if (random < 98){
+            item = LootManager.getPotionLoot(tier)
+        }else{
+            item = JSON.parse(JSON.stringify(itemVars.drops.pan))
+        }
+        return item;
     }
 
     static getTreasureModifier(treasure, tier){
@@ -366,6 +434,17 @@ class LootManager{
         item.value *= 0.7;
         item.value = Math.floor(item.value);
         item.value = Math.max(item.value,1);
+    }
+
+    static expendUse(item){
+        if(item.uses < 2){
+            console.log ('ITEM COULD NOT BE EXPENDED')
+            return false;
+        }
+
+        let newRatio = 1/item.uses;
+        item.value = Math.floor(item.value - (newRatio*item.value));
+        item.uses--;
     }
 
     getColor(val){

@@ -369,6 +369,27 @@ let itemVars = {
             color:'brightPurple',
             value:4
         },
+        pan:{
+            weapon:true,
+            name:"cast iron pan",
+            iron:true,
+            damage:1,
+            stunTime:2,
+            weight:2,
+            flimsy:2,
+            type:{
+                blunt:true
+            },
+            swing:{
+                damage:5,
+                stunTime:4,
+                weight:2,
+                type:{
+                    blunt:true
+                }
+            },
+            value:2
+        },
     },
     treasure:{
         thimble:{
@@ -878,9 +899,16 @@ let itemVars = {
             name:'provisions',
             usable:true,
             food:1,
-            value:1,
+            value:2,
             uses:3,
             color:'brown'
+        },
+        fineCheese:{
+            name:'fine cheese',
+            usable: true,
+            food:1,
+            value:3,
+            color:'bone'
         },
         baguette:{
             name:'stale baguette',
@@ -923,6 +951,14 @@ let itemVars = {
             fuel:1,
             color:'gold',
             value:5
+        },
+        cake:{
+            name:'cake',
+            usable:true,
+            food:1,
+            value:4,
+            uses:5,
+            color:'brightPurple'
         },
     },
     potions:{

@@ -117,14 +117,19 @@ class Shop{
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
 
         let priceMultiplier = Random.roll(2,5);
-        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
 
         //variance...
         if(fuel.uses){
             let useDiff = Random.roll(0,(fuel.uses))-1;
-            fuel.uses -=useDiff
-            fuel.price -= useDiff*(fuel.value-1);
+            for(let i = 0; i < useDiff; i++){
+                LootManager.expendUse(fuel);
+                fuel.value++;
+            }
+
         }
+
+        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
+
         
         fuel.tier = 'fuel';
 

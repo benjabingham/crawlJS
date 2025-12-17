@@ -371,7 +371,7 @@ class Player {
     static consume(slot){
         let item = Player.inventory.items[slot];
         if(item.uses > 1){
-            item.uses--;
+            LootManager.expendUse(item);
         }else{
             Player.inventory.items[slot] = false;
         }

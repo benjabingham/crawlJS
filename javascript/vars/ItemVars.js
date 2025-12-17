@@ -1130,7 +1130,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 1,
-            value: 7,
+            value: 5,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -1139,7 +1139,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 3,
-            value: 20,
+            value: 10,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -1148,7 +1148,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 6,
-            value: 40,
+            value: 15,
             color: 'green',
             message:'Your luck returns to you.'
         },
@@ -1210,7 +1210,7 @@ let itemVars = {
             health: 10,
             luck: -10,
             hunger: 10,
-            value: 20,
+            value: 11,
             color: 'brightPurple',
             message:"You feel fully renewed, but something's wrong...",
             tip: 'You gained hunger, stamina, and health at the cost of luck.'
@@ -1222,7 +1222,7 @@ let itemVars = {
             stamina: 10,
             health: 10,
             luck: 10,
-            value: 50,
+            value: 20,
             hunger: 10,
             light:2,
             color: 'gold',

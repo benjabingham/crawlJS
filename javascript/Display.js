@@ -580,7 +580,7 @@ class Display{
                     GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
                     Display.displayInventory(dungeonMode);
                 })
-            } else if(item.potable && !itemIsEquipped){
+            } else if(item.potable && !itemIsEquipped && inventory != "shop"){
                 button = $('<button>').addClass('item-button').text('drink').on('click',function(){
                     GameMaster.drinkItem({type:'item-'+(slot+1)},dungeonMode);
                     Display.displayInventory(dungeonMode);

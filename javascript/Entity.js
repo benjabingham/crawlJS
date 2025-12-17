@@ -225,6 +225,10 @@ class Entity{
         }
         Log.addMessage('you search the '+container.name+'...',false,false,false,container.id)
 
+        if(container.triggerTransform){
+            container.transformEntities();
+        }
+
         if(container.checkTransform('onSearchChance')){
             return false;
         }
@@ -232,7 +236,7 @@ class Entity{
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
-        }else if (!container.inventory.items.length){
+        }else if (!container.inventory.items.length && !container.inventory.gold){
             if(isPlayer){
                 Log.addMessage("nothing.")
             }
@@ -652,6 +656,25 @@ class Entity{
         })
 
         return transformed;
+    }
+
+    //transforms all other entities of a type
+    //triggerTransform.targetName is NAME of entity
+    //transform all entities with that name into monster with key triggerTransform.formKey
+    //then give them new name (triggerTransform.name)
+    transformEntities(){
+        if(!this.triggerTransform){
+            return false;
+        }
+        let transformInfo = this.triggerTransform;
+        Object.keys(EntityManager.entities).forEach((key)=>{
+            let entity = EntityManager.entities[key];
+            console.log(entity);
+            if(entity.name != transformInfo.targetName){
+                return;
+            }
+            EntityManager.transformEntity(entity, transformInfo)
+        })
     }
 
     disturb(){

@@ -269,6 +269,26 @@ let containerVars = {
         isContainer: true,
         color:'woodBrown'
     },
+    skeletonCorpse:{
+        name:"skeleton corpse",
+        symbol:"x",
+        behavior:"",
+        hitDice:1,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        color:'bone',
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:5
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:13
+            }
+        ],
+    },
     weaponChest:{
         name:"weapon rack",
         symbol:"⧦",
@@ -791,6 +811,40 @@ let containerVars = {
             gold:{
                 chance:100,
                 amount:5
+            }
+        },
+        color:'gold'
+    },
+    awakeningAltar:{
+        name:"awakening altar",
+        symbol:"▣",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 10,
+        isContainer: true,
+        triggerTransform:{
+            targetName:"skeleton corpse",
+            formKey:"skeletonPile",
+            name: "skeleton",
+            resetMortal:true
+        },
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
             }
         },
         color:'gold'

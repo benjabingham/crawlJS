@@ -410,7 +410,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs','tombTest', 'ratTomb', 'mimictest']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs','tombTest', 'ratTomb', 'mimictest','awakening test']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(

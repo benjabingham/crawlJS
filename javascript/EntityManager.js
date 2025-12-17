@@ -159,7 +159,9 @@ class EntityManager{
                 }else{
                     entity.wait = false;
                 }
-            }else if(entity.wakeupChance && !entity.awake){
+            }else
+            
+            if(!entity.wait && entity.wakeupChance && !entity.awake){
                 if(Math.random()*100 < entity.wakeupChance){
                     entity.awake = true;
                 }else{
@@ -560,14 +562,16 @@ class EntityManager{
             newEntity = new Monster(formInfo.formKey,entity.x,entity.y);
         }
         let newID = newEntity.id;
-        newEntity.mortal = entity.mortal;
+        if(!formInfo.resetMortal){
+            newEntity.mortal = entity.mortal;
+        }
         newEntity.inventory = entity.inventory;
         newEntity.index = entity.index;
         newEntity.id = entity.id;
         newEntity.stunned = entity.stunned
         //its possible for new form to roll a lower threshold than current mortal.
         //this makes sure it's always alive if it was before.
-        if(!entity.dead && newEntity.mortal >= newEntity.threshold){
+        if(!formInfo.resetMortal && !entity.dead && newEntity.mortal >= newEntity.threshold){
             newEntity.threshold = newEntity.mortal+1
         }
         

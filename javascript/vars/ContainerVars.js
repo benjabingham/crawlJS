@@ -128,7 +128,7 @@ let containerVars = {
             },
             supplies:{
                 chance:30,
-                tier:0
+                tier:-1
             }
         },
         color:'gold'
@@ -144,7 +144,7 @@ let containerVars = {
         spawnEntities:{
             occupiedChance:10,
             entities:[
-                'rat'
+                'goblin'
             ],
             spawnChance: 5,
             disturbChance:100,
@@ -152,23 +152,23 @@ let containerVars = {
         },
         loot:{
             treasure:{
-                chance:20,
+                chance:5,
                 tier:1
             },
             weapon:{
-                chance:20,
+                chance:10,
                 tier:0
             },
             gold:{
-                chance:25,
+                chance:15,
                 amount:3
             },
             food:{
-                chance:30,
+                chance:20,
                 tier:0
             },
             supplies:{
-                chance:10,
+                chance:7,
                 tier:0
             }
         },

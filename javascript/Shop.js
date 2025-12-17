@@ -55,6 +55,13 @@ class Shop{
             slot++;
         }
 
+        for(let i=0; i<0; i++){
+            let supplies = Shop.getSupplies();
+            supplies.slot = slot;
+            Shop.inventory.push(supplies);
+            slot++;
+        }
+
         for(let i=0; i<2; i++){
             let potion = Shop.getPotion();
             potion.slot = slot;
@@ -94,6 +101,13 @@ class Shop{
                     potion.fresh = true;
                     Shop.inventory[slot] = potion;
                 }
+            }else if(item.tier == 'supplies'){
+                if(Random.roll(0,2)){
+                    let supplies = Shop.getSupplies();
+                    supplies.slot = slot;
+                    supplies.fresh = true;
+                    Shop.inventory[slot] = supplies;
+                }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
@@ -111,6 +125,16 @@ class Shop{
                 item.fresh = false;
             }
         })
+    }
+
+    static getSupplies(){
+        let tier = Random.roll(0,5)
+        let item = LootManager.getSupplyLoot(tier);
+        let multiplier = tier+1.5;
+        item.price = Math.ceil(item.value * multiplier);
+        item.tier = 'supplies'
+
+        return item;
     }
 
     static getFuel(){

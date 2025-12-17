@@ -781,7 +781,8 @@ let containerVars = {
             weapon:{
                 chance:25,
                 tier:1,
-                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','silver','gold'],
+                curseMultiplier:5
             },
             treasure:{
                 chance:35,

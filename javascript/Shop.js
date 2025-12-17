@@ -55,6 +55,13 @@ class Shop{
             slot++;
         }
 
+        for(let i=0; i<0; i++){
+            let supplies = Shop.getSupplies();
+            supplies.slot = slot;
+            Shop.inventory.push(supplies);
+            slot++;
+        }
+
         for(let i=0; i<2; i++){
             let potion = Shop.getPotion();
             potion.slot = slot;
@@ -94,6 +101,13 @@ class Shop{
                     potion.fresh = true;
                     Shop.inventory[slot] = potion;
                 }
+            }else if(item.tier == 'supplies'){
+                if(Random.roll(0,2)){
+                    let supplies = Shop.getSupplies();
+                    supplies.slot = slot;
+                    supplies.fresh = true;
+                    Shop.inventory[slot] = supplies;
+                }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
@@ -113,18 +127,33 @@ class Shop{
         })
     }
 
+    static getSupplies(){
+        let tier = Random.roll(0,5)
+        let item = LootManager.getSupplyLoot(tier);
+        let multiplier = tier+1.5;
+        item.price = Math.ceil(item.value * multiplier);
+        item.tier = 'supplies'
+
+        return item;
+    }
+
     static getFuel(){
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
 
         let priceMultiplier = Random.roll(2,5);
-        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
 
         //variance...
         if(fuel.uses){
             let useDiff = Random.roll(0,(fuel.uses))-1;
-            fuel.uses -=useDiff
-            fuel.price -= useDiff*(fuel.value-1);
+            for(let i = 0; i < useDiff; i++){
+                LootManager.expendUse(fuel);
+                fuel.value++;
+            }
+
         }
+
+        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
+
         
         fuel.tier = 'fuel';
 

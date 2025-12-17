@@ -347,6 +347,7 @@ class GameMaster{
         Board.placeEntities();
         if(!EntityManager.skipBehaviors){
             Player.checkHungerModifiers();
+            Player.checkChangeNourishment(.33);
         }
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));

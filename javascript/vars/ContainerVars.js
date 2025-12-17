@@ -8,18 +8,7 @@ let containerVars = {
         inventorySlots: 10,
         isContainer: true,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:10
-            },
-            {
-                item: itemVars.food.provisions,
-                chance:5
-            },
-            {
-                item: itemVars.potions.unlabeled,
-                chance:5
-            }
+            
         ],
         loot:{
             weapon:{
@@ -36,6 +25,10 @@ let containerVars = {
             },
             potion:{
                 chance:5,
+                tier:1
+            },
+            supplies:{
+                chance:30,
                 tier:1
             }
         },
@@ -55,37 +48,18 @@ let containerVars = {
                 chance:80
             },
             {
-                item: itemVars.food.morsel,
-                chance:50
-            },
-            {
-                item: itemVars.food.provisions,
-                chance:25
-            },
-            {
-                item: itemVars.potions.unlabeled,
-                chance: 5
-            },
-            {
-                item: itemVars.food.baguette,
-                chance: 10
-            },
-            {
-                item: itemVars.food.cookingOil,
-                chance: 10
-            },
-            {
-                item: itemVars.food.berries,
-                chance: 10
+                item: itemVars.drops.pan,
+                chance:5
             },
         ],
         loot:{
-            treasure:{
-                chance:5,
-                tier:-1
+            food:{
+                chance:80,
+                maxNumber:2,
+                tier:0
             },
-            potion:{
-                chance:10,
+            supplies:{
+                chance:20,
                 tier:0
             },
             gold:{
@@ -138,18 +112,6 @@ let containerVars = {
         inventorySlots: 2,
         isContainer: true,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:25
-            },
-            {
-                item: itemVars.fuel.kindling,
-                chance:5
-            },
-            {
-                item: itemVars.potions.unlabeled,
-                chance:3
-            }
         ],
         loot:{
             treasure:{
@@ -163,6 +125,10 @@ let containerVars = {
             gold:{
                 chance:25,
                 amount:1
+            },
+            supplies:{
+                chance:30,
+                tier:-1
             }
         },
         color:'gold'
@@ -178,33 +144,31 @@ let containerVars = {
         spawnEntities:{
             occupiedChance:10,
             entities:[
-                'rat'
+                'goblin'
             ],
             spawnChance: 5,
             disturbChance:100,
             audioDisturbChance:20
         },
-        inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:40
-            }
-        ],
         loot:{
             treasure:{
-                chance:20,
+                chance:5,
                 tier:1
             },
             weapon:{
-                chance:20,
+                chance:10,
                 tier:0
             },
             gold:{
-                chance:25,
+                chance:15,
                 amount:3
             },
-            potion:{
-                chance:10,
+            food:{
+                chance:20,
+                tier:0
+            },
+            supplies:{
+                chance:7,
                 tier:0
             }
         },
@@ -245,16 +209,16 @@ let containerVars = {
                 chance:35,
                 tier:-1
             },
-            weapon:{
-                chance:3,
+            supplies:{
+                chance:5,
                 tier:-2
             },
             gold:{
                 chance:10,
                 amount:1
             },
-            potion:{
-                chance:2,
+            food:{
+                chance:10,
                 tier:0
             }
         },
@@ -331,7 +295,7 @@ let containerVars = {
         isContainer: true,
         loot:{
             weapon:{
-                chance:100,
+                chance:80,
                 tier:2
             },
             gold:{
@@ -345,6 +309,10 @@ let containerVars = {
             treasure:{
                 chance:10,
                 tier:1
+            },
+            supplies:{
+                chance:80,
+                tier:2
             }
         },
         blood:1,
@@ -800,6 +768,31 @@ let containerVars = {
                 tier:2
             }
         },
+    },
+    altar:{
+        name:"altar",
+        symbol:"▣",
+        behavior:"",
+        hitDice:0,
+        damage:4,
+        inventorySlots: 2,
+        isContainer: true,
+        loot:{
+            weapon:{
+                chance:25,
+                tier:1,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead']
+            },
+            treasure:{
+                chance:35,
+                tier:1
+            },
+            gold:{
+                chance:100,
+                amount:5
+            }
+        },
+        color:'gold'
     },
     goopile:{
         name:"pile of goo",

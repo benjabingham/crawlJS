@@ -112,15 +112,21 @@ class EntityManager{
 
         return true;
     }
+
+    static checkEther(){
+        if(Player.equipped && Player.equipped.ether){
+            Player.changeStamina(1);
+        }
+    }
     
     static movePlayer(x,y){
         if(!EntityManager.checkPlayerExertion()){
             return false;
         }
-
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
+        EntityManager.checkEther();
 
         let playerEntity = EntityManager.getEntity("player");
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);

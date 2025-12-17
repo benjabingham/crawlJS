@@ -208,7 +208,7 @@ let itemVars = {
             disallowedMaterials:["wood","bone","ceramic","flint","bone", "rubber", "lightsteel"],
             unwieldy:1,
 
-            value:10
+            value:14
         },
         handaxe:{
             weapon:true,
@@ -708,6 +708,7 @@ let itemVars = {
             color:'silver',
             frequency:2,
         },
+        
         adamantine:{
             name:'adamantine',
             weight:-1,
@@ -717,7 +718,17 @@ let itemVars = {
             value:20,
             color:'blue',
             frequency:1
-        }
+        },
+        ethersteel:{
+            name:'ethersteel',
+            edged:{
+                damage:2
+            },
+            ether:true,
+            value:23,
+            color:'clearBlue',
+            frequency:1
+        },
     },
     treasureMaterials:{
         paper:{

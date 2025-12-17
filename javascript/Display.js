@@ -673,7 +673,13 @@ class Display{
 
         if(item.unwieldy){
             $('#'+inventory+'-description').append(
-                $('<div>').addClass('resistant-text').text('Costs '+item.unwieldy+' stamina to move while equipped.')
+                $('<div>').addClass('resistant-text').text('Costs '+item.unwieldy+' stamina to move.')
+            )
+        }
+
+        if(item.ether){
+            $('#'+inventory+'-description').append(
+                $('<div>').addClass('resistant-text').text('Regain 1 stamina on movement.')
             )
         }
 

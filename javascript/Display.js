@@ -345,26 +345,37 @@ class Display{
         $('#meals-div').html('');
 
         meals.forEach((meal)=>{
-            $('#meals-div').append(
-                $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                    if(Player.gold >= meal.cost){
-                        if(meal.item){
-                            if(Player.inventory.items.length < Player.inventory.slots){
-                                let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                                Player.pickUpItem(itemCopy);
-                            }else{
-                                Player.changeNourishment(item.food);
-                            }
+            let button = $('<button>');
+            button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
+                if(Player.gold >= meal.cost){
+                    if(meal.item){
+                        if(Player.inventory.items.length < Player.inventory.slots){
+                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                            Player.pickUpItem(itemCopy);
                         }else{
-                            Player.changeNourishment(meal.nourishment);
+                            Player.changeNourishment(item.food);
                         }
-                        Player.gold-= meal.cost;
-                        display.nourishmentDiv();
-                        display.displayGold();
-                        display.displayInventory(false);
+                    }else{
+                        Player.changeNourishment(meal.nourishment);
                     }
-                })
-            )
+                    Player.gold-= meal.cost;
+                    display.nourishmentDiv();
+                    display.displayGold();
+                    display.displayInventory(false);
+                }
+            })
+            if(!meal.item){
+                Display.setHintText(button,"Fully refils your hunger bar")
+                button.on('mouseenter',()=>{
+                    $('#hunger-level').css('width',"150px").addClass('preview');
+                    $('#hunger-level').text(Player.nourishmentMax+"/"+Player.nourishmentMax);                    
+                }).on('mouseleave',()=>{
+                    $('#hunger-level').removeClass('preview');
+                    Display.fillBars();
+                })  
+            }
+             
+            $('#meals-div').append(button)
         })
     }
 
@@ -414,7 +425,6 @@ class Display{
         if(!restInfo){
             restInfo = Player.getRestInfo();
         }
-
         let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
 
         return hintText;
@@ -438,6 +448,8 @@ class Display{
 
         $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
         $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
+
+        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
     }
 
     static restButton(){
@@ -456,6 +468,8 @@ class Display{
         }).on('mouseleave',()=>{
             $('.hint-divs').html('');
             Display.fillBars();
+            Display.exertionDiv();
+            $('#exertion-level-div').removeClass('preview');
             $('#health-level').removeClass('preview');
 
             $('#luck-level').removeClass('preview');

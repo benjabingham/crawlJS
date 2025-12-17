@@ -445,7 +445,7 @@ class LootManager{
         
         let starterWeapon = LootManager.getWeaponLoot(5,['wood','flint','iron'],0)
     
-        while(starterWeapon.value > 5){
+        while(starterWeapon.value > 500){
             starterWeapon = LootManager.getWeaponLoot(5,['wood','flint','iron'],0)
         }
         if(!starterWeapon.flimsy){

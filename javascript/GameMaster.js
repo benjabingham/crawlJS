@@ -144,7 +144,7 @@ class GameMaster{
         }
         if(Player.equipped && Player.equipped.unlucky){
             Log.addNotice("Can't Rewind")
-            Log.addNotice("something you're holding is unlucky!")
+            Log.addNotice("something you're holding is cursed!")
             Log.printLog();  
             Log.clearNotices();
             return false;

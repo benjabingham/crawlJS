@@ -75,6 +75,11 @@
     width:100%;
 }
 
+.trait-spans{
+    font-weight: bolder;
+    cursor: pointer;
+}
+
 .fresh-true{
     background-color: var(--shopFresh);
     border-color: var(--shopFreshBorder);

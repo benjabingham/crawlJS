@@ -647,6 +647,32 @@ class Display{
             descriptionBodyElement
         )
 
+
+
+        let traits = keywordVars.traits;
+        let hasTrait = false;
+        let traitsDiv = $('<div>').addClass('traits-text')
+        Object.keys(traits).forEach((key)=>{
+            if(item[key]){
+                let trait = keywordVars.traits[key]
+                let text = trait.name
+                if(hasTrait){
+                    text = ", "+text
+                }
+                if(item[key] > 1){
+                    text = text+" "+item[key]
+                }
+                let traitSpan = $('<span>').addClass('trait-spans').text(text);
+                Display.setHintText(traitSpan, trait.hintText)
+                traitsDiv.append(traitSpan)
+                hasTrait = true;
+            }
+        })
+
+        if(hasTrait){
+            $('#'+inventory+'-description').append(traitsDiv);
+        }
+
         if(item.light && item.fuel && !item.weapon){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
@@ -662,24 +688,6 @@ class Display{
         if(item.flimsy){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
-            )
-        }
-
-        if(item.resistant){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('resistant-text').text('Resistant to corrosion.')
-            )
-        }
-
-        if(item.unwieldy){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('resistant-text').text('Costs '+item.unwieldy+' stamina to move.')
-            )
-        }
-
-        if(item.ether){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('resistant-text').text('Regain 1 stamina on movement.')
             )
         }
 

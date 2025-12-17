@@ -1,12 +1,13 @@
 #log-window{
     border:1px solid gray;
-    width:300px;
+    width:385px;
     height:510px;
 }
 
 #log-title{
     text-align:center;
     font-weight: 600;
+    cursor: pointer;
 }
 
 #log{
@@ -20,6 +21,11 @@
     .turn-counter{
         text-align:center;
     }
+}
+
+.log-reverse{
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .message-fresh{

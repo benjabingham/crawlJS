@@ -25,6 +25,7 @@ class Display{
         Display.displayInventory(true);
         Display.scrollToTop();
         Display.dropButton();
+        Log.logInit();
     }
 
     static showHomeScreen(){

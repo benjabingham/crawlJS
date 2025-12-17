@@ -230,9 +230,7 @@ class Player {
 
     static checkChangeNourishment(hungerChance){
         let random = Math.random()*100;
-        console.log((Player.hungerPercent/150)+.66);
         hungerChance *= (Player.hungerPercent/150)+.66
-        console.log(hungerChance);
         if(random < hungerChance){
             Player.changeNourishment(-1);
         }

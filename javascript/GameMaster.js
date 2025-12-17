@@ -69,6 +69,8 @@ class GameMaster{
 
         });
 
+        GameMaster.postPlayerAction();
+
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
@@ -358,6 +360,9 @@ class GameMaster{
             Log.rewind();
         }
         Log.printLog();  
+        
+
+        
         Log.clearNotices();
         EntityManager.skipBehaviors = false;
     }

@@ -669,7 +669,6 @@ class Entity{
         let transformInfo = this.triggerTransform;
         Object.keys(EntityManager.entities).forEach((key)=>{
             let entity = EntityManager.entities[key];
-            console.log(entity);
             if(entity.name != transformInfo.targetName){
                 return;
             }
@@ -742,9 +741,8 @@ class Entity{
         this.checkTransform('onHitChance');
     }
 
-    //audioDisturbChance is multiplied by volume-distance, and added to spawnchance.
-    //
     hearSound(volume){
+        //audioDisturbChance is multiplied by volume-distance, and added to spawnchance.
         if(this.spawnEntities && this.spawnEntities.audioDisturbChance){
             let disturbChance = this.spawnEntities.audioDisturbChance;
             if(volume > 1){
@@ -754,10 +752,19 @@ class Entity{
                 this.spawnChance = 0;
             } 
             this.spawnEntities.spawnChance += disturbChance;
-            
+        }
+        //audiotransformchance is multiplied by volume-distance, and added to perturntransform chance for each form.
+        if(this.changeForms){
+            this.changeForms.forEach((form)=>{
+                if(form.audioTransformChance){
+                    if(!form.perTurnChance){
+                        form.perTurnChance = 0;
+                    }
+                    form.perTurnChance += form.audioTransformChance*volume
+                }
+            })
         }
     }
-    
 }
 
 class PlayerEntity extends Entity{

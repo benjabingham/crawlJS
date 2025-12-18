@@ -182,6 +182,10 @@ class EntityManager{
                 if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
                     entity.reconstituteFn(entity.reconstitute);
                 }
+
+                if(entity.changeForms){
+                    entity.checkTransform('perTurnChance')
+                }
                 
             }
             if(entity.decay && !slow){

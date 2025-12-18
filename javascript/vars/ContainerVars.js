@@ -289,6 +289,35 @@ let containerVars = {
             }
         ],
     },
+    sleepingSkeleton:{
+        name:"sleeping skeleton",
+        symbol:"x",
+        behavior:"",
+        hitDice:1,
+        damage:4,
+        inventorySlots: 1,
+        isContainer: true,
+        color:'bone',
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:5
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:13
+            }
+        ],
+        changeForms:[
+            {
+                audioTransformChance:8,
+                formKey:'skeletonPile',
+                resetMortal:true,
+                name:"skeleton"
+            },
+
+        ],
+    },
     weaponChest:{
         name:"weapon rack",
         symbol:"⧦",

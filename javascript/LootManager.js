@@ -388,7 +388,16 @@ class LootManager{
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
                 case 'name':
-                    item[key] = value + ' ' + item[key];
+                    if(!modifier.symbol){
+                        item[key] = value + ' ' + item[key];
+                    }
+                    break;
+                case 'symbol':
+                    if(!item.symbols){
+                        item.symbols = [value]
+                    }else{
+                        item.symbols.push(value);
+                    }
                     break;
                 case 'damage':
                 case 'stunTime':
@@ -443,10 +452,10 @@ class LootManager{
 
     static getStarterWeapon(){
         
-        let starterWeapon = LootManager.getWeaponLoot(5,['wood','flint','iron'],0)
+        let starterWeapon = LootManager.getWeaponLoot(1,['wood','flint','iron'],0)
     
         while(starterWeapon.value > 5){
-            starterWeapon = LootManager.getWeaponLoot(5,['wood','flint','iron'],0)
+            starterWeapon = LootManager.getWeaponLoot(1,['wood','flint','iron'],0)
         }
         if(!starterWeapon.flimsy){
             starterWeapon.flimsy = 1
@@ -492,5 +501,16 @@ class LootManager{
         }
 
         return color;
+    }
+
+    static getItemNameWithSymbols(item){
+        let name = item.name;
+        if(item.symbols){
+            item.symbols.forEach((symbol)=>{
+                name+=" "+symbol
+            })
+        }
+    
+        return name;
     }
 }

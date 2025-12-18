@@ -530,6 +530,11 @@ class Display{
         return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
         
     }
+
+    static getSymbolHintText(symbol){
+        let charCode = symbol.charCodeAt(0)
+        return keywordVars.symbols[charCode].name
+    }
     
 
     static addInventoryItem(item, dungeonMode, inventory){
@@ -539,7 +544,16 @@ class Display{
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let itemIsSelected = slot == Display.displayedInventorySlot;
         let primed = Display.isPrimed(item.slot);
-
+        let symbolsSpan = $('<span>')
+        if(item.symbols){
+            item.symbols.forEach((symbol)=>{
+                let symbolSpan = $('<span>').text(" "+symbol);
+                let hintText = Display.getSymbolHintText(symbol);
+                Display.setHintText(symbolSpan,hintText)
+                symbolsSpan.append(symbolSpan);
+            })
+        }
+        
         if(!itemValue){
             itemValue = '0';
         }
@@ -548,7 +562,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(

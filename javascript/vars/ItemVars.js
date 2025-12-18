@@ -229,7 +229,7 @@ let itemVars = {
             },
             value:4
         },
-        pickAxe:{
+        pickaxe:{
             weapon:true,
             name:"pickaxe",
             wrecking:true,
@@ -881,6 +881,7 @@ let itemVars = {
     weaponModifiers:{
         worn:{
             name:'worn',
+            symbol:'⤓',
             flimsy:1,
             edged:{
                 damage:-1
@@ -889,6 +890,7 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
+            symbol:'⚶',
             unlucky:true,
             value: .3
         },

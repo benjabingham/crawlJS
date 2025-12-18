@@ -173,14 +173,16 @@ class Entity{
             let item = itemPile.inventory.items.pop()
             this.inventory.items.push(item);
             if(isPlayer){
-                Log.addMessage('Picked up '+item.name+'.')
+                let itemName = LootManager.getItemNameWithSymbols(item);
+                Log.addMessage('Picked up '+itemName+'.')
             }
         }
 
         if(isPlayer && itemPile.inventory.items.length > 0){
             itemPile.inventory.items.forEach((item)=>{
                 let tipText = "value - "+item.value;
-                Log.addMessage('Not enough space for '+item.name+'...',false,item.name,tipText);
+                let itemName = LootManager.getItemNameWithSymbols(item);
+                Log.addMessage('Not enough space for '+itemName+'...',false,item.name,tipText);
             })
         }
 
@@ -250,14 +252,17 @@ class Entity{
             let item = container.inventory.items.pop();
             this.inventory.items.push(item);
             if(isPlayer){
-                Log.addMessage('Found '+item.name+'.');
+                let itemName = LootManager.getItemNameWithSymbols(item);
+                Log.addMessage('Found '+itemName+'.');
             }
         }
 
         if(isPlayer && container.inventory.items.length > 0){
             container.inventory.items.forEach((item)=>{
                 let tipText = "value - "+item.value;
-                Log.addMessage('Not enough space for '+item.name+'...',false,item.name,tipText);
+                let itemName = LootManager.getItemNameWithSymbols(item);
+
+                Log.addMessage('Not enough space for '+itemName+'...',false,item.name,tipText);
             })
         }
         

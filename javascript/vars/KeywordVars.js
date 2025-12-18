@@ -19,6 +19,7 @@ keywordVars = {
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
-        unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."}
+        unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."},
+        wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."}
     }
 }

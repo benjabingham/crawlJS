@@ -262,12 +262,25 @@ let containerVars = {
         name:"fence",
         symbol:"⩸",
         behavior:"",
+        loud:1,
         hitDice:2,
         behaviorInfo:{sturdy:60},
         damage:4,
         inventorySlots: 0,
         isContainer: true,
         color:'woodBrown'
+    },
+    rubble:{
+        name:"rubble",
+        symbol:"⬡",
+        behavior:"",
+        loud:1,
+        hitDice:6,
+        behaviorInfo:{sturdy:80},
+        damage:4,
+        inventorySlots: 0,
+        isContainer: true,
+        color:'darkGray'
     },
     skeletonCorpse:{
         name:"skeleton corpse",
@@ -472,6 +485,7 @@ let containerVars = {
         name:"tomb",
         symbol:"▣",
         behavior:"",
+        loud:1,
         behaviorInfo:{sturdy:90},
         spawnEntities:{
             minCapacity:1,
@@ -523,6 +537,7 @@ let containerVars = {
         name:"sleepy tomb",
         symbol:"▣",
         behavior:"",
+        loud:1,
         spawnEntities:{
             occupiedChance:100,
             entities:[
@@ -573,6 +588,7 @@ let containerVars = {
         name:"sleeping tomb",
         symbol:"▣",
         behavior:"",
+        loud:1,
         spawnEntities:{
             occupiedChance:80,
             entities:[
@@ -591,6 +607,7 @@ let containerVars = {
         damage:4,
         inventorySlots: 2,
         isContainer: true,
+        loud:1,
         inventory:[
             {
                 item: itemVars.drops.sigiledBone,
@@ -623,6 +640,7 @@ let containerVars = {
         name:"ghoul tomb",
         symbol:"▣",
         behavior:"",
+        loud:1,
         behaviorInfo:{sturdy:90},
         spawnEntities:{
             entities:[
@@ -663,6 +681,7 @@ let containerVars = {
         name:"rat tomb",
         symbol:"▣",
         behavior:"",
+        loud:1,
         behaviorInfo:{sturdy:90},
         spawnEntities:{
             minCapacity:0,
@@ -716,6 +735,7 @@ let containerVars = {
         damage:4,
         inventorySlots: 1,
         isContainer: true,
+        loud:1,
         spawnEntities:{
             occupiedChance:5,
             entities:[
@@ -757,6 +777,7 @@ let containerVars = {
         name:"overflowingCrypt",
         symbol:"▣",
         behavior:"",
+        loud:1,
         behaviorInfo:{sturdy:95},
         spawnEntities:{ 
             minCapacity:5,

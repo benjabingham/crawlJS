@@ -243,7 +243,7 @@ class LootManager{
                 LootManager.expendUse(item);
             }
         }else if (random < 90){
-            let weapons = ['shortsword','club','handaxe']
+            let weapons = ['shortsword','club','handaxe','pickaxe']
             let weapon = itemVars.weapons[weapons[Random.roll(0,weapons.length-1)]];
             weapon = JSON.parse(JSON.stringify(weapon));
             let material = LootManager.getWeaponMaterial(tier,['wood','copper','iron','steel']);

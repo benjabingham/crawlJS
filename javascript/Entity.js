@@ -1041,6 +1041,10 @@ class SwordEntity extends Entity{
             damageDice++;
         }
 
+        if(target.isContainer && this.item.wrecking){
+            damageDice +=2
+        }
+
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
         stunTime += vulnerability;
@@ -1053,7 +1057,7 @@ class SwordEntity extends Entity{
             stunAdded += Random.roll(1,stunTime);
         }
         let mortality = Random.rollN(damageDice,0,damage);
-
+        console.log(mortality);
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');

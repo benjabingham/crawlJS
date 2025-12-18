@@ -229,6 +229,27 @@ let itemVars = {
             },
             value:4
         },
+        pickAxe:{
+            weapon:true,
+            name:"pickaxe",
+            wrecking:true,
+            damage:2,
+            stunTime:3,
+            weight:3,
+            type:{
+                edged:true
+            },
+            swing:{
+                damage:8,
+                stunTime:3,
+                weight:3,
+                type:{
+                    edged:true
+                }
+            },
+            disallowedMaterials:["ceramic","limestone","obsidian","rubber","glass"],
+            value:7
+        },
         greataxe:{
             weapon:true,
             name:"greataxe",

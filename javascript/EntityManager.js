@@ -700,6 +700,9 @@ class EntityManager{
     }
 
     static emitSound(pos,volume){
+        if(pos.loud){
+            volume*=(pos.loud+1)
+        }
         let entity;
         for(let x = pos.x-volume; x <= pos.x+volume; x++){
             for(let y = pos.y-volume; y <= pos.y+volume; y++){

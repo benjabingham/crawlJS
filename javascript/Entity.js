@@ -660,6 +660,10 @@ class Entity{
             this.setToLastPosition();
             let attackerLastPos = History.getSnapshotEntity(attacker.id);
             if(attacker.isSword){
+                //if sword was unequipped
+                if(!Board.isSpace(attackerLastPos)){
+                    attackerLastPos = this;
+                }
                 attacker.findSwordMiddle(this,attackerLastPos);
             }else{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 

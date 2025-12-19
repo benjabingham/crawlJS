@@ -781,8 +781,8 @@ let monsterVars = {
         hitDice:6,
         damage:3,
         blood:2,
-        grabby:1,
-        corrosive:1,
+        grabby:3,
+        corrosive:2,
         inventorySlots:5,
         inventory:[
             {
@@ -871,7 +871,7 @@ let monsterVars = {
     },
     mimicChest:{
         name:"mimicChest",
-        symbol:"Ch",
+        symbol:"⍞",
         behavior:"chase",
         behaviorInfo:{
             slow:99.5,

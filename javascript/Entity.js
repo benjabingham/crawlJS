@@ -3,6 +3,7 @@ class Entity{
     name;
     symbol;
     color;
+    //id is entity's key in EntityManager.entities
     id;
     x;
     y;
@@ -16,6 +17,53 @@ class Entity{
     highlighted = false;
     //array of x,y pairs of directions of adjacent cells that should be highlighted
     highlightedAdjacents = [];
+    //behavior defines which behavior function is called when it's the entity's turn to act. If blank, entity will not act.
+    behavior;
+    //object which contains a number of attributes that define how an entity behaves, ex. sturdy, knock, enrage, daze 
+    behaviorInfo;
+    //defines whether an entity can be searched. Mostly entities of the Container class, or dead monsters.
+    isContainer;
+    //object given to entities which can spawn other entities. Includes attributes which define spawning behavior
+        //minCapacity & maxCapacity + minSpawn & maxSpawn define the min and max number of entities contained or spawned at once(all default to 1)
+        //occupiedChance defines the chance, upon generation, that the entity will have entities in it
+        //entities is an array containing the keys of entities which may be contained in the spawner
+        //spawnChance is the percent chance that the spawner will spawn one of these entities each turn
+        //disturbChance is the percent chance that the spawner will spawn one of these entities upon being searched or taking damage
+        //audioDisturbChance is a number. When the spawner hears a sound, the volume of the sound will be multiplied by audioDisturbChance and added to spawnChance.
+    spawnEntities;
+    //loud is a number. volume of sound made by striking this entity is multiplied by loud+1.
+    loud;
+    //changeForms is an array of form objects which may have the following attributes
+        //perTurnChance, onHitChance, noTargetChance, onSearchChance are the chamce the entity transforms each turn, if it is hit, if it has no target, or if it's searched
+        //audioTransformChance is a number. When the entity hears a sound, this number is multiplied by the volume and added to perTurnTransformChance.
+        //resetMortal - if true, entity will inherit the mortal value of its new form (probably 0)
+        //name - if set, this will be the name of the entity after tranforming.
+        //message - if player has line of sight, {entityname}+message will be put in log at time of transformation
+    changeForms;
+    //does it bleed? How much? Default is 1.
+    blood;
+    //what color does it bleed? Object with r,g,b integer attributes, each between 0 and 255 inclusive
+    bloodColor;
+    //triggerTransform - when searched, this entity will cause all entities with a given name to transform into an entity of another key.
+    //triggerTransform's attributes are the same as changeForms's form objects', because it uses the same function. There is one exception -
+            //targetName - Each entity with this NAME (not key) will be affected.
+    triggerTransform;
+    //if true, entity will not drop a corpse on death
+    corpseless;
+    //decay - each turn, gain from 0 to n mortality
+    decay;
+    //sturcyCorpse - corpse has extra health
+    sturdyCorpse;
+    //wakeupchance - entity will not act. Each turn, n% chance to lose wakeupchance.
+    wakeupChance;
+    //wait - entity will not act until it gets line of sight of player
+    wait;
+    //lightStrenght - entity gives off this many tiles of light
+    lightStrength;
+    //corrosive - striking with a weapon causes weapon to gain degrade chance of 0 to n
+    corrosive;
+    //grabby - striking with weapon costs 0 to n extra stamina. If this cannot be spent, entity steals weapon.
+    grabby;
 
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
@@ -612,6 +660,10 @@ class Entity{
             this.setToLastPosition();
             let attackerLastPos = History.getSnapshotEntity(attacker.id);
             if(attacker.isSword){
+                //if sword was unequipped
+                if(!Board.isSpace(attackerLastPos)){
+                    attackerLastPos = this;
+                }
                 attacker.findSwordMiddle(this,attackerLastPos);
             }else{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
@@ -1203,10 +1255,7 @@ class SwordEntity extends Entity{
 }
 
 class Monster extends Entity{
-    //behavior - string determing monster's behavior method
-    behavior;
-    //behaviorInfo - object containing parameters to be passed to behavior method
-    behaviorInfo= {};
+    behaviorInfo = {};
     //stunned - integer decreases when positive each turn, takes double damage and skips turn while positive.
     stunned = 0;
     //mortal - the amount of damage it has taken
@@ -1226,7 +1275,27 @@ class Monster extends Entity{
     sightDistance = 8;
     //turn spawned
     spawnTurn = 0;
-
+    //tracking - integer. If has not seen player, will seek adjacent tiles which player has occupied in the last n turns. Prioritizes recency.
+    tracking;
+    //vulnerabilities - array of names of materials. Damage from these materials will be doubled, and deal 1 extra stun
+    vulnerabilities;
+    //reconstitute - while dead, each turn, will lose 0 to n mortality, and will rise if falls below threshold.
+    reconstitute;
+    //sets behavior to this value upon reconstitution
+    reconstituteBehavior;
+    //reconstitutechance - number. Monster has a 100-n % chance to set reconstitute=false on death.
+    reconstituteChance;
+    //reconstituteDecay - number, adds 0 to n to decay value
+    reconstituteDecay;
+    //targetWeapon - monster will target player's weapon instead of player
+    targetWeapon;
+    //lightseeking - increase speed and sight distance based on player's light value
+    lightSeeking;
+    //lightDrain - reeduce player's light by 1 on hit
+    lightDrain;
+    //can player make a counterattack?
+    parryable;
+    
 
     constructor(monsterKey,x,y, additionalParameters = {}){
         super(false, x, y);

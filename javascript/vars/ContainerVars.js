@@ -3,12 +3,10 @@ let containerVars = {
         name:"chest",
         symbol:"⍞",
         behavior:"",
-        hitDice:0,
-        damage:4,
+        hitDice:1,
         inventorySlots: 10,
         isContainer: true,
-        inventory:[
-            
+        inventory:[    
         ],
         loot:{
             weapon:{
@@ -38,10 +36,10 @@ let containerVars = {
         name:"pantry",
         symbol:"⽬",
         behavior:"",
-        hitDice:0,
-        damage:4,
+        hitDice:1,
         inventorySlots: 3,
         isContainer: true,
+        behaviorInfo:{sturdy:30},
         inventory:[
             {
                 item: itemVars.food.morsel,
@@ -73,8 +71,7 @@ let containerVars = {
         name:"rare chest",
         symbol:"⍞",
         behavior:"",
-        hitDice:0,
-        damage:4,
+        hitDice:1,
         inventorySlots: 10,
         isContainer: true,
         inventory:[
@@ -107,8 +104,7 @@ let containerVars = {
         name:"garbage chest",
         symbol:"⍞",
         behavior:"",
-        hitDice:0,
-        damage:4,
+        hitDice:1,
         inventorySlots: 2,
         isContainer: true,
         inventory:[
@@ -229,7 +225,6 @@ let containerVars = {
         symbol:"▤",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 1,
         isContainer: true,
         inventory:[
@@ -265,7 +260,6 @@ let containerVars = {
         loud:1,
         hitDice:2,
         behaviorInfo:{sturdy:60},
-        damage:4,
         inventorySlots: 0,
         isContainer: true,
         color:'woodBrown'
@@ -287,7 +281,6 @@ let containerVars = {
         symbol:"x",
         behavior:"",
         hitDice:1,
-        damage:4,
         inventorySlots: 1,
         isContainer: true,
         color:'bone',
@@ -336,7 +329,6 @@ let containerVars = {
         symbol:"⧦",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 10,
         isContainer: true,
         loot:{
@@ -385,7 +377,6 @@ let containerVars = {
         symbol:"⧦",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 10,
         isContainer: true,
         loot:{
@@ -401,7 +392,6 @@ let containerVars = {
         symbol:"⍞",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 10,
         isContainer: true,
         loot:{
@@ -426,7 +416,6 @@ let containerVars = {
         symbol:"⧦",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 10,
         isContainer: true,
         inventory:[
@@ -452,7 +441,6 @@ let containerVars = {
         symbol:"❧",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 2,
         isContainer: true,
         inventory:[
@@ -651,7 +639,6 @@ let containerVars = {
             audioDisturbChance:10
         },
         hitDice:4,
-        damage:4,
         inventorySlots: 3,
         isContainer: true,
         inventory:[],
@@ -732,7 +719,6 @@ let containerVars = {
         behavior:"",
         behaviorInfo:{sturdy:70},
         hitDice:3,
-        damage:4,
         inventorySlots: 1,
         isContainer: true,
         loud:1,
@@ -797,7 +783,6 @@ let containerVars = {
             audioDisturbChance: 10
         },
         hitDice:5,
-        damage:4,
         inventorySlots: 10,
         isContainer: true,
         inventory:[
@@ -844,7 +829,6 @@ let containerVars = {
         symbol:"▣",
         behavior:"",
         hitDice:0,
-        damage:4,
         inventorySlots: 2,
         isContainer: true,
         loot:{
@@ -920,7 +904,6 @@ let containerVars = {
             audioDisturbChance:15
         },
         hitDice:3,
-        damage:4,
         inventorySlots: 3,
         inventory:[
             {

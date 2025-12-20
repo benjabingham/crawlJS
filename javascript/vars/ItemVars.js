@@ -1026,6 +1026,21 @@ let itemVars = {
             uses:5,
             color:'brightPurple'
         },
+        ultimateSalami:{
+            name:'ultimate salami',
+            usable: true,
+            food:3,
+            color:'darkRed',
+            weapon:true,
+            damage:3,
+            stunTime:4,
+            weight:2,
+            type:{
+                blunt:true,
+                long:true
+            },
+            value:10
+        },
     },
     potions:{
         poison:{

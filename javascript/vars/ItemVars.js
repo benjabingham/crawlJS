@@ -999,7 +999,7 @@ let itemVars = {
             color:'darkRed',
             flimsy:8,
             weapon:true,
-            damage:2,
+            damage:1,
             stunTime:2,
             weight:1,
             type:{

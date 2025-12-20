@@ -212,7 +212,7 @@ class Grid{
         if(!floorType){
             floorType = 'stone'
         }
-        tileDiv.removeClass('stoneFloor grassFloor dirtFloor')
+        tileDiv.removeClass('stoneFloor grassFloor dirtFloor woodFloor')
         tileDiv.addClass(floorType+'Floor')
         //console.log(floorType)
     }

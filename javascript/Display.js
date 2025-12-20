@@ -250,12 +250,12 @@ class Display{
         console.log(possibleStrikes);
         let weaponItem = EntityManager.playerEntity.swordEntity.item
         let weight = 99999
-        if(weaponItem){
-            weight = weaponItem.weight;
-        }
+        
         possibleStrikes.forEach((strike)=>{
             if (weaponItem && weaponItem[strike]){
                 weight = Math.min(weight, weaponItem[strike].weight);
+            }else if(weaponItem){
+                weight = Math.min(weight,weaponItem.weight)
             }
 
             if(strike == 'unarmed'){

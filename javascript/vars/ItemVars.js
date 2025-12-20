@@ -980,6 +980,7 @@ let itemVars = {
             usable: true,
             food:1,
             color:'bone',
+            flimsy:35,
 
             weapon:true,
             damage:1,
@@ -996,7 +997,7 @@ let itemVars = {
             usable: true,
             food:1,
             color:'darkRed',
-
+            flimsy:8,
             weapon:true,
             damage:2,
             stunTime:2,

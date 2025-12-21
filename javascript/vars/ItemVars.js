@@ -423,6 +423,75 @@ let itemVars = {
             value:2
         },
     },
+    tools:{
+        rollingPin:{
+            weapon:true,
+            name:"rolling pin",
+            wood:true,
+            damage:2,
+            stunTime:2,
+            weight:1,
+            flimsy:8,
+            type:{
+                blunt:true
+            },
+            jab:{
+                damage:1,
+                stunTime:1,
+                weight:1,
+                type:{
+                    blunt:true
+                }
+            },
+            color:'woodBrown',
+            value:0
+        },
+        woodenShovel:{
+            weapon:true,
+            name:"wooden shovel",
+            wood:true,
+            damage:1,
+            stunTime:2,
+            weight:2,
+            flimsy:8,
+            type:{
+                blunt:true
+            },
+            swing:{
+                damage:6,
+                stunTime:3,
+                weight:3,
+                type:{
+                    blunt:true
+                }
+            },
+            color:'woodBrown',
+            value:0
+        },
+        woodenPitchfork:{
+            weapon:true,
+            name:"wooden pitchfork",
+            wood:true,
+            damage:1,
+            stunTime:2,
+            weight:2,
+            flimsy:8,
+            type:{
+                edged:true
+            },
+            jab:{
+                damage:4,
+                stunTime:2,
+                weight:2,
+                type:{
+                    edged:true
+                }
+            },
+            color:'woodBrown',
+            value:0
+        }
+
+    },
     treasure:{
         thimble:{
             name:"thimble",

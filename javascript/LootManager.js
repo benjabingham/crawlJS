@@ -236,13 +236,15 @@ class LootManager{
             item = LootManager.getFoodLoot(tier);
         }else if (random < 70){
             item = JSON.parse(JSON.stringify(itemVars.fuel.kindling))
-        }else if(random < 80){
+        }else if(random < 78){
             item = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask))
             let n = Random.roll(0,2);
             for(let i = 0; i < n; i++){
                 LootManager.expendUse(item);
             }
-        }else if (random < 90){
+        }else if (random < 88){
+            item = LootManager.getTool();
+        }else if (random < 93){
             let weapons = ['shortsword','club','handaxe','pickaxe']
             let weapon = itemVars.weapons[weapons[Random.roll(0,weapons.length-1)]];
             weapon = JSON.parse(JSON.stringify(weapon));
@@ -371,6 +373,18 @@ class LootManager{
         return JSON.parse(JSON.stringify(weapon));
     }
 
+    static getTool(){
+        let tools = Object.keys(itemVars.tools);
+        let nTools = tools.length;
+        let toolIndex = Random.roll(0,nTools-1);
+        
+        let key = tools[toolIndex];
+        let tool = itemVars.tools[key];
+        
+        //this is to make a copy of the object - this way it isn't passed by reference.
+        return JSON.parse(JSON.stringify(tool));
+    }
+
     static getTreasure(){
         let treasures = Object.keys(itemVars.treasure);
         let nTreasures = treasures.length;
@@ -451,7 +465,7 @@ class LootManager{
     }
 
     static getStarterWeapon(){
-        
+        /*
         let starterWeapon = LootManager.getWeaponLoot(1,['wood','flint','iron'],0)
     
         while(starterWeapon.value > 5){
@@ -461,6 +475,9 @@ class LootManager{
             starterWeapon.flimsy = 1
         }
         starterWeapon.flimsy += 5;
+        */
+
+        let starterWeapon = LootManager.getTool();
 
         return starterWeapon
     }

@@ -128,11 +128,20 @@ let itemVars = {
             weapon:true,
             name:"shortsword",
             damage:4,
-            stunTime:2,
+            stunTime:1,
             weight:2,
             type:{
                 sword:true,
                 edged:true
+            },
+            draw:{
+                damage:4,
+                stunTime:3,
+                weight:1,
+                type:{
+                    sword:true,
+                    edged:true
+                },
             },
             value:4
         },
@@ -169,7 +178,7 @@ let itemVars = {
                 },
             },
             flimsy:1,
-            disallowedMaterials:["flint","limestone","obsidian","rubber","bone"],
+            disallowedMaterials:["flint","limestone","obsidian","rubber","bone","wood","ceramic","obsidian","lead","copper","bronze","glass","sigiledBone","ironwood","crystal","gold","platinum"],
             value:10
         },
         greatsword:{

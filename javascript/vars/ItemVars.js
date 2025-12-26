@@ -128,11 +128,20 @@ let itemVars = {
             weapon:true,
             name:"shortsword",
             damage:4,
-            stunTime:2,
+            stunTime:1,
             weight:2,
             type:{
                 sword:true,
                 edged:true
+            },
+            draw:{
+                damage:4,
+                stunTime:3,
+                weight:1,
+                type:{
+                    sword:true,
+                    edged:true
+                },
             },
             value:4
         },
@@ -169,7 +178,7 @@ let itemVars = {
                 },
             },
             flimsy:1,
-            disallowedMaterials:["flint","limestone","obsidian","rubber","bone"],
+            disallowedMaterials:["flint","limestone","obsidian","rubber","bone","wood","ceramic","obsidian","lead","copper","bronze","glass","sigiledBone","ironwood","crystal","gold","platinum"],
             value:10
         },
         greatsword:{
@@ -422,6 +431,84 @@ let itemVars = {
             },
             value:2
         },
+    },
+    tools:{
+        rollingPin:{
+            weapon:true,
+            name:"rolling pin",
+            wood:true,
+            damage:2,
+            stunTime:2,
+            weight:1,
+            flimsy:8,
+            type:{
+                blunt:true
+            },
+            jab:{
+                damage:1,
+                stunTime:1,
+                weight:1,
+                type:{
+                    blunt:true
+                }
+            },
+            usable:true,
+            fuel:true,
+            light:1,
+            color:'woodBrown',
+            value:0
+        },
+        woodenShovel:{
+            weapon:true,
+            name:"wooden shovel",
+            wood:true,
+            damage:1,
+            stunTime:2,
+            weight:2,
+            flimsy:8,
+            type:{
+                blunt:true
+            },
+            swing:{
+                damage:6,
+                stunTime:3,
+                weight:3,
+                type:{
+                    blunt:true
+                }
+            },
+            usable:true,
+            fuel:true,
+            light:1,
+            color:'woodBrown',
+            value:0
+        },
+        woodenPitchfork:{
+            weapon:true,
+            name:"wooden pitchfork",
+            wood:true,
+            damage:1,
+            stunTime:2,
+            weight:2,
+            flimsy:8,
+            type:{
+                edged:true
+            },
+            jab:{
+                damage:4,
+                stunTime:2,
+                weight:2,
+                type:{
+                    edged:true
+                }
+            },
+            usable:true,
+            fuel:true,
+            light:1,
+            color:'woodBrown',
+            value:0
+        }
+
     },
     treasure:{
         thimble:{

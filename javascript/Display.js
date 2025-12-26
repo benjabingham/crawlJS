@@ -708,7 +708,7 @@ class Display{
             )
         }
 
-        if(item.food && !item.weapon){
+        if(item.food){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
             )

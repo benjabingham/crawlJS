@@ -194,7 +194,7 @@ class LootManager{
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
     static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1){
         //extra curse bonus...
-        if(Random.roll(1,20) <= curseMultiplier){
+        if(Random.roll(1,30) <= curseMultiplier){
             tier+= 3
             curseMultiplier = 999;
         }        
@@ -340,7 +340,7 @@ class LootManager{
 
     //checks to apply cursed to a weapon
     static getIsCursed(weapon, tier, multiplier = 1){
-        let notCursedChance = (20 * tier) / multiplier;
+        let notCursedChance = (30 * tier) / multiplier;
         if(Random.roll(0,99) < notCursedChance){
             return false;
         }

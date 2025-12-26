@@ -64,7 +64,8 @@ class Log{
             "Most oozes have a low sight radius. Keep your distance if you don't want to fight them.",
             "Corrosive(green) and absorbent(orange) oozes track your weapon instead of you. Put it away and they'll leave you alone!",
             "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
-            "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them."
+            "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them.",
+            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

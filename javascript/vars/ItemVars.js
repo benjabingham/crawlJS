@@ -452,6 +452,9 @@ let itemVars = {
                     blunt:true
                 }
             },
+            usable:true,
+            fuel:true,
+            light:1,
             color:'woodBrown',
             value:0
         },
@@ -474,6 +477,9 @@ let itemVars = {
                     blunt:true
                 }
             },
+            usable:true,
+            fuel:true,
+            light:1,
             color:'woodBrown',
             value:0
         },
@@ -496,6 +502,9 @@ let itemVars = {
                     edged:true
                 }
             },
+            usable:true,
+            fuel:true,
+            light:1,
             color:'woodBrown',
             value:0
         }

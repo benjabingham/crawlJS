@@ -40,6 +40,18 @@ let containerVars = {
         inventorySlots: 3,
         isContainer: true,
         behaviorInfo:{sturdy:30},
+        spawnEntities:{
+            maxCapacity:3,
+            minSpawn:1,
+            maxSpawn:3,
+            occupiedChance:5,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 0.25,
+            disturbChance:100,
+            audioDisturbChance:5
+        },
         inventory:[
             {
                 item: itemVars.food.morsel,

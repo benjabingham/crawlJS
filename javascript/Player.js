@@ -228,7 +228,7 @@ class Player {
         
     }
 
-    static checkChangeNourishment(hungerChance){
+    static checkChangeNourishment(hungerChance = 0.25){
         let random = Math.random()*100;
         hungerChance *= (Player.hungerPercent/150)+.66
         if(random < hungerChance){

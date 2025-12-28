@@ -55,7 +55,7 @@ class Save{
     }
 
     static mapInit(json){
-
+        console.log(json);
         let roomString = json.name;
         console.log('initializing map - '+roomString);
         let entityGroups = json.entityGroups.entityGroups;
@@ -81,7 +81,11 @@ class Save{
             }
         }
         json.roster = roster;
+        if(json.floorMatrix){
+            json.floorMatrix = JSON.parse(json.floorMatrix);
+        }
         Save.maps[roomString] = json;
+        console.log(json);
         console.log(Save.maps);
         console.log('loaded');
     }
@@ -126,6 +130,10 @@ class Save{
                     entity.alive = true;
                     entity.inventory.items = [];
                     LootManager.getEntityLoot(entity);
+                    //reset spawner...
+                    if(entity.spawnEntities){
+                        entity.containedEntities = false;
+                    }
                 }
             }
         })

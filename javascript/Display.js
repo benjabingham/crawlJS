@@ -2,11 +2,13 @@ class Display{
     static entityManager;
     static customControls;
     static colorScheme = 0;
+    static displayedInventorySlot;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
         {scheme:'dark-mode',name:'Dark Mode'},
         {scheme:'light-mode',name:'Light Mode'}
     ]
+    static highlightedCells=[];
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -18,9 +20,12 @@ class Display{
         $('#hud-div').show();
         Display.fillBars(Player);
         $('#dungeon-screen').show();
+        $('#town-hint-div').hide().html('');
         Display.boardDisplayInit();
         Display.displayInventory(true);
         Display.scrollToTop();
+        Display.dropButton();
+        Log.logInit();
     }
 
     static showHomeScreen(){
@@ -38,6 +43,7 @@ class Display{
         $('#town-screen').show();
         $('#day-div').text('Day '+Save.day);
         $('#town-inventory-wrapper').show();
+        $('#town-hint-div').show().html('');
 
         Display.populateLocations();
         Display.displayInventory(false);
@@ -133,10 +139,10 @@ class Display{
     }
 
     static printBoard(){
-        let devMode = false;
+        let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
-        
+        Display.addDirectionHighlight();
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
                 let gridDiv = $('#board-grid-'+displayX+'-'+displayY);
@@ -148,7 +154,8 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-wall grid-exit grid-hint').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('click');
@@ -158,17 +165,17 @@ class Display{
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
-                            gridDiv.addClass('grid-wall')
+                            let wallType = Board.wallArray[y][x].wallType;
+                            if(!wallType){
+                                wallType = 'wall'
+                            }
+                            entityDiv.addClass('grid-'+wallType)
+                            
                         }
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
-                            gridDiv.addClass('grid-hint').off('mouseenter').on('mouseenter',()=>{
-                                $('.hint-divs').html('').append(
-                                    $('<p>').text(boardArray[y][x].name)
-                                )
-                            }).off('mouseleave').on('mouseleave',()=>{
-                                $('.hint-divs').html('');
-                            })
+                            gridDiv.addClass('grid-hint').off('mouseenter')
+                            Display.setHintText(gridDiv, boardArray[y][x].name);
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -176,6 +183,23 @@ class Display{
                             }                 
                         }
                         Display.applyColor(boardArray[y][x], entityDiv);
+                        let highlighted = boardArray[y][x].highlighted;
+                        let highlightedAdjacents = boardArray[y][x].highlightedAdjacents;
+                        if(highlighted || highlightedAdjacents){
+                            Display.addHighlights({x:displayX,y:displayY}, highlighted,highlightedAdjacents)
+                            //reset each frame
+                            boardArray[y][x].highlighted = false;
+                            boardArray[y][x].highlightedAdjacents = [];
+                        }
+                        Display.showParryHighlight(x,y, entityDiv);
+                    }
+                    if(Board.isSpace(x,y)){
+                        //floor stuff
+                        let floorType = Board.getFloor(x,y);
+                        if(!floorType){
+                            floorType = 'stone';
+                        }
+                        gridDiv.addClass(floorType+'Floor')
                     }
                     if(!Board.isSpace(x,y)){
                         if(Board.hasAdjacentEmptySpace(x,y)){
@@ -186,17 +210,123 @@ class Display{
                     }
                     if(Board.getStain(x,y)){
                         //stainDiv.text('౷');
-                        Display.applyBackgroundColor('red', stainDiv);
-                        Display.applyOpacity(Board.getStain(x,y),stainDiv);
+                        Display.applyBackgroundColorRGB(Board.getStain(x,y).color, stainDiv);
+                        Display.applyOpacity(Board.getStain(x,y).level,stainDiv);
                     }
                 //out of sight
                 }else{
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
-                entityDiv.text(symbol)
+                entityDiv.text(symbol)       
             }
         }
+        Display.applyHighlights();
+        Display.setHintText($('.grid-exit'),'EXIT')
+    }
+
+    static showParryHighlight(x,y, entityDiv){
+        if(
+            Board.boardArray[y][x].parryable && Display.parryInRange(x,y)
+        ){
+            entityDiv.addClass('parryable')
+        }
+    }
+
+    static parryInRange(x,y){
+        console.log({x:x,y:y})
+        let playerEntity = EntityManager.playerEntity;
+        let playerToTarget = {x:x-playerEntity.x, y:y-playerEntity.y}
+        if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(playerToTarget.x,playerToTarget.y)){
+            console.log('not in range')
+            console.log(EntityManager.playerEntity.canUnarmedStrike(x,y))
+            return false
+        }
+
+        let possibleStrikes = EntityManager.getPossibleStrikes({x,y})
+        if(!possibleStrikes.length){
+            return false;
+        }
+        console.log(possibleStrikes);
+        let weaponItem = EntityManager.playerEntity.swordEntity.item
+        let weight = 99999
+        
+        possibleStrikes.forEach((strike)=>{
+            if (weaponItem && weaponItem[strike]){
+                weight = Math.min(weight, weaponItem[strike].weight);
+            }else if(weaponItem){
+                weight = Math.min(weight,weaponItem.weight)
+            }
+
+            if(strike == 'unarmed'){
+                weight = Math.min(weight,3);
+            }
+        })
+
+        //because parrys cost 1 less...
+        weight-=1;
+
+        return weight <= Player.stamina;
+    }
+
+    //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells
+    static addHighlights(pos,highlighted = false,highlightedAdjacents = []){
+        let highlight = {
+            x:pos.x,
+            y:pos.y,
+            highlighted:highlighted,
+            highlightedAdjacents:highlightedAdjacents
+        }
+        Display.highlightedCells.push(highlight)
+    }
+
+    static addDirectionHighlight(){
+        let playerEntity = EntityManager.getEntity('player');
+        let swordEntity = playerEntity.swordEntity;
+        //this is how we tell if it's equipped, or outside of the map
+        if(Board.isSpace(swordEntity.x,swordEntity.y)){
+            playerEntity.highlightedAdjacents = [];
+            return false;
+        }
+        let direction = EntityManager.translations[swordEntity.rotation];
+        playerEntity.highlightedAdjacents = [direction]
+    }
+
+    //directional highlights are just for showing player where they are looking. Will need to be different for walls.
+    static applyHighlights(){
+        Display.highlightedCells.forEach((cell)=>{
+            let cellElement = $('#board-entity-'+cell.x+'-'+cell.y)
+            if(cell.highlighted){
+                cellElement.addClass('grid-highlighted')
+            }
+            if(cell.highlightedAdjacents){
+                cell.highlightedAdjacents.forEach((direction)=>{
+                    if(direction.x == 1){
+                        cellElement.addClass('highlight-right')
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                    }else if(direction.x == -1){
+                        cellElement.addClass('highlight-left')
+                        if(direction.y == 1){
+                            cellElement.addClass('highlight-counterclockwise')
+                        }
+                        if(direction.y == -1){
+                            cellElement.addClass('highlight-clockwise')
+                        }
+                    }else if(direction.y == 1){
+                        cellElement.addClass('highlight-down')
+                    }else if(direction.y == -1){
+                        cellElement.addClass('highlight-up')          
+                    }
+                })
+            }
+        })
+
+        Display.highlightedCells = [];
     }
     
     static nourishmentDiv(){
@@ -210,32 +340,43 @@ class Display{
                 cost:1,
                 item: itemVars.food.morsel
             },
-            {name:'Proper Meal',cost:5,nourishment:100},
+            {name:'Proper Meal',cost:6,nourishment:100},
         ]
 
         $('#meals-div').html('');
 
         meals.forEach((meal)=>{
-            $('#meals-div').append(
-                $('<button>').text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                    if(Player.gold >= meal.cost){
-                        if(meal.item){
-                            if(Player.inventory.items.length < Player.inventory.slots){
-                                let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                                Player.pickUpItem(itemCopy);
-                            }else{
-                                Player.changeNourishment(item.food);
-                            }
+            let button = $('<button>');
+            button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
+                if(Player.gold >= meal.cost){
+                    if(meal.item){
+                        if(Player.inventory.items.length < Player.inventory.slots){
+                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                            Player.pickUpItem(itemCopy);
                         }else{
-                            Player.changeNourishment(meal.nourishment);
+                            Player.changeNourishment(item.food);
                         }
-                        Player.gold-= meal.cost;
-                        display.nourishmentDiv();
-                        display.displayGold();
-                        display.displayInventory(false);
+                    }else{
+                        Player.changeNourishment(meal.nourishment);
                     }
-                })
-            )
+                    Player.gold-= meal.cost;
+                    display.nourishmentDiv();
+                    display.displayGold();
+                    display.displayInventory(false);
+                }
+            })
+            if(!meal.item){
+                Display.setHintText(button,"Fully refils your hunger bar")
+                button.on('mouseenter',()=>{
+                    $('#hunger-level').css('width',"150px").addClass('preview');
+                    $('#hunger-level').text(Player.nourishmentMax+"/"+Player.nourishmentMax);                    
+                }).on('mouseleave',()=>{
+                    $('#hunger-level').removeClass('preview');
+                    Display.fillBars();
+                })  
+            }
+             
+            $('#meals-div').append(button)
         })
     }
 
@@ -269,7 +410,7 @@ class Display{
     
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(
@@ -281,10 +422,68 @@ class Display{
         })
     }
 
+    static getRestHintText(restInfo){
+        if(!restInfo){
+            restInfo = Player.getRestInfo();
+        }
+        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
+
+        return hintText;
+    }
+
+    static previewRestBars(restInfo){
+        console.log(restInfo);
+        let newHealth = Player.health+restInfo.healthChange
+        let newLuck = Math.min(Player.luck+0.5,Player.luckMax)
+        let newHunger = Player.nourishment+restInfo.nourishmentChange
+        let healthPercent = Math.floor(newHealth/Player.healthMax*100);
+        let luckPercent = Math.floor(newLuck/Player.luckMax*100);
+        let hungerPercent = Math.floor(newHunger/Player.nourishmentMax*100);
+        console.log(healthPercent)
+
+        $('#health-level').css('width',healthPercent*1.5+"px").addClass('preview');
+        $('#health-level').text(newHealth+"/"+Player.healthMax);
+
+        $('#luck-level').css('width',luckPercent*1.5+"px").addClass('preview');
+        $('#luck-level').text(newLuck+"/"+Player.luckMax);
+
+        $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
+        $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
+
+        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
+    }
+
     static restButton(){
-        $('#rest-button').off().on('click',()=>{
+        let restButton = $('#rest-button')
+        restButton.off().on('click',()=>{
             GameMaster.nextDay();
             GameMaster.loadTown();
+            $('.hint-divs').text(Display.getRestHintText());
+        })
+        
+        restButton.on('mouseenter',()=>{
+            let restInfo = Player.getRestInfo();
+            let hintText = Display.getRestHintText(restInfo);
+            Display.previewRestBars(restInfo);
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
+            Display.fillBars();
+            Display.exertionDiv();
+            $('#exertion-level-div').removeClass('preview');
+            $('#health-level').removeClass('preview');
+
+            $('#luck-level').removeClass('preview');
+
+            $('#hunger-level').removeClass('preview');
+        })   
+    }
+
+    static setHintText(element, hintText){
+        element.on('mouseenter',()=>{
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
         })
     }
 
@@ -293,9 +492,13 @@ class Display{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
+        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
+        Display.displayItemInfo(displayedItem, inventoryId)
         inventory.forEach((item) =>{
             Display.addInventoryItem(item, dungeonMode, inventoryId);
         })
+        
+        
         Display.displayGold();
     }
 
@@ -313,20 +516,53 @@ class Display{
         $('.gold-div').text(Player.gold+" gold");
     }
 
+    //checks if an inventory slot is primed.
+    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
+    static isPrimed(slot, inventory){
+        if(inventory == 'shop'){
+            return false;
+        }
+
+        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
+            return false
+        }
+
+        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
+        
+    }
+
+    static getSymbolHintText(symbol){
+        let charCode = symbol.charCodeAt(0)
+        return keywordVars.symbols[charCode].name
+    }
+    
+
     static addInventoryItem(item, dungeonMode, inventory){
         let slot = item.slot;
         let display = this;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+        let itemIsSelected = slot == Display.displayedInventorySlot;
+        let primed = Display.isPrimed(item.slot);
+        let symbolsSpan = $('<span>')
+        if(item.symbols){
+            item.symbols.forEach((symbol)=>{
+                let symbolSpan = $('<span>').text(" "+symbol);
+                let hintText = Display.getSymbolHintText(symbol);
+                Display.setHintText(symbolSpan,hintText)
+                symbolsSpan.append(symbolSpan);
+            })
+        }
+        
         if(!itemValue){
             itemValue = '0';
         }
         //add item
         $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh).attr('id',inventory+'-slot-'+slot).append(
+            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -342,6 +578,16 @@ class Display{
 
         //add buttons
 
+        if(GameMaster.dropMode){
+            $('#'+inventory+'-item-buttons-'+slot).append(
+                $('<button>').addClass('item-button').text('drop').on('click',function(){
+                    GameMaster.dropItem(slot);
+                })
+            )
+
+            return;
+        }
+
         if(item.usable){
             let button;
             if(item.food && !itemIsEquipped){
@@ -349,7 +595,7 @@ class Display{
                     GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
                     Display.displayInventory(dungeonMode);
                 })
-            } else if(item.potable && !itemIsEquipped){
+            } else if(item.potable && !itemIsEquipped && inventory != "shop"){
                 button = $('<button>').addClass('item-button').text('drink').on('click',function(){
                     GameMaster.drinkItem({type:'item-'+(slot+1)},dungeonMode);
                     Display.displayInventory(dungeonMode);
@@ -403,27 +649,66 @@ class Display{
                 })
             )
         }
-        
     }
 
     static displayItemInfo(item, inventory){
+        if(!item){
+            $('#'+inventory+'-description').html('')
+            return false;
+        }
+        if(inventory != 'shop'){
+            Display.displayedInventorySlot = item.slot;
+        }
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
         }
+        let descriptionBodyElement;
+        if(item.weapon || item.potable){
+            descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
+        }else{
+            descriptionBodyElement = '';
+        }
+
         $('#'+inventory+'-description').html('').append(
             $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
         ).append(
-            $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body')
+            descriptionBodyElement
         )
 
-        if(item.light && item.fuel && !item.weapon){
+
+
+        let traits = keywordVars.traits;
+        let hasTrait = false;
+        let traitsDiv = $('<div>').addClass('traits-text')
+        Object.keys(traits).forEach((key)=>{
+            if(item[key]){
+                let trait = keywordVars.traits[key]
+                let text = trait.name
+                if(hasTrait){
+                    text = ", "+text
+                }
+                if(item[key] > 1){
+                    text = text+" "+item[key]
+                }
+                let traitSpan = $('<span>').addClass('trait-spans').text(text);
+                Display.setHintText(traitSpan, trait.hintText)
+                traitsDiv.append(traitSpan)
+                hasTrait = true;
+            }
+        })
+
+        if(hasTrait){
+            $('#'+inventory+'-description').append(traitsDiv);
+        }
+
+        if(item.light && item.fuel){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
             )
         }
 
-        if(item.food && !item.weapon){
+        if(item.food){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
             )
@@ -438,7 +723,7 @@ class Display{
         if(itemValue){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value:').append(itemValue)
+                    $('<div>').text('Sell Value: ').append(itemValue)
                 )
             )
         }
@@ -470,7 +755,7 @@ class Display{
 
 
         if(item.weapon){
-            let attackTypes = ['jab','swing','strafe']
+            let attackTypes = ['jab','swing','strafe','draw']
             let special = false;
             let specialName = false;
             attackTypes.forEach(function(val){
@@ -502,13 +787,11 @@ class Display{
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false
                 )
-            )
-            console.log('#'+inventory+'-weapon-description');
-            
+            ).append("<hr>")
+             /*           
             attackTypes.forEach(function(val){
                 if(item[val]){
                     let special = item[val];
-                    console.log(val);
                     $('#'+inventory+'-weapon-description').append(
                         $('<div>').addClass('item-stats-normal').append(
                             $('<div>').addClass('item-title').text(val+":")
@@ -521,7 +804,7 @@ class Display{
                         )
                     )
                 }
-            })    
+            })    */
         }
 
         
@@ -587,13 +870,16 @@ class Display{
     }
 
     static applyColor(object, element){
+        let colorString;
         if(object.color){
-            element.css('color', 'var(--'+object.color+')')
+            colorString = 'var(--'+object.color+')'
         }else if(object.item && object.item.color){
-            element.css('color', 'var(--'+object.item.color+')')
+            colorString =  'var(--'+object.item.color+')'
         }else{
-            element.css('color', 'var(--defaultEntity)')
-        }
+            colorString =  'var(--defaultEntity)'        }
+
+        element.css('color', colorString)
+        element.css('text-decoration-color', colorString)
     }
 
     static applyBackgroundColor(color, element){
@@ -603,10 +889,23 @@ class Display{
         element.css('background-color', 'var(--'+color+')')
     }
 
+    static applyBackgroundColorRGB(color, element){
+        if(!color){
+            return false;
+        }
+        element.css('background-color', 'rgb('+color.r+','+color.g+','+color.b+')')
+    }
+
     //use integer 0-10
     static applyOpacity(opacity, element){
         opacity = Math.min(opacity,7);
         element.css('opacity',opacity/10)
+    }
+
+    static dropButton(){
+        $('#drop-items-button').off().on('click',(event)=>{
+            GameMaster.drop(event);
+        })
     }
     
 }

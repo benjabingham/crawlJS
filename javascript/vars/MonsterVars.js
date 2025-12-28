@@ -125,6 +125,50 @@ let monsterVars = {
         },
         color:'green'
     },
+    redOgre:{
+        name:"red ogre",
+        symbol:"Og",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:20,
+            enrage:75,
+            slow:40,
+            beat:30,
+            sturdy:30
+        },
+        hitDice:5,
+        damage:8,
+        inventorySlots: 10,
+        inventory:[
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            },
+            {
+                item: itemVars.food.morsel,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:30,
+                tier:2
+            },
+            treasure:{
+                chance:40,
+                tier:2
+            },
+            gold:{
+                chance:55,
+                amount:12
+            },
+            potion:{
+                chance: 15,
+                tier: 2
+            }
+        },
+        color:'red'
+    },
     rat:{
         name:"rat",
         symbol:"Ra",
@@ -134,7 +178,8 @@ let monsterVars = {
         },
         hitDice:0,
         damage:1,
-        inventorySlots: 1,
+        corpseless:true,
+        inventorySlots: 0,
         tiny:true,
         color:'gray'
     },
@@ -162,6 +207,15 @@ let monsterVars = {
         name:"king rat",
         symbol:"Kr",
         behavior:"chase",
+        spawnEntities:{
+            minCapacity:0,
+            maxCapacity:3,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 0,
+            disturbChance:30
+        },
         behaviorInfo:{
             focus:25,
             enrage:30
@@ -184,6 +238,7 @@ let monsterVars = {
             enrage:40,
             daze:15
         },
+        tracking:12,
         hitDice:1,
         damage:5,
         inventorySlots: 1,
@@ -199,6 +254,7 @@ let monsterVars = {
         name:"dire wolf",
         symbol:"Dw",
         behavior:"chase",
+        tracking:12,
         behaviorInfo:{
             focus:25,
             enrage:75,
@@ -214,6 +270,656 @@ let monsterVars = {
             }
         ],
         color:'gray'
+    },
+    zombie:{
+        name:"zombie",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:35
+        },
+        hitDice:3,
+        damage:4,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        bloodColor:{r:136,g:62,b:63},
+        color:'darkGreen'
+    },
+    infestedHusk:{
+        name:"infested husk",
+        symbol:"Zo",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        spawnEntities:{
+            minCapacity:2,
+            maxCapacity:4,
+            minSpawn:1,
+            maxSpawn:2,
+            entities:[
+                'rat'
+            ],
+            spawnChance: 1,
+            disturbChance:70
+        },
+        behaviorInfo:{
+            slow:50
+        },
+        hitDice:3,
+        damage:2,
+        inventorySlots: 1,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:1,
+                tier:1
+            },
+            treasure:{
+                chance:5,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:10
+            },
+            potion:{
+                chance:2,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:30,
+        bloodColor:{r:136,g:62,b:63},
+        color:'brown'
+    },
+    revenant:{
+        name:"revenant",
+        symbol:"Re",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            knock:30,
+            sturdy:30
+        },
+        hitDice:3,
+        damage:8,
+        inventorySlots: 3,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:4,
+                allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold','silver'],
+                curseMultiplier: 3
+            },
+            treasure:{
+                chance:20,
+                tier:3
+            },
+            gold:{
+                chance:80,
+                amount:10
+            },
+            potion:{
+                chance:20,
+                tier:1
+            }
+        },
+        tracking:12,
+        reconstitute:24,
+        reconstituteDecay:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        bloodColor:{r:136,g:62,b:63},
+        color:'silver'
+    },
+    skeletonPile:{
+        name:"skeleton corpse",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:20
+        },
+        sturdyCorpse:1,
+        threshold:2,
+        hitDice:0,
+        mortal:3,
+        damage:4,
+        reconstitute:2,
+        wakeupChance:1.5,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:5
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:20
+            }
+        ],
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:5,
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
+            },
+            treasure:{
+                chance:1,
+                tier:1
+            },
+            gold:{
+                chance:5,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    skeleton:{
+        name:"skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:20
+        },
+        sturdyCorpse:2,
+        threshold:2,
+        hitDice:0,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:8,
+                formKey:'headlessSkeleton',
+                message:"'s head falls off.",
+            },
+            {
+                onHitChance:5,
+                formKey:'leglessSkeleton',
+                message:"'s legs are destroyed.",
+            }
+        ],
+        blood:0,
+        color:'bone'
+    },
+    leglessSkeleton:{
+        name:"legless skeleton",
+        symbol:"Sk",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:80
+        },
+        hitDice:0,
+        sturdyCorpse:2,
+        threshold:2,
+        damage:2,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:50,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledSkull,
+                chance:20
+            },
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    headlessSkeleton:{
+        name:"headless skeleton",
+        symbol:"Sk",
+        behavior:"chase",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:20,
+            focus:28,
+        },
+        sightDistance:1,
+        hitDice:0,
+        sturdyCorpse:2,
+        threshold:2,
+        damage:4,
+        reconstitute:2,
+        reconstituteBehavior:'chase',
+        reconstituteChance:75,
+        inventorySlots: 1,
+        inventory:[
+            {
+                item: itemVars.drops.sigiledBone,
+                chance:100
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:1,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier: 3
+            },
+            treasure:{
+                chance:15,
+                tier:1
+            },
+            gold:{
+                chance:10,
+                amount:5
+            },
+            potion:{
+                chance:1,
+                tier:1
+            }
+        },
+        blood:0,
+        color:'bone'
+    },
+    ghoul:{
+        name:"ghoul",
+        symbol:"Gh",
+        behavior:"chaseBinary",
+        vulnerabilities:['silver', 'sigiled bone'],
+        behaviorInfo:{
+            slow:10
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 2,
+        inventory:[
+        ],
+        loot:{
+            weapon:{
+                chance:5,
+                tier:2,
+                allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
+                curseMultiplier:3
+            },
+            treasure:{
+                chance:15,
+                tier:2
+            },
+            gold:{
+                chance:10,
+                amount:10
+            },
+            potion:{
+                chance:15,
+                tier:1
+            }
+        },
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:35,
+        bloodColor:{r:136,g:62,b:63},
+        color:'silver'
+    },
+    corrosiveOoze:{
+        name:"corrosive ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        corrosive:1,
+        targetWeapon:true,
+        blood:1,
+        inventorySlots:3,
+        sightDistance:2,
+        tracking:5,
+        inventory:[
+            {
+                item: itemVars.drops.greenGoo,
+                chance:100
+            },
+        ],
+        behaviorInfo:{
+            slow:35
+        },
+        lightStrength:1,
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        color:"green",
+        bloodColor:{r:29,g:189,b:66}
+    },
+    absorbentOoze:{
+        name:"absorbent ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:2,
+        damage:1,
+        blood:1,
+        grabby:3,
+        targetWeapon:true,
+        inventorySlots:3,
+        sightDistance:2,
+        tracking:5,
+        inventory:[
+            {
+                item: itemVars.drops.orangeGoo,
+                chance:100
+            },
+        ],
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:20,
+        behaviorInfo:{
+            slow:35
+        },
+        color:"orange",
+        bloodColor:{r:211,g:147,b:28}
+    },
+    mitoticOoze:{
+        name:"mitotic ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:1,
+        damage:1,
+        blood:1,
+        inventorySlots:1,
+        sightDistance:2,
+        tracking:3,
+        inventory:[
+            {
+                item: itemVars.drops.blueGoo,
+                chance:100
+            },
+        ],
+        reconstitute:1,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:10,
+        behaviorInfo:{
+            slow:35
+        },
+        spawnEntities:{ 
+            items:true,
+            minCapacity:1,
+            maxCapacity:1,
+            entities:[
+                "mitoticOoze"
+            ],
+            spawnChance: 0,
+            disturbChance:70,
+        },
+        color:"blue",
+        bloodColor:{r:39,g:66,b:183}
+    },
+    blackOoze:{
+        name:"black ooze",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:3,
+        damage:5,
+        blood:1,
+        inventorySlots:3,
+        inventory:[
+            {
+                item: itemVars.drops.blackGoo,
+                chance:100
+            },
+        ],
+        sightDistance:0,
+        //tracking:5,
+        lightSeeking:10,
+        lightDrain:true,
+        reconstitute:2,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:70,
+        behaviorInfo:{
+            slow:30
+        },
+        color:"black",
+        bloodColor:{r:0,g:0,b:0}
+    },
+    elderGoo:{
+        name:"elder goo",
+        symbol:"Oo",
+        behavior:"chaseBinary",
+        hitDice:6,
+        damage:3,
+        blood:2,
+        grabby:3,
+        corrosive:2,
+        inventorySlots:5,
+        inventory:[
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:100
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:75
+            },
+            {
+                item: itemVars.drops.purpleGoo,
+                chance:25
+            },
+        ],
+        reconstitute:3,
+        reconstituteBehavior:'chaseBinary',
+        reconstituteChance:100,
+        behaviorInfo:{
+            slow:35
+        },
+        spawnEntities:{ 
+            minCapacity:3,
+            maxCapacity:8,
+            minSpawn:1,
+            maxSpawn:2,
+            entities:[
+                "absorbentOoze",
+                "corrosiveOoze"
+            ],
+            spawnChance: 0,
+            disturbChance:70,
+        },
+        color:"brightPurple",
+        bloodColor:{r:173,g:26,b:202}
+    },
+    mimic:{
+        name:"mimic",
+        symbol:"Mi",
+        behavior:"chase",
+        hitDice:3,
+        damage:6,
+        blood:1,
+        //grabby:3,
+        //targetWeapon:true,
+        inventorySlots:10,
+        sightDistance:3,
+        tracking:5,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
+            }
+        },
+        reconstituteBehavior:'chaseBinary',
+        behaviorInfo:{
+            focus:25,
+        },
+        changeForms:[
+            {
+                noTargetChance:50,
+                formKey:'mimicChest',
+                name:'chest'
+            },
+        ],
+        color:"gold",
+        bloodColor:{r:211,g:147,b:28}
+    },
+    mimicChest:{
+        name:"mimicChest",
+        symbol:"⍞",
+        behavior:"chase",
+        behaviorInfo:{
+            slow:99.5,
+        },
+        hitDice:3,
+        damage:6,
+        inventorySlots: 10,
+        isContainer: true,
+        inventory:[
+            {
+                item: itemVars.food.provisions,
+                chance:20
+            }
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:5
+            },
+            treasure:{
+                chance:75,
+                tier:3
+            },
+            potion:{
+                chance:50,
+                tier:3
+            },
+            gold:{
+                chance:100,
+                amount:20
+            }
+        },
+        changeForms:[
+            {
+                onHitChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            },
+            {
+                onSearchChance:100,
+                formKey:'mimic',
+                message:" is a mimic!",
+                messageClass:'danger'
+            }
+        ],
+        color:'gold',
+        bloodColor:{r:211,g:147,b:28}
     },
     dummy:{
         name:"dummy",

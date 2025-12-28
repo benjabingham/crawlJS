@@ -86,6 +86,39 @@ class Player {
         return level;
     }
 
+    static getRestInfo(){
+        let healthChange = Player.nourishmentLevel;
+        let oldHealth = Player.health;
+        let newHealth = Math.min(oldHealth+healthChange,Player.healthMax)
+
+        let nourishmentChange = (newHealth - oldHealth)*-1;
+        nourishmentChange -=3;
+
+        if((nourishmentChange*-1) > Player.nourishment){
+            healthChange += (Player.nourishment + nourishmentChange)
+        }
+
+        let exertionChange = Player.exertion*-1
+
+        if((Player.health+healthChange) > Player.healthMax){
+            healthChange = Player.healthMax - Player.health;
+        }
+
+        if((Player.health + healthChange) < 0){
+            healthChange = Player.health*-1;
+        }
+
+        if((Player.nourishment + nourishmentChange) < 0){
+            nourishmentChange = Player.nourishment*-1;
+        }
+
+        return{
+            healthChange:healthChange,
+            nourishmentChange:nourishmentChange,
+            exertionChange:exertionChange
+        }
+    }
+
     static rest(){
         let health = Player.nourishmentLevel;
         let oldHealth = Player.health;
@@ -139,11 +172,8 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.staminaMax,Player.stamina);
 
-        let random = Math.random()*100;
         let hungerChance = (Player.stamina - oldStamina)*2;
-        if(random < hungerChance){
-            Player.changeNourishment(-1);
-        }
+        Player.checkChangeNourishment(hungerChance);
     }
 
     static changeHealth(n){
@@ -198,6 +228,14 @@ class Player {
         
     }
 
+    static checkChangeNourishment(hungerChance = 0.25){
+        let random = Math.random()*100;
+        hungerChance *= (Player.hungerPercent/150)+.66
+        if(random < hungerChance){
+            Player.changeNourishment(-1);
+        }
+    }
+
     static reset(){
         Player.staminaMax = 10;
         Player.stamina = Player.staminaMax;
@@ -237,6 +275,14 @@ class Player {
         Player.equipped = weapon;
         EntityManager.equipWeapon('player', weapon, verbose);
         return true;
+    }
+
+    static updateEquippedEntityReference(){
+        let slot = Player.equipped.slot;
+        let weaponEntity = EntityManager.playerEntity.swordEntity;
+        let equippedItem = Player.inventory.items[slot];
+        console.log(weaponEntity);
+        weaponEntity.equip(equippedItem);
     }
 
     static unequipWeapon(){
@@ -330,7 +376,7 @@ class Player {
     static consume(slot){
         let item = Player.inventory.items[slot];
         if(item.uses > 1){
-            item.uses--;
+            LootManager.expendUse(item);
         }else{
             Player.inventory.items[slot] = false;
         }

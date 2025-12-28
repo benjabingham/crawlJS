@@ -36,11 +36,22 @@
     grid-gap: 0px;
     border-collapse: collapse;
 
+    /*
     .board-grid-div:not(.grid-dark){
         background-color:var(--floor);
-    }
+    }*/
 
 }
+
+#board:after{
+    content:"";
+    box-shadow: inset 0 0 0 1000px var(--overlay);
+    position:absolute;
+    width: 510px;
+    height:510px;
+    pointer-events: none;
+}
+
 
 .board-grid-div{
     font-size:1.5rem;
@@ -48,7 +59,6 @@
     height:30px;
     text-align:center;
     /*overflow:hidden;*/
-    border:1px solid var(--gridLine);
     outline-offset:1px;
     margin:auto;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -64,7 +74,65 @@
     }
 
     .board-entity-div{
+        /*box-shadow: inset 0 0 0 1000px rgba(22, 15, 0, 0.308);*/
+
         position:absolute;
+        /*text-shadow:1px var(--dark);*/
+        /*text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);*/
+        /*text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);*/
+        width:30px;
+        height:30px;
+        box-sizing: border-box;
+    }
+
+    /*this is where the player is*/
+    #board-entity-8-8:before{
+        /*make directional nicer*/
+        border-radius:30px;
+        position:absolute;
+        width:30px;
+        height:30px;
+        content:'';
+        transform:translate(-9px);
+    }
+
+    #board-entity-8-8>text{
+        width:30px;
+    }
+
+    .parryable{
+        text-shadow: -2px -2px 0 var(--parryable), 2px -2px 0 var(--parryable), -2px 2px 0 var(--parryable), 2px 2px 0 var(--parryable);
+    }
+
+    .board-entity-div.grid-highlighted{
+        background-color: var(--highlight);
+    }
+
+    .board-entity-div.grid-highlighted{
+    }
+
+    .board-entity-div.highlight-down:before{
+        border-bottom: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-up:before{
+        border-top: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-left:before{
+        border-left: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-right:before{
+        border-right: 2px solid var(--directionalHighlight);
+    }
+
+    .board-entity-div.highlight-counterclockwise:before{
+        transform:translate(-9px) rotate(-45deg) !important;
+    }
+
+    .board-entity-div.highlight-clockwise:before{
+        transform:translate(-9px) rotate(45deg)  !important;
     }
 
     .board-stain-div{
@@ -102,6 +170,57 @@
     repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
     50% / 30px;
     background-size:20% 20%;
+    border:1px solid var(--gridLine);
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
+
+.grid-wood{
+    background:
+    repeating-linear-gradient(var(--woodWall) 0% 25%, var(--woodWallAccent) 0% 40%) 
+    50% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodWallGrid);
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    }
+
+.grid-tree{
+    background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+    border:1px solid var(--treeBorder);
+    border-radius:20px;
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+}
+
+
+
+.stoneFloor{
+    background-color: var(--floor);
+    
+    border:1px solid var(--gridLine)
+}
+
+.woodFloor{
+    background:
+    repeating-linear-gradient(var(--woodFloor) 0% 25%, var(--woodFloorAccent) 0% 40%) 
+    70% / 30px;
+    background-size:40% 30%;
+    border:1px solid var(--woodFloorGrid);
+}
+
+.grassFloor{
+    background-color: var(--grassFloor);
+    border:1px solid var(--grassGrid);
+    background:repeating-conic-gradient(var(--grassFloor) 0% 25%, var(--grassAccent) 0% 50%) 50% / 30px;
+    background-size:20% 20%;
+
+}
+
+.dirtFloor{
+    background-color: var(--dirtFloor);
+    border:1px solid var(--dirtGrid);
+    background: repeating-conic-gradient(var(--dirtFloor) 0% 25%, var(--dirtAccent) 20% 50%) 
+    50% / 30px;
+    background-size:20% 20%;
 }
 
 .grid-exit{
@@ -110,6 +229,10 @@
       50% / 20px;
     background-size:100% 100%;
     border:none;
+}
+
+.grid-exit:hover{
+    cursor:pointer;
 }
 
 .grid-hint:hover{

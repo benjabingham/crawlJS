@@ -75,9 +75,31 @@
     width:100%;
 }
 
+.trait-spans{
+    font-weight: bolder;
+    cursor: pointer;
+}
+
 .fresh-true{
     background-color: var(--shopFresh);
     border-color: var(--shopFreshBorder);
+}
+
+.selected-true>.item-name{
+    /*background-color:var(--selectedSlot);*/
+    text-decoration: underline;
+}
+
+.drop-true{
+    background-color: var(--lightRed);
+}
+
+.drop-true:hover{
+    background-color: var(--muteRed);
+}
+
+.primed-true{
+    border: 2px solid black;
 }
 
 .inventory-description{
@@ -85,10 +107,11 @@
     margin-left:auto;
     width:250px;
     padding:5px;
+    text-align:left;
 }
 
 .inventory-description-body{
-    height:100px;
+    height:80px;
     
 }
 
@@ -97,6 +120,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0px;
     grid-auto-rows: 2rem;
+    height:68px;
 }
 
 .item-stats-normal{

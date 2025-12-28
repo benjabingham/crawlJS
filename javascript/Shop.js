@@ -34,15 +34,12 @@ class Shop{
 
 
     static stockInventory(){
-        let tiers = [0,0,1,3,4,4];
+        let tiers = [0,0,1,2,3,4];
         let slot = 0;
-        let carriedMaterials = ['wooden','copper','bronze','iron','steel'];
+        let carriedMaterials = ['wood','copper','bronze','iron','steel'];
         tiers.forEach((tier)=>{
             let priceMultiplier = Random.roll(1,4) + tier;
-            let item = LootManager.getWeaponLoot(tier);
-            while(!Shop.itemCarried(item,carriedMaterials)){
-                item = LootManager.getWeaponLoot(tier);
-            }
+            let item = LootManager.getWeaponLoot(tier, carriedMaterials);
             
             item.price = Math.max(item.value,1) * priceMultiplier;
             item.slot = slot;
@@ -55,6 +52,20 @@ class Shop{
             let fuel = Shop.getFuel();
             fuel.slot = slot;
             Shop.inventory.push(fuel);
+            slot++;
+        }
+
+        for(let i=0; i<0; i++){
+            let supplies = Shop.getSupplies();
+            supplies.slot = slot;
+            Shop.inventory.push(supplies);
+            slot++;
+        }
+
+        for(let i=0; i<2; i++){
+            let potion = Shop.getPotion();
+            potion.slot = slot;
+            Shop.inventory.push(potion);
             slot++;
         }
 
@@ -73,24 +84,35 @@ class Shop{
     }
 
     static restockInventory(){
-        let carriedMaterials = ['wooden','copper','bronze','iron','steel','ironwood','lightsteel','silver','adamantine'];
+        let carriedMaterials = ['wood','copper','bronze','iron','steel','silver','ironwood','lightsteel','adamantine'];
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
-                if(Random.roll(0,4)){
+                if(Random.roll(0,2)){
                     let fuel = Shop.getFuel();
                     fuel.slot = slot;
                     fuel.fresh = true;
                     Shop.inventory[slot] = fuel;
                 }
+            }else if(item.tier == 'potion'){
+                if(Random.roll(0,2)){
+                    let potion = Shop.getPotion();
+                    potion.slot = slot;
+                    potion.fresh = true;
+                    Shop.inventory[slot] = potion;
+                }
+            }else if(item.tier == 'supplies'){
+                if(Random.roll(0,2)){
+                    let supplies = Shop.getSupplies();
+                    supplies.slot = slot;
+                    supplies.fresh = true;
+                    Shop.inventory[slot] = supplies;
+                }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
-                if(random < restockChance || item.purchased){
-                    let newItem = LootManager.getWeaponLoot(item.tier);
-                    while(!Shop.itemCarried(newItem,carriedMaterials)){
-                        newItem = LootManager.getWeaponLoot(item.tier);                
-                    }
+                if(random < restockChance){
+                    let newItem = LootManager.getWeaponLoot(item.tier, carriedMaterials);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value,1) * priceMultiplier;
                     newItem.slot = slot;
@@ -105,22 +127,46 @@ class Shop{
         })
     }
 
+    static getSupplies(){
+        let tier = Random.roll(0,5)
+        let item = LootManager.getSupplyLoot(tier);
+        let multiplier = tier+1.5;
+        item.price = Math.ceil(item.value * multiplier);
+        item.tier = 'supplies'
+
+        return item;
+    }
+
     static getFuel(){
         let fuel = JSON.parse(JSON.stringify(itemVars.fuel.oilFlask));
 
         let priceMultiplier = Random.roll(2,5);
-        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
 
         //variance...
         if(fuel.uses){
             let useDiff = Random.roll(0,(fuel.uses))-1;
-            fuel.uses -=useDiff
-            fuel.price -= useDiff*(fuel.value-1);
+            for(let i = 0; i < useDiff; i++){
+                LootManager.expendUse(fuel);
+                fuel.value++;
+            }
+
         }
+
+        fuel.price = Math.max(fuel.value,1) * priceMultiplier;
+
         
         fuel.tier = 'fuel';
 
         return fuel;
+    }
+
+    static getPotion(){
+        let tier = Random.roll(0,4);
+        let potion = LootManager.getPotionLoot(tier);
+        potion.price = potion.value * (tier+1);
+        potion.tier = 'potion'
+
+        return potion;
     }
 
     static buyItem(slot){

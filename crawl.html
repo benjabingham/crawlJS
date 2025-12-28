@@ -40,6 +40,7 @@
     <script src="javascript/Random.js?v=7"></script>
     <script src="javascript/Entity.js?v=7"></script>
     <script src="javascript/History.js?v=7"></script>
+    <script src="javascript/Stats.js?v=7"></script>
 	<script src="javascript/crawl.js?v=7"></script>
 
 
@@ -143,7 +144,7 @@
             <div id="board" tabindex="0"></div> 
             
             <div id="log-window">
-                <div id="log-title">Log</div>
+                <div id="log-title">Log ↓</div>
                 <div id="log"></div>
             </div>
         </div>
@@ -154,10 +155,14 @@
                 <div id ="dungeon-inventory-list" class="inventory-list"></div>
                 <div id ="dungeon-inventory-description" class="inventory-description"></div>
             </div>
-            <div id="gold-div"class="gold-div"></div>
+            <div id="under-inventory-div">
+                <button id = 'drop-items-button'>Drop Items</button>
+                <div id="gold-div"class="gold-div"></div>
+            </div>
+            
         </div>
     </div>
-
+    <div class="hint-divs" id = 'town-hint-div'></div>
     <div id = "town-inventory-wrapper" class="inventory-wrapper">
         <div class="inventory-title">Inventory</div>
         <div id="town-inventory" class="inventory">

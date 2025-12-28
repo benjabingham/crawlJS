@@ -13,6 +13,7 @@ class EntityGroup{
     wait = false;
     instances = {};
     count = 0;
+    wallType = false;
 
     constructor(empty = false){
         if(empty){
@@ -63,6 +64,7 @@ class EntityGroup{
             this.symbol = '☺';
         }else if(type == 'wall'){
             this.symbol = '';
+            this.name = 'wall'
         }
     }
 

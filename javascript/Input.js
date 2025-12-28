@@ -1,5 +1,6 @@
 //Creates an event called through name, which is called with onInput()
 class Input {
+
     constructor(_name, _key) {
         this.name = _name
         this.key = _key
@@ -32,6 +33,8 @@ class Input {
 class InputManager{
     static inputs = []
     static locked = false;
+    static lastEvent;
+    static currentEvent;
 
     static setInputPreset(presetName){
         let preset = inputVars[presetName];
@@ -53,15 +56,17 @@ class InputManager{
 
         inputVars.numpad.forEach((input)=>{
             $(document).bind(input.inputName,function(event){
+                InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
                 InputManager.locked = true;
                 if(input.movePlayer) GameMaster.movePlayer(event);
                 if(input.wait) GameMaster.wait(event);
                 if(input.rotate) GameMaster.rotate(event);
-                if(input.useItem) GameMaster.useItem(event);
+                if(input.slotKey) GameMaster.slotKey(event);
                 if(input.drop) GameMaster.drop(event);
                 if(input.rewind) GameMaster.rewind(event);
                 InputManager.locked = false;
+                InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })
         })
     }
@@ -91,12 +96,12 @@ class InputManager{
         if($(':focus').is('input')){
             return;
         }
-        console.log(newInput);
+        //console.log(newInput);
         newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
-        console.log(inputCode);
+        //console.log(inputCode);
         let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));
-        console.log(theInput);
+        //console.log(theInput);
         if(theInput){
             theInput.onInput();
         }

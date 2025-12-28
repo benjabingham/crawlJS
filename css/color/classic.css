@@ -2,11 +2,52 @@
     /*dungeon*/
     --dark:#222;
     --darkAccent:#262626;
-    --floor:#ddd;
+    --overlay:#2222222d;
+    /*
+    --floor:#c2c2c2;
+q
+    --grassFloor:#a7c0a8;
+    --dirtFloor:#c9c0af;
+    */
+    --floor:#c9c9c9;
+
+    --grassFloor:#bbcabb;
+    --grassAccent:#b1c4b1;
+
+    --dirtFloor:#cec3a4;
+    --dirtAccent:#c9c0ae;
+
     --wall:#777;
     --wallAccent:#888;
+
     --exit:#555;
-    --gridLine:#2222221c;
+    
+    --gridLine:#22222210;
+    --dirtGrid:#a8997f23;
+    --grassGrid:#87a58927;
+
+    --tree:rgb(109 83 53);
+    --treeAccent:rgb(72, 121, 58);
+    --treeBorder:rgb(30, 75, 25);
+
+    --woodWall:#5f4a32;
+    --woodWallAccent:#5a452d;
+    --woodWallGrid:#3d2b153d;
+
+    --woodFloor:#b6a99b;
+    --woodFloorAccent:#b4a089;
+    --woodFloorGrid:#72412518;
+
+
+    --highlight:#ecda3350;
+    /*--directionalHighlight:var(--dark);*/
+    --directionalHighlight:#00000075;
+    /*--directionalHighlight:#b4a834ab;*/
+
+    --outline:#f3f3f338;
+    /*--outline:var(--gridLine);*/
+    /*--parryable:#fdbe3588;*/
+    --parryable:#fccb61;
 
     --defaultEntity:var(--dark);
 
@@ -18,7 +59,7 @@
     --luckBar:var(--green);
     --luckBarText:var(--darkGreen);
     --hungerBar:var(--orange);
-    --hungerBarText:far(var(--darkOrange));
+    --hungerBarText:var(--darkOrange);
     --resourceBorder:var(--defaultEntity);
 
 
@@ -32,11 +73,12 @@
     --red:rgb(231, 46, 0);
     --darkRed:rgb(117,0,0);
     --muteRed:rgb(190, 38, 0);
+    --lightRed:rgb(243, 152, 129);
     --brightPurple:rgb(153, 0, 255);
     --darkPurple:rgb(90, 0, 150);
     --blue:blue;
     --darkBlue:rgb(0, 0, 136);
-    --green:rgb(2, 184, 2);
+    --green:rgb(16, 167, 16);
     --darkGreen:rgb(0, 105, 0);
     --yellow:yellow;
     --darkYellow:rgb(110, 110, 0);
@@ -68,6 +110,7 @@
     --inventorySlotHover:#E8D6BD;
     --shopFresh:#fdd7003a;
     --shopFreshBorder:var(--inventoryBorder);
+    --selectedSlot:#f3e3b6;
 
     
     /*log*/

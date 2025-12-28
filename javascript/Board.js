@@ -6,6 +6,8 @@ class Board{
     static wallArray = [];
     static losArray = [];
     static stainArray = [];
+    static floorArray = [];
+    static lightSourceIDs = [];
 
     static destinations = {};
 
@@ -16,11 +18,12 @@ class Board{
             Board.stainArray = roomJson.stains;
         }else{
             Board.stainArray = new Array(Board.height).fill().map( ()=>
-                Array(Board.width).fill(false)
+                Array(Board.width).fill({color:{r:0,g:0,b:0}, level:0})
             )
         }
     }
 
+    //this is called each frame
     static setBoard(){
         Board.boardArray = [];
         Board.wallArray = [];
@@ -44,7 +47,7 @@ class Board{
             if(Board.entityAt(x,y).id != entity.id && Board.isSpace(x,y)){
                 let itemCase = Board.entityAt(x,y).isItemPile || entity.isItemPile;
                 if(entity.isWall && !entity.dead){
-                    Board.wallArray[y][x] = true;
+                    Board.wallArray[y][x] = {wallType:entity.wallType};
                 }
                 if(!Board.isOccupiedSpace(x,y) || entity.isSword || itemCase){
                     if(itemCase){
@@ -98,6 +101,14 @@ class Board{
         }
     }
 
+    static getFloor(x,y){
+        if ( Board.floorArray && Board.floorArray[y] && Board.floorArray[y][x]){
+            return Board.floorArray[y][x]
+        }
+
+        return false;
+    }
+
     static placeEntity(entity, x, y){
 
         if (Board.isSpace(x,y)){
@@ -107,6 +118,31 @@ class Board{
 
     static clearSpace(x, y){
         Board.placeEntity(false, x, y);
+    }
+
+    //does one point have line of sight to another
+    static hasLos(pos1,pos2, maxDistance = 8){
+        if( !Board.isSpace(pos1.x,pos1.y) || !Board.isSpace(pos2.x,pos2.y)){
+            return false;
+        }
+        if(EntityManager.getDistance(pos1,pos2) > maxDistance){
+            return false;
+        }
+        let lineOfSight = true;
+
+        let line = Board.getLine(pos1,pos2);
+        //remove the last item - walls shouldnt block los to themselves
+        line.pop();
+
+        line.forEach((point) =>{
+            if(lineOfSight){
+                if(Board.wallAt(point.x,point.y)){
+                    lineOfSight = false;
+                }
+            }
+        })
+
+        return lineOfSight;
     }
 
     static drawLos(playerx,playery,x,y){
@@ -150,6 +186,7 @@ class Board{
         let losDistance = 25
         let losMin = 8-losDistance
         let losMax = 8+losDistance
+        //for each edge of the view window, draw a line from the player to that edge.
         for(let displayY=losMin;displayY<=losMax;displayY++){
             for(let displayX=losMin;displayX<=losMax;displayX++){
                 if(displayX == losMin || displayY == losMin || displayX == losMax || displayY == losMax){
@@ -161,7 +198,7 @@ class Board{
         }
     }
 
-    static getLine(point1,point2){
+    static getLine(point1,point2, nPoints = false){
         let xdif = point2.x - point1.x;
         let ydif = point2.y - point1.y;
         
@@ -185,6 +222,10 @@ class Board{
             line.push({
                 x:Math.floor(x+.5), y:Math.floor(y+.5)
             });
+
+            if(line.length == nPoints){
+                return line;
+            }
         }
 
         return line;
@@ -224,16 +265,59 @@ class Board{
         return float ? distance : Math.floor(distance);
     }
 
-    //TRY - get light from sword's position, not player position
     static hasLight(pos){
-        let sourceTile = EntityManager.getEntity('player').swordEntity.getSwordPosition();
-        let lightDistance = Player.light+1;
-        let distance = Board.getTrueDistance(pos,sourceTile);
+        let hasLight = false
+        let playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        let sources = [{
+            x:playerLightPos.x,
+            y:playerLightPos.y,
+            lightStrength:Player.light+1,
+            isPlayerSource: true
+        }]
+        Board.lightSourceIDs.forEach((id)=>{
+            sources.push(EntityManager.getEntity(id))
+        })
+           
+        sources.forEach((source)=>{
+            if(source.obliterated){
+                return false;
+            }
+            let distance = Board.getTrueDistance(pos,source);
+            let entity = Board.entityAt(pos.x,pos.y);
+            
+            if (source.lightStrength < distance){
+                return false;
+            }
 
-        return lightDistance >= distance;
+            // if is wall, get direction from wall to source. Look at tile next to wall in the direction. If player doesnt have los of that tile, should not have los of wall.
+            //this stops light from shining through walls.
+            if(entity.isWall && !source.isPlayerSource){
+            
+                let line = Board.getLine(entity, source, 2);
+                let betweenTile = line[1];
+                if(!EntityManager.hasPlayerLos(betweenTile) || Board.entityAt(betweenTile.x,betweenTile.y).isWall){
+                    
+                    return false;
+                }
+            }
+
+            let hasLos = false;
+            if(source.isPlayerSource){
+                hasLos = EntityManager.hasPlayerLos(pos)
+            }else{
+                hasLos = Board.hasLos(source,pos)
+            }
+
+            if(hasLos){
+                hasLight = true;
+            }
         
+        })
+
+        return hasLight;        
     }
 
+    //can the player see this position (INCLUDES LIGHT)
     static hasPlayerLos(pos){
         return Board.hasLight(pos) && Board.getLineOfSight(pos.x, pos.y);
     }
@@ -251,34 +335,42 @@ class Board{
         return result;
     }
 
-    static setStain(x,y, stain = 1){
+    static setStain(x,y, level = 1, color = {r:185, g:80, b:53}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];
         }
         if(!Board.stainArray[y][x]){
-            Board.stainArray[y][x] = 0;
+            Board.stainArray[y][x] = {
+                level:0,
+                color:{r:0,g:0,b:0}
+            };
         }
-        Board.stainArray[y][x] += stain;
+        if(level < 0){
+            Board.stainArray[y][x].level += level;    
+        }else{
+            Board.stainArray[y][x] = Board.getCombinedStain({level:level, color:color},Board.stainArray[y][x]);
+        }
 
-        Board.expandPuddle(x,y, stain);
-        
+        Board.expandPuddle(x,y, level);
     }
 
-    static expandPuddle(x,y, stain){
+    static expandPuddle(x,y, level){
         let direction = Random.roll(0,7);
         let counter = 0;
-        while(counter < 8 && stain > 0){
-            console.log(direction);
+        while(counter < 8 && level > 0){
             let translation = EntityManager.translations[direction]
             let x2 = x + translation.x;
             let y2 = y + translation.y;
-            let diff = Board.getStain(x,y) - Board.getStain(x2,y2);
-            if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
-                Board.setStain(x,y, -1);
-                Board.setStain(x2,y2);
-                stain--;
+            let stain1 = Board.getStain(x,y)
+            let stain2 = Board.getStain(x2,y2)
+            if(stain1 && stain2){
+                let diff =  stain1.level - stain2.level;
+                if(diff > Random.roll(1,7) && !Board.wallAt(x2,y2)){
+                    Board.setStain(x,y, -1);
+                    Board.setStain(x2,y2, 1, Board.stainArray[y][x].color);
+                    level--;
+                }    
             }
-
             direction = (direction+1) %8
             counter++;
         }
@@ -288,25 +380,58 @@ class Board{
         if(!Board.stainArray[y]){
             return false;
         }
+        if(Board.stainArray[y][x]){
+            return Board.stainArray[y][x]
+        }
 
-        return Board.stainArray[y][x];
+        return false;
     }
 
     static smearStain(pos1,pos2){
-        let amt = Math.floor(((Board.getStain(pos1.x,pos1.y)-Board.getStain(pos2.x,pos2.y))/2.0)+.5)
-        console.log({
-            amt,
-            tile1:Board.getStain(pos1.x,pos1.y),
-            tile2: Board.getStain(pos2.x,pos2.y)
-        });
-        if(amt <= 0){
+        let stain1 = Board.getStain(pos1.x,pos1.y)
+        let level1 = stain1 ? stain1.level : 0;
+        level1 = level1 ? level1 : 0;
+        let stain2 = Board.getStain(pos2.x,pos2.y)
+        let level2 = stain2 ? stain2.level : 0;
+        level2 = level2 ? level2 : 0;
+        let amt = Math.floor(((level1 - level2)/2.0)+.5);
+        if(!amt || amt <= 0){
             return false;
         }
         let random = Random.roll(1,3);
-        if(random < Board.getStain(pos1.x,pos1.y)){
+        if(random < Board.getStain(pos1.x,pos1.y).level){
+            console.log('smear');
             Board.setStain(pos1.x,pos1.y,amt*-1);
-            Board.setStain(pos2.x,pos2.y,amt);
+            Board.setStain(pos2.x,pos2.y,amt, Board.stainArray[pos1.y][pos1.x].color);
         }
+    }
+
+    //get two stains in the form of {level:n, color:{r:x, g:y, b:z}}.
+    //returns a color with averaged values and combined levels
+    static getCombinedStain(stain1, stain2){
+        let totalLevel = stain1.level + stain2.level
+        let emptyStain = {level:0, color:{r:0,g:0,b:0}}
+        let result = JSON.parse(JSON.stringify(emptyStain));
+        result.level = totalLevel;
+        if(!stain1 || stain1 == -1 || !stain1.color || !stain1.color.r){
+            stain1 = JSON.parse(JSON.stringify(emptyStain));
+        }
+        if(!stain2 || stain2 == -1 || !stain2.color || !stain2.color.r){
+            stain2 = JSON.parse(JSON.stringify(emptyStain));
+        }
+        console.log({
+            1:stain1,
+            2:stain2
+        })
+        const colors = ['r','g','b'];
+        colors.forEach((key)=>{
+            console.log(key);
+            let sum = (stain1.color[key]*stain1.level) + (stain2.color[key]*stain2.level);
+            let avg = Math.floor(sum/totalLevel);
+            result.color[key] = avg;
+        })
+
+        return result;
     }
     
 }

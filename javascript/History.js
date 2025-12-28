@@ -1,6 +1,6 @@
 class History{
     static snapshots = [];
-    static snapshotLimit = 10;
+    static snapshotLimit = 11;
     static trackedEntities = [];
 
     static reset(){
@@ -24,17 +24,17 @@ class History{
         return entities;
     }
 
+    //get snapshot entity of given id from n turns ago. n=1 equals this turn.
     static getSnapshotEntity(id, n=1){
+        if(n >= History.snapshots.length){
+            return false;
+        }
         let snapshotEntity = History.snapshots[this.snapshots.length-n].entities[id];
         if (snapshotEntity){
             return JSON.parse(snapshotEntity);
         }
 
-        console.log({
-            id:id,
-            entity:EntityManager.getEntity(id)
-        });
-        throw new Error('Entity does not exist in History.snapshots! ');
+        //throw new Error('Entity does not exist in History.snapshots! ');
 
         return false;
     }

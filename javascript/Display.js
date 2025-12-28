@@ -702,7 +702,7 @@ class Display{
             $('#'+inventory+'-description').append(traitsDiv);
         }
 
-        if(item.light && item.fuel && !item.weapon){
+        if(item.light && item.fuel){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
             )

@@ -1,11 +1,27 @@
 class Shop{
 
-    static inventory = [];
-    static essentials = [];
+    static get weaponTiers(){
+        return GameMaster.currentTown.shop.weaponTiers;
+    }
+
+    static get inventory(){
+        return GameMaster.currentTown.shop.inventory;
+    }
+
+    static get fuelSlots(){
+        return GameMaster.currentTown.shop.fuelSlots;
+    }
+
+    static get potionSlots(){
+        return GameMaster.currentTown.shop.potionSlots;
+    }
+
+    static setInventory(arr){
+        GameMaster.currentTown.shop.inventory = arr;
+    }
 
     static shopInit(){
         Shop.stockInventory();
-
     }
 
     static getInventory(){
@@ -19,6 +35,8 @@ class Shop{
         return inventory;
     }
 
+    //I don't think this ever actually does anything...
+    //items are never truly removed from the shop, they are just marked as "purchased".
     static inventoryCleanup(){
         let newInventory = [];
         let slot = 0;
@@ -29,17 +47,17 @@ class Shop{
                 slot++;
             }
         })
-        Shop.inventory = newInventory;
+        Shop.setInventory(newInventory);
     }
 
 
+    //stock inventory from fresh
     static stockInventory(){
-        let tiers = [0,0,1,2,3,4];
+        Shop.setInventory([]);
         let slot = 0;
-        let carriedMaterials = ['wood','copper','bronze','iron','steel'];
-        tiers.forEach((tier)=>{
+        Shop.weaponTiers.forEach((tier)=>{
             let priceMultiplier = Random.roll(1,4) + tier;
-            let item = LootManager.getWeaponLoot(tier, carriedMaterials);
+            let item = LootManager.getWeaponLoot(tier, Shop.carriedMaterials);
             
             item.price = Math.max(item.value,1) * priceMultiplier;
             item.slot = slot;
@@ -48,21 +66,23 @@ class Shop{
             slot++;
         })
 
-        for(let i=0; i<2; i++){
+        for(let i=0; i<Shop.fuelSlots; i++){
             let fuel = Shop.getFuel();
             fuel.slot = slot;
             Shop.inventory.push(fuel);
             slot++;
         }
 
+        /*
         for(let i=0; i<0; i++){
             let supplies = Shop.getSupplies();
             supplies.slot = slot;
             Shop.inventory.push(supplies);
             slot++;
         }
+        */
 
-        for(let i=0; i<2; i++){
+        for(let i=0; i<Shop.potionSlots; i++){
             let potion = Shop.getPotion();
             potion.slot = slot;
             Shop.inventory.push(potion);
@@ -72,19 +92,7 @@ class Shop{
         
     }
 
-    static itemCarried(item,carriedMaterials){
-        let result = false
-        carriedMaterials.forEach((material)=>{
-            if (item[material]){
-                result = true;
-            }
-        })
-        
-        return result;
-    }
-
     static restockInventory(){
-        let carriedMaterials = ['wood','copper','bronze','iron','steel','silver','ironwood','lightsteel','adamantine'];
         this.inventory.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
@@ -112,7 +120,7 @@ class Shop{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
                 if(random < restockChance){
-                    let newItem = LootManager.getWeaponLoot(item.tier, carriedMaterials);
+                    let newItem = LootManager.getWeaponLoot(item.tier, Shop.carriedMaterials);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value,1) * priceMultiplier;
                     newItem.slot = slot;

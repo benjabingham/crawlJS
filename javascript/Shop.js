@@ -16,6 +16,10 @@ class Shop{
         return GameMaster.currentTown.shop.potionSlots;
     }
 
+    static get carriedMaterials(){
+        return GameMaster.currentTown.shop.carriedMaterials
+    }
+
     static setInventory(arr){
         GameMaster.currentTown.shop.inventory = arr;
     }
@@ -89,6 +93,8 @@ class Shop{
             slot++;
         }
 
+        console.log(Shop.carriedMaterials)
+        console.log(Shop.inventory);
         
     }
 

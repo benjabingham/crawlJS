@@ -54,3 +54,113 @@ how to close... ???
 
 strike type - DRAW
 katana with draw bonus!
+
+XP
+Gain xp from MANY THINGS
+Player has XP array storing all instances of XP gain, which are objects:
+{
+    Amount: The amount of XP gained. When the amount of all XP instances reaches a threshold, you level up,
+    Source: How you got the XP. This will inform your perk options on level up,
+    Weight: how heavily to weighh this instance of XP gain when determining level up perks
+}
+
+XP Sources:
+    HP (losing HP)
+        Moderate amount, moderate weight.
+        Perks:
+            + max hp
+            Improved hp gain on rest
+            chance to ignore attack?
+    Stamina (Spending Stamina)
+        amount 0, very low weight
+        perks:
+            + max stamina
+            + stamina gain on wait (singular)
+            Ability to use health when low on stamina (singular)
+            Special ?? - Use once per day, regain all stamina (singular)
+    Luck (spending luck)
+        Moderate amount, moderate weight
+        perks:
+            plus max luck
+            chance to not expend on use
+            improved regeneration
+            special - spend (3?) luck, go back (10?) turns
+            Death defy - if you would die, chance to give a reroll for free
+    Hunger (losing hunger)
+        low amount, moderate weight
+        perks:
+            Plus max
+            drain slower
+            drain faster, but regain stamina faster
+    Selling
+        high amount, moderate weight (both based on value of item)
+        perks
+            Trinket Peddler - Treasure is worth +1 gold (need to add treasure tag to treasure)
+            Trapper - Pelts are worth +1 gold
+            Archaeologist - Treasure is worth +25%
+
+    Buying
+        low amount, moderate weight (both based on amount spent)
+        perks
+            Keen eye - 25% Discount on "worn" and "cursed" weapons (can't buy for less than item value)
+            15% discount on all weapons
+            15% discount on all potions
+            15% discount on fuel
+
+    Weapon Types (blunt, sword, edged, long). Maybe instead blunt, axe, sword? Split across all types of a weapon?
+        trigger on strike living target
+        0 amount, low weight
+        perks
+            Improved durability
+            -25% stamina cost
+            adv damage
+            Blunt:
+                +25% max stun
+            Sword:
+                double counterattack damage
+            Axe:
+                +25% max damage
+
+    Strike types (Draw, strafe, swing, jab)
+        trigger on strike living target
+        0 amount, low weight
+        perks
+            -25% stamina cost
+            maneuvers
+                Draw
+                    Quickdraw - draw then immediately unequip your weapon. Costs 1 less stamina?
+                strafe
+                    Backslash - move through enemy directly behind you, striking them
+                swing
+                    Cleave - swing twice for cost of 1 extra stamina
+                jab
+                    Skewer - strike cell beyond, 1 extra stamina
+                Unarmed
+                    180 - do a 180, if unarmed. Costs 1 stamina
+
+    Monster types (goblin, humanoid, etc. Split among multiple types)
+        trigger on killing monsters
+        high amount, low weight
+        +25% damage, rounded up
+        adv stun
+        double chance to daze?
+
+    counterattack
+        Trigger on counterattack
+        0 amount, low weight
+        Perks
+            adv on counterattack damage
+            adv on counterattack stun
+            Can counterattack enemies that damaged you
+            extend counterattack window?
+            -25% stamina cost for counterattacks
+
+    potions
+        trigger on drink
+        0 amount, medium weight
+        perks
+            potions get an extra use
+            
+
+
+

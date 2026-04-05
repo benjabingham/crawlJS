@@ -9,7 +9,7 @@ class XP{
         axes: {},
         blunt: {}
     };
-    static threshold = 20;
+    static threshold = 30;
 
     static XPInit(){
         console.log(this.skills);
@@ -101,7 +101,7 @@ class XP{
         //multiply amount stamina spent by current percentage of stamina spent
         let percent = 1 - (Player.staminaPercent/100);
         let weightAmount = amount * percent;
-        weightAmount /= 2;
+        //weightAmount /= 2;
         amount /= 5;
         this.gain('stamina',amount,weightAmount)
     }

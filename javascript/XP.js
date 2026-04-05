@@ -89,7 +89,7 @@ class XP{
         }
 
         //TODO - if target is valid
-        this.gain(skill,1,1)
+        this.gain(skill,10,10)
     }
 
     static gainHPXP(amount){
@@ -196,7 +196,11 @@ class XP{
 
     static applyWeaponAdv(perk){
         console.log(perk.type + " " + perk.weaponType)
-        Player.perks[perk.weaponType].advantage = true;
+        if(Player.perks[perk.weaponType].advantage){
+            Player.perks[perk.weaponType].advantage++;
+        }else{
+            Player.perks[perk.weaponType].advantage = 1;
+        }
     }
 }
 

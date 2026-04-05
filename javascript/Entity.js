@@ -1113,8 +1113,12 @@ class SwordEntity extends Entity{
         if (stunTime){
             stunAdded += Random.roll(1,stunTime);
         }
-        let mortality = Random.rollN(damageDice,0,damage);
-        console.log(mortality);
+        let advantage = 0;
+        if(this.owner == "player"){
+            advantage += Player.getAdvantage(this);
+        }
+        let mortality = Random.rollN(damageDice, 0, damage, advantage);
+        console.log({advantage: advantage, mortality:mortality})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');

@@ -460,14 +460,14 @@ class Player {
         playerEntity.dropItem(slot);
     }
 
-    static getAdvantage(weapon){
-        let weaponItem = weapon.item;
+    static getAdvantage(weaponItem){
+        console.log(weaponItem);
         let weaponTypes = weaponItem.type;
         let advantage = 0;
         //for each perk category...
         Object.keys(Player.perks).forEach(skill =>{
             //if the player has advantage in that category, and the weapon has that category as a type...
-            if(Player.perks[skill].advantage && weaponTypes[skill]){
+            if(weaponTypes && Player.perks[skill].advantage && weaponTypes[skill]){
                 //add player's degree of advantage in that skill
                 advantage += Player.perks[skill].advantage
             }

@@ -21,11 +21,13 @@ keywordVars = {
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
         unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."},
-        wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."}
+        wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
+        accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     },
 
     symbols:{
         9910:{name:"cursed",symbol:'⚶'},
-        10515:{name:"worn",symbol:'⤓'}
+        10515:{name:"worn",symbol:'⤓'},
+        43:{name:"accustomed",symbol:'+'}
     }
 }

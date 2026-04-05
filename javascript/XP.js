@@ -89,7 +89,7 @@ class XP{
         }
 
         //TODO - if target is valid
-        this.gain(skill,10,10)
+        this.gain(skill,1,1)
     }
 
     static gainHPXP(amount){
@@ -171,6 +171,7 @@ class XP{
 
     static applyRaiseBarMax(perk){
         console.log(perk.type + " " + perk.bar);
+        alert("Your " +perk.bar+" bar has increased in size.")
         switch(perk.bar){
             case "stamina":
                 Player.staminaMax += perk.amount;
@@ -196,6 +197,7 @@ class XP{
 
     static applyWeaponAdv(perk){
         console.log(perk.type + " " + perk.weaponType)
+        alert("You have grown accustomed to using weapons that are "+perk.weaponType+".")
         if(Player.perks[perk.weaponType].advantage){
             Player.perks[perk.weaponType].advantage++;
         }else{

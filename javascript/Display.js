@@ -533,6 +533,7 @@ class Display{
 
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
+        console.log(charCode);
         return keywordVars.symbols[charCode].name
     }
     
@@ -545,8 +546,15 @@ class Display{
         let itemIsSelected = slot == Display.displayedInventorySlot;
         let primed = Display.isPrimed(item.slot);
         let symbolsSpan = $('<span>')
-        if(item.symbols){
-            item.symbols.forEach((symbol)=>{
+        let symbols = item.symbols;
+        if(!symbols){symbols = []}
+        symbols = [...symbols];
+        console.log(symbols);
+        if(Player.getAdvantage(item)){
+            symbols.push("+")
+        }
+        if(symbols){
+            symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
                 let hintText = Display.getSymbolHintText(symbol);
                 Display.setHintText(symbolSpan,hintText)
@@ -682,7 +690,7 @@ class Display{
         let hasTrait = false;
         let traitsDiv = $('<div>').addClass('traits-text')
         Object.keys(traits).forEach((key)=>{
-            if(item[key]){
+            if(item[key] || (key == "accustomed" && Player.getAdvantage(item))){
                 let trait = keywordVars.traits[key]
                 let text = trait.name
                 if(hasTrait){

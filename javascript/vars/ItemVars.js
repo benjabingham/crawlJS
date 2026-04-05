@@ -226,14 +226,16 @@ let itemVars = {
             stunTime:2,
             weight:2,
             type:{
-                edged:true
+                edged:true,
+                axe:true
             },
             swing:{
                 damage:6,
                 stunTime:4,
                 weight:2,
                 type:{
-                    edged:true
+                    edged:true,
+                    axe:true
                 }
             },
             value:4
@@ -246,14 +248,16 @@ let itemVars = {
             stunTime:3,
             weight:3,
             type:{
-                edged:true
+                edged:true,
+                axe:true
             },
             swing:{
                 damage:8,
                 stunTime:3,
                 weight:3,
                 type:{
-                    edged:true
+                    edged:true,
+                    axe:true
                 }
             },
             disallowedMaterials:["ceramic","limestone","obsidian","rubber","glass"],
@@ -266,14 +270,16 @@ let itemVars = {
             stunTime:3,
             weight:3,
             type:{
-                edged:true
+                edged:true,
+                axe:true
             },
             swing:{
                 damage:15,
                 stunTime:6,
                 weight:5,
                 type:{
-                    edged:true
+                    edged:true,
+                    axe:true
                 }
             },
             disallowedMaterials:["flint","ceramic","bone"],
@@ -287,7 +293,8 @@ let itemVars = {
             weight:4,
             type:{
                 edged:true,
-                long:true
+                long:true,
+                axe:true
             },
             swing:{
                 damage:15,
@@ -295,7 +302,7 @@ let itemVars = {
                 weight:6,
                 type:{
                     edged:true,
-                    long:true
+                    long:true,
                 }
             },
             disallowedMaterials:["flint","limestone","rubber","ceramic","bone"],

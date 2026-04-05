@@ -1115,7 +1115,7 @@ class SwordEntity extends Entity{
         }
         let advantage = 0;
         if(this.owner == "player"){
-            advantage += Player.getAdvantage(this);
+            advantage += Player.getAdvantage(this.item);
         }
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
         console.log({advantage: advantage, mortality:mortality})

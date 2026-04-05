@@ -15,7 +15,8 @@ class XP{
         Object.keys(this.skills).forEach(skill => {
             this.skills[skill] = {
                 level: 0,
-                weight: 0
+                weight: 0,
+                xpGained: 0
             }
         });
     }
@@ -23,6 +24,7 @@ class XP{
     static gain(skill, xp, weight){
         this.skills[skill].weight += weight;
         this.xp += xp;
+        this.skills[skill].xpGained += xp;
 
         console.log({
             xp:this.xp,
@@ -64,15 +66,24 @@ class XP{
     }
 
     static gainAttackXP(weapon,target){
-        let skill;
-        if(weapon.type.sword){
+        console.log(weapon);
+        if(weapon.owner != 'player'){
+            return false;
+        }
+        let skill = false;
+        if(weapon.item.type.sword){
             skill = 'swords';
         }
-        if(weapon.type.axe){
+        if(weapon.item.type.axe){
             skill = 'axes';
         }
-        if(weapon.type.blunt){
+        if(weapon.item.type.blunt){
             skill = 'blunt';
+        }
+
+        if(!skill){
+            //give xp to strike type instead...?
+            return false;
         }
 
         //TODO - if target is valid
@@ -87,9 +98,10 @@ class XP{
     static gainStaminaXP(amount){
         //multiply amount stamina spent by current percentage of stamina spent
         let percent = 1 - (Player.staminaPercent/100);
-        amount *= percent;
-        amount /= 2;
-        this.gain('stamina',amount,amount)
+        let weightAmount = amount * percent;
+        weightAmount /= 2;
+        amount /= 5;
+        this.gain('stamina',amount,weightAmount)
     }
 
     static gainLuckXP(){
@@ -97,7 +109,9 @@ class XP{
     }
 
     static gainHungerXP(){
-        this.gain('hunger',2,5);
+        let percent = 1 - (Player.hungerPercent/100);
+        let weightAmount = 5*percent;
+        this.gain('hunger',2,weightAmount);
     }
 }
 

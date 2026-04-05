@@ -36,6 +36,7 @@ class Player {
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
         Player.nourishment = 7;
         Player.inventoryCleanup();
+        XP.XPInit();
     }
 
     static getPlayerJson(){
@@ -174,24 +175,35 @@ class Player {
 
         let hungerChance = (Player.stamina - oldStamina)*2;
         Player.checkChangeNourishment(hungerChance);
+
+        if(n < 0){
+            XP.gainStaminaXP(n*-1);
+        }
     }
 
     static changeHealth(n){
         Player.health = Player.health+n;
         Player.health = Math.min(Player.healthMax,Player.health);
         Player.health = Math.max(0,Player.health)
+
+        if(n < 0){
+            XP.gainHPXP(n*-1);
+        }
     }
 
     static changeLuck(n){
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
+
+        if(n < 0){
+            XP.gainLuckXP(n*-1);
+        }
     }
 
     static changeExertion(n){
         n += Player.exertion;
-        Player.setExertion(n);
-        
+        Player.setExertion(n);    
     }
 
     static setExertion(n){
@@ -214,6 +226,10 @@ class Player {
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
         Display.fillBars();
+
+        if(n < 0){
+            XP.gainHungerXP(n*-1);
+        }
     }
 
     static setNourishment(n){

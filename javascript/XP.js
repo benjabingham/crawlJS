@@ -9,11 +9,10 @@ class XP{
         axes: {},
         blunt: {}
     };
-    static player;
 
-    static XPInit(player){
-        this.player = player;
-        this.skills.keys().forEach(skill => {
+    static XPInit(){
+        console.log(this.skills);
+        Object.keys(this.skills).forEach(skill => {
             this.skills[skill] = {
                 level: 0,
                 weight: 0
@@ -24,6 +23,11 @@ class XP{
     static gain(skill, xp, weight){
         this.skills[skill].weight += weight;
         this.xp += xp;
+
+        console.log({
+            xp:this.xp,
+            weights:this.skills
+        })
     }
 
     //picks n skills, wieghted by each skill's weight. When picked, a skill's weight is reset to 0. Returns as array of strings.
@@ -32,7 +36,7 @@ class XP{
         while(chosenSkills.length < n){
             //weightedSkills is an array of skill names. Each skill occurs a number of times equal to its weight plus 1.
             let weightedSkills = [];
-            this.skills.keys().forEach(skill =>{
+            Object.keys(this.skills).forEach(skill =>{
                 let finalWeight = this.skills[skill].weight;
                 finalWeight /= this.skills[skill].level;
                 finalWeight += 1;
@@ -50,7 +54,7 @@ class XP{
     }
 
     static resetWeights(){
-        this.skills.keys().forEach(skill=>{
+        Object.keys(this.skills).forEach(skill=>{
             this.skills[skill].weight = 0;
         })
     }
@@ -81,16 +85,19 @@ class XP{
     }
 
     static gainStaminaXP(amount){
-        amount /= 5;
+        //multiply amount stamina spent by current percentage of stamina spent
+        let percent = 1 - (Player.staminaPercent/100);
+        amount *= percent;
+        amount /= 2;
         this.gain('stamina',amount,amount)
     }
 
     static gainLuckXP(){
-        this.gain('luck',3,10);
+        this.gain('luck',3,7);
     }
 
     static gainHungerXP(){
-        this.gain('hunger',2,10);
+        this.gain('hunger',2,5);
     }
 }
 

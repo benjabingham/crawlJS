@@ -9,6 +9,7 @@ class XP{
         axes: {},
         blunt: {}
     };
+    static threshold = 20;
 
     static XPInit(){
         console.log(this.skills);
@@ -40,9 +41,10 @@ class XP{
             let weightedSkills = [];
             Object.keys(this.skills).forEach(skill =>{
                 let finalWeight = this.skills[skill].weight;
-                finalWeight /= this.skills[skill].level;
+                finalWeight /= (this.skills[skill].level+1);
                 finalWeight += 1;
                 finalWeight = Math.floor(finalWeight);
+                console.log(finalWeight);
                 for(let i = 0; i < finalWeight; i++){
                     weightedSkills.push(skill);
                 }
@@ -112,6 +114,89 @@ class XP{
         let percent = 1 - (Player.hungerPercent/100);
         let weightAmount = 5*percent;
         this.gain('hunger',2,weightAmount);
+    }
+
+    //skills is array of strings which correspond to skills
+    static getPerks(skills){
+
+    }
+
+    static checkLevelUp(){
+        if(this.xp >= this.threshold){
+            this.levelUp();
+        }
+    }
+
+    //takes array of skill strings. Returns array containing random perk object for each.
+    static getPerks(skillArray){
+        let perks = [];
+        skillArray.forEach(skill=>{
+            perks.push(this.getPerk(skill))
+        })
+
+        return perks
+    }
+
+    //skill is string corresponding to a skill. Returns a random perk of that skill.
+    static getPerk(skill){
+        let perks = skillVars[skill];
+        let perk = perks[Math.floor(Math.random()*perks.length)]
+        return perk;
+    }
+
+    static levelUp(){
+        //for now, just get one...
+        console.log('Level up!')
+        let skillOptions = this.getWeightedSkills(1);
+        let perkOptions = this.getPerks(skillOptions);
+        let chosenPerk = perkOptions[0];
+        this.applyPerk(chosenPerk)
+        this.resetWeights();
+        this.xp -= this.threshold;
+        this.threshold *= 1.5;
+    }
+
+    static applyPerk(perk){
+        switch(perk.type){
+            case "raiseBarMax":
+                this.applyRaiseBarMax(perk);
+                break;
+            case "weaponAdv":
+                this.applyWeaponAdv(perk);
+                break;
+            default:
+                console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
+        }
+    }
+
+    static applyRaiseBarMax(perk){
+        console.log(perk.type + " " + perk.bar);
+        switch(perk.bar){
+            case "stamina":
+                Player.staminaMax += perk.amount;
+                Player.changeStamina(perk.amount);
+                break;
+            case "hp":
+                Player.healthMax += perk.amount;
+                Player.changeHealth(perk.amount);
+                break;
+            case "luck":
+                Player.luckMax += perk.amount;
+                Player.changeLuck(perk.amount);
+                break;
+            case "hunger":
+                Player.nourishmentMax += perk.amount;
+                Player.changeNourishment(perk.amount);
+                //
+                break;
+            default:
+                console.log('BAR '+perk.bar+' NOT RECOGNIZED')
+        }
+    }
+
+    static applyWeaponAdv(perk){
+        console.log(perk.type + " " + perk.weaponType)
+        Player.perks[perk.weaponType].advantage = true;
     }
 }
 

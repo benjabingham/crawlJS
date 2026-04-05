@@ -16,6 +16,12 @@ class Player {
     static light = 0;
     static lightMax = 8;
     static lightTime = 0;
+
+    static perks ={
+        sword:{},
+        axe:{},
+        blunt:{}
+    }
         
     
     static inventory = {
@@ -132,6 +138,8 @@ class Player {
         Player.changeNourishment(-3);
 
         Player.setExertion(0);
+
+        XP.checkLevelUp();
 
         console.log(Player.nourishment);
         console.log(Player.nourishmentLevel);

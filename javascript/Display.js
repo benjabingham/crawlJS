@@ -549,7 +549,7 @@ class Display{
         let symbols = item.symbols;
         if(!symbols){symbols = []}
         symbols = [...symbols];
-        console.log(symbols);
+        //console.log(symbols);
         if(Player.getAdvantage(item)){
             symbols.push("+")
         }

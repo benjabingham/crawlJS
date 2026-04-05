@@ -1124,7 +1124,7 @@ class SwordEntity extends Entity{
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
             Player.changeHealth(mortality * -1);
         }else{
-            XP.gainAttackXP(this,target);
+            XP.gainWeaponAttackXP(this,target,strikeType);
             if(target.parryable){
                 EntityManager.transmitMessage('You counterattack!','pos','counterattack')
                 target.parryable = false;

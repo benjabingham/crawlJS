@@ -44,5 +44,29 @@ let skillVars = {
             type:"weaponAdv",
             weaponType:"blunt" 
         }
+    ],
+    long:[
+        {
+            type:"weaponAdv",
+            weaponType:"long" 
+        }
+    ],
+    edged:[
+        {
+            type:"weaponAdv",
+            weaponType:"edged" 
+        }
+    ],
+    improvised:[
+        {
+            type:"weaponAdv",
+            weaponType:"improvised" 
+        }
+    ],
+    unarmed:[
+        {
+            type:"weaponAdv",
+            weaponType:"unarmed" 
+        }
     ]
 }

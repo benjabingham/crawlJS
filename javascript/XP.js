@@ -7,7 +7,18 @@ class XP{
         hunger: {},
         swords: {},
         axes: {},
-        blunt: {}
+        blunt: {},
+        long: {},
+        edged:{},
+        improvised:{},
+        /*
+        unarmed: {},
+        swing: {},
+        strafe: {},
+        jab: {},
+        draw: {},
+        counterAttack:{}
+        */
     };
     static threshold = 30;
 
@@ -23,6 +34,7 @@ class XP{
     }
 
     static gain(skill, xp, weight){
+        console.log(skill);
         this.skills[skill].weight += weight;
         this.xp += xp;
         this.skills[skill].xpGained += xp;
@@ -63,33 +75,49 @@ class XP{
         })
     }
 
-    static levelUp(skill){
-        this.skills[skill].level++;
-    }
-
-    static gainAttackXP(weapon,target){
-        console.log(weapon);
+    static gainWeaponAttackXP(weapon,target, strikeType){
         if(weapon.owner != 'player'){
             return false;
         }
-        let skill = false;
+        let weaponSkills = []
         if(weapon.item.type.sword){
-            skill = 'swords';
+            weaponSkills.push('swords');
         }
         if(weapon.item.type.axe){
-            skill = 'axes';
+            weaponSkills.push('axes');
         }
         if(weapon.item.type.blunt){
-            skill = 'blunt';
+            weaponSkills.push('blunt');
+        }
+        if(weapon.item.type.long){
+            weaponSkills.push('long');
+        }
+        if(weapon.item.type.edged){
+            weaponSkills.push('edged');
+        }
+        if(weapon.item.type.improvised){
+            weaponSkills.push('improvised');
+        }
+        let strikeTypeXP = 1;
+        //split xp evenly among all relevant skills
+        if(weaponSkills.length){
+            let xp = 1/weaponSkills.length;
+            weaponSkills.forEach(skill=>{
+                this.gain(skill,xp,xp)
+            })
+        }else{
+            //if there are no weaponskills, pass xp to striketype... Probably won't ever happen?
+            strikeTypeXP++;
         }
 
-        if(!skill){
-            //give xp to strike type instead...?
-            return false;
-        }
+        //this.gain(strikeType,strikeTypeXP,strikeTypeXP)
 
         //TODO - if target is valid
-        this.gain(skill,1,1)
+    }
+
+    static gainUnarmedAttackXP(target){
+        //TODO - if target is valid
+        this.gain(unarmed,1,1);
     }
 
     static gainHPXP(amount){
@@ -147,6 +175,7 @@ class XP{
     static levelUp(){
         //for now, just get one...
         console.log('Level up!')
+        console.log(JSON.parse(JSON.stringify(this.skills)))
         let skillOptions = this.getWeightedSkills(1);
         let perkOptions = this.getPerks(skillOptions);
         let chosenPerk = perkOptions[0];
@@ -171,7 +200,7 @@ class XP{
 
     static applyRaiseBarMax(perk){
         console.log(perk.type + " " + perk.bar);
-        alert("Your " +perk.bar+" bar has increased in size.")
+        alert("Your maximum " +perk.bar+" has increased.")
         switch(perk.bar){
             case "stamina":
                 Player.staminaMax += perk.amount;

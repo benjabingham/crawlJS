@@ -20,7 +20,16 @@ class Player {
     static perks ={
         sword:{},
         axe:{},
-        blunt:{}
+        blunt:{},
+        long: {},
+        edged:{},
+        improvised:{},
+        unarmed:{},
+        swing:{},
+        strafe:{},
+        jab:{},
+        draw:{},
+        counterAttack:{}
     }
         
     
@@ -461,7 +470,7 @@ class Player {
     }
 
     static getAdvantage(weaponItem){
-        console.log(weaponItem);
+        //console.log(weaponItem);
         let weaponTypes = weaponItem.type;
         let advantage = 0;
         //for each perk category...

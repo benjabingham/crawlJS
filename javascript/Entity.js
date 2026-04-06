@@ -1098,6 +1098,12 @@ class SwordEntity extends Entity{
             damageDice++;
         }
 
+        let crit = false;
+        if(this.owner=="player" && Player.getCrit(this.item,strikeType)){
+            damageDice++;
+            crit = true;
+        }
+
         if(target.isContainer && this.item.wrecking){
             damageDice +=2
         }
@@ -1130,6 +1136,9 @@ class SwordEntity extends Entity{
                 target.parryable = false;
             }
             EntityManager.sendStrikeMessage(strikeType, weapon, target)
+            if(crit){
+                EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
+            }
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
                 if(vulnerability){

@@ -615,7 +615,6 @@ class EntityManager{
                 break;
             default:    
                 message = "you strike the "+target.name+".";
-
         }
         EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
     }

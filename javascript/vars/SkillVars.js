@@ -29,44 +29,72 @@ let skillVars = {
     ],
     swords:[
         {
-            type:"weaponAdv",
-            weaponType:"sword"
+            type:"advantage",
+            attackType:"sword"
         }
     ],
     axes:[
         {
-            type:"weaponAdv",
-            weaponType:"axe"
+            type:"advantage",
+            attackType:"axe"
         }
     ],
     blunt:[
         {
-            type:"weaponAdv",
-            weaponType:"blunt" 
+            type:"advantage",
+            attackType:"blunt" 
         }
     ],
     long:[
         {
-            type:"weaponAdv",
-            weaponType:"long" 
+            type:"advantage",
+            attackType:"long" 
         }
     ],
     edged:[
         {
-            type:"weaponAdv",
-            weaponType:"edged" 
+            type:"advantage",
+            attackType:"edged" 
         }
     ],
     improvised:[
         {
-            type:"weaponAdv",
-            weaponType:"improvised" 
+            type:"advantage",
+            attackType:"improvised" 
         }
     ],
     unarmed:[
         {
-            type:"weaponAdv",
-            weaponType:"unarmed" 
+            type:"advantage",
+            attackType:"unarmed" 
         }
-    ]
+    ],
+    swing:[
+        {
+            type:"critChance",
+            attackType:"swing",
+            chance: 0.1
+        }
+    ],
+    jab:[
+        {
+            type:"critChance",
+            attackType:"jab",
+            chance: 0.1
+        }
+    ],
+    draw:[
+        {
+            type:"critChance",
+            attackType:"draw",
+            chance: 0.1
+        }
+    ],
+    strafe:[
+        {
+            type:"critChance",
+            attackType:"strafe",
+            chance: 0.1
+        }
+    ],
 }

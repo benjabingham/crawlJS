@@ -469,6 +469,7 @@ class Player {
         playerEntity.dropItem(slot);
     }
 
+    //TODO - make work like crit, so strike types can have advantage too?
     static getAdvantage(weaponItem){
         //console.log(weaponItem);
         let weaponTypes = weaponItem.type;
@@ -483,6 +484,24 @@ class Player {
         })
 
         return advantage;
+    }
+
+    static getCrit(weaponItem, strikeType){
+        let attackTypes = {};
+        if(weaponItem.type){
+            attackTypes = weaponItem.type;
+        }
+        attackTypes[strikeType] = true;
+        let critChance = 0;
+
+        Object.keys(Player.perks).forEach(skill =>{
+            if(Player.perks[skill].critChance && attackTypes[skill]){
+                critChance += Player.perks[skill].critChance;
+            }
+        })
+
+        let isCrit = Math.random() < critChance;
+        return isCrit;
     }
 
 }

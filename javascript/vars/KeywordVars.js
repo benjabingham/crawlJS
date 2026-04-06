@@ -14,6 +14,9 @@ keywordVars = {
     counterattack:{
         hintText:"Counterattacks cost 1 less stamina and stun for +1 turn."
     },
+    critical:{
+        hintText:"Critical hits deal double damage."
+    },
 
     traits:{
         worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's edged. It will become unuseable next time it degrades."},

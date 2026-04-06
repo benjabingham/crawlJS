@@ -11,16 +11,16 @@ class XP{
         long: {},
         edged:{},
         improvised:{},
-        /*
-        unarmed: {},
         swing: {},
         strafe: {},
         jab: {},
         draw: {},
+        /*
+        unarmed: {},
         counterAttack:{}
         */
     };
-    static threshold = 30;
+    static threshold = 40;
 
     static XPInit(){
         console.log(this.skills);
@@ -49,18 +49,21 @@ class XP{
     static getWeightedSkills(n){
         let chosenSkills = [];
         while(chosenSkills.length < n){
-            //weightedSkills is an array of skill names. Each skill occurs a number of times equal to its weight plus 1.
+            //weightedSkills is an array of skill names. Each skill occurs a number of times equal to its weight.
             let weightedSkills = [];
             Object.keys(this.skills).forEach(skill =>{
                 let finalWeight = this.skills[skill].weight;
+                //this currently does nothing, because skill level is never touched.
                 finalWeight /= (this.skills[skill].level+1);
-                finalWeight += 1;
                 finalWeight = Math.floor(finalWeight);
-                console.log(finalWeight);
+                console.log(skill+" - "+finalWeight);
                 for(let i = 0; i < finalWeight; i++){
                     weightedSkills.push(skill);
                 }
             })
+            if(!weightedSkills.length){
+                weightedSkills = Object.keys(this.skills);
+            }
             let skill = weightedSkills[Math.floor(Math.random()*weightedSkills.length)];
             chosenSkills.push(skill);
             this.skills[skill].weight = 0;
@@ -99,6 +102,8 @@ class XP{
             weaponSkills.push('improvised');
         }
         let strikeTypeXP = 1;
+        //TODO - check if target is valid
+
         //split xp evenly among all relevant skills
         if(weaponSkills.length){
             let xp = 1/weaponSkills.length;
@@ -110,9 +115,8 @@ class XP{
             strikeTypeXP++;
         }
 
-        //this.gain(strikeType,strikeTypeXP,strikeTypeXP)
+        this.gain(strikeType,strikeTypeXP,strikeTypeXP)
 
-        //TODO - if target is valid
     }
 
     static gainUnarmedAttackXP(target){
@@ -182,7 +186,7 @@ class XP{
         this.applyPerk(chosenPerk)
         this.resetWeights();
         this.xp -= this.threshold;
-        this.threshold *= 1.5;
+        this.threshold *= 1.3; 
     }
 
     static applyPerk(perk){
@@ -190,8 +194,11 @@ class XP{
             case "raiseBarMax":
                 this.applyRaiseBarMax(perk);
                 break;
-            case "weaponAdv":
-                this.applyWeaponAdv(perk);
+            case "advantage":
+                this.applyAdv(perk);
+                break;
+            case "critChance":
+                this.applyCritChance(perk);
                 break;
             default:
                 console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
@@ -224,14 +231,25 @@ class XP{
         }
     }
 
-    static applyWeaponAdv(perk){
+    static applyAdv(perk){
         console.log(perk.type + " " + perk.weaponType)
-        alert("You have grown accustomed to using weapons that are "+perk.weaponType+".")
-        if(Player.perks[perk.weaponType].advantage){
-            Player.perks[perk.weaponType].advantage++;
+        alert("You have grown accustomed to using weapons that are "+perk.attackType+".")
+        if(Player.perks[perk.attackType].advantage){
+            Player.perks[perk.attackType].advantage++;
         }else{
-            Player.perks[perk.weaponType].advantage = 1;
+            Player.perks[perk.attackType].advantage = 1;
         }
+    }
+
+    static applyCritChance(perk){
+        if(Player.perks[perk.attackType].critChance){
+            Player.perks[perk.attackType].critChance += perk.chance;
+        }else{
+            Player.perks[perk.attackType].critChance = perk.chance;
+        }
+
+        let newCritChance = Math.floor(Player.perks[perk.attackType].critChance * 100);
+        alert("Your "+perk.attackType+" attacks now have a "+newCritChance+"% crit chance.")
     }
 }
 

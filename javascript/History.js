@@ -54,10 +54,12 @@ class History{
             }
         }
         let playerJson = Player.getPlayerJson();
+        let XPJson = XP.getSnapshot();
         History.snapshots.push({
             entities:entities,
             player:playerJson,
-            stainArray:JSON.stringify(Board.stainArray)
+            stainArray:JSON.stringify(Board.stainArray),
+            XPJson: XPJson
         })
 
         History.trim();
@@ -79,6 +81,7 @@ class History{
         History.snapshots.pop();
         let snapshot = History.popSnapshot();
         EntityManager.loadSnapshot(snapshot);
+        XP.loadSnapshot(snapshot.XPJson);
         Board.stainArray = JSON.parse(snapshot.stainArray);
         Board.placeEntities();
         

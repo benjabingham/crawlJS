@@ -251,5 +251,22 @@ class XP{
         let newCritChance = Math.floor(Player.perks[perk.attackType].critChance * 100);
         alert("Your "+perk.attackType+" attacks now have a "+newCritChance+"% crit chance.")
     }
+
+    static getSnapshot(){
+        let snapshot = {
+            xp:this.xp,
+            skills:this.skills,
+            threshold:this.threshold
+        }
+
+        return JSON.stringify(snapshot)
+    }
+
+    static loadSnapshot(snapshot){
+        snapshot = JSON.parse(snapshot)
+        this.xp = snapshot.xp;
+        this.skills = snapshot.skills;
+        this.threshold = snapshot.threshold;
+    }
 }
 

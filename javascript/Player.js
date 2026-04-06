@@ -209,12 +209,14 @@ class Player {
     }
 
     static changeLuck(n){
+        console.log("changeluck "+n)
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
 
         if(n < 0){
-            XP.gainLuckXP(n*-1);
+            //this happens in history instead.
+            //XP.gainLuckXP(n*-1);
         }
     }
 
@@ -489,11 +491,10 @@ class Player {
     static getCrit(weaponItem, strikeType){
         let attackTypes = {};
         if(weaponItem.type){
-            attackTypes = weaponItem.type;
+            attackTypes = JSON.parse(JSON.stringify(weaponItem.type));
         }
         attackTypes[strikeType] = true;
         let critChance = 0;
-
         Object.keys(Player.perks).forEach(skill =>{
             if(Player.perks[skill].critChance && attackTypes[skill]){
                 critChance += Player.perks[skill].critChance;

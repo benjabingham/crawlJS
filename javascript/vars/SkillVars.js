@@ -73,28 +73,28 @@ let skillVars = {
         {
             type:"critChance",
             attackType:"swing",
-            chance: 0.1
+            chance: 0.2
         }
     ],
     jab:[
         {
             type:"critChance",
             attackType:"jab",
-            chance: 0.1
+            chance: 0.2
         }
     ],
     draw:[
         {
             type:"critChance",
             attackType:"draw",
-            chance: 0.1
+            chance: 0.2
         }
     ],
     strafe:[
         {
             type:"critChance",
             attackType:"strafe",
-            chance: 0.1
+            chance: 0.2
         }
     ],
 }

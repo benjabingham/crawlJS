@@ -92,7 +92,9 @@ class History{
             luck:luck,
             playerLuck:Player.luck
         })
+        //use this instead of player.changeluck because may have gained luck on the frame thats being undone, which would otherwise allow infinite rewinding
         Player.luck = Math.min(luck,Player.luck-1);
+        XP.gainLuckXP();
         if (Player.luck < 0){
             Log.addMessage("You've angered fate.", 'urgent',false,"You used luck you didn't have. Maximum luck decreased.")
             Player.luck = 0;

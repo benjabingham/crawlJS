@@ -145,3 +145,14 @@
 .item-slot-number:after{
     content:". "
 }
+
+.proficiencySpan{
+    /*font-size:xx-small;*/
+}
+
+sup { 
+    vertical-align: top;
+    position: relative;
+    top: -0.5em; 
+    font-size: 0.6em;
+}

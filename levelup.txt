@@ -14,7 +14,7 @@ Threshold = int, xp required for levelup
 skills
     hp
         levels
-        
+
     stamina
     luck
     hunger
@@ -146,3 +146,54 @@ XP Sources:
         perks
             potions get an extra use
 
+effects of advantage
+XP.js?v=7:44 1 - 0.779
+XP.js?v=7:47 55%
+XP.js?v=7:44 2 - 1.412
+XP.js?v=7:47 41%
+XP.js?v=7:44 3 - 2.172
+XP.js?v=7:47 44%
+XP.js?v=7:44 4 - 2.775
+XP.js?v=7:47 38%
+XP.js?v=7:44 5 - 3.515
+XP.js?v=7:47 40%
+XP.js?v=7:44 6 - 4.185
+XP.js?v=7:47 39%
+XP.js?v=7:44 7 - 4.828
+XP.js?v=7:47 37%
+XP.js?v=7:44 8 - 5.496
+XP.js?v=7:47 37%
+XP.js?v=7:44 9 - 6.166
+XP.js?v=7:47 37%
+XP.js?v=7:44 10 - 6.885
+XP.js?v=7:47 37%
+XP.js?v=7:44 11 - 7.557
+XP.js?v=7:47 37%
+XP.js?v=7:44 12 - 8.156
+XP.js?v=7:47 35%
+XP.js?v=7:44 13 - 8.821
+XP.js?v=7:47 35%
+XP.js?v=7:44 14 - 9.434
+XP.js?v=7:47 34%
+XP.js?v=7:44 15 - 10.04
+XP.js?v=7:47 33%
+XP.js?v=7:44 16 - 10.971
+XP.js?v=7:47 37%
+XP.js?v=7:44 17 - 11.618
+XP.js?v=7:47 36%
+XP.js?v=7:44 18 - 12.259
+XP.js?v=7:47 36%
+XP.js?v=7:44 19 - 12.965
+XP.js?v=7:47 36%
+
+for(let i = 0; i < 20; i++){
+    let sum = 0;
+    for(let j = 0; j < 1000; j++){
+        sum += Random.roll(0,i,2);
+    }
+    let average = sum/1000
+    console.log(i+" - "+average)
+    let diff = average-(i/2);
+    let percentDiff = Math.floor(diff/(i/2)*100);
+    console.log(percentDiff+"%")
+}

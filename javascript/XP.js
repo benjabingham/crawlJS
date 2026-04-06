@@ -31,6 +31,11 @@ class XP{
                 xpGained: 0
             }
         });
+
+        XP.applyPerk(skillVars.improvised[0],false)
+        //XP.applyPerk(skillVars.swing[0])
+
+        
     }
 
     static gain(skill, xp, weight){
@@ -131,15 +136,16 @@ class XP{
 
     static gainStaminaXP(amount){
         //multiply amount stamina spent by current percentage of stamina spent
-        let percent = 1 - (Player.staminaPercent/100);
-        let weightAmount = amount * percent;
-        //weightAmount /= 2;
+        let percentMissing = 1 - (Player.staminaPercent/100);
+        let weightAmount = amount * percentMissing;
+        weightAmount *= 0.75;
         amount /= 5;
         this.gain('stamina',amount,weightAmount)
     }
 
     static gainLuckXP(){
         this.gain('luck',3,7);
+        console.log(this.skills.luck)
     }
 
     static gainHungerXP(){
@@ -189,25 +195,27 @@ class XP{
         this.threshold *= 1.3; 
     }
 
-    static applyPerk(perk){
+    static applyPerk(perk, verbose = true){
         switch(perk.type){
             case "raiseBarMax":
-                this.applyRaiseBarMax(perk);
+                this.applyRaiseBarMax(perk, verbose);
                 break;
             case "advantage":
-                this.applyAdv(perk);
+                this.applyAdv(perk, verbose);
                 break;
             case "critChance":
-                this.applyCritChance(perk);
+                this.applyCritChance(perk,verbose);
                 break;
             default:
                 console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
         }
     }
 
-    static applyRaiseBarMax(perk){
+    static applyRaiseBarMax(perk,verbose = true){
         console.log(perk.type + " " + perk.bar);
-        alert("Your maximum " +perk.bar+" has increased.")
+        if(verbose){
+            alert("Your maximum " +perk.bar+" has increased.")
+        }
         switch(perk.bar){
             case "stamina":
                 Player.staminaMax += perk.amount;
@@ -231,9 +239,11 @@ class XP{
         }
     }
 
-    static applyAdv(perk){
-        console.log(perk.type + " " + perk.weaponType)
-        alert("You have grown accustomed to using weapons that are "+perk.attackType+".")
+    static applyAdv(perk, verbose = true){
+        console.log(perk.type + " " + perk.attackType)
+        if(verbose){
+            alert("You have grown accustomed to using weapons that are "+perk.attackType+".")
+        }
         if(Player.perks[perk.attackType].advantage){
             Player.perks[perk.attackType].advantage++;
         }else{
@@ -241,7 +251,7 @@ class XP{
         }
     }
 
-    static applyCritChance(perk){
+    static applyCritChance(perk, verbose = true){
         if(Player.perks[perk.attackType].critChance){
             Player.perks[perk.attackType].critChance += perk.chance;
         }else{
@@ -249,7 +259,9 @@ class XP{
         }
 
         let newCritChance = Math.floor(Player.perks[perk.attackType].critChance * 100);
-        alert("Your "+perk.attackType+" attacks now have a "+newCritChance+"% crit chance.")
+        if(verbose){
+            alert("Your "+perk.attackType+" attacks now have a "+newCritChance+"% crit chance.")
+        }
     }
 
     static getSnapshot(){
@@ -264,9 +276,11 @@ class XP{
 
     static loadSnapshot(snapshot){
         snapshot = JSON.parse(snapshot)
+        let luck = JSON.parse(JSON.stringify(this.skills.luck));
         this.xp = snapshot.xp;
         this.skills = snapshot.skills;
         this.threshold = snapshot.threshold;
+        this.skills.luck = luck;
     }
 }
 

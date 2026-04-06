@@ -550,9 +550,7 @@ class Display{
         if(!symbols){symbols = []}
         symbols = [...symbols];
         //console.log(symbols);
-        if(Player.getAdvantage(item)){
-            symbols.push("+")
-        }
+        
         if(symbols){
             symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
@@ -561,6 +559,10 @@ class Display{
                 symbolsSpan.append(symbolSpan);
             })
         }
+
+        let proficiencySpan = Display.getProficiencySpan(item);
+        console.log(proficiencySpan);
+        if(proficiencySpan){console.log(item.name)}
         
         if(!itemValue){
             itemValue = '0';
@@ -570,7 +572,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(proficiencySpan).append(symbolsSpan)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -819,6 +821,25 @@ class Display{
         
 
         
+    }
+
+    static getProficiencySpan(item){
+        let span = $('<sup>').addClass('proficiencySpan');
+        let text = "";
+        let proficiency = Player.getAdvantage(item);
+        if(!proficiency){
+            return false;
+        }
+        for(let i = 0; i < proficiency; i++){
+            text += "+";
+        }
+
+        let hintText = "You have "+proficiency+" levels of proficiency with this weapon. Damage is rerolled that many times, with the highest roll used.";
+        Display.setHintText(span,hintText)
+
+
+        span.text(text);
+        return span;
     }
 
     static setCustomControls(){

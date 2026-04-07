@@ -89,12 +89,12 @@ class Player {
 
     static get nourishmentLevel(){
         let level;
-        let nourishment = Player.nourishment;
-        if(nourishment == 0){
+        let hungerPercent = Player.hungerPercent;
+        if(hungerPercent == 0){
             level = 0;
-        }else if(nourishment < 4){
+        }else if(hungerPercent < 40){
             level = 1;
-        }else if (nourishment == 10){
+        }else if (hungerPercent == 100){
             level = 3;
         }else{
             level = 2;
@@ -167,7 +167,8 @@ class Player {
     static checkHungerModifiers(){
         let stamina = 0;
         let random = Math.random()*100;
-        let gainChance = (Player.nourishment - 8)*5;
+        //gaining uses percentage, losing uses flat value.
+        let gainChance = (Player.hungerPercent - 80)/2;
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){

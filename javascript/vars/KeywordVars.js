@@ -15,7 +15,7 @@ keywordVars = {
         hintText:"Counterattacks cost 1 less stamina and stun for +1 turn."
     },
     critical:{
-        hintText:"Critical hits deal double damage."
+        hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
     },
 
     traits:{

@@ -680,12 +680,14 @@ class Display{
             descriptionBodyElement = '';
         }
 
+        let proficiencySpan = Display.getProficiencySpan(item);
+
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
         ).append(
             descriptionBodyElement
         )
-
+ 
 
 
         let traits = keywordVars.traits;
@@ -834,7 +836,7 @@ class Display{
             text += "+";
         }
 
-        let hintText = "You have "+proficiency+" levels of proficiency with this weapon. Damage is rerolled that many times, with the highest roll used.";
+        let hintText = "You have "+proficiency+" levels of proficiency with this weapon - Damage is rerolled "+proficiency+" times, with the highest roll used.";
         Display.setHintText(span,hintText)
 
 

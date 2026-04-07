@@ -1093,19 +1093,24 @@ class SwordEntity extends Entity{
             stunTime = weapon[strikeType].stunTime;
             weight = weapon[strikeType].weight
         }
+        let crit = 0;
         let damageDice = 1;
-        if(target.stunned || target.dead){
-            damageDice++;
+        if(target.stunned){
+            damageDice*=2;
+            crit++;
         }
 
-        let crit = false;
         if(this.owner=="player" && Player.getCrit(this.item,strikeType)){
-            damageDice++;
-            crit = true;
+            damageDice*=2;
+            crit++;
         }
 
         if(target.isContainer && this.item.wrecking){
             damageDice +=2
+        }
+
+        if(target.dead){
+            damageDice++;
         }
 
         let vulnerability = target.isVulnerable(this.item, strikeType);
@@ -1136,8 +1141,10 @@ class SwordEntity extends Entity{
                 target.parryable = false;
             }
             EntityManager.sendStrikeMessage(strikeType, weapon, target)
-            if(crit){
+            if(crit == 1){
                 EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
+            }else if(crit > 1){
+                EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A critical hit on a stunned enemy is a Brutal Critical, and inflicts quadruple damage.");
             }
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
@@ -1152,7 +1159,7 @@ class SwordEntity extends Entity{
             }
             target.addMortality(mortality);
             target.checkDead(target.name+" is slain!");
-            target.checkSplatter(mortality, weapon);
+            target.checkSplatter(mortality+(damageDice-1), weapon);
             target.knock(this.id);
             target.onHit(this); 
         }

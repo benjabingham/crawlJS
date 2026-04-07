@@ -8,7 +8,7 @@ let itemVars = {
             weight:2,
             flimsy:-2,
             type:{
-                blunt:true
+                blunt:true,
             },
             jab:{
                 damage:2,

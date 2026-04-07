@@ -836,7 +836,18 @@ class Display{
             text += "+";
         }
 
-        let hintText = "You have "+proficiency+" levels of proficiency with this weapon - Damage is rerolled "+proficiency+" times, with the highest roll used.";
+        let proficiencies = Player.getProficiencies(item);
+        let proficienciesTextArray= [];
+        proficiencies.forEach(skill=>{
+            let proficiencyText = skill.skill;
+            if(skill.level != 1){
+                proficiencyText += "(" + skill.level + ")"
+            }
+            proficienciesTextArray.push(proficiencyText)
+        })
+        let proficienciesText = proficienciesTextArray.join(", ")
+
+        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used.";
         Display.setHintText(span,hintText)
 
 

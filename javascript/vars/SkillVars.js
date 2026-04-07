@@ -63,6 +63,12 @@ let skillVars = {
             attackType:"improvised" 
         }
     ],
+    simple:[
+        {
+            type:"advantage",
+            attackType:"simple" 
+        }
+    ],
     unarmed:[
         {
             type:"advantage",

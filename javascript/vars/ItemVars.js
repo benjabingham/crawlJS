@@ -9,13 +9,15 @@ let itemVars = {
             flimsy:-2,
             type:{
                 blunt:true,
+                simple:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
                 weight:2,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    simple:true
                 }
             },
             value:2
@@ -430,7 +432,8 @@ let itemVars = {
             flimsy:2,
             type:{
                 blunt:true,
-                improvised:true
+                improvised:true,
+                simple:true
             },
             swing:{
                 damage:5,
@@ -438,7 +441,8 @@ let itemVars = {
                 weight:2,
                 type:{
                     blunt:true,
-                    improvised:true
+                    improvised:true,
+                    simple:true
                 }
             },
             value:2
@@ -455,7 +459,8 @@ let itemVars = {
             flimsy:8,
             type:{
                 blunt:true,
-                improvised:true
+                improvised:true,
+                simple:true
             },
             jab:{
                 damage:1,
@@ -463,7 +468,8 @@ let itemVars = {
                 weight:1,
                 type:{
                     blunt:true,
-                    improvised:true
+                    improvised:true,
+                    simple:true
                 }
             },
             usable:true,
@@ -482,7 +488,8 @@ let itemVars = {
             flimsy:8,
             type:{
                 blunt:true,
-                improvised:true
+                improvised:true,
+                simple:true
             },
             swing:{
                 damage:6,
@@ -490,7 +497,8 @@ let itemVars = {
                 weight:3,
                 type:{
                     blunt:true,
-                    improvised:true
+                    improvised:true,
+                    simple:true
                 }
             },
             usable:true,
@@ -510,7 +518,8 @@ let itemVars = {
             type:{
                 edged:true,
                 improvised:true,
-                long:true
+                long:true,
+                simple:true
             },
             jab:{
                 damage:4,
@@ -519,7 +528,8 @@ let itemVars = {
                 type:{
                     edged:true,
                     improvised:true,
-                    long:true
+                    long:true,
+                    simple:true
                 }
             },
             usable:true,

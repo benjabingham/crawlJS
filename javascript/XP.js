@@ -11,6 +11,7 @@ class XP{
         long: {},
         edged:{},
         improvised:{},
+        simple:{},
         swing: {},
         strafe: {},
         jab: {},
@@ -32,7 +33,7 @@ class XP{
             }
         });
 
-        XP.applyPerk(skillVars.improvised[0],false)
+        XP.applyPerk(skillVars.simple[0],false)
         //XP.applyPerk(skillVars.swing[0])
 
         
@@ -105,6 +106,9 @@ class XP{
         }
         if(weapon.item.type.improvised){
             weaponSkills.push('improvised');
+        }
+        if(weapon.item.type.simple){
+            weaponSkills.push('simple');
         }
         let strikeTypeXP = 1;
         //TODO - check if target is valid

@@ -24,6 +24,7 @@ class Player {
         long: {},
         edged:{},
         improvised:{},
+        simple:{},
         unarmed:{},
         swing:{},
         strafe:{},
@@ -474,18 +475,32 @@ class Player {
     //TODO - make work like crit, so strike types can have advantage too?
     static getAdvantage(weaponItem){
         //console.log(weaponItem);
+        let proficiencies = Player.getProficiencies(weaponItem);
         let weaponTypes = weaponItem.type;
         let advantage = 0;
+        proficiencies.forEach(skill=>{
+            advantage += skill.level;
+        })
+
+        return advantage;
+    }
+
+    //returns an array of all the types of the weapon you have advantage in - {skill: , level: }
+    static getProficiencies(weaponItem){
+        let weaponTypes = weaponItem.type;  
+        let proficiencies = [];
         //for each perk category...
         Object.keys(Player.perks).forEach(skill =>{
             //if the player has advantage in that category, and the weapon has that category as a type...
             if(weaponTypes && Player.perks[skill].advantage && weaponTypes[skill]){
-                //add player's degree of advantage in that skill
-                advantage += Player.perks[skill].advantage
+                proficiencies.push({
+                    skill:skill,
+                    level: Player.perks[skill].advantage
+                })
             }
         })
 
-        return advantage;
+        return proficiencies;
     }
 
     static getCrit(weaponItem, strikeType){

@@ -1583,7 +1583,7 @@ class Monster extends Entity{
             this.behavior = this.reconstituteBehavior;
             this.tempSymbol = false;
             this.dead = false;
-            this.container = false;
+            this.isContainer = false;
             this.name = this.name.split(' corpse')[0];
             this.stunTime++;
             if(Board.hasPlayerLos(this)){

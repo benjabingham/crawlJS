@@ -19,6 +19,10 @@
     }
 }
 
+.keyword{
+    font-weight: bold;
+}
+
 .skill-option{
     padding:4px;
     margin:12px auto;

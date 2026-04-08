@@ -17,6 +17,21 @@ keywordVars = {
     critical:{
         hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
     },
+    proficiency:{
+        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used."
+    },
+    swing:{
+        hintText:"A swing is a strike that has you rotating your weapon into a target."
+    },
+    jab:{
+        hintText:"A target is jabbed when you strike them by advancing towards them."
+    },
+    strafe:{
+        hintText:"A strafing strike is one where you strike while moving sideways or backwards diagonally"
+    },
+    draw:{
+        hintText:"A draw strike occurs when you draw your weapon into a target."
+    },
 
     traits:{
         worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},

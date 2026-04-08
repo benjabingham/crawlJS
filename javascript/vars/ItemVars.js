@@ -454,7 +454,6 @@ let itemVars = {
             type:{
                 blunt:true,
                 improvised:true,
-                simple:true
             },
             swing:{
                 damage:5,
@@ -463,7 +462,6 @@ let itemVars = {
                 type:{
                     blunt:true,
                     improvised:true,
-                    simple:true
                 }
             },
             value:2

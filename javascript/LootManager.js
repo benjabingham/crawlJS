@@ -530,4 +530,37 @@ class LootManager{
     
         return name;
     }
+
+    //takes string type, returns array of weapon objects of that type.
+    static getWeaponsOfType(type){
+        let weapons = [];
+        console.log(type);
+        Object.keys(itemVars.weapons).forEach(key =>{
+            let weapon = itemVars.weapons[key];
+            console.log(weapon);
+            if(weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.drops).forEach(key =>{
+            let weapon = itemVars.drops[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.tools).forEach(key =>{
+            let weapon = itemVars.tools[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.food).forEach(key =>{
+            let weapon = itemVars.food[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+
+        return weapons;
+    }
 }

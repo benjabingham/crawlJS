@@ -216,34 +216,57 @@ class XP{
 
         perkOptions.forEach(perk =>{
             console.log(perk);
-            let text = "";
+            let text = $('<text>');
             let oldVal = 0;
             let newVal = 0;
+            let attackTypeSpan;
             switch(perk.type){
                 case "raiseBarMax":
-                    text = "Increase "+perk.bar;
+                    text.append("Increase "+perk.bar);
                     oldVal = Player.getMaxResource(perk.bar)
                     newVal = oldVal+perk.amount;
+                    text.append(" ("+oldVal+" → "+newVal+")");
                     break;
                 case "advantage":
-                    text = "Increase "+perk.attackType+" proficiency";
+                    attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
+                    let proficiencySpan = $('<span>').text(" proficiency").addClass('keyword');
+                    let weapons = LootManager.getWeaponsOfType(perk.attackType);
+                    console.log(weapons);
+                    let weaponNames = [];
+                    weapons.forEach(weapon=>{
+                        weaponNames.push(weapon.name)
+                    })
+                    console.log(weaponNames);
+                    Display.setHintText(attackTypeSpan, weaponNames.join(", "));
+                    Display.setHintText(proficiencySpan, keywordVars.proficiency.hintText);
+                    text.append("Increase ").append(attackTypeSpan).append(proficiencySpan);
                     if(Player.perks[perk.attackType].advantage){
                         oldVal = Player.perks[perk.attackType].advantage;
                     }
                     newVal = oldVal + 1;
+                    text.append(" ("+oldVal+" → "+newVal+")");
                     break;
                 case "critChance":
-                    text = "Increase "+perk.attackType+ " crit chance";
+                    attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
+                    let critSpan = $('<span>').text(" crit chance").addClass('keyword');
+                    Display.setHintText(attackTypeSpan,keywordVars[perk.attackType].hintText);
+                    Display.setHintText(critSpan,keywordVars.critical.hintText)
+                    text.append("Increase ").append(attackTypeSpan).append(critSpan);
                     if(Player.perks[perk.attackType].critChance){
                         oldVal = Player.perks[perk.attackType].critChance;
                     }
                     newVal = oldVal + perk.chance;
+                    oldVal *= 100;
+                    oldVal += "%";
+                    newVal *= 100;
+                    newVal += "%";
+                    text.append(" ("+oldVal+" → "+newVal+")")
                     break;
                 default:
             }
 
             modal.append(
-                $('<div>').addClass('skill-option').text(text + "\n ("+oldVal+" → "+newVal+")").on('click',(e)=>{
+                $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
                     console.log('click')
                     XP.applyPerk(perk)
                     modal.remove();

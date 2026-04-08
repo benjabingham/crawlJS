@@ -73,6 +73,11 @@ let skillVars = {
         {
             type:"advantage",
             attackType:"unarmed" 
+        },
+        {
+            type:"critChance",
+            attackType:"unarmed",
+            chance:0.2 
         }
     ],
     swing:[

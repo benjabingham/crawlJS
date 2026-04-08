@@ -477,7 +477,6 @@ class Player {
     static getAdvantage(weaponItem){
         //console.log(weaponItem);
         let proficiencies = Player.getProficiencies(weaponItem);
-        let weaponTypes = weaponItem.type;
         let advantage = 0;
         proficiencies.forEach(skill=>{
             advantage += skill.level;
@@ -516,7 +515,6 @@ class Player {
                 critChance += Player.perks[skill].critChance;
             }
         })
-
         let isCrit = Math.random() < critChance;
         return isCrit;
     }

@@ -886,7 +886,8 @@ class PlayerEntity extends Entity{
         let weapon = {
             damage:3,
             stun:2,
-            weight:3
+            weight:3,
+            type:{unarmed:true}
         }
 
         if(rotationalDistance > 0){
@@ -897,6 +898,7 @@ class PlayerEntity extends Entity{
         return this.unarmedStrike(targetEntity, weapon);
     }
 
+    //weapon is defined by canUnarmedStrike, and is determined by specifics of strike.
     unarmedStrike(target, weapon){
         if(target.id == this.id || target.isWall){
             return false;  
@@ -910,20 +912,32 @@ class PlayerEntity extends Entity{
         Player.changeStamina(weight * -1);   
         let damage = weapon.damage;
         let stunTime = weapon.stun;
+        let crit = 0;
         let damageDice = 1;
         if(target.stunned){
-            damageDice++;
+            damageDice*=2;
+            crit++;
+        }
+
+        if(Player.getCrit(weapon,'none')){
+            damageDice*=2;
+            crit++;
         }
 
         let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
         damageDice += vulnerability;
         stunTime += vulnerability;
 
-        EntityManager.emitSound(target,2);            
+        EntityManager.emitSound(target,2);  
+        
+        let advantage = Player.getAdvantage(weapon);
 
+        //big targets are less likely to be stunned
+        //should look at remaining health... ? Maybe for everything ... ?
         let sizeBonus = Math.min(target.threshold*5,90);
         let stunAdded = Random.roll(0,stunTime);
-        let mortality = Random.rollN(damageDice,0,damage);
+        let mortality = Random.rollN(damageDice,0,damage,advantage);
+        XP.gainUnarmedAttackXP(target);
         if(sizeBonus > Math.random()*100){
             stunAdded = Math.max(0,stunAdded-1);
         }
@@ -933,20 +947,26 @@ class PlayerEntity extends Entity{
             stunAdded++;
         }
         EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
+        if(crit == 1){
+                EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
+        }else if(crit > 1){
+            EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A critical hit on a stunned enemy is a Brutal Critical, and inflicts quadruple damage.");
+        }
         EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
         if(!target.dead){     
             if(vulnerability){
                 Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
             }
         }
+        target.addMortality(mortality);
         if(Monster.prototype.isPrototypeOf(target)){
             target.addStunTime(stunAdded);
+            target.checkBloody();
         }
-        target.addMortality(mortality);
         target.checkDead(target.name+" is slain!");
         target.checkSplatter(mortality);
         target.knock(this.id);
-        target.onHit(this, sizeBonus); 
+        target.onHit(this, sizeBonus);
         
         return true;
     }
@@ -1152,12 +1172,13 @@ class SwordEntity extends Entity{
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
-            EntityManager.emitSound(target,weight);            
+            EntityManager.emitSound(target,weight); 
+            target.addMortality(mortality);           
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
                 target.checkStealWeapon();
+                target.checkBloody();
             }
-            target.addMortality(mortality);
             target.checkDead(target.name+" is slain!");
             target.checkSplatter(mortality+(damageDice-1), weapon);
             target.knock(this.id);
@@ -1647,11 +1668,29 @@ class Monster extends Entity{
 
     }
 
+    checkBloody(){
+        //monsters get stunned longer if they're lower on health...
+        if(
+            this.mortal < this.threshold && 
+            this.mortal >= this.threshold/2 && 
+            Random.roll(0,this.mortal) > this.threshold/2
+        ){
+            this.addStunTime(1);
+            EntityManager.transmitMessage(this.name+" falters", '', 'falters', "This monster is getting close to death, and is taking longer to recover from your blows.", this.id);
+            this.splatter();
+        }
+        //but get stunned shorter if they're higher on health...
+        if(Random.roll(0,this.mortal) < this.threshold/2){
+            //this.stunned--;
+        }
+    
+    }
+
     addStunTime(stunTime){
         if(!this.stunned){
             this.stunned = 0;
         }
-        this.stunned += stunTime;
+        this.stunned += Math.max(stunTime,0);
     }
 
     enrageAndDaze(){

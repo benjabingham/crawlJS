@@ -16,8 +16,8 @@ class XP{
         strafe: {},
         jab: {},
         draw: {},
-        /*
         unarmed: {},
+        /*
         counterAttack:{}
         */
     };
@@ -72,7 +72,7 @@ class XP{
             }
             let skill = weightedSkills[Math.floor(Math.random()*weightedSkills.length)];
             chosenSkills.push(skill);
-            this.skills[skill].weight = 0;
+            //this.skills[skill].weight = 0;
         }
 
         return chosenSkills;
@@ -80,7 +80,7 @@ class XP{
 
     static resetWeights(){
         Object.keys(this.skills).forEach(skill=>{
-            this.skills[skill].weight = 0;
+            //this.skills[skill].weight = 0;
         })
     }
 
@@ -111,7 +111,9 @@ class XP{
             weaponSkills.push('simple');
         }
         let strikeTypeXP = 1;
-        //TODO - check if target is valid
+        if(target.isContainer || target.dead){
+            return false;
+        }
 
         //split xp evenly among all relevant skills
         if(weaponSkills.length){
@@ -129,8 +131,9 @@ class XP{
     }
 
     static gainUnarmedAttackXP(target){
-        //TODO - if target is valid
-        this.gain(unarmed,1,1);
+        if(!target.isContainer && !target.dead){
+            this.gain('unarmed',20,20);
+        }
     }
 
     static gainHPXP(amount){

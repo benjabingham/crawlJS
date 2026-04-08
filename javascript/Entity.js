@@ -646,6 +646,7 @@ class Entity{
         }     
     };
 
+    //attacker is sword
     sturdy(attacker, bonus=0){
         let sturdyChance = bonus;
         if(this.behaviorInfo && this.behaviorInfo.sturdy && !this.dead){
@@ -661,10 +662,12 @@ class Entity{
             let attackerLastPos = History.getSnapshotEntity(attacker.id);
             if(attacker.isSword){
                 //if sword was unequipped
-                if(!Board.isSpace(attackerLastPos)){
+                if(!Board.isSpace(attackerLastPos.x, attackerLastPos.y)){
+                    console.log(attackerLastPos)
                     attackerLastPos = this;
                 }
                 attacker.findSwordMiddle(this,attackerLastPos);
+                console.log(JSON.parse(JSON.stringify(attacker)));
             }else{
                 EntityManager.setPosition(attacker.id,attackerLastPos.x, attackerLastPos.y) 
             }
@@ -687,7 +690,7 @@ class Entity{
             overkill -= this.threshold*this.sturdyCorpse;
         }
         if((overkill >= this.threshold/2 || this.corpseless) && this.dead && !this.obliterated && !this.isSword){
-            console.log('obliterating');
+            //console.log('obliterating');
             Board.clearSpace(this.x,this.y);
             this.dropInventory();
             if(this.blood){
@@ -741,7 +744,7 @@ class Entity{
             if(!this.disturbed){
                 this.disturbed = 0;
             } 
-            console.log('DISTURBED');
+            //console.log('DISTURBED');
             this.disturbed++;
         }
     }
@@ -789,10 +792,10 @@ class Entity{
         if(this.enrageAndDaze){
             this.enrageAndDaze();   
         }
-        console.log(sturdyBonus)
+        //console.log(sturdyBonus)
         this.sturdy(attacker, sturdyBonus);
         if(this.spawnEntities && this.spawnEntities.disturbChance){
-            console.log('gonna disturb...')
+            //console.log('gonna disturb...')
             this.disturb();
         }
         this.checkTransform('onHitChance');
@@ -856,8 +859,8 @@ class PlayerEntity extends Entity{
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
-        console.log(targetEntity)
-        console.log(rotationalDistance)
+        //console.log(targetEntity)
+        //console.log(rotationalDistance)
         if(!targetEntity || targetEntity.isItemPile){
             return false;
         }
@@ -1114,7 +1117,7 @@ class SwordEntity extends Entity{
             stunAdded += Random.roll(1,stunTime);
         }
         let mortality = Random.rollN(damageDice,0,damage);
-        console.log(mortality);
+        //console.log(mortality);
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
@@ -1202,7 +1205,7 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        
+        console.log({pos1:pos1,pos2:pos2})
         let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
@@ -1229,6 +1232,7 @@ class SwordEntity extends Entity{
             position = this.getSwordPosition(rotation);
             x = position.x;
             y = position.y;
+            console.log(bestDistance);
         }
 
         let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)
@@ -1569,7 +1573,7 @@ class Monster extends Entity{
         if(this.reconstitute < this.decay){
             return false;
         }
-        console.log('reconstituting')
+        //console.log('reconstituting')
         this.mortal -= Random.roll(0,n);
         if(this.mortal < this.threshold){
             if(this.reconstituteDecay){
@@ -1610,7 +1614,7 @@ class Monster extends Entity{
             }else{
                 Player.changeHealth(mortality * -1);
                 if (this.lightDrain){
-                    console.log('lightdrain')
+                    //console.log('lightdrain')
                     Player.light = Math.max(Player.light-1,0)
                     EntityManager.transmitMessage('your light is drained.','danger')
                 }

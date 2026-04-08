@@ -519,4 +519,20 @@ class Player {
         return isCrit;
     }
 
+    //take hp, luck, stamina, hunger, return associated max value
+    static getMaxResource(resourceString){
+        switch(resourceString){
+            case "hp":
+                return Player.healthMax;
+            case "stamina":
+                return Player.staminaMax;
+            case "luck":
+                return Player.luckMax;
+            case "hunger":
+                return Player.nourishmentMax;
+            default:
+                return 0;
+        }
+    }
+
 }

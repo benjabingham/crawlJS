@@ -3,7 +3,7 @@ let skillVars = {
         {
             type:"raiseBarMax",
             bar:"hp",
-            amount:2
+            amount:2,
         }
     ],
     stamina:[

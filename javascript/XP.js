@@ -34,6 +34,8 @@ class XP{
         });
 
         XP.applyPerk(skillVars.simple[0],false)
+        //XP.levelUp();
+        //XP.openLevelupDialog();
         //XP.applyPerk(skillVars.swing[0])
 
         
@@ -199,13 +201,59 @@ class XP{
         //for now, just get one...
         console.log('Level up!')
         console.log(JSON.parse(JSON.stringify(this.skills)))
-        let skillOptions = this.getWeightedSkills(1);
+        let skillOptions = this.getWeightedSkills(3);
         let perkOptions = this.getPerks(skillOptions);
-        let chosenPerk = perkOptions[0];
-        this.applyPerk(chosenPerk)
+        XP.openLevelupDialog(perkOptions);
         this.reduceWeights();
         this.xp -= this.threshold;
         this.threshold *= 1.3; 
+    }
+
+    static openLevelupDialog(perkOptions){
+        let modal = $("<div>").addClass("modal").append(
+            $("<h2>").text("LEVEL UP")
+        )
+
+        perkOptions.forEach(perk =>{
+            console.log(perk);
+            let text = "";
+            let oldVal = 0;
+            let newVal = 0;
+            switch(perk.type){
+                case "raiseBarMax":
+                    text = "Increase "+perk.bar;
+                    oldVal = Player.getMaxResource(perk.bar)
+                    newVal = oldVal+perk.amount;
+                    break;
+                case "advantage":
+                    text = "Increase "+perk.attackType+" proficiency";
+                    if(Player.perks[perk.attackType].advantage){
+                        oldVal = Player.perks[perk.attackType].advantage;
+                    }
+                    newVal = oldVal + 1;
+                    break;
+                case "critChance":
+                    text = "Increase "+perk.attackType+ " crit chance";
+                    if(Player.perks[perk.attackType].critChance){
+                        oldVal = Player.perks[perk.attackType].critChance;
+                    }
+                    newVal = oldVal + perk.chance;
+                    break;
+                default:
+            }
+
+            modal.append(
+                $('<div>').addClass('skill-option').text(text + "\n ("+oldVal+" → "+newVal+")").on('click',(e)=>{
+                    console.log('click')
+                    XP.applyPerk(perk)
+                    modal.remove();
+                })
+            )
+        })
+
+        $("body").append(
+            modal
+        )
     }
 
     static applyPerk(perk, verbose = true){
@@ -222,6 +270,8 @@ class XP{
             default:
                 console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
         }
+
+        Display.fillBars();
     }
 
     static applyRaiseBarMax(perk,verbose = true){

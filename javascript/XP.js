@@ -72,7 +72,7 @@ class XP{
             }
             let skill = weightedSkills[Math.floor(Math.random()*weightedSkills.length)];
             chosenSkills.push(skill);
-            //this.skills[skill].weight = 0;
+            this.skills[skill].weight = 0;
         }
 
         return chosenSkills;
@@ -80,7 +80,13 @@ class XP{
 
     static resetWeights(){
         Object.keys(this.skills).forEach(skill=>{
-            //this.skills[skill].weight = 0;
+            this.skills[skill].weight = 0;
+        })
+    }
+
+    static reduceWeights(){
+        Object.keys(this.skills).forEach(skill=>{
+            this.skills[skill].weight /= 2;
         })
     }
 
@@ -197,7 +203,7 @@ class XP{
         let perkOptions = this.getPerks(skillOptions);
         let chosenPerk = perkOptions[0];
         this.applyPerk(chosenPerk)
-        this.resetWeights();
+        this.reduceWeights();
         this.xp -= this.threshold;
         this.threshold *= 1.3; 
     }

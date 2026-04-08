@@ -1676,7 +1676,7 @@ class Monster extends Entity{
             Random.roll(0,this.mortal) > this.threshold/2
         ){
             this.addStunTime(1);
-            EntityManager.transmitMessage(this.name+" falters", '', 'falters', "This monster is getting close to death, and is taking longer to recover from your blows.", this.id);
+            EntityManager.transmitMessage(this.name+" falters", '', 'falters', "This "+this.name+" is showing signs of damage, and is taking longer to recover from your blows.", this.id);
             this.splatter();
         }
         //but get stunned shorter if they're higher on health...

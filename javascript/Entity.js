@@ -534,7 +534,7 @@ class Entity{
         let sharp = false;
         damage *= this.blood;
         if(weapon){
-            sharp = weapon.type.edged || weapon.type.sword
+            sharp = weapon.type.sharp
         }
         if(!damage){
             return false;

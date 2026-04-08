@@ -428,8 +428,8 @@ class LootManager{
                     item[key]+= value;
                     break;
                 case 'blunt':
-                case 'edged':
-                    if(item.type[key] || (item.type['sword'] && key == 'edged')){
+                case 'sharp':
+                    if(item.type[key]){
                         LootManager.applyModifier(item, value,true);
                     }
                     break;

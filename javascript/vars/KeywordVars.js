@@ -19,7 +19,7 @@ keywordVars = {
     },
 
     traits:{
-        worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's edged. It will become unuseable next time it degrades."},
+        worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},

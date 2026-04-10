@@ -52,27 +52,37 @@ class XP{
     }
 
     //picks n skills, wieghted by each skill's weight. When picked, a skill's weight is reset to 0. Returns as array of strings.
+    
     static getWeightedSkills(n){
         let chosenSkills = [];
         while(chosenSkills.length < n){
             //weightedSkills is an array of skill names. Each skill occurs a number of times equal to its weight.
-            let weightedSkills = [];
+            let weightSum = 0;
             Object.keys(this.skills).forEach(skill =>{
-                let finalWeight = this.skills[skill].weight;
-                //this currently does nothing, because skill level is never touched.
-                finalWeight /= (this.skills[skill].level+1);
-                finalWeight = Math.floor(finalWeight);
-                console.log(skill+" - "+finalWeight);
-                for(let i = 0; i < finalWeight; i++){
-                    weightedSkills.push(skill);
+                weightSum += this.skills[skill].weight;
+            })
+            if(!weightSum){
+                //push random skill to chosenskills
+                let skills = Object.keys(this.skills);
+                let skill = skills[Math.floor(Math.random()*skills.length)];
+                while(chosenSkills.includes(skill)){
+                    skill = skills[Math.floor(Math.random()*skills.length)]
+                }
+                chosenSkills.push(skill);
+                continue;
+            }
+            let rand = Math.random()*weightSum;
+            let skillString;
+            let pointer = 0;
+            let found = false;
+            Object.keys(this.skills).forEach(skill =>{
+                pointer += this.skills[skill].weight;
+                if(rand <= pointer && !found){
+                    chosenSkills.push(skill);
+                    this.skills[skill].weight = 0;
+                    found = true;
                 }
             })
-            if(!weightedSkills.length){
-                weightedSkills = Object.keys(this.skills);
-            }
-            let skill = weightedSkills[Math.floor(Math.random()*weightedSkills.length)];
-            chosenSkills.push(skill);
-            this.skills[skill].weight = 0;
         }
 
         return chosenSkills;
@@ -254,7 +264,6 @@ class XP{
                 case "critChance":
                     attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
                     let critSpan = $('<span>').text(" crit chance").addClass('keyword');
-                    console.log(perk.attackType);
                     Display.setHintText(attackTypeSpan,keywordVars[perk.attackType].hintText);
                     Display.setHintText(critSpan,keywordVars.critical.hintText)
                     text.append("Increase ").append(attackTypeSpan).append(critSpan);
@@ -273,7 +282,6 @@ class XP{
 
             modal.append(
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
-                    console.log('click')
                     XP.applyPerk(perk)
                     modal.remove();
                 })

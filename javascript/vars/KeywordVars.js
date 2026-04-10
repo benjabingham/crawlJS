@@ -12,7 +12,7 @@ keywordVars = {
         hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
     },
     counterattack:{
-        hintText:"Counterattacks cost 1 less stamina and stun for +1 turn."
+        hintText:"You may counterattack an enemy when they attack you or your weapon without inflicting damage. costs 1 less stamina and stuns for +1 turn."
     },
     critical:{
         hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."

@@ -30,7 +30,7 @@ class Player {
         strafe:{},
         jab:{},
         draw:{},
-        counterAttack:{}
+        counterattack:{}
     }
         
     
@@ -510,7 +510,7 @@ class Player {
         }
         attackTypes[strikeType] = true;
         if(target.parryable){
-            attackTypes['counterAttack'] = true;
+            attackTypes['counterattack'] = true;
         }
         let critChance = 0;
         Object.keys(Player.perks).forEach(skill =>{
@@ -518,7 +518,6 @@ class Player {
                 critChance += Player.perks[skill].critChance;
             }
         })
-        console.log('critchance '+critChance)
         let isCrit = Math.random() < critChance;
         return isCrit;
     }

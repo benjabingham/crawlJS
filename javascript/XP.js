@@ -17,7 +17,7 @@ class XP{
         jab: {},
         draw: {},
         unarmed: {},
-        counterAttack:{}
+        counterattack:{}
     };
     static threshold = 40;
 
@@ -122,7 +122,7 @@ class XP{
         }
 
         if(target.parryable){
-            this.gain("counterAttack",1,1);
+            this.gain("counterattack",1,1);
         }
 
         //split xp evenly among all relevant skills
@@ -143,7 +143,7 @@ class XP{
     static gainUnarmedAttackXP(target){
         if(!target.isContainer && !target.dead){
             if(target.parryable){
-                this.gain("counterAttack",1,1);
+                this.gain("counterattack",1,1);
             }
             this.gain('unarmed',20,20);
         }
@@ -254,6 +254,7 @@ class XP{
                 case "critChance":
                     attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
                     let critSpan = $('<span>').text(" crit chance").addClass('keyword');
+                    console.log(perk.attackType);
                     Display.setHintText(attackTypeSpan,keywordVars[perk.attackType].hintText);
                     Display.setHintText(critSpan,keywordVars.critical.hintText)
                     text.append("Increase ").append(attackTypeSpan).append(critSpan);

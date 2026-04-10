@@ -503,18 +503,22 @@ class Player {
         return proficiencies;
     }
 
-    static getCrit(weaponItem, strikeType){
+    static getCrit(weaponItem, strikeType,target){
         let attackTypes = {};
         if(weaponItem.type){
             attackTypes = JSON.parse(JSON.stringify(weaponItem.type));
         }
         attackTypes[strikeType] = true;
+        if(target.parryable){
+            attackTypes['counterAttack'] = true;
+        }
         let critChance = 0;
         Object.keys(Player.perks).forEach(skill =>{
             if(Player.perks[skill].critChance && attackTypes[skill]){
                 critChance += Player.perks[skill].critChance;
             }
         })
+        console.log('critchance '+critChance)
         let isCrit = Math.random() < critChance;
         return isCrit;
     }

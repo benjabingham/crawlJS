@@ -17,9 +17,7 @@ class XP{
         jab: {},
         draw: {},
         unarmed: {},
-        /*
         counterAttack:{}
-        */
     };
     static threshold = 40;
 
@@ -123,6 +121,10 @@ class XP{
             return false;
         }
 
+        if(target.parryable){
+            this.gain("counterAttack",1,1);
+        }
+
         //split xp evenly among all relevant skills
         if(weaponSkills.length){
             let xp = 1/weaponSkills.length;
@@ -140,6 +142,9 @@ class XP{
 
     static gainUnarmedAttackXP(target){
         if(!target.isContainer && !target.dead){
+            if(target.parryable){
+                this.gain("counterAttack",1,1);
+            }
             this.gain('unarmed',20,20);
         }
     }

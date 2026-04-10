@@ -919,7 +919,7 @@ class PlayerEntity extends Entity{
             crit++;
         }
 
-        if(Player.getCrit(weapon,'none')){
+        if(Player.getCrit(weapon,'none',target)){
             damageDice*=2;
             crit++;
         }
@@ -1120,7 +1120,7 @@ class SwordEntity extends Entity{
             crit++;
         }
 
-        if(this.owner=="player" && Player.getCrit(this.item,strikeType)){
+        if(this.owner=="player" && Player.getCrit(this.item,strikeType,target)){
             damageDice*=2;
             crit++;
         }

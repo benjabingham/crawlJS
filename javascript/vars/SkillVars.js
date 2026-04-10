@@ -108,4 +108,11 @@ let skillVars = {
             chance: 0.2
         }
     ],
+    counterAttack:[
+        {
+            type:"critChance",
+            attackType:"counterAttack",
+            chance: 0.35
+        }
+    ],
 }

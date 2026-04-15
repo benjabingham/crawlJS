@@ -370,6 +370,8 @@ class Player {
         }
         Player.consume(slot);
 
+        Display.fillBars();
+
         return true;
     }
 

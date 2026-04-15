@@ -264,7 +264,9 @@ class XP{
                 case "critChance":
                     attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
                     let critSpan = $('<span>').text(" crit chance").addClass('keyword');
-                    Display.setHintText(attackTypeSpan,keywordVars[perk.attackType].hintText);
+                    if(keywordVars[perk.attackType]){
+                        Display.setHintText(attackTypeSpan,keywordVars[perk.attackType].hintText);
+                    }
                     Display.setHintText(critSpan,keywordVars.critical.hintText)
                     text.append("Increase ").append(attackTypeSpan).append(critSpan);
                     if(Player.perks[perk.attackType].critChance){

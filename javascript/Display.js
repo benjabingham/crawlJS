@@ -236,6 +236,7 @@ class Display{
     static parryInRange(x,y){
         console.log({x:x,y:y})
         let playerEntity = EntityManager.playerEntity;
+        //x,y difference between player and target
         let playerToTarget = {x:x-playerEntity.x, y:y-playerEntity.y}
         if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(playerToTarget.x,playerToTarget.y)){
             console.log('not in range')

@@ -1,5 +1,8 @@
 class Inventory{
-    static displayedInventorySlot = 0;
+    static displayedInventorySlots = {
+        "dungeon-inventory":0,
+        "container-inventory":0
+    };
     static nQuickSlots = 4;
     static playerInBag = false;
     static lastScrolledItem = 0;
@@ -13,7 +16,8 @@ class Inventory{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
-        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlot]
+        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
+        //should really store displayedItem separately for each inventory....
         Inventory.displayItemInfo(displayedItem, inventoryId)
         inventory.forEach((item) =>{
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
@@ -49,8 +53,8 @@ class Inventory{
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let inSelectedInventory = inventory == Inventory.selectedInventory;
-        let itemIsSelected = slot == Inventory.displayedInventorySlot && inSelectedInventory;
-        console.log(Inventory.displayedInventorySlot)
+        let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
+        console.log(Inventory.displayedInventorySlots)
         console.log(slot);
         console.log(itemIsSelected);
         let primed = Inventory.isPrimed(item.slot);
@@ -102,7 +106,8 @@ class Inventory{
         if(inventory == "container-inventory"){
             element.append(
                 $('<button>').addClass('item-button').text('take').on('click',function(){
-                
+                    Inventory.selectedContainer.inventory.items.splice(slot, 1)
+                    Player.pickUpItem(item);
                 })
             )
 
@@ -188,7 +193,7 @@ class Inventory{
             return false;
         }
         if(inventory != 'shop' && inventory != "container-inventory"){
-            Inventory.displayedInventorySlot = item.slot;
+            Inventory.displayedInventorySlots[inventory] = item.slot;
         }
         let itemValue = item.value;
         if(!itemValue){
@@ -339,20 +344,27 @@ class Inventory{
 
     static toggleInventory(){
         this.playerInBag = !this.playerInBag;
+        if(!this.playerInBag){
+            this.selectedContainer = false;
+        }
         this.displayInventory();
     }
 
+    
     //inventory can be player or container
     static getItemsInInventory(inventory = "dungeon-inventory"){
         if(inventory == "dungeon-inventory"){
             return Player.inventory.items.length;
-        }else{
+        }else if (Inventory.selectedContainer && Inventory.selectedContainer.inventory){
             return Inventory.selectedContainer.inventory.items.length;
         }
+
+        return 0;
     }
 
     static navigate(event){
         let direction = event.type;
+        console.log(direction);
         switch(direction){
             case "left":
                 Inventory.selectedInventory = "dungeon-inventory"
@@ -363,40 +375,58 @@ class Inventory{
                 }
                 break;
             case "up":
-                this.displayedInventorySlot--
+                this.displayedInventorySlots[Inventory.selectedInventory]--
                 break;
             case "down":
-                this.displayedInventorySlot++
+                this.displayedInventorySlots[Inventory.selectedInventory]++
                 break;
         }
 
         let nItems = this.getItemsInInventory(this.selectedInventory);
-        this.displayedInventorySlot += nItems;
-        this.displayedInventorySlot %= nItems;
-        this.displayedInventorySlot = this.displayedInventorySlot ? this.displayedInventorySlot : 0;
-        console.log(this.displayedInventorySlot)
+        this.displayedInventorySlots[Inventory.selectedInventory] += nItems;
+        this.displayedInventorySlots[Inventory.selectedInventory] %= nItems;
+        this.displayedInventorySlots[Inventory.selectedInventory] = this.displayedInventorySlots[Inventory.selectedInventory] ? this.displayedInventorySlots[Inventory.selectedInventory] : 0;
+        console.log(this.displayedInventorySlots[Inventory.selectedInventory])
 
         this.displayInventory();
     }
 
+    static selectItem(event){
+        if(Inventory.selectedInventory == "dungeon-inventory"){
+            let slot = Inventory.displayedInventorySlots["dungeon-inventory"];
+            console.log(slot)
+            GameMaster.useItem({type:"item-"+(slot+1)})
+        }
+    }
+
     static displayContainerInventory(){
         let container = Inventory.selectedContainer;
-        if(!container){return false;}
         $('#container-inventory-list').html('');
+        if(!container){
+            this.clearContainerInventory();
+            return false;
+        }
+        Inventory.assignSlots();
         let items = container.inventory.items;
-        let displayedItem = items[0];
-        Inventory.displayItemInfo(displayedItem,'container-inventory')
+        let displayedItemSlot = Inventory.displayedInventorySlots['container-inventory']
+        Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
         console.log(items);
         items.forEach((item)=>{
             Inventory.addInventoryItem(item,true,"container-inventory")
         })
     }
 
+    static clearContainerInventory(){
+        $("#container-inventory-description").html("");
+        $('#container-inventory-title').text("");
+
+    }
+
     static openContainerInventory(container){
         Inventory.playerInBag = true;
         Inventory.selectedContainer = container;
         Inventory.selectedInventory = "container-inventory";
-        Inventory.assignSlots();
+        Inventory.displayedInventorySlots["container-inventory"] = 0;
         $('#container-inventory-title').text(container.name);
         Inventory.displayInventory();
     }

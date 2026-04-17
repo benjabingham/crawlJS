@@ -21,15 +21,7 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask))
         ]
     }
 
@@ -253,6 +245,8 @@ class Player {
     }
 
     static useItem(item){
+        console.log('useItem')
+        console.log(item);
         if(!item){
             return false;
         }

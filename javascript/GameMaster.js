@@ -235,9 +235,11 @@ class GameMaster{
         if(!GameMaster.dungeonMode){
             return false;
         }
+        console.log(event);
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         let slot = parseInt(event.type.split('-')[1])-1;
+        console.log(slot);
         if(GameMaster.dropMode){
             GameMaster.dropItem(slot);
         }else if(!Player.useItem(Player.inventory.items[slot])){
@@ -287,6 +289,11 @@ class GameMaster{
         GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
             return false
+        }
+        if(Inventory.playerInBag){
+            //navigate in inventory instead
+            Inventory.selectItem(event);
+            return false;
         }
         Player.gainStamina();
         GameMaster.postPlayerAction();

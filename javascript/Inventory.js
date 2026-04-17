@@ -342,8 +342,12 @@ class Inventory{
         }
     }
 
-    static toggleInventory(){
-        this.playerInBag = !this.playerInBag;
+    static toggleInventory(state = null){
+        if(state===null){
+            this.playerInBag = !this.playerInBag;
+        }else{
+            this.playerInBag = state;
+        }
         if(!this.playerInBag){
             this.selectedContainer = false;
         }
@@ -417,6 +421,10 @@ class Inventory{
         let displayedItemSlot = Inventory.displayedInventorySlots['container-inventory']
         Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
         console.log(items);
+        if(!items.length){
+            this.toggleInventory(false);
+            //Log.addMessage('empty');
+        }
         items.forEach((item)=>{
             Inventory.addInventoryItem(item,true,"container-inventory")
         })

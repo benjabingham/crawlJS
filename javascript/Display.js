@@ -2,7 +2,6 @@ class Display{
     static entityManager;
     static customControls;
     static colorScheme = 0;
-    static displayedInventorySlot;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
         {scheme:'dark-mode',name:'Dark Mode'},
@@ -22,7 +21,7 @@ class Display{
         $('#dungeon-screen').show();
         $('#town-hint-div').hide().html('');
         Display.boardDisplayInit();
-        Display.displayInventory(true);
+        Inventory.displayInventory(true);
         Display.scrollToTop();
         Display.dropButton();
         Log.logInit();
@@ -46,7 +45,7 @@ class Display{
         $('#town-hint-div').show().html('');
 
         Display.populateLocations();
-        Display.displayInventory(false);
+        Inventory.displayInventory(false);
         Display.displayShop();
         Display.restButton();
         Display.fillBars(Player);
@@ -363,7 +362,7 @@ class Display{
                     Player.gold-= meal.cost;
                     display.nourishmentDiv();
                     display.displayGold();
-                    display.displayInventory(false);
+                    Inventory.displayInventory(false);
                 }
             })
             if(!meal.item){
@@ -488,27 +487,14 @@ class Display{
         })
     }
 
-    static displayInventory(dungeonMode=true){
-        let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
-        //$('#inventory-wrapper').show();
-        $('#'+inventoryId+'-list').html('');
-        let inventory = Player.inventory.items;
-        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
-        Display.displayItemInfo(displayedItem, inventoryId)
-        inventory.forEach((item) =>{
-            Display.addInventoryItem(item, dungeonMode, inventoryId);
-        })
-        
-        
-        Display.displayGold();
-    }
+    
 
     static displayShop(){
         $('#shop-wrapper').show();
         $('#shop-list').html('');
         let inventory = Shop.getInventory();
         inventory.forEach((item) =>{
-            Display.addInventoryItem(item, false, 'shop');
+            Inventory.addInventoryItem(item, false, 'shop');
         })
         Display.displayGold();
     }
@@ -517,303 +503,12 @@ class Display{
         $('.gold-div').text(Player.gold+" gold");
     }
 
-    //checks if an inventory slot is primed.
-    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
-    static isPrimed(slot, inventory){
-        if(inventory == 'shop'){
-            return false;
-        }
-
-        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
-            return false
-        }
-
-        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
-        
-    }
-
+    
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
         return keywordVars.symbols[charCode].name
     }
     
-
-    static addInventoryItem(item, dungeonMode, inventory){
-        let slot = item.slot;
-        let display = this;
-        let itemValue = item.value;
-        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
-        let itemIsSelected = slot == Display.displayedInventorySlot;
-        let primed = Display.isPrimed(item.slot);
-        let symbolsSpan = $('<span>')
-        if(item.symbols){
-            item.symbols.forEach((symbol)=>{
-                let symbolSpan = $('<span>').text(" "+symbol);
-                let hintText = Display.getSymbolHintText(symbol);
-                Display.setHintText(symbolSpan,hintText)
-                symbolsSpan.append(symbolSpan);
-            })
-        }
-        
-        if(!itemValue){
-            itemValue = '0';
-        }
-        //add item
-        $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
-                (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
-            ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
-            ).on('click',function(){
-                display.displayItemInfo(item, inventory);
-            }).append(
-                $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
-            )
-        )
-
-        Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
-
-        if(item.uses){
-            $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
-        }
-
-        //add buttons
-
-        if(GameMaster.dropMode){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('drop').on('click',function(){
-                    GameMaster.dropItem(slot);
-                })
-            )
-
-            return;
-        }
-
-        if(item.usable){
-            let button;
-            if(item.food && !itemIsEquipped){
-                button = $('<button>').addClass('item-button').text('eat').on('click',function(){
-                    GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
-                    Display.displayInventory(dungeonMode);
-                })
-            } else if(item.potable && !itemIsEquipped && inventory != "shop"){
-                button = $('<button>').addClass('item-button').text('drink').on('click',function(){
-                    GameMaster.drinkItem({type:'item-'+(slot+1)},dungeonMode);
-                    Display.displayInventory(dungeonMode);
-                })
-            }
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                button
-            )
-        }
-
-        if(dungeonMode){
-            if(item.weapon && !Player.equipped){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
-                    })
-                )
-            }
-            if(item.weapon && itemIsEquipped){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
-                    })
-                )
-            }
-            if(item.usable){
-                let button;
-                if(item.fuel && !itemIsEquipped){
-                    button = $('<button>').addClass('item-button').text('burn').on('click',function(){
-                        GameMaster.useFuel({type:'item-'+(slot+1)});
-                    })
-                }
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    button
-                )
-            }
-        }else if (inventory != 'shop'){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
-                    Shop.sellItem(slot);
-                    display.displayShop();
-                    display.displayInventory(false);
-                })
-            )
-        }else if(inventory == 'shop'){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('buy - '+item.price).on('click',function(){
-                    Shop.buyItem(slot);
-                    display.displayShop();
-                    display.displayInventory(false);
-                })
-            )
-        }
-    }
-
-    static displayItemInfo(item, inventory){
-        if(!item){
-            $('#'+inventory+'-description').html('')
-            return false;
-        }
-        if(inventory != 'shop'){
-            Display.displayedInventorySlot = item.slot;
-        }
-        let itemValue = item.value;
-        if(!itemValue){
-            itemValue = '0';
-        }
-        let descriptionBodyElement;
-        if(item.weapon || item.potable){
-            descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
-        }else{
-            descriptionBodyElement = '';
-        }
-
-        $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
-        ).append(
-            descriptionBodyElement
-        )
-
-
-
-        let traits = keywordVars.traits;
-        let hasTrait = false;
-        let traitsDiv = $('<div>').addClass('traits-text')
-        Object.keys(traits).forEach((key)=>{
-            if(item[key]){
-                let trait = keywordVars.traits[key]
-                let text = trait.name
-                if(hasTrait){
-                    text = ", "+text
-                }
-                if(item[key] > 1){
-                    text = text+" "+item[key]
-                }
-                let traitSpan = $('<span>').addClass('trait-spans').text(text);
-                Display.setHintText(traitSpan, trait.hintText)
-                traitsDiv.append(traitSpan)
-                hasTrait = true;
-            }
-        })
-
-        if(hasTrait){
-            $('#'+inventory+'-description').append(traitsDiv);
-        }
-
-        if(item.light && item.fuel){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
-            )
-        }
-
-        if(item.food){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
-            )
-        }
-
-        if(item.flimsy){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
-            )
-        }
-
-        if(itemValue){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value: ').append(itemValue)
-                )
-            )
-        }
-
-        if(item.potable){
-            let effects = ['health','stamina','luck','hunger','light']
-            effects.forEach((effect)=>{
-                let power = item[effect]
-                if(power){
-                    let gainLose
-                    if (power > 0){
-                        gainLose = 'gain'
-                    }else{
-                        gainLose = 'lose'
-                        power *= -1;
-                    }
-                    $('#'+inventory+'-description-body').append(
-                        $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
-                    )
-                }
-            })
-
-            if(item.unlabeled){
-                $('#'+inventory+'-description-body').append(
-                    $('<div>').addClass('potion-description').text('unknown effect...')
-                )
-            }
-        }
-
-
-        if(item.weapon){
-            let attackTypes = ['jab','swing','strafe','draw']
-            let special = false;
-            let specialName = false;
-            attackTypes.forEach(function(val){
-                if(item[val]){
-                    special = item[val];
-                    specialName = val;
-                }
-            })
-
-            $('#'+inventory+'-description-body').append(
-                $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
-                    $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text('Normal:')
-                    ).append(
-                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
-                    ).append(
-                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
-                    ).append(
-                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
-                    )
-                ).append(
-                    special?($('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(specialName+":")
-                    ).append(
-                        $('<div>').addClass('item-damage').text('Damage: '+special.damage)
-                    ).append(
-                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
-                    ).append(
-                        $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                    )):false
-                )
-            ).append("<hr>")
-             /*           
-            attackTypes.forEach(function(val){
-                if(item[val]){
-                    let special = item[val];
-                    $('#'+inventory+'-weapon-description').append(
-                        $('<div>').addClass('item-stats-normal').append(
-                            $('<div>').addClass('item-title').text(val+":")
-                        ).append(
-                            $('<div>').addClass('item-damage').text('Damage: '+special.damage)
-                        ).append(
-                            $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
-                        ).append(
-                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                        )
-                    )
-                }
-            })    */
-        }
-
-        
-        
-
-        
-    }
-
     static setCustomControls(){
         let display = this;
         let inputs = InputManager.inputs;

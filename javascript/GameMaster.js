@@ -64,7 +64,7 @@ class GameMaster{
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
         $(document).off('click').on("click", (event)=>{
             InputManager.currentEvent = event;
-            Display.displayInventory(this.dungeonMode);
+            Inventory.displayInventory(this.dungeonMode);
             InputManager.lastEvent = event;
 
         });
@@ -181,7 +181,7 @@ class GameMaster{
             GameMaster.stopDrop();
         }
 
-        Display.displayInventory();
+        Inventory.displayInventory();
         /*
         EntityManager.skipBehaviors = true;
         GameMaster.postPlayerAction();
@@ -199,6 +199,11 @@ class GameMaster{
             //GameMaster.dropMode = false;
         }
         GameMaster.postPlayerAction();
+    }
+
+    static inventoryOpenClose(event){
+        console.log('inventoryOpenClose');
+        Inventory.toggleInventory();
     }
 
     //function for inventory slot hotkeys
@@ -220,8 +225,8 @@ class GameMaster{
             InputManager.currentEvent.type = "forget"
             return true;
         }
-        Display.displayedInventorySlot = slot;
-        Display.displayInventory(GameMaster.dungeonMode)
+        Inventory.displayedInventorySlot = slot;
+        Inventory.displayInventory(GameMaster.dungeonMode)
 
     }
 
@@ -305,6 +310,11 @@ class GameMaster{
         if (!GameMaster.dungeonMode){
             return false
         }
+        if(Inventory.playerInBag){
+            //navigate in inventory instead
+            Inventory.navigate(event);
+            return false;
+        }
         let dungeonId = GameMaster.dungeonId;
         let direction = event.type;
 
@@ -335,7 +345,7 @@ class GameMaster{
     static updateDisplay(){
         Display.printBoard(board.boardArray);
         Player.inventoryCleanup();
-        Display.displayInventory(true);
+        Inventory.displayInventory(true);
 
         Display.fillBars(Player);
     }

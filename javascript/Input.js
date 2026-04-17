@@ -65,6 +65,7 @@ class InputManager{
                 if(input.slotKey) GameMaster.slotKey(event);
                 if(input.drop) GameMaster.drop(event);
                 if(input.rewind) GameMaster.rewind(event);
+                if(input.inventory) GameMaster.inventoryOpenClose(event);
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })

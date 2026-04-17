@@ -25,7 +25,9 @@ inputVars = {
         {inputName:'item-10', inputKey:'Digit0', slotKey:true},
 
         {inputName:'drop', inputKey:'KeyD', drop:true},
-        {inputName:'rewind', inputKey:'Backspace', rewind:true}       
+        {inputName:'rewind', inputKey:'Backspace', rewind:true}, 
+        
+        {inputName:'inventory', inputKey:'Tab', inventory:true}
     ],
     noNumpad:[
         {inputName:'upleft', inputKey:'KeyI', movePlayer:true},

@@ -111,7 +111,7 @@ q
     --shopFresh:#fdd7003a;
     --shopFreshBorder:var(--inventoryBorder);
     --selectedSlot:#f3e3b6;
-
+    --slotUnavailable:#b1a48e;
     
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);

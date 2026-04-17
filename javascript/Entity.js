@@ -109,8 +109,9 @@ class Entity{
             }
             this.setPosition(x,y);
             return true;
-        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer){
-            this.lootContainer(Board.entityAt(x,y));
+        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && PlayerEntity.prototype.isPrototypeOf(this)){
+            //this.lootContainer(Board.entityAt(x,y));
+            Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
             GameMaster.travel(x,y);
@@ -268,6 +269,7 @@ class Entity{
         this.inventory.gold = 0;
     }
 
+    //DEPRECATING... REPLACING WITH OPENCONTAINERINVENTORY
     lootContainer(container){
         let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(!isPlayer){

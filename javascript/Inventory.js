@@ -3,8 +3,9 @@ class Inventory{
     static nQuickSlots = 4;
     static playerInBag = false;
     static lastScrolledItem = 0;
-    //player or world
-    static selectedInventory = "player"
+    //player or container
+    static selectedInventory = "dungeon-inventory"
+    static selectedContainer = false;
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -17,6 +18,8 @@ class Inventory{
         inventory.forEach((item) =>{
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
+
+        Inventory.displayContainerInventory();
         
         Display.displayGold();
     }
@@ -40,10 +43,16 @@ class Inventory{
     }
 
     static addInventoryItem(item, dungeonMode, inventory){
+        console.log(inventory);
+        console.log(Inventory.selectedInventory);
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
-        let itemIsSelected = slot == Inventory.displayedInventorySlot;
+        let inSelectedInventory = inventory == Inventory.selectedInventory;
+        let itemIsSelected = slot == Inventory.displayedInventorySlot && inSelectedInventory;
+        console.log(Inventory.displayedInventorySlot)
+        console.log(slot);
+        console.log(itemIsSelected);
         let primed = Inventory.isPrimed(item.slot);
         let symbolsSpan = $('<span>')
         let quickSlot = slot<Inventory.nQuickSlots;
@@ -84,8 +93,19 @@ class Inventory{
             this.lastScrolledItem = slot;
         }
 
+
         //add buttons
         if(!available){
+            return;
+        }
+
+        if(inventory == "container-inventory"){
+            element.append(
+                $('<button>').addClass('item-button').text('take').on('click',function(){
+                
+                })
+            )
+
             return;
         }
 
@@ -167,7 +187,7 @@ class Inventory{
             $('#'+inventory+'-description').html('')
             return false;
         }
-        if(inventory != 'shop'){
+        if(inventory != 'shop' && inventory != "container-inventory"){
             Inventory.displayedInventorySlot = item.slot;
         }
         let itemValue = item.value;
@@ -322,10 +342,12 @@ class Inventory{
         this.displayInventory();
     }
 
-    //inventory can be player or world
-    static getItemsInInventory(inventory = "player"){
-        if(inventory == "player"){
+    //inventory can be player or container
+    static getItemsInInventory(inventory = "dungeon-inventory"){
+        if(inventory == "dungeon-inventory"){
             return Player.inventory.items.length;
+        }else{
+            return Inventory.selectedContainer.inventory.items.length;
         }
     }
 
@@ -333,10 +355,12 @@ class Inventory{
         let direction = event.type;
         switch(direction){
             case "left":
-                //
+                Inventory.selectedInventory = "dungeon-inventory"
                 break;
             case "right":
-                //
+                if(Inventory.selectedContainer){
+                    Inventory.selectedInventory = "container-inventory";
+                }
                 break;
             case "up":
                 this.displayedInventorySlot--
@@ -349,8 +373,39 @@ class Inventory{
         let nItems = this.getItemsInInventory(this.selectedInventory);
         this.displayedInventorySlot += nItems;
         this.displayedInventorySlot %= nItems;
-
+        this.displayedInventorySlot = this.displayedInventorySlot ? this.displayedInventorySlot : 0;
+        console.log(this.displayedInventorySlot)
 
         this.displayInventory();
+    }
+
+    static displayContainerInventory(){
+        let container = Inventory.selectedContainer;
+        if(!container){return false;}
+        $('#container-inventory-list').html('');
+        let items = container.inventory.items;
+        let displayedItem = items[0];
+        Inventory.displayItemInfo(displayedItem,'container-inventory')
+        console.log(items);
+        items.forEach((item)=>{
+            Inventory.addInventoryItem(item,true,"container-inventory")
+        })
+    }
+
+    static openContainerInventory(container){
+        Inventory.playerInBag = true;
+        Inventory.selectedContainer = container;
+        Inventory.selectedInventory = "container-inventory";
+        Inventory.assignSlots();
+        $('#container-inventory-title').text(container.name);
+        Inventory.displayInventory();
+    }
+
+    static assignSlots(){
+        let i = 0;
+        Inventory.selectedContainer.inventory.items.forEach((item)=>{
+            item.slot = i;
+            i++;
+        })
     }
 }

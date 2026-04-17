@@ -396,6 +396,12 @@ class Inventory{
             let slot = Inventory.displayedInventorySlots["dungeon-inventory"];
             console.log(slot)
             GameMaster.useItem({type:"item-"+(slot+1)})
+        }else{
+            let slot = Inventory.displayedInventorySlots["container-inventory"]
+            let item = Inventory.selectedContainer.inventory.items[slot];
+            Inventory.selectedContainer.inventory.items.splice(slot, 1)
+            Player.pickUpItem(item);
+            Inventory.displayInventory();
         }
     }
 
@@ -419,6 +425,7 @@ class Inventory{
     static clearContainerInventory(){
         $("#container-inventory-description").html("");
         $('#container-inventory-title').text("");
+        Inventory.selectedInventory = "dungeon-inventory"
 
     }
 

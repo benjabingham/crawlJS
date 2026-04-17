@@ -22,6 +22,14 @@ class Player {
         slots: 10,
         items:[
             JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
+            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
         ]
     }
 

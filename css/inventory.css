@@ -30,6 +30,10 @@
     grid-auto-rows: 2rem;
     */
     padding-top:2px;
+    height:59%;
+    overflow:scroll;
+    overflow-x: hidden;
+    scrollbar-width: none;
 }
 
 .inventory-slot{

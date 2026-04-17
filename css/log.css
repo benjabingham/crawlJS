@@ -1,7 +1,11 @@
 #log-window{
     border:1px solid gray;
-    width:385px;
-    height:510px;
+    /*width:385px;*/
+    width:1116px;
+    height:200px;
+    margin:auto auto;
+    background-color: var(--floor);
+    color: var(--defaultEntity);
 }
 
 #log-title{
@@ -11,7 +15,7 @@
 }
 
 #log{
-    height:492px;
+    height:182px;
     overflow-y:scroll;
 
     p{

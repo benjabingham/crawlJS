@@ -140,15 +140,19 @@
     
     <div id="dungeon-screen">
         <div id="game-window">
-            
+            <div class="inventory" id ="dungeon-inventory">
+                <div class="inventory-description" id ="dungeon-inventory-description"></div>
+                <div class="inventory-title">Inventory</div>
+                <div id ="dungeon-inventory-list" class="inventory-list"></div>
+            </div>
             <div id="board" tabindex="0"></div> 
-            
-            <div id="log-window">
-                <div id="log-title">Log ↓</div>
-                <div id="log"></div>
+            <div class="inventory">
+                <div class="inventory-description"></div>
+                <div class="inventory-title">Inventory</div>
             </div>
         </div>
         <div class="hint-divs"></div>
+        <!--
         <div id = "dungeon-inventory-wrapper" class="inventory-wrapper">
             <div class="inventory-title">Inventory</div>
             <div id="dungeon-inventory" class="inventory">
@@ -161,6 +165,11 @@
             </div>
             
         </div>
+    -->
+        <div id="log-window">
+                <div id="log-title">Log ↓</div>
+                <div id="log"></div>
+            </div>
     </div>
     <div class="hint-divs" id = 'town-hint-div'></div>
     <div id = "town-inventory-wrapper" class="inventory-wrapper">
@@ -170,9 +179,6 @@
             <div id ="town-inventory-description" class="inventory-description"></div>
         </div>
         <div id="gold-div"class="gold-div"></div>
-    </div>
-    <div id="color-scheme-select">
-        <button id="color-scheme-button"></button>
     </div>
     
     <div id = 'instructions-div'>

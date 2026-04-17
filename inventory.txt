@@ -1,0 +1,41 @@
+UI OVERHAUL NECESSARY
+
+UI Elements
+Top bar
+log
+board
+quickbar (will be small)
+Select Window (no longer part of quick bar?)
+
+
+
+new inventory system 
+
+everything is picked up via menus (except single-item piles)
+
+Remove action buttons from items - put in description instead, add specific hotkeys
+(B)urn (C)onsume (E)quip/unequip
+
+BEG MENU
+press B to open bag
+Opens on side of screen. Movement is not possible while open.
+Navigable with numpad (8 up, 2 down) or with arrow keys.
+Press quickbar number to swap with item in that slot (1-3)
+used for piles, containers, and personal inventory.
+Items can be used as usual
+
+
+exit hotkey (esc?) to exit window
+
+PILES/containers
+appear over log (partially)
+Inventory is always also visible. 4,6 to navigate between inventories.
+- CONTAINERS - open menu when searching container (monsters dont take turn until after you close container)
+Each item has option TAKE, (or EAT and DRINK for relevant items). What about burn?
+"Take all" hotkey (enter?) to take all items
+
+piles - does not bring up window automatically when standing over... Introduce Search action. Hotkey S.
+Search action opens up an inventory menu for a pile you are standing on (and adjacent piles?)
+maybe just opening inventory while over a pile shows that pile...
+
+

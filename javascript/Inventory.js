@@ -9,6 +9,7 @@ class Inventory{
     //player or container
     static selectedInventory = "dungeon-inventory"
     static selectedContainer = false;
+    static itemPile = false;
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -106,8 +107,7 @@ class Inventory{
         if(inventory == "container-inventory"){
             element.append(
                 $('<button>').addClass('item-button').text('take').on('click',function(){
-                    Inventory.selectedContainer.inventory.items.splice(slot, 1)
-                    Player.pickUpItem(item);
+                    Inventory.take(slot);
                 })
             )
 
@@ -350,7 +350,15 @@ class Inventory{
         }
         if(!this.playerInBag){
             this.selectedContainer = false;
+        }else if(Inventory.itemPile && (EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0)){
+            Inventory.selectedContainer = Inventory.itemPile;
+            Inventory.selectedInventory = "container-inventory"
         }
+        if(this.playerInBag && !this.selectedContainer){
+
+        }
+        //if standing on top of last stood itempile
+        
         this.displayInventory();
     }
 
@@ -402,11 +410,19 @@ class Inventory{
             GameMaster.useItem({type:"item-"+(slot+1)})
         }else{
             let slot = Inventory.displayedInventorySlots["container-inventory"]
+            Inventory.take(slot);
+            Inventory.displayInventory();
+        }
+    }
+
+    static take(slot){
             let item = Inventory.selectedContainer.inventory.items[slot];
             Inventory.selectedContainer.inventory.items.splice(slot, 1)
             Player.pickUpItem(item);
-            Inventory.displayInventory();
-        }
+
+            if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
+                Inventory.itemPile.sortInventory();
+            }
     }
 
     static displayContainerInventory(){

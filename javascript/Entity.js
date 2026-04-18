@@ -218,15 +218,23 @@ class Entity{
             return false;
         }
 
-        while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            let item = itemPile.inventory.items.pop()
-            this.inventory.items.push(item);
-            if(isPlayer){
-                let itemName = LootManager.getItemNameWithSymbols(item);
-                Log.addMessage('Picked up '+itemName+'.')
+        if(isPlayer){
+            Inventory.itemPile = itemPile;
+        }else{
+            while(itemPile.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
+                let item = itemPile.inventory.items.pop()
+                this.inventory.items.push(item);
+                /*
+                if(isPlayer){
+                    let itemName = LootManager.getItemNameWithSymbols(item);
+                    Log.addMessage('Picked up '+itemName+'.')
+                }
+                */
             }
         }
 
+        
+/*
         if(isPlayer && itemPile.inventory.items.length > 0){
             itemPile.inventory.items.forEach((item)=>{
                 let tipText = "value - "+item.value;
@@ -234,7 +242,7 @@ class Entity{
                 Log.addMessage('Not enough space for '+itemName+'...',false,item.name,tipText);
             })
         }
-
+*/
         if(ItemPile.prototype.isPrototypeOf(this)){
             this.sortInventory();
             this.dropTurn = Math.max(itemPile.dropTurn, this.dropTurn)

@@ -225,7 +225,7 @@ class GameMaster{
             InputManager.currentEvent.type = "forget"
             return true;
         }
-        Inventory.displayedInventorySlot = slot;
+        Inventory.displayedInventorySlots["dungeon-inventory"] = slot;
         Inventory.displayInventory(GameMaster.dungeonMode)
 
     }

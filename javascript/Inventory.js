@@ -17,13 +17,13 @@ class Inventory{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
-        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
         //should really store displayedItem separately for each inventory....
-        Inventory.displayItemInfo(displayedItem, inventoryId)
         inventory.forEach((item) =>{
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
-
+        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
+        Inventory.displayItemInfo(displayedItem, inventoryId)
+        
         Inventory.displayContainerInventory();
         
         Display.displayGold();
@@ -53,12 +53,12 @@ class Inventory{
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+        let primed = Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         console.log(Inventory.displayedInventorySlots)
         console.log(slot);
         console.log(itemIsSelected);
-        let primed = Inventory.isPrimed(item.slot);
         let symbolsSpan = $('<span>')
         let quickSlot = slot<Inventory.nQuickSlots;
         let available = quickSlot || Inventory.playerInBag;

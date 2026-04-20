@@ -17,7 +17,9 @@ class Inventory{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
+        let bagTitle = false;
         inventory.forEach((item) =>{
+            bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
         let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
@@ -339,6 +341,18 @@ class Inventory{
                 }
             })    */
         }
+    }
+
+    static checkAddBagTitle(item, bagTitle){
+        if(item.quickSlot || bagTitle){
+            return bagTitle;
+        }
+
+        $('#dungeon-inventory-list').append(
+            $('<div>').addClass('inventory-title').text('Bag')
+        )
+
+        return true
     }
 
     static toggleInventory(state = null){

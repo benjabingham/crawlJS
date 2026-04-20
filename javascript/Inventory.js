@@ -357,21 +357,25 @@ class Inventory{
         }
 
         if(!item){
-            item = Player.inventory.items[Inventory.displayedInventorySlots['dungeon-inventory']]
+            item = Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
         }
         let slotItem = Player.inventory.items[slot];
 
+        if(Inventory.selectedInventory == 'container-inventory'){
+            Inventory.take(item.slot)
+            Player.inventoryCleanup();
+        }
         //swap if slotitem is quickslot. Otherwise just insert.
-        if(slotItem.quickSlot){
+        if(slotItem && slotItem.quickSlot){
             Player.inventory.items.splice(slot,1,item)
             Player.inventory.items.splice(item.slot,1,slotItem)
+            slotItem.quickSlot = item.quickSlot;
         }else{
             Player.inventory.items.splice(slot,0,item)
             Player.inventory.items.splice(item.slot,1)
         }
 
         item.quickSlot = true;
-        slotItem.quickSlot = false;
 
         Player.inventoryCleanup();
         return true;
@@ -429,10 +433,7 @@ class Inventory{
                 break;
         }
 
-        let nItems = this.getItemsInInventory(this.selectedInventory);
-        this.displayedInventorySlots[Inventory.selectedInventory] += nItems;
-        this.displayedInventorySlots[Inventory.selectedInventory] %= nItems;
-        this.displayedInventorySlots[Inventory.selectedInventory] = this.displayedInventorySlots[Inventory.selectedInventory] ? this.displayedInventorySlots[Inventory.selectedInventory] : 0;
+        this.findValidSelect();
 
         this.displayInventory();
     }
@@ -450,13 +451,27 @@ class Inventory{
 
     //player takes item from container/pile
     static take(slot){
-            let item = Inventory.selectedContainer.inventory.items[slot];
-            Inventory.selectedContainer.inventory.items.splice(slot, 1)
-            Player.pickUpItem(item);
+        let item = Inventory.selectedContainer.inventory.items[slot];
+        Inventory.selectedContainer.inventory.items.splice(slot, 1)
+        Player.pickUpItem(item);
 
-            if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
-                Inventory.itemPile.sortInventory();
-            }
+        if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
+            Inventory.itemPile.sortInventory();
+        }
+        console.log(this.displayedInventorySlots[Inventory.selectedInventory])
+        this.findValidSelect();
+    }
+
+    static findValidSelect(){
+        console.log('findValidSelect')
+        let nItems = this.getItemsInInventory(this.selectedInventory);
+        while(this.displayedInventorySlots[Inventory.selectedInventory] >= nItems){
+            console.log("too high - "+this.displayedInventorySlots[Inventory.selectedInventory])
+            this.displayedInventorySlots[Inventory.selectedInventory]--
+        }
+        this.displayedInventorySlots[Inventory.selectedInventory] += nItems;
+        this.displayedInventorySlots[Inventory.selectedInventory] %= nItems;
+        this.displayedInventorySlots[Inventory.selectedInventory] = this.displayedInventorySlots[Inventory.selectedInventory] ? this.displayedInventorySlots[Inventory.selectedInventory] : 0;
     }
 
     static displayContainerInventory(){

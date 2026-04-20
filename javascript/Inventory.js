@@ -350,25 +350,27 @@ class Inventory{
         return true
     }
 
-    //'slot' is a quickslot. Swaps selected item into that slot.
-    static swapSlot(slot){
+    //'slot' is a quickslot. 'item' is item being swapped into that slot. If not specified, item defaults to selected item
+    static swapSlot(slot, item = false){
         if (slot >= Inventory.nQuickSlots){
             return false;
         }
 
-        let selectedItem = Player.inventory.items[Inventory.displayedInventorySlots['dungeon-inventory']];
+        if(!item){
+            item = Player.inventory.items[Inventory.displayedInventorySlots['dungeon-inventory']]
+        }
         let slotItem = Player.inventory.items[slot];
 
         //swap if slotitem is quickslot. Otherwise just insert.
         if(slotItem.quickSlot){
-            Player.inventory.items.splice(slot,1,selectedItem)
-            Player.inventory.items.splice(selectedItem.slot,1,slotItem)
+            Player.inventory.items.splice(slot,1,item)
+            Player.inventory.items.splice(item.slot,1,slotItem)
         }else{
-            Player.inventory.items.splice(slot,0,selectedItem)
-            Player.inventory.items.splice(selectedItem.slot,1)
+            Player.inventory.items.splice(slot,0,item)
+            Player.inventory.items.splice(item.slot,1)
         }
 
-        selectedItem.quickSlot = true;
+        item.quickSlot = true;
         slotItem.quickSlot = false;
 
         Player.inventoryCleanup();

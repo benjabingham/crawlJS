@@ -281,6 +281,9 @@ class Player {
             return false;
         }
         Player.equipped = weapon;
+        if(!weapon.quickSlot){
+            Inventory.swapSlot(0,weapon);
+        }
         EntityManager.equipWeapon('player', weapon, verbose);
         return true;
     }

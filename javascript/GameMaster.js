@@ -13,6 +13,14 @@ class GameMaster{
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         GameMaster.getRoom(
             'Abandoned Village',
@@ -212,6 +220,15 @@ class GameMaster{
         let slot = false;
         if(event.type){
             slot = parseInt(event.type.split('-')[1])-1;
+        }
+
+        console.log(Inventory.playerInBag);
+        if(Inventory.playerInBag){
+            let swapped = Inventory.swapSlot(slot);
+            if(swapped){
+                GameMaster.postPlayerAction();
+            }
+            return swapped;
         }
 
         //return false if not a quickslot

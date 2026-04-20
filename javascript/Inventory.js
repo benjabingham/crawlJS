@@ -49,17 +49,12 @@ class Inventory{
     }
 
     static addInventoryItem(item, dungeonMode, inventory){
-        console.log(inventory);
-        console.log(Inventory.selectedInventory);
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let primed = Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
-        console.log(Inventory.displayedInventorySlots)
-        console.log(slot);
-        console.log(itemIsSelected);
         let symbolsSpan = $('<span>')
         let quickSlot = item.quickSlot;
         let available = quickSlot || Inventory.playerInBag;
@@ -355,6 +350,31 @@ class Inventory{
         return true
     }
 
+    //'slot' is a quickslot. Swaps selected item into that slot.
+    static swapSlot(slot){
+        if (slot >= Inventory.nQuickSlots){
+            return false;
+        }
+
+        let selectedItem = Player.inventory.items[Inventory.displayedInventorySlots['dungeon-inventory']];
+        let slotItem = Player.inventory.items[slot];
+
+        //swap if slotitem is quickslot. Otherwise just insert.
+        if(slotItem.quickSlot){
+            Player.inventory.items.splice(slot,1,selectedItem)
+            Player.inventory.items.splice(selectedItem.slot,1,slotItem)
+        }else{
+            Player.inventory.items.splice(slot,0,selectedItem)
+            Player.inventory.items.splice(selectedItem.slot,1)
+        }
+
+        selectedItem.quickSlot = true;
+        slotItem.quickSlot = false;
+
+        Player.inventoryCleanup();
+        return true;
+    }
+
     static toggleInventory(state = null){
         if(state===null){
             this.playerInBag = !this.playerInBag;
@@ -389,7 +409,6 @@ class Inventory{
 
     static navigate(event){
         let direction = event.type;
-        console.log(direction);
         switch(direction){
             case "left":
                 Inventory.selectedInventory = "dungeon-inventory"
@@ -411,7 +430,6 @@ class Inventory{
         this.displayedInventorySlots[Inventory.selectedInventory] += nItems;
         this.displayedInventorySlots[Inventory.selectedInventory] %= nItems;
         this.displayedInventorySlots[Inventory.selectedInventory] = this.displayedInventorySlots[Inventory.selectedInventory] ? this.displayedInventorySlots[Inventory.selectedInventory] : 0;
-        console.log(this.displayedInventorySlots[Inventory.selectedInventory])
 
         this.displayInventory();
     }
@@ -419,7 +437,6 @@ class Inventory{
     static selectItem(event){
         if(Inventory.selectedInventory == "dungeon-inventory"){
             let slot = Inventory.displayedInventorySlots["dungeon-inventory"];
-            console.log(slot)
             GameMaster.useItem({type:"item-"+(slot+1)})
         }else{
             let slot = Inventory.displayedInventorySlots["container-inventory"]
@@ -450,7 +467,6 @@ class Inventory{
         let items = container.inventory.items;
         let displayedItemSlot = Inventory.displayedInventorySlots['container-inventory']
         Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
-        console.log(items);
         if(!items.length){
             this.toggleInventory(false);
             //Log.addMessage('empty');

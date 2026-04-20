@@ -13,6 +13,7 @@ class GameMaster{
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
+        Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
@@ -211,6 +212,11 @@ class GameMaster{
         let slot = false;
         if(event.type){
             slot = parseInt(event.type.split('-')[1])-1;
+        }
+
+        //return false if not a quickslot
+        if(!Player.inventory.items[slot].quickSlot){
+            return false;
         }
 
         if(GameMaster.dropMode){

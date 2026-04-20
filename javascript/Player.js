@@ -21,7 +21,6 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask))
         ]
     }
 
@@ -266,6 +265,13 @@ class Player {
     }
 
     static pickUpItem(item){
+        let quickSlot = true;
+        let nQuickSlots = Inventory.nQuickSlots;
+        //if item N exists and is quickslotted, new item is not quickslotted. Otherwise it is.
+        if(Player.inventory.items[nQuickSlots-1] && Player.inventory.items[nQuickSlots-1].quickSlot){
+            quickSlot = false;
+        }
+        item.quickSlot = quickSlot
         Player.inventory.items.push(item);
         Player.inventoryCleanup();
     }
@@ -410,11 +416,19 @@ class Player {
 
     
     static inventoryCleanup(){
+        let quickSlots = [];
         let newInventory = [];
 
         while(Player.inventory.items.length > 0){
-            newInventory.push(Player.inventory.items.pop())
+            let item = Player.inventory.items.pop();
+            if(item.quickSlot){
+                quickSlots.push(item);
+            }else{
+                newInventory.push(item)
+            }
         }
+
+        newInventory = newInventory.concat(quickSlots);
         let slot = 0;
 
         while(newInventory.length > 0){

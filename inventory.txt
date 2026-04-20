@@ -38,4 +38,22 @@ piles - does not bring up window automatically when standing over... Introduce S
 Search action opens up an inventory menu for a pile you are standing on (and adjacent piles?)
 maybe just opening inventory while over a pile shows that pile...
 
+FIX QUICK MENU
+dont use slots - add new attribute to items (quick: 2,3,4). Reserve 1 for equipped item, or most recently equipped item.
+Render these items first, then render everything else.
+If there is no equipped, 2, 3, or 4, these slots can be empty.
+
+options
+    - attribute on item
+        - cons
+            - must be set / reset on pickup
+            - messes up current inventory navigation ...
+                - Unless they ALSO are placed in slots 1-4...
+        - pros
+            - can be rendered in time with everything else (just have a special div)
+    - use first 4 slots, PLUS attribute "quickbar".
+    - when gain item, check the item in slot 4. If !exists or !item.quickbar, new item.quickbar = true.
+    - when sorting player inventory, place quickbar=true items first
+             
+    - pleyer gets array of pointers
 

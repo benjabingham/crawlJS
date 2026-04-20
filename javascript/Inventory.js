@@ -17,7 +17,6 @@ class Inventory{
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
-        //should really store displayedItem separately for each inventory....
         inventory.forEach((item) =>{
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
@@ -60,7 +59,7 @@ class Inventory{
         console.log(slot);
         console.log(itemIsSelected);
         let symbolsSpan = $('<span>')
-        let quickSlot = slot<Inventory.nQuickSlots;
+        let quickSlot = item.quickSlot;
         let available = quickSlot || Inventory.playerInBag;
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
@@ -415,6 +414,7 @@ class Inventory{
         }
     }
 
+    //player takes item from container/pile
     static take(slot){
             let item = Inventory.selectedContainer.inventory.items[slot];
             Inventory.selectedContainer.inventory.items.splice(slot, 1)

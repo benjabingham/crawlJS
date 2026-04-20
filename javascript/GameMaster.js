@@ -233,8 +233,8 @@ class GameMaster{
             return swapped;
         }
 
-        //return false if not a quickslot
-        if(!Player.inventory.items[slot].quickSlot){
+        //return false if not a quickslot or no item
+        if(!Player.inventory.items[slot] || !Player.inventory.items[slot].quickSlot){
             return false;
         }
 

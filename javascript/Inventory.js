@@ -458,15 +458,12 @@ class Inventory{
         if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
             Inventory.itemPile.sortInventory();
         }
-        console.log(this.displayedInventorySlots[Inventory.selectedInventory])
         this.findValidSelect();
     }
 
     static findValidSelect(){
-        console.log('findValidSelect')
         let nItems = this.getItemsInInventory(this.selectedInventory);
         while(this.displayedInventorySlots[Inventory.selectedInventory] >= nItems){
-            console.log("too high - "+this.displayedInventorySlots[Inventory.selectedInventory])
             this.displayedInventorySlots[Inventory.selectedInventory]--
         }
         this.displayedInventorySlots[Inventory.selectedInventory] += nItems;

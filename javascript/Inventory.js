@@ -18,6 +18,7 @@ class Inventory{
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
         let bagTitle = false;
+        Inventory.findValidSelect();
         inventory.forEach((item) =>{
             bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
@@ -350,6 +351,16 @@ class Inventory{
         return true
     }
 
+    static getSelectedItem(){
+        if(this.selectedInventory == "dungeon-inventory"){
+            return Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
+        }else{
+            return Inventory.selectedContainer.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
+        }
+
+        return false
+    }
+
     //'slot' is a quickslot. 'item' is item being swapped into that slot. If not specified, item defaults to selected item
     static swapSlot(slot, item = false){
         if (slot >= Inventory.nQuickSlots){
@@ -357,8 +368,9 @@ class Inventory{
         }
 
         if(!item){
-            item = Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
+            item = Inventory.getSelectedItem();
         }
+        console.log(item.name)
         let slotItem = Player.inventory.items[slot];
 
         if(Inventory.selectedInventory == 'container-inventory'){
@@ -366,6 +378,10 @@ class Inventory{
             Player.inventoryCleanup();
         }
         //swap if slotitem is quickslot. Otherwise just insert.
+        console.log({
+            slot:slot,
+            item:item,
+        })
         if(slotItem && slotItem.quickSlot){
             Player.inventory.items.splice(slot,1,item)
             Player.inventory.items.splice(item.slot,1,slotItem)
@@ -433,8 +449,6 @@ class Inventory{
                 break;
         }
 
-        this.findValidSelect();
-
         this.displayInventory();
     }
 
@@ -458,7 +472,6 @@ class Inventory{
         if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
             Inventory.itemPile.sortInventory();
         }
-        this.findValidSelect();
     }
 
     static findValidSelect(){

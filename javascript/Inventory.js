@@ -89,7 +89,7 @@ class Inventory{
         }
 
         //scroll
-        if(itemIsSelected && Math.abs(this.lastScrolledItem - slot) > 8 ){
+        if(itemIsSelected && Math.abs(this.lastScrolledItem - slot) > 7 ){
             $('#'+inventory+'-list').scrollTop(element.offset().top);
             this.lastScrolledItem = slot;
         }
@@ -392,7 +392,8 @@ class Inventory{
         if(this.playerInBag && !this.selectedContainer){
 
         }
-        //if standing on top of last stood itempile
+    
+        this.bagOverlay();
         
         this.displayInventory();
     }
@@ -492,6 +493,7 @@ class Inventory{
         Inventory.displayedInventorySlots["container-inventory"] = 0;
         $('#container-inventory-title').text(container.name);
         Inventory.displayInventory();
+        this.bagOverlay();
     }
 
     static assignSlots(){
@@ -500,5 +502,13 @@ class Inventory{
             item.slot = i;
             i++;
         })
+    }
+
+    static bagOverlay(){
+        if(this.playerInBag){
+            $("#board").addClass('bag-board')
+        }else{
+            $("#board").removeClass('bag-board')
+        }
     }
 }

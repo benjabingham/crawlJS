@@ -52,6 +52,13 @@
     pointer-events: none;
 }
 
+.bag-board:after{
+    box-shadow: inset 0 0 0 1000px var(--bag-overlay) !important;
+    content:"Rummaging..." !important;
+    color:white;
+    font-style: italic;
+}
+
 
 .board-grid-div{
     font-size:1.5rem;

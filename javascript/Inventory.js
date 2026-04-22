@@ -608,15 +608,23 @@ class Inventory{
             e.preventDefault();
             let follower = $('<div>').addClass('dragged-item follower').text(item.name)
             Display.applyColor(item, follower);
-            $('body').append(
-                follower
-            )
+            $(element).on('mousemove', function(){
+                if(follower){
+                    $('body').append(
+                        follower
+                    )
+                }
+            })
+            
+            
             Display.updateFollower(e);
         })
-        $(document).on('mouseup',e=>{
-            $('.dragged-item').remove();
-        })
-
         
+    }
+
+    static initReleaseDragItems(){
+        $(document).on('mouseup',e=>{
+            $('.dragged-item').remove()
+        })
     }
 }

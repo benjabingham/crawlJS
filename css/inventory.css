@@ -155,3 +155,8 @@
 .available-false{
     background-color:var(--slotUnavailable);
 }
+
+.inventory-extras-div{
+    margin:10px;
+    color: var(--altBackText);
+}

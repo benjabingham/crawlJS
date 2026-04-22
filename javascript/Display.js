@@ -8,6 +8,7 @@ class Display{
         {scheme:'light-mode',name:'Light Mode'}
     ]
     static highlightedCells=[];
+    static mouseOverBoard = false;
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -91,6 +92,7 @@ class Display{
         let boardDiv = $("#board");
        // boardDiv.css('width',17*1.8+"rem");
         Display.generateBoardGrid();
+        Display.mouseOverBoardInit();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
         //$('#log').css('height',17*2-2.5+"rem");
@@ -617,6 +619,19 @@ class Display{
                 left: e.pageX,
                 top: e.pageY
             });
+    }
+
+    static mouseOverBoardInit(){
+        console.log('boardinit')
+        $('#board').on('mouseenter',e=>{
+            Display.mouseOverBoard = true;
+            $('.inventory-between-div').removeClass('lastSlot');
+        })
+        $('#board').on('mouseleave',e=>{
+            Display.mouseOverBoard = false;
+            console.log(false)
+        })
+        console.log( $('#board'))
     }
     
 }

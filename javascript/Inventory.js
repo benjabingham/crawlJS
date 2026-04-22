@@ -625,8 +625,8 @@ class Inventory{
                         follower
                     )
                     Inventory.draggedItem.slot = item.slot;
-                    Inventory.draggedItem.inventoryId = inventoryId;
-                    $('.inventory-between-div').on('mouseenter',function(){
+                    Inventory.draggedItem.inventoryId = inventoryId;                    
+                    $('.inventory-between-div').off('mouseenter').on('mouseenter',function(){
                         let slot = parseInt($(this).attr('slot'));
                         let hoveredInventoryId = $(this).attr('inventoryId');
                         console.log(slot);
@@ -651,6 +651,9 @@ class Inventory{
             }
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
+            if(Display.mouseOverBoard){
+                GameMaster.dropItem(Inventory.draggedItem.slot);
+            }
             if(Inventory.lastHoveredSlot.inventoryId){
                 console.log(Inventory.draggedItem)
                 console.log(Inventory.lastHoveredSlot)

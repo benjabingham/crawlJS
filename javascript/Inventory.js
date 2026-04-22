@@ -650,7 +650,9 @@ class Inventory{
             if(Inventory.draggedItem.slot && Inventory.lastHoveredSlot.inventoryId){
                 console.log(Inventory.draggedItem)
                 console.log(Inventory.lastHoveredSlot)
-                Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)
+                if(Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
+                    GameMaster.postPlayerAction();
+                }
             }
             Inventory.lastHoveredSlot.inventoryId = false;
             Inventory.draggedItem.slot = false;
@@ -690,6 +692,7 @@ class Inventory{
         }
 
         let item = transfer.from.inventory[fromSlot];
+        let quickSlot = item.quickSlot;
         console.log(toSlot)
         transfer.to.inventory.splice(toSlot,0,item);
         if(fromSlot > toSlot){fromSlot++}
@@ -704,6 +707,13 @@ class Inventory{
 
         Player.inventoryCleanup();
         Inventory.displayInventory();
+
+        //check if item actually moved ...
+        if(item.quickSlot != quickSlot || fromInventoryId != toInventoryId){
+            return true
+        }else{
+            return false;
+        }
 
     }
 }

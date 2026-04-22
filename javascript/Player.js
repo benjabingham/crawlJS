@@ -423,19 +423,20 @@ class Player {
         let newInventory = [];
 
         while(Player.inventory.items.length > 0){
-            let item = Player.inventory.items.pop();
-            if(item.quickSlot){
+            let item = Player.inventory.items.shift();
+            if(item.quickSlot && quickSlots.length < Inventory.nQuickSlots){
                 quickSlots.push(item);
             }else{
                 newInventory.push(item)
+                item.quickSlot = false;
             }
         }
 
-        newInventory = newInventory.concat(quickSlots);
+        newInventory = quickSlots.concat(newInventory);
         let slot = 0;
 
         while(newInventory.length > 0){
-            let item = newInventory.pop();
+            let item = newInventory.shift();
             if(item){
                 Player.inventory.items.push(item);
                 item.slot = slot;
@@ -443,7 +444,7 @@ class Player {
             }
 
         }
-
+        console.log(Player.inventory.items);
     }
 
     static dropItem(slot){

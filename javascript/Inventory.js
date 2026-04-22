@@ -9,7 +9,8 @@ class Inventory{
     static selectedInventory = "dungeon-inventory"
     static selectedContainer = false;
     static itemPile = false;
-    static lastHoveredSlot;
+    static draggedItem = {inventoryId:false,slot:false};
+    static lastHoveredSlot = {inventoryId:false,slot:false}
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -21,8 +22,8 @@ class Inventory{
         let bagTitle = false;
         Inventory.findValidSelect();
         inventory.forEach((item) =>{
-            Inventory.addBetweenDiv(item.slot,inventoryId,item.quickSlot);
             bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
+            Inventory.addBetweenDiv(item.slot,inventoryId,item.quickSlot);
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
         Inventory.addBetweenDiv(inventory.length,inventoryId);
@@ -87,7 +88,7 @@ class Inventory{
                 $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
             )
         //add item
-        Inventory.addDragBehavior(element, item);
+        Inventory.addDragBehavior(element, item, inventory);
         $('#'+inventory+'-list').append(element)
 
         Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
@@ -606,7 +607,7 @@ class Inventory{
         })
     }
 
-    static addDragBehavior(element, item){
+    static addDragBehavior(element, item, inventoryId){
         element.on('mousedown',e=>{
             if(e.originalEvent.button != 0){
                 return false;
@@ -619,11 +620,16 @@ class Inventory{
                     $('body').append(
                         follower
                     )
+                    Inventory.draggedItem.slot = item.slot;
+                    Inventory.draggedItem.inventoryId = inventoryId;
                     $('.inventory-between-div').on('mouseenter',function(){
-                        let slot = $(this).attr('slot');
+                        let slot = parseInt($(this).attr('slot'));
+                        let hoveredInventoryId = $(this).attr('inventoryId');
                         console.log(slot);
                         $('.inventory-between-div').removeClass('lastSlot');
                         $(this).addClass('lastSlot');
+                        Inventory.lastHoveredSlot.slot = slot;
+                        Inventory.lastHoveredSlot.inventoryId = hoveredInventoryId;
                     })
                 }
             })
@@ -641,12 +647,63 @@ class Inventory{
             }
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
+            if(Inventory.draggedItem.slot && Inventory.lastHoveredSlot.inventoryId){
+                console.log(Inventory.draggedItem)
+                console.log(Inventory.lastHoveredSlot)
+                Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)
+            }
+            Inventory.lastHoveredSlot.inventoryId = false;
+            Inventory.draggedItem.slot = false;
         })
     }
 
     //add divs between slots for the purpose of dragging. Slot is the slot an item will enter if dragged here.
     static addBetweenDiv(slot, inventory, quickslot = false){
-        let betweenDiv = $('<div>').addClass('inventory-between-div').attr('id','between-div-'+slot).attr('quickslot', quickslot).attr('slot',slot)
+        let betweenDiv = $('<div>').addClass('inventory-between-div').attr('id','between-div-'+slot).attr('quickslot', quickslot).attr('slot',slot).attr('inventoryId',inventory)
         $('#'+inventory+'-list').append(betweenDiv)
+    }
+
+    static moveItem(fromSlot, toSlot, fromInventoryId, toInventoryId){
+        let transfer = {
+            from:{
+                id:fromInventoryId,
+                inventory:false
+            },
+            to:{
+                id:toInventoryId,
+                inventory:false
+            }
+        }
+
+        Object.keys(transfer).forEach(key=>{
+            let location = transfer[key];
+            if(location.id == "dungeon-inventory"){
+                location.inventory = Player.inventory.items;
+            }else if (location.id == "container-inventory"){
+                location.inventory = Inventory.selectedContainer.inventory.items;
+            }
+            console.log(location.id)
+        })
+
+        if(!transfer.from.inventory || !transfer.to.inventory){
+            throw new Error("inventory not found !!!");
+        }
+
+        let item = transfer.from.inventory[fromSlot];
+        console.log(toSlot)
+        transfer.to.inventory.splice(toSlot,0,item);
+        if(fromSlot > toSlot){fromSlot++}
+        transfer.from.inventory.splice(fromSlot,1);
+
+        if(transfer.to.id == "dungeon-inventory" && toSlot < Inventory.nQuickSlots){
+            console.log('GONNE BE QUICK')
+            item.quickSlot = true;
+        }else{
+            item.quickSlot = false
+        }
+
+        Player.inventoryCleanup();
+        Inventory.displayInventory();
+
     }
 }

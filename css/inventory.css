@@ -164,3 +164,16 @@
 .inventory-title-buttons{
     margin:5px;
 }
+
+.dragged-item{
+    padding:4px;
+    margin:3px;
+    height:31px;
+    box-sizing: border-box;
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
+    font-weight:800;
+    width:200px;
+    /*border:1px solid gray*/
+}

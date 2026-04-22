@@ -119,3 +119,7 @@ h1, h2, h3{
 #menu-buttons-div{
     display:flex;
 }
+
+.follower{
+    position:absolute;
+}

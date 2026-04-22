@@ -11,6 +11,7 @@ class Display{
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
+        Display.followerInit();
     }
 
     static showDungeonScreen(){
@@ -602,6 +603,19 @@ class Display{
         $('#drop-items-button').off().on('click',(event)=>{
             GameMaster.drop(event);
         })
+    }
+
+    static followerInit(){
+        $(document).on('mousemove', function(e){
+            Display.updateFollower(e);
+        })
+    }
+
+    static updateFollower(e){
+        $('.follower').css({
+                left: e.pageX,
+                top: e.pageY
+            });
     }
     
 }

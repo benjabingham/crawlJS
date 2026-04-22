@@ -84,6 +84,7 @@ class Inventory{
                 $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
             )
         //add item
+        Inventory.addDragBehavior(element, item);
         $('#'+inventory+'-list').append(element)
 
         Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
@@ -600,5 +601,22 @@ class Inventory{
                 this.scrollToItem(selectedElement, container)            
             }
         })
+    }
+
+    static addDragBehavior(element, item){
+        element.on('mousedown',e=>{
+            e.preventDefault();
+            let follower = $('<div>').addClass('dragged-item follower').text(item.name)
+            Display.applyColor(item, follower);
+            $('body').append(
+                follower
+            )
+            Display.updateFollower(e);
+        })
+        $(document).on('mouseup',e=>{
+            $('.dragged-item').remove();
+        })
+
+        
     }
 }

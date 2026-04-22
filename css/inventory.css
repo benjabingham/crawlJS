@@ -160,3 +160,7 @@
     margin:10px;
     color: var(--altBackText);
 }
+
+.inventory-title-buttons{
+    margin:5px;
+}

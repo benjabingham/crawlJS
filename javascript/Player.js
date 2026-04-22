@@ -458,4 +458,18 @@ class Player {
         playerEntity.dropItem(slot);
     }
 
+    static dropBag(){
+        console.log('dropbag')
+        let slot = 0;
+        //find first nonquickslot item
+        while(Player.inventory.items[slot] && Player.inventory.items[slot].quickSlot){
+            slot++
+        }
+        //drop everything 
+        while(Player.inventory.items[slot]){
+            Player.dropItem(slot);
+        }
+        
+    }
+
 }

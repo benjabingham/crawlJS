@@ -342,9 +342,17 @@ class Inventory{
             return bagTitle;
         }
 
-        $('#dungeon-inventory-list').append(
-            $('<div>').addClass('inventory-title').text('Bag')
-        )
+        let bagTitleElement = $('<div>').addClass('inventory-title').text('Bag')
+
+        if(GameMaster.dropMode){
+            bagTitleElement.append(
+                $('<button>').text('drop bag').addClass('inventory-title-buttons').on('click',e=>{
+                    GameMaster.dropBag();
+                })
+            )
+        }
+
+        $('#dungeon-inventory-list').append(bagTitleElement)
 
         return true
     }

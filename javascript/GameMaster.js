@@ -226,6 +226,11 @@ class GameMaster{
         GameMaster.postPlayerAction();
     }
 
+    static dropBag(){
+        Player.dropBag();
+        GameMaster.postPlayerAction();
+    }
+
     static inventoryOpenClose(event){
         //console.log('inventoryOpenClose');
         Inventory.toggleInventory();

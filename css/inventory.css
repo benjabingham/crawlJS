@@ -17,9 +17,10 @@
 .inventory{
     background-color: var(--menuBack);
     color: var(--menuText);
-    height:100%;
+    height:650px;
     border:1px solid var(--border);
     width:300px;
+    margin:0px 5px;
 }
 
 .inventory-list{
@@ -30,7 +31,7 @@
     grid-auto-rows: 2rem;
     */
     padding-top:2px;
-    height:59%;
+    height:68%;
     overflow:scroll;
     overflow-x: hidden;
     scrollbar-width: thin;
@@ -40,8 +41,9 @@
 .inventory-slot{
     padding:4px;
     margin:3px;
+    height:31px;
+    box-sizing: border-box;
     display:flex;
-    height:fit-content;
     background-color: var(--inventorySlot);
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid var(--inventoryBorder);
@@ -111,7 +113,6 @@
 .inventory-description{
     padding:3px;
     outline:1px solid var(--border);
-    width:100%;
     height:180px;
     text-align:left;
     background-color: var(--inventorySlotHover);

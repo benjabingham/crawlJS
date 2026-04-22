@@ -1,7 +1,7 @@
 #log-window{
     border:1px solid gray;
     /*width:385px;*/
-    width:1116px;
+    width:510px;
     height:200px;
     margin:auto auto;
     background-color: var(--floor);

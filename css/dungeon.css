@@ -4,11 +4,10 @@
 
 
 #game-window{
-    background-color: var(--floor);
+    /*background-color: var(--floor);*/
     color: var(--defaultEntity);
     display:flex;
     margin:auto;
-    border:1px solid var(--border);
     width:fit-content;
     height:510px;
 }
@@ -22,6 +21,7 @@
     background-color: #d9d2bf;
     color: #3d3936;
     */
+    border:1px solid var(--border);
     background-color:var(--dark);
     white-space:pre-line;
     font-family: monospace;

@@ -13,7 +13,7 @@ class GameMaster{
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
-        /*
+        
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
@@ -22,7 +22,21 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
-        */
+
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        starterWeapon = LootManager.getStarterWeapon();
+        Player.pickUpItem(starterWeapon);
+        
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         GameMaster.getRoom(
             'Abandoned Village',

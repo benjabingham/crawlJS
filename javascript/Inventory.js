@@ -55,12 +55,13 @@ class Inventory{
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
-        let primed = Inventory.isPrimed(item.slot);
+        let primed = inventory == "dungeon-inventory" && Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let symbolsSpan = $('<span>')
         let quickSlot = item.quickSlot;
         let available = quickSlot || Inventory.playerInBag;
+        let dropMode = inventory == "dungeon-inventory" && GameMaster.dropMode
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
@@ -73,7 +74,7 @@ class Inventory{
         if(!itemValue){
             itemValue = '0';
         }
-        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode+' quickslot-'+quickSlot+' available-'+available ).attr('id',inventory+'-slot-'+slot).append(
+        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+available ).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') && quickSlot ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
@@ -108,7 +109,7 @@ class Inventory{
             return;
         }
 
-        if(GameMaster.dropMode){
+        if(dropMode){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('drop').on('click',function(){
                     GameMaster.dropItem(slot);
@@ -423,7 +424,8 @@ class Inventory{
         }
         if(Inventory.itemPile && (EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0)){
             Inventory.selectedContainer = Inventory.itemPile;
-            Inventory.selectedInventory = "container-inventory"
+            $('#container-inventory-title').text("Floor");
+            //Inventory.selectedInventory = "container-inventory"
         }
     }
 
@@ -454,7 +456,9 @@ class Inventory{
                 this.displayedInventorySlots[Inventory.selectedInventory]--
                 break;
             case "down":
-                this.displayedInventorySlots[Inventory.selectedInventory]++
+                //use modulo to loop around
+                this.displayedInventorySlots[Inventory.selectedInventory] = (this.displayedInventorySlots[Inventory.selectedInventory] + 1) % this.getItemsInInventory(Inventory.selectedInventory)
+                
                 break;
         }
 
@@ -505,7 +509,12 @@ class Inventory{
         let displayedItemSlot = Inventory.displayedInventorySlots['container-inventory']
         Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
         if(!items.length){
-            this.toggleInventory(false);
+            if (!container.isItemPile){
+                this.toggleInventory(false);
+            }else if (this.selectedInventory != "dungeon-inventory"){
+                this.selectedInventory = "dungeon-inventory";
+                this.displayInventory();
+            }
             //Log.addMessage('empty');
         }
         items.forEach((item)=>{

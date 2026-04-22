@@ -238,7 +238,14 @@ class GameMaster{
             slot = parseInt(event.type.split('-')[1])-1;
         }
 
-        console.log(Inventory.playerInBag);
+        if(GameMaster.dropMode){
+            if(Player.inventory.items[slot].quickSlot){
+                GameMaster.dropItem(slot);
+                return true;
+            }
+            return false;
+        }
+
         if(Inventory.playerInBag){
             let swapped = Inventory.swapSlot(slot);
             if(swapped){
@@ -251,12 +258,6 @@ class GameMaster{
         if(!Player.inventory.items[slot] || !Player.inventory.items[slot].quickSlot){
             return false;
         }
-
-        if(GameMaster.dropMode){
-            GameMaster.dropItem(slot);
-            return false;
-        }
-
 
         if(InputManager.lastEvent && InputManager.lastEvent.type == event.type){
             console.log('lastevent: '+InputManager.lastEvent.type)
@@ -325,20 +326,23 @@ class GameMaster{
     }
 
     static wait(event){
-        GameMaster.stopDrop();
-        if (!GameMaster.dungeonMode){
-            return false
-        }
         if(Inventory.playerInBag){
             //navigate in inventory instead
             Inventory.selectItem(event);
-            return false;
+            return true;
+        }
+        GameMaster.stopDrop();
+        if (!GameMaster.dungeonMode){
+            return false
         }
         Player.gainStamina();
         GameMaster.postPlayerAction();
     }
 
     static rotate(event){
+        if(Inventory.playerInBag){
+            return false;
+        }
         GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
             return false
@@ -352,14 +356,14 @@ class GameMaster{
 
     //should belong to input once classes are static
     static movePlayer(event){
-        GameMaster.stopDrop();
-        if (!GameMaster.dungeonMode){
-            return false
-        }
         if(Inventory.playerInBag){
             //navigate in inventory instead
             Inventory.navigate(event);
             return false;
+        }
+        GameMaster.stopDrop();
+        if (!GameMaster.dungeonMode){
+            return false
         }
         let dungeonId = GameMaster.dungeonId;
         let direction = event.type;

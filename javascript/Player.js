@@ -453,6 +453,7 @@ class Player {
         if(Player.equipped && Player.equipped.slot == slot){
             Player.unequipWeapon();
         }
+        Player.inventory.items[slot].quickSlot = false;
         let playerEntity = EntityManager.getEntity('player');
         playerEntity.dropItem(slot);
     }

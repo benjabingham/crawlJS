@@ -40,7 +40,7 @@
 
 .inventory-slot{
     padding:4px;
-    margin:3px;
+    margin:0px 3px;
     height:31px;
     box-sizing: border-box;
     display:flex;
@@ -49,6 +49,18 @@
     border: 1px solid var(--inventoryBorder);
     /*border:1px solid gray*/
 }
+
+.inventory-between-div{
+    height:3px;
+
+    
+}
+
+.lastSlot{
+        background-color: var(--highlight);
+        height:10px;
+    }
+
 
 .inventory-slot:hover{
     cursor: pointer;

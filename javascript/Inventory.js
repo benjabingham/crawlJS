@@ -9,6 +9,7 @@ class Inventory{
     static selectedInventory = "dungeon-inventory"
     static selectedContainer = false;
     static itemPile = false;
+    static lastHoveredSlot;
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -20,9 +21,11 @@ class Inventory{
         let bagTitle = false;
         Inventory.findValidSelect();
         inventory.forEach((item) =>{
+            Inventory.addBetweenDiv(item.slot,inventoryId,item.quickSlot);
             bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
+        Inventory.addBetweenDiv(inventory.length,inventoryId);
         let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
         Inventory.displayItemInfo(displayedItem, inventoryId)
         
@@ -605,6 +608,9 @@ class Inventory{
 
     static addDragBehavior(element, item){
         element.on('mousedown',e=>{
+            if(e.originalEvent.button != 0){
+                return false;
+            }
             e.preventDefault();
             let follower = $('<div>').addClass('dragged-item follower').text(item.name)
             Display.applyColor(item, follower);
@@ -613,6 +619,12 @@ class Inventory{
                     $('body').append(
                         follower
                     )
+                    $('.inventory-between-div').on('mouseenter',function(){
+                        let slot = $(this).attr('slot');
+                        console.log(slot);
+                        $('.inventory-between-div').removeClass('lastSlot');
+                        $(this).addClass('lastSlot');
+                    })
                 }
             })
             
@@ -624,7 +636,17 @@ class Inventory{
 
     static initReleaseDragItems(){
         $(document).on('mouseup',e=>{
+            if(e.originalEvent.button != 0){
+                return false;
+            }
             $('.dragged-item').remove()
+            $('.inventory-between-div').off('mouseenter');
         })
+    }
+
+    //add divs between slots for the purpose of dragging. Slot is the slot an item will enter if dragged here.
+    static addBetweenDiv(slot, inventory, quickslot = false){
+        let betweenDiv = $('<div>').addClass('inventory-between-div').attr('id','between-div-'+slot).attr('quickslot', quickslot).attr('slot',slot)
+        $('#'+inventory+'-list').append(betweenDiv)
     }
 }

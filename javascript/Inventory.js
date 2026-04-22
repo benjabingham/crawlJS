@@ -352,9 +352,18 @@ class Inventory{
             )
         }
 
+        bagTitleElement.append(this.getRummageButton())
+
         $('#dungeon-inventory-list').append(bagTitleElement)
 
         return true
+    }
+
+    static getRummageButton(){
+        let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
+        return $('<button>').text(text).addClass('inventory-title-buttons').on('click',e=>{
+            this.toggleInventory();
+        })
     }
 
     static getSelectedItem(){
@@ -434,7 +443,7 @@ class Inventory{
         
         if(EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0){
             Inventory.selectedContainer = Inventory.itemPile;
-            $('#container-inventory-title').text("Floor");
+            $('#container-inventory-title').text("Floor").append(this.getRummageButton());
             //Inventory.selectedInventory = "container-inventory"
         }else{
             Inventory.itemPile = false;
@@ -537,7 +546,7 @@ class Inventory{
 
     static clearContainerInventory(){
         $("#container-inventory-description").html("");
-        $('#container-inventory-title').text("");
+        $('#container-inventory-title').html("");
         Inventory.selectedInventory = "dungeon-inventory"
 
     }
@@ -547,7 +556,7 @@ class Inventory{
         Inventory.selectedContainer = container;
         Inventory.selectedInventory = "container-inventory";
         Inventory.displayedInventorySlots["container-inventory"] = 0;
-        $('#container-inventory-title').text(container.name);
+        $('#container-inventory-title').text(container.name).append(this.getRummageButton());
         Inventory.displayInventory();
         this.bagOverlay();
     }

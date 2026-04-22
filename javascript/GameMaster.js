@@ -227,7 +227,7 @@ class GameMaster{
     }
 
     static inventoryOpenClose(event){
-        console.log('inventoryOpenClose');
+        //console.log('inventoryOpenClose');
         Inventory.toggleInventory();
     }
 

@@ -214,7 +214,8 @@ class Entity{
             return false;
         }
 
-        if(!this.isItemPile && itemPile.dropTurn >= Log.turnCounter){
+        //shouldnt ever matter... nonplayers cant pick up itempiles the turn they drop.
+        if(!this.isItemPile && itemPile.dropTurn >= Log.turnCounter && !isPlayer){
             return false;
         }
 

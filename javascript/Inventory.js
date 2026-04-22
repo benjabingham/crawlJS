@@ -13,6 +13,7 @@ class Inventory{
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
         let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
+        this.checkForItemPile();
         //$('#inventory-wrapper').show();
         $('#'+inventoryId+'-list').html('');
         let inventory = Player.inventory.items;
@@ -394,6 +395,7 @@ class Inventory{
     }
 
     static toggleInventory(state = null){
+        console.log('toggle '+state )
         if(state===null){
             this.playerInBag = !this.playerInBag;
         }else{
@@ -401,9 +403,6 @@ class Inventory{
         }
         if(!this.playerInBag){
             this.selectedContainer = false;
-        }else if(Inventory.itemPile && (EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0)){
-            Inventory.selectedContainer = Inventory.itemPile;
-            Inventory.selectedInventory = "container-inventory"
         }
         if(this.playerInBag && !this.selectedContainer){
 
@@ -412,6 +411,20 @@ class Inventory{
         this.bagOverlay();
         
         this.displayInventory();
+    }
+
+    static checkForItemPile(){
+        if(!Inventory.playerInBag){
+            return false;
+        }
+        //don't pull up item pile if already in another container
+        if(Inventory.selectedContainer && !Inventory.selectedContainer.isItemPile){
+            return false;
+        }
+        if(Inventory.itemPile && (EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0)){
+            Inventory.selectedContainer = Inventory.itemPile;
+            Inventory.selectedInventory = "container-inventory"
+        }
     }
 
     

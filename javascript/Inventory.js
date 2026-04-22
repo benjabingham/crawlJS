@@ -385,8 +385,9 @@ class Inventory{
             Player.inventory.items.splice(item.slot,1,slotItem)
             slotItem.quickSlot = item.quickSlot;
         }else{
-            Player.inventory.items.splice(slot,0,item)
             Player.inventory.items.splice(item.slot,1)
+            Player.inventory.items.splice(slot,0,item)
+            
         }
 
         item.quickSlot = true;
@@ -415,17 +416,21 @@ class Inventory{
     }
 
     static checkForItemPile(){
-        if(!Inventory.playerInBag){
-            return false;
+        if(!Inventory.playerInBag || !Inventory.itemPile){
+            //return false;
         }
         //don't pull up item pile if already in another container
         if(Inventory.selectedContainer && !Inventory.selectedContainer.isItemPile){
             return false;
         }
-        if(Inventory.itemPile && (EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0)){
+        
+        if(EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0){
             Inventory.selectedContainer = Inventory.itemPile;
             $('#container-inventory-title').text("Floor");
             //Inventory.selectedInventory = "container-inventory"
+        }else{
+            Inventory.itemPile = false;
+            Inventory.selectedContainer = false;
         }
     }
 

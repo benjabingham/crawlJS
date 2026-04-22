@@ -5,7 +5,6 @@ class Inventory{
     };
     static nQuickSlots = 4;
     static playerInBag = false;
-    static lastScrolledItem = 0;
     //player or container
     static selectedInventory = "dungeon-inventory"
     static selectedContainer = false;
@@ -27,6 +26,8 @@ class Inventory{
         Inventory.displayItemInfo(displayedItem, inventoryId)
         
         Inventory.displayContainerInventory();
+
+        Inventory.scrollInventories();
         
         Display.displayGold();
     }
@@ -90,11 +91,6 @@ class Inventory{
         }
 
         //scroll
-        if(itemIsSelected && Math.abs(this.lastScrolledItem - slot) > 7 ){
-            $('#'+inventory+'-list').scrollTop(element.offset().top);
-            this.lastScrolledItem = slot;
-        }
-
 
         //add buttons
         if(!available){
@@ -535,5 +531,30 @@ class Inventory{
         }else{
             $("#board").removeClass('bag-board')
         }
+    }
+
+    static scrollToItem(element, containerElement){
+        let scrollPos = element.offset().top - containerElement.offset().top;
+        containerElement.scrollTop(scrollPos);
+    }
+
+
+    static scrollInventories(){
+        Object.keys(this.displayedInventorySlots).forEach(inventory=>{
+            let container = $('#'+inventory+'-list');
+            let selectedSlot = this.displayedInventorySlots[inventory];
+            let selectedElement = $("#"+inventory+"-slot-"+selectedSlot);
+            if(!selectedElement.offset()){return false}
+            var winTop =  $('#'+inventory+'-list').offset().top;
+            var winBottom = winTop + $('#'+inventory+'-list').height();
+            var elTop = selectedElement.offset().top;
+            var elBottom = elTop + selectedElement.height();
+
+            let inView = ((elBottom<= winBottom) && (elTop >= winTop));
+
+            if(!inView){
+                this.scrollToItem(selectedElement, container)            
+            }
+        })
     }
 }

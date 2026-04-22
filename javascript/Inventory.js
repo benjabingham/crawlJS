@@ -22,8 +22,8 @@ class Inventory{
         let bagTitle = false;
         Inventory.findValidSelect();
         inventory.forEach((item) =>{
-            bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
             Inventory.addBetweenDiv(item.slot,inventoryId,item.quickSlot);
+            bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
             Inventory.addInventoryItem(item, dungeonMode, inventoryId);
         })
         Inventory.addBetweenDiv(inventory.length,inventoryId);
@@ -361,6 +361,8 @@ class Inventory{
 
         $('#dungeon-inventory-list').append(bagTitleElement)
 
+        Inventory.addBetweenDiv(item.slot,"dungeon-inventory",item.quickSlot);
+
         return true
     }
 
@@ -647,7 +649,7 @@ class Inventory{
             }
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
-            if(Inventory.draggedItem.slot && Inventory.lastHoveredSlot.inventoryId){
+            if(Inventory.lastHoveredSlot.inventoryId){
                 console.log(Inventory.draggedItem)
                 console.log(Inventory.lastHoveredSlot)
                 if(Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
@@ -666,6 +668,7 @@ class Inventory{
     }
 
     static moveItem(fromSlot, toSlot, fromInventoryId, toInventoryId){
+        console.log('moveItem');
         let transfer = {
             from:{
                 id:fromInventoryId,
@@ -684,6 +687,7 @@ class Inventory{
             }else if (location.id == "container-inventory"){
                 location.inventory = Inventory.selectedContainer.inventory.items;
             }
+            console.log(key);
             console.log(location.id)
         })
 
@@ -694,9 +698,10 @@ class Inventory{
         let item = transfer.from.inventory[fromSlot];
         let quickSlot = item.quickSlot;
         console.log(toSlot)
-        transfer.to.inventory.splice(toSlot,0,item);
-        if(fromSlot > toSlot){fromSlot++}
         transfer.from.inventory.splice(fromSlot,1);
+        if(fromSlot < toSlot && fromInventoryId == toInventoryId){toSlot--}
+        transfer.to.inventory.splice(toSlot,0,item);
+
 
         if(transfer.to.id == "dungeon-inventory" && toSlot < Inventory.nQuickSlots){
             console.log('GONNE BE QUICK')

@@ -547,8 +547,10 @@ class Inventory{
             //Log.addMessage('empty');
         }
         items.forEach((item)=>{
+            Inventory.addBetweenDiv(item.slot,'container-inventory',false)
             Inventory.addInventoryItem(item,true,"container-inventory")
         })
+        Inventory.addBetweenDiv(items.length,'container-inventory',false)
     }
 
     static clearContainerInventory(){

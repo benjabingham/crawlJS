@@ -234,6 +234,9 @@ class GameMaster{
     static inventoryOpenClose(event){
         //console.log('inventoryOpenClose');
         Inventory.toggleInventory();
+        if(Inventory.playerInBag){
+            GameMaster.postPlayerAction();
+        }
     }
 
     //function for inventory slot hotkeys

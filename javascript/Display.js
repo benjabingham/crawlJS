@@ -14,6 +14,7 @@ class Display{
         Display.customControls = GameMaster.customControls;
         Display.followerInit();
         Inventory.initReleaseDragItems();
+        Inventory.inventoryClickPreventDefault();
     }
 
     static showDungeonScreen(){

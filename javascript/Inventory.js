@@ -66,6 +66,7 @@ class Inventory{
         let quickSlot = item.quickSlot;
         let available = quickSlot || Inventory.playerInBag;
         let dropMode = inventory == "dungeon-inventory" && GameMaster.dropMode
+        let draggable = Inventory.playerInBag;
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
@@ -87,8 +88,10 @@ class Inventory{
             }).append(
                 $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
             )
+        if(draggable){
+            Inventory.addDragBehavior(element, item, inventory);
+        }
         //add item
-        Inventory.addDragBehavior(element, item, inventory);
         $('#'+inventory+'-list').append(element)
 
         Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
@@ -683,6 +686,13 @@ class Inventory{
             Inventory.lastHoveredSlot.inventoryId = false;
             Inventory.draggedItem.slot = false;
             Inventory.draggedItem.inventoryId = false;
+        })
+    }
+
+    static inventoryClickPreventDefault(){
+        $('.inventory-list').on('mousedown',e=>{
+            e.preventDefault();
+            console.log('eh')
         })
     }
 

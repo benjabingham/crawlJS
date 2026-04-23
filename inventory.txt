@@ -1,59 +1,27 @@
-UI OVERHAUL NECESSARY
+bulk
 
-UI Elements
-Top bar
-log
-board
-quickbar (will be small)
-Select Window (no longer part of quick bar?)
+items have BULK. Materials have multipliers
 
+Player has bulk capacity of 10. Items in hotbar don't count...? or count for half?
+Once over capacity, moving costs 1 stamina for every 50% over capacity
 
+materials have bulk multipliers
+hold W in inventory to see bulks?
 
-new inventory system 
+touchstone -
+    shortsword has bulk 1
+    longsword has bulk 3
+    greatsword has bulk 5
 
-everything is picked up via menus (except single-item piles)
+    thimble/bead/ring bulk 0.1
+    crown has bulk 1
 
-Remove action buttons from items - put in description instead, add specific hotkeys
-(B)urn (C)onsume (E)quip/unequip
+    paper has mult 0.1
+    normal weapon materials have mult 0
+    gold has mult 2
 
-BEG MENU
-press B to open bag
-Opens on side of screen. Movement is not possible while open.
-Navigable with numpad (8 up, 2 down) or with arrow keys.
-Press quickbar number to swap with item in that slot (1-3)
-used for piles, containers, and personal inventory.
-Items can be used as usual
+    Morsels have bulk 0.5
+    Oil flask has bulk 1
+    potions have bulk 0.5
 
-
-exit hotkey (esc?) to exit window
-
-PILES/containers
-appear over log (partially)
-Inventory is always also visible. 4,6 to navigate between inventories.
-- CONTAINERS - open menu when searching container (monsters dont take turn until after you close container)
-Each item has option TAKE, (or EAT and DRINK for relevant items). What about burn?
-"Take all" hotkey (enter?) to take all items
-
-piles - does not bring up window automatically when standing over... Introduce Search action. Hotkey S.
-Search action opens up an inventory menu for a pile you are standing on (and adjacent piles?)
-maybe just opening inventory while over a pile shows that pile...
-
-FIX QUICK MENU
-dont use slots - add new attribute to items (quick: 2,3,4). Reserve 1 for equipped item, or most recently equipped item.
-Render these items first, then render everything else.
-If there is no equipped, 2, 3, or 4, these slots can be empty.
-
-options
-    - attribute on item
-        - cons
-            - must be set / reset on pickup
-            - messes up current inventory navigation ...
-                - Unless they ALSO are placed in slots 1-4...
-        - pros
-            - can be rendered in time with everything else (just have a special div)
-    - use first 4 slots, PLUS attribute "quickbar".
-    - when gain item, check the item in slot 4. If !exists or !item.quickbar, new item.quickbar = true.
-    - when sorting player inventory, place quickbar=true items first
-             
-    - pleyer gets array of pointers
 

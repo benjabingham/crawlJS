@@ -424,6 +424,9 @@ class Player {
 
         while(Player.inventory.items.length > 0){
             let item = Player.inventory.items.shift();
+            if(!item){
+                continue;
+            }
             if(item.quickSlot && quickSlots.length < Inventory.nQuickSlots){
                 quickSlots.push(item);
             }else{

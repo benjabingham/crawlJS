@@ -514,6 +514,10 @@ class Inventory{
         if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
             Inventory.itemPile.sortInventory();
         }
+
+        if(!item.quickSlot){
+            GameMaster.postPlayerAction();
+        }
     }
 
     static findValidSelect(){
@@ -619,7 +623,10 @@ class Inventory{
             e.preventDefault();
             let follower = $('<div>').addClass('dragged-item follower').text(item.name)
             Display.applyColor(item, follower);
+            let behaviorSet = false;
             $(element).on('mousemove', function(){
+                if(behaviorSet){return false}
+                behaviorSet = true;
                 if(follower){
                     $('body').append(
                         follower
@@ -635,6 +642,13 @@ class Inventory{
                         Inventory.lastHoveredSlot.slot = slot;
                         Inventory.lastHoveredSlot.inventoryId = hoveredInventoryId;
                     })
+
+                    $('.inventory').on('mouseenter',function(){
+                        let inventoryId = $(this).attr('id')
+                        console.log(inventoryId);
+                        Inventory.lastHoveredSlot.inventoryId = inventoryId;
+                        Inventory.lastHoveredSlot.slot = Inventory.getItemsInInventory(inventoryId)
+                    })
                 }
             })
             
@@ -649,10 +663,15 @@ class Inventory{
             if(e.originalEvent.button != 0){
                 return false;
             }
+            if(!Inventory.draggedItem.inventoryId){return false}
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
-            if(Display.mouseOverBoard){
+            if(Display.mouseOverBoard && Inventory.draggedItem.inventoryId == 'dungeon-inventory'){
                 GameMaster.dropItem(Inventory.draggedItem.slot);
+                Inventory.lastHoveredSlot.inventoryId = false;
+                Inventory.draggedItem.slot = false;
+                Inventory.draggedItem.inventoryId = false;
+                return true;
             }
             if(Inventory.lastHoveredSlot.inventoryId){
                 console.log(Inventory.draggedItem)
@@ -663,6 +682,7 @@ class Inventory{
             }
             Inventory.lastHoveredSlot.inventoryId = false;
             Inventory.draggedItem.slot = false;
+            Inventory.draggedItem.inventoryId = false;
         })
     }
 
@@ -685,22 +705,34 @@ class Inventory{
             }
         }
 
+        let dropCase = false;
+
         Object.keys(transfer).forEach(key=>{
             let location = transfer[key];
             if(location.id == "dungeon-inventory"){
                 location.inventory = Player.inventory.items;
             }else if (location.id == "container-inventory"){
-                location.inventory = Inventory.selectedContainer.inventory.items;
+                if(Inventory.selectedContainer){
+                    location.inventory = Inventory.selectedContainer.inventory.items;
+                }else{
+                    console.log('dripItem');
+                    GameMaster.dropItem(fromSlot)
+                    dropCase = true;
+                }
             }
             console.log(key);
             console.log(location.id)
         })
+
+        if(dropCase){return false}
+        console.log(dropCase)
 
         if(!transfer.from.inventory || !transfer.to.inventory){
             throw new Error("inventory not found !!!");
         }
 
         let item = transfer.from.inventory[fromSlot];
+        console.log(item);
         let quickSlot = item.quickSlot;
         console.log(toSlot)
         transfer.from.inventory.splice(fromSlot,1);

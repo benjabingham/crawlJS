@@ -77,6 +77,7 @@ class Log{
         Log.messages = {};
         Log.turnCounter = 0;
         $('.turn-message').remove();
+        $('.day-counter').remove();
     }
 
     static printTurn(turn){   
@@ -159,7 +160,7 @@ class Log{
     }
 
     static printDayToLog(temp){
-        let classes = 'turn-counter'
+        let classes = 'turn-counter day-counter'
         classes += temp ? ' temp-turn-counter' : '';
         $('#log').prepend(
                 $('<div>').addClass(classes).text('Day '+ Save.day).append($('<hr>'))

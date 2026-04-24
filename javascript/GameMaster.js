@@ -43,8 +43,14 @@ class GameMaster{
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
-            {x:50,y:42}
+            {x:1,y:42}
         );
+        /*
+        GameMaster.getRoom(
+            'Abandoned Village',
+            'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
+            {x:50,y:42}
+        );*/
 
     }
 
@@ -289,17 +295,16 @@ class GameMaster{
 
     //general case use item - will work for any item.
     static useItem(event){
-        if(!GameMaster.dungeonMode){
-            return false;
+        if(GameMaster.dungeonMode){
+            let swordId = EntityManager.getProperty('player','sword')
+            EntityManager.removeEntity(swordId);
         }
-        console.log(event);
-        let swordId = EntityManager.getProperty('player','sword')
-        EntityManager.removeEntity(swordId);
+        
         let slot = parseInt(event.type.split('-')[1])-1;
         console.log(slot);
         if(GameMaster.dropMode){
             GameMaster.dropItem(slot);
-        }else if(!Player.useItem(Player.inventory.items[slot])){
+        }else if(!Player.useItem(Player.inventory.items[slot]) && GameMaster.dungeonMode){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }

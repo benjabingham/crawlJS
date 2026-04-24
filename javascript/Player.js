@@ -249,17 +249,24 @@ class Player {
         if(!item){
             return false;
         }
+
+        let dungeonMode = GameMaster.dungeonMode;
         
-        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
+        if(dungeonMode && item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            return Player.unequipWeapon();
-        }else if(item.weapon && !Player.equipped){
+        }else if(dungeonMode && item.weapon && !Player.equipped){
             return Player.equipWeapon(item);
-        }else if(item.fuel){
+        }else if(dungeonMode && item.fuel){
             return Player.addFuel(item);
         }else if(item.food){
             return Player.eatItem(item);
         }else if (item.potable){
             return Player.drinkItem(item);
+        }else if(!dungeonMode){
+            let result = Shop.sellItem(item.slot);
+            Inventory.displayInventory();
+            
+            return result;
         }
         return false;
     }

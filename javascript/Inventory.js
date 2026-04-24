@@ -66,10 +66,11 @@ class Inventory{
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let quickSlot = item.quickSlot;
-        let available = Inventory.itemIsAccessible(item);
-        let dropMode = inventory == "player-inventory" && GameMaster.dropMode && !dungeonMode
-        let shopItem = inventory=="world-inventory" && Inventory.selectedContainer.shop;
-        let draggable = Inventory.itemIsAccessible(item) && !shopItem;
+        let available = Inventory.itemIsAccessible(item, inventory);
+        let dropMode = inventory == "player-inventory" && GameMaster.dropMode && dungeonMode
+        let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
+        let draggable = available;
+        let availableStyling = available || shopItem;   
 
         let symbolsSpan = $('<span>')
         if(item.symbols){
@@ -84,7 +85,7 @@ class Inventory{
         if(!itemValue){
             itemValue = '0';
         }
-        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+available ).attr('id',inventory+'-slot-'+slot).append(
+        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+availableStyling ).attr('id',inventory+'-slot-'+slot).append(
                 quickSlot ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
@@ -783,7 +784,16 @@ class Inventory{
 
     }
 
-    static itemIsAccessible(item){
-        return (item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode;
+    static itemIsAccessible(item, inventory = false){
+        if(inventory == "world-inventory" && this.selectedContainer.shop){
+            return false;
+        }
+        console.log({
+            quickSlot:item.quickSlot,
+            inbag:Inventory.playerInBag,
+            dungeonMode:GameMaster.dungeonMode,
+            accessible:((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode)
+        })
+        return ((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode);
     }
 }

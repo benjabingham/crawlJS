@@ -236,8 +236,14 @@ class GameMaster{
 
     static inventoryOpenClose(event){
         //console.log('inventoryOpenClose');
+        if(!GameMaster.dungeonMode){
+            return false;
+        }
         Inventory.toggleInventory();
         if(Inventory.playerInBag){
+            if(Inventory.selectedContainer){
+                Inventory.selectedInventory = "world-inventory"
+            }
             GameMaster.postPlayerAction();
         }
     }
@@ -360,13 +366,15 @@ class GameMaster{
     static equipSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
-        if(Inventory.selectedInventory == 'container-inventory'){
+        
+        let result = false
+        if(Player.equipped){
+            result = Player.unequipWeapon();
+        }else if(Inventory.selectedInventory == 'container-inventory'){
             Inventory.take(item.slot);
         }
-        let result = false
-        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
-            result = Player.unequipWeapon();
-        }else if(item.weapon && !Player.equipped){
+
+        if(item.weapon && !Player.equipped && !result){
             result = Player.equipWeapon(item);
         }
 

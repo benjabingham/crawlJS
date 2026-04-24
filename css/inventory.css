@@ -175,8 +175,16 @@
 
     border-top:1px solid var(--border);
 
+    background-color:var(--inventorySlotHover);
+
     div{
         margin:5px;
+    }
+
+    .gold-div{
+       font-weight:600; 
+       flex:1;
+       text-align: right;
     }
     /*color: var(--altBackText);*/
 }

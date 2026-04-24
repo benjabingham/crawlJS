@@ -61,6 +61,7 @@ class GameMaster{
         GameMaster.dungeonMode = true;
         Log.wipeLog();
         Log.initialWarnings();
+        Inventory.toggleInventory(false)
         if(message){
             Log.addMessage(message,'urgent');
         }
@@ -217,7 +218,7 @@ class GameMaster{
 
     static stopDrop(){
         GameMaster.dropMode = false;
-        $('#drop-items-button').text('drop items');
+        $('#drop-items-button').text('Drop Items');
     }
 
     static dropItem(slot){
@@ -489,7 +490,10 @@ class GameMaster{
     }
 
 
-    static postPlayerAction(){     
+    static postPlayerAction(){ 
+        if(!GameMaster.dungeonMode){
+            return false;
+        }    
         EntityManager.placeSword('player');   
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();

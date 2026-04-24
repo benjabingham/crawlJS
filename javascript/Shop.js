@@ -28,6 +28,7 @@ class Shop{
         Shop.stockInventory();
     }
 
+//why did i do this???
     static getInventory(){
         let inventory = [];
         Shop.inventory.forEach((item)=>{
@@ -189,13 +190,14 @@ class Shop{
             return false;
         }
         Player.gold -= item.price;
-        if(slot != -1){
-            Shop.inventory[slot] = {purchased:true,tier:item.tier};
-        }
         item.fresh = false;
-        Player.inventory.items.push(item);
-        Player.inventoryCleanup();
+        Inventory.take(slot,true);
+        if(slot != -1){
+            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier})
+        }
         Shop.inventoryCleanup();
+        Player.inventoryCleanup();
+        Inventory.displayInventory();
     }
 
     static sellItem(slot){

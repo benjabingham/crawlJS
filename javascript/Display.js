@@ -20,6 +20,7 @@ class Display{
     static showDungeonScreen(){
         $('#world-inventory').show();
         $('#side-menu').hide();
+        $('#drop-items-button').show();
         console.log('showDungeonScreen');
         Display.fillBars(Player);
         $('#board').show();
@@ -35,27 +36,27 @@ class Display{
         $('#game-window').hide();
         $('#home-screen').show();
 
-        Display.populateLocations();
+        Town.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
         Display.scrollToTop();
     }
 
     static showTownScreen(){
-        $('#town-screen').show();
-        $('#board').hide();
-        $('#day-div').text('Day '+Save.day);
-
-        Display.populateLocations();
-        Inventory.displayInventory(false);
-        Display.displayShop();
-        Display.restButton();
-        Display.fillBars(Player);
-        Display.nourishmentDiv(Player);
-        Display.scrollToTop();
+        Town.showTownScreen();
     }
 
-    
+    static setHintText(element, hintText){
+        element.on('mouseenter',()=>{
+            $('.hint-divs').text(hintText)
+        }).on('mouseleave',()=>{
+            $('.hint-divs').html('');
+        })
+    }
+
+    static displayGold(){
+        $('.gold-div').text(Player.gold+" gold");
+    }
 
     static scrollToTop(){
         document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -328,57 +329,6 @@ class Display{
 
         Display.highlightedCells = [];
     }
-    
-    static nourishmentDiv(){
-        let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
-        let display = this;
-        //$('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
-
-        let meals = [
-            {
-                name:'Morsel',
-                cost:1,
-                item: itemVars.food.morsel
-            },
-            {name:'Proper Meal',cost:6,nourishment:100},
-        ]
-
-        $('#meals-div').html('');
-
-        meals.forEach((meal)=>{
-            let button = $('<button>');
-            button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                if(Player.gold >= meal.cost){
-                    if(meal.item){
-                        if(Player.inventory.items.length < Player.inventory.slots){
-                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                            Player.pickUpItem(itemCopy);
-                        }else{
-                            Player.changeNourishment(item.food);
-                        }
-                    }else{
-                        Player.changeNourishment(meal.nourishment);
-                    }
-                    Player.gold-= meal.cost;
-                    display.nourishmentDiv();
-                    display.displayGold();
-                    Inventory.displayInventory(false);
-                }
-            })
-            if(!meal.item){
-                Display.setHintText(button,"Fully refils your hunger bar")
-                button.on('mouseenter',()=>{
-                    $('#hunger-level').css('width',"150px").addClass('preview');
-                    $('#hunger-level').text(Player.nourishmentMax+"/"+Player.nourishmentMax);                    
-                }).on('mouseleave',()=>{
-                    $('#hunger-level').removeClass('preview');
-                    Display.fillBars();
-                })  
-            }
-             
-            $('#meals-div').append(button)
-        })
-    }
 
     static exertionDiv(){
         let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
@@ -407,101 +357,8 @@ class Display{
         Display.exertionDiv();
 
     }
-    
-    static populateLocations(){
-        $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs']
-        maps.forEach((element) =>{
-            $('#travel-locations-div').append(
-                $("<div>").addClass('location-divs').append(
-                    $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element)
-                    })
-                )
-            )
-        })
-    }
-
-    static getRestHintText(restInfo){
-        if(!restInfo){
-            restInfo = Player.getRestInfo();
-        }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
-
-        return hintText;
-    }
-
-    static previewRestBars(restInfo){
-        console.log(restInfo);
-        let newHealth = Player.health+restInfo.healthChange
-        let newLuck = Math.min(Player.luck+0.5,Player.luckMax)
-        let newHunger = Player.nourishment+restInfo.nourishmentChange
-        let healthPercent = Math.floor(newHealth/Player.healthMax*100);
-        let luckPercent = Math.floor(newLuck/Player.luckMax*100);
-        let hungerPercent = Math.floor(newHunger/Player.nourishmentMax*100);
-        console.log(healthPercent)
-
-        $('#health-level').css('width',healthPercent*1.5+"px").addClass('preview');
-        $('#health-level').text(newHealth+"/"+Player.healthMax);
-
-        $('#luck-level').css('width',luckPercent*1.5+"px").addClass('preview');
-        $('#luck-level').text(newLuck+"/"+Player.luckMax);
-
-        $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
-        $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
-
-        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
-    }
-
-    static restButton(){
-        let restButton = $('#rest-button')
-        restButton.off().on('click',()=>{
-            GameMaster.nextDay();
-            GameMaster.loadTown();
-            $('.hint-divs').text(Display.getRestHintText());
-        })
-        
-        restButton.on('mouseenter',()=>{
-            let restInfo = Player.getRestInfo();
-            let hintText = Display.getRestHintText(restInfo);
-            Display.previewRestBars(restInfo);
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-            Display.fillBars();
-            Display.exertionDiv();
-            $('#exertion-level-div').removeClass('preview');
-            $('#health-level').removeClass('preview');
-
-            $('#luck-level').removeClass('preview');
-
-            $('#hunger-level').removeClass('preview');
-        })   
-    }
-
-    static setHintText(element, hintText){
-        element.on('mouseenter',()=>{
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-        })
-    }
 
     
-
-    static displayShop(){
-        $('#shop-wrapper').show();
-        $('#shop-list').html('');
-        let inventory = Shop.getInventory();
-        inventory.forEach((item) =>{
-            Inventory.addInventoryItem(item, false, 'shop');
-        })
-        Display.displayGold();
-    }
-
-    static displayGold(){
-        $('.gold-div').text(Player.gold+" gold");
-    }
 
     
     static getSymbolHintText(symbol){

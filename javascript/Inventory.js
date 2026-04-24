@@ -23,7 +23,7 @@ class Inventory{
         inventory.forEach((item) =>{
             Inventory.addBetweenDiv(item.slot,"player-inventory",item.quickSlot);
             bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
-            Inventory.addInventoryItem(item, dungeonMode, "player-inventory");
+            Inventory.addInventoryItem(item, "player-inventory");
         })
         Inventory.addBetweenDiv(inventory.length,"player-inventory");
         let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots["player-inventory"]]
@@ -54,18 +54,24 @@ class Inventory{
         
     }
 
-    static addInventoryItem(item, dungeonMode, inventory){
+    static addInventoryItem(item, inventory){
+        if(item.purchased){
+            return false;
+        }
+        let dungeonMode = GameMaster.dungeonMode;
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
         let primed = inventory == "player-inventory" && Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
-        let symbolsSpan = $('<span>')
         let quickSlot = item.quickSlot;
         let available = Inventory.itemIsAccessible(item);
-        let dropMode = inventory == "player-inventory" && GameMaster.dropMode
-        let draggable = Inventory.itemIsAccessible(item);
+        let dropMode = inventory == "player-inventory" && GameMaster.dropMode && !dungeonMode
+        let shopItem = inventory=="world-inventory" && Inventory.selectedContainer.shop;
+        let draggable = Inventory.itemIsAccessible(item) && !shopItem;
+
+        let symbolsSpan = $('<span>')
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
@@ -79,7 +85,7 @@ class Inventory{
             itemValue = '0';
         }
         let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+available ).attr('id',inventory+'-slot-'+slot).append(
-                (inventory != 'shop') && quickSlot ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
+                quickSlot ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
             ).on('click',function(){
@@ -101,14 +107,12 @@ class Inventory{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
-        //scroll
-
         //add buttons
         if(!available){
             return;
         }
 
-        if(inventory == "world-inventory"){
+        if(inventory == "world-inventory" && !shopItem){
             element.append(
                 $('<button>').addClass('item-button').text('take').on('click',function(){
                     Inventory.take(slot);
@@ -128,7 +132,7 @@ class Inventory{
             return;
         }
 
-        if(item.usable){
+        if(item.usable && !shopItem){
             let button;
             if(item.food && !itemIsEquipped){
                 button = $('<button>').addClass('item-button').text('eat').on('click',function(){
@@ -172,20 +176,20 @@ class Inventory{
                     button
                 )
             }
-        }else if (inventory != 'shop'){
+        }else if (!shopItem){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
                     Shop.sellItem(slot);
-                    Display.displayShop();
-                    Inventory.displayInventory(false);
+                    //Display.displayShop();
+                    Inventory.displayInventory();
                 })
             )
-        }else if(inventory == 'shop'){
+        }else if(shopItem){
             $('#'+inventory+'-item-buttons-'+slot).append(
                 $('<button>').addClass('item-button').text('buy - '+item.price).on('click',function(){
                     Shop.buyItem(slot);
-                    Display.displayShop();
-                    Inventory.displayInventory(false);
+                    //Display.displayShop();
+                    Inventory.displayInventory();
                 })
             )
         }
@@ -369,6 +373,9 @@ class Inventory{
     }
 
     static getRummageButton(){
+        if(!GameMaster.dungeonMode){
+            return false;
+        }
         let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
         return $('<button>').text(text).addClass('inventory-title-buttons').on('click',e=>{
             this.toggleInventory();
@@ -525,9 +532,11 @@ class Inventory{
     }
 
     //player takes item from container/pile
-    static take(slot, skipPostAction = false){
+    static take(slot, skipPostAction = false, removeItem = true){
         let item = Inventory.selectedContainer.inventory.items[slot];
-        Inventory.selectedContainer.inventory.items.splice(slot, 1)
+        if(removeItem){
+            Inventory.selectedContainer.inventory.items.splice(slot, 1)
+        }
         Player.pickUpItem(item);
 
         if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
@@ -572,7 +581,7 @@ class Inventory{
         }
         items.forEach((item)=>{
             Inventory.addBetweenDiv(item.slot,'world-inventory',false)
-            Inventory.addInventoryItem(item,true,"world-inventory")
+            Inventory.addInventoryItem(item,"world-inventory")
         })
         Inventory.addBetweenDiv(items.length,'world-inventory',false)
     }
@@ -775,6 +784,6 @@ class Inventory{
     }
 
     static itemIsAccessible(item){
-        return item.quickSlot || Inventory.playerInBag;
+        return (item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode;
     }
 }

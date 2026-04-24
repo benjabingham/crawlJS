@@ -531,7 +531,7 @@ class Inventory{
     }
 
     //player takes item from container/pile
-    static take(slot){
+    static take(slot, skipPostAction = false){
         let item = Inventory.selectedContainer.inventory.items[slot];
         Inventory.selectedContainer.inventory.items.splice(slot, 1)
         Player.pickUpItem(item);
@@ -540,7 +540,7 @@ class Inventory{
             Inventory.itemPile.sortInventory();
         }
 
-        if(!item.quickSlot){
+        if(!item.quickSlot && !skipPostAction){
             GameMaster.postPlayerAction();
         }
     }

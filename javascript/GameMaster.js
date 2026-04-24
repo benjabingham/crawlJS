@@ -311,6 +311,9 @@ class GameMaster{
     static consumeSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
+        if(Inventory.selectedInventory == 'container-inventory'){
+            Inventory.take(item.slot);
+        }
         let result = false
         if(item.food){
             result = Player.eatItem(item);
@@ -332,6 +335,9 @@ class GameMaster{
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
+        if(Inventory.selectedInventory == 'container-inventory'){
+            Inventory.take(item.slot);
+        }
         let result = false
         if(item.fuel){
             result = Player.addFuel(item);
@@ -351,6 +357,9 @@ class GameMaster{
     static equipSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
+        if(Inventory.selectedInventory == 'container-inventory'){
+            Inventory.take(item.slot);
+        }
         let result = false
         if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
             result = Player.unequipWeapon();

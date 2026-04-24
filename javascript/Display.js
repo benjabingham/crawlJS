@@ -150,6 +150,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
+                entityDiv.html('');
                 gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
                 entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
@@ -214,7 +215,10 @@ class Display{
                     gridDiv.addClass('grid-dark')
                 }
                 while(symbol.length < 2) symbol += ' ';
-                entityDiv.text(symbol)       
+                //entityDiv.text(symbol)
+                entityDiv.append(
+                    $('<text>').text(symbol)
+                )  
             }
         }
         Display.applyHighlights();

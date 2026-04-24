@@ -64,9 +64,9 @@ class Inventory{
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let symbolsSpan = $('<span>')
         let quickSlot = item.quickSlot;
-        let available = quickSlot || Inventory.playerInBag;
+        let available = Inventory.itemIsAccessible(item);
         let dropMode = inventory == "dungeon-inventory" && GameMaster.dropMode
-        let draggable = Inventory.playerInBag;
+        let draggable = Inventory.itemIsAccessible(item);
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
@@ -84,6 +84,8 @@ class Inventory{
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
             ).on('click',function(){
+                Inventory.displayedInventorySlots[inventory] = item.slot;
+                Inventory.selectedInventory = inventory;
                 Inventory.displayItemInfo(item, inventory);
             }).append(
                 $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
@@ -195,9 +197,7 @@ class Inventory{
             $('#'+inventory+'-description').html('')
             return false;
         }
-        if(inventory != 'shop' && inventory != "container-inventory"){
-            Inventory.displayedInventorySlots[inventory] = item.slot;
-        }
+        
         let itemValue = item.value;
         if(!itemValue){
             itemValue = '0';
@@ -395,7 +395,6 @@ class Inventory{
         if(!item){
             item = Inventory.getSelectedItem();
         }
-        console.log(item.name)
         let slotItem = Player.inventory.items[slot];
 
         if(Inventory.selectedInventory == 'container-inventory'){
@@ -403,10 +402,6 @@ class Inventory{
             Player.inventoryCleanup();
         }
         //swap if slotitem is quickslot. Otherwise just insert.
-        console.log({
-            slot:slot,
-            item:item,
-        })
         if(slotItem && slotItem.quickSlot){
             Player.inventory.items.splice(slot,1,item)
             Player.inventory.items.splice(item.slot,1,slotItem)
@@ -446,7 +441,6 @@ class Inventory{
     }
 
     static toggleInventory(state = null){
-        console.log('toggle '+state )
         if(state===null){
             this.playerInBag = !this.playerInBag;
         }else{
@@ -650,6 +644,7 @@ class Inventory{
             Display.applyColor(item, follower);
             let behaviorSet = false;
             $(element).on('mousemove', function(){
+                $(element).off('mousemove');
                 if(behaviorSet){return false}
                 behaviorSet = true;
                 if(follower){
@@ -661,7 +656,6 @@ class Inventory{
                     $('.inventory-between-div').off('mouseenter').on('mouseenter',function(){
                         let slot = parseInt($(this).attr('slot'));
                         let hoveredInventoryId = $(this).attr('inventoryId');
-                        console.log(slot);
                         $('.inventory-between-div').removeClass('lastSlot');
                         $(this).addClass('lastSlot');
                         Inventory.lastHoveredSlot.slot = slot;
@@ -670,7 +664,6 @@ class Inventory{
 
                     $('.inventory').on('mouseenter',function(){
                         let inventoryId = $(this).attr('id')
-                        console.log(inventoryId);
                         Inventory.lastHoveredSlot.inventoryId = inventoryId;
                         Inventory.lastHoveredSlot.slot = Inventory.getItemsInInventory(inventoryId)
                     })
@@ -699,8 +692,6 @@ class Inventory{
                 return true;
             }
             if(Inventory.lastHoveredSlot.inventoryId){
-                console.log(Inventory.draggedItem)
-                console.log(Inventory.lastHoveredSlot)
                 if(Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
                     GameMaster.postPlayerAction();
                 }
@@ -714,7 +705,6 @@ class Inventory{
     static inventoryClickPreventDefault(){
         $('.inventory-list').on('mousedown',e=>{
             e.preventDefault();
-            console.log('eh')
         })
     }
 
@@ -725,7 +715,6 @@ class Inventory{
     }
 
     static moveItem(fromSlot, toSlot, fromInventoryId, toInventoryId){
-        console.log('moveItem');
         let transfer = {
             from:{
                 id:fromInventoryId,
@@ -747,33 +736,26 @@ class Inventory{
                 if(Inventory.selectedContainer){
                     location.inventory = Inventory.selectedContainer.inventory.items;
                 }else{
-                    console.log('dripItem');
                     GameMaster.dropItem(fromSlot)
                     dropCase = true;
                 }
             }
-            console.log(key);
-            console.log(location.id)
         })
 
         if(dropCase){return false}
-        console.log(dropCase)
 
         if(!transfer.from.inventory || !transfer.to.inventory){
             throw new Error("inventory not found !!!");
         }
 
         let item = transfer.from.inventory[fromSlot];
-        console.log(item);
         let quickSlot = item.quickSlot;
-        console.log(toSlot)
         transfer.from.inventory.splice(fromSlot,1);
         if(fromSlot < toSlot && fromInventoryId == toInventoryId){toSlot--}
         transfer.to.inventory.splice(toSlot,0,item);
 
 
         if(transfer.to.id == "dungeon-inventory" && toSlot < Inventory.nQuickSlots){
-            console.log('GONNE BE QUICK')
             item.quickSlot = true;
         }else{
             item.quickSlot = false

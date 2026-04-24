@@ -505,6 +505,8 @@ class GameMaster{
 
     static postPlayerAction(){ 
         if(!GameMaster.dungeonMode){
+            Log.turnCounter++;
+            Log.printLog();  
             return false;
         }    
         EntityManager.placeSword('player');   

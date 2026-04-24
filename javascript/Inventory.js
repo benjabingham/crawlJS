@@ -754,7 +754,6 @@ class Inventory{
     }
 
     static addButtons(slot,inventory,buttons){
-        console.log(buttons)
         let buttonOrder = ['equip','unequip','burn','eat','drink','take','drop','buy','sell'];
         buttonOrder.forEach(buttonName=>{
             if(buttons[buttonName]){

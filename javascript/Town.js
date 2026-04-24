@@ -12,6 +12,9 @@ class Town{
         Display.fillBars(Player);
         Town.nourishmentDiv(Player);
         Display.scrollToTop();
+
+        Log.wipeLog();
+        GameMaster.postPlayerAction();
     }
 
     static showShop(){
@@ -34,6 +37,7 @@ class Town{
             let button = $('<button>');
             button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
                 if(Player.gold >= meal.cost){
+                    let oldNourishment = Player.nourishment
                     if(meal.item){
                         if(Player.inventory.items.length < Player.inventory.slots){
                             let itemCopy = JSON.parse(JSON.stringify(meal.item));
@@ -44,10 +48,17 @@ class Town{
                     }else{
                         Player.changeNourishment(meal.nourishment);
                     }
+                    let nourishmentGained = Player.nourishment - oldNourishment;
                     Player.gold-= meal.cost;
-                    Display.nourishmentDiv();
+                    Town.nourishmentDiv();
                     Display.displayGold();
                     Inventory.displayInventory(false);
+
+                    Log.addMessage("Purchased "+meal.name+" for "+meal.cost+" gold.")
+                    if(nourishmentGained > 0){
+                        Log.addMessage("Gained "+nourishmentGained+" hunger.", 'pos') 
+                    }
+                    GameMaster.postPlayerAction()
                 }
             })
             if(!meal.item){
@@ -113,8 +124,22 @@ class Town{
     static restButton(){
         let restButton = $('#rest-button')
         restButton.off().on('click',()=>{
+            let restInfo = Player.getRestInfo();
             GameMaster.nextDay();
-            GameMaster.loadTown();
+            $('#day-div').text('Day '+Save.day);
+            //GameMaster.loadTown();
+            //Inventory.displayInventory();
+            Shop.restockInventory();
+            Log.addMessage('You rested. It is now day '+Save.day+".")
+            if(restInfo.healthChange > 0){
+                Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
+            }
+            if(restInfo.nourishmentChange < 0){
+                Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
+            }
+            Log.addMessage('You are now well rested.','pos')
+
+            GameMaster.postPlayerAction();
             $('.hint-divs').text(Town.getRestHintText());
         })
         

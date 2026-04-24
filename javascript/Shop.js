@@ -198,6 +198,8 @@ class Shop{
         Shop.inventoryCleanup();
         Player.inventoryCleanup();
         Inventory.displayInventory();
+        Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
+        GameMaster.postPlayerAction()
     }
 
     static sellItem(slot){
@@ -205,6 +207,8 @@ class Shop{
         Player.inventory.items[slot] = false;
         Player.gold += item.value;
         Player.inventoryCleanup();
+        Log.addMessage("sold "+item.name+" for "+item.value+" gold.")
+        GameMaster.postPlayerAction()
     }
 
 }

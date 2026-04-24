@@ -88,7 +88,11 @@ class Player {
     static getRestInfo(){
         let healthChange = Player.nourishmentLevel;
         let oldHealth = Player.health;
-        let newHealth = Math.min(oldHealth+healthChange,Player.healthMax)
+        if(healthChange + oldHealth > Player.healthMax){
+            let excess = (healthChange + oldHealth) - Player.healthMax
+            healthChange -= excess
+        }
+        let newHealth = oldHealth+healthChange
 
         let nourishmentChange = (newHealth - oldHealth)*-1;
         nourishmentChange -=3;
@@ -208,7 +212,7 @@ class Player {
         */
         if(Player.nourishment < 0){
             Player.changeHealth((Player.nourishment));
-            Log.addMessage('You are starving.', 'urgent');
+            Log.addMessage('You are starving! ' + Player.nourishment +" health!", 'urgent');
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
@@ -265,7 +269,7 @@ class Player {
         }else if(!dungeonMode){
             let result = Shop.sellItem(item.slot);
             Inventory.displayInventory();
-            
+
             return result;
         }
         return false;

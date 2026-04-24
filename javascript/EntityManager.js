@@ -311,6 +311,10 @@ class EntityManager{
                 if(entitySave.alive){
                     entityObj = new Container(groupInfo.key,x,y,groupInfo);
                 }
+            }else if(groupInfo.entityType == 'itemPile'){
+                if(entitySave.alive){
+                    entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
+                }
             }
             if(entityObj){
                 entityObj.index = entitySave.index;
@@ -464,6 +468,7 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
+            //if entity was spawned, return it and its items to its spawner
             if(typeof entity.spawnerID != 'undefined' ){
                 if ((entity.dead && !entity.reconstitute) || entity.obliterated){
                     delete EntityManager.entities[key];
@@ -474,7 +479,7 @@ class EntityManager{
                         spawner.returnContainedEntity(entity);
                         spawnerSave = EntityManager.currentMap.roster[spawner.index];
                     }
-                    //if spawner was spawned, don't bother
+                    //if spawner was itself spawned, don't bother
                     if(spawnerSave && !spawnerSave.spawnerID && !spawner.spawnEntities.items){
                         spawnerSave.inventory.items = spawner.inventory.items;
                         spawnerSave.inventory.gold = spawner.inventory.gold;
@@ -482,7 +487,6 @@ class EntityManager{
                     }
                    
                 }
-                
             }else if(typeof entity.index != 'undefined'){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
@@ -491,6 +495,20 @@ class EntityManager{
                     entitySave.containedEntities = entity.containedEntities;
                 }
 
+            }else if(entity.isItemPile && !entity.obliterated){
+                let entitySave = {
+                    alive:true,
+                    entityGroupId:-1,
+                    entityGroupInfo:{
+                        id:-1,
+                        entityType:"itemPile"
+                    },
+                    index:EntityManager.currentMap.roster.length,
+                    inventory:entity.inventory,
+                    x:entity.x,
+                    y:entity.y
+                }
+                EntityManager.currentMap.roster.push(entitySave);
             }
         }
     }

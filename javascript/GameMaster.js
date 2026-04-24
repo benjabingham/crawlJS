@@ -3,9 +3,11 @@ class GameMaster{
     static dungeonId = 0;
     static quickStartMode = true;
     static dungeonMode = false;
+    static currentTown;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
+        GameMaster.currentTown = mapVars['Sundun'];
         Shop.shopInit();
         Display.displayInit();
     }

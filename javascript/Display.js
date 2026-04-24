@@ -19,11 +19,9 @@ class Display{
 
     static showDungeonScreen(){
         console.log('showDungeonScreen');
-        Display.hideAllScreens();
-        $('#hud-div').show();
         Display.fillBars(Player);
-        $('#dungeon-screen').show();
-        $('#town-hint-div').hide().html('');
+        $('#board').show();
+        $('#town-screen').hide();
         Display.boardDisplayInit();
         Inventory.displayInventory(true);
         Display.scrollToTop();
@@ -32,8 +30,9 @@ class Display{
     }
 
     static showHomeScreen(){
-        Display.hideAllScreens();
+        $('#game-window').hide();
         $('#home-screen').show();
+
         Display.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
@@ -41,12 +40,8 @@ class Display{
     }
 
     static showTownScreen(){
-        Display.hideAllScreens();
-        $('#hud-div').show();
         $('#town-screen').show();
         $('#day-div').text('Day '+Save.day);
-        $('#town-inventory-wrapper').show();
-        $('#town-hint-div').show().html('');
 
         Display.populateLocations();
         Inventory.displayInventory(false);
@@ -57,13 +52,7 @@ class Display{
         Display.scrollToTop();
     }
 
-    static hideAllScreens(){
-        $('#town-screen').hide();
-        $('#town-inventory-wrapper').hide();
-        $('#home-screen').hide();
-        $('#dungeon-screen').hide();
-        Display.scrollToTop();
-    }
+    
 
     static scrollToTop(){
         document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -72,6 +61,9 @@ class Display{
     static giveSaveButtonsBehavior(){
         $('#new-save-button').off().on('click',function(){
             Save.newSave();
+            $('#game-window').show();
+            $('#hud-div').show();
+            $('#home-screen').hide();
             if(GameMaster.quickStartMode){
                 GameMaster.quickStart();
             }else{

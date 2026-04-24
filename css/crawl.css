@@ -3,6 +3,27 @@ html{
     color: var(--altBackText);
 }
 
+#game-window{
+    /*background-color: var(--floor);*/
+    color: var(--defaultEntity);
+    display:flex;
+    margin:auto;
+    width:fit-content;
+    display:block;
+    /*height:510px;*/
+}
+
+#main-content{
+    display:flex;
+    height:730px;
+}
+
+#mid-content{
+    display: flex;
+    flex-direction: column;
+    margin:0 1rem;
+}
+
 #instructions-div{
     width:875px;
     margin:auto;

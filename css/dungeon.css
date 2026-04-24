@@ -2,16 +2,6 @@
     display:none;
 }
 
-
-#game-window{
-    /*background-color: var(--floor);*/
-    color: var(--defaultEntity);
-    display:flex;
-    margin:auto;
-    width:fit-content;
-    height:510px;
-}
-
 #board:focus{
     border:none;
 }

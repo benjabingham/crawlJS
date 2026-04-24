@@ -2,10 +2,10 @@
     border:1px solid gray;
     /*width:385px;*/
     width:510px;
-    height:200px;
-    margin:auto auto;
+    margin-top:1rem;
     background-color: var(--floor);
     color: var(--defaultEntity);
+    flex:1;
 }
 
 #log-title{

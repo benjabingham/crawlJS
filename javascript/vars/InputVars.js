@@ -27,7 +27,13 @@ inputVars = {
         {inputName:'drop', inputKey:'KeyD', drop:true},
         {inputName:'rewind', inputKey:'Backspace', rewind:true}, 
         
-        {inputName:'inventory', inputKey:'Tab', inventory:true}
+        {inputName:'inventory', inputKey:'Tab', inventory:true},
+
+        {inputName:'consume', inputKey:'KeyC', consume:true},
+        {inputName:'equip', inputKey:'KeyE', equip:true},
+        {inputName:'burn', inputKey:'KeyB', burn:true},
+        {inputName:'show-weights', inputKey:'KeyW', showWeights:true},
+        {inputName:'quick-toggle', inputKey:'KeyQ', quickToggle:true},
     ],
     noNumpad:[
         {inputName:'upleft', inputKey:'KeyI', movePlayer:true},

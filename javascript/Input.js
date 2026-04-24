@@ -55,6 +55,7 @@ class InputManager{
         })*/
 
         inputVars.numpad.forEach((input)=>{
+            console.log(input)
             $(document).bind(input.inputName,function(event){
                 InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
@@ -66,6 +67,12 @@ class InputManager{
                 if(input.drop) GameMaster.drop(event);
                 if(input.rewind) GameMaster.rewind(event);
                 if(input.inventory) GameMaster.inventoryOpenClose(event);
+
+                if(input.consume) GameMaster.consumeSelectedItem(event);
+                if(input.equip) GameMaster.equipSelectedItem(event);
+                if(input.burn) GameMaster.burnSelectedItem(event);
+                if(input.quickToggle) GameMaster.quickToggle(event);
+                //if(input.show-weights)
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })
@@ -94,6 +101,7 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
+        console.log(InputManager.inputs)
         if($(':focus').is('input')){
             return;
         }
@@ -101,10 +109,14 @@ class InputManager{
         newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
         //console.log(inputCode);
-        let theInput = InputManager.inputs.find((input) => input.hasKey(inputCode));
+        let theInputs = InputManager.inputs.filter((input) => input.hasKey(inputCode));
         //console.log(theInput);
-        if(theInput){
-            theInput.onInput();
-        }
+        theInputs.forEach(input=>{
+            if(input){
+                console.log(input)
+                input.onInput();
+            }
+        })
+        
     }
 }

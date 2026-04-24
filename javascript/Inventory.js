@@ -423,6 +423,28 @@ class Inventory{
         return true;
     }
 
+    //selected item becomes quickslot
+    static quickToggle(){
+        if(Inventory.selectedInventory != 'dungeon-inventory'){
+            return false;
+        }
+
+        let item = Inventory.getSelectedItem();
+
+        if(item.quickSlot){
+            item.quickSlot = false;
+            return true
+        }
+
+        //if full of quickslots, remove item in highest slot
+        if(Player.inventory.items[Inventory.nQuickSlots-1].quickSlot){
+            Player.inventory.items[Inventory.nQuickSlots-1].quickSlot = false;
+        }
+        item.quickSlot = true;
+
+        return true;
+    }
+
     static toggleInventory(state = null){
         console.log('toggle '+state )
         if(state===null){
@@ -767,5 +789,9 @@ class Inventory{
             return false;
         }
 
+    }
+
+    static itemIsAccessible(item){
+        return item.quickSlot || Inventory.playerInBag;
     }
 }

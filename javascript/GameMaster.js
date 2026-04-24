@@ -14,7 +14,7 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         
-        starterWeapon = LootManager.getStarterWeapon();
+        starterWeapon = LootManager.getFoodLoot();
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
@@ -307,6 +307,75 @@ class GameMaster{
 
         GameMaster.postPlayerAction();
     }
+
+    static consumeSelectedItem(event){
+        let item = Inventory.getSelectedItem();
+        if(!Inventory.itemIsAccessible(item)){return false}
+        let result = false
+        if(item.food){
+            result = Player.eatItem(item);
+        }else if (item.potable){
+            result = Player.drinkItem(item);
+        }
+
+        if(!result){
+            return false;
+        }
+
+        if(GameMaster.dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+
+        return result;
+    }
+
+    static burnSelectedItem(event){
+        let item = Inventory.getSelectedItem();
+        if(!Inventory.itemIsAccessible(item)){return false}
+        let result = false
+        if(item.fuel){
+            result = Player.addFuel(item);
+        }
+
+        if(!result){
+            return false;
+        }
+
+        if(GameMaster.dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+
+        return result;
+    }
+
+    static equipSelectedItem(event){
+        let item = Inventory.getSelectedItem();
+        if(!Inventory.itemIsAccessible(item)){return false}
+        let result = false
+        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
+            result = Player.unequipWeapon();
+        }else if(item.weapon && !Player.equipped){
+            result = Player.equipWeapon(item);
+        }
+
+        if(!result){
+            return false;
+        }
+
+        if(GameMaster.dungeonMode){
+            GameMaster.postPlayerAction();
+        }
+
+        return result;
+    }
+
+    static quickToggle(event){
+        if(!Inventory.playerInBag){return false}
+        if(Inventory.quickToggle()){
+            GameMaster.postPlayerAction();
+        }
+    }
+
 
     static eatItem(event, dungeonMode=true){
         let slot = parseInt(event.type.split('-')[1])-1;

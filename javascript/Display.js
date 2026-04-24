@@ -18,6 +18,8 @@ class Display{
     }
 
     static showDungeonScreen(){
+        $('#world-inventory').show();
+        $('#side-menu').hide();
         console.log('showDungeonScreen');
         Display.fillBars(Player);
         $('#board').show();
@@ -41,6 +43,7 @@ class Display{
 
     static showTownScreen(){
         $('#town-screen').show();
+        $('#board').hide();
         $('#day-div').text('Day '+Save.day);
 
         Display.populateLocations();
@@ -329,7 +332,7 @@ class Display{
     static nourishmentDiv(){
         let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
         let display = this;
-        $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
+        //$('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
 
         let meals = [
             {

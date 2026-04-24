@@ -22,6 +22,7 @@ html{
     display: flex;
     flex-direction: column;
     margin:0 1rem;
+    width:510px;
 }
 
 #instructions-div{
@@ -143,4 +144,8 @@ h1, h2, h3{
 
 .follower{
     position:absolute;
+}
+
+#side-menu{
+    visibility: hidden;
 }

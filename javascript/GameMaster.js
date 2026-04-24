@@ -41,7 +41,7 @@ class GameMaster{
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
-            {x:41,y:43}
+            {x:1,y:1}
         );
 
     }

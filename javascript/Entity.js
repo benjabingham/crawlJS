@@ -278,7 +278,6 @@ class Entity{
         this.inventory.gold = 0;
     }
 
-    //DEPRECATING... REPLACING WITH OPENCONTAINERINVENTORY
     lootContainer(container){
         let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(!isPlayer){
@@ -287,6 +286,10 @@ class Entity{
         Log.addMessage('you search the '+container.name+'...',false,false,false,container.id)
         let searchedTurn = container.searchedTurn;
         container.searchedTurn = Log.turnCounter;
+        console.log({
+            oldSearchTurn:searchedTurn,
+            newSearchTurn:container.searchedTurn
+        })
 
         //triggers a map-wide transform
         if(container.triggerTransform){
@@ -297,6 +300,17 @@ class Entity{
             return false;
         }
 
+        let foundGold = false;
+
+        if(this.pickUpGold(container.inventory.gold)){
+            container.inventory.gold = 0;
+            let roster = EntityManager.currentMap.roster;
+            if(roster[container.index]){
+                roster[container.index].inventory.gold = 0;
+                foundGold = true
+            }
+        };
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
@@ -304,7 +318,9 @@ class Entity{
         }else if (!container.inventory.items.length && !container.inventory.gold){
             //you can access an empty container by searching it two turns in a row
             if(searchedTurn != Log.turnCounter-1){
-                Log.addMessage("nothing. (Search again to store items)")
+                if(!foundGold){
+                    Log.addMessage("nothing. (Search again to store items)")
+                }
                 return false;
             }
         }
@@ -314,13 +330,7 @@ class Entity{
 
         Inventory.openContainerInventory(container);
         
-        if(this.pickUpGold(container.inventory.gold)){
-            container.inventory.gold = 0;
-            let roster = EntityManager.currentMap.roster;
-            if(roster[container.index]){
-                roster[container.index].inventory.gold = 0;
-            }
-        };
+        
         
     }
 

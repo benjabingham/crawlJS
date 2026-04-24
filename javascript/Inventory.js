@@ -109,7 +109,7 @@ class Inventory{
         }
 
         //add buttons
-        if(!available){
+        if(!available && !shopItem){
             return;
         }
 
@@ -574,7 +574,8 @@ class Inventory{
             if (!container.isItemPile){
                 //should containers close when empty?
                 //this.toggleInventory(false);
-            }else if (this.selectedInventory != "player-inventory"){
+            }
+            if (this.selectedInventory != "player-inventory"){
                 this.selectedInventory = "player-inventory";
                 this.displayInventory();
             }
@@ -788,12 +789,6 @@ class Inventory{
         if(inventory == "world-inventory" && this.selectedContainer.shop){
             return false;
         }
-        console.log({
-            quickSlot:item.quickSlot,
-            inbag:Inventory.playerInBag,
-            dungeonMode:GameMaster.dungeonMode,
-            accessible:((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode)
-        })
         return ((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode);
     }
 }

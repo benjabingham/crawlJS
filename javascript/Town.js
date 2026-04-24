@@ -60,6 +60,9 @@ class Town{
                         Log.addMessage("Gained "+nourishmentGained+" hunger.", 'pos') 
                     }
                     GameMaster.postPlayerAction()
+                }else{
+                    Log.addMessage("Too poor!",'danger')
+                    GameMaster.postPlayerAction()
                 }
             })
             if(!meal.item){

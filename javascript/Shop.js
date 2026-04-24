@@ -187,6 +187,8 @@ class Shop{
     static buyItem(slot){
         let item = Shop.inventory[slot];
         if (item.price > Player.gold){
+            Log.addMessage("Too poor!",'danger')
+            GameMaster.postPlayerAction()
             return false;
         }
         Player.gold -= item.price;

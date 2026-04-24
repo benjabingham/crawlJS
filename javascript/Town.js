@@ -14,6 +14,7 @@ class Town{
         Display.scrollToTop();
 
         Log.wipeLog();
+        Log.printLog();
         GameMaster.postPlayerAction();
     }
 
@@ -125,6 +126,7 @@ class Town{
         let restButton = $('#rest-button')
         restButton.off().on('click',()=>{
             let restInfo = Player.getRestInfo();
+            Log.printDayToLog(false);
             GameMaster.nextDay();
             $('#day-div').text('Day '+Save.day);
             //GameMaster.loadTown();
@@ -138,7 +140,6 @@ class Town{
                 Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
             }
             Log.addMessage('You are now well rested.','pos')
-
             GameMaster.postPlayerAction();
             $('.hint-divs').text(Town.getRestHintText());
         })

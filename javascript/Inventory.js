@@ -1,12 +1,12 @@
 class Inventory{
     static displayedInventorySlots = {
-        "dungeon-inventory":0,
-        "container-inventory":0
+        "player-inventory":0,
+        "world-inventory":0
     };
     static nQuickSlots = 4;
     static playerInBag = false;
     //player or container
-    static selectedInventory = "dungeon-inventory"
+    static selectedInventory = "player-inventory"
     static selectedContainer = false;
     static itemPile = false;
     static draggedItem = {inventoryId:false,slot:false};
@@ -14,21 +14,20 @@ class Inventory{
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
-        let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
         this.checkForItemPile();
         //$('#inventory-wrapper').show();
-        $('#'+inventoryId+'-list').html('');
+        $('#player-inventory-list').html('');
         let inventory = Player.inventory.items;
         let bagTitle = false;
         Inventory.findValidSelect();
         inventory.forEach((item) =>{
-            Inventory.addBetweenDiv(item.slot,inventoryId,item.quickSlot);
+            Inventory.addBetweenDiv(item.slot,"player-inventory",item.quickSlot);
             bagTitle = Inventory.checkAddBagTitle(item,bagTitle);
-            Inventory.addInventoryItem(item, dungeonMode, inventoryId);
+            Inventory.addInventoryItem(item, dungeonMode, "player-inventory");
         })
-        Inventory.addBetweenDiv(inventory.length,inventoryId);
-        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots[inventoryId]]
-        Inventory.displayItemInfo(displayedItem, inventoryId)
+        Inventory.addBetweenDiv(inventory.length,"player-inventory");
+        let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots["player-inventory"]]
+        Inventory.displayItemInfo(displayedItem, "player-inventory")
         
         Inventory.displayContainerInventory();
 
@@ -59,13 +58,13 @@ class Inventory{
         let slot = item.slot;
         let itemValue = item.value;
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
-        let primed = inventory == "dungeon-inventory" && Inventory.isPrimed(item.slot);
+        let primed = inventory == "player-inventory" && Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let symbolsSpan = $('<span>')
         let quickSlot = item.quickSlot;
         let available = Inventory.itemIsAccessible(item);
-        let dropMode = inventory == "dungeon-inventory" && GameMaster.dropMode
+        let dropMode = inventory == "player-inventory" && GameMaster.dropMode
         let draggable = Inventory.itemIsAccessible(item);
         if(item.symbols){
             item.symbols.forEach((symbol)=>{
@@ -109,7 +108,7 @@ class Inventory{
             return;
         }
 
-        if(inventory == "container-inventory"){
+        if(inventory == "world-inventory"){
             element.append(
                 $('<button>').addClass('item-button').text('take').on('click',function(){
                     Inventory.take(slot);
@@ -362,9 +361,9 @@ class Inventory{
 
         bagTitleElement.append(this.getRummageButton())
 
-        $('#dungeon-inventory-list').append(bagTitleElement)
+        $('#player-inventory-list').append(bagTitleElement)
 
-        Inventory.addBetweenDiv(item.slot,"dungeon-inventory",item.quickSlot);
+        Inventory.addBetweenDiv(item.slot,"player-inventory",item.quickSlot);
 
         return true
     }
@@ -377,7 +376,7 @@ class Inventory{
     }
 
     static getSelectedItem(){
-        if(this.selectedInventory == "dungeon-inventory"){
+        if(this.selectedInventory == "player-inventory"){
             return Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
         }else{
             return Inventory.selectedContainer.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
@@ -397,7 +396,7 @@ class Inventory{
         }
         let slotItem = Player.inventory.items[slot];
 
-        if(Inventory.selectedInventory == 'container-inventory'){
+        if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot)
             Player.inventoryCleanup();
         }
@@ -420,7 +419,7 @@ class Inventory{
 
     //selected item becomes quickslot
     static quickToggle(){
-        if(Inventory.selectedInventory != 'dungeon-inventory'){
+        if(Inventory.selectedInventory != 'player-inventory'){
             return false;
         }
 
@@ -441,6 +440,7 @@ class Inventory{
     }
 
     static toggleInventory(state = null){
+        GameMaster.stopDrop();
         if(state===null){
             this.playerInBag = !this.playerInBag;
         }else{
@@ -469,8 +469,8 @@ class Inventory{
         
         if(EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0){
             Inventory.selectedContainer = Inventory.itemPile;
-            $('#container-inventory-title').text("Floor").append(this.getRummageButton());
-            //Inventory.selectedInventory = "container-inventory"
+            $('#world-inventory-title').text("Floor").append(this.getRummageButton());
+            //Inventory.selectedInventory = "world-inventory"
         }else{
             Inventory.itemPile = false;
             Inventory.selectedContainer = false;
@@ -479,8 +479,8 @@ class Inventory{
 
     
     //inventory can be player or container
-    static getItemsInInventory(inventory = "dungeon-inventory"){
-        if(inventory == "dungeon-inventory"){
+    static getItemsInInventory(inventory = "player-inventory"){
+        if(inventory == "player-inventory"){
             return Player.inventory.items.length;
         }else if (Inventory.selectedContainer && Inventory.selectedContainer.inventory){
             return Inventory.selectedContainer.inventory.items.length;
@@ -493,11 +493,11 @@ class Inventory{
         let direction = event.type;
         switch(direction){
             case "left":
-                Inventory.selectedInventory = "dungeon-inventory"
+                Inventory.selectedInventory = "player-inventory"
                 break;
             case "right":
                 if(Inventory.selectedContainer){
-                    Inventory.selectedInventory = "container-inventory";
+                    Inventory.selectedInventory = "world-inventory";
                 }
                 break;
             case "up":
@@ -514,11 +514,11 @@ class Inventory{
     }
 
     static selectItem(event){
-        if(Inventory.selectedInventory == "dungeon-inventory"){
-            let slot = Inventory.displayedInventorySlots["dungeon-inventory"];
+        if(Inventory.selectedInventory == "player-inventory"){
+            let slot = Inventory.displayedInventorySlots["player-inventory"];
             GameMaster.useItem({type:"item-"+(slot+1)})
         }else{
-            let slot = Inventory.displayedInventorySlots["container-inventory"]
+            let slot = Inventory.displayedInventorySlots["world-inventory"]
             Inventory.take(slot);
             Inventory.displayInventory();
         }
@@ -551,45 +551,45 @@ class Inventory{
 
     static displayContainerInventory(){
         let container = Inventory.selectedContainer;
-        $('#container-inventory-list').html('');
+        $('#world-inventory-list').html('');
         if(!container){
             this.clearContainerInventory();
             return false;
         }
         Inventory.assignSlots();
         let items = container.inventory.items;
-        let displayedItemSlot = Inventory.displayedInventorySlots['container-inventory']
-        Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
+        let displayedItemSlot = Inventory.displayedInventorySlots['world-inventory']
+        Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'world-inventory')
         if(!items.length){
             if (!container.isItemPile){
                 //should containers close when empty?
                 //this.toggleInventory(false);
-            }else if (this.selectedInventory != "dungeon-inventory"){
-                this.selectedInventory = "dungeon-inventory";
+            }else if (this.selectedInventory != "player-inventory"){
+                this.selectedInventory = "player-inventory";
                 this.displayInventory();
             }
             //Log.addMessage('empty');
         }
         items.forEach((item)=>{
-            Inventory.addBetweenDiv(item.slot,'container-inventory',false)
-            Inventory.addInventoryItem(item,true,"container-inventory")
+            Inventory.addBetweenDiv(item.slot,'world-inventory',false)
+            Inventory.addInventoryItem(item,true,"world-inventory")
         })
-        Inventory.addBetweenDiv(items.length,'container-inventory',false)
+        Inventory.addBetweenDiv(items.length,'world-inventory',false)
     }
 
     static clearContainerInventory(){
-        $("#container-inventory-description").html("");
-        $('#container-inventory-title').html("");
-        Inventory.selectedInventory = "dungeon-inventory"
+        $("#world-inventory-description").html("");
+        $('#world-inventory-title').html("");
+        Inventory.selectedInventory = "player-inventory"
 
     }
 
     static openContainerInventory(container){
         Inventory.playerInBag = true;
         Inventory.selectedContainer = container;
-        Inventory.selectedInventory = "container-inventory";
-        Inventory.displayedInventorySlots["container-inventory"] = 0;
-        $('#container-inventory-title').text(container.name).append(this.getRummageButton());
+        Inventory.selectedInventory = "world-inventory";
+        Inventory.displayedInventorySlots["world-inventory"] = 0;
+        $('#world-inventory-title').text(container.name).append(this.getRummageButton());
         Inventory.displayInventory();
         this.bagOverlay();
     }
@@ -685,7 +685,7 @@ class Inventory{
             if(!Inventory.draggedItem.inventoryId){return false}
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
-            if(Display.mouseOverBoard && Inventory.draggedItem.inventoryId == 'dungeon-inventory'){
+            if(Display.mouseOverBoard && Inventory.draggedItem.inventoryId == 'player-inventory'){
                 GameMaster.dropItem(Inventory.draggedItem.slot);
                 Inventory.lastHoveredSlot.inventoryId = false;
                 Inventory.draggedItem.slot = false;
@@ -731,9 +731,9 @@ class Inventory{
 
         Object.keys(transfer).forEach(key=>{
             let location = transfer[key];
-            if(location.id == "dungeon-inventory"){
+            if(location.id == "player-inventory"){
                 location.inventory = Player.inventory.items;
-            }else if (location.id == "container-inventory"){
+            }else if (location.id == "world-inventory"){
                 if(Inventory.selectedContainer){
                     location.inventory = Inventory.selectedContainer.inventory.items;
                 }else{
@@ -756,7 +756,7 @@ class Inventory{
         transfer.to.inventory.splice(toSlot,0,item);
 
 
-        if(transfer.to.id == "dungeon-inventory" && toSlot < Inventory.nQuickSlots){
+        if(transfer.to.id == "player-inventory" && toSlot < Inventory.nQuickSlots){
             item.quickSlot = true;
         }else{
             item.quickSlot = false

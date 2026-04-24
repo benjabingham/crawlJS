@@ -110,8 +110,8 @@ class Entity{
             this.setPosition(x,y);
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && PlayerEntity.prototype.isPrototypeOf(this)){
-            //this.lootContainer(Board.entityAt(x,y));
-            Inventory.openContainerInventory(Board.entityAt(x,y))
+            this.lootContainer(Board.entityAt(x,y));
+            //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
             GameMaster.travel(x,y);
@@ -285,7 +285,10 @@ class Entity{
             return false;
         }
         Log.addMessage('you search the '+container.name+'...',false,false,false,container.id)
+        let searchedTurn = container.searchedTurn;
+        container.searchedTurn = Log.turnCounter;
 
+        //triggers a map-wide transform
         if(container.triggerTransform){
             container.transformEntities();
         }
@@ -297,33 +300,19 @@ class Entity{
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
-        }else if (!container.inventory.items.length && !container.inventory.gold){
-            if(isPlayer){
-                Log.addMessage("nothing.")
-            }
             return false;
+        }else if (!container.inventory.items.length && !container.inventory.gold){
+            //you can access an empty container by searching it two turns in a row
+            if(searchedTurn != Log.turnCounter-1){
+                Log.addMessage("nothing. (Search again to store items)")
+                return false;
+            }
         }
         if(!this.inventory.items){
             this.inventory.items = [];
         }
 
-        while(container.inventory.items.length > 0 && this.inventory.items.length < this.inventory.slots){
-            let item = container.inventory.items.pop();
-            this.inventory.items.push(item);
-            if(isPlayer){
-                let itemName = LootManager.getItemNameWithSymbols(item);
-                Log.addMessage('Found '+itemName+'.');
-            }
-        }
-
-        if(isPlayer && container.inventory.items.length > 0){
-            container.inventory.items.forEach((item)=>{
-                let tipText = "value - "+item.value;
-                let itemName = LootManager.getItemNameWithSymbols(item);
-
-                Log.addMessage('Not enough space for '+itemName+'...',false,item.name,tipText);
-            })
-        }
+        Inventory.openContainerInventory(container);
         
         if(this.pickUpGold(container.inventory.gold)){
             container.inventory.gold = 0;
@@ -332,8 +321,6 @@ class Entity{
                 roster[container.index].inventory.gold = 0;
             }
         };
-
-        
         
     }
 
@@ -751,6 +738,7 @@ class Entity{
         if(!this.spawnEntities){
             return false;
         }
+        console.log('disturbing');
         if(this.spawnEntities.disturbChance > Math.random()*100){
             if(!this.disturbed){
                 this.disturbed = 0;
@@ -1740,6 +1728,7 @@ class Container extends Entity{
     mortal = 0;
     threshold = 1;
     isContainer = true;
+    searchedTurn = -1;
 
     constructor(containerKey, x, y, additionalParameters = {}){
         //console.log(additionalParameters);

@@ -55,7 +55,7 @@ class InputManager{
         })*/
 
         inputVars.numpad.forEach((input)=>{
-            console.log(input)
+            //console.log(input)
             $(document).bind(input.inputName,function(event){
                 InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
@@ -101,7 +101,7 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
-        console.log(InputManager.inputs)
+        //console.log(InputManager.inputs)
         if($(':focus').is('input')){
             return;
         }

@@ -562,7 +562,8 @@ class Inventory{
         Inventory.displayItemInfo(Inventory.selectedContainer.inventory.items[displayedItemSlot],'container-inventory')
         if(!items.length){
             if (!container.isItemPile){
-                this.toggleInventory(false);
+                //should containers close when empty?
+                //this.toggleInventory(false);
             }else if (this.selectedInventory != "dungeon-inventory"){
                 this.selectedInventory = "dungeon-inventory";
                 this.displayInventory();

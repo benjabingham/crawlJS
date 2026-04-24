@@ -349,6 +349,7 @@ class EntityManager{
         }
 
         if(Math.random()*100 > spawnEntities.spawnChance && !spawner.disturbed){
+            //console.log('nospawn')
             return false;
         }
 

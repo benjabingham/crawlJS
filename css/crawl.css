@@ -50,15 +50,22 @@ button:hover,
 }
 
 .hint-divs{
-    text-align:center;
     /*font-style:italic;*/
-    color:var(--altBackText);
-
-    height:1rem;
-
-    p{
-        margin:0px;
-    }
+    pointer-events: none;
+    display: none;
+    padding:4px;
+    margin:0px 3px;
+    box-sizing: border-box;
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
+    font-weight:600;
+    text-transform: capitalize;
+    /*transform:translateY(17px)*/
+    transform:translateX(12px);
+    width:fit-content;
+    max-width:800px;
+    font-style:italic;
 }
 
 #custom-controls-wrapper-div{

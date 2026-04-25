@@ -48,9 +48,10 @@ class Display{
 
     static setHintText(element, hintText){
         element.on('mouseenter',()=>{
-            $('.hint-divs').text(hintText)
+            $('.hint-divs').show().text(hintText)
+            
         }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
+            $('.hint-divs').hide().html('');
         })
     }
 
@@ -482,7 +483,7 @@ class Display{
         })
         $('#board').on('mouseleave',e=>{
             Display.mouseOverBoard = false;
-            console.log(false)
+            //console.log(false)
         })
         console.log( $('#board'))
     }

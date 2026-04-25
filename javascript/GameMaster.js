@@ -64,6 +64,7 @@ class GameMaster{
     }
 
     static startGame(message=false, position=false){
+        $('#day-div').text('Day '+Save.day);
         GameMaster.dungeonMode = true;
         Log.wipeLog();
         Log.initialWarnings();

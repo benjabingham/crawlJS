@@ -130,6 +130,7 @@ class Town{
         restButton.off().on('click',()=>{
             let restInfo = Player.getRestInfo();
             Log.printDayToLog(false);
+            let oldLuck = Player.luck;
             GameMaster.nextDay();
             $('#day-div').text('Day '+Save.day);
             //GameMaster.loadTown();
@@ -138,6 +139,9 @@ class Town{
             Log.addMessage('You rested. It is now day '+Save.day+".")
             if(restInfo.healthChange > 0){
                 Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
+            }
+            if(oldLuck < Player.luck){
+                Log.addMessage("Gained "+(Player.luck-oldLuck)+ " luck!","win")
             }
             if(restInfo.nourishmentChange < 0){
                 Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')

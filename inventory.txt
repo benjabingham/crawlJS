@@ -1,0 +1,27 @@
+bulk
+
+items have BULK. Materials have multipliers
+
+Player has bulk capacity of 10. Items in hotbar don't count...? or count for half?
+Once over capacity, moving costs 1 stamina for every 50% over capacity
+
+materials have bulk multipliers
+hold W in inventory to see bulks?
+
+touchstone -
+    shortsword has bulk 1
+    longsword has bulk 3
+    greatsword has bulk 5
+
+    thimble/bead/ring bulk 0.1
+    crown has bulk 1
+
+    paper has mult 0.1
+    normal weapon materials have mult 0
+    gold has mult 2
+
+    Morsels have bulk 0.5
+    Oil flask has bulk 1
+    potions have bulk 0.5
+
+

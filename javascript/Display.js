@@ -2,64 +2,65 @@ class Display{
     static entityManager;
     static customControls;
     static colorScheme = 0;
-    static displayedInventorySlot;
     static colorSchemes = [
         {scheme:'classic', name:'Classic'},
         {scheme:'dark-mode',name:'Dark Mode'},
         {scheme:'light-mode',name:'Light Mode'}
     ]
     static highlightedCells=[];
+    static mouseOverBoard = false;
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
+        Display.followerInit();
+        Inventory.initReleaseDragItems();
+        Inventory.inventoryClickPreventDefault();
     }
 
     static showDungeonScreen(){
+        $('#world-inventory').show();
+        $('#side-menu').hide();
+        $('#drop-items-button').show();
         console.log('showDungeonScreen');
-        Display.hideAllScreens();
-        $('#hud-div').show();
         Display.fillBars(Player);
-        $('#dungeon-screen').show();
-        $('#town-hint-div').hide().html('');
+        $('#board').show();
+        $('#town-screen').hide();
         Display.boardDisplayInit();
-        Display.displayInventory(true);
+        Inventory.displayInventory(true);
         Display.scrollToTop();
         Display.dropButton();
         Log.logInit();
     }
 
     static showHomeScreen(){
-        Display.hideAllScreens();
+        $('#game-window').hide();
         $('#home-screen').show();
-        Display.populateLocations();
+
+        Town.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
         Display.scrollToTop();
     }
 
     static showTownScreen(){
-        Display.hideAllScreens();
-        $('#hud-div').show();
-        $('#town-screen').show();
-        $('#day-div').text('Day '+Save.day);
-        $('#town-inventory-wrapper').show();
-        $('#town-hint-div').show().html('');
-
-        Display.populateLocations();
-        Display.displayInventory(false);
-        Display.displayShop();
-        Display.restButton();
-        Display.fillBars(Player);
-        Display.nourishmentDiv(Player);
-        Display.scrollToTop();
+        Town.showTownScreen();
     }
 
-    static hideAllScreens(){
-        $('#town-screen').hide();
-        $('#town-inventory-wrapper').hide();
-        $('#home-screen').hide();
-        $('#dungeon-screen').hide();
-        Display.scrollToTop();
+    static setHintText(element, hintText, hintClass = "info"){
+        element.on('mousemove',()=>{
+            $('.hint-divs').show().text(hintText).addClass(hintClass);
+            
+        }).on('mouseleave',()=>{
+            Display.hideHintDiv();
+        })
+    }
+
+    static hideHintDiv(){
+        $('.hint-divs').hide().html('').removeClass('info label');
+    }
+
+    static displayGold(){
+        $('.gold-div').text(Player.gold+" gold");
     }
 
     static scrollToTop(){
@@ -69,6 +70,9 @@ class Display{
     static giveSaveButtonsBehavior(){
         $('#new-save-button').off().on('click',function(){
             Save.newSave();
+            $('#game-window').show();
+            $('#hud-div').show();
+            $('#home-screen').hide();
             if(GameMaster.quickStartMode){
                 GameMaster.quickStart();
             }else{
@@ -90,6 +94,7 @@ class Display{
         let boardDiv = $("#board");
        // boardDiv.css('width',17*1.8+"rem");
         Display.generateBoardGrid();
+        Display.mouseOverBoardInit();
         let gameWindow = $("#game-window");
         //gameWindow.css('height',17*2+"rem");
         //$('#log').css('height',17*2-2.5+"rem");
@@ -154,7 +159,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter mousemove');
                 entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
@@ -175,7 +180,7 @@ class Display{
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
                             gridDiv.addClass('grid-hint').off('mouseenter')
-                            Display.setHintText(gridDiv, boardArray[y][x].name);
+                            Display.setHintText(gridDiv, boardArray[y][x].name, "label");
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -222,7 +227,7 @@ class Display{
             }
         }
         Display.applyHighlights();
-        Display.setHintText($('.grid-exit'),'EXIT')
+        Display.setHintText($('.grid-exit'),'EXIT',"label")
     }
 
     static showParryHighlight(x,y, entityDiv){
@@ -234,13 +239,13 @@ class Display{
     }
 
     static parryInRange(x,y){
-        console.log({x:x,y:y})
+        //console.log({x:x,y:y})
         let playerEntity = EntityManager.playerEntity;
         //x,y difference between player and target
         let playerToTarget = {x:x-playerEntity.x, y:y-playerEntity.y}
         if(EntityManager.getDistance({x,y},EntityManager.playerEntity.swordEntity) != 1 && !EntityManager.playerEntity.canUnarmedStrike(playerToTarget.x,playerToTarget.y)){
-            console.log('not in range')
-            console.log(EntityManager.playerEntity.canUnarmedStrike(x,y))
+            //console.log('not in range')
+            //console.log(EntityManager.playerEntity.canUnarmedStrike(x,y))
             return false
         }
 
@@ -329,57 +334,6 @@ class Display{
 
         Display.highlightedCells = [];
     }
-    
-    static nourishmentDiv(){
-        let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
-        let display = this;
-        $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
-
-        let meals = [
-            {
-                name:'Morsel',
-                cost:1,
-                item: itemVars.food.morsel
-            },
-            {name:'Proper Meal',cost:6,nourishment:100},
-        ]
-
-        $('#meals-div').html('');
-
-        meals.forEach((meal)=>{
-            let button = $('<button>');
-            button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                if(Player.gold >= meal.cost){
-                    if(meal.item){
-                        if(Player.inventory.items.length < Player.inventory.slots){
-                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                            Player.pickUpItem(itemCopy);
-                        }else{
-                            Player.changeNourishment(item.food);
-                        }
-                    }else{
-                        Player.changeNourishment(meal.nourishment);
-                    }
-                    Player.gold-= meal.cost;
-                    display.nourishmentDiv();
-                    display.displayGold();
-                    display.displayInventory(false);
-                }
-            })
-            if(!meal.item){
-                Display.setHintText(button,"Fully refils your hunger bar")
-                button.on('mouseenter',()=>{
-                    $('#hunger-level').css('width',"150px").addClass('preview');
-                    $('#hunger-level').text(Player.nourishmentMax+"/"+Player.nourishmentMax);                    
-                }).on('mouseleave',()=>{
-                    $('#hunger-level').removeClass('preview');
-                    Display.fillBars();
-                })  
-            }
-             
-            $('#meals-div').append(button)
-        })
-    }
 
     static exertionDiv(){
         let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
@@ -408,422 +362,14 @@ class Display{
         Display.exertionDiv();
 
     }
+
     
-    static populateLocations(){
-        $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs']
-        maps.forEach((element) =>{
-            $('#travel-locations-div').append(
-                $("<div>").addClass('location-divs').append(
-                    $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element)
-                    })
-                )
-            )
-        })
-    }
 
-    static getRestHintText(restInfo){
-        if(!restInfo){
-            restInfo = Player.getRestInfo();
-        }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
-
-        return hintText;
-    }
-
-    static previewRestBars(restInfo){
-        console.log(restInfo);
-        let newHealth = Player.health+restInfo.healthChange
-        let newLuck = Math.min(Player.luck+0.5,Player.luckMax)
-        let newHunger = Player.nourishment+restInfo.nourishmentChange
-        let healthPercent = Math.floor(newHealth/Player.healthMax*100);
-        let luckPercent = Math.floor(newLuck/Player.luckMax*100);
-        let hungerPercent = Math.floor(newHunger/Player.nourishmentMax*100);
-        console.log(healthPercent)
-
-        $('#health-level').css('width',healthPercent*1.5+"px").addClass('preview');
-        $('#health-level').text(newHealth+"/"+Player.healthMax);
-
-        $('#luck-level').css('width',luckPercent*1.5+"px").addClass('preview');
-        $('#luck-level').text(newLuck+"/"+Player.luckMax);
-
-        $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
-        $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
-
-        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
-    }
-
-    static restButton(){
-        let restButton = $('#rest-button')
-        restButton.off().on('click',()=>{
-            GameMaster.nextDay();
-            GameMaster.loadTown();
-            $('.hint-divs').text(Display.getRestHintText());
-        })
-        
-        restButton.on('mouseenter',()=>{
-            let restInfo = Player.getRestInfo();
-            let hintText = Display.getRestHintText(restInfo);
-            Display.previewRestBars(restInfo);
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-            Display.fillBars();
-            Display.exertionDiv();
-            $('#exertion-level-div').removeClass('preview');
-            $('#health-level').removeClass('preview');
-
-            $('#luck-level').removeClass('preview');
-
-            $('#hunger-level').removeClass('preview');
-        })   
-    }
-
-    static setHintText(element, hintText){
-        element.on('mouseenter',()=>{
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-        })
-    }
-
-    static displayInventory(dungeonMode=true){
-        let inventoryId = (dungeonMode) ? "dungeon-inventory" : "town-inventory";
-        //$('#inventory-wrapper').show();
-        $('#'+inventoryId+'-list').html('');
-        let inventory = Player.inventory.items;
-        let displayedItem = Player.inventory.items[Display.displayedInventorySlot]
-        Display.displayItemInfo(displayedItem, inventoryId)
-        inventory.forEach((item) =>{
-            Display.addInventoryItem(item, dungeonMode, inventoryId);
-        })
-        
-        
-        Display.displayGold();
-    }
-
-    static displayShop(){
-        $('#shop-wrapper').show();
-        $('#shop-list').html('');
-        let inventory = Shop.getInventory();
-        inventory.forEach((item) =>{
-            Display.addInventoryItem(item, false, 'shop');
-        })
-        Display.displayGold();
-    }
-
-    static displayGold(){
-        $('.gold-div').text(Player.gold+" gold");
-    }
-
-    //checks if an inventory slot is primed.
-    //should be primed if this slot's hotkey was just pressed, but not if it was last input as well
-    static isPrimed(slot, inventory){
-        if(inventory == 'shop'){
-            return false;
-        }
-
-        if (InputManager.lastEvent && InputManager.currentEvent.type == InputManager.lastEvent.type){
-            return false
-        }
-
-        return InputManager.currentEvent ? InputManager.currentEvent.type == "item-"+(slot+1) : false;
-        
-    }
-
+    
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
         console.log(charCode);
         return keywordVars.symbols[charCode].name
-    }
-    
-
-    static addInventoryItem(item, dungeonMode, inventory){
-        let slot = item.slot;
-        let display = this;
-        let itemValue = item.value;
-        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
-        let itemIsSelected = slot == Display.displayedInventorySlot;
-        let primed = Display.isPrimed(item.slot);
-        let symbolsSpan = $('<span>')
-        let symbols = item.symbols;
-        if(!symbols){symbols = []}
-        symbols = [...symbols];
-        //console.log(symbols);
-        
-        if(symbols){
-            symbols.forEach((symbol)=>{
-                let symbolSpan = $('<span>').text(" "+symbol);
-                let hintText = Display.getSymbolHintText(symbol);
-                Display.setHintText(symbolSpan,hintText)
-                symbolsSpan.append(symbolSpan);
-            })
-        }
-
-        let proficiencySpan = Display.getProficiencySpan(item);
-        console.log(proficiencySpan);
-        if(proficiencySpan){console.log(item.name)}
-        
-        if(!itemValue){
-            itemValue = '0';
-        }
-        //add item
-        $('#'+inventory+'-list').append(
-            $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
-                (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
-            ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(proficiencySpan).append(symbolsSpan)
-            ).on('click',function(){
-                display.displayItemInfo(item, inventory);
-            }).append(
-                $('<div>').addClass('item-buttons').attr('id',inventory+'-item-buttons-'+slot)
-            )
-        )
-
-        Display.applyColor(item, $('#'+inventory+'-item-name-'+slot));
-
-        if(item.uses){
-            $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
-        }
-
-        //add buttons
-
-        if(GameMaster.dropMode){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('drop').on('click',function(){
-                    GameMaster.dropItem(slot);
-                })
-            )
-
-            return;
-        }
-
-        if(item.usable){
-            let button;
-            if(item.food && !itemIsEquipped){
-                button = $('<button>').addClass('item-button').text('eat').on('click',function(){
-                    GameMaster.eatItem({type:'item-'+(slot+1)},dungeonMode);
-                    Display.displayInventory(dungeonMode);
-                })
-            } else if(item.potable && !itemIsEquipped && inventory != "shop"){
-                button = $('<button>').addClass('item-button').text('drink').on('click',function(){
-                    GameMaster.drinkItem({type:'item-'+(slot+1)},dungeonMode);
-                    Display.displayInventory(dungeonMode);
-                })
-            }
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                button
-            )
-        }
-
-        if(dungeonMode){
-            if(item.weapon && !Player.equipped){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('equip').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
-                    })
-                )
-            }
-            if(item.weapon && itemIsEquipped){
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    $('<button>').addClass('item-button').text('unequip').on('click',function(){
-                        GameMaster.useItem({type:'item-'+(slot+1)});
-                    })
-                )
-            }
-            if(item.usable){
-                let button;
-                if(item.fuel && !itemIsEquipped){
-                    button = $('<button>').addClass('item-button').text('burn').on('click',function(){
-                        GameMaster.useFuel({type:'item-'+(slot+1)});
-                    })
-                }
-                $('#'+inventory+'-item-buttons-'+slot).append(
-                    button
-                )
-            }
-        }else if (inventory != 'shop'){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('sell - '+itemValue).on('click',function(){
-                    Shop.sellItem(slot);
-                    display.displayShop();
-                    display.displayInventory(false);
-                })
-            )
-        }else if(inventory == 'shop'){
-            $('#'+inventory+'-item-buttons-'+slot).append(
-                $('<button>').addClass('item-button').text('buy - '+item.price).on('click',function(){
-                    Shop.buyItem(slot);
-                    display.displayShop();
-                    display.displayInventory(false);
-                })
-            )
-        }
-    }
-
-    static displayItemInfo(item, inventory){
-        if(!item){
-            $('#'+inventory+'-description').html('')
-            return false;
-        }
-        if(inventory != 'shop'){
-            Display.displayedInventorySlot = item.slot;
-        }
-        let itemValue = item.value;
-        if(!itemValue){
-            itemValue = '0';
-        }
-        let descriptionBodyElement;
-        if(item.weapon || item.potable){
-            descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
-        }else{
-            descriptionBodyElement = '';
-        }
-
-        let proficiencySpan = Display.getProficiencySpan(item);
-
-        $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
-        ).append(
-            descriptionBodyElement
-        )
- 
-
-
-        let traits = keywordVars.traits;
-        let hasTrait = false;
-        let traitsDiv = $('<div>').addClass('traits-text')
-        Object.keys(traits).forEach((key)=>{
-            if(item[key] || (key == "accustomed" && Player.getAdvantage(item))){
-                let trait = keywordVars.traits[key]
-                let text = trait.name
-                if(hasTrait){
-                    text = ", "+text
-                }
-                if(item[key] > 1){
-                    text = text+" "+item[key]
-                }
-                let traitSpan = $('<span>').addClass('trait-spans').text(text);
-                Display.setHintText(traitSpan, trait.hintText)
-                traitsDiv.append(traitSpan)
-                hasTrait = true;
-            }
-        })
-
-        if(hasTrait){
-            $('#'+inventory+'-description').append(traitsDiv);
-        }
-
-        if(item.light && item.fuel){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
-            )
-        }
-
-        if(item.food){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
-            )
-        }
-
-        if(item.flimsy){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
-            )
-        }
-
-        if(itemValue){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value: ').append(itemValue)
-                )
-            )
-        }
-
-        if(item.potable){
-            let effects = ['health','stamina','luck','hunger','light']
-            effects.forEach((effect)=>{
-                let power = item[effect]
-                if(power){
-                    let gainLose
-                    if (power > 0){
-                        gainLose = 'gain'
-                    }else{
-                        gainLose = 'lose'
-                        power *= -1;
-                    }
-                    $('#'+inventory+'-description-body').append(
-                        $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
-                    )
-                }
-            })
-
-            if(item.unlabeled){
-                $('#'+inventory+'-description-body').append(
-                    $('<div>').addClass('potion-description').text('unknown effect...')
-                )
-            }
-        }
-
-
-        if(item.weapon){
-            let attackTypes = ['jab','swing','strafe','draw']
-            let special = false;
-            let specialName = false;
-            attackTypes.forEach(function(val){
-                if(item[val]){
-                    special = item[val];
-                    specialName = val;
-                }
-            })
-
-            $('#'+inventory+'-description-body').append(
-                $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
-                    $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text('Normal:')
-                    ).append(
-                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).text('Damage: '+item.damage)
-                    ).append(
-                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
-                    ).append(
-                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
-                    )
-                ).append(
-                    special?($('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(specialName+":")
-                    ).append(
-                        $('<div>').addClass('item-damage').text('Damage: '+special.damage)
-                    ).append(
-                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
-                    ).append(
-                        $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                    )):false
-                )
-            ).append("<hr>")
-             /*           
-            attackTypes.forEach(function(val){
-                if(item[val]){
-                    let special = item[val];
-                    $('#'+inventory+'-weapon-description').append(
-                        $('<div>').addClass('item-stats-normal').append(
-                            $('<div>').addClass('item-title').text(val+":")
-                        ).append(
-                            $('<div>').addClass('item-damage').text('Damage: '+special.damage)
-                        ).append(
-                            $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
-                        ).append(
-                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
-                        )
-                    )
-                }
-            })    */
-        }
-
-        
-        
-
-        
     }
 
     static getProficiencySpan(item){
@@ -949,6 +495,32 @@ class Display{
         $('#drop-items-button').off().on('click',(event)=>{
             GameMaster.drop(event);
         })
+    }
+
+    static followerInit(){
+        $(document).on('mousemove', function(e){
+            Display.updateFollower(e);
+        })
+    }
+
+    static updateFollower(e){
+        $('.follower').css({
+                left: e.pageX,
+                top: e.pageY
+            });
+    }
+
+    static mouseOverBoardInit(){
+        console.log('boardinit')
+        $('#board').on('mouseenter',e=>{
+            Display.mouseOverBoard = true;
+            $('.inventory-between-div').removeClass('lastSlot');
+        })
+        $('#board').on('mouseleave',e=>{
+            Display.mouseOverBoard = false;
+            //console.log(false)
+        })
+        console.log( $('#board'))
     }
     
 }

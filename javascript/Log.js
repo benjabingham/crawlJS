@@ -79,9 +79,11 @@ class Log{
         Log.messages = {};
         Log.turnCounter = 0;
         $('.turn-message').remove();
+        $('.day-counter').remove();
     }
 
-    static printTurn(turn){        
+    static printTurn(turn){   
+        console.log(turn);     
         let messages = Log.messages[turn];
         $('.message-fresh').removeClass('message-fresh')
         $('.temp-turn-counter').remove();
@@ -124,14 +126,14 @@ class Log{
                 }
                 messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
                     if(tipText){
-                        $('.hint-divs').text(tipText)  
+                        $('.hint-divs').show().text(tipText).addClass('info');
                     }
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = true;
                         Display.printBoard();
                     }
                 }).on('mouseleave',()=>{
-                    $('.hint-divs').html('');
+                    Display.hideHintDiv();
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = false;
                         Display.printBoard();
@@ -145,14 +147,26 @@ class Log{
                 message.fresh = false;
             })
             turnMessage.prepend(
-                $('<p>').text('Turn '+turn).addClass('turn-counter')
+                GameMaster.dungeonMode ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
             ).append($('<hr>'))
             messages.printed = true;
         }else{
             $('#log').prepend(
-                $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>'))
+                GameMaster.dungeonMode ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
             )
         }
+
+        if(!GameMaster.dungeonMode){
+            Log.printDayToLog(true)
+        }
+    }
+
+    static printDayToLog(temp){
+        let classes = 'turn-counter day-counter'
+        classes += temp ? ' temp-turn-counter' : '';
+        $('#log').prepend(
+                $('<div>').addClass(classes).text('Day '+ Save.day).append($('<hr>'))
+            )
     }
 
     static printLog(){

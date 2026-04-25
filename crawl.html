@@ -28,6 +28,8 @@
     <script src="javascript/vars/ContainerVars.js?v=7"></script>
     <script src="javascript/vars/KeywordVars.js?v=7"></script>
     <script src="javascript/vars/InputVars.js?v=7"></script>
+    <script src="javascript/vars/MapVars.js?v=7"></script>
+
     <script src="javascript/vars/SkillVars.js?v=7"></script>
 
     <script src="javascript/LootManager.js?v=7"></script>
@@ -40,6 +42,8 @@
     <script src="javascript/Player.js?v=7"></script>
     <script src="javascript/Log.js?v=7"></script>
     <script src="javascript/Display.js?v=7"></script>
+    <script src="javascript/Town.js?v=7"></script>
+    <script src="javascript/Inventory.js?v=7"></script>
     <script src="javascript/Random.js?v=7"></script>
     <script src="javascript/Entity.js?v=7"></script>
     <script src="javascript/History.js?v=7"></script>
@@ -61,110 +65,120 @@
             -->
         </div>
     </div>
-    <div id="hud-div">
-        <div id="day-div"></div>
-        <div id = "resources">
-            <div class="resource-bar-containers">
-                <div id="hp-number-div" class="resource-number-divs"></div>
-                <div class="resource-label-divs">HP</div>
-                <div id = "health-bar" class="resource-bar-divs">
-                    <div id = "health-level" class="resource-level-divs"></div>
+
+    <div id = 'game-window'>
+
+        <div id="hud-div">
+            <div id="day-div"></div>
+            <div id = "resources">
+                <div class="resource-bar-containers">
+                    <div id="hp-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">HP</div>
+                    <div id = "health-bar" class="resource-bar-divs">
+                        <div id = "health-level" class="resource-level-divs"></div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="resource-bar-containers">
-                <div id="stamina-number-div" class="resource-number-divs"></div>
-                <div class="resource-label-divs">Stamina</div>
-                <div id = "stamina-bar" class="resource-bar-divs">
-                    <div id = "stamina-level" class="resource-level-divs"></div>
-                </div>
-            </div>
-
-            <div class="resource-bar-containers">
-                <div id="luck-number-div" class="resource-number-divs"></div>
-                <div class="resource-label-divs">Luck</div>
-                <div id = "luck-bar" class="resource-bar-divs">
-                    <div id = "luck-level" class="resource-level-divs"></div>
-                </div>
-            </div>
-
-            <div class="resource-bar-containers">
-                <div id="hunger-number-div" class="resource-number-divs"></div>
-                <div class="resource-label-divs">Hunger</div>
-                <div id = "hunger-bar" class="resource-bar-divs">
-                    <div id = "hunger-level" class="resource-level-divs"></div>
-                </div>
-            </div>
-
-        </div>
-        <!--<div id="nourishment-level-div"></div>-->
-        <div id="exertion-level-div"></div>
-        <div id="gold-div"class="gold-div"></div>
-
-
-    </div>
-    <div id="town-screen">
-        <div id="town-title-div">You are in town.</div>
-        <div class="hint-text">You are safe here. Find and sell treasure to feed yourself. Survive.</div>
-
-        <div id="tavern-wrapper-div">
-            Tavern
-            <div id="tavern-div">
                 
-                <div id="nourishment-div">
-                    <div id="meals-div"></div>
+                <div class="resource-bar-containers">
+                    <div id="stamina-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">Stamina</div>
+                    <div id = "stamina-bar" class="resource-bar-divs">
+                        <div id = "stamina-level" class="resource-level-divs"></div>
+                    </div>
                 </div>
-                <div class="hint-text">
-                    Being well fed increases your health gain per day, and your stamina gain per turn. Avoid eating and you will starve.
+
+                <div class="resource-bar-containers">
+                    <div id="luck-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">Luck</div>
+                    <div id = "luck-bar" class="resource-bar-divs">
+                        <div id = "luck-level" class="resource-level-divs"></div>
+                    </div>
                 </div>
-                <button id="rest-button">rest</button>
-                <br>
-                <div class="hint-text">
-                    Rest to reset exertion.
+
+                <div class="resource-bar-containers">
+                    <div id="hunger-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">Hunger</div>
+                    <div id = "hunger-bar" class="resource-bar-divs">
+                        <div id = "hunger-level" class="resource-level-divs"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!--<div id="nourishment-level-div"></div>-->
+            <div id="exertion-level-div"></div>
+            <div id="gold-div"class="gold-div"></div>
+
+
+        </div>
+        
+        <div class id="main-content">
+
+            <div class="inventory" id ="player-inventory">
+                <div class="inventory-description" id ="player-inventory-description"></div>
+                <div class="inventory-title">Inventory</div>
+                <div id ="player-inventory-list" class="inventory-list"></div>
+                <div class="inventory-extras-div">
+                    <button id = 'drop-items-button'>Drop Items</button>
+                    <div id="gold-div"class="gold-div"></div>
                 </div>
             </div>
-        </div>
-        <div id = "shop-wrapper" class="inventory-wrapper">
-            <div class="inventory-title">Shop</div>
-            <div id="shop" class="inventory">
-                <div id ="shop-list" class="inventory-list"></div>
-                <div id ="shop-description" class="inventory-description"></div>
+
+            <div id = "mid-content">
+                
+                <div id="board" tabindex="0"></div> 
+
+                <div id="town-screen">
+                    <div id="town-title-div">You are in town.</div>
+                    <div class="hint-text">You are safe here. Find and sell treasure to feed yourself. Survive.</div>
+
+                    <div id="tavern-wrapper-div">
+                        Tavern
+                        <div id="tavern-div">
+                            
+                            <div id="nourishment-div">
+                                <div id="meals-div"></div>
+                            </div>
+                            <div class="hint-text">
+                                Being well fed increases your health gain per day, and your stamina gain per turn. Avoid eating and you will starve.
+                            </div>
+                            <button id="rest-button">rest</button>
+                            <br>
+                            <div class="hint-text">
+                                Rest to reset exertion.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="travel-locations-wrapper-div">
+                        <div id="travel-locations-title-div">Nearby Dungeons</div>
+                        <div id="travel-locations-hint-div" class="hint-text">Be sure you're rested and prepared before traveling to a dungeon.</div>
+                        <div name="travel-locations-div" id="travel-locations-div"></div>
+                    </div>
+                    <!--
+                    <button id="download-save-button">Download Save</button>  
+                    -->
+                </div>
+
+                <div id="log-window">
+                        <div id="log-title">Log ↓</div>
+                        <div id="log"></div>
+                    </div>
             </div>
-            <!--<div id="shop-gold-div" class="gold-div"></div>-->
-        </div>
-        <div id="travel-locations-wrapper-div">
-            <div id="travel-locations-title-div">Nearby Dungeons</div>
-            <div id="travel-locations-hint-div" class="hint-text">Be sure you're rested and prepared before traveling to a dungeon.</div>
-            <div name="travel-locations-div" id="travel-locations-div"></div>
-        </div>
-        <!--
-        <button id="download-save-button">Download Save</button>  
-        -->
-    </div>
-    
-    <div id="dungeon-screen">
-        <div id="game-window">
-            
-            <div id="board" tabindex="0"></div> 
-            
-            <div id="log-window">
-                <div id="log-title">Log ↓</div>
-                <div id="log"></div>
+
+
+            <div class="inventory" id = "world-inventory">
+                <div class="inventory-description" id = "world-inventory-description"></div>
+                <div class="inventory-title" id="world-inventory-title">Inventory</div>
+                <div id ="world-inventory-list" class="inventory-list"></div>
+            </div>
+            <div class="inventory" id = "side-menu">
+                <div class="inventory-description" id = "side-menu-description"></div>
+                <div class="inventory-title" id="side-menu-title"></div>
+                <div id ="side-menu-content"></div>
             </div>
         </div>
-        <div class="hint-divs"></div>
-        <div id = "dungeon-inventory-wrapper" class="inventory-wrapper">
-            <div class="inventory-title">Inventory</div>
-            <div id="dungeon-inventory" class="inventory">
-                <div id ="dungeon-inventory-list" class="inventory-list"></div>
-                <div id ="dungeon-inventory-description" class="inventory-description"></div>
-            </div>
-            <div id="under-inventory-div">
-                <button id = 'drop-items-button'>Drop Items</button>
-                <div id="gold-div"class="gold-div"></div>
-            </div>
-            
-        </div>
+        
+        <div class="hint-divs follower"></div>
     </div>
     <div class="hint-divs" id = 'town-hint-div'></div>
     <div id = "town-inventory-wrapper" class="inventory-wrapper">

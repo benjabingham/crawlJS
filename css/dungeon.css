@@ -2,17 +2,6 @@
     display:none;
 }
 
-
-#game-window{
-    background-color: var(--floor);
-    color: var(--defaultEntity);
-    display:flex;
-    margin:auto;
-    border:1px solid var(--border);
-    width:fit-content;
-    height:510px;
-}
-
 #board:focus{
     border:none;
 }
@@ -22,6 +11,7 @@
     background-color: #d9d2bf;
     color: #3d3936;
     */
+    border:1px solid var(--border);
     background-color:var(--dark);
     white-space:pre-line;
     font-family: monospace;
@@ -50,6 +40,14 @@
     width: 510px;
     height:510px;
     pointer-events: none;
+}
+
+.bag-board:after{
+    box-shadow: inset 0 0 0 1000px var(--bag-overlay) !important;
+    content:"Rummaging... \A  [Tab] - Stop Rummaging \A  [Numpad/ArrowKeys] - Navigate \A [Num5/Enter] - Take/Use Item \A [Q] - Toggle Quickslot \A [Numbar] - Swap To Quickslot \A [E]- Equip Item \A [C] - Consume Item \A [B] - Burn Item \A [D] - Drop Items"!important;
+    font-size: 1.3rem;  
+    color:white;
+    font-style: italic;
 }
 
 

@@ -17,31 +17,51 @@
 .inventory{
     background-color: var(--menuBack);
     color: var(--menuText);
-    display:flex;
-    height:11.5rem;
     border:1px solid var(--border);
+    width:300px;
+    display:flex;
+    flex-direction:column;
 }
 
 .inventory-list{
-    width:610px;
-    display:grid;
+    /*width:600px;*/
+    /*display:grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0px;
-    grid-auto-rows: 36px;
+    grid-auto-rows: 2rem;
+    */
     padding-top:2px;
+    height:68%;
+    overflow:scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color:var(--wall) var(--floor);
+    flex:1;
 }
 
 .inventory-slot{
     padding:4px;
-    margin-left:3px;
+    margin:0px 3px;
+    height:31px;
+    box-sizing: border-box;
     display:flex;
-    height:25px;
-    line-height:25px;
     background-color: var(--inventorySlot);
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid var(--inventoryBorder);
     /*border:1px solid gray*/
 }
+
+.inventory-between-div{
+    height:3px;
+
+    
+}
+
+.lastSlot{
+        background-color: var(--highlight);
+        height:10px;
+    }
+
 
 .inventory-slot:hover{
     cursor: pointer;
@@ -86,7 +106,7 @@
     border-color: var(--shopFreshBorder);
 }
 
-.selected-true>.item-name{
+.primed-true>.item-name{
     /*background-color:var(--selectedSlot);*/
     text-decoration: underline;
 }
@@ -99,16 +119,16 @@
     background-color: var(--muteRed);
 }
 
-.primed-true{
+.selected-true{
     border: 2px solid black;
 }
 
 .inventory-description{
+    padding:3px;
     outline:1px solid var(--border);
-    margin-left:auto;
-    width:250px;
-    padding:5px;
+    height:180px;
     text-align:left;
+    background-color: var(--inventorySlotHover);
 }
 
 .inventory-description-body{
@@ -138,21 +158,50 @@
 
 .item-slot-number{
     padding-right:5px;
-    /*border-right:1px solid black;*/
-    text-align:center;
+    /*border-right:1px solid black*/
 }
 
-.item-slot-number:after{
-    content:". "
+#inventory{
+    width:300px;
 }
 
-.proficiencySpan{
-    /*font-size:xx-small;*/
+.available-false{
+    background-color:var(--slotUnavailable);
 }
 
-sup { 
-    vertical-align: top;
-    position: relative;
-    top: -0.5em; 
-    font-size: 0.6em;
+.inventory-extras-div{
+    padding:5px;
+    display:flex;
+
+    border-top:1px solid var(--border);
+
+    background-color:var(--inventorySlotHover);
+
+    div{
+        margin:5px;
+    }
+
+    .gold-div{
+       font-weight:600; 
+       flex:1;
+       text-align: right;
+    }
+    /*color: var(--altBackText);*/
+}
+
+.inventory-title-buttons{
+    margin:5px;
+}
+
+.dragged-item{
+    padding:4px;
+    margin:3px;
+    height:31px;
+    box-sizing: border-box;
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
+    font-weight:800;
+    width:200px;
+    /*border:1px solid gray*/
 }

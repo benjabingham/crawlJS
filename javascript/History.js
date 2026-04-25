@@ -54,10 +54,12 @@ class History{
             }
         }
         let playerJson = Player.getPlayerJson();
+        let inventorySnapshot = Inventory.getSnapshot();
         let XPJson = XP.getSnapshot();
         History.snapshots.push({
             entities:entities,
             player:playerJson,
+            inventory:inventorySnapshot,
             stainArray:JSON.stringify(Board.stainArray),
             XPJson: XPJson
         })
@@ -86,6 +88,7 @@ class History{
         Board.placeEntities();
         
         Player.setPlayerInfo(snapshot.player);
+        Inventory.loadSnapshot(snapshot.inventory);
         EntityManager.syncPlayerInventory();
 
         console.log({

@@ -37,7 +37,6 @@ class Player {
     static inventory = {
         slots: 10,
         items:[
-            JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)),
         ]
     }
 
@@ -106,7 +105,11 @@ class Player {
     static getRestInfo(){
         let healthChange = Player.nourishmentLevel;
         let oldHealth = Player.health;
-        let newHealth = Math.min(oldHealth+healthChange,Player.healthMax)
+        if(healthChange + oldHealth > Player.healthMax){
+            let excess = (healthChange + oldHealth) - Player.healthMax
+            healthChange -= excess
+        }
+        let newHealth = oldHealth+healthChange
 
         let nourishmentChange = (newHealth - oldHealth)*-1;
         nourishmentChange -=3;
@@ -242,7 +245,7 @@ class Player {
         */
         if(Player.nourishment < 0){
             Player.changeHealth((Player.nourishment));
-            Log.addMessage('You are starving.', 'urgent');
+            Log.addMessage('You are starving! ' + Player.nourishment +" health!", 'urgent');
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
@@ -282,25 +285,41 @@ class Player {
     }
 
     static useItem(item){
+        console.log('useItem')
+        console.log(item);
         if(!item){
             return false;
         }
+
+        let dungeonMode = GameMaster.dungeonMode;
         
-        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
+        if(dungeonMode && item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            return Player.unequipWeapon();
-        }else if(item.weapon && !Player.equipped){
+        }else if(dungeonMode && item.weapon && !Player.equipped){
             return Player.equipWeapon(item);
-        }else if(item.fuel){
+        }else if(dungeonMode && item.fuel){
             return Player.addFuel(item);
         }else if(item.food){
             return Player.eatItem(item);
         }else if (item.potable){
             return Player.drinkItem(item);
+        }else if(!dungeonMode){
+            let result = Shop.sellItem(item.slot);
+            Inventory.displayInventory();
+
+            return result;
         }
         return false;
     }
 
     static pickUpItem(item){
+        let quickSlot = true;
+        let nQuickSlots = Inventory.nQuickSlots;
+        //if item N exists and is quickslotted, new item is not quickslotted. Otherwise it is.
+        if(Player.inventory.items[nQuickSlots-1] && Player.inventory.items[nQuickSlots-1].quickSlot){
+            quickSlot = false;
+        }
+        item.quickSlot = quickSlot
         Player.inventory.items.push(item);
         Player.inventoryCleanup();
     }
@@ -310,6 +329,9 @@ class Player {
             return false;
         }
         Player.equipped = weapon;
+        if(!weapon.quickSlot){
+            Inventory.swapSlot(0,weapon);
+        }
         EntityManager.equipWeapon('player', weapon, verbose);
         return true;
     }
@@ -445,15 +467,27 @@ class Player {
 
     
     static inventoryCleanup(){
+        let quickSlots = [];
         let newInventory = [];
 
         while(Player.inventory.items.length > 0){
-            newInventory.push(Player.inventory.items.pop())
+            let item = Player.inventory.items.shift();
+            if(!item){
+                continue;
+            }
+            if(item.quickSlot && quickSlots.length < Inventory.nQuickSlots){
+                quickSlots.push(item);
+            }else{
+                newInventory.push(item)
+                item.quickSlot = false;
+            }
         }
+
+        newInventory = quickSlots.concat(newInventory);
         let slot = 0;
 
         while(newInventory.length > 0){
-            let item = newInventory.pop();
+            let item = newInventory.shift();
             if(item){
                 Player.inventory.items.push(item);
                 item.slot = slot;
@@ -461,7 +495,7 @@ class Player {
             }
 
         }
-
+        console.log(Player.inventory.items);
     }
 
     static dropItem(slot){
@@ -471,8 +505,23 @@ class Player {
         if(Player.equipped && Player.equipped.slot == slot){
             Player.unequipWeapon();
         }
+        Player.inventory.items[slot].quickSlot = false;
         let playerEntity = EntityManager.getEntity('player');
         playerEntity.dropItem(slot);
+    }
+
+    static dropBag(){
+        console.log('dropbag')
+        let slot = 0;
+        //find first nonquickslot item
+        while(Player.inventory.items[slot] && Player.inventory.items[slot].quickSlot){
+            slot++
+        }
+        //drop everything 
+        while(Player.inventory.items[slot]){
+            Player.dropItem(slot);
+        }
+        
     }
 
     //TODO - make work like crit, so strike types can have advantage too?

@@ -1,6 +1,6 @@
 class Save{
     static maps = {};
-    static day = 0;
+    static day = 1;
 
     static saveInit(){
         Player.playerInit();
@@ -20,12 +20,7 @@ class Save{
                 Save.maps = fileJson.maps;
                 for (const [key, value] of Object.entries(fileJson.player)) {
                     Save.player[key] = value;
-                    console.log({
-                        k:key,
-                        v:value
-                    })
                 }
-                console.log(Save.player);
             }
             reader.onerror = function (evt) {
                 $('#load-file-input').append("error reading file");
@@ -51,7 +46,6 @@ class Save{
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
 
-        console.log(this);
     }
 
     static mapInit(json){
@@ -85,9 +79,6 @@ class Save{
             json.floorMatrix = JSON.parse(json.floorMatrix);
         }
         Save.maps[roomString] = json;
-        console.log(json);
-        console.log(Save.maps);
-        console.log('loaded');
     }
 
     static catchUpMap(mapString){
@@ -97,6 +88,7 @@ class Save{
             console.log(i);
             Save.mapRespawn(mapString);
             Save.degradeStains(mapString);
+            Save.scatterItems(mapString);
         }
         map.lastDay = day;
     }
@@ -123,7 +115,7 @@ class Save{
         let map = Save.maps[mapString];
         console.log(map)
         map.roster.forEach((entity)=>{
-            console.log(entity);
+            //console.log(entity);
             if((!entity.alive || entity.entityGroupInfo.entitytype == 'container') && entity.entityGroupInfo.respawnChance){
                 let random = Random.roll(0,99);
                 if(random < entity.entityGroupInfo.respawnChance){
@@ -137,5 +129,108 @@ class Save{
                 }
             }
         })
+    }
+
+    static scatterItems(mapString){
+        let map = Save.maps[mapString];
+        let stealers = 0
+        let nMisc = 0;
+        //console.log(map);
+        let nTiles = map.height * map.width;
+        //itempiles are at the end of the roster... so just one loop is enough
+        map.roster.forEach((entity)=>{
+            if(entity.entityGroupInfo.entityType == "monster" && entity.alive){
+                stealers++;
+            }else if(entity.entityGroupInfo.entityType == "itemPile"){
+
+                //total number of map tiles minus walls and such
+                let mapSpace = nTiles - nMisc;
+                let percentMonsters = stealers/mapSpace;
+                let stealChance = percentMonsters;
+                //take first (most valuable) item first
+                if(entity.inventory.gold){
+                    let rand = Math.random()
+                    rand = 0;
+                    if(rand < stealChance*entity.inventory.gold){
+                        Save.scatterGold(entity.inventory.gold, mapString)
+                        entity.inventory.gold = 0;
+                    }
+                }
+                let stolenIndexes = [];
+                for(let i = 0; i < entity.inventory.items.length; i++){
+                    let item = entity.inventory.items[i]
+                    let itemStealChance = stealChance;
+                    itemStealChance *= item.value+1;
+                    if(item.food){
+                        itemStealChance *= item.value+1;
+                        itemStealChance+=.05
+                    }
+                    let rand = Math.random();
+                    if(rand < itemStealChance){
+                        Save.scatterItem(item, mapString)  
+                        stolenIndexes.push(i);
+                    }
+                }
+                stolenIndexes.reverse();
+                stolenIndexes.forEach(i=>{
+                    entity.inventory.items.splice(i,1)
+                })
+
+                if(!entity.inventory.gold && !entity.inventory.items.length){
+                    entity.alive = false;
+                }
+                
+            }else{
+                nMisc++;
+            }
+        })
+    }
+
+    //gives item to a random monster or container
+    static scatterItem(item, mapString){
+        let entities = Save.getEntitiesWithSpace(mapString);
+        let entity = entities[Random.roll(0,entities.length-1)]
+        entity.inventory.items.push(item);
+    }
+
+    //gives gold to a random monster or container
+    static scatterGold(gold, mapString){
+        let entities = Save.getEntitiesWithSpace(mapString);
+        let entity = entities[Random.roll(0,entities.length-1)]
+        if(!entity.inventory.gold){
+            entity.inventory.gold = 0;
+        }
+        entity.inventory.gold += gold
+    }
+
+    static getEntitiesWithSpace(mapString){
+        let map = Save.maps[mapString];
+        let entities = []
+        map.roster.forEach((entity)=>{
+            if(Save.entityHasSpace(entity)){
+                entities.push(entity);
+            }
+        })
+
+        return entities;
+    }
+
+    static entityHasSpace(entity){
+        let inventory = entity.inventory.items
+        let key = entity.entityGroupInfo.key;
+        let template
+        if(entity.entityGroupInfo.entityType == "monster"){
+            template = monsterVars[key]
+        }else if(entity.entityGroupInfo.entityType == "container"){
+            template = containerVars[key]
+        }else{
+            return false;
+        }
+            
+        if(template){
+            return inventory.length <= template.inventorySlots
+        }else{
+            return false
+        }
     }
 }

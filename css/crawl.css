@@ -3,6 +3,28 @@ html{
     color: var(--altBackText);
 }
 
+#game-window{
+    /*background-color: var(--floor);*/
+    color: var(--defaultEntity);
+    display:flex;
+    margin:auto;
+    width:fit-content;
+    display:block;
+    /*height:510px;*/
+}
+
+#main-content{
+    display:flex;
+    height:730px;
+}
+
+#mid-content{
+    display: flex;
+    flex-direction: column;
+    margin:0 1rem;
+    width:510px;
+}
+
 #instructions-div{
     width:875px;
     margin:auto;
@@ -28,15 +50,29 @@ button:hover,
 }
 
 .hint-divs{
-    text-align:center;
     /*font-style:italic;*/
-    color:var(--altBackText);
+    pointer-events: none;
+    display: none;
+    padding:4px;
+    margin:0px 3px;
+    box-sizing: border-box;
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
+    /*transform:translateY(17px)*/
+    transform:translateX(12px);
+    width:fit-content;
+    max-width:300px;
+}
 
-    height:1rem;
+.label{
+    font-style:italic;
+    text-transform: capitalize;
+    font-weight:600;
+}
 
-    p{
-        margin:0px;
-    }
+.info{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.103);
 }
 
 #custom-controls-wrapper-div{
@@ -118,4 +154,12 @@ h1, h2, h3{
 
 #menu-buttons-div{
     display:flex;
+}
+
+.follower{
+    position:absolute;
+}
+
+#side-menu{
+    visibility: hidden;
 }

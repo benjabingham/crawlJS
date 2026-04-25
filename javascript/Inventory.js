@@ -177,10 +177,10 @@ class Inventory{
             descriptionBodyElement = '';
         }
 
-        let proficiencySpan = Display.getProficiencySpan(item);
+        let header = Inventory.getItemDescriptionHeader(item, inventory);
 
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
+            header
         ).append(
             descriptionBodyElement
         )
@@ -224,14 +224,6 @@ class Inventory{
         if(item.flimsy){
             $('#'+inventory+'-description').append(
                 $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
-            )
-        }
-
-        if(itemValue){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-value').append(
-                    $('<div>').text('Sell Value: ').append(itemValue)
-                )
             )
         }
 
@@ -313,6 +305,31 @@ class Inventory{
                 }
             })    */
         }
+    }
+
+    static getItemDescriptionHeader(item, inventory){
+        let proficiencySpan = Display.getProficiencySpan(item);
+        let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
+        let goldValue;
+        let goldHint;
+        if(shopItem){
+            goldValue = item.price
+            goldHint = "This item can be purchased for "+goldValue+" gold."
+        }else{
+            goldValue = item.value
+            goldHint = "This item can be sold for "+goldValue+" gold."
+        }
+
+        let header = $('<div>').addClass('item-description-header');
+        let goldDiv = $('<div>').addClass('item-gold-div').text(goldValue+'g')
+        Display.setHintText(goldDiv,goldHint,'info')
+        let name = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
+        let bulkDiv = $('<div>').addClass('item-bulk-div').text(item.bulk+"b");
+        Display.setHintText(bulkDiv, "This item has a bulk of "+item.bulk+".","info")
+
+        header.append(goldDiv).append(name).append(bulkDiv)
+
+        return header;
     }
 
     static checkAddBagTitle(item, bagTitle){

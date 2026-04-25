@@ -11,6 +11,7 @@ let itemVars = {
                 blunt:true,
                 simple:true
             },
+            bulk:1,
             jab:{
                 damage:2,
                 stunTime:2,
@@ -33,6 +34,7 @@ let itemVars = {
                 blunt:true,
                 sharp:true,
             },
+            bulk:1,
             jab:{
                 damage:2,
                 stunTime:2,
@@ -51,6 +53,7 @@ let itemVars = {
             stunTime:5,
             weight:3,
             flimsy:-1,
+            bulk:2,
             type:{
                 blunt:true
             },
@@ -71,6 +74,7 @@ let itemVars = {
             stunTime:7,
             weight:5,
             flimsy:-1,
+            bulk:5,
             type:{
                 blunt:true
             },
@@ -92,6 +96,7 @@ let itemVars = {
             damage:2,
             stunTime:2,
             weight:1,
+            bulk:1.5,
             type:{
                 sword:true,
                 sharp:true,
@@ -114,6 +119,7 @@ let itemVars = {
             damage:7,
             stunTime:2,
             weight:3,
+            bulk:1.5,
             strafe:{
                 damage:6,
                 stunTime:2,
@@ -138,6 +144,7 @@ let itemVars = {
             damage:4,
             stunTime:1,
             weight:2,
+            bulk:1,
             type:{
                 sword:true,
                 edged:true,
@@ -163,6 +170,7 @@ let itemVars = {
             damage:8,
             stunTime:2,
             weight:3,
+            bulk:2,
             type:{
                 sword:true,
                 edged:true,
@@ -177,6 +185,7 @@ let itemVars = {
             damage:8,
             stunTime:1,
             weight:3,
+            bulk:2,
             type:{
                 sword:true,
                 edged:true,
@@ -202,6 +211,7 @@ let itemVars = {
             damage:12,
             stunTime:4,
             weight:5,
+            bulk:4,
             type:{
                 sword:true,
                 edged:true,
@@ -217,6 +227,7 @@ let itemVars = {
             damage:20,
             stunTime:6,
             weight:7,
+            bulk:6,
             draw:{
                 damage:25,
                 stunTime:8,
@@ -243,6 +254,7 @@ let itemVars = {
             damage:1,
             stunTime:2,
             weight:2,
+            bulk:1,
             type:{
                 edged:true,
                 axe:true,
@@ -267,6 +279,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
+            bulk:2.5,
             type:{
                 axe:true,
                 improvised:true,
@@ -291,6 +304,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
+            bulk:6,
             type:{
                 edged:true,
                 axe:true,
@@ -315,6 +329,7 @@ let itemVars = {
             damage:8,
             stunTime:3,
             weight:4,
+            bulk:7,
             type:{
                 edged:true,
                 long:true,
@@ -341,7 +356,8 @@ let itemVars = {
             fuel:true,
             light:2,
             uses:3,
-            value:5
+            value:5,
+            bulk:1,
         },
         kindling:{
             usable:true,
@@ -349,29 +365,34 @@ let itemVars = {
             fuel:true,
             light:1,
             value:0,
-            color:'woodBrown'
+            color:'woodBrown',
+            bulk:0.25,
         }
     },
     drops:{
         direRatPelt:{
             name:"dire rat pelt",
             value:1,
-            color:'brown'
+            color:'brown',
+            bulk:1,
         },
         wolfPelt:{
             name:"wolf pelt",
             value:2,
-            color:'brown'
+            color:'brown',
+            bulk:1.5,
         },
         direWolfPelt:{
             name:"dire wolf pelt",
             value:4,
-            color:'gray'
+            color:'gray',
+            bulk:2,
         },
         kingRatSkull:{
             name:"king rat's skull",
             value:15,
-            color:'red'
+            color:'red',
+            bulk:1,
         },
         branch:{
             weapon:true,
@@ -379,6 +400,7 @@ let itemVars = {
             damage:1,
             stunTime:1,
             weight:1,
+            bulk:0.5,
             type:{
                 blunt:true,
                 improvised:true
@@ -394,12 +416,14 @@ let itemVars = {
         sigiledBone:{
             name:"sigiled bone",
             value:1,
-            color:'bone'
+            color:'bone',
+            bulk:0.5,
         },
         sigiledSkull:{
             name:"sigiled skull",
             value:3,
-            color:'bone'
+            color:'bone',
+            bulk:1,
         },
         blueGoo:{
             name:'blue goo',
@@ -408,7 +432,8 @@ let itemVars = {
             fuel:1,
             light:1,
             color:'blue',
-            value:1
+            value:1,
+            bulk:0.5,
         },
         blackGoo:{
             name:'black goo',
@@ -416,7 +441,8 @@ let itemVars = {
             fuel:1,
             light:-3,
             color:'black',
-            value:4
+            value:4,
+            bulk:0.5,
         },
         orangeGoo:{
             name:'orange goo',
@@ -425,7 +451,8 @@ let itemVars = {
             fuel:1,
             light:1,
             color:'orange',
-            value:2
+            value:2,
+            bulk:0.5,
         },
         greenGoo:{
             name:'green goo',
@@ -433,7 +460,8 @@ let itemVars = {
             fuel:1,
             light:2,
             color:'green',
-            value:3
+            value:3,
+            bulk:0.5,
         },
         purpleGoo:{
             name:'purple goo',
@@ -441,7 +469,8 @@ let itemVars = {
             fuel:3,
             light:3,
             color:'brightPurple',
-            value:4
+            value:4,
+            bulk:0.5,
         },
         pan:{
             weapon:true,
@@ -451,6 +480,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:2,
+            bulk:1.2,
             type:{
                 blunt:true,
                 improvised:true,
@@ -476,6 +506,7 @@ let itemVars = {
             stunTime:2,
             weight:1,
             flimsy:8,
+            bulk:0.5,
             type:{
                 blunt:true,
                 improvised:true,
@@ -505,6 +536,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
+            bulk:3,
             type:{
                 blunt:true,
                 improvised:true,
@@ -534,6 +566,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
+            bulk:3,
             type:{
                 improvised:true,
                 long:true,
@@ -562,51 +595,63 @@ let itemVars = {
     treasure:{
         thimble:{
             name:"thimble",
-            value:1
+            value:1,
+            bulk:0.1,
         },
         bead:{
             name:"bead",
-            value:1.5
+            value:1.5,
+            bulk:0.1,
         },
         ring:{
             name:"ring",
-            value:4
+            value:4,
+            bulk:0.1,
         },
         cup:{
             name:"cup",
-            value:6
+            value:6,
+            bulk:0.25,
         },
         pendant:{
             name:"pendant",
-            value:6
+            value:6,
+            bulk:0.15,
         },
         plate:{
             name:"plate",
-            value:8
+            value:8,
+            bulk:1,
         },
         bowl:{
             name:"bowl",
-            value:9
+            value:9,
+            bulk:1.2,
         },
         vase:{
             name:"vase",
-            value:10
+            value:10,
+            bulk:2.5,
         },
         coinPouch:{
             name:"coin pouch",
-            value:10
+            value:10,
+            bulk:0.2,
         },
         statuette:{
             name:"statuette",
-            value:12
+            value:12,
+            bulk:1,
         },
         tiara:{
             name:"tiara",
-            value:12
+            value:12,
+            bulk:0.75,
         },
         crown:{
             name:"crown",
-            value:20
+            value:20,
+            bulk:1.2,
         }
     },
     weaponMaterials:{
@@ -616,6 +661,7 @@ let itemVars = {
             stunTime: -2,
             weight:-1,
             damage:-1,
+            bulk:0.8,
             sharp:{
                 damage:-1,
                 flimsy:2
@@ -653,6 +699,7 @@ let itemVars = {
             weight:2,
             stunTime:3,
             damage:2,
+            bulk:2,
             blunt:{
                 damage:2
             },
@@ -707,6 +754,7 @@ let itemVars = {
             },
             value:2,
             color:'darkgray',
+            bulk:3,
 
             frequency:3
 
@@ -822,6 +870,7 @@ let itemVars = {
             blunt:{
                 damage: 4
             },
+            bulk:5,
             unwieldy:1,
             value:8,
             color:'black',
@@ -837,6 +886,7 @@ let itemVars = {
             sharp:{
                 damage:2
             },
+            bulk:0.5,
             value:8,
             color:'silver',
             frequency:1
@@ -857,6 +907,7 @@ let itemVars = {
             sharp:{
                 damage:-1
             },
+            bulk:1.5,
             value:10,
             color:'silver',
             frequency:3
@@ -874,6 +925,7 @@ let itemVars = {
             },
             value:12,
             color:'gold',
+            bulk:3,
             frequency:3
         },
         platinum:{
@@ -882,6 +934,7 @@ let itemVars = {
             stunTime:4,
             flimsy:1,
             damage:4,
+            bulk:5,
             blunt:{
                 damage:2
             },
@@ -896,6 +949,7 @@ let itemVars = {
             sharp:{
                 damage:2
             },
+            bulk:0.75,
             value:20,
             color:'blue',
             frequency:1
@@ -920,6 +974,7 @@ let itemVars = {
             usable:true,
             fuel:true,
             light:2,
+            bulk:0.1,
         },
         bone:{
             name:"bone",
@@ -938,7 +993,8 @@ let itemVars = {
         stone:{
             name:'stone',
             value:0.4,
-            color:"gray"
+            color:"gray",
+            bulk:1.5,
         },
         
         iron:{
@@ -959,7 +1015,8 @@ let itemVars = {
         lead:{
             name:'lead',
             value:2,
-            color:"darkgray"
+            color:"darkgray",
+            bulk:3,
         },
         sigiledBone:{
             name:"sigiled bone",
@@ -979,27 +1036,32 @@ let itemVars = {
         tin:{
             name:'tin',
             value:4,
-            color:"lightGray"
+            color:"lightGray",
+            bulk:0.7,
         },
         sterling:{
             name:'sterling silver',
             value:5,
-            color:'silver'
+            color:'silver',
+            bulk:1.2,
         },
         silver:{
             name:'silver',
             value:8,
-            color:"silver"
+            color:"silver",
+            bulk:1.5,
         },
         gold:{
             name:'gold',
             value:10,
-            color:"gold"
+            color:"gold",
+            bulk:3,
         },
         platinum:{
             name:'platinum',
             value:20,
-            color:"silver"
+            color:"silver",
+            bulk:4,
         }
     },
     weaponModifiers:{
@@ -1075,14 +1137,16 @@ let itemVars = {
             usable: true,
             food:1,
             color:'brown',
-            value:0
+            value:0,
+            bulk:0.3,
         },
         berries:{
             name:'berries',
             usable: true,
             food:1,
             value:1,
-            color:'red'
+            color:'red',
+            bulk:0.1,
         },
         provisions:{
             name:'provisions',
@@ -1090,14 +1154,16 @@ let itemVars = {
             food:1,
             value:2,
             uses:3,
-            color:'brown'
+            color:'brown',
+            bulk:0.5,
         },
         fineCheese:{
             name:'fine cheese',
             usable: true,
             food:1,
             value:3,
-            color:'bone'
+            color:'bone',
+            bulk:0.5,
         },
         baguette:{
             name:'stale baguette',
@@ -1105,6 +1171,7 @@ let itemVars = {
             food:1,
             color:'bone',
             flimsy:35,
+            bulk:1,
 
             weapon:true,
             damage:1,
@@ -1126,6 +1193,7 @@ let itemVars = {
             damage:1,
             stunTime:2,
             weight:1,
+            bulk:1,
             type:{
                 blunt:true,
                 improvised:true
@@ -1140,7 +1208,8 @@ let itemVars = {
             light:1,
             fuel:1,
             color:'gold',
-            value:5
+            value:5,
+            bulk:1,
         },
         cake:{
             name:'cake',
@@ -1148,6 +1217,7 @@ let itemVars = {
             food:1,
             value:4,
             uses:5,
+            bulk:2,
             color:'brightPurple'
         },
         ultimateSalami:{
@@ -1159,6 +1229,7 @@ let itemVars = {
             damage:3,
             stunTime:4,
             weight:2,
+            bulk:1,
             type:{
                 blunt:true,
                 improvised:true
@@ -1176,7 +1247,9 @@ let itemVars = {
             value: 3,
             negative:true,
             message:'your life force weakens.',
-            tip: 'You lost health'
+            tip: 'You lost health',
+            
+            bulk:0.5,
         },
         darkness:{
             name:'potion of darkness',
@@ -1186,7 +1259,9 @@ let itemVars = {
             light: -10,
             value: 3,
             negative:true,
-            message:'your light is extinguished.'
+            message:'your light is extinguished.',
+            
+            bulk:0.5,
         },
         illFortune:{
             name:'potion of ill fortune',
@@ -1196,7 +1271,9 @@ let itemVars = {
             luck: -3,
             value: 3,
             negative:true,
-            message: 'Your luck drains away.'
+            message: 'Your luck drains away.',
+            
+            bulk:0.5,
         },
         fatigue:{
             name:'potion of fatigue',
@@ -1207,7 +1284,9 @@ let itemVars = {
             value: 3,
             negative:true,
             message: 'Your energy is sapped.',
-            tip: 'You lost stamina'
+            tip: 'You lost stamina',
+            
+            bulk:0.5,
         },
         vomitingPotion:{
             name:'potion of vomiting',
@@ -1219,7 +1298,9 @@ let itemVars = {
             value: 3,
             negative:true,
             message: 'You empty your stomach onto the floor.',
-            tip: 'You lost hunger'
+            tip: 'You lost hunger',
+            
+            bulk:0.5,
 
         },
         unlabeled:{
@@ -1229,7 +1310,9 @@ let itemVars = {
             color:'darkPurple',
             unlabeled: true,
             value: 5,
-            tier: 3
+            tier: 3,
+            
+            bulk:0.5,
         },
         healthTincture:{
             name:'health tincture',
@@ -1238,7 +1321,9 @@ let itemVars = {
             health: 2,
             value: 5,
             color: 'red',
-            message:'Your wounds close.'
+            message:'Your wounds close.',
+            
+            bulk:0.5,
         },
         healthPotion:{
             name:'health potion',
@@ -1247,7 +1332,9 @@ let itemVars = {
             health: 5,
             value: 10,
             color: 'red',
-            message:'Your wounds close.'
+            message:'Your wounds close.',
+            
+            bulk:0.5,
         },
         greaterHealthPotion:{
             name:'greater health potion',
@@ -1256,7 +1343,9 @@ let itemVars = {
             health: 10,
             value: 20,
             color: 'red',
-            message:'Your wounds close.'
+            message:'Your wounds close.',
+            
+            bulk:0.5,
         },
         staminaTincture:{
             name:'stamina tincture',
@@ -1266,7 +1355,9 @@ let itemVars = {
             value: 5,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
-            tip: 'You gained stamina'
+            tip: 'You gained stamina',
+            
+            bulk:0.5,
         },
         staminaPotion:{
             name:'stamina potion',
@@ -1276,7 +1367,9 @@ let itemVars = {
             value: 7,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
-            tip: 'You gained stamina'
+            tip: 'You gained stamina',
+            
+            bulk:0.5,
         },
         greaterStaminaPotion:{
             name:'greater stamina potion',
@@ -1286,7 +1379,9 @@ let itemVars = {
             value: 11,
             color: 'darkYellow',
             message:'You feel a surge of energy.',
-            tip: 'You gained stamina'
+            tip: 'You gained stamina',
+            
+            bulk:0.5,
         },
         luckTincture:{
             name:'luck tincture',
@@ -1295,7 +1390,9 @@ let itemVars = {
             luck: 1,
             value: 5,
             color: 'green',
-            message:'Your luck returns to you.'
+            message:'Your luck returns to you.',
+            
+            bulk:0.5,
         },
         luckPotion:{
             name:'luck potion',
@@ -1304,7 +1401,9 @@ let itemVars = {
             luck: 3,
             value: 10,
             color: 'green',
-            message:'Your luck returns to you.'
+            message:'Your luck returns to you.',
+            
+            bulk:0.5,
         },
         greaterLuckPotion:{
             name:'greater luck potion',
@@ -1313,7 +1412,9 @@ let itemVars = {
             luck: 6,
             value: 15,
             color: 'green',
-            message:'Your luck returns to you.'
+            message:'Your luck returns to you.',
+            
+            bulk:0.5,
         },
         metabolismPotion:{
             name:'metabolism potion',
@@ -1325,7 +1426,9 @@ let itemVars = {
             value: 7,
             color: 'orange',
             message:"You digest your stomach's contents in an instant.",
-            tip: 'You gained stamina and health, at the cost of hunger.'
+            tip: 'You gained stamina and health, at the cost of hunger.',
+            
+            bulk:0.5,
         },
         /*
         unHallowedStrength:{
@@ -1338,7 +1441,9 @@ let itemVars = {
             value: 9,
             color: 'orange',
             message:"You feel reinvigorated, but something's wrong...",
-            tip: 'You gained stamina at the cost of luck.'
+            tip: 'You gained stamina at the cost of luck.',
+            
+            bulk:0.5,
         },
         unHallowedHealth:{
             name:'potion of unhallowed health',
@@ -1350,7 +1455,9 @@ let itemVars = {
             value: 10,
             color: 'darkRed',
             message:"Your wounds close, but something's wrong...",
-            tip: 'You gained health at the cost of luck.'
+            tip: 'You gained health at the cost of luck.',
+            
+            bulk:0.5,
         },   
         unHallowedNourishment:{
             name:'potion of unhallowed nourishment',
@@ -1362,7 +1469,9 @@ let itemVars = {
             value: 3,
             color: 'darkOrange',
             message:"Your stomach fills, but still you feel empty...",
-            tip: 'You gained hunger at the cost of luck.'
+            tip: 'You gained hunger at the cost of luck.',
+            
+            bulk:0.5,
         },
         */
         fatestealerElixir:{
@@ -1376,7 +1485,9 @@ let itemVars = {
             value: 11,
             color: 'brightPurple',
             message:"You feel fully renewed, but something's wrong...",
-            tip: 'You gained hunger, stamina, and health at the cost of luck.'
+            tip: 'You gained hunger, stamina, and health at the cost of luck.',
+            
+            bulk:0.5,
         },
         nectar:{
             name:'nectar',
@@ -1390,7 +1501,9 @@ let itemVars = {
             light:2,
             color: 'gold',
             message:"You feel reinvigorated.",
-            tip: 'You gained stamina, health, luck, and hunger.'
+            tip: 'You gained stamina, health, luck, and hunger.',
+            
+            bulk:0.5,
         },
         ritualBrew:{
             name:'ritual brew',
@@ -1403,7 +1516,9 @@ let itemVars = {
             hunger: -10,
             color: 'darkOrange',
             message:"Your life force is rended from you. You feel reborn.",
-            tip: 'You gained luck at the cost of stamina, health, and hunger'
+            tip: 'You gained luck at the cost of stamina, health, and hunger',
+            
+            bulk:0.5,
         },
         nourishmentPotion:{
             name:'nourishment potion',
@@ -1412,7 +1527,9 @@ let itemVars = {
             value: 4,
             hunger: 10,
             color: 'darkOrange',
-            message:"Your stomach fills."
+            message:"Your stomach fills.",
+            
+            bulk:0.5,
         },
         lightPotion:{
             name:'potion of light',
@@ -1421,7 +1538,9 @@ let itemVars = {
             value: 8,
             light: 10,
             color: 'gold',
-            message:"Your lantern roars to life."
+            message:"Your lantern roars to life.",
+            
+            bulk:0.5,
         },
         darkVigor:{
             name:'potion of dark vigor',
@@ -1432,7 +1551,9 @@ let itemVars = {
             stamina: 10,
             color: 'darkPurple',
             message:"You feel a surge of strength as your lantern is extinguished.",
-            tip: 'You gained stamina.'
+            tip: 'You gained stamina.',
+            
+            bulk:0.5,
         }
     }
 }

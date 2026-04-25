@@ -444,6 +444,21 @@ class LootManager{
                 case 'color':
                     item[key] = value;
                     break;
+                case 'bulk':
+                    if(!item[key]){
+                        item[key] = 1;
+                    }
+                    item[key] *= value 
+
+                    //round to nearest tenth
+                    item[key] *= 10;
+                    item[key] += .5;
+                    item[key] = Math.floor(item[key]);
+                    item[key] /= 10;
+                    
+                    //min value 0.1
+                    item[key] = Math.max(item[key], 0.1);
+                    break;
                 default:
                     if(typeof(value) == "number"){
                         if(!item[key]){

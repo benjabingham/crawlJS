@@ -91,9 +91,30 @@
     height:fit-content;
 }
 
+.item-description-header{
+    display:flex; 
+    margin-bottom: 1rem;
+}
+
+.item-gold-div{
+    font-weight: 600;
+    color: var(--darkOrange)
+}
+
+.item-bulk-div{
+    font-weight:600;
+    color: var(--darkBlue)
+}
+
 .inventory-description-title{
     text-align:center;
     width:100%;
+    flex:1;
+    text-transform: capitalize;
+}
+
+.item-name:has(.proficiencySpan){
+    line-height:0.5rem;
 }
 
 .trait-spans{

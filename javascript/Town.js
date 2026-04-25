@@ -136,7 +136,7 @@ class Town{
             //GameMaster.loadTown();
             //Inventory.displayInventory();
             Shop.restockInventory();
-            Log.addMessage('You rested. It is now day '+Save.day+".")
+            Log.addMessage('You rested.')
             if(restInfo.healthChange > 0){
                 Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
             }

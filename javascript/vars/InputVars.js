@@ -34,6 +34,13 @@ inputVars = {
         {inputName:'burn', inputKey:'KeyB', burn:true},
         {inputName:'show-weights', inputKey:'KeyW', showWeights:true},
         {inputName:'quick-toggle', inputKey:'KeyQ', quickToggle:true},
+
+        {inputName:'use-item', inputKey:'Enter', useItem:true},
+        {inputName:'item-up', inputKey:'ArrowUp', itemNav:true},
+        {inputName:'item-down', inputKey:'ArrowDown', itemNav:true},
+        {inputName:'item-left', inputKey:'ArrowLeft', itemNav:true},
+        {inputName:'item-right', inputKey:'ArrowRight', itemNav:true},
+
     ],
     noNumpad:[
         {inputName:'upleft', inputKey:'KeyI', movePlayer:true},

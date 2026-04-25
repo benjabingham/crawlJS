@@ -395,6 +395,20 @@ class GameMaster{
         return result;
     }
 
+    static useSelectedItem(){
+        if(!Inventory.itemIsAccessible(Inventory.getSelectedItem())){
+            return false;
+        }
+        Inventory.selectItem();
+        return true;
+    }
+
+    static navigateInventory(event){
+        //navigate in inventory instead
+        Inventory.navigate(event);
+        return true;
+    }
+
     static quickToggle(event){
         if(!Inventory.playerInBag){return false}
         if(Inventory.quickToggle()){
@@ -428,11 +442,12 @@ class GameMaster{
         }
     }
 
+
+
     static wait(event){
         if(Inventory.playerInBag){
-            //navigate in inventory instead
-            Inventory.selectItem(event);
-            return true;
+            return GameMaster.useSelectedItem();
+            //navigate in inventory instead   
         }
         GameMaster.stopDrop();
         if (!GameMaster.dungeonMode){
@@ -461,7 +476,7 @@ class GameMaster{
     static movePlayer(event){
         if(Inventory.playerInBag){
             //navigate in inventory instead
-            Inventory.navigate(event);
+            GameMaster.navigateInventory(event);
             return false;
         }
         GameMaster.stopDrop();

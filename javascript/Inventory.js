@@ -396,7 +396,7 @@ class Inventory{
         }
 
         //if full of quickslots, remove item in highest slot
-        if(Player.inventory.items[Inventory.nQuickSlots-1].quickSlot){
+        if(Player.inventory.items[Inventory.nQuickSlots-1] && Player.inventory.items[Inventory.nQuickSlots-1].quickSlot){
             Player.inventory.items[Inventory.nQuickSlots-1].quickSlot = false;
         }
         item.quickSlot = true;
@@ -455,7 +455,14 @@ class Inventory{
     }
 
     static navigate(event){
-        let direction = event.type;
+        console.log(event)
+
+        //this way "up" and "item-up" both work.
+        let splitEventType = event.type.split('-')
+        let direction = splitEventType[splitEventType.length-1];
+        console.log(splitEventType);
+        console.log(direction)
+
         switch(direction){
             case "left":
                 Inventory.selectedInventory = "player-inventory"
@@ -480,7 +487,7 @@ class Inventory{
         this.displayInventory();
     }
 
-    static selectItem(event){
+    static selectItem(){
         if(Inventory.selectedInventory == "player-inventory"){
             let slot = Inventory.displayedInventorySlots["player-inventory"];
             GameMaster.useItem({type:"item-"+(slot+1)})

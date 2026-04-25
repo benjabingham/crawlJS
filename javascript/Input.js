@@ -72,6 +72,8 @@ class InputManager{
                 if(input.equip) GameMaster.equipSelectedItem(event);
                 if(input.burn) GameMaster.burnSelectedItem(event);
                 if(input.quickToggle) GameMaster.quickToggle(event);
+                if(input.useItem) GameMaster.useSelectedItem();
+                if(input.itemNav) GameMaster.navigateInventory(event);
                 //if(input.show-weights)
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
@@ -113,7 +115,6 @@ class InputManager{
         //console.log(theInput);
         theInputs.forEach(input=>{
             if(input){
-                console.log(input)
                 input.onInput();
             }
         })

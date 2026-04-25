@@ -124,14 +124,14 @@ class Log{
                 }
                 messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
                     if(tipText){
-                        $('.hint-divs').text(tipText)  
+                        $('.hint-divs').show().text(tipText).addClass('info');
                     }
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = true;
                         Display.printBoard();
                     }
                 }).on('mouseleave',()=>{
-                    $('.hint-divs').html('');
+                    Display.hideHintDiv();
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = false;
                         Display.printBoard();

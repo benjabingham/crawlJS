@@ -59,13 +59,20 @@ button:hover,
     background-color: var(--inventorySlot);
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid var(--inventoryBorder);
-    font-weight:600;
-    text-transform: capitalize;
     /*transform:translateY(17px)*/
     transform:translateX(12px);
     width:fit-content;
-    max-width:800px;
+    max-width:300px;
+}
+
+.label{
     font-style:italic;
+    text-transform: capitalize;
+    font-weight:600;
+}
+
+.info{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.103);
 }
 
 #custom-controls-wrapper-div{

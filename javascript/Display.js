@@ -46,9 +46,9 @@ class Display{
         Town.showTownScreen();
     }
 
-    static setHintText(element, hintText){
+    static setHintText(element, hintText, hintClass = "info"){
         element.on('mousemove',()=>{
-            $('.hint-divs').show().text(hintText)
+            $('.hint-divs').show().text(hintText).addClass(hintClass);
             
         }).on('mouseleave',()=>{
             Display.hideHintDiv();
@@ -56,7 +56,7 @@ class Display{
     }
 
     static hideHintDiv(){
-        $('.hint-divs').hide().html('');
+        $('.hint-divs').hide().html('').removeClass('info label');
     }
 
     static displayGold(){
@@ -180,7 +180,7 @@ class Display{
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
                             gridDiv.addClass('grid-hint').off('mouseenter')
-                            Display.setHintText(gridDiv, boardArray[y][x].name);
+                            Display.setHintText(gridDiv, boardArray[y][x].name, "label");
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -227,7 +227,7 @@ class Display{
             }
         }
         Display.applyHighlights();
-        Display.setHintText($('.grid-exit'),'EXIT')
+        Display.setHintText($('.grid-exit'),'EXIT',"label")
     }
 
     static showParryHighlight(x,y, entityDiv){

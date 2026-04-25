@@ -32,6 +32,7 @@ class Inventory{
         Inventory.displayContainerInventory();
 
         Inventory.scrollInventories();
+        Inventory.setBulkDiv();
         
         Display.displayGold();
     }
@@ -330,6 +331,12 @@ class Inventory{
         header.append(goldDiv).append(name).append(bulkDiv)
 
         return header;
+    }
+
+    static setBulkDiv(){
+        let bulk = Number.parseFloat(Player.getBulk()).toFixed(1);
+        console.log(bulk)
+        $('.bulk-div').text(bulk+" bulk")
     }
 
     static checkAddBagTitle(item, bagTitle){

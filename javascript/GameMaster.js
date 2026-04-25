@@ -52,7 +52,7 @@ class GameMaster{
             {x:50,y:42}
         );
 
-        //XP.levelUp();
+        XP.levelUp();
 
     }
 

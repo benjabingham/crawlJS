@@ -274,8 +274,10 @@ class XP{
                     }
                     newVal = oldVal + perk.chance;
                     oldVal *= 100;
+                    oldVal = Number.parseFloat(oldVal).toFixed(0);
                     oldVal += "%";
                     newVal *= 100;
+                    newVal = Number.parseFloat(newVal).toFixed(0);
                     newVal += "%";
                     text.append(" ("+oldVal+" → "+newVal+")")
                     break;

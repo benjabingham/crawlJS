@@ -446,6 +446,22 @@ class Player {
         return true;
     }
 
+    static getBulk(){
+        let bulkSum = 0;
+        Player.inventory.items.forEach(item=>{
+            let bulk = 0
+            if(item.bulk){bulk = item.bulk}
+            if(item.quickSlot){bulk /=2}
+
+            bulk*= 10
+            bulk = Math.floor(bulk)
+            bulk /= 10;
+            bulkSum += bulk;
+        })
+
+        return bulkSum;
+    }
+
     static lightDown(){
         if(Player.light < 1){
             return false;

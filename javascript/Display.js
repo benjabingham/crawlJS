@@ -521,6 +521,5 @@ class Display{
             //console.log(false)
         })
         console.log( $('#board'))
-    }
-    
+    }    
 }

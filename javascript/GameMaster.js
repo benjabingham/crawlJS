@@ -210,6 +210,7 @@ class GameMaster{
         }
         if(!GameMaster.dropMode){
             GameMaster.dropMode = true;
+            Inventory.selectedInventory = "player-inventory";
             $('#drop-items-button').text('stop dropping');
         }else{
             GameMaster.stopDrop();
@@ -325,7 +326,7 @@ class GameMaster{
     static consumeSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
-        if(Inventory.selectedInventory == 'container-inventory'){
+        if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
         let result = false
@@ -349,7 +350,7 @@ class GameMaster{
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item)){return false}
-        if(Inventory.selectedInventory == 'container-inventory'){
+        if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
         let result = false
@@ -375,7 +376,7 @@ class GameMaster{
         let result = false
         if(Player.equipped){
             result = Player.unequipWeapon();
-        }else if(Inventory.selectedInventory == 'container-inventory'){
+        }else if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
 

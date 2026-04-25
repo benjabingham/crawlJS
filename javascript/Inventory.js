@@ -459,10 +459,12 @@ class Inventory{
         switch(direction){
             case "left":
                 Inventory.selectedInventory = "player-inventory"
+                GameMaster.stopDrop();
                 break;
             case "right":
                 if(Inventory.selectedContainer){
                     Inventory.selectedInventory = "world-inventory";
+                    GameMaster.stopDrop();
                 }
                 break;
             case "up":
@@ -488,6 +490,7 @@ class Inventory{
                 Shop.buyItem(slot)
             }else{
                 Inventory.take(slot);
+                GameMaster.postPlayerAction();
             }
             Inventory.displayInventory();
         }
@@ -503,10 +506,6 @@ class Inventory{
 
         if(Inventory.itemPile && !Inventory.itemPile.checkIsEmpty()){
             Inventory.itemPile.sortInventory();
-        }
-
-        if(!item.quickSlot && !skipPostAction){
-            GameMaster.postPlayerAction();
         }
     }
 
@@ -784,7 +783,7 @@ class Inventory{
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'drop':
-                        button = this.getDropButton(slot)
+                        button = this.getDropButton(inventory, slot)
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'buy':
@@ -863,5 +862,29 @@ class Inventory{
             Shop.buyItem(slot);
             Inventory.displayInventory();
         })
+    }
+
+    static getSnapshot(){
+        let attributes = [
+            //'displayedInventorySlots',
+            'playerInBag',
+            //'selectedInventory',
+            //'itemPile'
+        ]
+        let snapshot = {}
+        attributes.forEach(attribute=>{
+            snapshot[attribute] = Inventory[attribute];
+        })
+
+        return JSON.stringify(snapshot);
+    }
+
+    static loadSnapshot(snapshotString){
+        let snapshot = JSON.parse(snapshotString);
+        Object.keys(snapshot).forEach(attribute=>{
+            Inventory[attribute] = snapshot[attribute];
+        })
+        this.checkForItemPile();
+        Inventory.bagOverlay();
     }
 }

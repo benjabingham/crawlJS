@@ -38,19 +38,18 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
-        */
-        Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
+        /*
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
             {x:1,y:42}
         );
-        /*
+        */
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
             {x:50,y:42}
-        );*/
+        );
 
     }
 
@@ -377,7 +376,8 @@ class GameMaster{
         if(Player.equipped){
             result = Player.unequipWeapon();
         }else if(Inventory.selectedInventory == 'world-inventory'){
-            Inventory.take(item.slot);
+            //Not necessary, player.equip handles this. Causes a bug.
+            //Inventory.take(item.slot);
         }
 
         if(item.weapon && !Player.equipped && !result){

@@ -72,6 +72,7 @@ class Inventory{
         let draggable = available || shopItem;
         let availableStyling = available || shopItem;   
 
+        let symbolsSpan = $('<span>')
         let symbols = item.symbols;
         if(!symbols){symbols = []}
         symbols = [...symbols];

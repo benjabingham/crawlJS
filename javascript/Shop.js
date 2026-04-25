@@ -202,6 +202,8 @@ class Shop{
         Inventory.displayInventory();
         Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
         GameMaster.postPlayerAction()
+
+        return true;
     }
 
     static sellItem(slot){

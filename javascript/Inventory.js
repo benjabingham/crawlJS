@@ -69,7 +69,7 @@ class Inventory{
         let available = Inventory.itemIsAccessible(item, inventory);
         let dropMode = inventory == "player-inventory" && GameMaster.dropMode && dungeonMode
         let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
-        let draggable = available;
+        let draggable = available || shopItem;
         let availableStyling = available || shopItem;   
 
         let symbolsSpan = $('<span>')
@@ -671,7 +671,17 @@ class Inventory{
                 return true;
             }
             if(Inventory.lastHoveredSlot.inventoryId){
-                if(Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
+                let shopItem = Inventory.draggedItem.inventoryId == "world-inventory" && Inventory.selectedContainer.shop;
+                if(Inventory.lastHoveredSlot.inventoryId == "world-inventory" && Inventory.draggedItem.inventoryId == "player-inventory" && Inventory.selectedContainer.shop){
+                    //sell item
+                    Shop.sellItem(Inventory.draggedItem.slot);
+                }else if(Inventory.lastHoveredSlot.inventoryId == "player-inventory" && shopItem){
+                    //buy item
+                    let item = Inventory.selectedContainer.inventory.items[Inventory.draggedItem.slot]
+                    if(Shop.buyItem(Inventory.draggedItem.slot)){
+                        Inventory.moveItem(item.slot,Inventory.lastHoveredSlot.slot,"player-inventory","player-inventory")
+                    };
+                }else if(!shopItem && Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
                     GameMaster.postPlayerAction();
                 }
             }

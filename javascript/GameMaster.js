@@ -520,6 +520,7 @@ class GameMaster{
 
 
     static postPlayerAction(){ 
+        Display.hideHintDiv()
         if(!GameMaster.dungeonMode){
             Log.turnCounter++;
             Log.printLog();  

@@ -47,12 +47,16 @@ class Display{
     }
 
     static setHintText(element, hintText){
-        element.on('mouseenter',()=>{
+        element.on('mousemove',()=>{
             $('.hint-divs').show().text(hintText)
             
         }).on('mouseleave',()=>{
-            $('.hint-divs').hide().html('');
+            Display.hideHintDiv();
         })
+    }
+
+    static hideHintDiv(){
+        $('.hint-divs').hide().html('');
     }
 
     static displayGold(){
@@ -155,7 +159,7 @@ class Display{
                 if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter mousemove');
                 entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){

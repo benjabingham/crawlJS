@@ -15,6 +15,7 @@ class GameMaster{
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
+        Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         
         /*starterWeapon = LootManager.getFoodLoot();
         Player.pickUpItem(starterWeapon);

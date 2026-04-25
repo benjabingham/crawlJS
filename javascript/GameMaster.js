@@ -340,9 +340,8 @@ class GameMaster{
             return false;
         }
 
-        if(GameMaster.dungeonMode){
-            GameMaster.postPlayerAction();
-        }
+        Inventory
+        GameMaster.postPlayerAction();
 
         return result;
     }
@@ -523,6 +522,7 @@ class GameMaster{
         if(!GameMaster.dungeonMode){
             Log.turnCounter++;
             Log.printLog();  
+            Inventory.displayInventory();
             return false;
         }    
         EntityManager.placeSword('player');   

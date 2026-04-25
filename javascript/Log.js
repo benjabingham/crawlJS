@@ -54,7 +54,7 @@ class Log{
             "Buying a proper meal fills your hunger bar completely.",
             "Luck regenerates when you rest, but very slowly. Use it sparingly!",
             "Weapon breaking is completely random - you can use luck to make your weapons last longer!",
-            "Stunned enemies appear in lower case, and take double damage. Press the advantage!",
+            "Stunned enemies appear in lower case, and recieve guaranteed critical hits. Press the advantage!",
             "Scroll over an object with your mouse to see what it is.",
             "Scroll over a keyword in the log to see what it means.",
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
@@ -65,7 +65,9 @@ class Log{
             "Corrosive(green) and absorbent(orange) oozes track your weapon instead of you. Put it away and they'll leave you alone!",
             "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
             "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them.",
-            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected."
+            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected.",
+            "Your proficiency with a weapon is represented by a number of +s next to that weapon's name. Scroll over the +s to learn more.",
+            "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!"
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

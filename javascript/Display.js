@@ -534,6 +534,7 @@ class Display{
 
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
+        console.log(charCode);
         return keywordVars.symbols[charCode].name
     }
     
@@ -546,14 +547,23 @@ class Display{
         let itemIsSelected = slot == Display.displayedInventorySlot;
         let primed = Display.isPrimed(item.slot);
         let symbolsSpan = $('<span>')
-        if(item.symbols){
-            item.symbols.forEach((symbol)=>{
+        let symbols = item.symbols;
+        if(!symbols){symbols = []}
+        symbols = [...symbols];
+        //console.log(symbols);
+        
+        if(symbols){
+            symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
                 let hintText = Display.getSymbolHintText(symbol);
                 Display.setHintText(symbolSpan,hintText)
                 symbolsSpan.append(symbolSpan);
             })
         }
+
+        let proficiencySpan = Display.getProficiencySpan(item);
+        console.log(proficiencySpan);
+        if(proficiencySpan){console.log(item.name)}
         
         if(!itemValue){
             itemValue = '0';
@@ -563,7 +573,7 @@ class Display{
             $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+GameMaster.dropMode).attr('id',inventory+'-slot-'+slot).append(
                 (inventory != 'shop') ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
-                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(symbolsSpan)
+                $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(proficiencySpan).append(symbolsSpan)
             ).on('click',function(){
                 display.displayItemInfo(item, inventory);
             }).append(
@@ -671,19 +681,21 @@ class Display{
             descriptionBodyElement = '';
         }
 
+        let proficiencySpan = Display.getProficiencySpan(item);
+
         $('#'+inventory+'-description').html('').append(
-            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name)
+            $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
         ).append(
             descriptionBodyElement
         )
-
+ 
 
 
         let traits = keywordVars.traits;
         let hasTrait = false;
         let traitsDiv = $('<div>').addClass('traits-text')
         Object.keys(traits).forEach((key)=>{
-            if(item[key]){
+            if(item[key] || (key == "accustomed" && Player.getAdvantage(item))){
                 let trait = keywordVars.traits[key]
                 let text = trait.name
                 if(hasTrait){
@@ -812,6 +824,36 @@ class Display{
         
 
         
+    }
+
+    static getProficiencySpan(item){
+        let span = $('<sup>').addClass('proficiencySpan');
+        let text = "";
+        let proficiency = Player.getAdvantage(item);
+        if(!proficiency){
+            return false;
+        }
+        for(let i = 0; i < proficiency; i++){
+            text += "+";
+        }
+
+        let proficiencies = Player.getProficiencies(item);
+        let proficienciesTextArray= [];
+        proficiencies.forEach(skill=>{
+            let proficiencyText = skill.skill;
+            if(skill.level != 1){
+                proficiencyText += "(" + skill.level + ")"
+            }
+            proficienciesTextArray.push(proficiencyText)
+        })
+        let proficienciesText = proficienciesTextArray.join(", ")
+
+        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used.";
+        Display.setHintText(span,hintText)
+
+
+        span.text(text);
+        return span;
     }
 
     static setCustomControls(){

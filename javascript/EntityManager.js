@@ -598,24 +598,23 @@ class EntityManager{
         switch (strikeType){
             case "swing":
                 message = 'you swing your weapon into the '+target.name+"."
-                tipText = "A swing is a strike that has you rotating your weapon into a target."
+                tipText = keywordVars.swing.hintText;
                 break;
             case "jab":
                 message = "you jab the "+target.name+'.'
-                tipText = "A target is jabbed when you strike them by advancing towards them."
+                tipText = keywordVars.jab.hintText;
                 break;
             case "strafe":
                 message = "you deliver a strafing strike to the "+target.name+"."
                 strikeType = "strafing"
-                tipText = "A strafing strike is one where you strike while moving sideways or backwards diagonally"
+                tipText = keywordVars.jab.strafe;
                 break;
             case "draw":
                 message = 'you draw your weapon, striking the '+target.name+"."
-                tipText = "a draw strike occurs when you draw your weapon into a target."
+                tipText = keywordVars.draw.hintText;
                 break;
             default:    
                 message = "you strike the "+target.name+".";
-
         }
         EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
     }

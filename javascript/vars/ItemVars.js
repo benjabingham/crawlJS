@@ -3,19 +3,21 @@ let itemVars = {
         club:{
             weapon:true,
             name:"club",
-            damage:4,
+            damage:3,
             stunTime:3,
             weight:2,
             flimsy:-2,
             type:{
-                blunt:true
+                blunt:true,
+                simple:true
             },
             jab:{
                 damage:2,
                 stunTime:2,
                 weight:2,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    simple:true
                 }
             },
             value:2
@@ -28,14 +30,16 @@ let itemVars = {
             weight:2,
             flimsy:-1,
             type:{
-                blunt:true
+                blunt:true,
+                sharp:true,
             },
             jab:{
                 damage:2,
                 stunTime:2,
                 weight:2,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    sharp:true,
                 }
             },
             value:4
@@ -90,6 +94,7 @@ let itemVars = {
             weight:1,
             type:{
                 sword:true,
+                sharp:true,
             },
             jab:{
                 damage:8,
@@ -97,6 +102,7 @@ let itemVars = {
                 weight:2,
                 type:{
                     sword:true,
+                    sharp:true,
                 },
             },
             disallowedMaterials:["flint","limestone","obsidian","rubber"],
@@ -114,12 +120,14 @@ let itemVars = {
                 weight:2,
                 type:{
                     sword:true,
-                    edged:true
+                    edged:true,
+                    sharp:true,
                 },
             },
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
             },
             disallowedMaterials:["flint","limestone","rubber","ceramic","bone"],
             value:7
@@ -132,7 +140,9 @@ let itemVars = {
             weight:2,
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
+                simple:true,
             },
             draw:{
                 damage:4,
@@ -140,7 +150,9 @@ let itemVars = {
                 weight:1,
                 type:{
                     sword:true,
-                    edged:true
+                    edged:true,
+                    sharp:true,
+                    simple:true
                 },
             },
             value:4
@@ -153,7 +165,8 @@ let itemVars = {
             weight:3,
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
             },
             disallowedMaterials:["flint","bone"],
             value:7
@@ -166,7 +179,8 @@ let itemVars = {
             weight:3,
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
             },
             draw:{
                 damage:8,
@@ -174,7 +188,8 @@ let itemVars = {
                 weight:3,
                 type:{
                     sword:true,
-                    edged:true
+                    edged:true,
+                    sharp:true,
                 },
             },
             flimsy:1,
@@ -189,7 +204,8 @@ let itemVars = {
             weight:5,
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
             },
             disallowedMaterials:["ceramic", "flint","bone"],
 
@@ -207,12 +223,14 @@ let itemVars = {
                 weight:9,
                 type:{
                     sword:true,
-                    edged:true
+                    edged:true,
+                    sharp:true,
                 },
             },
             type:{
                 sword:true,
-                edged:true
+                edged:true,
+                sharp:true,
             },
             disallowedMaterials:["wood","bone","ceramic","flint","bone", "rubber", "lightsteel"],
             unwieldy:1,
@@ -226,14 +244,18 @@ let itemVars = {
             stunTime:2,
             weight:2,
             type:{
-                edged:true
+                edged:true,
+                axe:true,
+                sharp:true,
             },
             swing:{
                 damage:6,
                 stunTime:4,
                 weight:2,
                 type:{
-                    edged:true
+                    edged:true,
+                    axe:true,
+                    sharp:true,
                 }
             },
             value:4
@@ -246,14 +268,18 @@ let itemVars = {
             stunTime:3,
             weight:3,
             type:{
-                edged:true
+                axe:true,
+                improvised:true,
+                sharp:true,
             },
             swing:{
                 damage:8,
                 stunTime:3,
                 weight:3,
                 type:{
-                    edged:true
+                    axe:true,
+                    improvised:true,
+                    sharp:true,
                 }
             },
             disallowedMaterials:["ceramic","limestone","obsidian","rubber","glass"],
@@ -266,14 +292,18 @@ let itemVars = {
             stunTime:3,
             weight:3,
             type:{
-                edged:true
+                edged:true,
+                axe:true,
+                sharp:true,
             },
             swing:{
                 damage:15,
                 stunTime:6,
                 weight:5,
                 type:{
-                    edged:true
+                    edged:true,
+                    axe:true,
+                    sharp:true,
                 }
             },
             disallowedMaterials:["flint","ceramic","bone"],
@@ -287,7 +317,8 @@ let itemVars = {
             weight:4,
             type:{
                 edged:true,
-                long:true
+                long:true,
+                sharp:true,
             },
             swing:{
                 damage:15,
@@ -295,7 +326,8 @@ let itemVars = {
                 weight:6,
                 type:{
                     edged:true,
-                    long:true
+                    long:true,
+                    axe:true
                 }
             },
             disallowedMaterials:["flint","limestone","rubber","ceramic","bone"],
@@ -348,7 +380,8 @@ let itemVars = {
             stunTime:1,
             weight:1,
             type:{
-                blunt:true
+                blunt:true,
+                improvised:true
             },
             value:0,
             wood:true,
@@ -419,14 +452,16 @@ let itemVars = {
             weight:2,
             flimsy:2,
             type:{
-                blunt:true
+                blunt:true,
+                improvised:true,
             },
             swing:{
                 damage:5,
                 stunTime:4,
                 weight:2,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    improvised:true,
                 }
             },
             value:2
@@ -442,14 +477,18 @@ let itemVars = {
             weight:1,
             flimsy:8,
             type:{
-                blunt:true
+                blunt:true,
+                improvised:true,
+                simple:true
             },
             jab:{
                 damage:1,
                 stunTime:1,
                 weight:1,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    improvised:true,
+                    simple:true
                 }
             },
             usable:true,
@@ -467,14 +506,18 @@ let itemVars = {
             weight:2,
             flimsy:8,
             type:{
-                blunt:true
+                blunt:true,
+                improvised:true,
+                simple:true
             },
             swing:{
-                damage:6,
+                damage:5,
                 stunTime:3,
                 weight:3,
                 type:{
-                    blunt:true
+                    blunt:true,
+                    improvised:true,
+                    simple:true
                 }
             },
             usable:true,
@@ -492,14 +535,20 @@ let itemVars = {
             weight:2,
             flimsy:8,
             type:{
-                edged:true
+                improvised:true,
+                long:true,
+                simple:true,
+                sharp:true,
             },
             jab:{
                 damage:4,
                 stunTime:2,
                 weight:2,
                 type:{
-                    edged:true
+                    improvised:true,
+                    long:true,
+                    simple:true,
+                    sharp:true,
                 }
             },
             usable:true,
@@ -566,11 +615,9 @@ let itemVars = {
             flimsy:6,
             stunTime: -2,
             weight:-1,
-            blunt:{
-                damage:-1
-            },
-            edged:{
-                damage:-2,
+            damage:-1,
+            sharp:{
+                damage:-1,
                 flimsy:2
             },            
             value:.25,
@@ -585,12 +632,12 @@ let itemVars = {
         },
         bone:{
             name:'bone',
+            flimsy:4,
             blunt:{
-                flimsy:4,
                 damage: -1,
             },
-            edged:{
-                flimsy:8,
+            sharp:{
+                flimsy:4,
             },
             stunTime:-1,
             weight:-1,
@@ -605,10 +652,8 @@ let itemVars = {
             flimsy:6,
             weight:2,
             stunTime:3,
+            damage:2,
             blunt:{
-                damage:4
-            },
-            edged:{
                 damage:2
             },
             value:.2,
@@ -619,10 +664,8 @@ let itemVars = {
         },
         flint:{
             name:'flint',
+            flimsy:4,
             blunt:{
-                flimsy:6,
-            },
-            edged:{
                 flimsy:4,
             },
             value:.3,
@@ -632,10 +675,8 @@ let itemVars = {
         },
         ceramic:{
             name:'ceramic',
+            flimsy:10,
             blunt:{
-                flimsy:20,
-            },
-            edged:{
                 flimsy:10,
             },
             value:.8,
@@ -645,12 +686,12 @@ let itemVars = {
         },
         obsidian:{
             name:'obsidian',
+            flimsy:6,
             blunt:{
-                flimsy:9,
+                flimsy:3,
             },
-            edged:{
+            sharp:{
                 damage:2,
-                flimsy:6
             },
             value:.5,
 
@@ -672,12 +713,12 @@ let itemVars = {
         },
         rubber:{
             name:'rubber',
+            damage:-5,
             blunt:{
-                damage:-5,
                 stunTime:2
             },
-            edged:{
-                damage:-8
+            sharp:{
+                damage:-3
             },
             value:.5,
 
@@ -694,7 +735,7 @@ let itemVars = {
         bronze:{
             name:'bronze',
             flimsy:2,
-            edged:{
+            sharp:{
                 damage:1
             },
             value:3,
@@ -705,7 +746,7 @@ let itemVars = {
         iron:{
             name:'iron',
             flimsy:1,
-            edged:{
+            sharp:{
                 damage:1
             },
             value:2.5,
@@ -714,7 +755,7 @@ let itemVars = {
         },
         steel:{
             name:'steel',
-            edged:{
+            sharp:{
                 damage:2
             },
             value:2,
@@ -725,7 +766,7 @@ let itemVars = {
             name:'glass',
             flimsy:40,
             value:3,
-            edged:{
+            sharp:{
                 damage:6
             },
             color:'clearBlue',
@@ -745,7 +786,7 @@ let itemVars = {
             blunt:{
                 damage:2
             },
-            edged:{
+            sharp:{
                 damage:-1
             },
             value:3,
@@ -756,7 +797,7 @@ let itemVars = {
             name:'crystal',
             flimsy:20,
             value:8,
-            edged:{
+            sharp:{
                 damage:8
             },
             color:'darkPurple',
@@ -765,7 +806,7 @@ let itemVars = {
         meteorite:{
             name:'meteorite',
             damage:1,
-            edged:{
+            sharp:{
                 damage:1,
             },
             value:7,
@@ -777,11 +818,9 @@ let itemVars = {
             name:'gravsteel',
             weight:3,
             stuntime:6,
-            edged:{
-                damage:8
-            },
+            damage:8,
             blunt:{
-                damage: 12
+                damage: 4
             },
             unwieldy:1,
             value:8,
@@ -795,7 +834,7 @@ let itemVars = {
             blunt:{
                 damage:-2
             },
-            edged:{
+            sharp:{
                 damage:2
             },
             value:8,
@@ -805,7 +844,7 @@ let itemVars = {
         coldsteel:{
             name:'coldsteel',
             stunTime:2,
-            edged:{
+            sharp:{
                 damage:2
             },
             value:10,
@@ -815,7 +854,7 @@ let itemVars = {
         silver:{
             name:'silver',
             flimsy:5,
-            edged:{
+            sharp:{
                 damage:-1
             },
             value:10,
@@ -827,7 +866,7 @@ let itemVars = {
             weight:1,
             stunTime:2,
             flimsy:8,
-            edged:{
+            sharp:{
                 damage:-2
             },
             blunt:{
@@ -842,11 +881,9 @@ let itemVars = {
             weight:2,
             stunTime:4,
             flimsy:1,
-            edged:{
-                damage:4
-            },
+            damage:4,
             blunt:{
-                damage:6
+                damage:2
             },
             value:19,
             color:'silver',
@@ -856,7 +893,7 @@ let itemVars = {
         adamantine:{
             name:'adamantine',
             weight:-1,
-            edged:{
+            sharp:{
                 damage:2
             },
             value:20,
@@ -865,7 +902,7 @@ let itemVars = {
         },
         ethersteel:{
             name:'ethersteel',
-            edged:{
+            sharp:{
                 damage:2
             },
             ether:true,
@@ -970,7 +1007,7 @@ let itemVars = {
             name:'worn',
             symbol:'⤓',
             flimsy:1,
-            edged:{
+            sharp:{
                 damage:-1
             },
             value:.4
@@ -1075,7 +1112,7 @@ let itemVars = {
             weight:1,
             type:{
                 blunt:true,
-                long:true
+                improvised:true
             },
             value:1
         },
@@ -1091,7 +1128,7 @@ let itemVars = {
             weight:1,
             type:{
                 blunt:true,
-                long:true
+                improvised:true
             },
             value:2
         },
@@ -1124,7 +1161,7 @@ let itemVars = {
             weight:2,
             type:{
                 blunt:true,
-                long:true
+                improvised:true
             },
             value:10
         },

@@ -12,20 +12,40 @@ keywordVars = {
         hintText:"Each turn, your lantern's chance to dim increases. Flickering is an indication that it is likely to dim soon."
     },
     counterattack:{
-        hintText:"Counterattacks cost 1 less stamina and stun for +1 turn."
+        hintText:"You may counterattack an enemy when they attack you or your weapon without inflicting damage. costs 1 less stamina and stuns for +1 turn."
+    },
+    critical:{
+        hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
+    },
+    proficiency:{
+        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used."
+    },
+    swing:{
+        hintText:"A swing is a strike that occurs when you rotate your weapon into a target."
+    },
+    jab:{
+        hintText:"A target is jabbed when you strike them by advancing towards them."
+    },
+    strafe:{
+        hintText:"A strafing strike is one that occurs when you strike while moving sideways or backwards diagonally"
+    },
+    draw:{
+        hintText:"A draw strike occurs when you draw your weapon into a target."
     },
 
     traits:{
-        worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's edged. It will become unuseable next time it degrades."},
+        worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
         unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."},
-        wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."}
+        wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
+        //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     },
 
     symbols:{
         9910:{name:"cursed",symbol:'⚶'},
-        10515:{name:"worn",symbol:'⤓'}
+        10515:{name:"worn",symbol:'⤓'},
+        43:{name:"accustomed",symbol:'+'}
     }
 }

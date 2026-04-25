@@ -18,16 +18,16 @@
     background-color: var(--menuBack);
     color: var(--menuText);
     display:flex;
-    height:10rem;
+    height:11.5rem;
     border:1px solid var(--border);
 }
 
 .inventory-list{
-    width:600px;
+    width:610px;
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0px;
-    grid-auto-rows: 2rem;
+    grid-auto-rows: 36px;
     padding-top:2px;
 }
 
@@ -35,7 +35,8 @@
     padding:4px;
     margin-left:3px;
     display:flex;
-    height:fit-content;
+    height:25px;
+    line-height:25px;
     background-color: var(--inventorySlot);
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid var(--inventoryBorder);
@@ -137,5 +138,21 @@
 
 .item-slot-number{
     padding-right:5px;
-    /*border-right:1px solid black*/
+    /*border-right:1px solid black;*/
+    text-align:center;
+}
+
+.item-slot-number:after{
+    content:". "
+}
+
+.proficiencySpan{
+    /*font-size:xx-small;*/
+}
+
+sup { 
+    vertical-align: top;
+    position: relative;
+    top: -0.5em; 
+    font-size: 0.6em;
 }

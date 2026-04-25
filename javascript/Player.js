@@ -16,6 +16,22 @@ class Player {
     static light = 0;
     static lightMax = 8;
     static lightTime = 0;
+
+    static perks ={
+        sword:{},
+        axe:{},
+        blunt:{},
+        long: {},
+        edged:{},
+        improvised:{},
+        simple:{},
+        unarmed:{},
+        swing:{},
+        strafe:{},
+        jab:{},
+        draw:{},
+        counterattack:{}
+    }
         
     
     static inventory = {
@@ -36,6 +52,7 @@ class Player {
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
         Player.nourishment = 7;
         Player.inventoryCleanup();
+        XP.XPInit();
     }
 
     static getPlayerJson(){
@@ -72,12 +89,12 @@ class Player {
 
     static get nourishmentLevel(){
         let level;
-        let nourishment = Player.nourishment;
-        if(nourishment == 0){
+        let hungerPercent = Player.hungerPercent;
+        if(hungerPercent == 0){
             level = 0;
-        }else if(nourishment < 4){
+        }else if(hungerPercent < 40){
             level = 1;
-        }else if (nourishment == 10){
+        }else if (hungerPercent == 100){
             level = 3;
         }else{
             level = 2;
@@ -132,6 +149,8 @@ class Player {
 
         Player.setExertion(0);
 
+        XP.checkLevelUp();
+
         console.log(Player.nourishment);
         console.log(Player.nourishmentLevel);
     }
@@ -148,7 +167,8 @@ class Player {
     static checkHungerModifiers(){
         let stamina = 0;
         let random = Math.random()*100;
-        let gainChance = (Player.nourishment - 8)*5;
+        //gaining uses percentage, losing uses flat value.
+        let gainChance = (Player.hungerPercent - 80)/2;
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){
@@ -174,24 +194,37 @@ class Player {
 
         let hungerChance = (Player.stamina - oldStamina)*2;
         Player.checkChangeNourishment(hungerChance);
+
+        if(n < 0){
+            XP.gainStaminaXP(n*-1);
+        }
     }
 
     static changeHealth(n){
         Player.health = Player.health+n;
         Player.health = Math.min(Player.healthMax,Player.health);
         Player.health = Math.max(0,Player.health)
+
+        if(n < 0){
+            XP.gainHPXP(n*-1);
+        }
     }
 
     static changeLuck(n){
+        console.log("changeluck "+n)
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
+
+        if(n < 0){
+            //this happens in history instead.
+            //XP.gainLuckXP(n*-1);
+        }
     }
 
     static changeExertion(n){
         n += Player.exertion;
-        Player.setExertion(n);
-        
+        Player.setExertion(n);    
     }
 
     static setExertion(n){
@@ -214,6 +247,10 @@ class Player {
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
         Display.fillBars();
+
+        if(n < 0){
+            XP.gainHungerXP(n*-1);
+        }
     }
 
     static setNourishment(n){
@@ -436,6 +473,71 @@ class Player {
         }
         let playerEntity = EntityManager.getEntity('player');
         playerEntity.dropItem(slot);
+    }
+
+    //TODO - make work like crit, so strike types can have advantage too?
+    static getAdvantage(weaponItem){
+        //console.log(weaponItem);
+        let proficiencies = Player.getProficiencies(weaponItem);
+        let advantage = 0;
+        proficiencies.forEach(skill=>{
+            advantage += skill.level;
+        })
+
+        return advantage;
+    }
+
+    //returns an array of all the types of the weapon you have advantage in - {skill: , level: }
+    static getProficiencies(weaponItem){
+        let weaponTypes = weaponItem.type;  
+        let proficiencies = [];
+        //for each perk category...
+        Object.keys(Player.perks).forEach(skill =>{
+            //if the player has advantage in that category, and the weapon has that category as a type...
+            if(weaponTypes && Player.perks[skill].advantage && weaponTypes[skill]){
+                proficiencies.push({
+                    skill:skill,
+                    level: Player.perks[skill].advantage
+                })
+            }
+        })
+
+        return proficiencies;
+    }
+
+    static getCrit(weaponItem, strikeType,target){
+        let attackTypes = {};
+        if(weaponItem.type){
+            attackTypes = JSON.parse(JSON.stringify(weaponItem.type));
+        }
+        attackTypes[strikeType] = true;
+        if(target.parryable){
+            attackTypes['counterattack'] = true;
+        }
+        let critChance = 0;
+        Object.keys(Player.perks).forEach(skill =>{
+            if(Player.perks[skill].critChance && attackTypes[skill]){
+                critChance += Player.perks[skill].critChance;
+            }
+        })
+        let isCrit = Math.random() < critChance;
+        return isCrit;
+    }
+
+    //take hp, luck, stamina, hunger, return associated max value
+    static getMaxResource(resourceString){
+        switch(resourceString){
+            case "hp":
+                return Player.healthMax;
+            case "stamina":
+                return Player.staminaMax;
+            case "luck":
+                return Player.luckMax;
+            case "hunger":
+                return Player.nourishmentMax;
+            default:
+                return 0;
+        }
     }
 
 }

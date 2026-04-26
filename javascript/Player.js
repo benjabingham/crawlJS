@@ -327,7 +327,7 @@ class Player {
     }
 
     static equipWeapon(weapon, verbose=true){
-        if(Player.equipped){
+        if(Player.equipped || !GameMaster.dungeonMode){
             return false;
         }
         Player.equipped = weapon;

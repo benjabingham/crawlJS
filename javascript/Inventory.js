@@ -11,7 +11,7 @@ class Inventory{
     static itemPile = false;
     static draggedItem = {inventoryId:false,slot:false};
     static lastHoveredSlot = {inventoryId:false,slot:false}
-    static showBulkMode = false;
+    static showBulkAndGold = false;
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -160,14 +160,19 @@ class Inventory{
             buttons = {buy:item.price};
         }
 
-        if(!Inventory.showBulkMode){
+        if(!Inventory.showBulkAndGold){
             Inventory.addButtons(slot, inventory, buttons);
         }else{
             let bulk = item.bulk;
+            let gold = shopItem ? item.price : item.value;
             //if(quickSlot){bulk /=2}
             element.append(
-                $('<div>').addClass('item-bulk-div').append(bulk+" bulk")
+                $('<div>').addClass('item-gold-div').append(gold+"g").addClass('item-values')
             )
+            element.append(
+                $('<div>').addClass('item-bulk-div').append(bulk+"b").addClass('item-values')
+            )
+            
         }
     }
 
@@ -966,13 +971,13 @@ class Inventory{
         Inventory.bagOverlay();
     }
 
-    static showBulks(){
-        Inventory.showBulkMode = true;
+    static startShowBulkAndGold(){
+        Inventory.showBulkAndGold = true;
         Inventory.displayInventory();
     }
 
-    static endShowBulks(){
-        Inventory.showBulkMode = false;
+    static endShowBulkAndGold(){
+        Inventory.showBulkAndGold = false;
         Inventory.displayInventory();
     }
 }

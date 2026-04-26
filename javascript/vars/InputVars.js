@@ -33,7 +33,7 @@ inputVars = {
         {inputName:'equip', inputKey:'KeyE', equip:true},
         {inputName:'burn', inputKey:'KeyB', burn:true},
         {inputName:'sell-store', inputKey:'KeyS', sellStore:true},
-        {inputName:'show-bulks', inputKey:'KeyW', showBulks:true},
+        {inputName:'show-bulk-gold', inputKey:'KeyG', showBulkGold:true},
         {inputName:'quick-toggle', inputKey:'KeyQ', quickToggle:true},
 
         {inputName:'use-item', inputKey:'Enter', useItem:true},

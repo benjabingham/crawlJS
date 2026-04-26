@@ -49,6 +49,10 @@
     /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
     border: 1px solid var(--inventoryBorder);
     /*border:1px solid gray*/
+
+    .item-values{
+        margin-left:5px;
+    }
 }
 
 .inventory-between-div{

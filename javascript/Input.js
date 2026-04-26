@@ -77,7 +77,7 @@ class InputManager{
                 if(input.quickToggle) GameMaster.quickToggle(event);
                 if(input.useItem) GameMaster.useSelectedItem();
                 if(input.itemNav) GameMaster.navigateInventory(event);
-                if(input.showBulks) GameMaster.showBulks(event);
+                if(input.showBulkGold) GameMaster.showBulkAndGold(event);
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })

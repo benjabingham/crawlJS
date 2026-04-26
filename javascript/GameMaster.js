@@ -466,18 +466,24 @@ class GameMaster{
         }
     }
 
-    static showBulks(event){
-        if(!Inventory.playerInBag || Inventory.showBulkMode){
-            return false;
+    static showBulkAndGold(event){
+        if(Inventory.showBulkAndGold){
+            Inventory.endShowBulkAndGold();
+        }else{
+            Inventory.startShowBulkAndGold();
         }
+
+        return true;
+        /*
+        code for holding button down
         let keyCode = InputManager.currentKeydownEvent.originalEvent.code;
-        Inventory.showBulks();
         $(document).on("keyup",e=>{
             if(e.originalEvent.code == keyCode){
-                Inventory.endShowBulks();
+                Inventory.endShowBulkAndGold();
                 $(document).off("keyup");
             }
         })
+            */
     }
 
     static wait(event){

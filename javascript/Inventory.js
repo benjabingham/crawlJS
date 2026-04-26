@@ -159,7 +159,15 @@ class Inventory{
             buttons = {buy:item.price};
         }
 
-        Inventory.addButtons(slot, inventory, buttons);
+        if(!Inventory.showBulkMode){
+            Inventory.addButtons(slot, inventory, buttons);
+        }else{
+            let bulk = item.bulk;
+            if(quickSlot){bulk /=2}
+            element.append(
+                $('<div>').addClass('item-bulk-div').append(bulk+" bulk")
+            )
+        }
     }
 
     static displayItemInfo(item, inventory){

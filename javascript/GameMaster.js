@@ -448,6 +448,9 @@ class GameMaster{
     }
 
     static showBulks(event){
+        if(!Inventory.playerInBag || Inventory.showBulkMode){
+            return false;
+        }
         let keyCode = InputManager.currentKeydownEvent.originalEvent.code;
         Inventory.showBulks();
         $(document).on("keyup",e=>{

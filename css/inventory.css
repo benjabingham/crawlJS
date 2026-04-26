@@ -101,12 +101,13 @@
     color: var(--darkOrange)
 }
 
+/*
 .quickslot-true{
     .item-bulk-div{
         color: var(--lightBlue)
     }
 }
-
+*/
 .item-bulk-div{
     font-weight:600;
     color: var(--darkBlue)

@@ -164,7 +164,7 @@ class Inventory{
             Inventory.addButtons(slot, inventory, buttons);
         }else{
             let bulk = item.bulk;
-            if(quickSlot){bulk /=2}
+            //if(quickSlot){bulk /=2}
             element.append(
                 $('<div>').addClass('item-bulk-div').append(bulk+" bulk")
             )
@@ -347,14 +347,14 @@ class Inventory{
         let bulk = Number.parseFloat(Player.getBulk()).toFixed(2);
 
         //trim trailing 0 and .
-        while(bulk.length > 1 && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
+        while(bulk.includes('.') && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
             bulk = bulk.slice(0,bulk.length-1)
         }
         $('.bulk-div').text(bulk+" / "+Player.maxBulk+" bulk")
     }
 
     static checkEncumbered(){
-        if(Player.getIncumbranceLevel()){
+        if(Player.getEncumbranceLevel()){
             $('#player-inventory').addClass('encumbered')
             return true
         }else{
@@ -449,6 +449,9 @@ class Inventory{
 
         if(item.quickSlot){
             item.quickSlot = false;
+            if(Player.equipped && Player.equipped.slot == item.slot){
+                Player.unequipWeapon();
+            }
             return true
         }
 

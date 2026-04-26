@@ -11,7 +11,7 @@ class Player {
     static nourishmentMax = 10;
     static nourishment;
 
-    static maxBulk = 2;
+    static maxBulk = 10;
 
     static exertion = 0;
 
@@ -453,13 +453,15 @@ class Player {
         Player.inventory.items.forEach(item=>{
             let bulk = 0
             if(item.bulk){bulk = item.bulk}
-            if(item.quickSlot){bulk /=2}
+            
+            //if(item.quickSlot){bulk /=2}
 
             bulk*= 10
             bulk = Math.floor(bulk)
             bulk /= 10;
             bulkSum += bulk;
         })
+        console.log(bulkSum);
 
         return bulkSum;
     }
@@ -607,8 +609,10 @@ class Player {
         }
     }
 
-    static getIncumbranceLevel(){
-        return Math.floor(Player.getBulk()/Player.maxBulk)
+    static getEncumbranceLevel(){
+        let level = Math.floor(Player.getBulk()/Player.maxBulk);
+        level *= level;
+        return level;
     }
 
 }

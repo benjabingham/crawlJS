@@ -113,6 +113,20 @@ class EntityManager{
         return true;
     }
 
+    static checkEncumbered(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            if(Player.stamina >= encumbrance){
+                Player.changeStamina(encumbrance*-1);
+            }else{
+                EntityManager.cancelAction({insuficientStamina:true});
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     static checkEther(){
         if(Player.equipped && Player.equipped.ether){
             Player.changeStamina(1);
@@ -124,6 +138,9 @@ class EntityManager{
             return false;
         }
         if(!EntityManager.checkUnwieldy()){
+            return false;
+        }
+        if(!EntityManager.checkEncumbered()){
             return false;
         }
         EntityManager.checkEther();

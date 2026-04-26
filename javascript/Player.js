@@ -212,6 +212,8 @@ class Player {
 
         if(n < 0){
             XP.gainHPXP(n*-1);
+            Display.flash($('body'),'deepRed');
+            Display.flash($('#health-level'),'lightRed');
         }
     }
 
@@ -613,6 +615,13 @@ class Player {
         let level = Math.floor(Player.getBulk()/Player.maxBulk);
         level *= level;
         return level;
+    }
+
+    static changeGold(n){
+        Player.gold += n;
+        Player.gold = Math.max(Player.gold,0)
+        Display.flash($('.gold-div'),'goldDivs')
+        Display.displayGold()
     }
 
 }

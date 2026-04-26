@@ -40,6 +40,7 @@ class EntityManager{
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
         if(random < degradeChance){
+            Display.flash($('body'),'item-breaking')
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
@@ -141,6 +142,7 @@ class EntityManager{
                 if(Random.roll(1,100) <= 5){
                     Player.changeStamina(-1)
                     Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                    Display.flash($('#player-inventory'),'inventory')
                     return false;
                 }
             }

@@ -213,16 +213,6 @@
         margin:5px;
     }
 
-    .gold-div{
-       font-weight:600; 
-        color: var(--darkOrange)
-    } 
-
-    .bulk-div{
-        font-weight: 600;
-        color: var(--darkBlue)
-    }
-
     .drop-button-container{
         flex:1;
         width:fit-content;
@@ -236,7 +226,6 @@
 }
 
 .inventory.encumbered{
-    background-color: var(--parryable);
     .drop-true{
         /*background-color: var(--floor);*/
         /*outline:1px solid var(--tree);*/

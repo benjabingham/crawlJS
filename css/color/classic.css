@@ -73,6 +73,7 @@ q
     
     --red:rgb(231, 46, 0);
     --darkRed:rgb(117,0,0);
+    --deepRed:rgb(77, 1, 1);
     --muteRed:rgb(190, 38, 0);
     --lightRed:rgb(243, 152, 129);
     --brightPurple:rgb(153, 0, 255);
@@ -114,6 +115,7 @@ q
     --shopFreshBorder:var(--inventoryBorder);
     --selectedSlot:#f3e3b6;
     --slotUnavailable:#b1a48e;
+    --flashInventory:#dba444;
     
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);
@@ -122,6 +124,9 @@ q
 
     /*town*/
     --shopBackground:rgba(252, 143, 0, 0.164);
+
+    /*flash*/
+    --flashItemBreaking:#5a431f;
 }
 
 .clearblue{

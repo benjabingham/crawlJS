@@ -191,7 +191,7 @@ class Shop{
             GameMaster.postPlayerAction()
             return false;
         }
-        Player.gold -= item.price;
+        Player.changeGold(item.price*-1);
         item.fresh = false;
         Inventory.take(slot,true);
         if(slot != -1){
@@ -209,7 +209,7 @@ class Shop{
     static sellItem(slot){
         let item = Player.inventory.items[slot];
         Player.inventory.items[slot] = false;
-        Player.gold += item.value;
+        Player.changeGold(item.value);
         Player.inventoryCleanup();
         Log.addMessage("sold "+item.name+" for "+item.value+" gold.")
         GameMaster.postPlayerAction()

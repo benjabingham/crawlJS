@@ -521,5 +521,22 @@ class Display{
             //console.log(false)
         })
         console.log( $('#board'))
-    }    
+    }  
+    
+    //remove all other flash classes, wait 0ms (which is enough to forget the class), then add flash class.
+    static flash(element, color = 'orange'){
+        let classesString = element.attr('class')
+        if(classesString){
+            let classes = classesString.split(' ')
+            classes.forEach(className=>{
+                if(className.includes('flash-')){
+                    element.removeClass(className)
+                }
+            })
+        }
+        
+        setTimeout(() => {
+            element.addClass("flash-"+color)
+        }, 0);
+    }
 }

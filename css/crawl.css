@@ -49,6 +49,16 @@ button:hover,
     font-style:italic;
 }
 
+.gold-div{
+       font-weight:600; 
+        color: var(--darkOrange)
+    } 
+
+    .bulk-div{
+        font-weight: 600;
+        color: var(--darkBlue)
+    }
+
 .hint-divs{
     /*font-style:italic;*/
     pointer-events: none;
@@ -163,4 +173,73 @@ h1, h2, h3{
 
 #side-menu{
     visibility: hidden;
+}
+
+.flash-item-breaking{
+    animation-name: flashItemBreaking;
+    animation-duration: .5s;
+}
+
+@keyframes flashItemBreaking{
+    from{background-color: var(--flashItemBreaking);}
+}
+
+.flash-highlight{
+    animation-name: flashHighlight;
+    animation-duration: 1s;
+}
+
+@keyframes flashHighlight{
+    from{background-color: var(--highlight);}
+}
+
+.flash-inventory{
+    animation-name: flashInventory;
+    animation-duration: 1s;
+}
+
+@keyframes flashInventory{
+    from{background-color: var(--flashInventory);}
+}
+
+.flash-deepRed{
+    animation-name: flashDeepRed;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashDeepRed{
+    from{background-color: var(--deepRed);}
+
+}
+
+.flash-white{
+    animation-name: flashWhite;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashWhite{
+    from{background-color: white;}
+
+}
+
+.flash-lightRed{
+    animation-name: flashLightRed;
+    animation-duration: .7s;
+}
+
+@keyframes flashLightRed{
+    from{background-color: var(--lightRed);}
+
+}
+
+.flash-goldDivs{
+    animation-name: flashGoldDivs;
+    animation-duration: .7s;
+}
+
+@keyframes flashGoldDivs{
+    from{color: var(--orange);}
+
 }

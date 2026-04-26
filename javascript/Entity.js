@@ -351,8 +351,7 @@ class Entity{
         this.inventory.gold += gold;
 
         if(isPlayer){
-            Player.gold += gold;
-            Display.displayGold();
+            Player.changeGold(gold);
             EntityManager.transmitMessage('Found '+gold+' gold!','win')
         }
 
@@ -1654,7 +1653,7 @@ class Monster extends Entity{
         let mortality = Random.roll(0,damage);
 
         if (target.id == 'player'){
-            EntityManager.transmitMessage(this.name+" attacks you!", false, false, false, this.id);
+            EntityManager.transmitMessage(this.name+" attacks you!", 'danger', false, false, this.id);
             if(mortality == 0){
                 if(Display.parryInRange(this.x,this.y)){
                     EntityManager.transmitMessage(this.name+" misses! You may counterattack.",false, "counterattack",false,this.id);

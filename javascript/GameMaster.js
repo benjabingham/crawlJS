@@ -17,7 +17,7 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         
-        /*starterWeapon = LootManager.getFoodLoot();
+        starterWeapon = LootManager.getFoodLoot();
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);

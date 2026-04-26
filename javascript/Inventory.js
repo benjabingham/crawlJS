@@ -452,6 +452,7 @@ class Inventory{
             if(Player.equipped && Player.equipped.slot == item.slot){
                 Player.unequipWeapon();
             }
+            Player.inventoryCleanup()
             return true
         }
 
@@ -460,7 +461,7 @@ class Inventory{
             Player.inventory.items[Inventory.nQuickSlots-1].quickSlot = false;
         }
         item.quickSlot = true;
-
+        Player.inventoryCleanup()
         return true;
     }
 

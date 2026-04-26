@@ -1663,6 +1663,7 @@ class Monster extends Entity{
                 this.parryable = true;
             }else{
                 Player.changeHealth(mortality * -1);
+                EntityManager.transmitMessage(this.name+" deals "+mortality+" damage!", 'danger', false, false, this.id);
                 if (this.lightDrain){
                     //console.log('lightdrain')
                     Player.light = Math.max(Player.light-1,0)

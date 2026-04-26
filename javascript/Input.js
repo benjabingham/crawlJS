@@ -73,6 +73,7 @@ class InputManager{
                 if(input.consume) GameMaster.consumeSelectedItem(event);
                 if(input.equip) GameMaster.equipSelectedItem(event);
                 if(input.burn) GameMaster.burnSelectedItem(event);
+                if(input.sellStore) GameMaster.sellStoreSelectedItem(event);
                 if(input.quickToggle) GameMaster.quickToggle(event);
                 if(input.useItem) GameMaster.useSelectedItem();
                 if(input.itemNav) GameMaster.navigateInventory(event);

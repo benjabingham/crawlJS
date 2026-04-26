@@ -17,7 +17,7 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         
-        starterWeapon = LootManager.getFoodLoot();
+        /*starterWeapon = LootManager.getFoodLoot();
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
@@ -405,6 +405,25 @@ class GameMaster{
             return false;
         }
         Inventory.selectItem();
+        return true;
+    }
+
+    static sellStoreSelectedItem(){
+        if(!Inventory.itemIsAccessible(Inventory.getSelectedItem(), "player-inventory")){
+            return false;
+        }
+
+        if(Inventory.selectedInventory != "player-inventory" || !Inventory.selectedContainer){
+            return false;
+        }
+
+        if(Inventory.selectedContainer.shop){
+            Shop.sellItem(Inventory.getSelectedItem().slot)
+        }else{
+            Inventory.moveItem(Inventory.getSelectedItem().slot, Inventory.getItemsInInventory("world-inventory"),"player-inventory","world-inventory")
+        }
+
+        GameMaster.postPlayerAction();
         return true;
     }
 

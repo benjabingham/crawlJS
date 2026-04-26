@@ -130,7 +130,7 @@ class EntityManager{
     }
 
     //on move, chance to lose 1 stamina and end turn.
-    //chance = 5%. Checked again for every 10% above your max.
+    //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
     static checkEncumberedV2(){
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
@@ -139,7 +139,9 @@ class EntityManager{
             let nChecks = 1;
             nChecks += Math.floor(percentOver*10)
             for(let i = 0; i < nChecks; i++){
-                if(Random.roll(1,100) <= 5){
+                let chance = 3;
+                if(i==0){chance += 2}
+                if(Random.roll(1,100) <= chance){
                     Player.changeStamina(-1)
                     Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     Display.flash($('#player-inventory'),'inventory')

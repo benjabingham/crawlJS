@@ -273,6 +273,8 @@ class GameMaster{
             return false;
         }
 
+        //better without swapping...
+        /*
         if(Inventory.playerInBag){
             let swapped = Inventory.swapSlot(slot);
             if(swapped){
@@ -280,7 +282,7 @@ class GameMaster{
             }
             return swapped;
         }
-
+        */
         //return false if not a quickslot or no item
         if(!Player.inventory.items[slot] || !Player.inventory.items[slot].quickSlot){
             return false;

@@ -34,6 +34,7 @@ class Inventory{
 
         Inventory.scrollInventories();
         Inventory.setBulkDiv();
+        Inventory.checkEncumbered();
         
         Display.displayGold();
     }
@@ -344,11 +345,22 @@ class Inventory{
 
     static setBulkDiv(){
         let bulk = Number.parseFloat(Player.getBulk()).toFixed(2);
+
         //trim trailing 0 and .
         while(bulk.length > 1 && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
             bulk = bulk.slice(0,bulk.length-1)
         }
-        $('.bulk-div').text(bulk+" bulk")
+        $('.bulk-div').text(bulk+" / "+Player.maxBulk+" bulk")
+    }
+
+    static checkEncumbered(){
+        if(Player.getIncumbranceLevel()){
+            $('#player-inventory').addClass('encumbered')
+            return true
+        }else{
+            $('#player-inventory').removeClass('encumbered')
+            return false;
+        }
     }
 
     static checkAddBagTitle(item, bagTitle){

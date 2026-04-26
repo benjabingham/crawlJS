@@ -11,6 +11,8 @@ class Player {
     static nourishmentMax = 10;
     static nourishment;
 
+    static maxBulk = 2;
+
     static exertion = 0;
 
     static light = 0;
@@ -603,6 +605,10 @@ class Player {
             default:
                 return 0;
         }
+    }
+
+    static getIncumbranceLevel(){
+        return Math.floor(Player.getBulk()/Player.maxBulk)
     }
 
 }

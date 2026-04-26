@@ -35,7 +35,7 @@
     overflow:scroll;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color:var(--wall) var(--floor);
+    scrollbar-color:var(--wall) #00000000;
     flex:1;
 }
 
@@ -228,6 +228,17 @@
         }
     }
     /*color: var(--altBackText);*/
+}
+
+.inventory.encumbered{
+    background-color: var(--parryable);
+    .drop-true{
+        /*background-color: var(--floor);*/
+        /*outline:1px solid var(--tree);*/
+    }
+    .bulk-div{
+        color: var(--red);
+    }
 }
 
 .inventory-title-buttons{

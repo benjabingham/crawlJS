@@ -11,6 +11,7 @@ class Inventory{
     static itemPile = false;
     static draggedItem = {inventoryId:false,slot:false};
     static lastHoveredSlot = {inventoryId:false,slot:false}
+    static showBulkMode = false;
 
     //displays player's inventory, either in the dungeon or in the town
     static displayInventory(dungeonMode=true){
@@ -939,5 +940,15 @@ class Inventory{
         })
         this.checkForItemPile();
         Inventory.bagOverlay();
+    }
+
+    static showBulks(){
+        Inventory.showBulkMode = true;
+        Inventory.displayInventory();
+    }
+
+    static endShowBulks(){
+        Inventory.showBulkMode = false;
+        Inventory.displayInventory();
     }
 }

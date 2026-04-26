@@ -52,7 +52,7 @@ class GameMaster{
             {x:50,y:42}
         );
 
-        XP.levelUp();
+        //XP.levelUp();
 
     }
 
@@ -447,7 +447,16 @@ class GameMaster{
         }
     }
 
-
+    static showBulks(event){
+        let keyCode = InputManager.currentKeydownEvent.originalEvent.code;
+        Inventory.showBulks();
+        $(document).on("keyup",e=>{
+            if(e.originalEvent.code == keyCode){
+                Inventory.endShowBulks();
+                $(document).off("keyup");
+            }
+        })
+    }
 
     static wait(event){
         if(Inventory.playerInBag){

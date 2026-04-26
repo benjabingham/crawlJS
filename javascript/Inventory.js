@@ -334,8 +334,11 @@ class Inventory{
     }
 
     static setBulkDiv(){
-        let bulk = Number.parseFloat(Player.getBulk()).toFixed(1);
-        console.log(bulk)
+        let bulk = Number.parseFloat(Player.getBulk()).toFixed(2);
+        //trim trailing 0 and .
+        while(bulk.length > 1 && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
+            bulk = bulk.slice(0,bulk.length-1)
+        }
         $('.bulk-div').text(bulk+" bulk")
     }
 

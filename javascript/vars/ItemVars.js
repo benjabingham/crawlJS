@@ -11,7 +11,7 @@ let itemVars = {
                 blunt:true,
                 simple:true
             },
-            bulk:1,
+            bulk:1.2,
             jab:{
                 damage:2,
                 stunTime:2,
@@ -34,7 +34,7 @@ let itemVars = {
                 blunt:true,
                 sharp:true,
             },
-            bulk:1,
+            bulk:1.2,
             jab:{
                 damage:2,
                 stunTime:2,
@@ -74,7 +74,7 @@ let itemVars = {
             stunTime:7,
             weight:5,
             flimsy:-1,
-            bulk:5,
+            bulk:4,
             type:{
                 blunt:true
             },
@@ -96,7 +96,7 @@ let itemVars = {
             damage:2,
             stunTime:2,
             weight:1,
-            bulk:1.5,
+            bulk:1.4,
             type:{
                 sword:true,
                 sharp:true,
@@ -211,7 +211,7 @@ let itemVars = {
             damage:12,
             stunTime:4,
             weight:5,
-            bulk:4,
+            bulk:3.5,
             type:{
                 sword:true,
                 edged:true,
@@ -227,7 +227,7 @@ let itemVars = {
             damage:20,
             stunTime:6,
             weight:7,
-            bulk:6,
+            bulk:5,
             draw:{
                 damage:25,
                 stunTime:8,
@@ -279,7 +279,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
-            bulk:2.5,
+            bulk:2,
             type:{
                 axe:true,
                 improvised:true,
@@ -304,7 +304,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
-            bulk:6,
+            bulk:4,
             type:{
                 edged:true,
                 axe:true,
@@ -329,7 +329,7 @@ let itemVars = {
             damage:8,
             stunTime:3,
             weight:4,
-            bulk:7,
+            bulk:5,
             type:{
                 edged:true,
                 long:true,
@@ -366,7 +366,7 @@ let itemVars = {
             light:1,
             value:0,
             color:'woodBrown',
-            bulk:0.25,
+            bulk:0.5,
         }
     },
     drops:{
@@ -400,7 +400,7 @@ let itemVars = {
             damage:1,
             stunTime:1,
             weight:1,
-            bulk:0.5,
+            bulk:0.7,
             type:{
                 blunt:true,
                 improvised:true
@@ -611,7 +611,7 @@ let itemVars = {
         cup:{
             name:"cup",
             value:6,
-            bulk:0.25,
+            bulk:0.3,
         },
         pendant:{
             name:"pendant",

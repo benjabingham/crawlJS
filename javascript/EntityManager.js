@@ -113,6 +113,7 @@ class EntityManager{
         return true;
     }
 
+    //lose 1 stamina on move
     static checkEncumbered(){
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
@@ -121,6 +122,27 @@ class EntityManager{
             }else{
                 EntityManager.cancelAction({insuficientStamina:true});
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    //on move, chance to lose 1 stamina and end turn.
+    //chance = 5%. Checked again for every 10% above your max.
+    static checkEncumberedV2(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            let diff = Player.getBulk()-Player.maxBulk;
+            let percentOver = diff/Player.maxBulk;
+            let nChecks = 1;
+            nChecks += Math.floor(percentOver*10)
+            for(let i = 0; i < nChecks; i++){
+                if(Random.roll(1,100) <= 5){
+                    Player.changeStamina(-1)
+                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                    return false;
+                }
             }
         }
 
@@ -140,7 +162,7 @@ class EntityManager{
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
-        if(!EntityManager.checkEncumbered()){
+        if(!EntityManager.checkEncumberedV2()){
             return false;
         }
         EntityManager.checkEther();

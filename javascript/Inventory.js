@@ -118,6 +118,11 @@ class Inventory{
             $('#'+inventory+'-item-name-'+slot).append("("+item.uses+")")
         }
 
+        if(Inventory.showBulkAndGold){
+            Inventory.addBulkAndGoldInfo(item,element,shopItem)
+            return;
+        }
+
         //add buttons
         if(!available && !shopItem){
             return;
@@ -160,20 +165,19 @@ class Inventory{
             buttons = {buy:item.price};
         }
 
-        if(!Inventory.showBulkAndGold){
-            Inventory.addButtons(slot, inventory, buttons);
-        }else{
-            let bulk = item.bulk;
-            let gold = shopItem ? item.price : item.value;
-            //if(quickSlot){bulk /=2}
-            element.append(
-                $('<div>').addClass('item-gold-div').append(gold+"g").addClass('item-values')
-            )
-            element.append(
-                $('<div>').addClass('item-bulk-div').append(bulk+"b").addClass('item-values')
-            )
-            
-        }
+        Inventory.addButtons(slot, inventory, buttons);
+    }
+
+    static addBulkAndGoldInfo(item, element, shopItem = false){
+        let bulk = item.bulk;
+        let gold = shopItem ? item.price : item.value;
+        //if(quickSlot){bulk /=2}
+        element.append(
+            $('<div>').addClass('item-gold-div').append(gold+"g").addClass('item-values')
+        )
+        element.append(
+            $('<div>').addClass('item-bulk-div').append(bulk+"b").addClass('item-values')
+        )
     }
 
     static displayItemInfo(item, inventory){

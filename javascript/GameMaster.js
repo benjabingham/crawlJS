@@ -288,6 +288,9 @@ class GameMaster{
             return false;
         }
 
+        Inventory.displayedInventorySlots["player-inventory"] = slot;
+        Inventory.selectedInventory = "player-inventory"
+
         if(InputManager.lastEvent && InputManager.lastEvent.type == event.type){
             console.log('lastevent: '+InputManager.lastEvent.type)
             GameMaster.useItem(event)

@@ -140,5 +140,41 @@ let skillVars = {
     ],
     buy:[
 
-    ]
+    ],
+    goblinoid:[
+        {
+            type:"misc",
+            category:"goblinoid",
+            name:"goblinoid anatomy",
+            key:"anatomy",
+            description:"+2 maximum stun time against goblinoid foes."
+        }
+    ],
+    beast:[
+        {
+            type:"misc",
+            category:"beast",
+            name:"beast anatomy",
+            key:"anatomy",
+            description:"+2 maximum stun time against beasts."
+        }
+    ],
+    undead:[
+        {
+            type:"misc",
+            category:"undead",
+            name:"undead anatomy",
+            key:"anatomy",
+            description:"+2 maximum stun time against undead."
+        }
+    ],
+    ooze:[
+        {
+            type:"misc",
+            category:"ooze",
+            name:"ooze anatomy",
+            key:"anatomy",
+            description:"+2 maximum stun time against oozes."
+        }
+    ],
 }

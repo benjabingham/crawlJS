@@ -20,6 +20,10 @@ class XP{
         unarmed: {},
         counterattack:{},
         sell:{},
+        goblinoid:{},
+        beast:{},
+        undead:{},
+        ooze:{}
     };
     static threshold = 50;
 
@@ -64,9 +68,11 @@ class XP{
 
     static gain(skill, xp, weight){
         console.log(skill);
-        this.skills[skill].weight += weight;
+        if(skill){
+            this.skills[skill].weight += weight;
+            this.skills[skill].xpGained += xp;
+        }
         this.xp += xp;
-        this.skills[skill].xpGained += xp;
         Display.fillBars();
         console.log({
             xp:this.xp,
@@ -217,9 +223,26 @@ class XP{
         this.gain('sell',xpAmount,weightAmount)
     }
 
-    //skills is array of strings which correspond to skills
-    static getPerks(skills){
+    static gainFoeXP(entity){
+        
+        let enemyTypes = [];
+        let possibleTypes = ["goblinoid","beast","undead","ooze"];
+        possibleTypes.forEach(type=>{
+            if(entity.types[type]){
+                enemyTypes.push(type)
+            }
+        })
 
+        let totalXp = entity.threshold/4;
+
+        if(!enemyTypes.length){
+            XP.gain(false,totalXp,0)
+        }
+
+        totalXp /= enemyTypes.length;
+        enemyTypes.forEach(type=>{
+            XP.gain(type,totalXp,totalXp)
+        })
     }
 
     static checkLevelUp(){

@@ -495,6 +495,7 @@ class Entity{
             console.log({message:'kill',entity:this})
             if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win',false,false,this.id);
+                XP.gainFoeXP(this);
             }
             this.name += " corpse";
             this.behavior = 'dead';
@@ -687,8 +688,10 @@ class Entity{
     };
 
     checkDead(message = false){
+        let killed = false
         if (this.mortal >= this.threshold && !this.dead){
             this.kill(message);
+            killed = true;
         }
 
         let overkill = this.mortal - this.threshold;
@@ -706,6 +709,8 @@ class Entity{
             }
             this.obliterate();
         }
+
+        return killed
     }
 
     //take trigger (ex. 'onHitChance')
@@ -923,6 +928,7 @@ class PlayerEntity extends Entity{
         Player.changeStamina(weight * -1);   
         let damage = weapon.damage;
         let stunTime = weapon.stun;
+        stunTime += Player.getAnatomyBonus(target);
         let crit = 0;
         let damageDice = 1;
         if(target.stunned){
@@ -1118,6 +1124,7 @@ class SwordEntity extends Entity{
         let damage = weapon.damage;
         let weight = weapon.weight;
         let stunTime = weapon.stunTime;
+        stunTime += Player.getAnatomyBonus(target);
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;

@@ -33,7 +33,11 @@ class Player {
         jab:{},
         draw:{},
         counterattack:{},
-        sell:{}
+        sell:{},
+        goblinoid:{},
+        beast:{},
+        undead:{},
+        ooze:{}
     }
         
     
@@ -610,6 +614,21 @@ class Player {
         })
         let isCrit = Math.random() < critChance;
         return isCrit;
+    }
+
+    static getAnatomyBonus(entity){
+        if(!entity.types){
+            return 0;
+        }
+        let enemyTypes = Object.keys(entity.types);
+        let bonus = 0;
+        enemyTypes.forEach(type=>{
+            if(Player.perks[type] && Player.perks[type].anatomy){
+                bonus += Player.perks[type].anatomy.val * 2
+            }
+        })
+
+        return bonus
     }
 
     //take hp, luck, stamina, hunger, return associated max value

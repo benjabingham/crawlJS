@@ -36,7 +36,8 @@ let monsterVars = {
                 amount:3
             }
         },
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{humanoid:true, goblinoid:true}
     },
     goblinBoss:{
         name:"goblin boss",
@@ -79,7 +80,8 @@ let monsterVars = {
                 tier:1
             }
         },
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{humanoid:true, goblinoid:true}
     },
     ogre:{
         name:"ogre",
@@ -123,7 +125,8 @@ let monsterVars = {
                 tier: 2
             }
         },
-        color:'green'
+        color:'green',
+        types:{humanoid:true, goblinoid:true}
     },
     redOgre:{
         name:"red ogre",
@@ -167,7 +170,8 @@ let monsterVars = {
                 tier: 2
             }
         },
-        color:'red'
+        color:'red',
+        types:{humanoid:true, goblinoid:true}
     },
     rat:{
         name:"rat",
@@ -181,7 +185,8 @@ let monsterVars = {
         corpseless:true,
         inventorySlots: 0,
         tiny:true,
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     direRat:{
         name:"dire rat",
@@ -201,7 +206,8 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     kingRat:{
         name:"king rat",
@@ -227,7 +233,8 @@ let monsterVars = {
             item: itemVars.drops.kingRatSkull,
             chance:100
         }],
-        color:'darkRed'
+        color:'darkRed',
+        types:{beast:true}
     },
     wolf:{
         name:"wolf",
@@ -248,7 +255,8 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     direWolf:{
         name:"dire wolf",
@@ -269,7 +277,9 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
+
     },
     zombie:{
         name:"zombie",
@@ -306,7 +316,9 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
         bloodColor:{r:136,g:62,b:63},
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{undead:true}
+
     },
     infestedHusk:{
         name:"infested husk",
@@ -354,7 +366,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:30,
         bloodColor:{r:136,g:62,b:63},
-        color:'brown'
+        color:'brown',
+        types:{undead:true}
     },
     revenant:{
         name:"revenant",
@@ -396,7 +409,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:100,
         bloodColor:{r:136,g:62,b:63},
-        color:'silver'
+        color:'silver',
+        types:{undead:true}
     },
     skeletonPile:{
         name:"skeleton corpse",
@@ -459,7 +473,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     skeleton:{
         name:"skeleton",
@@ -520,7 +535,8 @@ let monsterVars = {
             }
         ],
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     leglessSkeleton:{
         name:"legless skeleton",
@@ -569,7 +585,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     headlessSkeleton:{
         name:"headless skeleton",
@@ -616,7 +633,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     ghoul:{
         name:"ghoul",
@@ -655,7 +673,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:35,
         bloodColor:{r:136,g:62,b:63},
-        color:'silver'
+        color:'silver',
+        types:{undead:true}
     },
     corrosiveOoze:{
         name:"corrosive ooze",
@@ -683,7 +702,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:20,
         color:"green",
-        bloodColor:{r:29,g:189,b:66}
+        bloodColor:{r:29,g:189,b:66},
+        types:{ooze:true}
     },
     absorbentOoze:{
         name:"absorbent ooze",
@@ -710,7 +730,8 @@ let monsterVars = {
             slow:35
         },
         color:"orange",
-        bloodColor:{r:211,g:147,b:28}
+        bloodColor:{r:211,g:147,b:28},
+        types:{ooze:true}
     },
     mitoticOoze:{
         name:"mitotic ooze",
@@ -745,7 +766,8 @@ let monsterVars = {
             disturbChance:70,
         },
         color:"blue",
-        bloodColor:{r:39,g:66,b:183}
+        bloodColor:{r:39,g:66,b:183},
+        types:{ooze:true}
     },
     blackOoze:{
         name:"black ooze",
@@ -772,7 +794,8 @@ let monsterVars = {
             slow:30
         },
         color:"black",
-        bloodColor:{r:0,g:0,b:0}
+        bloodColor:{r:0,g:0,b:0},
+        types:{ooze:true}
     },
     elderGoo:{
         name:"elder goo",
@@ -817,7 +840,8 @@ let monsterVars = {
             disturbChance:70,
         },
         color:"brightPurple",
-        bloodColor:{r:173,g:26,b:202}
+        bloodColor:{r:173,g:26,b:202},
+        types:{ooze:true}
     },
     mimic:{
         name:"mimic",

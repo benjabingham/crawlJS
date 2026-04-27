@@ -45,7 +45,7 @@ let skillVars = {
             category:"hunger",
             name:"hangry",
             key:"hangry",
-            description:"Your critical strike chance increases by 1% for each 1% of your hunger you're missing."
+            description:"As long as you're at half hunger or below, your critical strike chance increases by 10% for each point of hunger you're missing."
         },
     ],
     bulk:[

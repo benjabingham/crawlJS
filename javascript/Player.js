@@ -625,12 +625,12 @@ class Player {
                 critChance += Player.perks[skill].critChance;
             }
         })
-        if(Player.perks.hunger.hangry){
-            let percent = 1-(Player.hungerPercent/100);
-            percent *= Player.perks.hunger.hangry.val
-            critChance += percent;
+        if(Player.perks.hunger.hangry && Player.hungerPercent <= 50){
+            let pointsMissing = Player.nourishmentMax - Player.nourishment;
+            pointsMissing *= Player.perks.hunger.hangry.val
+            critChance += pointsMissing/10;
         }
-        console.log(critChance)
+        console.log({critchance:critChance})
         let isCrit = Math.random() < critChance;
         return isCrit;
     }

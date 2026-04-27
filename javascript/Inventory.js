@@ -299,7 +299,7 @@ class Inventory{
 
             let bonusDamageSpans = Player.getItemBonusDamageSpanWithSpecial(item,special);
             let bonusStunSpans = Player.getItemBonusStunSpanWithSpecial(item,special);
-
+            
             $('#'+inventory+'-description-body').append(
                 $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
                     $('<div>').addClass('item-stats-normal').append(

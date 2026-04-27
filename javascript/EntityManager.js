@@ -79,7 +79,7 @@ class EntityManager{
         let owner = EntityManager.getEntity(ownerId);
         let swordId = owner.sword;
         let sword = EntityManager.getEntity(swordId);
-        if(!sword.weapon){return false}
+        if(!sword.item || !sword.item.weapon){return false}
 
         sword.place();
     }

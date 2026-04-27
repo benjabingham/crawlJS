@@ -32,7 +32,8 @@ class Player {
         strafe:{},
         jab:{},
         draw:{},
-        counterattack:{}
+        counterattack:{},
+        sell:{}
     }
         
     
@@ -649,26 +650,45 @@ class Player {
         element.html('');
 
         Object.keys(Player.perks).forEach(key=>{
-            let perk = Player.perks[key];
-            if(perk.advantage){
-                console.log(perk);
-                let dummyItem = {type:{}}
-                dummyItem.type[key] = perk.advantage;
-                let proficiencySpan = Display.getProficiencySpan(dummyItem)
-                element.append(
-                    $('<div>').text(key).append(proficiencySpan)
-                )
-            }
-            if(perk.critChance){
-                let critChance = perk.critChance;
-                if(!critChance){critChance = 0}
-                critChance *= 100;
-                critChance = Number.parseFloat(critChance).toFixed(0);
-                critChance += "%";
-                element.append(
-                    $('<div>').text(key+" - "+critChance)
-                )
-            }
+            let perkCategory = Player.perks[key];
+            Object.keys(perkCategory).forEach(perkKey=>{
+                let perk = perkCategory[perkKey]
+                console.log(perk)
+                if(perkKey == 'advantage'){
+                    let dummyItem = {type:{}}
+                    dummyItem.type[key] = perk;
+                    let proficiencySpan = Display.getProficiencySpan(dummyItem)
+                    let perkDiv = $('<div>').text(key).append(proficiencySpan).addClass('perk-divs')
+                    let hintText = "You have proficiency "+perk+" with "+key+" weapons. Damage with those weapons is rerolled "+perk+" times, with the highest roll used."
+                    Display.setHintText(perkDiv,hintText)
+                    element.append(
+                        perkDiv
+                    )
+                }else if(perkKey == 'critChance'){
+                    let critChance = perk;
+                    if(!critChance){critChance = 0}
+                    critChance *= 100;
+                    critChance = Number.parseFloat(critChance).toFixed(0);
+                    critChance += "%";
+                    let hintText = "You have a "+critChance+" critical hit chance on "+key+" attacks."
+                    let perkDiv = $('<div>').text(critChance + " " + key+ " Crit").addClass('perk-divs')
+                    Display.setHintText(perkDiv, hintText);
+                    element.append(
+                        perkDiv
+                    )
+                }else{
+                    let perkDiv = $('<div>').text(perk.name).addClass('perk-divs');
+                    let description = perk.description
+                    if(perk.val > 1){
+                        perkDiv.append(" X"+perk.val)
+                        description +=" (x"+perk.val+")"
+                    }
+                    Display.setHintText(perkDiv, description)
+                    element.append(perkDiv) 
+                }
+            })
+            
+         
         })
 
     }

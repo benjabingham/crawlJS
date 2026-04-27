@@ -107,10 +107,29 @@
 
 #character-perks-div{
     width:100%;
-
+    display:grid;
+    padding:10px;
+    height:100%;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(
+            min(100% / 1, max(100% / 2)),
+            1fr
+        )
+    );
+    box-sizing: border-box;
     div{
-        text-align: center;
         text-transform: capitalize;
+        height:30px;
+        padding: 5px;
+    }
+
+    div:before{
+        content:"• "
+    }
+
+    div:has(.proficiencySpan) {
+        line-height: 0.5rem;
     }
 }
 

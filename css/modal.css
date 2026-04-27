@@ -17,11 +17,13 @@
         width:fit-content;
         letter-spacing: 2cap;
     }
-}
 
-.keyword{
+    .keyword{
     font-weight: bold;
 }
+}
+
+
 
 .skill-option{
     padding:4px;

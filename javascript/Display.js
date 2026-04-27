@@ -48,7 +48,7 @@ class Display{
     }
 
     static setHintText(element, hintText, hintClass = "info"){
-        element.on('mousemove',()=>{
+        element.addClass('keyword').on('mousemove',()=>{
             $('.hint-divs').show().text(hintText).addClass(hintClass);
             
         }).on('mouseleave',()=>{

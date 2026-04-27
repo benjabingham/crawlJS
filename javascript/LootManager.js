@@ -148,6 +148,7 @@ class LootManager{
         LootManager.getTreasureSize(treasure);
 
         console.log(treasure)
+        treasure.treasure = true;
         return treasure;
     }
 
@@ -606,5 +607,20 @@ class LootManager{
         })
 
         return weapons;
+    }
+
+    static getValue(item){
+        let value = item.value;
+        if(item.treasure && Player.perks.sell.trinketPeddler){
+            value += Player.perks.sell.trinketPeddler.val;
+        }
+
+        if(item.treasure && Player.perks.sell.appraiser){
+            let multiplier = Player.perks.sell.appraiser.val * 0.2;
+            multiplier += 1;
+            value *= multiplier;
+        }
+
+        return value;
     }
 }

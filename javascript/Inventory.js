@@ -69,6 +69,7 @@ class Inventory{
         let dungeonMode = GameMaster.dungeonMode;
         let slot = item.slot;
         let itemValue = item.value;
+        //let itemValue = LootManager.getValue(item);
         let itemIsEquipped = Player.equipped && Player.equipped.slot == slot && inventory=="player-inventory";
         let primed = inventory == "player-inventory" && Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
@@ -158,7 +159,7 @@ class Inventory{
             
         }
         if(!dungeonMode && inventory == "player-inventory"){
-            buttons.sell = itemValue;
+            buttons.sell = LootManager.getValue(item);
         }
         
         //these buttons appear only on their own
@@ -894,7 +895,7 @@ class Inventory{
     static addButtons(slot,inventory,buttons){
         let buttonOrder = ['equip','unequip','burn','eat','drink','take','drop','buy','sell'];
         buttonOrder.forEach(buttonName=>{
-            if(buttons[buttonName]){
+            if(typeof buttons[buttonName] !== 'undefined'){
                 let button;
                 switch(buttonName){
                     case 'equip':

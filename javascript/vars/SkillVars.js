@@ -122,4 +122,23 @@ let skillVars = {
             chance: 0.35
         }
     ],
+    sell:[
+        {
+            type:"misc",
+            category:"sell",
+            name:"trinket peddler",
+            key:"trinketPeddler",
+            description:"Sell all treasure for +1 gold."
+        },
+        {
+            type:"misc",
+            category:"sell",
+            name:"appraiser",
+            key:"appraiser",
+            description:"Sell all treasure for +20% gold."
+        },
+    ],
+    buy:[
+
+    ]
 }

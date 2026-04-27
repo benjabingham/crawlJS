@@ -209,9 +209,11 @@ class Shop{
     static sellItem(slot){
         let item = Player.inventory.items[slot];
         Player.inventory.items[slot] = false;
-        Player.changeGold(item.value);
+        let value = LootManager.getValue(item)
+        Player.changeGold(value);
         Player.inventoryCleanup();
-        Log.addMessage("sold "+item.name+" for "+item.value+" gold.")
+        Log.addMessage("sold "+item.name+" for "+value+" gold.")
+        XP.gainSellXP(value)
         GameMaster.postPlayerAction()
     }
 

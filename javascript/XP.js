@@ -18,7 +18,8 @@ class XP{
         jab: {},
         draw: {},
         unarmed: {},
-        counterattack:{}
+        counterattack:{},
+        sell:{},
     };
     static threshold = 50;
 
@@ -33,7 +34,19 @@ class XP{
         });
 
         XP.applyPerk(skillVars.simple[0],false)
-/*        
+        /*
+        XP.applyPerk(skillVars.sell[0],false)
+        XP.applyPerk(skillVars.sell[0],false)
+       
+        XP.applyPerk(skillVars.swords[0],false)
+        XP.applyPerk(skillVars.unarmed[0],false)
+        XP.applyPerk(skillVars.long[0],false)
+        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.edged[0],false)
+        XP.applyPerk(skillVars.swing[0],false)
+        XP.applyPerk(skillVars.sell[0],false)
+        XP.applyPerk(skillVars.sell[0],false)
+       
         XP.applyPerk(skillVars.swords[0],false)
         XP.applyPerk(skillVars.unarmed[0],false)
         XP.applyPerk(skillVars.long[0],false)
@@ -54,7 +67,7 @@ class XP{
         this.skills[skill].weight += weight;
         this.xp += xp;
         this.skills[skill].xpGained += xp;
-
+        Display.fillBars();
         console.log({
             xp:this.xp,
             weights:this.skills
@@ -165,7 +178,7 @@ class XP{
             if(target.parryable){
                 this.gain("counterattack",1,1);
             }
-            this.gain('unarmed',20,20);
+            this.gain('unarmed',1,1);
         }
     }
 
@@ -184,7 +197,7 @@ class XP{
     }
 
     static gainBulkXP(amount = 1){
-        this.gain('bulk',1,amount)
+        this.gain('bulk',0,amount)
     }
 
     static gainLuckXP(){
@@ -196,6 +209,12 @@ class XP{
         let percent = 1 - (Player.hungerPercent/100);
         let weightAmount = 5*percent;
         this.gain('hunger',2,weightAmount);
+    }
+
+    static gainSellXP(amount){
+        let xpAmount = amount * 0.3
+        let weightAmount = amount * 0.3
+        this.gain('sell',xpAmount,weightAmount)
     }
 
     //skills is array of strings which correspond to skills
@@ -237,6 +256,7 @@ class XP{
         this.xp -= this.threshold;
         this.threshold +=30;
         this.threshold *= 1.25 
+        Player.level++;
     }
 
     static openLevelupDialog(perkOptions){
@@ -296,12 +316,20 @@ class XP{
                     newVal += "%";
                     text.append(" ("+oldVal+" → "+newVal+")")
                     break;
+                case "misc":
+                    let perkNameSpan = $('<span>').text(perk.name).addClass('keyword')
+                    if(perk.description){
+                        Display.setHintText(perkNameSpan,perk.description)
+                    }
+                    text.append('Gain perk - ').append(perkNameSpan)
                 default:
             }
 
             modal.append(
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
                     XP.applyPerk(perk)
+                    Inventory.displayInventory();
+                    Display.hideHintDiv();
                     modal.remove();
                 })
             )
@@ -322,6 +350,9 @@ class XP{
                 break;
             case "critChance":
                 this.applyCritChance(perk,verbose);
+                break;
+            case "misc":
+                this.applyMisc(perk)
                 break;
             default:
                 console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
@@ -360,7 +391,7 @@ class XP{
         }
     }
 
-    static applyAdv(perk, verbose = true){
+    static applyAdv(perk, verbose = false){
         console.log(perk.type + " " + perk.attackType)
         if(verbose){
             alert("You have grown accustomed to using weapons that are "+perk.attackType+".")
@@ -372,7 +403,7 @@ class XP{
         }
     }
 
-    static applyCritChance(perk, verbose = true){
+    static applyCritChance(perk, verbose = false){
         if(Player.perks[perk.attackType].critChance){
             Player.perks[perk.attackType].critChance += perk.chance;
         }else{
@@ -382,6 +413,18 @@ class XP{
         let newCritChance = Math.floor(Player.perks[perk.attackType].critChance * 100);
         if(verbose){
             alert("Your "+perk.attackType+" attacks now have a "+newCritChance+"% crit chance.")
+        }
+    }
+
+    static applyMisc(perk){
+        if(!Player.perks[perk.category][perk.key]){
+            Player.perks[perk.category][perk.key] = {
+                name:perk.name,
+                val:1,
+                description:perk.description
+            };
+        }else{
+            Player.perks[perk.category][perk.key].val ++;
         }
     }
 

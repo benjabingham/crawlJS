@@ -5,6 +5,7 @@ class XP{
         stamina: {},
         luck: {},
         hunger: {},
+        bulk:{},
         swords: {},
         axes: {},
         blunt: {},
@@ -19,7 +20,7 @@ class XP{
         unarmed: {},
         counterattack:{}
     };
-    static threshold = 40;
+    static threshold = 50;
 
     static XPInit(){
         console.log(this.skills);
@@ -182,6 +183,10 @@ class XP{
         this.gain('stamina',amount,weightAmount)
     }
 
+    static gainBulkXP(amount = 1){
+        this.gain('bulk',1,amount)
+    }
+
     static gainLuckXP(){
         this.gain('luck',3,7);
         console.log(this.skills.luck)
@@ -230,7 +235,8 @@ class XP{
         XP.openLevelupDialog(perkOptions);
         this.reduceWeights();
         this.xp -= this.threshold;
-        this.threshold *= 1.3; 
+        this.threshold +=30;
+        this.threshold *= 1.25 
     }
 
     static openLevelupDialog(perkOptions){
@@ -306,7 +312,7 @@ class XP{
         )
     }
 
-    static applyPerk(perk, verbose = true){
+    static applyPerk(perk, verbose = false){
         switch(perk.type){
             case "raiseBarMax":
                 this.applyRaiseBarMax(perk, verbose);
@@ -324,7 +330,7 @@ class XP{
         Display.fillBars();
     }
 
-    static applyRaiseBarMax(perk,verbose = true){
+    static applyRaiseBarMax(perk,verbose = false){
         console.log(perk.type + " " + perk.bar);
         if(verbose){
             alert("Your maximum " +perk.bar+" has increased.")
@@ -345,7 +351,9 @@ class XP{
             case "hunger":
                 Player.nourishmentMax += perk.amount;
                 Player.changeNourishment(perk.amount);
-                //
+                break;
+            case "bulk capacity":
+                Player.maxBulk += perk.amount;
                 break;
             default:
                 console.log('BAR '+perk.bar+' NOT RECOGNIZED')

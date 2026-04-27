@@ -622,6 +622,8 @@ class Player {
                 return Player.luckMax;
             case "hunger":
                 return Player.nourishmentMax;
+            case "bulk capacity":
+                return Player.maxBulk;
             default:
                 return 0;
         }

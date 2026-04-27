@@ -357,7 +357,7 @@ let itemVars = {
             light:2,
             uses:3,
             value:5,
-            bulk:1,
+            bulk:15,
         },
         kindling:{
             usable:true,

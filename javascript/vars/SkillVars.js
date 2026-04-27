@@ -11,7 +11,7 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"stamina",
             amount:2
-        }
+        },
     ],
     luck:[
         {
@@ -24,6 +24,13 @@ let skillVars = {
         {
             type:"raiseBarMax",
             bar:"hunger",
+            amount:2
+        }
+    ],
+    bulk:[
+        {
+            type:"raiseBarMax",
+            bar:"bulk capacity",
             amount:2
         }
     ],

@@ -115,6 +115,7 @@ class EntityManager{
         return true;
     }
 
+    /*
     //lose 1 stamina on move
     static checkEncumbered(){
         let encumbrance = Player.getEncumbranceLevel()
@@ -129,7 +130,7 @@ class EntityManager{
 
         return true;
     }
-
+    */
     //on move, chance to lose 1 stamina and end turn.
     //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
     static checkEncumberedV2(){
@@ -146,6 +147,7 @@ class EntityManager{
                     Player.changeStamina(-1)
                     Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     Display.flash($('#player-inventory'),'inventory')
+                    XP.gainBulkXP(nChecks)
                     return false;
                 }
             }

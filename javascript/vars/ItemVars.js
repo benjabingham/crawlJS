@@ -11,7 +11,7 @@ let itemVars = {
                 blunt:true,
                 simple:true
             },
-            bulk:1.2,
+            bulk:1.3,
             jab:{
                 damage:2,
                 stunTime:2,
@@ -53,7 +53,7 @@ let itemVars = {
             stunTime:5,
             weight:3,
             flimsy:-1,
-            bulk:2,
+            bulk:3,
             type:{
                 blunt:true
             },
@@ -74,7 +74,7 @@ let itemVars = {
             stunTime:7,
             weight:5,
             flimsy:-1,
-            bulk:4,
+            bulk:6,
             type:{
                 blunt:true
             },
@@ -96,7 +96,7 @@ let itemVars = {
             damage:2,
             stunTime:2,
             weight:1,
-            bulk:1.4,
+            bulk:2,
             type:{
                 sword:true,
                 sharp:true,
@@ -119,7 +119,7 @@ let itemVars = {
             damage:7,
             stunTime:2,
             weight:3,
-            bulk:1.5,
+            bulk:2,
             strafe:{
                 damage:6,
                 stunTime:2,
@@ -144,7 +144,7 @@ let itemVars = {
             damage:4,
             stunTime:1,
             weight:2,
-            bulk:1,
+            bulk:1.2,
             type:{
                 sword:true,
                 edged:true,
@@ -170,7 +170,7 @@ let itemVars = {
             damage:8,
             stunTime:2,
             weight:3,
-            bulk:2,
+            bulk:3,
             type:{
                 sword:true,
                 edged:true,
@@ -185,7 +185,7 @@ let itemVars = {
             damage:8,
             stunTime:1,
             weight:3,
-            bulk:2,
+            bulk:3,
             type:{
                 sword:true,
                 edged:true,
@@ -211,7 +211,7 @@ let itemVars = {
             damage:12,
             stunTime:4,
             weight:5,
-            bulk:3.5,
+            bulk:5,
             type:{
                 sword:true,
                 edged:true,
@@ -227,7 +227,7 @@ let itemVars = {
             damage:20,
             stunTime:6,
             weight:7,
-            bulk:5,
+            bulk:7,
             draw:{
                 damage:25,
                 stunTime:8,
@@ -254,7 +254,7 @@ let itemVars = {
             damage:1,
             stunTime:2,
             weight:2,
-            bulk:1,
+            bulk:1.3,
             type:{
                 edged:true,
                 axe:true,
@@ -279,7 +279,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
-            bulk:2,
+            bulk:3.5,
             type:{
                 axe:true,
                 improvised:true,
@@ -304,7 +304,7 @@ let itemVars = {
             damage:2,
             stunTime:3,
             weight:3,
-            bulk:4,
+            bulk:6,
             type:{
                 edged:true,
                 axe:true,
@@ -329,7 +329,7 @@ let itemVars = {
             damage:8,
             stunTime:3,
             weight:4,
-            bulk:5,
+            bulk:7,
             type:{
                 edged:true,
                 long:true,
@@ -480,7 +480,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:2,
-            bulk:1.2,
+            bulk:1.8,
             type:{
                 blunt:true,
                 improvised:true,
@@ -506,7 +506,7 @@ let itemVars = {
             stunTime:2,
             weight:1,
             flimsy:8,
-            bulk:0.5,
+            bulk:0.7,
             type:{
                 blunt:true,
                 improvised:true,
@@ -536,7 +536,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
-            bulk:3,
+            bulk:5,
             type:{
                 blunt:true,
                 improvised:true,
@@ -566,7 +566,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
-            bulk:3,
+            bulk:5,
             type:{
                 improvised:true,
                 long:true,
@@ -593,6 +593,11 @@ let itemVars = {
 
     },
     treasure:{
+        button:{
+            name:"button",
+            value:0.9,
+            bulk:0.1,
+        },
         thimble:{
             name:"thimble",
             value:1,
@@ -602,56 +607,73 @@ let itemVars = {
             name:"bead",
             value:1.5,
             bulk:0.1,
+            scalable:true,
         },
         ring:{
             name:"ring",
             value:4,
             bulk:0.1,
+            scalable:true,
         },
         cup:{
             name:"cup",
             value:6,
-            bulk:0.3,
+            bulk:0.4,
+            scalable:true,
         },
         pendant:{
             name:"pendant",
             value:6,
             bulk:0.15,
+            scalable:true,
         },
-        plate:{
-            name:"plate",
+        dish:{
+            name:"dish",
             value:8,
             bulk:1,
+            scalable:true,
         },
         bowl:{
             name:"bowl",
             value:9,
-            bulk:1.2,
+            bulk:1.5,
+            scalable:true,
         },
         vase:{
             name:"vase",
             value:10,
-            bulk:2.5,
+            bulk:3,
+            scalable:true,
         },
         coinPouch:{
             name:"coin pouch",
             value:10,
             bulk:0.2,
+            scalable:true,
         },
         statuette:{
             name:"statuette",
             value:12,
             bulk:1,
+            scalable:true,
         },
         tiara:{
             name:"tiara",
             value:12,
             bulk:0.75,
+            scalable:true,
+        },
+        decorativePlate:{
+            name:"decorative plate",
+            value:15,
+            bulk:3,
+            scalable:true,
         },
         crown:{
             name:"crown",
             value:20,
             bulk:1.2,
+            scalable:true,
         }
     },
     weaponMaterials:{
@@ -975,6 +997,7 @@ let itemVars = {
             fuel:true,
             light:2,
             bulk:0.1,
+            scalable:false
         },
         bone:{
             name:"bone",
@@ -994,7 +1017,7 @@ let itemVars = {
             name:'stone',
             value:0.4,
             color:"gray",
-            bulk:1.5,
+            bulk:2,
         },
         
         iron:{
@@ -1062,6 +1085,28 @@ let itemVars = {
             value:20,
             color:"silver",
             bulk:4,
+        }
+    },
+    treasureSizes:{
+        tiny:{
+            name:"tiny",
+            value:0.3,
+            bulk:0.2
+        },
+        small:{
+            name:"small",
+            value:0.5,
+            bulk:0.5
+        },
+        large:{
+            name:"large",
+            value:1.5,
+            bulk:2
+        },
+        huge:{
+            name:"huge",
+            value:2.5,
+            bulk:4
         }
     },
     weaponModifiers:{

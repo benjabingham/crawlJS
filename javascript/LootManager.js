@@ -145,8 +145,9 @@ class LootManager{
         }
 
         LootManager.getTreasureModifier(treasure, tier);
+        LootManager.getTreasureSize(treasure);
 
-
+        console.log(treasure)
         return treasure;
     }
 
@@ -272,6 +273,28 @@ class LootManager{
         }else if (random >= 90){
             LootManager.applyModifier(treasure, itemVars.treasureModifiers.pristine)
         }
+    }
+
+    static getTreasureSize(treasure){
+        if(!treasure.scalable){
+            return false
+        }
+        let random = Random.roll(1,99);
+        let size;
+
+        if(random < 5){
+            size = itemVars.treasureSizes.tiny;
+        }else if (random < 15){
+            size = itemVars.treasureSizes.small
+        }else if (random < 25){
+            size = itemVars.treasureSizes.large
+        }else if (random < 30){
+            size = itemVars.treasureSizes.huge
+        }
+
+        if(!size){return false}
+
+        LootManager.applyModifier(treasure, size);
     }
 
     static getWeightedWeaponMaterials(allowedMaterials = false){
@@ -435,10 +458,14 @@ class LootManager{
                     break;
                 case 'value':
                     if(item[key]){
-                        item[key] *= value;
+                        //separately store the unrounded version of the items value
+                        if(!item.floatValue){item.floatValue = item.value}
+                        item.floatValue *= value;
+                        item[key] = item.floatValue;
                         item[key] += .5;
                         item[key] = Math.floor(item[key]);
-                        item[key] = Math.max(item[key], 1);
+                        item[key] = Math.max(item[key], 0);
+                    
                     }
                     break;
                 case 'color':
@@ -500,9 +527,11 @@ class LootManager{
     static breakWeapon(item){
         item.name += " (broken)";
         item.weapon = false;
-        item.value *= 0.7;
+        if(!item.floatValue){item.floatValue = item.value}
+        item.floatValue *= 0.7;
+        item.value = item.floatValue;
         item.value = Math.floor(item.value);
-        item.value = Math.max(item.value,1);
+        item.value = Math.max(item.value,0);
     }
 
     static expendUse(item){

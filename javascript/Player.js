@@ -631,6 +631,26 @@ class Player {
         return bonus
     }
 
+    static getItemBonusDamage(item){
+        let bonus = 0;
+        if(item.type.edged && Player.perks.edged.cuttingEdge){
+            bonus += Player.perks.edged.cuttingEdge.val * 3
+        }
+
+        return bonus
+    }
+
+    static getItemBonusDamageSpan(item){
+        let bonus = Player.getItemBonusDamage(item);
+
+        if(bonus){
+            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            return span
+        }else{
+            return ''
+        }
+    }
+
     //take hp, luck, stamina, hunger, return associated max value
     static getMaxResource(resourceString){
         switch(resourceString){
@@ -715,5 +735,7 @@ class Player {
     static itemIsEquipped(item){
         return Player.equipped && Player.equipped.slot == item.slot;
     }
+
+    
 
 }

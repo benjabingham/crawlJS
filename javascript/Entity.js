@@ -1122,6 +1122,8 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
+        damage += Player.getItemBonusDamage(weapon);
+        console.log(damage);
         let weight = weapon.weight;
         let stunTime = weapon.stunTime;
         stunTime += Player.getAnatomyBonus(target);

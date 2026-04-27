@@ -60,9 +60,12 @@ let skillVars = {
     ],
     edged:[
         {
-            type:"advantage",
-            attackType:"edged" 
-        }
+            type:"misc",
+            category:"edged",
+            name:"cutting edge",
+            key:"cuttingEdge",
+            description:"Edged weapons that aren't degraded get +3 max damage."
+        },
     ],
     improvised:[
         {

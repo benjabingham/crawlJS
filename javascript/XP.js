@@ -37,7 +37,7 @@ class XP{
             }
         });
 
-        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.edged[0],false)
         /*
         XP.applyPerk(skillVars.sell[0],false)
         XP.applyPerk(skillVars.sell[0],false)
@@ -352,6 +352,7 @@ class XP{
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
                     XP.applyPerk(perk)
                     Inventory.displayInventory();
+                    Inventory.selectCharacterInfoTab();
                     Display.hideHintDiv();
                     modal.remove();
                 })

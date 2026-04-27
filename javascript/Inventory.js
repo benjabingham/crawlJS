@@ -69,7 +69,7 @@ class Inventory{
         let dungeonMode = GameMaster.dungeonMode;
         let slot = item.slot;
         let itemValue = item.value;
-        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot;
+        let itemIsEquipped = Player.equipped && Player.equipped.slot == slot && inventory=="player-inventory";
         let primed = inventory == "player-inventory" && Inventory.isPrimed(item.slot);
         let inSelectedInventory = inventory == Inventory.selectedInventory;
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
@@ -823,6 +823,9 @@ class Inventory{
     }
 
     static moveItem(fromSlot, toSlot, fromInventoryId, toInventoryId){
+        if(Player.equipped && fromSlot == Player.equipped.slot && fromInventoryId == "player-inventory"){
+            Player.unequipWeapon();
+        }
         let transfer = {
             from:{
                 id:fromInventoryId,

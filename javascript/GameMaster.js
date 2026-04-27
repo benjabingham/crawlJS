@@ -388,7 +388,7 @@ class GameMaster{
             //Inventory.take(item.slot);
         }
 
-        if(item.weapon && !Player.equipped && !result){
+        if(!Player.equipped && !result){
             result = Player.equipWeapon(item);
         }
 

@@ -149,7 +149,7 @@ class Inventory{
             if(item.weapon && !Player.equipped){
                 buttons.equip = true;
             }
-            if(item.weapon && itemIsEquipped){
+            if(itemIsEquipped){
                 buttons.unequip = true;
             }
             if(item.usable && item.fuel && !itemIsEquipped){

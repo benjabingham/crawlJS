@@ -311,8 +311,9 @@ class Player {
         }else if(!dungeonMode){
             let result = Shop.sellItem(item.slot);
             Inventory.displayInventory();
-
             return result;
+        }else if(!Player.equipped){
+            return Player.equipWeapon(item);
         }
         return false;
     }
@@ -337,7 +338,11 @@ class Player {
         if(!weapon.quickSlot){
             Inventory.swapSlot(0,weapon);
         }
-        EntityManager.equipWeapon('player', weapon, verbose);
+        if(weapon.weapon){
+            EntityManager.equipWeapon('player', weapon, verbose);
+        }else{
+            Log.addMessage('Equipped item: '+weapon.name)
+        }
         return true;
     }
 
@@ -353,14 +358,16 @@ class Player {
         if (!Player.equipped){
             return false;
         }
+        let weapon = Player.equipped;
         Player.equipped = false;
-        EntityManager.unequipWeapon('player');
+        if(weapon.weapon){
+            EntityManager.unequipWeapon('player');
+        }
         return true;
     }
 
     static addFuel(fuel, consume=true){
         if(!fuel.light){return false}
-        if(Player.itemIsEquipped(fuel)){Player.unequipWeapon()}
         let slot = fuel.slot;
         let previousLight = Player.light;
         Player.light += fuel.light;
@@ -450,6 +457,7 @@ class Player {
         if(item.uses > 1){
             LootManager.expendUse(item);
         }else{
+            Player.unequipWeapon(slot);
             Player.inventory.items[slot] = false;
         }
 

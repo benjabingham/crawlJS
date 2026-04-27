@@ -457,7 +457,7 @@ class Player {
         if(item.uses > 1){
             LootManager.expendUse(item);
         }else{
-            Player.unequipWeapon(slot);
+            if(Player.itemIsEquipped(item)){Player.unequipWeapon(slot)}
             Player.inventory.items[slot] = false;
         }
 

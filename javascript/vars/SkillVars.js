@@ -39,7 +39,14 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"hunger",
             amount:2
-        }
+        },
+        {
+            type:"misc",
+            category:"hunger",
+            name:"hangry",
+            key:"hangry",
+            description:"Your critical strike chance increases by 1% for each 1% of your hunger you're missing."
+        },
     ],
     bulk:[
         {
@@ -70,7 +77,7 @@ let skillVars = {
             category:"blunt",
             name:"concussive blows",
             key:"concussiveBlows",
-            description:"Blunt weapons get +1 max stun."
+            description:"Blunt weapons get bonus max stun equal to 25% of their max damage."
         },
     ],
     long:[

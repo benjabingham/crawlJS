@@ -1122,18 +1122,28 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
-        damage += Player.getItemBonusDamage(weapon);
         console.log(damage);
         let weight = weapon.weight;
         let stunTime = weapon.stunTime;
-        stunTime += Player.getBonusStun(weapon,target);
         console.log(stunTime)
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
             stunTime = weapon[strikeType].stunTime;
             weight = weapon[strikeType].weight
+            stunTime += Player.getBonusStun(weapon[strikeType],target);
+            damage += Player.getItemBonusDamage(weapon[strikeType]);
+        }else{
+            stunTime += Player.getBonusStun(weapon,target);
+            damage += Player.getItemBonusDamage(weapon);
         }
+        
+
+        console.log({
+            damage:damage,
+            stunTime:stunTime
+        })
+
         let crit = 0;
         let damageDice = 1;
         if(target.stunned){

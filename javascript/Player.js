@@ -22,6 +22,7 @@ class Player {
     static perks ={
         stamina:{},
         hp:{},
+        hunger:{},
         sword:{},
         axe:{},
         blunt:{},
@@ -624,6 +625,12 @@ class Player {
                 critChance += Player.perks[skill].critChance;
             }
         })
+        if(Player.perks.hunger.hangry){
+            let percent = 1-(Player.hungerPercent/100);
+            percent *= Player.perks.hunger.hangry.val
+            critChance += percent;
+        }
+        console.log(critChance)
         let isCrit = Math.random() < critChance;
         return isCrit;
     }
@@ -651,12 +658,17 @@ class Player {
     }
 
     static getItemBonusStun(item){
+        if(!item){
+            return false;
+        }
         let bonus = 0;
         console.log(item.type.blunt)
         console.log(Player.perks.blunt.concussiveBlows)
         if(item.type.blunt && Player.perks.blunt.concussiveBlows){
-            bonus += Player.perks.blunt.concussiveBlows.val
-                    console.log(bonus)
+            let percent = Player.perks.blunt.concussiveBlows.val * .25;
+            bonus += item.damage * percent
+            bonus = Math.floor(bonus);
+            console.log(bonus)
 
         }
 
@@ -664,7 +676,17 @@ class Player {
         return bonus
     }
 
+    static getItemBonusStunSpanWithSpecial(item,special){
+        return {
+            normal:Player.getItemBonusStunSpan(item),
+            special:Player.getItemBonusStunSpan(special)
+        }
+    }
+
     static getItemBonusStunSpan(item){
+        if(!item){
+            return false;
+        }
         let bonus = Player.getItemBonusStun(item);
 
         if(bonus){
@@ -676,6 +698,7 @@ class Player {
     }
 
     static getItemBonusDamage(item){
+        if(!item){return 0}
         let bonus = 0;
         if(item.type.edged && Player.perks.edged.cuttingEdge){
             bonus += Player.perks.edged.cuttingEdge.val * 3
@@ -684,7 +707,15 @@ class Player {
         return bonus
     }
 
+    static getItemBonusDamageSpanWithSpecial(item,special){
+        return {
+            normal:Player.getItemBonusDamageSpan(item),
+            special:Player.getItemBonusDamageSpan(special)
+        }
+    }
+
     static getItemBonusDamageSpan(item){
+        if(!item){return false}
         let bonus = Player.getItemBonusDamage(item);
 
         if(bonus){

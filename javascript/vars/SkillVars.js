@@ -4,13 +4,27 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"hp",
             amount:2,
-        }
+        },
+        {
+            type:"misc",
+            category:"hp",
+            name:"vitality",
+            key:"vitality",
+            description:"Gain +1 health when you rest."
+        },
     ],
     stamina:[
         {
             type:"raiseBarMax",
             bar:"stamina",
             amount:2
+        },
+        {
+            type:"misc",
+            category:"stamina",
+            name:"aerobics",
+            key:"aerobics",
+            description:"+1 stamina gain on wait."
         },
     ],
     luck:[
@@ -50,7 +64,14 @@ let skillVars = {
         {
             type:"advantage",
             attackType:"blunt" 
-        }
+        },
+        {
+            type:"misc",
+            category:"blunt",
+            name:"concussive blows",
+            key:"concussiveBlows",
+            description:"Blunt weapons get +1 max stun."
+        },
     ],
     long:[
         {

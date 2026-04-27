@@ -20,6 +20,8 @@ class Player {
     static lightTime = 0;
 
     static perks ={
+        stamina:{},
+        hp:{},
         sword:{},
         axe:{},
         blunt:{},
@@ -118,7 +120,9 @@ class Player {
             healthChange -= excess
         }
         let newHealth = oldHealth+healthChange
-
+        if(Player.perks.hp.vitality){
+            healthChange = Math.min(healthChange+Player.perks.hp.vitality.val,Player.healthMax-oldHealth);
+        }
         let nourishmentChange = (newHealth - oldHealth)*-1;
         nourishmentChange -=3;
 
@@ -152,6 +156,9 @@ class Player {
         let oldHealth = Player.health;
         Player.changeHealth(health);
         Player.changeNourishment((Player.health-oldHealth)*-1);
+        if(Player.perks.hp.vitality){
+            Player.changeHealth(Player.perks.hp.vitality.val);
+        }
 
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);
@@ -159,6 +166,8 @@ class Player {
         Player.changeNourishment(-3);
 
         Player.setExertion(0);
+
+        
 
         XP.checkLevelUp();
 
@@ -169,6 +178,9 @@ class Player {
 
     static gainStamina(){
         let stamina = 2;
+        if(Player.perks.stamina.aerobics){
+            stamina++;
+        }
         if(Player.exertion){
             stamina--;
         }
@@ -616,6 +628,13 @@ class Player {
         return isCrit;
     }
 
+    static getBonusStun(weapon,entity){
+        let bonus = 0;
+        bonus += Player.getAnatomyBonus(entity);
+        bonus += Player.getItemBonusStun(weapon);
+        return bonus;
+    }
+
     static getAnatomyBonus(entity){
         if(!entity.types){
             return 0;
@@ -629,6 +648,31 @@ class Player {
         })
 
         return bonus
+    }
+
+    static getItemBonusStun(item){
+        let bonus = 0;
+        console.log(item.type.blunt)
+        console.log(Player.perks.blunt.concussiveBlows)
+        if(item.type.blunt && Player.perks.blunt.concussiveBlows){
+            bonus += Player.perks.blunt.concussiveBlows.val
+                    console.log(bonus)
+
+        }
+
+        console.log(bonus)
+        return bonus
+    }
+
+    static getItemBonusStunSpan(item){
+        let bonus = Player.getItemBonusStun(item);
+
+        if(bonus){
+            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            return span
+        }else{
+            return $('<span>')
+        }
     }
 
     static getItemBonusDamage(item){
@@ -647,7 +691,7 @@ class Player {
             let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
             return span
         }else{
-            return ''
+            return $('<span>')
         }
     }
 

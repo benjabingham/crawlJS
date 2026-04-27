@@ -290,6 +290,7 @@ class Inventory{
             let special = false;
             let specialName = false;
             let bonusDamageSpan = Player.getItemBonusDamageSpan(item);
+            let bonusStunSpan = Player.getItemBonusStunSpan(item);
             attackTypes.forEach(function(val){
                 if(item[val]){
                     special = item[val];
@@ -304,7 +305,7 @@ class Inventory{
                     ).append(
                         $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).append('Damage: '+item.damage).append(bonusDamageSpan.clone())
                     ).append(
-                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime)
+                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime).append(bonusStunSpan.clone())
                     ).append(
                         $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
                     )
@@ -314,7 +315,7 @@ class Inventory{
                     ).append(
                         $('<div>').addClass('item-damage').text('Damage: '+special.damage).append(bonusDamageSpan.clone())
                     ).append(
-                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
+                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime).append(bonusStunSpan.clone())
                     ).append(
                         $('<div>').addClass('item-weight').text('weight: '+special.weight)
                     )):false

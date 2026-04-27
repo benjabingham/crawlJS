@@ -359,6 +359,8 @@ class Player {
     }
 
     static addFuel(fuel, consume=true){
+        if(!fuel.light){return false}
+        if(Player.itemIsEquipped(fuel)){Player.unequipWeapon()}
         let slot = fuel.slot;
         let previousLight = Player.light;
         Player.light += fuel.light;
@@ -399,6 +401,8 @@ class Player {
     }
 
     static eatItem(item){
+        if(!item.food){return false}
+        if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
         Player.changeNourishment(item.food);
         Log.addMessage('You eat the '+item.name+".");
@@ -409,6 +413,8 @@ class Player {
 
     static drinkItem(item){
         let slot = item.slot;
+        if(!item.potable){return false}
+        if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
 
         Log.addMessage('You drink the '+item.name+".");
         while(item.unlabeled){

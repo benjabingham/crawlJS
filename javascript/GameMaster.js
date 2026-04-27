@@ -356,7 +356,7 @@ class GameMaster{
 
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
-        if(!Inventory.itemIsAccessible(item) || Player.itemIsEquipped(item)){return false}
+        if(!Inventory.itemIsAccessible(item)){return false}
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }

@@ -15,6 +15,7 @@ class Display{
         Display.followerInit();
         Inventory.initReleaseDragItems();
         Inventory.inventoryClickPreventDefault();
+        Inventory.initTabBehavior();
     }
 
     static showDungeonScreen(){

@@ -113,7 +113,7 @@
         
         <div class id="main-content">
 
-            <div class="inventory" id ="player-inventory">
+            <div class="inventory" id ="left-menu">
                 <div class="inventory-description" id ="player-inventory-description"></div>
                 <div class="inventory-title">Quickslots</div>
                 <div id ="player-inventory-list" class="inventory-list"></div>
@@ -169,10 +169,21 @@
             </div>
 
 
-            <div class="inventory" id = "world-inventory">
-                <div class="inventory-description" id = "world-inventory-description"></div>
-                <div class="inventory-title" id="world-inventory-title">Inventory</div>
-                <div id ="world-inventory-list" class="inventory-list"></div>
+            <div class="inventory" id = "right-menu">
+                <div class="tabs-container" id="right-menu-tabs">
+                    <div class="tabs-divs" id="world-inventory-tab">world inventory</div>
+                    <div class="tabs-divs" id="character-info-tab">Character Info</div>
+                </div>
+                <div id="world-inventory">
+                    <div class="inventory-description" id = "world-inventory-description"></div>
+                    <div class="inventory-title" id="world-inventory-title">Inventory</div>
+                    <div id ="world-inventory-list" class="inventory-list"></div>
+                </div>
+                
+                <div id = "character-info">
+                    <div class="inventory-title" id="character-info-title">Character Info</div>
+                </div>
+                
             </div>
             <div class="inventory" id = "side-menu">
                 <div class="inventory-description" id = "side-menu-description"></div>

@@ -157,7 +157,8 @@
 
 .inventory-description{
     padding:3px;
-    outline:1px solid var(--border);
+    /*outline:1px solid var(--border);*/
+    border-bottom:1px solid var(--border);
     height:180px;
     text-align:left;
     background-color: var(--inventorySlotHover);
@@ -250,4 +251,24 @@
     font-weight:800;
     width:200px;
     /*border:1px solid gray*/
+}
+
+.tabs-container{
+    display:flex;
+}
+
+.tabs-divs{
+    flex:1;
+    text-align:center;
+    border:1px solid var(--border);
+    border-top:none;
+    background-color:var(--slotUnavailable);
+    font-weight:600;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.tabs-divs.selected{
+    background-color: var(--floor);
+    border:none;
 }

@@ -30,7 +30,12 @@ class Inventory{
         let displayedItem = Player.inventory.items[Inventory.displayedInventorySlots["player-inventory"]]
         Inventory.displayItemInfo(displayedItem, "player-inventory")
         
-        Inventory.displayContainerInventory();
+        if(Inventory.selectedContainer){
+            Inventory.displayContainerInventory();
+        }else{
+            $('#right-menu-tabs').hide();
+            Inventory.selectCharacterInfoTab();
+        }
 
         Inventory.scrollInventories();
         Inventory.setBulkDiv();
@@ -504,7 +509,12 @@ class Inventory{
         
         if(EntityManager.getDistance(EntityManager.playerEntity, Inventory.itemPile)==0){
             Inventory.selectedContainer = Inventory.itemPile;
+            if(!$('#right-menu-tabs').is(':visible')){
+                $('#right-menu-tabs').show();
+                Inventory.selectWorldInventoryTab();
+            }
             $('#world-inventory-title').text("Floor").append(this.getRummageButton());
+            $('#world-inventory-tab').text("Floor")
             //Inventory.selectedInventory = "world-inventory"
         }else{
             Inventory.itemPile = false;
@@ -541,6 +551,7 @@ class Inventory{
             case "right":
                 if(Inventory.selectedContainer){
                     Inventory.selectedInventory = "world-inventory";
+                    Inventory.selectWorldInventoryTab();
                     GameMaster.stopDrop();
                 }
                 break;
@@ -637,12 +648,18 @@ class Inventory{
         Inventory.selectedContainer = container;
         Inventory.selectedInventory = "world-inventory";
         Inventory.displayedInventorySlots["world-inventory"] = 0;
+        $('#right-menu-tabs').show();
+        Inventory.selectWorldInventoryTab();
         $('#world-inventory-title').text(container.name).append(this.getRummageButton());
+        $('#world-inventory-tab').text(container.name)
         Inventory.displayInventory();
         this.bagOverlay();
     }
 
     static assignSlots(){
+        if(!Inventory.selectedContainer.inventory){
+            Inventory.selectedContainer.inventory = {items:[],gold:0}
+        }
         let i = 0;
         Inventory.selectedContainer.inventory.items.forEach((item)=>{
             item.slot = i;
@@ -759,6 +776,30 @@ class Inventory{
             Inventory.draggedItem.slot = false;
             Inventory.draggedItem.inventoryId = false;
         })
+    }
+
+    static initTabBehavior(){
+        $('#world-inventory-tab').on('click',Inventory.selectWorldInventoryTab)
+        $('#character-info-tab').on('click',Inventory.selectCharacterInfoTab)
+    }
+
+    static selectWorldInventoryTab(){
+        console.log('world')
+        $('#character-info').hide();
+        $('#world-inventory').show();
+        $('#character-info-tab').removeClass('selected');
+        $('#world-inventory-tab').addClass('selected');
+        Inventory.selectedInventory="world-inventory"
+    }
+
+    static selectCharacterInfoTab(){
+        console.log('character')
+        $('#character-info').show();
+        $('#world-inventory').hide();
+        $('#character-info-tab').addClass('selected');
+        $('#world-inventory-tab').removeClass('selected');
+        Inventory.selectedInventory="player-inventory"
+        
     }
 
     static inventoryClickPreventDefault(){

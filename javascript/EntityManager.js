@@ -79,6 +79,7 @@ class EntityManager{
         let owner = EntityManager.getEntity(ownerId);
         let swordId = owner.sword;
         let sword = EntityManager.getEntity(swordId);
+        if(!sword.weapon){return false}
 
         sword.place();
     }
@@ -263,6 +264,7 @@ class EntityManager{
     }
 
     static equipWeapon(wielderId, weapon, verbose=true){
+        if(!weapon.weapon){return false}
         let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
@@ -720,7 +722,7 @@ class EntityManager{
         }
 
 
-        if(Player.equipped && EntityManager.getDistance(weaponPos,target) == 1){
+        if(Player.equipped && Player.equipped.weapon && EntityManager.getDistance(weaponPos,target) == 1){
             console.log('equipped');
             //the space the player would have to move into to make a moving attack
             let moveSpace = {x: target.x - playerToWeapon.x, y: target.y - playerToWeapon.y}

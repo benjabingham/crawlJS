@@ -642,7 +642,7 @@ class Entity{
                 EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText, this.id);
             }
             
-        }else if(Player.equipped){
+        }else if(Player.equipped && Player.equipped.weapon){
             if(Display.parryInRange(this.x,this.y)){
                 EntityManager.transmitMessage("You hold steady! You may counterattack.",false, 'counterattack');
                 console.log(EntityManager.getPossibleStrikes(this))
@@ -862,7 +862,7 @@ class PlayerEntity extends Entity{
 
     //x and y are RELATIVE TO PLAYER
     canUnarmedStrike(x,y){
-        if(Player.equipped){
+        if(Player.equipped && Player.equipped.weapon){
             return false;
         }
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))

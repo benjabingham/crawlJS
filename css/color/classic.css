@@ -61,6 +61,8 @@ q
     --luckBarText:var(--darkGreen);
     --hungerBar:var(--orange);
     --hungerBarText:var(--darkOrange);
+    --xpBar:var(--blue);
+    --xpBarText:var(--darkBlue);
     --resourceBorder:var(--defaultEntity);
 
 

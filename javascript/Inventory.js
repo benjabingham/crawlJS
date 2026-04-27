@@ -100,7 +100,7 @@ class Inventory{
         if(!itemValue){
             itemValue = '0';
         }
-        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+availableStyling ).attr('id',inventory+'-slot-'+slot).append(
+        let element = $('<div>').addClass('inventory-slot fresh-'+item.fresh+' selected-'+itemIsSelected+' primed-'+primed+' drop-'+dropMode+' quickslot-'+quickSlot+' available-'+availableStyling+ ' equipped-'+itemIsEquipped ).attr('id',inventory+'-slot-'+slot).append(
                 quickSlot ? $('<div>').text(slot+1).addClass('item-slot-number') : ''
             ).append(
                 $('<div>').attr('id',inventory+'-item-name-'+slot).addClass('item-name').text(item.name).append(proficiencySpan).append(symbolsSpan)
@@ -177,12 +177,18 @@ class Inventory{
         let bulk = item.bulk;
         let gold = shopItem ? item.price : item.value;
         //if(quickSlot){bulk /=2}
-        element.append(
-            $('<div>').addClass('item-gold-div').append(gold+"g").addClass('item-values')
-        )
-        element.append(
-            $('<div>').addClass('item-bulk-div').append(bulk+"b").addClass('item-values')
-        )
+        if(typeof gold !== 'undefined'){
+            element.append(
+                $('<div>').addClass('item-gold-div').append(gold+"g").addClass('item-values')
+            )
+        }
+        if(typeof bulk !== 'undefined'){
+            element.append(
+                $('<div>').addClass('item-bulk-div').append(bulk+"b").addClass('item-values')
+            )
+        }
+        
+        
     }
 
     static displayItemInfo(item, inventory){
@@ -781,6 +787,7 @@ class Inventory{
     static initTabBehavior(){
         $('#world-inventory-tab').on('click',Inventory.selectWorldInventoryTab)
         $('#character-info-tab').on('click',Inventory.selectCharacterInfoTab)
+        Inventory.selectCharacterInfoTab();
     }
 
     static selectWorldInventoryTab(){
@@ -799,6 +806,7 @@ class Inventory{
         $('#character-info-tab').addClass('selected');
         $('#world-inventory-tab').removeClass('selected');
         Inventory.selectedInventory="player-inventory"
+        Player.updatePlayerInfo();
         
     }
 

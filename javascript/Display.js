@@ -360,6 +360,11 @@ class Display{
         $('#hunger-level').css('width',hungerPercent*1.5+"px");
         $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
 
+        let xpPercent = XP.xpPercent;
+        xpPercent = Math.min(xpPercent,100)
+        $('#xp-level').css('width',xpPercent*2.5+"px");
+        //$('#xp-level').text(XP.xp+"/"+XP.threshold);
+
         Display.exertionDiv();
 
     }

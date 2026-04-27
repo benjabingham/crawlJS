@@ -45,6 +45,7 @@ class Player {
     static gold = 0;
     //points to equipped object
     static equipped = false;
+    static level=1;
 
     static playerInit(){
         Player.stamina = Player.staminaMax;
@@ -453,6 +454,7 @@ class Player {
     static getBulk(){
         let bulkSum = 0;
         Player.inventory.items.forEach(item=>{
+            if(Player.itemIsEquipped(item)){return}
             let bulk = 0
             if(item.bulk){bulk = item.bulk}
             
@@ -463,7 +465,7 @@ class Player {
             bulk /= 10;
             bulkSum += bulk;
         })
-        console.log(bulkSum);
+        //console.log(bulkSum);
 
         return bulkSum;
     }
@@ -622,6 +624,41 @@ class Player {
         Player.gold = Math.max(Player.gold,0)
         Display.flash($('.gold-div'),'goldDivs')
         Display.displayGold()
+    }
+
+    static updatePlayerInfo(){
+        $('#level-div').text('Level '+Player.level)
+
+        let element = $('#character-perks-div');
+        element.html('');
+
+        Object.keys(Player.perks).forEach(key=>{
+            let perk = Player.perks[key];
+            if(perk.advantage){
+                console.log(perk);
+                let dummyItem = {type:{}}
+                dummyItem.type[key] = perk.advantage;
+                let proficiencySpan = Display.getProficiencySpan(dummyItem)
+                element.append(
+                    $('<div>').text(key).append(proficiencySpan)
+                )
+            }
+            if(perk.critChance){
+                let critChance = perk.critChance;
+                if(!critChance){critChance = 0}
+                critChance *= 100;
+                critChance = Number.parseFloat(critChance).toFixed(0);
+                critChance += "%";
+                element.append(
+                    $('<div>').text(key+" - "+critChance)
+                )
+            }
+        })
+
+    }
+
+    static itemIsEquipped(item){
+        return Player.equipped && Player.equipped.slot == item.slot;
     }
 
 }

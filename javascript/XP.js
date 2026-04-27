@@ -32,11 +32,20 @@ class XP{
         });
 
         XP.applyPerk(skillVars.simple[0],false)
+/*        
+        XP.applyPerk(skillVars.swords[0],false)
+        XP.applyPerk(skillVars.unarmed[0],false)
+        XP.applyPerk(skillVars.long[0],false)
+        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.edged[0],false)
+*/
         //XP.levelUp();
         //XP.openLevelupDialog();
         //XP.applyPerk(skillVars.swing[0])
+    }
 
-        
+    static get xpPercent(){
+        return Math.floor((XP.xp/XP.threshold)*100);
     }
 
     static gain(skill, xp, weight){

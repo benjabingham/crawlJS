@@ -114,6 +114,8 @@ class Player {
     }
 
     static getRestInfo(){
+        console.log(JSON.parse(JSON.stringify(XP.skills)))
+        console.log(XP.offeredPerks)
         let healthChange = Player.nourishmentLevel;
         let oldHealth = Player.health;
         if(healthChange + oldHealth > Player.healthMax){
@@ -172,8 +174,6 @@ class Player {
 
         XP.checkLevelUp();
 
-        console.log(Player.nourishment);
-        console.log(Player.nourishmentLevel);
     }
 
 
@@ -237,7 +237,6 @@ class Player {
     }
 
     static changeLuck(n){
-        console.log("changeluck "+n)
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
@@ -308,8 +307,6 @@ class Player {
     }
 
     static useItem(item){
-        console.log('useItem')
-        console.log(item);
         if(!item){
             return false;
         }
@@ -368,7 +365,6 @@ class Player {
         let slot = Player.equipped.slot;
         let weaponEntity = EntityManager.playerEntity.swordEntity;
         let equippedItem = Player.inventory.items[slot];
-        console.log(weaponEntity);
         weaponEntity.equip(equippedItem);
     }
 
@@ -510,7 +506,6 @@ class Player {
         let random = Math.random()*1500;
         if (random < Player.lightTime-150){
             Player.light--;
-            console.log(Player.lightTime);
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0)
             Log.addMessage('Your light dims.');
@@ -551,7 +546,6 @@ class Player {
             }
 
         }
-        console.log(Player.inventory.items);
     }
 
     static dropItem(slot){
@@ -567,7 +561,6 @@ class Player {
     }
 
     static dropBag(){
-        console.log('dropbag')
         let slot = 0;
         //find first nonquickslot item
         while(Player.inventory.items[slot] && Player.inventory.items[slot].quickSlot){
@@ -582,7 +575,6 @@ class Player {
 
     //TODO - make work like crit, so strike types can have advantage too?
     static getAdvantage(weaponItem){
-        //console.log(weaponItem);
         let proficiencies = Player.getProficiencies(weaponItem);
         let advantage = 0;
         proficiencies.forEach(skill=>{
@@ -630,7 +622,6 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
-        console.log({critchance:critChance})
         let isCrit = Math.random() < critChance;
         return isCrit;
     }
@@ -662,17 +653,13 @@ class Player {
             return false;
         }
         let bonus = 0;
-        console.log(item.type.blunt)
-        console.log(Player.perks.blunt.concussiveBlows)
         if(item.type.blunt && Player.perks.blunt.concussiveBlows){
             let percent = Player.perks.blunt.concussiveBlows.val * .25;
             bonus += item.damage * percent
             bonus = Math.floor(bonus);
-            console.log(bonus)
 
         }
 
-        console.log(bonus)
         return bonus
     }
 
@@ -767,7 +754,6 @@ class Player {
             let perkCategory = Player.perks[key];
             Object.keys(perkCategory).forEach(perkKey=>{
                 let perk = perkCategory[perkKey]
-                console.log(perk)
                 if(perkKey == 'advantage'){
                     let dummyItem = {type:{}}
                     dummyItem.type[key] = perk;

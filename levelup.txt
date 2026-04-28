@@ -56,6 +56,7 @@ XP Sources:
             + max hp
             Improved hp gain on rest
             chance to ignore attack?
+            when lose hp, gain that much stamina
     Stamina (Spending Stamina)
         amount 0, very low weight
         perks:
@@ -77,6 +78,7 @@ XP Sources:
             Plus max
             drain slower
             drain faster, but regain stamina faster
+            perk for full hunger...
     Selling
         high amount, moderate weight (both based on value of item)
         perks
@@ -105,6 +107,8 @@ XP Sources:
                 double counterattack damage
             Axe:
                 +25% max damage
+            edge:
+                chance to inflict bleed on crit
 
     Strike types (Draw, strafe, swing, jab)
         trigger on strike living target
@@ -120,6 +124,7 @@ XP Sources:
                     Cleave - swing twice for cost of 1 extra stamina
                 jab
                     Skewer - strike cell beyond, 1 extra stamina
+                    Strikethrough - move to cell beyond.
                 Unarmed
                     180 - do a 180, if unarmed. Costs 1 stamina
 
@@ -129,6 +134,9 @@ XP Sources:
         +25% damage, rounded up
         adv stun
         double chance to daze?
+        goblinoid - double chance to daze (Cruel strikes)
+        beast - half chance to enrage (tamer)
+        undead - mark when gonna get back up
 
     counterattack
         Trigger on counterattack
@@ -144,7 +152,16 @@ XP Sources:
         trigger on drink
         0 amount, medium weight
         perks
-            potions get an extra use
+            potions get an extra use/chance to not finish on use
+            ability to identify
+            regain hunger on drink
+    general attack
+        bonus for full stamina
+        bonus for use all stamina
+    bulk
+        bonus for low bulk
+        bonus for high bulk
+
 
 effects of advantage
 XP.js?v=7:44 1 - 0.779

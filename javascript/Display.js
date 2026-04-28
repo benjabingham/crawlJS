@@ -374,7 +374,6 @@ class Display{
     
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
-        console.log(charCode);
         return keywordVars.symbols[charCode].name
     }
 

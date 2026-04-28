@@ -25,6 +25,7 @@ class XP{
         undead:{},
         ooze:{}
     };
+    static offeredPerks = []
     static threshold = 50;
 
     static XPInit(){
@@ -67,7 +68,6 @@ class XP{
     }
 
     static gain(skill, xp, weight){
-        console.log(skill);
         if(skill){
             this.skills[skill].weight += weight;
             this.skills[skill].xpGained += xp;
@@ -108,6 +108,7 @@ class XP{
                 pointer += this.skills[skill].weight;
                 if(rand <= pointer && !found){
                     chosenSkills.push(skill);
+                    this.offeredPerks.push(skill);
                     this.skills[skill].weight = 0;
                     found = true;
                 }
@@ -208,7 +209,6 @@ class XP{
 
     static gainLuckXP(){
         this.gain('luck',3,7);
-        console.log(this.skills.luck)
     }
 
     static gainHungerXP(){

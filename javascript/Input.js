@@ -22,8 +22,8 @@ class Input {
 
     //Calls the event created by this input
     onInput() {
-        $(document).trigger(this.name);
         console.log('trigger '+this.name);
+        $(document).trigger(this.name);
         //dispatchEvent(this.inputEvent);
 
     }

@@ -796,7 +796,6 @@ class Inventory{
     }
 
     static selectWorldInventoryTab(){
-        console.log('world')
         $('#character-info').hide();
         $('#world-inventory').show();
         $('#character-info-tab').removeClass('selected');
@@ -805,7 +804,6 @@ class Inventory{
     }
 
     static selectCharacterInfoTab(){
-        console.log('character')
         $('#character-info').show();
         $('#world-inventory').hide();
         $('#character-info-tab').addClass('selected');

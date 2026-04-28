@@ -37,7 +37,7 @@ class XP{
             }
         });
 
-        XP.applyPerk(skillVars.hunger[1],false)
+        XP.applyPerk(skillVars.simple[0],false)
         /*
         XP.applyPerk(skillVars.sell[0],false)
         XP.applyPerk(skillVars.sell[0],false)

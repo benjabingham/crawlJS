@@ -164,6 +164,13 @@ let skillVars = {
         {
             type:"misc",
             category:"sell",
+            name:"trapper",
+            key:"trapper",
+            description:"Sell all pelts for +50% gold, rounded up."
+        },
+        {
+            type:"misc",
+            category:"sell",
             name:"appraiser",
             key:"appraiser",
             description:"Sell all treasure for +20% gold."

@@ -621,6 +621,12 @@ class LootManager{
             value *= multiplier;
         }
 
+        if(item.pelt && Player.perks.sell.trapper){
+            let multiplier = Player.perks.sell.trapper.val * 0.5
+            multiplier += 1
+            value *= multiplier;
+        }
+
         return value;
     }
 }

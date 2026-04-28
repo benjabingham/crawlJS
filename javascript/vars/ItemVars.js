@@ -375,24 +375,28 @@ let itemVars = {
             value:1,
             color:'brown',
             bulk:1,
+            pelt:true
         },
         wolfPelt:{
             name:"wolf pelt",
             value:2,
             color:'brown',
             bulk:1.5,
+            pelt:true
         },
         direWolfPelt:{
             name:"dire wolf pelt",
             value:4,
             color:'gray',
             bulk:2,
+            pelt:true
         },
         kingRatSkull:{
             name:"king rat's skull",
             value:15,
             color:'red',
             bulk:1,
+            treasure:true
         },
         branch:{
             weapon:true,
@@ -418,12 +422,14 @@ let itemVars = {
             value:1,
             color:'bone',
             bulk:0.5,
+            treasure:true
         },
         sigiledSkull:{
             name:"sigiled skull",
             value:3,
             color:'bone',
             bulk:1,
+            treasure:true
         },
         blueGoo:{
             name:'blue goo',

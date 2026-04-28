@@ -15,6 +15,7 @@ class GameMaster{
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
+        Player.pickUpItem(LootManager.getPotionLoot())
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
         
         /*starterWeapon = LootManager.getFoodLoot();
@@ -456,7 +457,7 @@ class GameMaster{
         }
     }
 
-    static drinkItem(event, dungeonMode=true){
+    static drinkItem(event, dungeonMode=GameMaster.dungeonMode){
         
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.drinkItem(Player.inventory.items[slot])){

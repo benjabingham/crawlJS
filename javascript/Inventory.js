@@ -1010,7 +1010,7 @@ class Inventory{
         let attributes = [
             //'displayedInventorySlots',
             'playerInBag',
-            //'selectedInventory',
+            'selectedContainer',
             //'itemPile'
         ]
         let snapshot = {}

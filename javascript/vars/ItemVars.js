@@ -296,7 +296,7 @@ let itemVars = {
                 }
             },
             disallowedMaterials:["ceramic","limestone","obsidian","rubber","glass"],
-            value:7
+            value:5
         },
         greataxe:{
             weapon:true,
@@ -558,7 +558,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
-            bulk:5,
+            bulk:4.5,
             type:{
                 blunt:true,
                 improvised:true,
@@ -588,7 +588,7 @@ let itemVars = {
             stunTime:2,
             weight:2,
             flimsy:8,
-            bulk:5,
+            bulk:4,
             type:{
                 improvised:true,
                 long:true,

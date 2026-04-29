@@ -77,6 +77,10 @@
     height:10px;
 }
 
+.full-xp{
+    background-color: var(--xpBarFull) !important;
+}
+
 #xp-bar{
     height:10px;
     width:250px;

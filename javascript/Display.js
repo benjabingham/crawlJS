@@ -364,6 +364,11 @@ class Display{
         xpPercent = Math.min(xpPercent,100)
         $('#xp-level').css('width',xpPercent*2.5+"px");
         //$('#xp-level').text(XP.xp+"/"+XP.threshold);
+        if(xpPercent == 100){
+            $('#xp-level').addClass('full-xp')
+        }else{
+            $('#xp-level').removeClass('full-xp')
+        }
 
         Display.exertionDiv();
 

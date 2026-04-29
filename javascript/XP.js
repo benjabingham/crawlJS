@@ -26,7 +26,7 @@ class XP{
         ooze:{}
     };
     static offeredPerks = []
-    static threshold = 50;
+    static threshold = 60;
 
     static XPInit(){
         console.log(this.skills);
@@ -156,7 +156,7 @@ class XP{
         if(weapon.item.type.simple){
             weaponSkills.push('simple');
         }
-        let strikeTypeXP = 1;
+        let strikeTypeXP = 2;
         if(target.isContainer || target.dead){
             return false;
         }
@@ -213,13 +213,13 @@ class XP{
 
     static gainHungerXP(){
         let percent = 1 - (Player.hungerPercent/100);
-        let weightAmount = 5*percent;
-        this.gain('hunger',2,weightAmount);
+        let weightAmount = 3*percent;
+        this.gain('hunger',1,weightAmount);
     }
 
     static gainSellXP(amount){
-        let xpAmount = amount * 0.3
-        let weightAmount = amount * 0.3
+        let xpAmount = (amount * 0.3) + 2
+        let weightAmount = (amount * 0.3) + 2
         this.gain('sell',xpAmount,weightAmount)
     }
 
@@ -443,11 +443,8 @@ class XP{
 
     static applyMisc(perk){
         if(!Player.perks[perk.category][perk.key]){
-            Player.perks[perk.category][perk.key] = {
-                name:perk.name,
-                val:1,
-                description:perk.description
-            };
+            Player.perks[perk.category][perk.key] = JSON.parse(JSON.stringify(perk))
+            Player.perks[perk.category][perk.key].val = 1
         }else{
             Player.perks[perk.category][perk.key].val ++;
         }

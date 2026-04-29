@@ -137,6 +137,7 @@ XP Sources:
         goblinoid - double chance to daze (Cruel strikes)
         beast - half chance to enrage (tamer)
         undead - mark when gonna get back up
+            - occultist - can burn bones, gaining luck and losing light equal to value (min 1)
 
     counterattack
         Trigger on counterattack

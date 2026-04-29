@@ -613,19 +613,21 @@ class LootManager{
     static getValue(item){
         let value = item.value;
         if(item.treasure && Player.perks.sell.trinketPeddler){
-            value += Player.perks.sell.trinketPeddler.val;
+            value += (Player.perks.sell.trinketPeddler.val * Player.perks.sell.trinketPeddler.amount);
         }
 
         if(item.treasure && Player.perks.sell.appraiser){
             let multiplier = Player.perks.sell.appraiser.val * 0.2;
             multiplier += 1;
             value *= multiplier;
+            value = Math.floor(value);
         }
 
         if(item.pelt && Player.perks.sell.trapper){
             let multiplier = Player.perks.sell.trapper.val * 0.5
             multiplier += 1
             value *= multiplier;
+            value = Math.ceiling(value);
         }
 
         return value;

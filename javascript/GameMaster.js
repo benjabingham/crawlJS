@@ -365,7 +365,7 @@ class GameMaster{
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
-        result = Player.addFuel(item);
+        let result = Player.addFuel(item);
 
         if(!result){
             return false;

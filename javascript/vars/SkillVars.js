@@ -10,7 +10,8 @@ let skillVars = {
             category:"hp",
             name:"vitality",
             key:"vitality",
-            description:"Gain +1 health when you rest."
+            description:"Gain +2 health when you rest.",
+            amount:2
         },
     ],
     stamina:[
@@ -77,7 +78,8 @@ let skillVars = {
             category:"blunt",
             name:"concussive blows",
             key:"concussiveBlows",
-            description:"Blunt weapons get bonus max stun equal to 25% of their max damage."
+            description:"Blunt weapons get bonus max stun equal to 30% of their max damage.",
+            amount:.3
         },
     ],
     long:[
@@ -92,7 +94,8 @@ let skillVars = {
             category:"edged",
             name:"cutting edge",
             key:"cuttingEdge",
-            description:"Edged weapons that aren't degraded get +3 max damage."
+            amount:5,
+            description:"Edged weapons that aren't degraded get +5 max damage."
         },
     ],
     improvised:[
@@ -115,42 +118,42 @@ let skillVars = {
         {
             type:"critChance",
             attackType:"unarmed",
-            chance:0.2 
+            chance:0.25 
         }
     ],
     swing:[
         {
             type:"critChance",
             attackType:"swing",
-            chance: 0.2
+            chance: 0.25
         }
     ],
     jab:[
         {
             type:"critChance",
             attackType:"jab",
-            chance: 0.2
+            chance: 0.25
         }
     ],
     draw:[
         {
             type:"critChance",
             attackType:"draw",
-            chance: 0.2
+            chance: 0.25
         }
     ],
     strafe:[
         {
             type:"critChance",
             attackType:"strafe",
-            chance: 0.2
+            chance: 0.25
         }
     ],
     counterattack:[
         {
             type:"critChance",
             attackType:"counterattack",
-            chance: 0.35
+            chance: 0.40
         }
     ],
     sell:[
@@ -159,7 +162,8 @@ let skillVars = {
             category:"sell",
             name:"trinket peddler",
             key:"trinketPeddler",
-            description:"Sell all treasure for +1 gold."
+            description:"Sell all treasure for +2 gold.",
+            amount:2
         },
         {
             type:"misc",

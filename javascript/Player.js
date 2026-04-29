@@ -124,7 +124,8 @@ class Player {
         }
         let newHealth = oldHealth+healthChange
         if(Player.perks.hp.vitality){
-            healthChange = Math.min(healthChange+Player.perks.hp.vitality.val,Player.healthMax-oldHealth);
+            let vitalityAmount = Player.perks.hp.vitality.val * Player.perks.hp.vitality.amount;
+            healthChange = Math.min(vitalityAmount,Player.healthMax-oldHealth);
         }
         let nourishmentChange = (newHealth - oldHealth)*-1;
         nourishmentChange -=3;
@@ -160,7 +161,7 @@ class Player {
         Player.changeHealth(health);
         Player.changeNourishment((Player.health-oldHealth)*-1);
         if(Player.perks.hp.vitality){
-            Player.changeHealth(Player.perks.hp.vitality.val);
+            Player.changeHealth(Player.perks.hp.vitality.val * Player.perks.hp.vitality.amount);
         }
 
         let luck = Math.floor(Math.random()*2)
@@ -654,7 +655,7 @@ class Player {
         }
         let bonus = 0;
         if(item.type.blunt && Player.perks.blunt.concussiveBlows){
-            let percent = Player.perks.blunt.concussiveBlows.val * .25;
+            let percent = Player.perks.blunt.concussiveBlows.val * Player.perks.blunt.concussiveBlows.val.amount;
             bonus += item.damage * percent
             bonus = Math.floor(bonus);
 
@@ -688,7 +689,7 @@ class Player {
         if(!item){return 0}
         let bonus = 0;
         if(item.type.edged && Player.perks.edged.cuttingEdge){
-            bonus += Player.perks.edged.cuttingEdge.val * 3
+            bonus += Player.perks.edged.cuttingEdge.val * Player.perks.edged.cuttingEdge.amount
         }
 
         return bonus

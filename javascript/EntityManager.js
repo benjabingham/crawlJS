@@ -214,7 +214,6 @@ class EntityManager{
                     skip++
                 }
             }
-            
             entity.checkPreMoveTriggers();
 
             //do this only if not stunned
@@ -421,7 +420,7 @@ class EntityManager{
                 entitySave.entityGroupInfo.entityType == 'monster' &&
                 !EntityManager.hasPlayerLos(entitySave)
             ){
-                EntityManager.spawnEntity(entitySave, 100)
+                EntityManager.spawnEntity(entitySave)
             }
 
             i++;
@@ -658,9 +657,14 @@ class EntityManager{
         console.log(message);
     }
 
-    //does this entity have line of sight of player (DOES NOT INCLUDE LIGHT, BUT RETURNS FALSE IF OUTSIDE OF VIEW WINDOW)
-    static hasPlayerLos(entity){
-        return Board.getLineOfSight(entity.x,entity.y);
+    //does this entity have line of sight of player (RETURNS FALSE IF OUTSIDE OF VIEW WINDOW)
+    static hasPlayerLos(entity, requireLight = false){
+        if(requireLight){
+            return Board.hasPlayerLos(entity)
+        }
+        else{
+            return Board.getLineOfSight(entity.x,entity.y);
+        }
     }
 
     static transformEntity(entity, formInfo){
@@ -747,10 +751,8 @@ class EntityManager{
 
     static getPossibleStrikes(target){
         let playerPos = EntityManager.playerEntity;
-        console.log(playerPos);
         let weaponPos = playerPos.swordEntity;
         let possibleStrikes = [];
-        console.log(weaponPos,target);
 
         let swordToTarget = {
             x:target.x - weaponPos.x,
@@ -764,7 +766,6 @@ class EntityManager{
 
 
         if(Player.equipped && Player.equipped.weapon && EntityManager.getDistance(weaponPos,target) == 1){
-            console.log('equipped');
             //the space the player would have to move into to make a moving attack
             let moveSpace = {x: target.x - playerToWeapon.x, y: target.y - playerToWeapon.y}
             let canMoveStrike = Board.isOpenSpace(moveSpace.x, moveSpace.y) || Board.entityAt(moveSpace.x,moveSpace.y).id == playerPos.swordEntity.id

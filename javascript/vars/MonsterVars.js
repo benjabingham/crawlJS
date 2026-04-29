@@ -961,7 +961,7 @@ let monsterVars = {
         blood:0,
         behaviorInfo:{
             focus:25,
-            slow:90,
+            slow:98,
             beat:50,
             sturdy:90,
             stunResist:5
@@ -995,5 +995,31 @@ let monsterVars = {
         spawnConditions:{gold:100},
         color:'brown'
     },
+    livingShrub:{
+        name:"living shrub",
+        symbol:"❧",
+        behavior:"chase",
+        hitDice:0,
+        inventorySlots: 2,
+        isContainer: true,
+        behaviorInfo:{
+            focus:25,
+            slow:95,
+        },
+        inventory:[
+            {
+                item: itemVars.fuel.kindling,
+                chance: 12
+            },
+            {
+                item: itemVars.drops.branch,
+                chance: 12
+            },
+            {
+                item: itemVars.food.berries,
+                chance: 12
+            }
+        ],
+    }
     
 }

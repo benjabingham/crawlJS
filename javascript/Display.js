@@ -168,7 +168,7 @@ class Display{
                 }
                 let symbol = '';
                 //out of bounds
-                if(true || Board.hasPlayerLos({x:x, y:y})){
+                if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
                         if(Board.wallArray[y][x]){
                             let wallType = Board.wallArray[y][x].wallType;

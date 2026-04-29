@@ -215,6 +215,9 @@ class EntityManager{
                 }
             }
             
+            entity.checkPreMoveTriggers();
+
+            //do this only if not stunned
             if (!skip){
                 entity.parryable = false;
                 switch(entity.behavior){
@@ -225,22 +228,10 @@ class EntityManager{
                         entity.chaseBinary();
                     default:
                 }
-                if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
-                    entity.reconstituteFn(entity.reconstitute);
-                }
-
-                if(entity.changeForms){
-                    entity.checkTransform('perTurnChance')
-                }
-                
             }
-            if(entity.decay && !slow){
-                entity.triggerDecay();
-            }
-            //can still spawn if stunned
-            if(entity.spawnEntities && !slow && !entity.wait){
-                EntityManager.spawnEntity(entity);
-            }
+            
+            entity.checkPostMoveTriggers(skip, slow)
+            
             entity.stunned = Math.max(entity.stunned-1, 0);
             if (!entity.dead){ 
                 if(entity.stunned > 0){
@@ -334,65 +325,113 @@ class EntityManager{
     static loadRoom(json){
         console.log(json);
         Save.catchUpMap(json.name);
+        Board.mapName = json.name;
+        console.log(Board.mapName)
         Board.setDimensions(json.width,json.height)
         Board.boardInit(json);
 
         Board.destinations = json.destinations;
         console.log(json.roster)
         json.roster.forEach((entitySave)=>{
-            let groupInfo = entitySave.entityGroupInfo;
-            let entityObj;
-            let x = entitySave.x;
-            let y = entitySave.y;
-            let random = Random.roll(0,99);
-            let spawn = (random < groupInfo.spawnChance || !groupInfo.spawnChance);
-            if(groupInfo.entityType == "player"){
-                EntityManager.playerEntity = EntityManager.playerInit(x, y)
-            }else if(groupInfo.entityType == "monster"){
-                if(entitySave.alive && spawn){
-                    entityObj = new Monster(groupInfo.key,x,y,groupInfo);
-                }
-            }else if(groupInfo.entityType == 'wall'){
-                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible, groupInfo.wallType);
-            }else if(groupInfo.entityType == 'container'){
-                if(entitySave.alive){
-                    entityObj = new Container(groupInfo.key,x,y,groupInfo);
-                }
-            }else if(groupInfo.entityType == 'itemPile'){
-                if(entitySave.alive){
-                    entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
-                }
-            }
-            if(entityObj){
-                entityObj.index = entitySave.index;
-            }else{
-                console.log({
-                    message:'entityObj = false',
-                    entitySave:entitySave
-                })
-                return false;
-            }
-            if(entitySave.inventory){
-                entityObj.inventory.items = entitySave.inventory.items;
-                entityObj.inventory.gold = entitySave.inventory.gold;
-            }
-
-            if(entityObj.spawnEntities){
-                if(entitySave.containedEntities){
-                    entityObj.containedEntities = entitySave.containedEntities;
-                }else{
-                    entityObj.generateContainedEntities();
-                }
-            }
+            EntityManager.spawnEntity(entitySave)
         })
         
         EntityManager.currentMap = json;
         
     }
 
+    static spawnEntity(entitySave, spawnChance = -1){
+        let groupInfo = entitySave.entityGroupInfo;
+        let entityObj;
+        let x = entitySave.x;
+        let y = entitySave.y;
+        let random = Random.roll(0,99);
+        if(spawnChance == -1){
+            spawnChance = groupInfo.spawnChance
+        }
+        let spawn = (random < spawnChance || typeof spawnChance == 'undefined');
+        if(groupInfo.entityType == "player"){
+            EntityManager.playerEntity = EntityManager.playerInit(x, y)
+        }else if(groupInfo.entityType == "monster"){
+            if(entitySave.alive && spawn){
+                entityObj = new Monster(groupInfo.key,x,y,groupInfo);
+            }
+        }else if(groupInfo.entityType == 'wall'){
+            entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible, groupInfo.wallType);
+        }else if(groupInfo.entityType == 'container'){
+            if(entitySave.alive){
+                entityObj = new Container(groupInfo.key,x,y,groupInfo);
+            }
+        }else if(groupInfo.entityType == 'itemPile'){
+            if(entitySave.alive){
+                entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
+            }
+        }
+        if(entityObj){
+            entityObj.index = entitySave.index;
+            
+        }else{
+            console.log({
+                message:'entityObj = false',
+                entitySave:entitySave
+            })
+            return false;
+        }
+        if(entitySave.inventory){
+            entityObj.inventory.items = entitySave.inventory.items;
+            entityObj.inventory.gold = entitySave.inventory.gold;
+        }
+
+        if(entityObj.spawnEntities){
+            if(entitySave.containedEntities){
+                entityObj.containedEntities = entitySave.containedEntities;
+            }else{
+                entityObj.generateContainedEntities();
+            }
+        }
+
+        if(!entityObj.checkSpawnConditions()){
+            console.log('obliterating')
+            entityObj.obliterated = true;
+            entityObj.dead = true;
+            entityObj.x = -2;
+            entityObj.y = -2;
+        }
+    }
+
+    static reanimateMonsters(){
+        let message = Board.mapName + ' stirs to life...'
+        if(!message.split(' ')[0] != "The"){
+            message = "The "+ message
+        }
+        Log.addMessage(message,'urgent')
+        let roster = EntityManager.currentMap.roster;
+        let ignoredIndexes = []
+        console.log(EntityManager.entities)
+        Object.entries(EntityManager.entities).forEach(entity=>{
+            ignoredIndexes.push(entity.index)
+        })
+        let i = 0;
+        //spawn each entity if it isnt already in the map, and if the player doesnt have line of sight
+        roster.forEach(entitySave=>{
+            entitySave.alive = true;
+            console.log(entitySave)
+            if(
+                !ignoredIndexes.includes(i) &&
+                entitySave.entityGroupInfo.entityType == 'monster' &&
+                !EntityManager.hasPlayerLos(entitySave)
+            ){
+                EntityManager.spawnEntity(entitySave, 100)
+            }
+
+            i++;
+        })
+
+    }
+
     //function used for entities spawning other entities
     //if they live when you leave the dungeon, their loot is returned to their container
-    static spawnEntity(spawner){
+    static spawnEntityFromSpawner(spawner){
         let spawnEntities = spawner.spawnEntities;
 
         if(!spawner.containedEntities.length){

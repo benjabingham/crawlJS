@@ -1,4 +1,6 @@
 class Board{
+    static mapName;
+
     static width;
     static height;
 

@@ -15,6 +15,7 @@ class Town{
 
         Log.wipeLog();
         Log.printLog();
+        GameMaster.checkWin();
         GameMaster.postPlayerAction();
     }
 

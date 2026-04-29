@@ -227,8 +227,9 @@ class XP{
         
         let enemyTypes = [];
         let possibleTypes = ["goblinoid","beast","undead","ooze"];
+
         possibleTypes.forEach(type=>{
-            if(entity.types[type]){
+            if(entity.types && entity.types[type]){
                 enemyTypes.push(type)
             }
         })

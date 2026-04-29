@@ -39,19 +39,19 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
-        
-        GameMaster.getRoom(
-            'Abandoned Village',
-            'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
-            {x:1,y:42}
-        );
         */
+        GameMaster.getRoom(
+            'reanimate test',
+            'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
+            
+        );
+        /*
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
             {x:50,y:42}
         );
-
+*/
         //XP.levelUp();
 
     }
@@ -563,6 +563,15 @@ class GameMaster{
         Display.fillBars(Player);
     }
 
+    static checkWin(){
+        Player.inventory.items.forEach(item=>{
+            
+            if(item.win){
+                alert("Congratulations. You have won the game by obtaining the "+item.name+". Tell Ben \""+item.secretCode+"\" and he will add something simple to the game, of your request.")
+                item.win = false;
+            }
+        })
+    }
 
     static postPlayerAction(){ 
         Display.hideHintDiv()

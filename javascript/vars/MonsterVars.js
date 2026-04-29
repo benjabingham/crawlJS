@@ -952,5 +952,48 @@ let monsterVars = {
         hitDice:100,
         damage:8,
         inventorySlots: 0,
-    }
+    },
+    treeOfGreed:{
+        name:"Tree Of Greed",
+        symbol:'T',
+        behavior:'chase',
+        hitDice:10,
+        blood:0,
+        behaviorInfo:{
+            focus:25,
+            slow:90,
+            beat:50,
+            sturdy:90,
+            stunResist:5
+        },
+        hitDice:10,
+        damage:10,
+        loot:{
+            gold:{
+                chance:100,
+                amount:2
+            }
+        },
+        inventory:[
+            {
+                item: itemVars.drops.greedHeart,
+                chance:100
+            },
+            {item: itemVars.drops.branch, chance:100},
+            {item: itemVars.drops.branch, chance:50},
+            {item: itemVars.fuel.kindling, chance:100},
+            {item: itemVars.fuel.kindling, chance:50},
+            
+        ],
+        logMessage:{
+            message:"You see a twisted oak, two coin-eyes pressed into its bark like scabs above a jagged gash of a mouth. It sees you. It has always seen you.",
+            class:'danger'
+        },
+        //respawns all monsters in map when seen
+        reanimator:{onHitChance:100},
+        //only appears if you have 100 or more gold
+        spawnConditions:{gold:100},
+        color:'brown'
+    },
+    
 }

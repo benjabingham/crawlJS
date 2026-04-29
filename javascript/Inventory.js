@@ -510,8 +510,8 @@ class Inventory{
     }
 
     static checkForItemPile(){
-        if(!Inventory.playerInBag || !Inventory.itemPile){
-            //return false;
+        if(!Inventory.itemPile){
+            return false;
         }
         //don't pull up item pile if already in another container
         if(Inventory.selectedContainer && !Inventory.selectedContainer.isItemPile){

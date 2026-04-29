@@ -502,6 +502,22 @@ let itemVars = {
             },
             value:2
         },
+        scrollOfUndeath:{
+            name:'Scroll Of Undeath',
+            color:'bone',
+            value:999,
+            bulk:0.5,
+            win:true,
+            secretCode:"I have conquered death at great cost."
+        },
+        greedHeart:{
+            name:'Greed Heart',
+            color:'darkRed',
+            value:999,
+            bulk:1,
+            win:true,
+            secretCode: "I have defeated greed, and all I got was endless riches."
+        }
     },
     tools:{
         rollingPin:{

@@ -875,6 +875,12 @@ let containerVars = {
             name: "skeleton",
             resetMortal:true
         },
+        inventory:[
+            {
+                item:itemVars.drops.scrollOfUndeath,
+                chance:100
+            }
+        ],
         loot:{
             weapon:{
                 chance:15,

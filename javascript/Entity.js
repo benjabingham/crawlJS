@@ -64,6 +64,12 @@ class Entity{
     corrosive;
     //grabby - striking with weapon costs 0 to n extra stamina. If this cannot be spent, entity steals weapon.
     grabby;
+    //spawnConditions - conditions that may prevent the entity from spawning
+    spawnConditions;
+    //reanimator - when the entity sees you, repopulates the map
+    reanimator;
+    //logMessage - {message,class}. Sent to log first time entity is seen.
+    logMessage;
 
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
@@ -86,6 +92,25 @@ class Entity{
         return this;
     }
 
+    //check spawn conditions. returns true if entity should spawn, false if not.
+    checkSpawnConditions(){
+        let spawns = true;
+        if(!this.spawnConditions){return spawns}
+        Object.keys(this.spawnConditions).forEach(condition=>{
+            let val = this.spawnConditions[condition]
+            switch(condition){
+                case "gold":
+                    if(Player.gold < val){
+                        console.log(this);
+                        console.log('not spawning')
+                        spawns = false;
+                    }
+                default:
+            }
+        })
+        return spawns;
+    }
+
     get slow(){
         if(!this.behaviorInfo){
             return 0
@@ -98,6 +123,45 @@ class Entity{
         return slow;
     }
 
+    checkPreMoveTriggers(){
+        if(this.logMessage){
+            this.sendEntityMessage();
+            return true
+        }
+
+        return false;
+    }
+
+    //is called every turn for each entity. 
+    //skip tracks if entity skips their behaviors, slow tracks if that's because of their slow property
+    checkPostMoveTriggers(skip, slow){
+        if(!skip){
+            if(this.dead && this.reconstitute && Monster.prototype.isPrototypeOf(this)){
+                this.reconstituteFn(this.reconstitute);
+            }
+
+            if(this.changeForms){
+                this.checkTransform('perTurnChance')
+            }
+        }
+
+        if(this.decay && !slow){
+            this.triggerDecay();
+        }
+
+        //can still spawn if stunned
+        if(this.spawnEntities && !slow && !this.wait){
+            EntityManager.spawnEntityFromSpawner(this);
+        }
+    }
+
+    sendEntityMessage(){
+        if(!this.logMessage || !Board.hasPlayerLos(this)){
+            return false;
+        }
+        Log.addMessage(this.logMessage.message,this.logMessage.class)
+        this.logMessage = false;
+    }
 
     move(x, y){
         x += this.x;
@@ -730,6 +794,21 @@ class Entity{
         return transformed;
     }
 
+    //take trigger (ex. 'onHitChance')
+    checkReanimator(trigger){
+        if(!this.reanimator || this.obliterated){
+            return false;
+        }
+        let chance = this.reanimator[trigger];
+        if(Math.random()*100 < chance){
+            EntityManager.reanimateMonsters()
+            this.reanimator = false;
+            return true;
+        }
+
+        return false;
+    }
+
     //transforms all other entities of a type
     //triggerTransform.targetName is NAME of entity
     //transform all entities with that name into monster with key triggerTransform.formKey
@@ -811,6 +890,7 @@ class Entity{
             //console.log('gonna disturb...')
             this.disturb();
         }
+        this.checkReanimator('onHitChance');
         this.checkTransform('onHitChance');
     }
 
@@ -1415,9 +1495,7 @@ class Monster extends Entity{
         }
         
         return this;
-    }
-
-    
+    }  
 
     //not tested or implemented.
     checkExpiration(){
@@ -1722,6 +1800,9 @@ class Monster extends Entity{
     addStunTime(stunTime){
         if(!this.stunned){
             this.stunned = 0;
+        }
+        if(this.behaviorInfo && this.behaviorInfo.stunResist){
+            stunTime -= Random.roll(0,this.behaviorInfo.stunResist)
         }
         this.stunned += Math.max(stunTime,0);
     }

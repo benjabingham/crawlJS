@@ -115,6 +115,7 @@ class LootManager{
             return false;
         }
         let inventory = [];
+        console.log(templateInventory)
         templateInventory.forEach((item)=>{
             let random=Random.roll(0,99);
             if(random < item.chance){

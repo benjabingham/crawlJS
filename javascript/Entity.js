@@ -1149,6 +1149,7 @@ class SwordEntity extends Entity{
         let position = this.getSwordPosition();
         let x = position.x;
         let y = position.y;
+        let attackOccurs = true;
 
         if(Board.isOccupiedSpace(x,y)){
             let target = Board.entityAt(x,y);
@@ -1164,14 +1165,27 @@ class SwordEntity extends Entity{
                     if(target.parryable){
                         weight = Math.max(0,weight-1);
                     }
+                    //swings and draws get canceled. Jabs and strafes are still allowed, but dont trigger an attack.
+                    //this is so having 0 stamina doesnt hinder your movement.
                     if(Player.stamina < weight){
-                        EntityManager.cancelAction({insuficientStamina:true});
-                        return false;
-                    }else{
-                        Player.changeStamina(weight * -1);
+                        if(strikeType=="strafe" || strikeType == "jab"){
+                            attackOccurs = false;
+                        }else{
+                            EntityManager.cancelAction({insuficientStamina:true});
+                            return false;
+                        }
                     }
+                    Player.changeStamina(weight * -1);
                 }
-                this.swordAttack(target);
+                //this is false if player tried to jab or strafe without enough stamina
+                if(attackOccurs){
+                    this.swordAttack(target);
+                }else{
+                    Log.addMessage('Attack failed! Not enough stamina.','danger')
+                    let lastPos = History.getSnapshotEntity(this.id);
+                    this.findSwordMiddle(target,lastPos);
+                    EntityManager.degradeItem(this,0,0.5);
+                }
             }
         }
         //if sword hasn't been placed somewhere else as result of attack...

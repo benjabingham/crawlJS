@@ -333,7 +333,12 @@ class GameMaster{
 
     static consumeSelectedItem(event){
         let item = Inventory.getSelectedItem();
-        if(!Inventory.itemIsAccessible(item)){return false}
+        if(
+            !Inventory.itemIsAccessible(item) ||
+            (!item.food && !item.potable)
+        ){
+            return false
+        }
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
@@ -356,14 +361,11 @@ class GameMaster{
 
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
-        if(!Inventory.itemIsAccessible(item)){return false}
+        if(!Inventory.itemIsAccessible(item) || !item.fuel){return false}
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
         }
-        let result = false
-        if(item.fuel){
-            result = Player.addFuel(item);
-        }
+        result = Player.addFuel(item);
 
         if(!result){
             return false;

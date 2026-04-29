@@ -1002,6 +1002,7 @@ let monsterVars = {
         hitDice:0,
         inventorySlots: 2,
         isContainer: true,
+        blood:0,
         behaviorInfo:{
             focus:25,
             slow:95,

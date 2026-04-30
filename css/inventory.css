@@ -87,12 +87,15 @@
 .item-name{
     font-weight:800;
     width:fit-content;
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 
 .item-buttons{
     margin-left:auto;
     width:fit-content;
     height:fit-content;
+    display:flex;
 }
 
 .item-description-header{

@@ -38,8 +38,9 @@ class XP{
                 xpGained: 0
             }
         });
+        XP.applyPerk(skillVars.simple[0],false)
 
-        XP.applyPerk(skillVars.dark[1],false)
+        /*
     
         XP.applyPerk(skillVars.stamina[2],false)
         XP.applyPerk(skillVars.dark[0],false)
@@ -59,7 +60,7 @@ class XP{
         XP.applyPerk(skillVars.long[0],false)
         XP.applyPerk(skillVars.simple[0],false)
         XP.applyPerk(skillVars.edged[0],false)
-
+*/
         //XP.levelUp();
         //XP.openLevelupDialog();
         //XP.applyPerk(skillVars.swing[0])

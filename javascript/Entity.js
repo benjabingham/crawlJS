@@ -1010,7 +1010,7 @@ class PlayerEntity extends Entity{
         let stunTime = weapon.stun;
         stunTime += Player.getAnatomyBonus(target);
         let crit = Player.getCrit(weapon,"unarmed",target);
-        let damageDice = 2^crit;
+        let damageDice = Math.pow(2,crit);
         
         let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
         damageDice += vulnerability;
@@ -1226,20 +1226,27 @@ class SwordEntity extends Entity{
         })
 
         let crit = Player.getCrit(weapon, strikeType,target);
-        let damageDice = 2^crit;
+        let damageDice = Math.pow(2,crit);
+        console.log(damageDice)
 
         if(target.isContainer && this.item.wrecking){
             damageDice +=2
+                    console.log(damageDice)
+
         }
 
         if(target.dead){
             damageDice++;
+                    console.log(damageDice)
+
         }
 
 
 
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
+                console.log(damageDice)
+
         stunTime += vulnerability;
         let stunAdded = 0;
         if(target.parryable){
@@ -1254,7 +1261,7 @@ class SwordEntity extends Entity{
             advantage += Player.getAdvantage(this.item);
         }
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
-        console.log({advantage: advantage, mortality:mortality})
+        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');

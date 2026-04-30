@@ -10,6 +10,7 @@ class LootManager{
         }else{
             key = entityGroupInfo.key;
         }
+        console.log(key)
 
         if(!entityType){
             entityType = entityGroupInfo.entityType
@@ -52,7 +53,7 @@ class LootManager{
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.preferredRange));
                 }
             }
 
@@ -115,7 +116,7 @@ class LootManager{
             return false;
         }
         let inventory = [];
-        console.log(templateInventory)
+        //console.log(templateInventory)
         templateInventory.forEach((item)=>{
             let random=Random.roll(0,99);
             if(random < item.chance){
@@ -127,9 +128,11 @@ class LootManager{
         return inventory;
     }
 
-    static getTreasureLoot(tier, allowedMaterials){
+    static getTreasureLoot(tier, allowedMaterials, preferredRange = {min: 0 , max: 9999}){
         let nRolls = tier-3;
         let greater = (nRolls > 0);
+        let min = preferredRange.min;
+        let max = preferredRange.max;
         nRolls = Math.abs(nRolls);
 
         let treasure = LootManager.getTreasure();
@@ -140,15 +143,28 @@ class LootManager{
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
-            if((greater && newTreasure.value > treasure.value) || (!greater && newTreasure.value < treasure.value)){
+            //if value is outside of range, expand range and try again
+            if(
+                (greater && newTreasure.value > treasure.value) ||
+                (!greater && newTreasure.value < treasure.value)
+            ){
+
                 treasure = newTreasure;
             }
         }
 
         LootManager.getTreasureModifier(treasure, tier);
         LootManager.getTreasureSize(treasure);
-
         console.log(treasure)
+        //if outside of range, widen range and try again!
+        if(treasure.value > max){
+            let newMax = max * 1.5;
+            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, {min:min, max:newMax})
+        }else if(treasure.value < min){
+            let newMin = Math.floor(min/2)
+            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
+        }
+
         treasure.treasure = true;
         return treasure;
     }

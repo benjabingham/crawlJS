@@ -29,7 +29,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:0
+                tier:0,
+                preferredRange:{min:1,max:5}
             },
             gold:{
                 chance:20,
@@ -114,7 +115,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:30,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:50}
             },
             gold:{
                 chance:45,
@@ -159,7 +161,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:40,
-                tier:2
+                tier:2,
+                preferredRange:{min:5,max:100}
             },
             gold:{
                 chance:55,
@@ -301,7 +304,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:5,
@@ -351,7 +355,9 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
+
             },
             gold:{
                 chance:5,
@@ -392,7 +398,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:20,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             gold:{
                 chance:80,
@@ -511,7 +518,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -573,7 +581,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -621,7 +630,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -658,7 +668,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:2
+                tier:2,
+                preferredRange:{min:3,max:20}
             },
             gold:{
                 chance:10,
@@ -868,7 +879,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             potion:{
                 chance:50,
@@ -917,7 +929,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             potion:{
                 chance:50,

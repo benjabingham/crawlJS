@@ -508,8 +508,10 @@ class Player {
 
     static lightDown(){
         if(Player.light < 1){
-            XP.gainDarkXP(0.1)
+            XP.gainDarkXP(0.2)
             return false;
+        }else if(Player.light < 2){
+            XP.gainDarkXP(0.1)
         }
         Player.lightTime += Player.light;
         let random = Math.random()*1500;

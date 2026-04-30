@@ -306,6 +306,7 @@ class XP{
         this.xp -= this.threshold;
         this.threshold +=30;
         this.threshold *= 1.25 
+        Log.addMessage("Level up!","win")
         Player.level++;
     }
 

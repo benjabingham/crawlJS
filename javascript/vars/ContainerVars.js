@@ -15,7 +15,8 @@ let containerVars = {
             },
             treasure:{
                 chance:45,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:100,
@@ -99,7 +100,8 @@ let containerVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:50}
             },
             potion:{
                 chance:50,
@@ -123,8 +125,9 @@ let containerVars = {
         ],
         loot:{
             treasure:{
-                chance:50,
-                tier:-1
+                chance:40,
+                tier:-1,
+                preferredRange:{min:1,max:1}
             },
             weapon:{
                 chance:15,
@@ -161,7 +164,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:0,max:10}
             },
             weapon:{
                 chance:10,
@@ -232,7 +236,7 @@ let containerVars = {
         },
         color:'gray'
     },
-    Prop:{
+    prop:{
         name:"prop",
         symbol:"▤",
         behavior:"",
@@ -252,7 +256,8 @@ let containerVars = {
             },
             treasure:{
                 chance:5,
-                tier:-1
+                tier:-1,
+                preferredRange:{min:0,max:5}
             },
             gold:{
                 chance:5,
@@ -374,7 +379,8 @@ let containerVars = {
             },
             treasure:{
                 chance:10,
-                tier:1
+                tier:1,
+                preferredRange:{min:5,max:25}
             },
             supplies:{
                 chance:80,
@@ -414,7 +420,8 @@ let containerVars = {
             },
             treasure:{
                 chance:5,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:100}
             },
             gold:{
                 chance:100,
@@ -518,7 +525,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:15,
-                tier:2
+                tier:2,
+                preferredRange:{min:1,max:50}
             },
             gold:{
                 chance:50,
@@ -569,7 +577,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:8,
-                tier:2
+                tier:2,
+                preferredRange:{min:3,max:30}
             },
             gold:{
                 chance:50,
@@ -621,7 +630,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:25,
@@ -663,7 +673,8 @@ let containerVars = {
             },
             treasure:{
                 chance:25,
-                tier:2
+                tier:2,
+                preferredRange:{min:3,max:50}
             },
             gold:{
                 chance:25,
@@ -711,7 +722,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:15,
-                tier:0
+                tier:0,
+                preferredRange:{min:0,max:50}
             },
             gold:{
                 chance:25,
@@ -756,7 +768,8 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:3,
-                tier:2
+                tier:2,
+                preferredRange:{min:5,max:50}
             },
             gold:{
                 chance:5,
@@ -824,7 +837,8 @@ let containerVars = {
             },
             treasure:{
                 chance:70,
-                tier:2
+                tier:2,
+                preferredRange:{min:10,max:50}
             },
             gold:{
                 chance:100,
@@ -852,7 +866,8 @@ let containerVars = {
             },
             treasure:{
                 chance:35,
-                tier:1
+                tier:1,
+                preferredRange:{min:3,max:50}
             },
             gold:{
                 chance:100,
@@ -888,7 +903,8 @@ let containerVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:10,max:9999}
             },
             potion:{
                 chance:50,
@@ -1009,7 +1025,7 @@ let containerVars = {
         loot:{
             treasure:{
                 chance:100,
-                tier:3
+                tier:3,
             },
         },
     },

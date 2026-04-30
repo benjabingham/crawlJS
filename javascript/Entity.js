@@ -1227,26 +1227,19 @@ class SwordEntity extends Entity{
 
         let crit = Player.getCrit(weapon, strikeType,target);
         let damageDice = Math.pow(2,crit);
-        console.log(damageDice)
 
         if(target.isContainer && this.item.wrecking){
             damageDice +=2
-                    console.log(damageDice)
-
         }
 
         if(target.dead){
             damageDice++;
-                    console.log(damageDice)
-
         }
 
 
 
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
-                console.log(damageDice)
-
         stunTime += vulnerability;
         let stunAdded = 0;
         if(target.parryable){

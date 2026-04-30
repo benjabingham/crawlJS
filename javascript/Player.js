@@ -41,7 +41,8 @@ class Player {
         beast:{},
         undead:{},
         ooze:{},
-        dark:{}
+        dark:{},
+        fuel:{}
     }
         
     
@@ -386,7 +387,12 @@ class Player {
         if(!fuel.light){return false}
         let slot = fuel.slot;
         let previousLight = Player.light;
+        XP.gainFuelXP(1);
         Player.light += fuel.light;
+        let kindler = Player.perks.fuel.kindler
+        if(kindler && fuel.light == 1){
+            Player.light += kindler.amount * kindler.val
+        }
         Player.light = Math.min(Player.lightMax, Player.light);
         Player.light = Math.max(Player.light,0);
         if(fuel.paper){

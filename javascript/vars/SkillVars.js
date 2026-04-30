@@ -238,7 +238,17 @@ let skillVars = {
             name:"night eyes",
             key:"nightEyes",
             amount:1,
-            description:"+1 minimum view range."
+            description:"+1 minimum sight range."
+        },
+    ],
+    fuel:[
+        {
+            type:"misc",
+            category:"fuel",
+            name:"kindler",
+            key:"kindler",
+            amount:1,
+            description:"Increase your light by an extra level whenever you burn fuel with a fuel strength of 1."
         },
     ]
 }

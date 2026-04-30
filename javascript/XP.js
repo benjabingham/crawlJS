@@ -25,6 +25,7 @@ class XP{
         undead:{},
         ooze:{},
         dark:{},
+        fuel:{},
     };
     static offeredPerks = []
     static threshold = 60;
@@ -38,7 +39,7 @@ class XP{
                 xpGained: 0
             }
         });
-        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.fuel[0],false)
 
         /*
     
@@ -196,7 +197,7 @@ class XP{
         }
 
         if(Player.light <= 0){
-            this.gain('dark',0,1)
+            this.gain('dark',1,1)
         }
     }
 
@@ -259,6 +260,11 @@ class XP{
 
     static gainDarkXP(amount){
         this.gain('dark',0,amount);
+    }
+
+    static gainFuelXP(amount){
+        amount *= Player.light * 0.5;
+        this.gain('fuel',0,amount);
     }
 
     static checkLevelUp(){

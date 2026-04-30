@@ -213,6 +213,17 @@ h1, h2, h3{
 
 }
 
+.flash-darkGreen{
+    animation-name: flashDeepGreen;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashDeepGreen{
+    from{background-color: var(--deepGreen);}
+
+}
+
 .flash-white{
     animation-name: flashWhite;
     animation-duration: .5s;

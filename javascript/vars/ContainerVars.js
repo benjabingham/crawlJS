@@ -67,7 +67,7 @@ let containerVars = {
             food:{
                 chance:80,
                 maxNumber:2,
-                tier:0
+                tier:0,
             },
             supplies:{
                 chance:20,
@@ -208,10 +208,6 @@ let containerVars = {
         },
         inventory:[
             {
-                item: itemVars.food.morsel,
-                chance:20
-            },
-            {
                 item: itemVars.fuel.kindling,
                 chance:10
             }
@@ -230,8 +226,10 @@ let containerVars = {
                 amount:1
             },
             food:{
-                chance:10,
-                tier:0
+                chance:20,
+                maxNumber:2,
+                tier:1,
+                rottenMultiplier:2
             }
         },
         color:'gray'
@@ -872,6 +870,11 @@ let containerVars = {
             gold:{
                 chance:100,
                 amount:5
+            },
+            food:{
+                chance:20,
+                tier:3,
+                rottenMultiplier:3
             }
         },
         color:'gold'

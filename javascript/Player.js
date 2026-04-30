@@ -433,8 +433,27 @@ class Player {
         if(!item.food){return false}
         if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
-        Player.changeNourishment(item.food);
         Log.addMessage('You eat the '+item.name+".");
+        let rotten = item.rotten || (Math.random() < item.rottenMultiplier * .2);
+        let ironGut = Player.perks.hunger.ironGut
+        if(rotten && ironGut){
+            Player.changeNourishment(item.food);
+            Player.changeLuck(ironGut.val * ironGut.amount);
+            Display.flash($('body'),'darkGreen');
+            Log.addMessage("It's rotten!",'win','rotten','Yum!')
+            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+        }else if(rotten){
+            Player.changeNourishment(item.food*-1);
+            Log.addMessage("It's rotten!",'danger','rotten','This food item reduced your hunger level by 1 instead of increasing it.')
+            Display.flash($('body'),'darkGreen');
+            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+        }else{
+            Player.changeNourishment(item.food);
+        }
+        
+        //it is no longer in a quantum state
+        item.rottenMultiplier = 0;
+        
         Player.consume(slot);
 
         return true;

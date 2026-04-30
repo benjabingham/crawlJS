@@ -55,6 +55,14 @@ let skillVars = {
             key:"hangry",
             description:"As long as you're at half hunger or below, your critical strike chance increases by 10% for each point of hunger you're missing."
         },
+        {
+            type:"misc",
+            category:"hunger",
+            name:"iron gut",
+            key:"ironGut",
+            amount:1,
+            description:"Rotten food has no ill effect on you. Gain 1 luck whenever you eat rotten food."
+        },
     ],
     bulk:[
         {

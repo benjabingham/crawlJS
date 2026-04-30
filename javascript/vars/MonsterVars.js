@@ -14,10 +14,6 @@ let monsterVars = {
         inventorySlots: 2,
         inventory:[
             {
-                item: itemVars.food.morsel,
-                chance:5
-            },
-            {
                 item: itemVars.potions.unlabeled,
                 chance: 1
             },
@@ -35,6 +31,10 @@ let monsterVars = {
             gold:{
                 chance:20,
                 amount:3
+            },
+            food:{
+                chance:5,
+                tier:0,
             }
         },
         color:'darkGreen',
@@ -54,10 +54,6 @@ let monsterVars = {
         damage:6,
         inventorySlots: 3,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:10
-            },
             {
                 item: itemVars.potions.unlabeled,
                 chance: 5
@@ -79,6 +75,10 @@ let monsterVars = {
             potion:{
                 chance:20,
                 tier:1
+            },
+            food:{
+                chance:10,
+                tier:3,
             }
         },
         color:'darkGreen',
@@ -98,16 +98,6 @@ let monsterVars = {
         hitDice:5,
         damage:8,
         inventorySlots: 10,
-        inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            },
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            }
-        ],
         loot:{
             weapon:{
                 chance:20,
@@ -115,8 +105,13 @@ let monsterVars = {
             },
             treasure:{
                 chance:30,
-                tier:1,
+                tier:0,
                 preferredRange:{min:1,max:50}
+            },
+            food:{
+                chance:30,
+                maxNumber:2,
+                tier:2,
             },
             gold:{
                 chance:45,
@@ -145,14 +140,6 @@ let monsterVars = {
         damage:8,
         inventorySlots: 10,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            },
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            }
         ],
         loot:{
             weapon:{
@@ -171,6 +158,11 @@ let monsterVars = {
             potion:{
                 chance: 15,
                 tier: 2
+            },
+            food:{
+                chance:30,
+                maxNumber:2,
+                tier:0,
             }
         },
         color:'red',

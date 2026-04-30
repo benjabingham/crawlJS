@@ -78,7 +78,9 @@ class LootManager{
                         foodLoot.maxNumber = 1;
                     }
                     let n = Random.roll(1,foodLoot.maxNumber)
-                    entitySave.inventory.items.push(LootManager.getFoodLoot(foodLoot.tier, n));
+                    for(let i=0; i< n; i++){
+                        entitySave.inventory.items.push(LootManager.getFoodLoot(foodLoot.tier, foodLoot.rottenMultiplier));
+                    }
                 }
             }
 
@@ -229,7 +231,8 @@ class LootManager{
         return weapon;
     }
 
-    static getFoodLoot(tier = 0, n=1){
+    static getFoodLoot(tier = 0, rottenMultiplier = 1){
+        console.log(rottenMultiplier)
         let foods = Object.keys(itemVars.food);
         let nFoods = foods.length; 
         //nrolls represents number of EXTRA rolls.
@@ -245,6 +248,17 @@ class LootManager{
         let foodKey = foods[foodIndex]
         let food = JSON.parse(JSON.stringify(itemVars.food[foodKey]));
 
+        if(food.preserved){rottenMultiplier /= 2}
+        if(food.perishable){rottenMultiplier *= 2}
+        food.rottenMultiplier = rottenMultiplier;
+        if(Math.random() < rottenMultiplier * .2){
+            LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
+            console.log('rotten')
+        }else{
+            console.log('not rotten')
+        }
+
+        console.log(food)
         return food;
     }
 

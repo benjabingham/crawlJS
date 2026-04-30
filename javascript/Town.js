@@ -27,10 +27,10 @@ class Town{
         let meals = [
             {
                 name:'Morsel',
-                cost:1,
+                cost:2,
                 item: itemVars.food.morsel
             },
-            {name:'Proper Meal',cost:6,nourishment:100},
+            {name:'Proper Meal',cost:10,nourishment:100},
         ]
 
         $('#meals-div').html('');

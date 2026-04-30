@@ -11,8 +11,8 @@ let mapVars = {
             potionSlots:2
         },
         tavern:{
-            fullMeal:6,
-            morsel:1,
+            fullMeal:10,
+            morsel:2,
             rest:0
         },
         destinations:{

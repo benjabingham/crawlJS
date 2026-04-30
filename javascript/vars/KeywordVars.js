@@ -40,6 +40,9 @@ keywordVars = {
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
         unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."},
         wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
+        preserved:{name:'preserved',hintText:"This food item is less likely to be rotten."},
+        perishable:{name:'perishable',hintText:"This food item is more likely to be rotten."},
+        rotten:{name:"rotten", hintText:"Eating this food item will decrease your hunger bar instead of raising it."}
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     },
 

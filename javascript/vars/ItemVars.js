@@ -1199,6 +1199,32 @@ let itemVars = {
         } 
     },
     food:{
+        hardboiledEgg:{
+            name:'hard boiled egg',
+            usable: true,
+            food:1,
+            color:'bone',
+            value:0,
+            bulk:0.15,
+            perishable:true
+        },
+        nuts:{
+            name:'nuts',
+            usable: true,
+            food:1,
+            color:'bone',
+            value:0,
+            bulk:0.15,
+            preserved:true
+        },
+        apple:{
+            name:'apple',
+            usable: true,
+            food:1,
+            color:'darkRed',
+            value:0,
+            bulk:0.3,
+        },
         morsel:{
             name:'morsel',
             usable: true,
@@ -1206,7 +1232,7 @@ let itemVars = {
             color:'brown',
             value:0,
             bulk:0.3,
-        },
+        },  
         berries:{
             name:'berries',
             usable: true,
@@ -1223,14 +1249,16 @@ let itemVars = {
             uses:3,
             color:'brown',
             bulk:0.5,
+            preserved: true
         },
         fineCheese:{
             name:'fine cheese',
             usable: true,
-            food:1,
+            food:2,
             value:3,
             color:'bone',
             bulk:0.5,
+            perishable:true
         },
         baguette:{
             name:'stale baguette',
@@ -1250,10 +1278,19 @@ let itemVars = {
             },
             value:1
         },
+        poultry:{
+            name:'cooked poultry',
+            usable: true,
+            food:1,
+            uses:3,
+            color:'woodBrown',
+            value:2,
+            perishable:true
+        },
         salami:{
             name:'salami',
             usable: true,
-            food:1,
+            food:2,
             color:'darkRed',
             flimsy:8,
             weapon:true,
@@ -1265,7 +1302,8 @@ let itemVars = {
                 blunt:true,
                 improvised:true
             },
-            value:2
+            value:2,
+            preserved:true
         },
         cookingOil:{
             name:'cooking oil',
@@ -1301,8 +1339,16 @@ let itemVars = {
                 blunt:true,
                 improvised:true
             },
+            preserved:true,
             value:10
         },
+    },
+    foodModifiers:{
+        rotten:{
+            rotten:true,
+            name:"rotten",
+            value:0.3
+        }
     },
     potions:{
         poison:{

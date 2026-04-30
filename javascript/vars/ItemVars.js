@@ -1241,6 +1241,17 @@ let itemVars = {
             color:'red',
             bulk:0.1,
         },
+        loaf:{
+            berries:{
+            name:'loaf of bread',
+            usable: true,
+            food:1,
+            uses:3,
+            value:1,
+            color:'woodBrown',
+            bulk:0.7,
+        },
+        },
         provisions:{
             name:'provisions',
             usable:true,
@@ -1277,6 +1288,15 @@ let itemVars = {
                 improvised:true
             },
             value:1
+        },
+        stew:{
+            name:"stew",
+            usable:true,
+            food:2,
+            color:"brown",
+            bulk:1,
+            value:1,
+            perishable:true,
         },
         poultry:{
             name:'cooked poultry',

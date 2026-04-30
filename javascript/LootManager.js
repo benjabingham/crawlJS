@@ -573,7 +573,16 @@ class LootManager{
         }
 
         let newRatio = 1/item.uses;
-        item.value = Math.floor(item.value - (newRatio*item.value));
+        if(!item.floatValue){item.floatValue = item.value}
+        item.floatValue = item.floatValue - (newRatio*item.floatValue);
+        item.value = Math.floor(item.floatValue)
+        let bulk = item.bulk;
+        bulk = item.bulk - (newRatio*bulk)
+        bulk *= 10;
+        bulk += .5;
+        bulk = Math.floor(bulk);
+        bulk /= 10;
+        item.bulk = bulk;
         item.uses--;
     }
 

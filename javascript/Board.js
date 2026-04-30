@@ -276,6 +276,11 @@ class Board{
             lightStrength:Player.light+1,
             isPlayerSource: true
         }]
+        //night eyes perk...
+        let nightEyes = Player.perks.dark.nightEyes
+        if(nightEyes && sources[0].lightStrength == 1){
+            sources[0].lightStrength += nightEyes.val * nightEyes.amount;
+        }
         Board.lightSourceIDs.forEach((id)=>{
             sources.push(EntityManager.getEntity(id))
         })

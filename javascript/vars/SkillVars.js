@@ -27,6 +27,13 @@ let skillVars = {
             key:"aerobics",
             description:"+1 stamina gain on wait."
         },
+        {
+            type:"misc",
+            category:"stamina",
+            name:"final push",
+            key:"finalPush",
+            description:"Attacks that use your last point of stamina are guaranteed crits."
+        },
     ],
     luck:[
         {
@@ -118,35 +125,35 @@ let skillVars = {
         {
             type:"critChance",
             attackType:"unarmed",
-            chance:0.25 
+            chance:0.2 
         }
     ],
     swing:[
         {
             type:"critChance",
             attackType:"swing",
-            chance: 0.25
+            chance: 0.2
         }
     ],
     jab:[
         {
             type:"critChance",
             attackType:"jab",
-            chance: 0.25
+            chance: 0.2
         }
     ],
     draw:[
         {
             type:"critChance",
             attackType:"draw",
-            chance: 0.25
+            chance: 0.2
         }
     ],
     strafe:[
         {
             type:"critChance",
             attackType:"strafe",
-            chance: 0.25
+            chance: 0.2
         }
     ],
     counterattack:[
@@ -170,7 +177,7 @@ let skillVars = {
             category:"sell",
             name:"trapper",
             key:"trapper",
-            description:"Sell all pelts for +50% gold, rounded up."
+            description:"Sell all pelts for +100% gold."
         },
         {
             type:"misc",
@@ -179,9 +186,6 @@ let skillVars = {
             key:"appraiser",
             description:"Sell all treasure for +20% gold."
         },
-    ],
-    buy:[
-
     ],
     goblinoid:[
         {
@@ -219,4 +223,22 @@ let skillVars = {
             description:"+2 maximum stun time against oozes."
         }
     ],
+    dark:[
+        {
+            type:"misc",
+            category:"dark",
+            name:"lurker",
+            key:"lurker",
+            amount:3,
+            description:"While you have no light, monsters treat you as if you were 3 tiles further away. (they will be less likely to notice you, and more likely to attack the wrong tile)"
+        },
+        {
+            type:"misc",
+            category:"dark",
+            name:"night eyes",
+            key:"nightEyes",
+            amount:1,
+            description:"+1 minimum view range."
+        },
+    ]
 }

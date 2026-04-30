@@ -23,7 +23,8 @@ class XP{
         goblinoid:{},
         beast:{},
         undead:{},
-        ooze:{}
+        ooze:{},
+        dark:{},
     };
     static offeredPerks = []
     static threshold = 60;
@@ -38,14 +39,15 @@ class XP{
             }
         });
 
-        XP.applyPerk(skillVars.simple[0],false)
-        /*
-        XP.applyPerk(skillVars.sell[0],false)
-        XP.applyPerk(skillVars.sell[0],false)
+        XP.applyPerk(skillVars.dark[1],false)
+    
+        XP.applyPerk(skillVars.stamina[2],false)
+        XP.applyPerk(skillVars.dark[0],false)
+        XP.applyPerk(skillVars.dark[0],false)
        
-        XP.applyPerk(skillVars.swords[0],false)
-        XP.applyPerk(skillVars.unarmed[0],false)
-        XP.applyPerk(skillVars.long[0],false)
+        XP.applyPerk(skillVars.swing[0],false)
+        XP.applyPerk(skillVars.unarmed[1],false)
+        XP.applyPerk(skillVars.unarmed[1],false)
         XP.applyPerk(skillVars.simple[0],false)
         XP.applyPerk(skillVars.edged[0],false)
         XP.applyPerk(skillVars.swing[0],false)
@@ -57,7 +59,7 @@ class XP{
         XP.applyPerk(skillVars.long[0],false)
         XP.applyPerk(skillVars.simple[0],false)
         XP.applyPerk(skillVars.edged[0],false)
-*/
+
         //XP.levelUp();
         //XP.openLevelupDialog();
         //XP.applyPerk(skillVars.swing[0])
@@ -167,7 +169,7 @@ class XP{
 
         //split xp evenly among all relevant skills
         if(weaponSkills.length){
-            let xp = 1/weaponSkills.length;
+            let xp = 2/weaponSkills.length;
             weaponSkills.forEach(skill=>{
                 this.gain(skill,xp,xp)
             })
@@ -178,6 +180,10 @@ class XP{
 
         this.gain(strikeType,strikeTypeXP,strikeTypeXP)
 
+        if(Player.light <= 0){
+            this.gain('dark', 0, 0.5)
+        }
+
     }
 
     static gainUnarmedAttackXP(target){
@@ -186,6 +192,10 @@ class XP{
                 this.gain("counterattack",1,1);
             }
             this.gain('unarmed',1,1);
+        }
+
+        if(Player.light <= 0){
+            this.gain('dark',0,1)
         }
     }
 
@@ -244,6 +254,10 @@ class XP{
         enemyTypes.forEach(type=>{
             XP.gain(type,totalXp,totalXp)
         })
+    }
+
+    static gainDarkXP(amount){
+        this.gain('dark',0,amount);
     }
 
     static checkLevelUp(){

@@ -56,7 +56,7 @@ class Log{
             "Weapon breaking is completely random - you can use luck to make your weapons last longer!",
             "Stunned enemies appear in lower case, and recieve guaranteed critical hits. Press the advantage!",
             "Scroll over an object with your mouse to see what it is.",
-            "Scroll over a keyword in the log to see what it means.",
+            "Scroll over a bolded keyword to see what it means.",
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
             "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
             "The contents of unlabeled potions are undetermined until the moment you drink them. Use luck to make better use of them.",
@@ -66,8 +66,9 @@ class Log{
             "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
             "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them.",
             "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected.",
-            "Your proficiency with a weapon is represented by a number of +s next to that weapon's name. Scroll over the +s to learn more.",
-            "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!"
+            "Your proficiency with a weapon is represented by a number of '+'s next to that weapon's name. Scroll over the '+'s to learn more.",
+            "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!",
+            "Guaranteed crits are applied separately from crits from crit chance. They scale multiplicitively!"
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]
@@ -194,5 +195,42 @@ class Log{
 
     static peek(){
         return Log.messages[Log.turnCounter];
+    }
+
+    static sendCritMessage(crit){
+        if(crit == 1){
+            EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
+        }else if(crit == 2){
+            EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A brutal critical occurs if you recieve a crit from multiple sources (ex. from crit chance and by attacking a stunned enemy), and inflicts quadruple damage.");
+        }else if(crit > 2){
+            EntityManager.transmitMessage("SAVAGE CRITICAL!!!",'pos',"SAVAGE CRITICAL", "A savage critical occurs if you recieve a crit from THREE SEPARATE sources, and inflicts octuple damage.");
+        }
+    }
+
+    static sendStrikeMessage(strikeType, weapon, target){
+        let message = '';
+        let tipText = '';
+        switch (strikeType){
+            case "swing":
+                message = 'you swing your weapon into the '+target.name+"."
+                tipText = keywordVars.swing.hintText;
+                break;
+            case "jab":
+                message = "you jab the "+target.name+'.'
+                tipText = keywordVars.jab.hintText;
+                break;
+            case "strafe":
+                message = "you deliver a strafing strike to the "+target.name+"."
+                strikeType = "strafing"
+                tipText = keywordVars.jab.strafe;
+                break;
+            case "draw":
+                message = 'you draw your weapon, striking the '+target.name+"."
+                tipText = keywordVars.draw.hintText;
+                break;
+            default:    
+                message = "you strike the "+target.name+".";
+        }
+        Log.addMessage(message,false,strikeType,tipText,target.id);
     }
 }

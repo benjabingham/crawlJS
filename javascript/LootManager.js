@@ -624,7 +624,7 @@ class LootManager{
         }
 
         if(item.pelt && Player.perks.sell.trapper){
-            let multiplier = Player.perks.sell.trapper.val * 0.5
+            let multiplier = Player.perks.sell.trapper.val
             multiplier += 1
             value *= multiplier;
             value = Math.ceiling(value);

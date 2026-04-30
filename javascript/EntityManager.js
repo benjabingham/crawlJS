@@ -701,33 +701,6 @@ class EntityManager{
         Board.placeEntity(newEntity,newEntity.x,newEntity.y);
     }
 
-    static sendStrikeMessage(strikeType, weapon, target){
-        let message = '';
-        let tipText = '';
-        switch (strikeType){
-            case "swing":
-                message = 'you swing your weapon into the '+target.name+"."
-                tipText = keywordVars.swing.hintText;
-                break;
-            case "jab":
-                message = "you jab the "+target.name+'.'
-                tipText = keywordVars.jab.hintText;
-                break;
-            case "strafe":
-                message = "you deliver a strafing strike to the "+target.name+"."
-                strikeType = "strafing"
-                tipText = keywordVars.jab.strafe;
-                break;
-            case "draw":
-                message = 'you draw your weapon, striking the '+target.name+"."
-                tipText = keywordVars.draw.hintText;
-                break;
-            default:    
-                message = "you strike the "+target.name+".";
-        }
-        EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
-    }
-
     static getDamageText(target,damage){
         if(!damage){
             return 'a negligible strike...'

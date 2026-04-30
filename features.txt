@@ -57,3 +57,6 @@ stat boost potions
 doors - walls that can be attacked and "open" or disappear upon bumping into them.
 some entities can do this, others cant.
 how to close... ???
+
+overall bonus on attacks that breaks weapons.
+ways to increase that bonus

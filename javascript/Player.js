@@ -40,7 +40,8 @@ class Player {
         goblinoid:{},
         beast:{},
         undead:{},
-        ooze:{}
+        ooze:{},
+        dark:{}
     }
         
     
@@ -501,6 +502,7 @@ class Player {
 
     static lightDown(){
         if(Player.light < 1){
+            XP.gainDarkXP(0.1)
             return false;
         }
         Player.lightTime += Player.light;
@@ -510,6 +512,9 @@ class Player {
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0)
             Log.addMessage('Your light dims.');
+            if(Player.light <= 0){
+                XP.gainDarkXP(3)
+            }
         }
 
         if(random < Player.lightTime-100){
@@ -603,7 +608,7 @@ class Player {
         return proficiencies;
     }
 
-    static getCrit(weaponItem, strikeType,target){
+    static getCritChance(weaponItem, strikeType, target){
         let attackTypes = {};
         if(weaponItem.type){
             attackTypes = JSON.parse(JSON.stringify(weaponItem.type));
@@ -623,8 +628,24 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
-        let isCrit = Math.random() < critChance;
-        return isCrit;
+
+        return critChance
+    }
+
+    static getCrit(weaponItem, strikeType,target){
+        let crits = 0;
+        let critChance = Player.getCritChance(weaponItem, strikeType, target);
+
+        crits += Math.random() < critChance;
+
+        if(target.stunned){crits++; console.log('stunned')}
+
+        console.log(Player.perks)
+        console.log(Player.stamina)
+        if(Player.perks.stamina.finalPush && Player.stamina <= 0){crits++; console.log('LAST PUSH')}
+        
+        console.log(crits);
+        return crits;
     }
 
     static getBonusStun(weapon,entity){

@@ -1009,18 +1009,9 @@ class PlayerEntity extends Entity{
         let damage = weapon.damage;
         let stunTime = weapon.stun;
         stunTime += Player.getAnatomyBonus(target);
-        let crit = 0;
-        let damageDice = 1;
-        if(target.stunned){
-            damageDice*=2;
-            crit++;
-        }
-
-        if(Player.getCrit(weapon,'none',target)){
-            damageDice*=2;
-            crit++;
-        }
-
+        let crit = Player.getCrit(weapon,"unarmed",target);
+        let damageDice = 2^crit;
+        
         let vulnerability = target.isVulnerable({blunt:true, unarmed:true});
         damageDice += vulnerability;
         stunTime += vulnerability;
@@ -1044,11 +1035,7 @@ class PlayerEntity extends Entity{
             stunAdded++;
         }
         EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
-        if(crit == 1){
-                EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
-        }else if(crit > 1){
-            EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A critical hit on a stunned enemy is a Brutal Critical, and inflicts quadruple damage.");
-        }
+        Log.sendCritMessage(crit);
         EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
         if(!target.dead){     
             if(vulnerability){
@@ -1238,17 +1225,8 @@ class SwordEntity extends Entity{
             stunTime:stunTime
         })
 
-        let crit = 0;
-        let damageDice = 1;
-        if(target.stunned){
-            damageDice*=2;
-            crit++;
-        }
-
-        if(this.owner=="player" && Player.getCrit(this.item,strikeType,target)){
-            damageDice*=2;
-            crit++;
-        }
+        let crit = Player.getCrit(weapon, strikeType,target);
+        let damageDice = 2^crit;
 
         if(target.isContainer && this.item.wrecking){
             damageDice +=2
@@ -1257,6 +1235,8 @@ class SwordEntity extends Entity{
         if(target.dead){
             damageDice++;
         }
+
+
 
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
@@ -1285,12 +1265,9 @@ class SwordEntity extends Entity{
                 EntityManager.transmitMessage('You counterattack!','pos','counterattack')
                 target.parryable = false;
             }
-            EntityManager.sendStrikeMessage(strikeType, weapon, target)
-            if(crit == 1){
-                EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
-            }else if(crit > 1){
-                EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A critical hit on a stunned enemy is a Brutal Critical, and inflicts quadruple damage.");
-            }
+            Log.sendStrikeMessage(strikeType, weapon, target);
+            Log.sendCritMessage(crit);
+            
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
                 if(vulnerability){
@@ -1580,10 +1557,10 @@ class Monster extends Entity{
         let focus = this.behaviorInfo.focus;
 
         //use distance from target, not lastSeen
-        let targetDistance = EntityManager.getDistance(this, target)
+        let targetDistance = this.getDetectionDistance(this, target)
         focus -= targetDistance;
 
-        if(this.hasLos(target)){
+        if(this.hasDetectionLos(target)){
             this.lastSeen = {x:target.x, y:target.y, turn:Log.turnCounter}
         }
         //go towards where you last saw the player, or otherwise towards player.
@@ -1617,7 +1594,7 @@ class Monster extends Entity{
     chaseBinary(){
         let target = this.getTarget();
         let trackTile = this.track(target)        
-        if(!this.hasLos(target)){
+        if(!this.hasDetectionLos(target)){
             if( trackTile ){
                 target = trackTile;
             }else{
@@ -1712,9 +1689,10 @@ class Monster extends Entity{
         }
     }
 
-    hasLos(pos){
+    //check if a monster can see a target for player-detection purposes
+    hasDetectionLos(pos){
         let sightDistance = this.sightDistance;
-        let targetDistance = EntityManager.getDistance(this, pos)
+        let targetDistance = this.getDetectionDistance(pos)
         if(this.lightSeeking && Player.light){
             sightDistance += Player.light+1;
         }
@@ -1724,6 +1702,17 @@ class Monster extends Entity{
         );
 
         return hasLos;
+    }
+
+    //get monster's distance from a point for detection/pathing/behavior purposes
+    getDetectionDistance(pos){
+        let distance = EntityManager.getDistance(this, pos);
+        let lurker = Player.perks.dark.lurker;
+        if(Player.light <= 0 && lurker){
+            distance += lurker.amount * lurker.val
+        }
+
+        return distance;
     }
 
     reconstituteFn(n){

@@ -250,5 +250,13 @@ let skillVars = {
             amount:1,
             description:"Increase your light by an extra level whenever you burn fuel with a fuel strength of 1."
         },
+        {
+            type:"misc",
+            category:"fuel",
+            name:"burning fury",
+            key:"burningFury",
+            amount:.2,
+            description:"your critical hits deal +10% damage for each level of light you have."
+        },
     ]
 }

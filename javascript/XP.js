@@ -39,7 +39,12 @@ class XP{
                 xpGained: 0
             }
         });
-        XP.applyPerk(skillVars.fuel[0],false)
+        XP.applyPerk(skillVars.simple[0],false)
+        /*
+        XP.applyPerk(skillVars.swing[0],false)
+        XP.applyPerk(skillVars.swing[0],false)
+        XP.applyPerk(skillVars.swing[0],false)
+
 
         /*
     
@@ -130,7 +135,7 @@ class XP{
 
     static reduceWeights(){
         Object.keys(this.skills).forEach(skill=>{
-            this.skills[skill].weight /= 2;
+            this.skills[skill].weight *= 0.6;
         })
     }
 

@@ -1025,6 +1025,8 @@ class PlayerEntity extends Entity{
         let sizeBonus = Math.min(target.threshold*5,90);
         let stunAdded = Random.roll(0,stunTime);
         let mortality = Random.rollN(damageDice,0,damage,advantage);
+        let multiplier = Player.getDamageMultiplier(weapon,"unarmed",target,crit);
+        mortality = Math.floor(mortality*multiplier)
         XP.gainUnarmedAttackXP(target);
         if(sizeBonus > Math.random()*100){
             stunAdded = Math.max(0,stunAdded-1);
@@ -1236,8 +1238,6 @@ class SwordEntity extends Entity{
             damageDice++;
         }
 
-
-
         let vulnerability = target.isVulnerable(this.item, strikeType);
         damageDice += vulnerability;
         stunTime += vulnerability;
@@ -1254,7 +1254,9 @@ class SwordEntity extends Entity{
             advantage += Player.getAdvantage(this.item);
         }
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
-        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice})
+        let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
+        mortality = Math.floor(mortality*multiplier)
+        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');

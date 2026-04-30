@@ -654,6 +654,16 @@ class Player {
         return crits;
     }
 
+    static getDamageMultiplier(weaponItem, strikeType, target, crit){
+        let multiplier = 1;
+        let burningFury = Player.perks.fuel.burningFury
+        if(burningFury && crit){
+            multiplier += burningFury.val * burningFury.amount * Player.light
+        }
+
+        return multiplier
+    }
+
     static getBonusStun(weapon,entity){
         let bonus = 0;
         bonus += Player.getAnatomyBonus(entity);

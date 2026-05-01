@@ -22,6 +22,7 @@ html{
     display: flex;
     flex-direction: column;
     margin:0 1rem;
+    width:510px;
 }
 
 #instructions-div{
@@ -48,16 +49,41 @@ button:hover,
     font-style:italic;
 }
 
-.hint-divs{
-    text-align:center;
-    /*font-style:italic;*/
-    color:var(--altBackText);
+.gold-div{
+       font-weight:600; 
+        color: var(--darkOrange)
+    } 
 
-    height:1rem;
-
-    p{
-        margin:0px;
+    .bulk-div{
+        font-weight: 600;
+        color: var(--darkBlue)
     }
+
+.hint-divs{
+    /*font-style:italic;*/
+    pointer-events: none;
+    display: none;
+    padding:4px;
+    margin:0px 3px;
+    box-sizing: border-box;
+    background-color: var(--inventorySlot);
+    /*background-image: linear-gradient(#ddcaa4,#c0aa73);*/
+    border: 1px solid var(--inventoryBorder);
+    /*transform:translateY(17px)*/
+    transform:translateX(12px);
+    width:fit-content;
+    max-width:300px;
+    z-index: 100;
+}
+
+.label{
+    font-style:italic;
+    text-transform: capitalize;
+    font-weight:600;
+}
+
+.info{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.103);
 }
 
 #custom-controls-wrapper-div{
@@ -143,4 +169,92 @@ h1, h2, h3{
 
 .follower{
     position:absolute;
+}
+
+#side-menu{
+    visibility: hidden;
+}
+
+.flash-item-breaking{
+    animation-name: flashItemBreaking;
+    animation-duration: .5s;
+}
+
+@keyframes flashItemBreaking{
+    from{background-color: var(--flashItemBreaking);}
+}
+
+.flash-highlight{
+    animation-name: flashHighlight;
+    animation-duration: 1s;
+}
+
+@keyframes flashHighlight{
+    from{background-color: var(--highlight);}
+}
+
+.flash-inventory{
+    animation-name: flashInventory;
+    animation-duration: 1s;
+}
+
+@keyframes flashInventory{
+    from{background-color: var(--flashInventory);}
+}
+
+.flash-deepRed{
+    animation-name: flashDeepRed;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashDeepRed{
+    from{background-color: var(--deepRed);}
+
+}
+
+.flash-darkGreen{
+    animation-name: flashDeepGreen;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashDeepGreen{
+    from{background-color: var(--deepGreen);}
+
+}
+
+.flash-white{
+    animation-name: flashWhite;
+    animation-duration: .5s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashWhite{
+    from{background-color: white;}
+
+}
+
+.flash-lightRed{
+    animation-name: flashLightRed;
+    animation-duration: .7s;
+}
+
+@keyframes flashLightRed{
+    from{background-color: var(--lightRed);}
+
+}
+
+.flash-goldDivs{
+    animation-name: flashGoldDivs;
+    animation-duration: .7s;
+}
+
+@keyframes flashGoldDivs{
+    from{color: var(--orange);}
+
+}
+
+.keyword{
+    cursor: pointer;
 }

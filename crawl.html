@@ -7,6 +7,7 @@
     <title>S O L I D U S</title>
 
     <link rel="stylesheet" href="css/crawl.css?v=7">
+    <link rel="stylesheet" href="css/modal.css?v=7">
     <link rel="stylesheet" href="css/dungeon.css?v=7">
     <link rel="stylesheet" href="css/hud.css?v=7">
     <link rel="stylesheet" href="css/inventory.css?v=7">
@@ -21,11 +22,15 @@
   <body>
 
     <script src="javascript/lib/jquery-3.7.1.js"></script>
+    <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>-->
     <script src="javascript/vars/ItemVars.js?v=7"></script>
     <script src="javascript/vars/MonsterVars.js?v=7"></script>
     <script src="javascript/vars/ContainerVars.js?v=7"></script>
     <script src="javascript/vars/KeywordVars.js?v=7"></script>
     <script src="javascript/vars/InputVars.js?v=7"></script>
+    <script src="javascript/vars/MapVars.js?v=7"></script>
+
+    <script src="javascript/vars/SkillVars.js?v=7"></script>
 
     <script src="javascript/LootManager.js?v=7"></script>
     <script src="javascript/Input.js?v=7"></script>
@@ -37,12 +42,14 @@
     <script src="javascript/Player.js?v=7"></script>
     <script src="javascript/Log.js?v=7"></script>
     <script src="javascript/Display.js?v=7"></script>
+    <script src="javascript/Town.js?v=7"></script>
     <script src="javascript/Inventory.js?v=7"></script>
     <script src="javascript/Random.js?v=7"></script>
     <script src="javascript/Entity.js?v=7"></script>
     <script src="javascript/History.js?v=7"></script>
     <script src="javascript/Stats.js?v=7"></script>
 	<script src="javascript/crawl.js?v=7"></script>
+	<script src="javascript/XP.js?v=7"></script>
 
 
     </div>
@@ -108,11 +115,14 @@
 
             <div class="inventory" id ="player-inventory">
                 <div class="inventory-description" id ="player-inventory-description"></div>
-                <div class="inventory-title">Inventory</div>
+                <div class="inventory-title">Quickslots</div>
                 <div id ="player-inventory-list" class="inventory-list"></div>
                 <div class="inventory-extras-div">
-                    <button id = 'drop-items-button'>Drop Items</button>
-                    <div id="gold-div"class="gold-div"></div>
+                    <div id="gold-div" class="gold-div"></div>
+                    <div class="drop-button-container">
+                        <button id = 'drop-items-button'>Drop Items</button>
+                    </div>
+                    <div id="bulk-div" class="bulk-div"></div>
                 </div>
             </div>
 
@@ -159,15 +169,51 @@
             </div>
 
 
-            <div class="inventory" id = "world-inventory">
-                <div class="inventory-description" id = "world-inventory-description"></div>
-                <div class="inventory-title" id="world-inventory-title">Inventory</div>
-                <div id ="world-inventory-list" class="inventory-list"></div>
+            <div class="inventory" id = "right-menu">
+                <div class="tabs-container" id="right-menu-tabs">
+                    <div class="tabs-divs" id="world-inventory-tab">world inventory</div>
+                    <div class="tabs-divs" id="character-info-tab">Character Info</div>
+                </div>
+                <div id="world-inventory">
+                    <div class="inventory-description" id = "world-inventory-description"></div>
+                    <div class="inventory-title" id="world-inventory-title">Inventory</div>
+                    <div id ="world-inventory-list" class="inventory-list"></div>
+                </div>
+                
+                <div id = "character-info">
+                    <div class="inventory-title" id="character-info-title">Character Info</div>
+                    <div class="portrait">☺</div>
+                    <div class="section-label-divs" id="level-div">Level</div>
+                    <div id="character-info-content">
+                        <div class="resource-bar-containers">
+                            <div id="xp-number-div" class="xp-number-divs"></div>
+                            <div id = "xp-bar" class="resource-bar-divs">
+                                <div id = "xp-level" class="xp-level-divs"></div>
+                            </div>
+                        </div>
+                        <!--<div class="section-label-divs">XP</div>-->
+                        <hr>
+                        <div class="section-label-divs">Perks & Proficiencies</div>
+                        <hr>
+                        <div id="character-perks-div"></div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="inventory" id = "side-menu">
+                <div class="inventory-description" id = "side-menu-description"></div>
+                <div class="inventory-title" id="side-menu-title"></div>
+                <div id ="side-menu-content"></div>
             </div>
         </div>
         
-        
+        <div class="hint-divs follower"></div>
     </div>
+    <!--
+    <div id="color-scheme-select">
+        <button id="color-scheme-button"></button>
+    </div>
+-->
     <div id = 'instructions-div'>
         <H2>INSTRUCTIONS</H2>
         <h3>CONTROLS</h3>

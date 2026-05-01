@@ -45,7 +45,7 @@
 
 .bag-board:after{
     box-shadow: inset 0 0 0 1000px var(--bag-overlay) !important;
-    content:"Rummaging... \A  [Tab] - Stop Rummaging \A  [Numpad] - Navigate \A [Num5] - Take/Use Item \A [Q] - Toggle Quickslot \A [Numbar] - Swap To Quickslot \A [E]- Equip Item \A [C] - Consume Item \A [B] - Burn Item \A [D] - Drop Items"!important;
+    content:"Rummaging... \A  [Tab] - Stop Rummaging \A  [Numpad/ArrowKeys] - Navigate \A [Num5/Enter] - Take/Use Item \A [Q] - Toggle Quickslot \A [G] - Toggle Item Buttons/Bulk & Gold \A [E]- Equip/unequip Item \A [S] - Sell/Store Item \A [C] - Consume Item \A [B] - Burn Item \A [D] - Drop Items"!important;
     font-size: 1.3rem;  
     color:white;
     font-style: italic;

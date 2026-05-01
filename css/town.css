@@ -1,5 +1,5 @@
 #town-screen{
-    width:900px;
+    width:100%;
     margin:auto;
     background-color:var(--menuBack);
     color:var(--menuText);
@@ -23,7 +23,7 @@
 }
 
 #tavern-div{
-    width:875px;
+    width:80%;
     margin:auto;
     border:1px solid black;
     background-color: var(--shopBackground)

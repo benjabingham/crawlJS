@@ -14,10 +14,6 @@ let monsterVars = {
         inventorySlots: 2,
         inventory:[
             {
-                item: itemVars.food.morsel,
-                chance:5
-            },
-            {
                 item: itemVars.potions.unlabeled,
                 chance: 1
             },
@@ -29,14 +25,20 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:0
+                tier:0,
+                preferredRange:{min:1,max:5}
             },
             gold:{
                 chance:20,
                 amount:3
+            },
+            food:{
+                chance:5,
+                tier:0,
             }
         },
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{humanoid:true, goblinoid:true}
     },
     goblinBoss:{
         name:"goblin boss",
@@ -52,10 +54,6 @@ let monsterVars = {
         damage:6,
         inventorySlots: 3,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:10
-            },
             {
                 item: itemVars.potions.unlabeled,
                 chance: 5
@@ -77,9 +75,14 @@ let monsterVars = {
             potion:{
                 chance:20,
                 tier:1
+            },
+            food:{
+                chance:10,
+                tier:3,
             }
         },
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{humanoid:true, goblinoid:true}
     },
     ogre:{
         name:"ogre",
@@ -95,16 +98,6 @@ let monsterVars = {
         hitDice:5,
         damage:8,
         inventorySlots: 10,
-        inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            },
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            }
-        ],
         loot:{
             weapon:{
                 chance:20,
@@ -112,7 +105,13 @@ let monsterVars = {
             },
             treasure:{
                 chance:30,
-                tier:1
+                tier:0,
+                preferredRange:{min:1,max:50}
+            },
+            food:{
+                chance:30,
+                maxNumber:2,
+                tier:2,
             },
             gold:{
                 chance:45,
@@ -123,7 +122,8 @@ let monsterVars = {
                 tier: 2
             }
         },
-        color:'green'
+        color:'green',
+        types:{humanoid:true, goblinoid:true}
     },
     redOgre:{
         name:"red ogre",
@@ -140,14 +140,6 @@ let monsterVars = {
         damage:8,
         inventorySlots: 10,
         inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            },
-            {
-                item: itemVars.food.morsel,
-                chance:20
-            }
         ],
         loot:{
             weapon:{
@@ -156,7 +148,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:40,
-                tier:2
+                tier:2,
+                preferredRange:{min:5,max:100}
             },
             gold:{
                 chance:55,
@@ -165,9 +158,15 @@ let monsterVars = {
             potion:{
                 chance: 15,
                 tier: 2
+            },
+            food:{
+                chance:30,
+                maxNumber:2,
+                tier:0,
             }
         },
-        color:'red'
+        color:'red',
+        types:{humanoid:true, goblinoid:true}
     },
     rat:{
         name:"rat",
@@ -181,7 +180,8 @@ let monsterVars = {
         corpseless:true,
         inventorySlots: 0,
         tiny:true,
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     direRat:{
         name:"dire rat",
@@ -201,7 +201,8 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     kingRat:{
         name:"king rat",
@@ -227,7 +228,8 @@ let monsterVars = {
             item: itemVars.drops.kingRatSkull,
             chance:100
         }],
-        color:'darkRed'
+        color:'darkRed',
+        types:{beast:true}
     },
     wolf:{
         name:"wolf",
@@ -248,7 +250,8 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
     },
     direWolf:{
         name:"dire wolf",
@@ -269,7 +272,9 @@ let monsterVars = {
                 chance:100
             }
         ],
-        color:'gray'
+        color:'gray',
+        types:{beast:true}
+
     },
     zombie:{
         name:"zombie",
@@ -291,7 +296,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:5,
@@ -306,7 +312,9 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:50,
         bloodColor:{r:136,g:62,b:63},
-        color:'darkGreen'
+        color:'darkGreen',
+        types:{undead:true}
+
     },
     infestedHusk:{
         name:"infested husk",
@@ -339,7 +347,9 @@ let monsterVars = {
             },
             treasure:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
+
             },
             gold:{
                 chance:5,
@@ -354,7 +364,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:30,
         bloodColor:{r:136,g:62,b:63},
-        color:'brown'
+        color:'brown',
+        types:{undead:true}
     },
     revenant:{
         name:"revenant",
@@ -379,7 +390,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:20,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             gold:{
                 chance:80,
@@ -396,7 +408,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:100,
         bloodColor:{r:136,g:62,b:63},
-        color:'silver'
+        color:'silver',
+        types:{undead:true}
     },
     skeletonPile:{
         name:"skeleton corpse",
@@ -459,7 +472,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     skeleton:{
         name:"skeleton",
@@ -496,7 +510,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -520,7 +535,8 @@ let monsterVars = {
             }
         ],
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     leglessSkeleton:{
         name:"legless skeleton",
@@ -557,7 +573,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -569,7 +586,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     headlessSkeleton:{
         name:"headless skeleton",
@@ -604,7 +622,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:20}
             },
             gold:{
                 chance:10,
@@ -616,7 +635,8 @@ let monsterVars = {
             }
         },
         blood:0,
-        color:'bone'
+        color:'bone',
+        types:{undead:true}
     },
     ghoul:{
         name:"ghoul",
@@ -640,7 +660,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:15,
-                tier:2
+                tier:2,
+                preferredRange:{min:3,max:20}
             },
             gold:{
                 chance:10,
@@ -655,7 +676,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:35,
         bloodColor:{r:136,g:62,b:63},
-        color:'silver'
+        color:'silver',
+        types:{undead:true}
     },
     corrosiveOoze:{
         name:"corrosive ooze",
@@ -683,7 +705,8 @@ let monsterVars = {
         reconstituteBehavior:'chaseBinary',
         reconstituteChance:20,
         color:"green",
-        bloodColor:{r:29,g:189,b:66}
+        bloodColor:{r:29,g:189,b:66},
+        types:{ooze:true}
     },
     absorbentOoze:{
         name:"absorbent ooze",
@@ -710,7 +733,8 @@ let monsterVars = {
             slow:35
         },
         color:"orange",
-        bloodColor:{r:211,g:147,b:28}
+        bloodColor:{r:211,g:147,b:28},
+        types:{ooze:true}
     },
     mitoticOoze:{
         name:"mitotic ooze",
@@ -745,7 +769,8 @@ let monsterVars = {
             disturbChance:70,
         },
         color:"blue",
-        bloodColor:{r:39,g:66,b:183}
+        bloodColor:{r:39,g:66,b:183},
+        types:{ooze:true}
     },
     blackOoze:{
         name:"black ooze",
@@ -772,7 +797,8 @@ let monsterVars = {
             slow:30
         },
         color:"black",
-        bloodColor:{r:0,g:0,b:0}
+        bloodColor:{r:0,g:0,b:0},
+        types:{ooze:true}
     },
     elderGoo:{
         name:"elder goo",
@@ -817,7 +843,8 @@ let monsterVars = {
             disturbChance:70,
         },
         color:"brightPurple",
-        bloodColor:{r:173,g:26,b:202}
+        bloodColor:{r:173,g:26,b:202},
+        types:{ooze:true}
     },
     mimic:{
         name:"mimic",
@@ -844,7 +871,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             potion:{
                 chance:50,
@@ -893,7 +921,8 @@ let monsterVars = {
             },
             treasure:{
                 chance:75,
-                tier:3
+                tier:3,
+                preferredRange:{min:5,max:30}
             },
             potion:{
                 chance:50,
@@ -928,5 +957,75 @@ let monsterVars = {
         hitDice:100,
         damage:8,
         inventorySlots: 0,
+    },
+    treeOfGreed:{
+        name:"Tree Of Greed",
+        symbol:'T',
+        behavior:'chase',
+        hitDice:10,
+        blood:0,
+        behaviorInfo:{
+            focus:25,
+            slow:98,
+            beat:50,
+            sturdy:90,
+            stunResist:5
+        },
+        hitDice:10,
+        damage:10,
+        loot:{
+            gold:{
+                chance:100,
+                amount:2
+            }
+        },
+        inventory:[
+            {
+                item: itemVars.drops.greedHeart,
+                chance:100
+            },
+            {item: itemVars.drops.branch, chance:100},
+            {item: itemVars.drops.branch, chance:50},
+            {item: itemVars.fuel.kindling, chance:100},
+            {item: itemVars.fuel.kindling, chance:50},
+            
+        ],
+        logMessage:{
+            message:"You see a twisted oak, two coin-eyes pressed into its bark like scabs above a jagged gash of a mouth. It sees you. It has always seen you.",
+            class:'danger'
+        },
+        //respawns all monsters in map when seen
+        reanimator:{onHitChance:100},
+        //only appears if you have 100 or more gold
+        spawnConditions:{gold:100},
+        color:'brown'
+    },
+    livingShrub:{
+        name:"living shrub",
+        symbol:"❧",
+        behavior:"chase",
+        hitDice:0,
+        inventorySlots: 2,
+        isContainer: true,
+        blood:0,
+        behaviorInfo:{
+            focus:25,
+            slow:95,
+        },
+        inventory:[
+            {
+                item: itemVars.fuel.kindling,
+                chance: 12
+            },
+            {
+                item: itemVars.drops.branch,
+                chance: 12
+            },
+            {
+                item: itemVars.food.berries,
+                chance: 12
+            }
+        ],
     }
+    
 }

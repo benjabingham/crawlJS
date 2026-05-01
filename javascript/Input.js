@@ -22,8 +22,8 @@ class Input {
 
     //Calls the event created by this input
     onInput() {
-        $(document).trigger(this.name);
         console.log('trigger '+this.name);
+        $(document).trigger(this.name);
         //dispatchEvent(this.inputEvent);
 
     }
@@ -35,6 +35,7 @@ class InputManager{
     static locked = false;
     static lastEvent;
     static currentEvent;
+    static currentKeydownEvent;
 
     static setInputPreset(presetName){
         let preset = inputVars[presetName];
@@ -57,6 +58,7 @@ class InputManager{
         inputVars.numpad.forEach((input)=>{
             //console.log(input)
             $(document).bind(input.inputName,function(event){
+                InputManager.currentKeydownEvent.preventDefault();
                 InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
                 InputManager.locked = true;
@@ -71,8 +73,11 @@ class InputManager{
                 if(input.consume) GameMaster.consumeSelectedItem(event);
                 if(input.equip) GameMaster.equipSelectedItem(event);
                 if(input.burn) GameMaster.burnSelectedItem(event);
+                if(input.sellStore) GameMaster.sellStoreSelectedItem(event);
                 if(input.quickToggle) GameMaster.quickToggle(event);
-                //if(input.show-weights)
+                if(input.useItem) GameMaster.useSelectedItem();
+                if(input.itemNav) GameMaster.navigateInventory(event);
+                if(input.showBulkGold) GameMaster.showBulkAndGold(event);
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })
@@ -101,19 +106,18 @@ class InputManager{
 
     //When called it checks all inputs to see if they have the key pressed, and if they do, calls their event
     static recieveInput(newInput) {
-        //console.log(InputManager.inputs)
+        InputManager.currentKeydownEvent = newInput
         if($(':focus').is('input')){
             return;
         }
         //console.log(newInput);
-        newInput.preventDefault()
+        //newInput.preventDefault()
         let inputCode = newInput.originalEvent.code;
         //console.log(inputCode);
         let theInputs = InputManager.inputs.filter((input) => input.hasKey(inputCode));
         //console.log(theInput);
         theInputs.forEach(input=>{
             if(input){
-                console.log(input)
                 input.onInput();
             }
         })

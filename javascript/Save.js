@@ -1,6 +1,6 @@
 class Save{
     static maps = {};
-    static day = 0;
+    static day = 1;
 
     static saveInit(){
         Player.playerInit();

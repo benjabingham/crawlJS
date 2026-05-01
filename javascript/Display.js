@@ -15,9 +15,13 @@ class Display{
         Display.followerInit();
         Inventory.initReleaseDragItems();
         Inventory.inventoryClickPreventDefault();
+        Inventory.initTabBehavior();
     }
 
     static showDungeonScreen(){
+        $('#world-inventory').show();
+        $('#side-menu').hide();
+        $('#drop-items-button').show();
         console.log('showDungeonScreen');
         Display.fillBars(Player);
         $('#board').show();
@@ -33,26 +37,32 @@ class Display{
         $('#game-window').hide();
         $('#home-screen').show();
 
-        Display.populateLocations();
+        Town.populateLocations();
         Display.giveSaveButtonsBehavior();
         Display.setColorSchemeButton();
         Display.scrollToTop();
     }
 
     static showTownScreen(){
-        $('#town-screen').show();
-        $('#day-div').text('Day '+Save.day);
-
-        Display.populateLocations();
-        Inventory.displayInventory(false);
-        Display.displayShop();
-        Display.restButton();
-        Display.fillBars(Player);
-        Display.nourishmentDiv(Player);
-        Display.scrollToTop();
+        Town.showTownScreen();
     }
 
-    
+    static setHintText(element, hintText, hintClass = "info"){
+        element.addClass('keyword').on('mousemove',()=>{
+            $('.hint-divs').show().text(hintText).addClass(hintClass);
+            
+        }).on('mouseleave',()=>{
+            Display.hideHintDiv();
+        })
+    }
+
+    static hideHintDiv(){
+        $('.hint-divs').hide().html('').removeClass('info label');
+    }
+
+    static displayGold(){
+        $('.gold-div').text(Player.gold+" gold");
+    }
 
     static scrollToTop(){
         document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -151,7 +161,7 @@ class Display{
                     continue;
                 }
                 entityDiv.html('');
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter mousemove');
                 entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
@@ -172,7 +182,7 @@ class Display{
                         symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
                         if(boardArray[y][x].name){
                             gridDiv.addClass('grid-hint').off('mouseenter')
-                            Display.setHintText(gridDiv, boardArray[y][x].name);
+                            Display.setHintText(gridDiv, boardArray[y][x].name, "label");
                             if(devMode){
                                 gridDiv.on('click',()=>{
                                     console.log(boardArray[y][x]);
@@ -222,7 +232,7 @@ class Display{
             }
         }
         Display.applyHighlights();
-        Display.setHintText($('.grid-exit'),'EXIT')
+        Display.setHintText($('.grid-exit'),'EXIT',"label")
     }
 
     static showParryHighlight(x,y, entityDiv){
@@ -329,57 +339,6 @@ class Display{
 
         Display.highlightedCells = [];
     }
-    
-    static nourishmentDiv(){
-        let nourishmentLevels = {0:'starving',1:'hungry',2:'sated',3:'well fed'}
-        let display = this;
-        $('#nourishment-level-div').text('You are '+nourishmentLevels[Player.nourishmentLevel]);
-
-        let meals = [
-            {
-                name:'Morsel',
-                cost:1,
-                item: itemVars.food.morsel
-            },
-            {name:'Proper Meal',cost:6,nourishment:100},
-        ]
-
-        $('#meals-div').html('');
-
-        meals.forEach((meal)=>{
-            let button = $('<button>');
-            button.text('buy '+meal.name+' - '+meal.cost).on('click',()=>{
-                if(Player.gold >= meal.cost){
-                    if(meal.item){
-                        if(Player.inventory.items.length < Player.inventory.slots){
-                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                            Player.pickUpItem(itemCopy);
-                        }else{
-                            Player.changeNourishment(item.food);
-                        }
-                    }else{
-                        Player.changeNourishment(meal.nourishment);
-                    }
-                    Player.gold-= meal.cost;
-                    display.nourishmentDiv();
-                    display.displayGold();
-                    Inventory.displayInventory(false);
-                }
-            })
-            if(!meal.item){
-                Display.setHintText(button,"Fully refils your hunger bar")
-                button.on('mouseenter',()=>{
-                    $('#hunger-level').css('width',"150px").addClass('preview');
-                    $('#hunger-level').text(Player.nourishmentMax+"/"+Player.nourishmentMax);                    
-                }).on('mouseleave',()=>{
-                    $('#hunger-level').removeClass('preview');
-                    Display.fillBars();
-                })  
-            }
-             
-            $('#meals-div').append(button)
-        })
-    }
 
     static exertionDiv(){
         let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
@@ -405,111 +364,58 @@ class Display{
         $('#hunger-level').css('width',hungerPercent*1.5+"px");
         $('#hunger-level').text(Player.nourishment+"/"+Player.nourishmentMax);
 
+        let xpPercent = XP.xpPercent;
+        xpPercent = Math.min(xpPercent,100)
+        $('#xp-level').css('width',xpPercent*2.5+"px");
+        //$('#xp-level').text(XP.xp+"/"+XP.threshold);
+        if(xpPercent == 100){
+            $('#xp-level').addClass('full-xp')
+        }else{
+            $('#xp-level').removeClass('full-xp')
+        }
+
         Display.exertionDiv();
 
     }
-    
-    static populateLocations(){
-        $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs']
-        maps.forEach((element) =>{
-            $('#travel-locations-div').append(
-                $("<div>").addClass('location-divs').append(
-                    $("<button>").text(element).on('click',function(){
-                        GameMaster.getRoom(element)
-                    })
-                )
-            )
-        })
-    }
-
-    static getRestHintText(restInfo){
-        if(!restInfo){
-            restInfo = Player.getRestInfo();
-        }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
-
-        return hintText;
-    }
-
-    static previewRestBars(restInfo){
-        console.log(restInfo);
-        let newHealth = Player.health+restInfo.healthChange
-        let newLuck = Math.min(Player.luck+0.5,Player.luckMax)
-        let newHunger = Player.nourishment+restInfo.nourishmentChange
-        let healthPercent = Math.floor(newHealth/Player.healthMax*100);
-        let luckPercent = Math.floor(newLuck/Player.luckMax*100);
-        let hungerPercent = Math.floor(newHunger/Player.nourishmentMax*100);
-        console.log(healthPercent)
-
-        $('#health-level').css('width',healthPercent*1.5+"px").addClass('preview');
-        $('#health-level').text(newHealth+"/"+Player.healthMax);
-
-        $('#luck-level').css('width',luckPercent*1.5+"px").addClass('preview');
-        $('#luck-level').text(newLuck+"/"+Player.luckMax);
-
-        $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
-        $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
-
-        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
-    }
-
-    static restButton(){
-        let restButton = $('#rest-button')
-        restButton.off().on('click',()=>{
-            GameMaster.nextDay();
-            GameMaster.loadTown();
-            $('.hint-divs').text(Display.getRestHintText());
-        })
-        
-        restButton.on('mouseenter',()=>{
-            let restInfo = Player.getRestInfo();
-            let hintText = Display.getRestHintText(restInfo);
-            Display.previewRestBars(restInfo);
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-            Display.fillBars();
-            Display.exertionDiv();
-            $('#exertion-level-div').removeClass('preview');
-            $('#health-level').removeClass('preview');
-
-            $('#luck-level').removeClass('preview');
-
-            $('#hunger-level').removeClass('preview');
-        })   
-    }
-
-    static setHintText(element, hintText){
-        element.on('mouseenter',()=>{
-            $('.hint-divs').text(hintText)
-        }).on('mouseleave',()=>{
-            $('.hint-divs').html('');
-        })
-    }
 
     
-
-    static displayShop(){
-        $('#shop-wrapper').show();
-        $('#shop-list').html('');
-        let inventory = Shop.getInventory();
-        inventory.forEach((item) =>{
-            Inventory.addInventoryItem(item, false, 'shop');
-        })
-        Display.displayGold();
-    }
-
-    static displayGold(){
-        $('.gold-div').text(Player.gold+" gold");
-    }
 
     
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
         return keywordVars.symbols[charCode].name
     }
-    
+
+    static getProficiencySpan(item){
+        let span = $('<sup>').addClass('proficiencySpan');
+        let text = "";
+        let proficiency = Player.getAdvantage(item);
+        if(!proficiency){
+            return false;
+        }
+        for(let i = 0; i < proficiency; i++){
+            text += "+";
+        }
+
+        let proficiencies = Player.getProficiencies(item);
+        let proficienciesTextArray= [];
+        proficiencies.forEach(skill=>{
+            let proficiencyText = skill.skill;
+            if(skill.level != 1){
+                proficiencyText += "(" + skill.level + ")"
+            }
+            proficienciesTextArray.push(proficiencyText)
+        })
+        let proficienciesText = proficienciesTextArray.join(", ")
+
+        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used. Has the opposite effect on attacks agains this weapon.";
+        Display.setHintText(span,hintText)
+
+
+        span.text(text);
+        return span;
+    }
+
     static setCustomControls(){
         let display = this;
         let inputs = InputManager.inputs;
@@ -626,9 +532,25 @@ class Display{
         })
         $('#board').on('mouseleave',e=>{
             Display.mouseOverBoard = false;
-            console.log(false)
+            //console.log(false)
         })
         console.log( $('#board'))
-    }
+    }  
     
+    //remove all other flash classes, wait 0ms (which is enough to forget the class), then add flash class.
+    static flash(element, color = 'orange'){
+        let classesString = element.attr('class')
+        if(classesString){
+            let classes = classesString.split(' ')
+            classes.forEach(className=>{
+                if(className.includes('flash-')){
+                    element.removeClass(className)
+                }
+            })
+        }
+        
+        setTimeout(() => {
+            element.addClass("flash-"+color)
+        }, 0);
+    }
 }

@@ -10,6 +10,7 @@ class LootManager{
         }else{
             key = entityGroupInfo.key;
         }
+        console.log(key)
 
         if(!entityType){
             entityType = entityGroupInfo.entityType
@@ -52,7 +53,7 @@ class LootManager{
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.preferredRange));
                 }
             }
 
@@ -77,7 +78,9 @@ class LootManager{
                         foodLoot.maxNumber = 1;
                     }
                     let n = Random.roll(1,foodLoot.maxNumber)
-                    entitySave.inventory.items.push(LootManager.getFoodLoot(foodLoot.tier, n));
+                    for(let i=0; i< n; i++){
+                        entitySave.inventory.items.push(LootManager.getFoodLoot(foodLoot.tier, foodLoot.rottenMultiplier));
+                    }
                 }
             }
 
@@ -115,6 +118,7 @@ class LootManager{
             return false;
         }
         let inventory = [];
+        //console.log(templateInventory)
         templateInventory.forEach((item)=>{
             let random=Random.roll(0,99);
             if(random < item.chance){
@@ -126,9 +130,11 @@ class LootManager{
         return inventory;
     }
 
-    static getTreasureLoot(tier, allowedMaterials){
+    static getTreasureLoot(tier, allowedMaterials, preferredRange = {min: 0 , max: 9999}){
         let nRolls = tier-3;
         let greater = (nRolls > 0);
+        let min = preferredRange.min;
+        let max = preferredRange.max;
         nRolls = Math.abs(nRolls);
 
         let treasure = LootManager.getTreasure();
@@ -139,14 +145,30 @@ class LootManager{
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
-            if((greater && newTreasure.value > treasure.value) || (!greater && newTreasure.value < treasure.value)){
+            //if value is outside of range, expand range and try again
+            if(
+                (greater && newTreasure.value > treasure.value) ||
+                (!greater && newTreasure.value < treasure.value)
+            ){
+
                 treasure = newTreasure;
             }
         }
 
         LootManager.getTreasureModifier(treasure, tier);
-
-
+        LootManager.getTreasureSize(treasure);
+        console.log(treasure)
+        //if outside of range, widen range and try again!
+        if(treasure.value > max){
+            let newMax = max * 1.5;
+            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, {min:min, max:newMax})
+        }else if(treasure.value < min){
+            let newMin = Math.floor(min/2)
+            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
+        }
+        treasure.treasure = true;
+        LootManager.getFlavorText(treasure);
+        
         return treasure;
     }
 
@@ -210,7 +232,8 @@ class LootManager{
         return weapon;
     }
 
-    static getFoodLoot(tier = 0, n=1){
+    static getFoodLoot(tier = 0, rottenMultiplier = 1){
+        console.log(rottenMultiplier)
         let foods = Object.keys(itemVars.food);
         let nFoods = foods.length; 
         //nrolls represents number of EXTRA rolls.
@@ -225,6 +248,17 @@ class LootManager{
         }
         let foodKey = foods[foodIndex]
         let food = JSON.parse(JSON.stringify(itemVars.food[foodKey]));
+
+        if(food.preserved){rottenMultiplier /= 2}
+        if(food.perishable){rottenMultiplier *= 2}
+        rottenMultiplier *= Math.random()+0.5
+        food.rottenMultiplier = rottenMultiplier;
+        if(Math.random() < rottenMultiplier * .2){
+            LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
+        }
+
+        food.tier = tier;
+        LootManager.getFlavorText(food);
 
         return food;
     }
@@ -272,6 +306,28 @@ class LootManager{
         }else if (random >= 90){
             LootManager.applyModifier(treasure, itemVars.treasureModifiers.pristine)
         }
+    }
+
+    static getTreasureSize(treasure){
+        if(!treasure.scalable){
+            return false
+        }
+        let random = Random.roll(1,99);
+        let size;
+
+        if(random < 5){
+            size = itemVars.treasureSizes.tiny;
+        }else if (random < 15){
+            size = itemVars.treasureSizes.small
+        }else if (random < 25){
+            size = itemVars.treasureSizes.large
+        }else if (random < 30){
+            size = itemVars.treasureSizes.huge
+        }
+
+        if(!size){return false}
+
+        LootManager.applyModifier(treasure, size);
     }
 
     static getWeightedWeaponMaterials(allowedMaterials = false){
@@ -428,21 +484,49 @@ class LootManager{
                     item[key]+= value;
                     break;
                 case 'blunt':
-                case 'edged':
-                    if(item.type[key] || (item.type['sword'] && key == 'edged')){
+                case 'sharp':
+                    if(item.type[key]){
                         LootManager.applyModifier(item, value,true);
                     }
                     break;
                 case 'value':
                     if(item[key]){
-                        item[key] *= value;
+                        //separately store the unrounded version of the items value
+                        if(!item.floatValue){item.floatValue = item.value}
+                        item.floatValue *= value;
+                        item[key] = item.floatValue;
                         item[key] += .5;
                         item[key] = Math.floor(item[key]);
-                        item[key] = Math.max(item[key], 1);
+                        item[key] = Math.max(item[key], 0);
+                    
                     }
                     break;
                 case 'color':
                     item[key] = value;
+                    break;
+                case 'bulk':
+                    if(!item[key]){
+                        item[key] = 1;
+                    }
+                    item[key] *= value 
+
+                    //round to nearest tenth
+                    item[key] *= 10;
+                    item[key] += .5;
+                    item[key] = Math.floor(item[key]);
+                    item[key] /= 10;
+                    
+                    //min value 0.1
+                    item[key] = Math.max(item[key], 0.1);
+                    break;
+                case 'possibleFlavorTexts':
+                case 'flavorText':
+                    console.log(value)
+                    if(!item.possibleFlavorTexts){
+                        item.possibleFlavorTexts = [];
+                        if(item.flavorText){item.possibleFlavorTexts.push(item.flavorText)}
+                    }
+                    item.possibleFlavorTexts = item.possibleFlavorTexts.concat(value);
                     break;
                 default:
                     if(typeof(value) == "number"){
@@ -462,6 +546,54 @@ class LootManager{
                 LootManager.applyModifier(item[val], modifier);
             }
         })
+    }
+
+    static getFlavorText(item){
+        if(item.weapon){return false}
+        let texts = []
+        if(item.treasure){
+            if(item.value == 0){
+                texts = texts.concat(itemVars.treasureFlavorTexts.worthless);
+            }else if(item.value < 5){
+                texts = texts.concat(itemVars.treasureFlavorTexts.moderate)
+            }else if(item.value < 20){
+                texts = texts.concat(itemVars.treasureFlavorTexts.nifty)
+            }else if(item.value < 100){
+                texts = texts.concat(itemVars.treasureFlavorTexts.valuable)
+            }else{
+                texts = texts.concat(itemVars.treasureFlavorTexts.opulent)
+            }
+            if(item.wearable){
+                texts = texts.concat(itemVars.treasureFlavorTexts.wearable)
+            }
+            if(item.dinnerware){
+                texts = texts.concat(itemVars.treasureFlavorTexts.dinnerware)
+            }
+            //don't overuse the general stuff...
+            if(Math.random() < 0.25){
+                texts = texts.concat(itemVars.treasureFlavorTexts.general)
+            }
+        }
+
+        if(item.food){
+            if(!item.rottenMultiplier || item.rottenMultiplier < 0.5){
+                texts = texts.concat(itemVars.foodFlavorTexts.lowRotten);
+            }else if(item.rottenMultiplier < 2){
+                texts = texts.concat(itemVars.foodFlavorTexts.mediumRotten);
+            }else{
+                texts = texts.concat(itemVars.foodFlavorTexts.highRotten);
+            }
+
+            if(item.rotten){texts = texts.concat(itemVars.foodFlavorTexts.rotten)}
+            texts = texts.concat(itemVars.foodFlavorTexts.general)
+        }
+        console.log(texts);
+        
+        if(item.possibleFlavorTexts){texts = texts.concat(item.possibleFlavorTexts)}
+        if(!texts){return false}
+        let index = Random.roll(0,texts.length-1)
+        console.log(texts[index])
+        item.flavorText = texts[index];
     }
 
     static getStarterWeapon(){
@@ -485,9 +617,11 @@ class LootManager{
     static breakWeapon(item){
         item.name += " (broken)";
         item.weapon = false;
-        item.value *= 0.7;
+        if(!item.floatValue){item.floatValue = item.value}
+        item.floatValue *= 0.7;
+        item.value = item.floatValue;
         item.value = Math.floor(item.value);
-        item.value = Math.max(item.value,1);
+        item.value = Math.max(item.value,0);
     }
 
     static expendUse(item){
@@ -497,7 +631,16 @@ class LootManager{
         }
 
         let newRatio = 1/item.uses;
-        item.value = Math.floor(item.value - (newRatio*item.value));
+        if(!item.floatValue){item.floatValue = item.value}
+        item.floatValue = item.floatValue - (newRatio*item.floatValue);
+        item.value = Math.floor(item.floatValue)
+        let bulk = item.bulk;
+        bulk = item.bulk - (newRatio*bulk)
+        bulk *= 10;
+        bulk += .5;
+        bulk = Math.floor(bulk);
+        bulk /= 10;
+        item.bulk = bulk;
         item.uses--;
     }
 
@@ -529,5 +672,61 @@ class LootManager{
         }
     
         return name;
+    }
+
+    //takes string type, returns array of weapon objects of that type.
+    static getWeaponsOfType(type){
+        let weapons = [];
+        console.log(type);
+        Object.keys(itemVars.weapons).forEach(key =>{
+            let weapon = itemVars.weapons[key];
+            console.log(weapon);
+            if(weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.drops).forEach(key =>{
+            let weapon = itemVars.drops[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.tools).forEach(key =>{
+            let weapon = itemVars.tools[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+        Object.keys(itemVars.food).forEach(key =>{
+            let weapon = itemVars.food[key];
+            if(weapon.weapon && weapon.type && weapon.type[type]){
+                weapons.push(weapon);
+            }
+        })
+
+        return weapons;
+    }
+
+    static getValue(item){
+        let value = item.value;
+        if(item.treasure && Player.perks.sell.trinketPeddler){
+            value += (Player.perks.sell.trinketPeddler.val * Player.perks.sell.trinketPeddler.amount);
+        }
+
+        if(item.treasure && Player.perks.sell.appraiser){
+            let multiplier = Player.perks.sell.appraiser.val * 0.2;
+            multiplier += 1;
+            value *= multiplier;
+            value = Math.floor(value);
+        }
+
+        if(item.pelt && Player.perks.sell.trapper){
+            let multiplier = Player.perks.sell.trapper.val
+            multiplier += 1
+            value *= multiplier;
+            value = Math.ceiling(value);
+        }
+
+        return value;
     }
 }

@@ -71,6 +71,90 @@
     color:var(--hungerBarText)
 }
 
+#xp-level{
+    background-color: var(--xpBar);
+    color:var(--xpBarText);
+    height:10px;
+}
+
+.full-xp{
+    background-color: var(--xpBarFull) !important;
+}
+
+#xp-bar{
+    height:10px;
+    width:250px;
+}
+
+#character-info{
+    .section-label-divs{
+        padding-top:2px;
+        width:100%;
+        text-align: center;
+            font-weight:600;
+    }
+}
+
+
+#character-info-content{
+    padding:3px;
+    font-weight:600;
+    .resource-bar-containers{
+        width:100%;
+        display:block;
+        .resource-bar-divs{
+            margin:auto auto
+        }
+    }
+
+}
+
+#character-perks-div{
+    width:100%;
+    display:grid;
+    padding:10px;
+    height:100%;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(
+            min(100% / 1, max(100% / 2)),
+            1fr
+        )
+    );
+    box-sizing: border-box;
+    div{
+        text-transform: capitalize;
+        height:30px;
+        padding: 5px;
+    }
+
+    div:before{
+        content:"• "
+    }
+
+    div:has(.proficiencySpan) {
+        line-height: 0.5rem;
+    }
+}
+
+#character-info-title{
+    padding:3px;
+}
+
+.portrait{
+    /*font-family: monospace;*/
+    width:100%;
+    height:200px;
+    line-height: 10rem;
+    text-align: center;
+    font-size:18rem;
+    overflow: hidden;
+    /*
+    border:1px solid var(--border);
+    background-color: var(--inventorySlotHover);
+*/
+    }
+
 .preview{
     animation: pulse 650ms ease-in-out infinite alternate;
 }

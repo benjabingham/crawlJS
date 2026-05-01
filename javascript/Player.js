@@ -11,11 +11,39 @@ class Player {
     static nourishmentMax = 10;
     static nourishment;
 
+    static maxBulk = 10;
+
     static exertion = 0;
 
     static light = 0;
     static lightMax = 8;
     static lightTime = 0;
+
+    static perks ={
+        stamina:{},
+        hp:{},
+        hunger:{},
+        sword:{},
+        axe:{},
+        blunt:{},
+        long: {},
+        edged:{},
+        improvised:{},
+        simple:{},
+        unarmed:{},
+        swing:{},
+        strafe:{},
+        jab:{},
+        draw:{},
+        counterattack:{},
+        sell:{},
+        goblinoid:{},
+        beast:{},
+        undead:{},
+        ooze:{},
+        dark:{},
+        fuel:{}
+    }
         
     
     static inventory = {
@@ -27,6 +55,7 @@ class Player {
     static gold = 0;
     //points to equipped object
     static equipped = false;
+    static level=1;
 
     static playerInit(){
         Player.stamina = Player.staminaMax;
@@ -35,6 +64,7 @@ class Player {
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
         Player.nourishment = 7;
         Player.inventoryCleanup();
+        XP.XPInit();
     }
 
     static getPlayerJson(){
@@ -71,12 +101,12 @@ class Player {
 
     static get nourishmentLevel(){
         let level;
-        let nourishment = Player.nourishment;
-        if(nourishment == 0){
+        let hungerPercent = Player.hungerPercent;
+        if(hungerPercent == 0){
             level = 0;
-        }else if(nourishment < 4){
+        }else if(hungerPercent < 40){
             level = 1;
-        }else if (nourishment == 10){
+        }else if (hungerPercent == 100){
             level = 3;
         }else{
             level = 2;
@@ -86,10 +116,19 @@ class Player {
     }
 
     static getRestInfo(){
+        console.log(JSON.parse(JSON.stringify(XP.skills)))
+        console.log(XP.offeredPerks)
         let healthChange = Player.nourishmentLevel;
         let oldHealth = Player.health;
-        let newHealth = Math.min(oldHealth+healthChange,Player.healthMax)
-
+        if(healthChange + oldHealth > Player.healthMax){
+            let excess = (healthChange + oldHealth) - Player.healthMax
+            healthChange -= excess
+        }
+        let newHealth = oldHealth+healthChange
+        if(Player.perks.hp.vitality){
+            let vitalityAmount = Player.perks.hp.vitality.val * Player.perks.hp.vitality.amount;
+            healthChange = Math.min(vitalityAmount,Player.healthMax-oldHealth);
+        }
         let nourishmentChange = (newHealth - oldHealth)*-1;
         nourishmentChange -=3;
 
@@ -123,6 +162,9 @@ class Player {
         let oldHealth = Player.health;
         Player.changeHealth(health);
         Player.changeNourishment((Player.health-oldHealth)*-1);
+        if(Player.perks.hp.vitality){
+            Player.changeHealth(Player.perks.hp.vitality.val * Player.perks.hp.vitality.amount);
+        }
 
         let luck = Math.floor(Math.random()*2)
         Player.changeLuck(luck);
@@ -131,13 +173,18 @@ class Player {
 
         Player.setExertion(0);
 
-        console.log(Player.nourishment);
-        console.log(Player.nourishmentLevel);
+        
+
+        XP.checkLevelUp();
+
     }
 
 
     static gainStamina(){
         let stamina = 2;
+        if(Player.perks.stamina.aerobics){
+            stamina++;
+        }
         if(Player.exertion){
             stamina--;
         }
@@ -147,7 +194,8 @@ class Player {
     static checkHungerModifiers(){
         let stamina = 0;
         let random = Math.random()*100;
-        let gainChance = (Player.nourishment - 8)*5;
+        //gaining uses percentage, losing uses flat value.
+        let gainChance = (Player.hungerPercent - 80)/2;
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){
@@ -173,24 +221,38 @@ class Player {
 
         let hungerChance = (Player.stamina - oldStamina)*2;
         Player.checkChangeNourishment(hungerChance);
+
+        if(n < 0){
+            XP.gainStaminaXP(n*-1);
+        }
     }
 
     static changeHealth(n){
         Player.health = Player.health+n;
         Player.health = Math.min(Player.healthMax,Player.health);
         Player.health = Math.max(0,Player.health)
+
+        if(n < 0){
+            XP.gainHPXP(n*-1);
+            Display.flash($('body'),'deepRed');
+            Display.flash($('#health-level'),'lightRed');
+        }
     }
 
     static changeLuck(n){
         Player.luck = Player.luck+n;
         Player.luck = Math.min(Player.luckMax,Player.luck);
         Player.luck = Math.max(0,Player.luck)
+
+        if(n < 0){
+            //this happens in history instead.
+            //XP.gainLuckXP(n*-1);
+        }
     }
 
     static changeExertion(n){
         n += Player.exertion;
-        Player.setExertion(n);
-        
+        Player.setExertion(n);    
     }
 
     static setExertion(n){
@@ -208,11 +270,15 @@ class Player {
         */
         if(Player.nourishment < 0){
             Player.changeHealth((Player.nourishment));
-            Log.addMessage('You are starving.', 'urgent');
+            Log.addMessage('You are starving! ' + Player.nourishment +" health!", 'urgent');
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)
         Display.fillBars();
+
+        if(n < 0){
+            XP.gainHungerXP(n*-1);
+        }
     }
 
     static setNourishment(n){
@@ -244,22 +310,28 @@ class Player {
     }
 
     static useItem(item){
-        console.log('useItem')
-        console.log(item);
         if(!item){
             return false;
         }
+
+        let dungeonMode = GameMaster.dungeonMode;
         
-        if(item.weapon && Player.equipped && Player.equipped.slot == item.slot){
+        if(dungeonMode && item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            return Player.unequipWeapon();
-        }else if(item.weapon && !Player.equipped){
+        }else if(dungeonMode && item.weapon && !Player.equipped){
             return Player.equipWeapon(item);
-        }else if(item.fuel){
+        }else if(dungeonMode && item.fuel){
             return Player.addFuel(item);
         }else if(item.food){
             return Player.eatItem(item);
         }else if (item.potable){
             return Player.drinkItem(item);
+        }else if(!dungeonMode){
+            let result = Shop.sellItem(item.slot);
+            Inventory.displayInventory();
+            return result;
+        }else if(!Player.equipped){
+            return Player.equipWeapon(item);
         }
         return false;
     }
@@ -277,14 +349,18 @@ class Player {
     }
 
     static equipWeapon(weapon, verbose=true){
-        if(Player.equipped){
+        if(Player.equipped || !GameMaster.dungeonMode){
             return false;
         }
         Player.equipped = weapon;
         if(!weapon.quickSlot){
             Inventory.swapSlot(0,weapon);
         }
-        EntityManager.equipWeapon('player', weapon, verbose);
+        if(weapon.weapon){
+            EntityManager.equipWeapon('player', weapon, verbose);
+        }else{
+            Log.addMessage('Equipped item: '+weapon.name)
+        }
         return true;
     }
 
@@ -292,7 +368,6 @@ class Player {
         let slot = Player.equipped.slot;
         let weaponEntity = EntityManager.playerEntity.swordEntity;
         let equippedItem = Player.inventory.items[slot];
-        console.log(weaponEntity);
         weaponEntity.equip(equippedItem);
     }
 
@@ -300,15 +375,24 @@ class Player {
         if (!Player.equipped){
             return false;
         }
+        let weapon = Player.equipped;
         Player.equipped = false;
-        EntityManager.unequipWeapon('player');
+        if(weapon.weapon){
+            EntityManager.unequipWeapon('player');
+        }
         return true;
     }
 
     static addFuel(fuel, consume=true){
+        if(!fuel.light){return false}
         let slot = fuel.slot;
         let previousLight = Player.light;
+        XP.gainFuelXP(1);
         Player.light += fuel.light;
+        let kindler = Player.perks.fuel.kindler
+        if(kindler && fuel.light == 1){
+            Player.light += kindler.amount * kindler.val
+        }
         Player.light = Math.min(Player.lightMax, Player.light);
         Player.light = Math.max(Player.light,0);
         if(fuel.paper){
@@ -346,9 +430,30 @@ class Player {
     }
 
     static eatItem(item){
+        if(!item.food){return false}
+        if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
-        Player.changeNourishment(item.food);
         Log.addMessage('You eat the '+item.name+".");
+        let rotten = item.rotten || (Math.random() < item.rottenMultiplier * .2);
+        let ironGut = Player.perks.hunger.ironGut
+        if(rotten && ironGut){
+            Player.changeNourishment(item.food);
+            Player.changeLuck(ironGut.val * ironGut.amount);
+            Display.flash($('body'),'darkGreen');
+            Log.addMessage("It's rotten!",'win','rotten','Yum!')
+            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+        }else if(rotten){
+            Player.changeNourishment(item.food*-1);
+            Log.addMessage("It's rotten!",'danger','rotten','This food item reduced your hunger level by 1 instead of increasing it.')
+            Display.flash($('body'),'darkGreen');
+            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+        }else{
+            Player.changeNourishment(item.food);
+        }
+        
+        //it is no longer in a quantum state
+        item.rottenMultiplier = 0;
+        
         Player.consume(slot);
 
         return true;
@@ -356,6 +461,8 @@ class Player {
 
     static drinkItem(item){
         let slot = item.slot;
+        if(!item.potable){return false}
+        if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
 
         Log.addMessage('You drink the '+item.name+".");
         while(item.unlabeled){
@@ -391,6 +498,7 @@ class Player {
         if(item.uses > 1){
             LootManager.expendUse(item);
         }else{
+            if(Player.itemIsEquipped(item)){Player.unequipWeapon(slot)}
             Player.inventory.items[slot] = false;
         }
 
@@ -398,18 +506,42 @@ class Player {
         return true;
     }
 
+    static getBulk(){
+        let bulkSum = 0;
+        Player.inventory.items.forEach(item=>{
+            if(Player.itemIsEquipped(item)){return}
+            let bulk = 0
+            if(item.bulk){bulk = item.bulk}
+            
+            //if(item.quickSlot){bulk /=2}
+
+            bulk*= 10
+            bulk = Math.floor(bulk)
+            bulk /= 10;
+            bulkSum += bulk;
+        })
+        //console.log(bulkSum);
+
+        return bulkSum;
+    }
+
     static lightDown(){
         if(Player.light < 1){
+            XP.gainDarkXP(0.2)
             return false;
+        }else if(Player.light < 2){
+            XP.gainDarkXP(0.1)
         }
         Player.lightTime += Player.light;
         let random = Math.random()*1500;
         if (random < Player.lightTime-150){
             Player.light--;
-            console.log(Player.lightTime);
             Player.lightTime -= 200;
             Player.lightTime = Math.max(Player.lightTime,0)
             Log.addMessage('Your light dims.');
+            if(Player.light <= 0){
+                XP.gainDarkXP(3)
+            }
         }
 
         if(random < Player.lightTime-100){
@@ -447,7 +579,6 @@ class Player {
             }
 
         }
-        console.log(Player.inventory.items);
     }
 
     static dropItem(slot){
@@ -463,7 +594,6 @@ class Player {
     }
 
     static dropBag(){
-        console.log('dropbag')
         let slot = 0;
         //find first nonquickslot item
         while(Player.inventory.items[slot] && Player.inventory.items[slot].quickSlot){
@@ -475,5 +605,257 @@ class Player {
         }
         
     }
+
+    //TODO - make work like crit, so strike types can have advantage too?
+    static getAdvantage(weaponItem){
+        let proficiencies = Player.getProficiencies(weaponItem);
+        let advantage = 0;
+        proficiencies.forEach(skill=>{
+            advantage += skill.level;
+        })
+
+        return advantage;
+    }
+
+    //returns an array of all the types of the weapon you have advantage in - {skill: , level: }
+    static getProficiencies(weaponItem){
+        let weaponTypes = weaponItem.type;  
+        let proficiencies = [];
+        //for each perk category...
+        Object.keys(Player.perks).forEach(skill =>{
+            //if the player has advantage in that category, and the weapon has that category as a type...
+            if(weaponTypes && Player.perks[skill].advantage && weaponTypes[skill]){
+                proficiencies.push({
+                    skill:skill,
+                    level: Player.perks[skill].advantage
+                })
+            }
+        })
+
+        return proficiencies;
+    }
+
+    static getCritChance(weaponItem, strikeType, target){
+        let attackTypes = {};
+        if(weaponItem.type){
+            attackTypes = JSON.parse(JSON.stringify(weaponItem.type));
+        }
+        attackTypes[strikeType] = true;
+        if(target.parryable){
+            attackTypes['counterattack'] = true;
+        }
+        let critChance = 0;
+        Object.keys(Player.perks).forEach(skill =>{
+            if(Player.perks[skill].critChance && attackTypes[skill]){
+                critChance += Player.perks[skill].critChance;
+            }
+        })
+        if(Player.perks.hunger.hangry && Player.hungerPercent <= 50){
+            let pointsMissing = Player.nourishmentMax - Player.nourishment;
+            pointsMissing *= Player.perks.hunger.hangry.val
+            critChance += pointsMissing/10;
+        }
+
+        return critChance
+    }
+
+    static getCrit(weaponItem, strikeType,target){
+        let crits = 0;
+        let critChance = Player.getCritChance(weaponItem, strikeType, target);
+
+        crits += Math.random() < critChance;
+
+        if(target.stunned){crits++; console.log('stunned')}
+
+        console.log(Player.perks)
+        console.log(Player.stamina)
+        if(Player.perks.stamina.finalPush && Player.stamina <= 0){crits++; console.log('LAST PUSH')}
+        
+        console.log(crits);
+        return crits;
+    }
+
+    static getDamageMultiplier(weaponItem, strikeType, target, crit){
+        let multiplier = 1;
+        let burningFury = Player.perks.fuel.burningFury
+        if(burningFury && crit){
+            multiplier += burningFury.val * burningFury.amount * Player.light
+        }
+
+        return multiplier
+    }
+
+    static getBonusStun(weapon,entity){
+        let bonus = 0;
+        bonus += Player.getAnatomyBonus(entity);
+        bonus += Player.getItemBonusStun(weapon);
+        return bonus;
+    }
+
+    static getAnatomyBonus(entity){
+        if(!entity.types){
+            return 0;
+        }
+        let enemyTypes = Object.keys(entity.types);
+        let bonus = 0;
+        enemyTypes.forEach(type=>{
+            if(Player.perks[type] && Player.perks[type].anatomy){
+                bonus += Player.perks[type].anatomy.val * 2
+            }
+        })
+
+        return bonus
+    }
+
+    static getItemBonusStun(item){
+        if(!item){
+            return false;
+        }
+        let bonus = 0;
+        if(item.type.blunt && Player.perks.blunt.concussiveBlows){
+            let percent = Player.perks.blunt.concussiveBlows.val * Player.perks.blunt.concussiveBlows.amount;
+            bonus += item.damage * percent
+            bonus = Math.floor(bonus);
+
+        }
+
+        return bonus
+    }
+
+    static getItemBonusStunSpanWithSpecial(item,special){
+        return {
+            normal:Player.getItemBonusStunSpan(item),
+            special:Player.getItemBonusStunSpan(special)
+        }
+    }
+
+    static getItemBonusStunSpan(item){
+        if(!item){
+            return false;
+        }
+        let bonus = Player.getItemBonusStun(item);
+
+        if(bonus){
+            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            return span
+        }else{
+            return $('<span>')
+        }
+    }
+
+    static getItemBonusDamage(item){
+        if(!item){return 0}
+        let bonus = 0;
+        if(item.type.edged && Player.perks.edged.cuttingEdge){
+            bonus += Player.perks.edged.cuttingEdge.val * Player.perks.edged.cuttingEdge.amount
+        }
+
+        return bonus
+    }
+
+    static getItemBonusDamageSpanWithSpecial(item,special){
+        return {
+            normal:Player.getItemBonusDamageSpan(item),
+            special:Player.getItemBonusDamageSpan(special)
+        }
+    }
+
+    static getItemBonusDamageSpan(item){
+        if(!item){return false}
+        let bonus = Player.getItemBonusDamage(item);
+
+        if(bonus){
+            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            return span
+        }else{
+            return $('<span>')
+        }
+    }
+
+    //take hp, luck, stamina, hunger, return associated max value
+    static getMaxResource(resourceString){
+        switch(resourceString){
+            case "hp":
+                return Player.healthMax;
+            case "stamina":
+                return Player.staminaMax;
+            case "luck":
+                return Player.luckMax;
+            case "hunger":
+                return Player.nourishmentMax;
+            case "bulk capacity":
+                return Player.maxBulk;
+            default:
+                return 0;
+        }
+    }
+
+    static getEncumbranceLevel(){
+        let level = Math.floor(Player.getBulk()/Player.maxBulk);
+        level *= level;
+        return level;
+    }
+
+    static changeGold(n){
+        Player.gold += n;
+        Player.gold = Math.max(Player.gold,0)
+        Display.flash($('.gold-div'),'goldDivs')
+        Display.displayGold()
+    }
+
+    static updatePlayerInfo(){
+        $('#level-div').text('Level '+Player.level)
+
+        let element = $('#character-perks-div');
+        element.html('');
+
+        Object.keys(Player.perks).forEach(key=>{
+            let perkCategory = Player.perks[key];
+            Object.keys(perkCategory).forEach(perkKey=>{
+                let perk = perkCategory[perkKey]
+                if(perkKey == 'advantage'){
+                    let dummyItem = {type:{}}
+                    dummyItem.type[key] = perk;
+                    let proficiencySpan = Display.getProficiencySpan(dummyItem)
+                    let perkDiv = $('<div>').text(key).append(proficiencySpan).addClass('perk-divs')
+                    let hintText = "You have proficiency "+perk+" with "+key+" weapons. Damage with those weapons is rerolled "+perk+" times, with the highest roll used."
+                    Display.setHintText(perkDiv,hintText)
+                    element.append(
+                        perkDiv
+                    )
+                }else if(perkKey == 'critChance'){
+                    let critChance = perk;
+                    if(!critChance){critChance = 0}
+                    critChance *= 100;
+                    critChance = Number.parseFloat(critChance).toFixed(0);
+                    critChance += "%";
+                    let hintText = "You have a "+critChance+" critical hit chance on "+key+" attacks."
+                    let perkDiv = $('<div>').text(critChance + " " + key+ " Crit").addClass('perk-divs')
+                    Display.setHintText(perkDiv, hintText);
+                    element.append(
+                        perkDiv
+                    )
+                }else{
+                    let perkDiv = $('<div>').text(perk.name).addClass('perk-divs');
+                    let description = perk.description
+                    if(perk.val > 1){
+                        perkDiv.append(" X"+perk.val)
+                        description +=" (x"+perk.val+")"
+                    }
+                    Display.setHintText(perkDiv, description)
+                    element.append(perkDiv) 
+                }
+            })
+            
+         
+        })
+
+    }
+
+    static itemIsEquipped(item){
+        return Player.equipped && Player.equipped.slot == item.slot;
+    }
+
+    
 
 }

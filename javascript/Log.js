@@ -54,9 +54,9 @@ class Log{
             "Buying a proper meal fills your hunger bar completely.",
             "Luck regenerates when you rest, but very slowly. Use it sparingly!",
             "Weapon breaking is completely random - you can use luck to make your weapons last longer!",
-            "Stunned enemies appear in lower case, and take double damage. Press the advantage!",
+            "Stunned enemies appear in lower case, and recieve guaranteed critical hits. Press the advantage!",
             "Scroll over an object with your mouse to see what it is.",
-            "Scroll over a keyword in the log to see what it means.",
+            "Scroll over a bolded keyword to see what it means.",
             "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
             "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
             "The contents of unlabeled potions are undetermined until the moment you drink them. Use luck to make better use of them.",
@@ -65,7 +65,13 @@ class Log{
             "Corrosive(green) and absorbent(orange) oozes track your weapon instead of you. Put it away and they'll leave you alone!",
             "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
             "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them.",
-            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected."
+            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected.",
+            "Your proficiency with a weapon is represented by a number of '+'s next to that weapon's name. Scroll over the '+'s to learn more.",
+            "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!",
+            "Guaranteed crits are applied separately from crits achieved via crit chance. They scale multiplicitively!",
+            "A food item's flavor text can give you a hint to its likelihood of being rotten.",
+            "Food not labeled as rotten still has a chance of being rotten when eaten... Use luck to reroll those odds.",
+            "Be very wary of corridors that are only one tile wide. Being cornered there is sure death."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]
@@ -77,9 +83,11 @@ class Log{
         Log.messages = {};
         Log.turnCounter = 0;
         $('.turn-message').remove();
+        $('.day-counter').remove();
     }
 
-    static printTurn(turn){        
+    static printTurn(turn){   
+        console.log(turn);     
         let messages = Log.messages[turn];
         $('.message-fresh').removeClass('message-fresh')
         $('.temp-turn-counter').remove();
@@ -122,14 +130,14 @@ class Log{
                 }
                 messageElement.addClass((message.fresh) ? 'message-fresh' : 'message-old').addClass((message.messageClass) ? 'message-'+message.messageClass : '').on('mouseenter',()=>{
                     if(tipText){
-                        $('.hint-divs').text(tipText)  
+                        $('.hint-divs').show().text(tipText).addClass('info');
                     }
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = true;
                         Display.printBoard();
                     }
                 }).on('mouseleave',()=>{
-                    $('.hint-divs').html('');
+                    Display.hideHintDiv();
                     if(highlightID != -1){
                         EntityManager.getEntity(highlightID).highlighted = false;
                         Display.printBoard();
@@ -143,14 +151,26 @@ class Log{
                 message.fresh = false;
             })
             turnMessage.prepend(
-                $('<p>').text('Turn '+turn).addClass('turn-counter')
+                GameMaster.dungeonMode ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
             ).append($('<hr>'))
             messages.printed = true;
         }else{
             $('#log').prepend(
-                $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>'))
+                GameMaster.dungeonMode ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
             )
         }
+
+        if(!GameMaster.dungeonMode){
+            Log.printDayToLog(true)
+        }
+    }
+
+    static printDayToLog(temp){
+        let classes = 'turn-counter day-counter'
+        classes += temp ? ' temp-turn-counter' : '';
+        $('#log').prepend(
+                $('<div>').addClass(classes).text('Day '+ Save.day).append($('<hr>'))
+            )
     }
 
     static printLog(){
@@ -178,5 +198,42 @@ class Log{
 
     static peek(){
         return Log.messages[Log.turnCounter];
+    }
+
+    static sendCritMessage(crit){
+        if(crit == 1){
+            EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
+        }else if(crit == 2){
+            EntityManager.transmitMessage("Brutal Critical!",'pos',"Brutal Critical", "A brutal critical occurs if you recieve a crit from multiple sources (ex. from crit chance and by attacking a stunned enemy), and inflicts quadruple damage.");
+        }else if(crit > 2){
+            EntityManager.transmitMessage("SAVAGE CRITICAL!!!",'pos',"SAVAGE CRITICAL", "A savage critical occurs if you recieve a crit from THREE SEPARATE sources, and inflicts octuple damage.");
+        }
+    }
+
+    static sendStrikeMessage(strikeType, weapon, target){
+        let message = '';
+        let tipText = '';
+        switch (strikeType){
+            case "swing":
+                message = 'you swing your weapon into the '+target.name+"."
+                tipText = keywordVars.swing.hintText;
+                break;
+            case "jab":
+                message = "you jab the "+target.name+'.'
+                tipText = keywordVars.jab.hintText;
+                break;
+            case "strafe":
+                message = "you deliver a strafing strike to the "+target.name+"."
+                strikeType = "strafing"
+                tipText = keywordVars.jab.strafe;
+                break;
+            case "draw":
+                message = 'you draw your weapon, striking the '+target.name+"."
+                tipText = keywordVars.draw.hintText;
+                break;
+            default:    
+                message = "you strike the "+target.name+".";
+        }
+        Log.addMessage(message,false,strikeType,tipText,target.id);
     }
 }

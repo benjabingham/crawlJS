@@ -10,6 +10,7 @@ let mainReleases = [
 ]
 
 let devBranches = [
+    {name: 'Playtest', branchName: 'playtest'},
     {name: 'Dev', branchName: 'dev'},
     {name: 'Levelup', branchName: 'levelup'},
     {name: 'Inventory', branchName: 'inventory'},

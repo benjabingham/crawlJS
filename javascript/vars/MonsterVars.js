@@ -961,6 +961,7 @@ let monsterVars = {
     treeOfGreed:{
         name:"Tree Of Greed",
         symbol:'T',
+        sightDistance:3,
         behavior:'chase',
         hitDice:10,
         blood:0,

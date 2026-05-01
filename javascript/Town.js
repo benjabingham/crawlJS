@@ -84,7 +84,7 @@ class Town{
 
     static populateLocations(){
         $('#travel-locations-div').html('');
-        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Dark Forest', 'Forgotten Cemetery', 'Catacombs']
+        let maps = ['Abandoned Village','Rat Nest', 'Goblin Keep', 'Forgotten Cemetery', 'Dark Forest',  'Catacombs']
         maps.forEach((element) =>{
             $('#travel-locations-div').append(
                 $("<div>").addClass('location-divs').append(

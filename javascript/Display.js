@@ -74,6 +74,7 @@ class Display{
             $('#game-window').show();
             $('#hud-div').show();
             $('#home-screen').hide();
+            Display.initLayoutButtons();
             if(GameMaster.quickStartMode){
                 GameMaster.quickStart();
             }else{
@@ -552,5 +553,32 @@ class Display{
         setTimeout(() => {
             element.addClass("flash-"+color)
         }, 0);
+    }
+
+    static initLayoutButtons(){
+        $('#layout-buttons').css('visibility','visible');
+        $('#bigmode-button').on('click',Display.toggleBigMode)
+        $('#rotate-screens-button').on('click',Display.rotateScreens)
+    }
+
+    static toggleBigMode(){
+        let gameWindow = $('#game-window')
+        if(gameWindow.hasClass('bigmode')){
+            gameWindow.removeClass('bigmode')
+            $('#mid-content').append($('#log-window'))
+            $('#log-window').removeClass('inventory')
+            $('#bigmode-button').text('Bigmode')
+        }else{
+            gameWindow.addClass('bigmode');
+            $('#main-content').append($('#log-window'))
+            $('#log-window').addClass('inventory')
+            $('#bigmode-button').text('Exit Bigmode')
+        }
+    }
+
+    static rotateScreens(){
+        let lastChild = $('#main-content').children().last()
+        $('#main-content').prepend(lastChild)
+        console.log(lastChild.attr('id'))
     }
 }

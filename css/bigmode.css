@@ -1,0 +1,46 @@
+.bigmode{
+    #mid-content{
+        width:716px;
+    }
+
+    #log-window{
+        margin-top:0rem;
+        margin-left:1rem;
+    }
+
+    #board{
+        grid-auto-rows:42px;
+    }
+
+    #board:after{
+        width:716px;
+        height:716px;
+    }
+
+    .board-grid-div{
+        font-size:1.9rem;
+    }
+
+    #board-entity-8-8{
+        text:before{
+            width:42px;
+            height:42px;
+            transform:translate(-12px)
+        }
+    }
+    .board-stain-div{
+        margin-top:0px;
+        margin-left:0px;
+        margin-right:0px;
+    }
+
+    .board-entity-div.highlight-clockwise>text:before{
+        transform:translate(-12px) rotate(45deg)  !important;
+    }
+
+    .board-entity-div.highlight-counterclockwise>text:before{
+        transform:translate(-12px) rotate(-45deg) !important;
+    }
+
+    
+}

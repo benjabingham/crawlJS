@@ -569,15 +569,14 @@ class Inventory{
 
         switch(direction){
             case "left":
-                Inventory.selectedInventory = "player-inventory"
-                GameMaster.stopDrop();
-                break;
             case "right":
-                if(Inventory.selectedContainer){
+                if(Inventory.selectedInventory == "world-inventory"){
+                    Inventory.selectedInventory = "player-inventory"
+                }else if(Inventory.selectedInventory == "player-inventory"){
                     Inventory.selectedInventory = "world-inventory";
                     Inventory.selectWorldInventoryTab();
-                    GameMaster.stopDrop();
                 }
+                GameMaster.stopDrop();
                 break;
             case "up":
                 this.displayedInventorySlots[Inventory.selectedInventory]--

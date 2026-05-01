@@ -16,12 +16,13 @@ html{
 #main-content{
     display:flex;
     height:730px;
+    margin-right:1rem;
 }
 
 #mid-content{
     display: flex;
     flex-direction: column;
-    margin:0 1rem;
+    margin-left:1rem;
     width:510px;
 }
 
@@ -257,4 +258,17 @@ h1, h2, h3{
 
 .keyword{
     cursor: pointer;
+}
+
+#layout-buttons{
+    display:flex;
+    justify-content:center;
+    visibility: hidden;
+    margin:1rem 50%;
+    white-space: nowrap;
+
+    button{
+        margin-left:5px;
+        margin-right:5px;
+    }
 }

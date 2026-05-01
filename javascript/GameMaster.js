@@ -14,12 +14,13 @@ class GameMaster{
 
     static quickStart(){
         let starterWeapon = LootManager.getStarterWeapon();
-        starterWeapon.type.edged = true
-        starterWeapon.type.blunt = true
-        starterWeapon.damage = 10
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
-        
+       /* Player.pickUpItem(LootManager.getTreasureLoot(1))
+        Player.pickUpItem(LootManager.getTreasureLoot(2))
+        Player.pickUpItem(LootManager.getTreasureLoot(3))
+        Player.pickUpItem(LootManager.getTreasureLoot(4))
+        Player.pickUpItem(LootManager.getTreasureLoot(5))*/
         /*starterWeapon = LootManager.getFoodLoot();
         Player.pickUpItem(starterWeapon);
         starterWeapon = LootManager.getStarterWeapon();

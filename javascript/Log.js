@@ -68,7 +68,10 @@ class Log{
             "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected.",
             "Your proficiency with a weapon is represented by a number of '+'s next to that weapon's name. Scroll over the '+'s to learn more.",
             "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!",
-            "Guaranteed crits are applied separately from crits achieved via crit chance. They scale multiplicitively!"
+            "Guaranteed crits are applied separately from crits achieved via crit chance. They scale multiplicitively!",
+            "A food item's flavor text can give you a hint to its likelihood of being rotten.",
+            "Food not labeled as rotten still has a chance of being rotten when eaten... Use luck to reroll those odds.",
+            "Be very wary of corridors that are only one tile wide. Being cornered there is sure death."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

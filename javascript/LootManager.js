@@ -166,9 +166,9 @@ class LootManager{
             let newMin = Math.floor(min/2)
             treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
         }
-
-        LootManager.getFlavorText(treasure);
         treasure.treasure = true;
+        LootManager.getFlavorText(treasure);
+        
         return treasure;
     }
 
@@ -563,7 +563,16 @@ class LootManager{
             }else{
                 texts = texts.concat(itemVars.treasureFlavorTexts.opulent)
             }
-            texts = texts.concat(itemVars.treasureFlavorTexts.general)
+            if(item.wearable){
+                texts = texts.concat(itemVars.treasureFlavorTexts.wearable)
+            }
+            if(item.dinnerware){
+                texts = texts.concat(itemVars.treasureFlavorTexts.dinnerware)
+            }
+            //don't overuse the general stuff...
+            if(Math.random() < 0.25){
+                texts = texts.concat(itemVars.treasureFlavorTexts.general)
+            }
         }
 
         if(item.food){
@@ -578,10 +587,12 @@ class LootManager{
             if(item.rotten){texts = texts.concat(itemVars.foodFlavorTexts.rotten)}
             texts = texts.concat(itemVars.foodFlavorTexts.general)
         }
+        console.log(texts);
         
         if(item.possibleFlavorTexts){texts = texts.concat(item.possibleFlavorTexts)}
         if(!texts){return false}
         let index = Random.roll(0,texts.length-1)
+        console.log(texts[index])
         item.flavorText = texts[index];
     }
 

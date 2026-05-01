@@ -262,11 +262,14 @@ class Inventory{
         }
 
         if(item.flavorText){
-            description.append(
+            let flavorWrapper = $('<div>').addClass('flavor-wrapper')
+            flavorWrapper.append(
                 $('<hr>')
             ).append(
                 $('<div>').addClass('item-flavor-text').text(item.flavorText)
             )
+
+            description.append(flavorWrapper)
         }
 
         if(item.potable){

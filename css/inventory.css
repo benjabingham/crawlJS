@@ -90,6 +90,7 @@
     overflow: hidden;
     text-overflow:ellipsis;
     text-transform: capitalize;
+    white-space:nowrap;
 }
 
 .item-buttons{
@@ -97,6 +98,10 @@
     width:fit-content;
     height:fit-content;
     display:flex;
+
+    button{
+        white-space: nowrap;
+    }
 }
 
 .item-description-header{
@@ -167,6 +172,8 @@
     height:180px;
     text-align:left;
     background-color: var(--inventorySlotHover);
+    display:flex;
+    flex-direction: column;
 }
 
 .inventory-description-body{
@@ -288,4 +295,14 @@
 
 .item-flavor-text{
     font-style: italic;
+}
+
+.flavor-wrapper{
+    display:flex;
+    flex:1;
+    /*justify-content: flex-end;*/
+    flex-direction: column;
+    padding-bottom:5px;
+
+    hr{width:100%};
 }

@@ -750,7 +750,7 @@ let itemVars = {
             "The image of a dragon has been delicately carved into it.", "It has a majestic unicorn painted on it."
         ],
         general:[
-            "It bears the insignia of a forgotten clan.","Inscribed with the image of a sword and shield","Inscribed with symbols you don't recognize","Painstakingly etched with someone's life story. You'll never know whose."
+            "It bears the insignia of a forgotten clan.","Inscribed with the image of a sword and shield.","Inscribed with symbols you don't recognize","Painstakingly etched with someone's life story. You'll never know whose.","Why is it sticky?"
         ]
     },
     weaponMaterials:{
@@ -1259,12 +1259,12 @@ let itemVars = {
         decrepit:{
             name:'decrepit',
             value:.4,
-            possibleFlavorTexts:["It's seen better days.","You can hardly make out the material through the grime.","It stinks.","You're pretty sure there's some shit on it."]
+            possibleFlavorTexts:["It's seen better days.","You can hardly make out the material through the grime.","It stinks.","You're pretty sure there's some shit on it.","It's drenched in some sort of grease.","Smells like something peed on it.","It's been smashed to pieces."]
         },
         distressed:{
             name:'distressed',
             value:.6,
-            possibleFlavorTexts:["This item has been well loved.","You feel a kinship with this item.","With a little care, it'd be like new."]
+            possibleFlavorTexts:["This item has been well loved.","You feel a kinship with this item.","With a little care, it'd be like new.","It's broken."]
         },
         pristine:{
             name:'pristine',
@@ -1294,15 +1294,6 @@ let itemVars = {
             preserved:true,
             possibleFlavorTexts:["That's nuts!"]
         },
-        apple:{
-            name:'apple',
-            usable: true,
-            food:1,
-            color:'darkRed',
-            value:0,
-            bulk:0.3,
-            possibleFlavorTexts:["This one's green. Ignore the text color.","Shiny and red!"]
-        },
         morsel:{
             name:'morsel',
             usable: true,
@@ -1310,7 +1301,9 @@ let itemVars = {
             color:'brown',
             value:0,
             bulk:0.3,
-        },  
+            possibleFlavorTexts:["Nourishing!","It's unclear what it's made of.","Nobody knows for sure where it comes from."],
+            flavorText:"Nobody knows for sure where it comes from."
+        },
         berries:{
             name:'berries',
             usable: true,
@@ -1318,7 +1311,8 @@ let itemVars = {
             value:1,
             color:'red',
             bulk:0.1,
-            possibleFlavorTexts:['Yummy!',"Not poisonous!"]
+            possibleFlavorTexts:['Yummy!',"Not poisonous!","Sour and full of seeds."],
+            flavorText:"Sour and full of seeds."
         },
         loaf:{
             name:'loaf of bread',
@@ -1339,8 +1333,18 @@ let itemVars = {
             color:'brown',
             bulk:0.5,
             preserved: true,
-            possibleFlavorTexts:["Packed with care."]
+            possibleFlavorTexts:["Packed with care."],
+            flavorText:"Packed with care."
         },
+        apple:{
+            name:'apple',
+            usable: true,
+            food:1,
+            color:'darkRed',
+            value:1,
+            bulk:0.3,
+            possibleFlavorTexts:["This one's green. Ignore the text color.","Shiny and red!","These are much harder to grow than they used to be."]
+        }, 
         fineCheese:{
             name:'fine cheese',
             usable: true,
@@ -1349,7 +1353,8 @@ let itemVars = {
             color:'bone',
             bulk:0.5,
             perishable:true,
-            possibleFlavorTexts:["Surely brie keeps well in a dungeon."]
+            possibleFlavorTexts:["Surely brie keeps well in a dungeon."],
+            flavorText:"Surely brie keeps well in a dungeon."
         },
         baguette:{
             name:'stale baguette',
@@ -1461,13 +1466,13 @@ let itemVars = {
             "Seems edible.","Remarkably well preserved.","Smells good!","Probably safe to eat.","Seems almost fresh.","No sign of rot."
         ],
         mediumRotten:[
-            "Seems relatively fresh.", "Smells fine."
+
         ],
         highRotten:[
             "There's a little fuzz on it... Maybe it's the good kind?","You feel you might regret eating this...","It doesn't smell quite right.","There's a single mushroom growing from it.","Smells wrong."
         ],
         general:[
-            "Your favorite!", "Mmm...", "Reminds you of home."
+            "Your favorite!", "Mmm...","Someone's already taken a bite."
         ]
     },
     potions:{

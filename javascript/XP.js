@@ -39,7 +39,8 @@ class XP{
                 xpGained: 0
             }
         });
-        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.blunt[1],false)
+        XP.applyPerk(skillVars.edged[0],false)
         /*
         XP.applyPerk(skillVars.swing[0],false)
         XP.applyPerk(skillVars.swing[0],false)

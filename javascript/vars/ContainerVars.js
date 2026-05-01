@@ -222,7 +222,7 @@ let containerVars = {
                 amount:1
             },
             food:{
-                chance:20,
+                chance:50,
                 maxNumber:2,
                 tier:1,
                 rottenMultiplier:2

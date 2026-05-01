@@ -670,9 +670,11 @@ class Entity{
     //also beats sword out of way if damage exceeds player stamina.
     beat(targetSword){
         let knock = false;
+        let disadvantage = Player.getAdvantage(targetSword.item)
+        console.log("disadvantage: "+disadvantage)
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
-            let damage = Random.roll(0,this.damage);
+            let damage = Random.roll(0,this.damage,disadvantage*-1);
             if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;

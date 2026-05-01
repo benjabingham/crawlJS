@@ -404,7 +404,7 @@ class Display{
         })
         let proficienciesText = proficienciesTextArray.join(", ")
 
-        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used.";
+        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used. Has the opposite effect on attacks agains this weapon.";
         Display.setHintText(span,hintText)
 
 

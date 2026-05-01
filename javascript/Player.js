@@ -713,7 +713,7 @@ class Player {
         }
         let bonus = 0;
         if(item.type.blunt && Player.perks.blunt.concussiveBlows){
-            let percent = Player.perks.blunt.concussiveBlows.val * Player.perks.blunt.concussiveBlows.val.amount;
+            let percent = Player.perks.blunt.concussiveBlows.val * Player.perks.blunt.concussiveBlows.amount;
             bonus += item.damage * percent
             bonus = Math.floor(bonus);
 

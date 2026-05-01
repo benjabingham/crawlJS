@@ -23,7 +23,7 @@
 */
     display:grid;
     grid-template-columns: repeat(17, 1fr);
-    grid-auto-rows:30px;
+    grid-auto-rows:var(--gridSize);
     grid-gap: 0px;
     border-collapse: collapse;
 
@@ -100,10 +100,10 @@
 
         text:before{
             /*make directional nicer*/
-            border-radius:30px;
+            border-radius:var(--gridSize);
             position:absolute;
-            width:30px;
-            height:30px;
+            width:var(--gridSize);
+            height:var(--gridSize);
             content:'';
             transform:translate(-9px);
         }
@@ -152,8 +152,8 @@
         opacity: .5;
         font-weight:700;
         
-        width:100%;
-        height:100%;
+        width:var(--gridSize);
+        height:var(--gridSize);
         
         margin-top:-1px;
         margin-left:-1px;
@@ -178,7 +178,7 @@
 .grid-dark{
     background:
     repeating-conic-gradient(var(--dark) 0% 25%, var(--darkAccent) 0% 50%) 
-    50% / 30px;
+    50% / var(--gridSize);
     background-size:10% 10%;
 
 }
@@ -186,7 +186,7 @@
 .grid-wall{
     background:
     repeating-conic-gradient(var(--wall) 0% 25%, var(--wallAccent) 0% 50%) 
-    50% / 30px;
+    50% / var(--gridSize);
     background-size:20% 20%;
     border:1px solid var(--gridLine);
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
@@ -195,14 +195,14 @@
 .grid-wood{
     background:
     repeating-linear-gradient(var(--woodWall) 0% 25%, var(--woodWallAccent) 0% 40%) 
-    50% / 30px;
+    50% / var(--gridSize);
     background-size:40% 30%;
     border:1px solid var(--woodWallGrid);
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
     }
 
 .grid-tree{
-    background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / 30px;
+    background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / var(--gridSize);
     background-size:20% 20%;
     border:1px solid var(--treeBorder);
     border-radius:20px;
@@ -220,7 +220,7 @@
 .woodFloor{
     background:
     repeating-linear-gradient(var(--woodFloor) 0% 25%, var(--woodFloorAccent) 0% 40%) 
-    70% / 30px;
+    70% /var(--gridSize);
     background-size:40% 30%;
     border:1px solid var(--woodFloorGrid);
 }
@@ -228,7 +228,7 @@
 .grassFloor{
     background-color: var(--grassFloor);
     border:1px solid var(--grassGrid);
-    background:repeating-conic-gradient(var(--grassFloor) 0% 25%, var(--grassAccent) 0% 50%) 50% / 30px;
+    background:repeating-conic-gradient(var(--grassFloor) 0% 25%, var(--grassAccent) 0% 50%) 50% / var(--gridSize);
     background-size:20% 20%;
 
 }
@@ -237,7 +237,7 @@
     background-color: var(--dirtFloor);
     border:1px solid var(--dirtGrid);
     background: repeating-conic-gradient(var(--dirtFloor) 0% 25%, var(--dirtAccent) 20% 50%) 
-    50% / 30px;
+    50% / var(--gridSize);
     background-size:20% 20%;
 }
 

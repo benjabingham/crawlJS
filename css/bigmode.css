@@ -1,4 +1,5 @@
 .bigmode{
+    --gridSize:42px;
     #mid-content{
         width:716px;
     }
@@ -6,10 +7,6 @@
     #log-window{
         margin-top:0rem;
         margin-left:1rem;
-    }
-
-    #board{
-        grid-auto-rows:42px;
     }
 
     #board:after{
@@ -23,8 +20,6 @@
 
     #board-entity-8-8{
         text:before{
-            width:42px;
-            height:42px;
             transform:translate(-12px)
         }
     }

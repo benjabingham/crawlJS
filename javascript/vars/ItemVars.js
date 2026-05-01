@@ -358,6 +358,8 @@ let itemVars = {
             uses:3,
             value:5,
             bulk:1,
+            
+            flavorText:"A spelunker's light is her life. Pity the fool who delves with too little oil."
         },
         kindling:{
             usable:true,
@@ -375,7 +377,9 @@ let itemVars = {
             value:1,
             color:'brown',
             bulk:1,
-            pelt:true
+            pelt:true,
+
+            flavorText:"Such a pelt would be worthless in the time when the sun still shone.",
         },
         wolfPelt:{
             name:"wolf pelt",
@@ -396,7 +400,10 @@ let itemVars = {
             value:15,
             color:'red',
             bulk:1,
-            treasure:true
+            treasure:true,
+
+            flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
+
         },
         branch:{
             weapon:true,
@@ -440,6 +447,8 @@ let itemVars = {
             color:'blue',
             value:1,
             bulk:0.5,
+
+            flavorText:"Smells like raspberries."
         },
         blackGoo:{
             name:'black goo',
@@ -449,6 +458,8 @@ let itemVars = {
             color:'black',
             value:4,
             bulk:0.5,
+
+            flavorText:"Although wet to the touch, this substance seems to reflect no light."
         },
         orangeGoo:{
             name:'orange goo',
@@ -459,6 +470,8 @@ let itemVars = {
             color:'orange',
             value:2,
             bulk:0.5,
+
+            flavorText:"Smells like citrus."
         },
         greenGoo:{
             name:'green goo',
@@ -619,84 +632,126 @@ let itemVars = {
             name:"button",
             value:0.9,
             bulk:0.1,
+            possibleFlavorTexts:["Someone must be missing this.","Your mother used to scold you when you lost your buttons as a child. For a moment, you wonder if this might be one of yours."]
         },
         thimble:{
             name:"thimble",
             value:1,
             bulk:0.1,
+            possibleFlavorTexts:["Probably won't provide the sort of protection you're in need of."]
         },
         bead:{
             name:"bead",
             value:1.5,
             bulk:0.1,
             scalable:true,
+            possibleFlavorTexts:["You wonder if the lone bead years for its sisters."]
         },
         ring:{
             name:"ring",
             value:4,
             bulk:0.1,
             scalable:true,
+            possibleFlavorTexts:["This once held tremendous sentimental value for someone. Not any more.", "It doesn't fit."]
         },
         cup:{
             name:"cup",
             value:6,
             bulk:0.4,
             scalable:true,
+            possibleFlavorTexts:["Smells putrid.","It's sticky."]
         },
         pendant:{
             name:"pendant",
             value:6,
             bulk:0.15,
             scalable:true,
+            possibleFlavorTexts:["This once held tremendous sentimental value for someone. Not any more."]
+
         },
         dish:{
             name:"dish",
             value:8,
             bulk:1,
             scalable:true,
+            possibleFlavorTexts:["There's still some food on it.","You haven't used one of these in a long time."]
         },
         bowl:{
             name:"bowl",
             value:9,
             bulk:1.5,
             scalable:true,
+            possibleFlavorTexts:["There's still some food on it."]
+        },
+        egg:{
+            name:"bowl",
+            value:9,
+            bulk:0.5,
+            scalable:true,
+            possibleFlavorTexts:["Not the kind you can eat.","Maybe it will hatch."]
         },
         vase:{
             name:"vase",
             value:10,
             bulk:3,
             scalable:true,
+            possibleFlavorTexts:["Something's rattling inside it..."]
         },
         coinPouch:{
             name:"coin pouch",
             value:10,
             bulk:0.2,
             scalable:true,
+            possibleFlavorTexts:["You don't recognize these coins..."]
         },
         statuette:{
             name:"statuette",
             value:12,
             bulk:1,
             scalable:true,
+            possibleFlavorTexts:["You wish it had some clothes on.","A depiction of a man forgotten in all but form.","It would be worth more if you could find the head..."]
         },
         tiara:{
             name:"tiara",
             value:12,
             bulk:0.75,
             scalable:true,
+            possibleFlavorTexts:["The gems have long been pried from it.","The delicate craftsmanship is inspiring."]
         },
         decorativePlate:{
             name:"decorative plate",
             value:15,
             bulk:3,
             scalable:true,
+            possibleFlavorTexts:["You doubt anyone ever ate off of this."]
         },
         crown:{
             name:"crown",
             value:20,
             bulk:1.2,
             scalable:true,
+            possibleFlavorTexts:["It seems even kings are forgotten to time.","You can't bring yourself to put it on."]
         }
+    },
+    treasureFlavorTexts:{
+        worthless:[
+            'Its time has long passed.',"It's hard to imagine anyone paying for this.","Worthless.","Trash."
+        ],
+        moderate:[
+            "A reminder of a simpler time.","Crafted with care.","There's a little ugly dog painted on it.","Someon's inscribed their name into it. You can't quite make it out."
+        ],
+        nifty:[
+            "This will fetch you some coin.","There's a horse painted on it.","There are butterflies painted on it.","The image of a regal-looking cat has been etched into it."
+        ],
+        valuable:[
+            "This could feed you for days.", "The nobles will pay well for this.","A pegasus has been carved into it with great care."
+        ],
+        opulent:[
+            "The image of a dragon has been delicately carved into it.", "It has a majestic unicorn painted on it."
+        ],
+        general:[
+            "It bears the insignia of a forgotten clan.","Inscribed with the image of a sword and shield","Inscribed with symbols you don't recognize","Painstakingly etched with someone's life story. You'll never know whose."
+        ]
     },
     weaponMaterials:{
         wood:{
@@ -954,7 +1009,8 @@ let itemVars = {
             bulk:1.5,
             value:10,
             color:'silver',
-            frequency:3
+            frequency:3,
+            treasure:true
         },
         gold:{
             name:'gold',
@@ -970,7 +1026,9 @@ let itemVars = {
             value:12,
             color:'gold',
             bulk:3,
-            frequency:3
+            frequency:3,
+            treasure:true
+
         },
         platinum:{
             name:'platinum',
@@ -985,6 +1043,7 @@ let itemVars = {
             value:19,
             color:'silver',
             frequency:2,
+            treasure:true
         },
         
         adamantine:{
@@ -1019,12 +1078,16 @@ let itemVars = {
             fuel:true,
             light:2,
             bulk:0.1,
-            scalable:false
+            scalable:false,
+
+            possibleFlavorTexts:["You aren't sure why somebody would have made this", "Must have been made by a child.","It should burn well..."]
         },
         bone:{
             name:"bone",
             value:0.2,
-            color:"bone"
+            color:"bone",
+
+            possibleFlavorTexts:["There's a bit of hair stuck to it...", "You find yourself comforted by the thought that this may be you one day."]
         },
         wood:{
             name:'wooden',
@@ -1034,14 +1097,15 @@ let itemVars = {
             usable:true,
             fuel:true,
             light:1,
+            possibleFlavorTexts:["If nothing else, it can burn.","Hand-carved."]
         },
         stone:{
             name:'stone',
             value:0.4,
             color:"gray",
             bulk:2,
+            possibleFlavorTexts:["This must be very old..."]
         },
-        
         iron:{
             name:'iron',
             value:.6,
@@ -1062,6 +1126,7 @@ let itemVars = {
             value:2,
             color:"darkgray",
             bulk:3,
+            possibleFlavorTexts:["It's heavier than it looks.",'It smells sweet... Perhaps a taste?']
         },
         sigiledBone:{
             name:"sigiled bone",
@@ -1083,6 +1148,7 @@ let itemVars = {
             value:4,
             color:"lightGray",
             bulk:0.7,
+            possibleFlavorTexts:['Lighter than it looks.']
         },
         sterling:{
             name:'sterling silver',
@@ -1101,24 +1167,28 @@ let itemVars = {
             value:10,
             color:"gold",
             bulk:3,
+            possibleFlavorTexts:"Its weight dismisses any doubts you had of its authenticity."
         },
         platinum:{
             name:'platinum',
             value:20,
             color:"silver",
             bulk:4,
+            possibleFlavorTexts:['The opulence is sickening','It shines brilliantly.']
         }
     },
     treasureSizes:{
         tiny:{
             name:"tiny",
             value:0.3,
-            bulk:0.2
+            bulk:0.2,
+            possibleFlavorTexts:['Fit for a mouse.','Who was this made for?','It would be very easy to misplace...']
         },
         small:{
             name:"small",
             value:0.5,
-            bulk:0.5
+            bulk:0.5,
+            possibleFlavorTexts:['This probably belonged to a child.']
         },
         large:{
             name:"large",
@@ -1128,7 +1198,8 @@ let itemVars = {
         huge:{
             name:"huge",
             value:2.5,
-            bulk:4
+            bulk:4,
+            possibleFlavorTexts:['Its mass astounds you.','Who would make this?']
         }
     },
     weaponModifiers:{
@@ -1187,15 +1258,18 @@ let itemVars = {
     treasureModifiers:{
         decrepit:{
             name:'decrepit',
-            value:.4
+            value:.4,
+            possibleFlavorTexts:["It's seen better days.","You can hardly make out the material through the grime.","It stinks.","You're pretty sure there's some shit on it."]
         },
         distressed:{
             name:'distressed',
-            value:.6
+            value:.6,
+            possibleFlavorTexts:["This item has been well loved.","You feel a kinship with this item.","With a little care, it'd be like new."]
         },
         pristine:{
             name:'pristine',
-            value:1.5
+            value:1.5,
+            possibleFlavorTexts:["How is it so clean?","It's like new...","You almost want to keep it..."]
         } 
     },
     food:{
@@ -1206,7 +1280,9 @@ let itemVars = {
             color:'bone',
             value:0,
             bulk:0.15,
-            perishable:true
+            perishable:true,
+
+            possibleFlavorTexts:["Under certain conditions, an egg can remain safe to eat for decades... You aren't sure what those conditions are.","Egg."]
         },
         nuts:{
             name:'nuts',
@@ -1215,7 +1291,8 @@ let itemVars = {
             color:'bone',
             value:0,
             bulk:0.15,
-            preserved:true
+            preserved:true,
+            possibleFlavorTexts:["That's nuts!"]
         },
         apple:{
             name:'apple',
@@ -1224,6 +1301,7 @@ let itemVars = {
             color:'darkRed',
             value:0,
             bulk:0.3,
+            possibleFlavorTexts:["This one's green. Ignore the text color.","Shiny and red!"]
         },
         morsel:{
             name:'morsel',
@@ -1240,9 +1318,9 @@ let itemVars = {
             value:1,
             color:'red',
             bulk:0.1,
+            possibleFlavorTexts:['Yummy!',"Not poisonous!"]
         },
         loaf:{
-            berries:{
             name:'loaf of bread',
             usable: true,
             food:1,
@@ -1250,7 +1328,7 @@ let itemVars = {
             value:1,
             color:'woodBrown',
             bulk:0.7,
-        },
+            possibleFlavorTexts:["A little stale..."]
         },
         provisions:{
             name:'provisions',
@@ -1260,7 +1338,8 @@ let itemVars = {
             uses:3,
             color:'brown',
             bulk:0.5,
-            preserved: true
+            preserved: true,
+            possibleFlavorTexts:["Packed with care."]
         },
         fineCheese:{
             name:'fine cheese',
@@ -1269,7 +1348,8 @@ let itemVars = {
             value:3,
             color:'bone',
             bulk:0.5,
-            perishable:true
+            perishable:true,
+            possibleFlavorTexts:["Surely brie keeps well in a dungeon."]
         },
         baguette:{
             name:'stale baguette',
@@ -1297,6 +1377,7 @@ let itemVars = {
             bulk:1,
             value:1,
             perishable:true,
+            possibleFlavorTexts:["Just like Mom used to make."]
         },
         poultry:{
             name:'cooked poultry',
@@ -1343,7 +1424,9 @@ let itemVars = {
             value:4,
             uses:5,
             bulk:2,
-            color:'brightPurple'
+            color:'brightPurple',
+            perishable:true,
+            possibleFlavorTexts:["It's your birthday!","With purple frosting."]
         },
         ultimateSalami:{
             name:'ultimate salami',
@@ -1369,6 +1452,23 @@ let itemVars = {
             name:"rotten",
             value:0.3
         }
+    },
+    foodFlavorTexts:{
+        rotten:[
+            "The ants have gotten to this one.","You think you see a face forming...","Is it supposed to be that color?","Please don't eat this.","You don't think you should eat this.","It does look sort of tasty..."
+        ],
+        lowRotten:[
+            "Seems edible.","Remarkably well preserved.","Smells good!","Probably safe to eat.","Seems almost fresh.","No sign of rot."
+        ],
+        mediumRotten:[
+            "Seems relatively fresh.", "Smells fine."
+        ],
+        highRotten:[
+            "There's a little fuzz on it... Maybe it's the good kind?","You feel you might regret eating this...","It doesn't smell quite right.","There's a single mushroom growing from it.","Smells wrong."
+        ],
+        general:[
+            "Your favorite!", "Mmm...", "Reminds you of home."
+        ]
     },
     potions:{
         poison:{

@@ -55,18 +55,14 @@ let containerVars = {
         },
         inventory:[
             {
-                item: itemVars.food.morsel,
-                chance:80
-            },
-            {
                 item: itemVars.drops.pan,
                 chance:5
             },
         ],
         loot:{
             food:{
-                chance:80,
-                maxNumber:2,
+                chance:85,
+                maxNumber:3,
                 tier:0,
             },
             supplies:{
@@ -241,12 +237,6 @@ let containerVars = {
         hitDice:0,
         inventorySlots: 1,
         isContainer: true,
-        inventory:[
-            {
-                item: itemVars.food.morsel,
-                chance:2
-            },
-        ],
         loot:{
             weapon:{
                 chance:2,
@@ -263,6 +253,10 @@ let containerVars = {
             },
             potion:{
                 chance:1,
+                tier:0
+            },
+            food:{
+                chance:2,
                 tier:0
             }
         },

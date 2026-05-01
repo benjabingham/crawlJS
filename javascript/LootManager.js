@@ -167,6 +167,7 @@ class LootManager{
             treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
         }
 
+        LootManager.getFlavorText(treasure);
         treasure.treasure = true;
         return treasure;
     }
@@ -250,15 +251,15 @@ class LootManager{
 
         if(food.preserved){rottenMultiplier /= 2}
         if(food.perishable){rottenMultiplier *= 2}
+        rottenMultiplier *= Math.random()+0.5
         food.rottenMultiplier = rottenMultiplier;
         if(Math.random() < rottenMultiplier * .2){
             LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
-            console.log('rotten')
-        }else{
-            console.log('not rotten')
         }
 
-        console.log(food)
+        food.tier = tier;
+        LootManager.getFlavorText(food);
+
         return food;
     }
 
@@ -518,6 +519,15 @@ class LootManager{
                     //min value 0.1
                     item[key] = Math.max(item[key], 0.1);
                     break;
+                case 'possibleFlavorTexts':
+                case 'flavorText':
+                    console.log(value)
+                    if(!item.possibleFlavorTexts){
+                        item.possibleFlavorTexts = [];
+                        if(item.flavorText){item.possibleFlavorTexts.push(item.flavorText)}
+                    }
+                    item.possibleFlavorTexts = item.possibleFlavorTexts.concat(value);
+                    break;
                 default:
                     if(typeof(value) == "number"){
                         if(!item[key]){
@@ -536,6 +546,43 @@ class LootManager{
                 LootManager.applyModifier(item[val], modifier);
             }
         })
+    }
+
+    static getFlavorText(item){
+        if(item.weapon){return false}
+        let texts = []
+        if(item.treasure){
+            if(item.value == 0){
+                texts = texts.concat(itemVars.treasureFlavorTexts.worthless);
+            }else if(item.value < 5){
+                texts = texts.concat(itemVars.treasureFlavorTexts.moderate)
+            }else if(item.value < 20){
+                texts = texts.concat(itemVars.treasureFlavorTexts.nifty)
+            }else if(item.value < 100){
+                texts = texts.concat(itemVars.treasureFlavorTexts.valuable)
+            }else{
+                texts = texts.concat(itemVars.treasureFlavorTexts.opulent)
+            }
+            texts = texts.concat(itemVars.treasureFlavorTexts.general)
+        }
+
+        if(item.food){
+            if(!item.rottenMultiplier || item.rottenMultiplier < 0.5){
+                texts = texts.concat(itemVars.foodFlavorTexts.lowRotten);
+            }else if(item.rottenMultiplier < 2){
+                texts = texts.concat(itemVars.foodFlavorTexts.mediumRotten);
+            }else{
+                texts = texts.concat(itemVars.foodFlavorTexts.highRotten);
+            }
+
+            if(item.rotten){texts = texts.concat(itemVars.foodFlavorTexts.rotten)}
+            texts = texts.concat(itemVars.foodFlavorTexts.general)
+        }
+        
+        if(item.possibleFlavorTexts){texts = texts.concat(item.possibleFlavorTexts)}
+        if(!texts){return false}
+        let index = Random.roll(0,texts.length-1)
+        item.flavorText = texts[index];
     }
 
     static getStarterWeapon(){

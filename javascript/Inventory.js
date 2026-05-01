@@ -209,9 +209,10 @@ class Inventory{
             descriptionBodyElement = '';
         }
 
+        let description = $('#'+inventory+'-description');
         let header = Inventory.getItemDescriptionHeader(item, inventory);
 
-        $('#'+inventory+'-description').html('').append(
+        description.html('').append(
             header
         ).append(
             descriptionBodyElement
@@ -224,10 +225,11 @@ class Inventory{
             if(item[key]){
                 let trait = keywordVars.traits[key]
                 let text = trait.name
+                let noDisplayNumber = ['food','fuel']
                 if(hasTrait){
                     text = ", "+text
                 }
-                if(item[key] > 1){
+                if(item[key] > 1 && !noDisplayNumber.includes(key)){
                     text = text+" "+item[key]
                 }
                 let traitSpan = $('<span>').addClass('trait-spans').text(text);
@@ -238,24 +240,32 @@ class Inventory{
         })
 
         if(hasTrait){
-            $('#'+inventory+'-description').append(traitsDiv);
+            description.append(traitsDiv);
         }
 
         if(item.light && item.fuel){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
-            )
+            let fuelStrengthDiv = $('<div>').addClass('item-fuel-value').text('Fuel strength: '+item.light)
+            Display.setHintText(fuelStrengthDiv,"Burn this item to increase your light level by this amount.")
+            description.append(fuelStrengthDiv)
         }
 
         if(item.food){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
-            )
+            let foodDiv = $('<div>').addClass('item-food-value').text('Nourishment: '+item.food)
+            Display.setHintText(foodDiv,"Eat this item to fill your hunger bar this much.")
+            description.append(foodDiv)
         }
 
         if(item.flimsy){
-            $('#'+inventory+'-description').append(
-                $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
+            let flimsyDiv = $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%')
+            Display.setHintText(flimsyDiv, "This is the base chance this item has to degrade when attacked by an enemy. It also has a lesser chance to degrade when used to attack an enemy.")
+            description.append(flimsyDiv)
+        }
+
+        if(item.flavorText){
+            description.append(
+                $('<hr>')
+            ).append(
+                $('<div>').addClass('item-flavor-text').text(item.flavorText)
             )
         }
 

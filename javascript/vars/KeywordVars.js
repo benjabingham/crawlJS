@@ -18,7 +18,7 @@ keywordVars = {
         hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
     },
     proficiency:{
-        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Has the opposite effect on enemies' attacks against a proficient weapon."
+        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Has the opposite effect on an enemy's attacks against a proficient weapon."
     },
     swing:{
         hintText:"A swing is a strike that occurs when you rotate your weapon into a target."

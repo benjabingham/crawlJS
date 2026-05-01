@@ -67,7 +67,6 @@ class XP{
         XP.applyPerk(skillVars.simple[0],false)
         XP.applyPerk(skillVars.edged[0],false)
 */
-        //XP.levelUp();
         //XP.openLevelupDialog();
         //XP.applyPerk(skillVars.swing[0])
     }
@@ -295,7 +294,7 @@ class XP{
         return perk;
     }
 
-    static levelUp(){
+    static levelUp(raiseThreshold = true){
         //for now, just get one...
         console.log('Level up!')
         console.log(JSON.parse(JSON.stringify(this.skills)))
@@ -303,11 +302,14 @@ class XP{
         let perkOptions = this.getPerks(skillOptions);
         XP.openLevelupDialog(perkOptions);
         this.reduceWeights();
-        this.xp -= this.threshold;
-        this.threshold +=30;
-        this.threshold *= 1.25 
-        Log.addMessage("Level up!","win")
-        Player.level++;
+        if(raiseThreshold){
+            this.xp -= this.threshold;
+            this.threshold +=30;
+            this.threshold *= 1.25 
+            Log.addMessage("Level up!","win")
+            Player.level++;
+        }
+        
     }
 
     static openLevelupDialog(perkOptions){

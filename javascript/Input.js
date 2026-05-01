@@ -62,22 +62,32 @@ class InputManager{
                 InputManager.currentEvent = event;
                 if(InputManager.locked) return false;
                 InputManager.locked = true;
-                if(input.movePlayer) GameMaster.movePlayer(event);
-                if(input.wait) GameMaster.wait(event);
-                if(input.rotate) GameMaster.rotate(event);
-                if(input.slotKey) GameMaster.slotKey(event);
-                if(input.drop) GameMaster.drop(event);
-                if(input.rewind) GameMaster.rewind(event);
-                if(input.inventory) GameMaster.inventoryOpenClose(event);
+                try{
+                    
+                    if(input.movePlayer) GameMaster.movePlayer(event);
+                    if(input.wait) GameMaster.wait(event);
+                    if(input.rotate) GameMaster.rotate(event);
+                    if(input.slotKey) GameMaster.slotKey(event);
+                    if(input.drop) GameMaster.drop(event);
+                    if(input.rewind) GameMaster.rewind(event);
+                    if(input.inventory) GameMaster.inventoryOpenClose(event);
 
-                if(input.consume) GameMaster.consumeSelectedItem(event);
-                if(input.equip) GameMaster.equipSelectedItem(event);
-                if(input.burn) GameMaster.burnSelectedItem(event);
-                if(input.sellStore) GameMaster.sellStoreSelectedItem(event);
-                if(input.quickToggle) GameMaster.quickToggle(event);
-                if(input.useItem) GameMaster.useSelectedItem();
-                if(input.itemNav) GameMaster.navigateInventory(event);
-                if(input.showBulkGold) GameMaster.showBulkAndGold(event);
+                    if(input.consume) GameMaster.consumeSelectedItem(event);
+                    if(input.equip) GameMaster.equipSelectedItem(event);
+                    if(input.burn) GameMaster.burnSelectedItem(event);
+                    if(input.sellStore) GameMaster.sellStoreSelectedItem(event);
+                    if(input.quickToggle) GameMaster.quickToggle(event);
+                    if(input.useItem) GameMaster.useSelectedItem();
+                    if(input.itemNav) GameMaster.navigateInventory(event);
+                    if(input.showBulkGold) GameMaster.showBulkAndGold(event);
+                }catch(e){
+                    Log.addMessage('ERROR! PLEASE COPY THE BELOW TEXT AND SEND TO BEN')
+                    Log.addMessage(e.name+" - "+e.message,'urgent')
+                    Log.addMessage(e.stack,'urgent')
+                    Log.printTurn(Log.turnCounter);
+                    console.error(e);
+                }
+                
                 InputManager.locked = false;
                 InputManager.lastEvent = JSON.parse(JSON.stringify(InputManager.currentEvent));
             })

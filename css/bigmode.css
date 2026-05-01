@@ -42,5 +42,7 @@
         transform:translate(-12px) rotate(-45deg) !important;
     }
 
-    
+    #town-screen{
+        height:100%;
+    }
 }

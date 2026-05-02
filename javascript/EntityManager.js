@@ -35,11 +35,17 @@ class EntityManager{
         return new SwordEntity(ownerId, item);
     }
 
-    static degradeItem(weapon, modifier = 0, multiplier = 1){
+    //checks if an item will degrade but doesnt degrade it - returns t/f
+    static itemWillDegrade(weapon, modifier, multiplier){
         let item = weapon.item;
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
-        if(random < degradeChance){
+        return random < degradeChance;
+    }
+
+    static degradeItem(weapon, modifier = 0, multiplier = 1){
+        let item = weapon.item;
+        if(EntityManager.itemWillDegrade(weapon,modifier,multiplier)){
             Display.flash($('body'),'item-breaking')
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);

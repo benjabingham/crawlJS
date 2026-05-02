@@ -1229,7 +1229,10 @@ class SwordEntity extends Entity{
             stunTime:stunTime
         })
 
+        let degrades = EntityManager.itemWillDegrade(this,0,0.25)
         let crit = Player.getCrit(weapon, strikeType,target);
+        //always crit when weapon breaks
+        if(degrades && weapon.worn){crit++;}
         let damageDice = Math.pow(2,crit);
 
         if(target.isContainer && this.item.wrecking){
@@ -1292,7 +1295,7 @@ class SwordEntity extends Entity{
         }
 
         if(this.owner == 'player'){
-            EntityManager.degradeItem(this,0,0.25);
+            if(degrades){EntityManager.degradeItem(this,100);}
             if(target.corrosive){
                 EntityManager.corrodeItem(this, target.corrosive);
             }

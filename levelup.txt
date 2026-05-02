@@ -162,6 +162,9 @@ XP Sources:
     bulk
         bonus for low bulk
         bonus for high bulk
+    break weapons
+        decreased degrade chance
+        weapons get extra damage ? equal to their degrade chance
 
 
 effects of advantage

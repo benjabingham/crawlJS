@@ -73,7 +73,8 @@ class Log{
             "Food not labeled as rotten still has a chance of being rotten when eaten... Use luck to reroll those odds.",
             "Be very wary of corridors that are only one tile wide. Being cornered there is sure death.",
             "Watch your bulk - carrying more than your max can cause you to lose turns at random intervals.",
-            "Equipped items don't count towards your bulk. Equip a hefty piece of treasure to make a hasty escape."
+            "Equipped items don't count towards your bulk. Equip a hefty piece of treasure to make a hasty escape.",
+            "Weapons score a guaranteed crit when they break while attacking an enemy."
         ]
 
         let tip = tips[Random.roll(0,tips.length-1)]

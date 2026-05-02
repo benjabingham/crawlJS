@@ -671,7 +671,7 @@ class Inventory{
     static openContainerInventory(container){
         Inventory.playerInBag = true;
         Inventory.selectedContainer = container;
-        Inventory.selectedInventory = "world-inventory";
+        if(!GameMaster.dropMode){Inventory.selectedInventory = "world-inventory"}
         Inventory.displayedInventorySlots["world-inventory"] = 0;
         $('#right-menu-tabs').show();
         Inventory.selectWorldInventoryTab();
@@ -814,7 +814,7 @@ class Inventory{
         $('#world-inventory').show();
         $('#character-info-tab').removeClass('selected');
         $('#world-inventory-tab').addClass('selected');
-        Inventory.selectedInventory="world-inventory"
+        //Inventory.selectedInventory="world-inventory"
     }
 
     static selectCharacterInfoTab(){

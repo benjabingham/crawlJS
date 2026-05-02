@@ -443,12 +443,12 @@ class Player {
             Player.changeLuck(ironGut.val * ironGut.amount);
             Display.flash($('body'),'darkGreen');
             Log.addMessage("It's rotten!",'win','rotten','Yum!')
-            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+            if(!item.rotten){LootManager.applyModifier(item, itemVars.foodModifiers.rotten)}
         }else if(rotten){
             Player.changeNourishment(item.food*-1);
             Log.addMessage("It's rotten!",'danger','rotten','This food item reduced your hunger level by 1 instead of increasing it.')
             Display.flash($('body'),'darkGreen');
-            LootManager.applyModifier(item, itemVars.foodModifiers.rotten)
+            if(!item.rotten){LootManager.applyModifier(item, itemVars.foodModifiers.rotten)}
         }else{
             Player.changeNourishment(item.food);
         }

@@ -345,8 +345,10 @@ class GameMaster{
         ){
             return false
         }
+        let selectSlot
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
+            selectSlot = item.slot
         }
         let result = false
         if(item.food){
@@ -354,12 +356,16 @@ class GameMaster{
         }else if (item.potable){
             result = Player.drinkItem(item);
         }
+        //if consumed one use of multiuse item, reselect it.
+        if(typeof Player.inventory.items[selectSlot] != 'undefined'){
+            Inventory.selectedInventory = "player-inventory";
+            Inventory.displayedInventorySlots["player-inventory"] = selectSlot;
+        }
 
         if(!result){
             return false;
         }
 
-        Inventory
         GameMaster.postPlayerAction();
 
         return result;
@@ -368,10 +374,17 @@ class GameMaster{
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item) || !item.fuel){return false}
+        let selectSlot
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
+            selectSlot = item.slot
         }
         let result = Player.addFuel(item);
+        //if consumed one use of multiuse item, reselect it.
+        if(typeof Player.inventory.items[selectSlot] != 'undefined'){
+            Inventory.selectedInventory = "player-inventory";
+            Inventory.displayedInventorySlots["player-inventory"] = selectSlot;
+        }
 
         if(!result){
             return false;

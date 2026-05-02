@@ -662,7 +662,7 @@ let itemVars = {
             value:1.5,
             bulk:0.1,
             scalable:true,
-            possibleFlavorTexts:["Star shaped.","Long and groved.","You wonder if the lone bead yearns for its lost sisters.","This would be easy to misplace."]
+            possibleFlavorTexts:["Star shaped.","Long and grooved.","You wonder if the lone bead yearns for its lost sisters.","This would be easy to misplace."]
         },
         ring:{
             name:"ring",

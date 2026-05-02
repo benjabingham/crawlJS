@@ -83,10 +83,7 @@ class XP{
         }
         this.xp += xp;
         Display.fillBars();
-        console.log({
-            xp:this.xp,
-            weights:this.skills
-        })
+        
     }
 
     //picks n skills, wieghted by each skill's weight. When picked, a skill's weight is reset to 0. Returns as array of strings.

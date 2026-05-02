@@ -284,5 +284,13 @@ let skillVars = {
             amount:.75,
             description:"Weapons you are proficient in have their degrade chance decreased by 75%, with a minimum reduction of 1 percentage point."
         },
+        {
+            type:"misc",
+            category:"durability",
+            name:"disposable blows",
+            key:"disposableBlows",
+            amount:.5,
+            description:"Each weapon's max damage is increased by an amount equal to half of its degrade chance. When determining if a weapon will degrade on attack, its max damage dealt is added to its degrade chance."
+        },
     ]
 }

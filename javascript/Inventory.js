@@ -258,7 +258,7 @@ class Inventory{
         if(item.flimsy){
             let getDegradeModifierSpan = Player.getDegradeModifierSpan(item)
             let flimsyDiv = $('<div>').addClass('item-break-chance').text('Degrade chance: '+item.flimsy+'%').append(getDegradeModifierSpan)
-            Display.setHintText(flimsyDiv, "This is the base chance this item has to degrade when attacked by an enemy. It also has a lesser chance to degrade when used to attack an enemy.")
+            Display.setHintText(flimsyDiv, "This is the base chance this item has to degrade when attacked by an enemy. It also has a quarter of this chance to degrade when used to attack an enemy.")
             description.append(flimsyDiv)
         }
 

@@ -739,26 +739,32 @@ class Player {
         }
     }
 
-    static getItemBonusDamage(item){
-        if(!item){return 0}
+    static getItemBonusDamage(attack, item = false){
+        if(!item){item = attack}
+        if(!attack){return 0}
         let bonus = 0;
-        if(item.type.edged && Player.perks.edged.cuttingEdge){
+        if(attack.type.edged && Player.perks.edged.cuttingEdge){
             bonus += Player.perks.edged.cuttingEdge.val * Player.perks.edged.cuttingEdge.amount
         }
+        let disposableBlows = Player.perks.durability.disposableBlows
+        if(disposableBlows && item.flimsy){
+            console.log('disposableblows')
+            bonus += item.flimsy * disposableBlows.val * disposableBlows.amount
+        }
 
-        return bonus
+        return Math.floor(bonus)
     }
 
     static getItemBonusDamageSpanWithSpecial(item,special){
         return {
             normal:Player.getItemBonusDamageSpan(item),
-            special:Player.getItemBonusDamageSpan(special)
+            special:Player.getItemBonusDamageSpan(special, item)
         }
     }
 
-    static getItemBonusDamageSpan(item){
-        if(!item){return false}
-        let bonus = Player.getItemBonusDamage(item);
+    static getItemBonusDamageSpan(attack, item = false){
+        if(!attack){return false}
+        let bonus = Player.getItemBonusDamage(attack, item);
 
         if(bonus){
             let span = $('<span>').addClass('bonus-span').text('+'+bonus)

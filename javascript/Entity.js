@@ -1217,19 +1217,18 @@ class SwordEntity extends Entity{
             stunTime = weapon[strikeType].stunTime;
             weight = weapon[strikeType].weight
             stunTime += Player.getBonusStun(weapon[strikeType],target);
-            damage += Player.getItemBonusDamage(weapon[strikeType]);
+            damage += Player.getItemBonusDamage(weapon[strikeType], weapon);
         }else{
             stunTime += Player.getBonusStun(weapon,target);
             damage += Player.getItemBonusDamage(weapon);
         }
         
-
         console.log({
             damage:damage,
             stunTime:stunTime
         })
-
-        let degrades = EntityManager.itemWillDegrade(this,0,0.25)
+        //damage is only referenced for perks
+        let degrades = EntityManager.itemWillDegrade(this,0,0.25,damage)
         let crit = Player.getCrit(weapon, strikeType,target);
         //always crit when weapon breaks
         if(degrades && weapon.worn){crit++;}
@@ -1261,6 +1260,7 @@ class SwordEntity extends Entity{
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
         let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
         mortality = Math.floor(mortality*multiplier)
+        
         console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);

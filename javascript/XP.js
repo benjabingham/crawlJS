@@ -40,7 +40,7 @@ class XP{
                 xpGained: 0
             }
         });
-        XP.applyPerk(skillVars.durability[0],false)
+        XP.applyPerk(skillVars.simple[0],false)
         /*
         XP.applyPerk(skillVars.swing[0],false)
         XP.applyPerk(skillVars.swing[0],false)
@@ -270,6 +270,10 @@ class XP{
     static gainFuelXP(amount){
         amount *= Player.light * 0.5;
         this.gain('fuel',0,amount);
+    }
+
+    static gainDurabilityXP(amount){
+        this.gain('durability',3,amount)
     }
 
     static checkLevelUp(){

@@ -729,4 +729,20 @@ class LootManager{
 
         return value;
     }
+
+    static getItemBulk(item){
+        if(!item.bulk){return 0.1}
+        let bulk = item.bulk;
+        let familiarBurden = Player.perks.bulk.familiarBurden
+        if(familiarBurden && Player.getAdvantage(item)){
+            let multiplier = 1-(familiarBurden.amount * familiarBurden.val)
+            bulk *= multiplier;
+        }
+        bulk*= 10
+        bulk = Math.floor(bulk)
+        bulk /= 10;
+
+        if(!bulk){bulk = 0.1}
+        return bulk;
+    }
 }

@@ -69,7 +69,15 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"bulk capacity",
             amount:2
-        }
+        },
+        {
+            type:"misc",
+            category:"bulk",
+            name:"familiar burden",
+            key:"familiarBurden",
+            amount:.75,
+            description:"Weapons you're proficient in have their bulk decreased by 75%."
+        },
     ],
     swords:[
         {
@@ -273,8 +281,8 @@ let skillVars = {
             category:"durability",
             name:"proper care",
             key:"properCare",
-            amount:.5,
-            description:"Your weapons have their degrade chance decreased by 50%, with a minimum reduction of 1 percentage point."
+            amount:.75,
+            description:"Weapons you are proficient in have their degrade chance decreased by 75%, with a minimum reduction of 1 percentage point."
         },
     ]
 }

@@ -23,6 +23,7 @@ class Player {
         stamina:{},
         hp:{},
         hunger:{},
+        bulk:{},
         sword:{},
         axe:{},
         blunt:{},
@@ -511,15 +512,7 @@ class Player {
         let bulkSum = 0;
         Player.inventory.items.forEach(item=>{
             if(Player.itemIsEquipped(item)){return}
-            let bulk = 0
-            if(item.bulk){bulk = item.bulk}
-            
-            //if(item.quickSlot){bulk /=2}
-
-            bulk*= 10
-            bulk = Math.floor(bulk)
-            bulk /= 10;
-            bulkSum += bulk;
+            bulkSum += LootManager.getItemBulk(item);
         })
         //console.log(bulkSum);
 
@@ -610,6 +603,7 @@ class Player {
     //TODO - make work like crit, so strike types can have advantage too?
     static getAdvantage(weaponItem){
         let proficiencies = Player.getProficiencies(weaponItem);
+        if(!proficiencies){return 0}
         let advantage = 0;
         proficiencies.forEach(skill=>{
             advantage += skill.level;
@@ -621,6 +615,7 @@ class Player {
     //returns an array of all the types of the weapon you have advantage in - {skill: , level: }
     static getProficiencies(weaponItem){
         let weaponTypes = weaponItem.type;  
+        if(!weaponTypes){return false;}
         let proficiencies = [];
         //for each perk category...
         Object.keys(Player.perks).forEach(skill =>{
@@ -780,10 +775,10 @@ class Player {
             flimsy = 0;
         }
         let properCare = Player.perks.durability.properCare;
-        if(properCare){
+        if(properCare && Player.getAdvantage(item)){
             let properCareMultiplier = properCare.val * properCare.amount;
             let properCareModifier = Math.floor(item.flimsy * properCareMultiplier);
-            properCareModifier = Math.max(properCareModifier,1)
+            properCareModifier = Math.max(properCareModifier,1 * properCare.val)
             modifier -= properCareModifier;
         }
 

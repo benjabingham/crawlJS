@@ -53,13 +53,15 @@ class EntityManager{
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
-                }          
+                }       
+                XP.gainDurabilityXP(10)   
             }else{
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent','broken','This item can no longer be used. Use a point of luck to extend its life.');
 
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
                 weapon.unequip();
+                XP.gainDurabilityXP(30)   
             }
         }
     }

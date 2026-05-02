@@ -175,7 +175,7 @@ class Inventory{
     }
 
     static addBulkAndGoldInfo(item, element, shopItem = false){
-        let bulk = item.bulk;
+        let bulk = LootManager.getItemBulk(item);
         let gold = shopItem ? item.price : item.value;
         //if(quickSlot){bulk /=2}
         if(typeof gold !== 'undefined'){
@@ -362,6 +362,7 @@ class Inventory{
         let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
         let goldValue;
         let goldHint;
+        let bulk = LootManager.getItemBulk(item);
         if(shopItem){
             goldValue = item.price
             goldHint = "This item can be purchased for "+goldValue+" gold."
@@ -374,8 +375,8 @@ class Inventory{
         let goldDiv = $('<div>').addClass('item-gold-div').text(goldValue+'g')
         Display.setHintText(goldDiv,goldHint,'info')
         let name = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
-        let bulkDiv = $('<div>').addClass('item-bulk-div').text(item.bulk+"b");
-        Display.setHintText(bulkDiv, "This item has a bulk of "+item.bulk+".","info")
+        let bulkDiv = $('<div>').addClass('item-bulk-div').text(bulk+"b");
+        Display.setHintText(bulkDiv, "This item has a bulk of "+bulk+".","info")
 
         header.append(goldDiv).append(name).append(bulkDiv)
 

@@ -755,6 +755,7 @@ class Inventory{
 
                     $('.inventory').on('mouseenter',function(){
                         let inventoryId = $(this).attr('id')
+                        if(inventoryId == "right-menu"){inventoryId = "world-inventory"}
                         Inventory.lastHoveredSlot.inventoryId = inventoryId;
                         Inventory.lastHoveredSlot.slot = Inventory.getItemsInInventory(inventoryId)
                     })

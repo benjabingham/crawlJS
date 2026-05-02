@@ -4,6 +4,7 @@ class GameMaster{
     static quickStartMode = true;
     static dungeonMode = false;
     static currentTown;
+    static startTime;
 
     static gameMasterInit(){
         EntityManager.entityManagerInit();
@@ -13,6 +14,7 @@ class GameMaster{
     }
 
     static quickStart(){
+        GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
@@ -573,7 +575,11 @@ class GameMaster{
         Player.inventory.items.forEach(item=>{
             
             if(item.win){
-                alert("Congratulations. You have won the game by obtaining the "+item.name+". Tell Ben \""+item.secretCode+"\" and he will add something simple to the game, of your request.")
+                let timeTaken = new Date().getTime() - GameMaster.startTime;
+                let minutes = Math.floor(timeTaken / 1000 / 60);
+                timeTaken %= 1000 * 60
+                let seconds = Math.floor(timeTaken / 1000)
+                alert("Congratulations. You have won the game by obtaining the "+item.name+", and it only took you"+minutes+"minutes and "+seconds+" seconds! Tell Ben \""+item.secretCode+"\" and he will add something simple to the game, of your request.")
                 item.win = false;
             }
         })

@@ -205,6 +205,9 @@
 .grid-tree{
     background:repeating-conic-gradient(var(--tree) 6% 16%, var(--treeAccent) 0% 50%) 50% / var(--gridSize);
     background-size:20% 20%;
+    width:85% !important;
+    height:85% !important;
+    margin-left:5% !important;
     border:1px solid var(--treeBorder);
     border-radius:20px;
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);

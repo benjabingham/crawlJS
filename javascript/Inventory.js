@@ -1040,6 +1040,8 @@ class Inventory{
         Object.keys(snapshot).forEach(attribute=>{
             Inventory[attribute] = snapshot[attribute];
         })
+        //the selected container is a copy of the one in the world
+        Inventory.selectedContainer = EntityManager.getEntity(Inventory.selectedContainer.id)
         this.checkForItemPile();
         Inventory.bagOverlay();
     }

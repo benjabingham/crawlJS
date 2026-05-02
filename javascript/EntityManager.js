@@ -42,7 +42,6 @@ class EntityManager{
         if(Player.perks.durability.disposableBlows && damage){flimsy += damage}
         modifier += Player.getDegradeChanceModifier(item);
         let degradeChance = (flimsy) + modifier;
-        console.log(degradeChance);
         let random = (Math.random()*100) * (1/multiplier);
         return random < degradeChance;
     }

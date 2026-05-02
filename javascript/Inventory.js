@@ -1042,7 +1042,10 @@ class Inventory{
             Inventory[attribute] = snapshot[attribute];
         })
         //the selected container is a copy of the one in the world
-        Inventory.selectedContainer = EntityManager.getEntity(Inventory.selectedContainer.id)
+        if(Inventory.selectedContainer){
+            Inventory.selectedContainer = EntityManager.getEntity(Inventory.selectedContainer.id)
+            if(Inventory.playerInBag){Inventory.selectWorldInventoryTab()}
+        }
         this.checkForItemPile();
         Inventory.bagOverlay();
     }

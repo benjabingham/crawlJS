@@ -585,7 +585,7 @@ class LootManager{
             }
 
             if(item.rotten){texts = texts.concat(itemVars.foodFlavorTexts.rotten)}
-            texts = texts.concat(itemVars.foodFlavorTexts.general)
+            if(Math.random() < 0.25){texts = texts.concat(itemVars.foodFlavorTexts.general)}
         }
         console.log(texts);
         

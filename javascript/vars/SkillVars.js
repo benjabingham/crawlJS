@@ -290,7 +290,7 @@ let skillVars = {
             name:"disposable blows",
             key:"disposableBlows",
             amount:.5,
-            description:"Each weapon's max damage is increased by an amount equal to half of its degrade chance. When determining if a weapon will degrade on attack, its max damage dealt is added to its degrade chance."
+            description:"Each weapon's max damage is increased by an amount equal to half of its degrade chance. When determining if a weapon will degrade on attack, its max damage is added to its degrade chance."
         },
     ]
 }

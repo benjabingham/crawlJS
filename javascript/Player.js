@@ -743,7 +743,7 @@ class Player {
         if(!item){item = attack}
         if(!attack){return 0}
         let bonus = 0;
-        if(attack.type.edged && Player.perks.edged.cuttingEdge){
+        if(attack.type.edged && Player.perks.edged.cuttingEdge && !item.worn){
             bonus += Player.perks.edged.cuttingEdge.val * Player.perks.edged.cuttingEdge.amount
         }
         let disposableBlows = Player.perks.durability.disposableBlows

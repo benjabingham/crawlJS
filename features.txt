@@ -60,3 +60,5 @@ how to close... ???
 
 overall bonus on attacks that breaks weapons.
 ways to increase that bonus
+
+veto one perk each levelup

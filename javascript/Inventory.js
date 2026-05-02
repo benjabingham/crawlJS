@@ -80,21 +80,7 @@ class Inventory{
         let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
         let draggable = available || shopItem;
         let availableStyling = available || shopItem;   
-
-        let symbolsSpan = $('<span>')
-        let symbols = item.symbols;
-        if(!symbols){symbols = []}
-        symbols = [...symbols];
-        //console.log(symbols);
-        
-        if(symbols){
-            symbols.forEach((symbol)=>{
-                let symbolSpan = $('<span>').text(" "+symbol);
-                let hintText = Display.getSymbolHintText(symbol);
-                Display.setHintText(symbolSpan,hintText)
-                symbolsSpan.append(symbolSpan);
-            })
-        }
+        let symbolsSpan = LootManager.getItemSymbolsSpan(item);
 
         let proficiencySpan = Display.getProficiencySpan(item);
         
@@ -363,6 +349,7 @@ class Inventory{
         let goldValue;
         let goldHint;
         let bulk = LootManager.getItemBulk(item);
+        let symbolsSpan = LootManager.getItemSymbolsSpan(item);
         if(shopItem){
             goldValue = item.price
             goldHint = "This item can be purchased for "+goldValue+" gold."
@@ -374,11 +361,12 @@ class Inventory{
         let header = $('<div>').addClass('item-description-header');
         let goldDiv = $('<div>').addClass('item-gold-div').text(goldValue+'g')
         Display.setHintText(goldDiv,goldHint,'info')
-        let name = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan)
+        let nameDiv = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan).append(symbolsSpan)
+        Display.applyColor(item,nameDiv)
         let bulkDiv = $('<div>').addClass('item-bulk-div').text(bulk+"b");
         Display.setHintText(bulkDiv, "This item has a bulk of "+bulk+".","info")
 
-        header.append(goldDiv).append(name).append(bulkDiv)
+        header.append(goldDiv).append(nameDiv).append(bulkDiv)
 
         return header;
     }

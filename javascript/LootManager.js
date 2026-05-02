@@ -745,4 +745,23 @@ class LootManager{
         if(!bulk){bulk = 0.1}
         return bulk;
     }
+
+    static getItemSymbolsSpan(item){
+        let symbolsSpan = $('<span>')
+        let symbols = item.symbols;
+        if(!symbols){symbols = []}
+        symbols = [...symbols];
+        //console.log(symbols);
+        
+        if(symbols){
+            symbols.forEach((symbol)=>{
+                let symbolSpan = $('<span>').text(" "+symbol);
+                let hintText = Display.getSymbolHintText(symbol);
+                Display.setHintText(symbolSpan,hintText)
+                symbolsSpan.append(symbolSpan);
+            })
+        }
+
+        return symbolsSpan;
+    }
 }

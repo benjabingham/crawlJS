@@ -592,7 +592,7 @@ class GameMaster{
                 let minutes = Math.floor(timeTaken / 1000 / 60);
                 timeTaken %= 1000 * 60
                 let seconds = Math.floor(timeTaken / 1000)
-                alert("Congratulations. You have won the game by obtaining the "+item.name+", and it only took you"+minutes+"minutes and "+seconds+" seconds! Tell Ben \""+item.secretCode+"\" and he will add something simple to the game, of your request.")
+                alert("Congratulations. You have won the game by obtaining the "+item.name+", and it only took you "+minutes+" minutes and "+seconds+" seconds! Tell Ben \""+item.secretCode+"\" and he will add something simple to the game, of your request.")
                 item.win = false;
             }
         })

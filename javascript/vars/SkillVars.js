@@ -266,5 +266,15 @@ let skillVars = {
             amount:.2,
             description:"your critical hits deal +10% damage for each level of light you have."
         },
+    ],
+    durability:[
+        {
+            type:"misc",
+            category:"durability",
+            name:"proper care",
+            key:"properCare",
+            amount:.5,
+            description:"Your weapons have their degrade chance decreased by 50%, with a minimum reduction of 1 percentage point."
+        },
     ]
 }

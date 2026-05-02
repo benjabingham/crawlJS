@@ -26,6 +26,7 @@ class XP{
         ooze:{},
         dark:{},
         fuel:{},
+        durability:{}
     };
     static offeredPerks = []
     static threshold = 60;
@@ -39,7 +40,7 @@ class XP{
                 xpGained: 0
             }
         });
-        XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.durability[0],false)
         /*
         XP.applyPerk(skillVars.swing[0],false)
         XP.applyPerk(skillVars.swing[0],false)

@@ -42,7 +42,8 @@ class Player {
         undead:{},
         ooze:{},
         dark:{},
-        fuel:{}
+        fuel:{},
+        durability:{}
     }
         
     
@@ -736,7 +737,7 @@ class Player {
         let bonus = Player.getItemBonusStun(item);
 
         if(bonus){
-            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            let span = $('<span>').addClass('bonus-span').text('+'+bonus)
             return span
         }else{
             return $('<span>')
@@ -765,11 +766,38 @@ class Player {
         let bonus = Player.getItemBonusDamage(item);
 
         if(bonus){
-            let span = $('<span>').addClass('bonus-damage-span').text('+'+bonus)
+            let span = $('<span>').addClass('bonus-span').text('+'+bonus)
             return span
         }else{
             return $('<span>')
         }
+    }
+
+    static getDegradeChanceModifier(item){
+        let modifier = 0;
+        let flimsy = item.flimsy;
+        if(!flimsy){
+            flimsy = 0;
+        }
+        let properCare = Player.perks.durability.properCare;
+        if(properCare){
+            let properCareMultiplier = properCare.val * properCare.amount;
+            let properCareModifier = Math.floor(item.flimsy * properCareMultiplier);
+            properCareModifier = Math.max(properCareModifier,1)
+            modifier -= properCareModifier;
+        }
+
+        return modifier;
+    }
+
+    static getDegradeModifierSpan(item){
+        let modifier = Player.getDegradeChanceModifier(item);
+        if(!modifier){return ""}
+        let spanClass = modifier > 0 ? "debuff-span" : "bonus-span";
+        let symbol = modifier > 0 ? "+" : "-";
+        let abs = Math.abs(modifier)
+
+        return $('<span>').addClass(spanClass).text(symbol+abs+'%')
     }
 
     //take hp, luck, stamina, hunger, return associated max value

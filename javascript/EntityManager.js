@@ -38,6 +38,7 @@ class EntityManager{
     //checks if an item will degrade but doesnt degrade it - returns t/f
     static itemWillDegrade(weapon, modifier, multiplier){
         let item = weapon.item;
+        modifier += Player.getDegradeChanceModifier(item);
         let degradeChance = (item.flimsy) + modifier;
         let random = (Math.random()*100) * (1/multiplier);
         return random < degradeChance;

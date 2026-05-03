@@ -26,7 +26,8 @@ class XP{
         ooze:{},
         dark:{},
         fuel:{},
-        durability:{}
+        durability:{},
+        potions:{}
     };
     static offeredPerks = []
     static threshold = 60;
@@ -41,6 +42,7 @@ class XP{
             }
         });
         XP.applyPerk(skillVars.simple[0],false)
+
         /*
         XP.applyPerk(skillVars.swing[0],false)
         XP.applyPerk(skillVars.swing[0],false)
@@ -273,6 +275,10 @@ class XP{
         this.gain('durability',3,amount)
     }
 
+    static gainPotionsXP(amount){
+        this.gain('potions',10,45)
+    }
+
     static checkLevelUp(){
         if(this.xp >= this.threshold){
             this.levelUp();
@@ -291,7 +297,11 @@ class XP{
 
     //skill is string corresponding to a skill. Returns a random perk of that skill.
     static getPerk(skill){
-        let perks = skillVars[skill];
+        let perks = skillVars[skill].filter((item)=>item.unavailable != true);
+        if(perks.length == 0){
+            //this shouldnt happen...
+            return false;
+        }
         let perk = perks[Math.floor(Math.random()*perks.length)]
         return perk;
     }
@@ -414,6 +424,7 @@ class XP{
                 console.log('PERK TYPE '+perk.type+' NOT RECOGNIZED')
         }
 
+        if(perk.unique){perk.unavailable = true;}
         Display.fillBars();
     }
 

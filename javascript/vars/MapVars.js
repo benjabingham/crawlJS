@@ -5,7 +5,7 @@ let mapVars = {
         type:'town',
         description:'',
         shop:{
-            weaponTiers:[0,0,1,2,3,4],
+            weaponTiers:[0,2,3,4],
             carriedMaterials:['wood','copper','bronze','iron','steel'],
             fuelSlots:2,
             potionSlots:2

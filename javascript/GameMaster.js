@@ -18,33 +18,8 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
-       /* Player.pickUpItem(LootManager.getTreasureLoot(1))
-        Player.pickUpItem(LootManager.getTreasureLoot(2))
-        Player.pickUpItem(LootManager.getTreasureLoot(3))
-        Player.pickUpItem(LootManager.getTreasureLoot(4))
-        Player.pickUpItem(LootManager.getTreasureLoot(5))*/
-        /*starterWeapon = LootManager.getFoodLoot();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
 
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
-        starterWeapon = LootManager.getStarterWeapon();
-        Player.pickUpItem(starterWeapon);
+       /*
         
         GameMaster.getRoom(
             'reanimate test',

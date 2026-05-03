@@ -642,9 +642,15 @@ class Inventory{
             }
             //Log.addMessage('empty');
         }
+        let lastCategory
         items.forEach((item)=>{
+            if(container.shop && lastCategory && lastCategory != item.shopCategory){
+                $('#world-inventory-list').append($('<hr>'))
+            }
             Inventory.addBetweenDiv(item.slot,'world-inventory',false)
             Inventory.addInventoryItem(item,"world-inventory")
+            
+            lastCategory = item.shopCategory;
         })
         Inventory.addBetweenDiv(items.length,'world-inventory',false)
     }

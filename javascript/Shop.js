@@ -67,6 +67,7 @@ class Shop{
             item.price = Math.max(item.value,1) * priceMultiplier;
             item.slot = slot;
             item.tier = tier;
+            item.shopCategory = "weapon"
             Shop.inventory.push(item);
             slot++;
         })
@@ -74,6 +75,7 @@ class Shop{
         for(let i=0; i<Shop.fuelSlots; i++){
             let fuel = Shop.getFuel();
             fuel.slot = slot;
+            fuel.shopCategory = "fuel"
             Shop.inventory.push(fuel);
             slot++;
         }
@@ -90,6 +92,7 @@ class Shop{
         for(let i=0; i<Shop.potionSlots; i++){
             let potion = Shop.getPotion();
             potion.slot = slot;
+            potion.shopCategory = "potion"
             Shop.inventory.push(potion);
             slot++;
         }
@@ -107,6 +110,7 @@ class Shop{
                     let fuel = Shop.getFuel();
                     fuel.slot = slot;
                     fuel.fresh = true;
+                    fuel.shopCategory = 'fuel'
                     Shop.inventory[slot] = fuel;
                 }
             }else if(item.tier == 'potion'){
@@ -114,6 +118,7 @@ class Shop{
                     let potion = Shop.getPotion();
                     potion.slot = slot;
                     potion.fresh = true;
+                    potion.shopCategory = 'potiom'
                     Shop.inventory[slot] = potion;
                 }
             }else if(item.tier == 'supplies'){
@@ -121,6 +126,7 @@ class Shop{
                     let supplies = Shop.getSupplies();
                     supplies.slot = slot;
                     supplies.fresh = true;
+                    supplies.shopCategory = 'supplies'
                     Shop.inventory[slot] = supplies;
                 }
             }else{
@@ -133,6 +139,7 @@ class Shop{
                     newItem.slot = slot;
                     newItem.fresh = true;
                     newItem.tier = item.tier;
+                    newItem.shopCategory = 'weapon'
                     Shop.inventory[slot] = newItem;
                 }
             }

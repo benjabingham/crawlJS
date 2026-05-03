@@ -766,7 +766,7 @@ let itemVars = {
             "Crafted with care.","There's a little ugly dog painted on it.","Someone's inscribed their name into it. You can't quite make it out.","It's been carved with the image of an animal of some sort."
         ],
         nifty:[
-            "It carries the image of a horse.","There are butterflies painted on it.","The image of a regal-looking cat has been etched into it.","Patterned with footprints."
+            "It depicts a horse.","There are butterflies painted on it.","The image of a regal-looking cat has been etched into it.","Patterned with footprints."
         ],
         valuable:[
             "Patterned with handprints.", "Carved with a myriad of tasteful erotic images.","A pegasus has been carved into it with great care."

@@ -276,7 +276,7 @@ class XP{
     }
 
     static gainPotionsXP(amount){
-        this.gain('potions',3,amount)
+        this.gain('potions',10,45)
     }
 
     static checkLevelUp(){

@@ -505,7 +505,7 @@ class Player {
         }else{
             Log.addMessage("Such a tiny sip!",'pos',false,"You took such a tiny sip that the potion was not consumed.")
         }
-        XP.gainPotionsXP(60);
+        XP.gainPotionsXP();
         Display.fillBars();
 
         return true;

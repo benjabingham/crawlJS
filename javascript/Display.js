@@ -389,6 +389,7 @@ class Display{
     
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
+        if(!keywordVars.symbols[charCode]){return false}
         return keywordVars.symbols[charCode].name
     }
 

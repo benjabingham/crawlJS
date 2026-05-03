@@ -100,6 +100,11 @@ class LootManager{
         }
         //trim down to max size
         entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
+
+        //chance for enchantments...
+        entitySave.inventory.items.forEach(item=>{
+            LootManager.getItemEnchantment(item,0.001)
+        })
     }
 
     static trimInventory(items, max){
@@ -145,6 +150,7 @@ class LootManager{
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
+            LootManager.getItemEnchantment(newTreasure,0.01)
             //if value is outside of range, expand range and try again
             if(
                 (greater && newTreasure.value > treasure.value) ||
@@ -224,6 +230,7 @@ class LootManager{
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsCursed(weapon,tier,curseMultiplier)
+        LootManager.getItemEnchantment(weapon,0.01)
         LootManager.getIsWorn(weapon, tier);
         if(!weapon.flimsy || weapon.flimsy < 0){
             weapon.flimsy = 0;
@@ -454,13 +461,17 @@ class LootManager{
     }
 
     static applyModifier(item, modifier, recursion = false){
+        console.log(modifier);
         item[modifier.name] = true;
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
                 case 'name':
-                    if(!modifier.symbol){
+                    if(!modifier.symbol && !modifier.suffix){
                         item[key] = value + ' ' + item[key];
                     }
+                    break;
+                case 'suffix':
+                    item.name = item.name + " " + value;
                     break;
                 case 'symbol':
                     if(!item.symbols){
@@ -500,6 +511,10 @@ class LootManager{
                         item[key] = Math.max(item[key], 0);
                     
                     }
+                    break;
+                case 'flatValue':
+                    if(!item.value){item.value = 0;}
+                    item.value += value;
                     break;
                 case 'color':
                     item[key] = value;
@@ -729,6 +744,15 @@ class LootManager{
         return value;
     }
 
+    //chance is chance the item gets an enchantment, from 0-1
+    static getItemEnchantment(item,chance){
+        if(Math.random() > chance){return false}
+        let enchantmentKeys = Object.keys(itemVars.enchantments);
+        console.log(enchantmentKeys)
+        let index = Random.roll(0,enchantmentKeys.length-1)
+        LootManager.applyModifier(item,itemVars.enchantments[enchantmentKeys[index]])
+    }
+
     static getItemBulk(item){
         if(!item.bulk){return 0.1}
         let bulk = item.bulk;
@@ -755,8 +779,16 @@ class LootManager{
         if(symbols){
             symbols.forEach((symbol)=>{
                 let symbolSpan = $('<span>').text(" "+symbol);
-                let hintText = Display.getSymbolHintText(symbol);
-                Display.setHintText(symbolSpan,hintText)
+                if(item[symbol] && item[symbol].color){
+                    Display.applyColor(item[symbol],symbolSpan)
+                }
+                let hintText;
+                if(item[symbol] && item[symbol].description){
+                    hintText = item[symbol].description
+                }else{
+                    hintText = Display.getSymbolHintText(symbol);
+                }
+                if(hintText){Display.setHintText(symbolSpan,hintText)}
                 symbolsSpan.append(symbolSpan);
             })
         }

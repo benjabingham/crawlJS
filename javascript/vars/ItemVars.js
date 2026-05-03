@@ -1259,6 +1259,7 @@ let itemVars = {
         cursed:{
             name: 'cursed',
             symbol:'⚶',
+            '⚶':{color:'darkPurple'},
             unlucky:true,
             value: .3
         },
@@ -1849,6 +1850,32 @@ let itemVars = {
             tip: 'You gained stamina.',
             
             bulk:0.5,
+        }
+    },
+    enchantments:{
+        vigor:{
+            name:'vigor',
+            symbol:'♃',
+            '♃':{color:'orange',description:"Aspect of Vigor"},
+            flatValue:20,
+            enchantment:true,
+            vigor:true
+        },
+        hunger:{
+            name:'hunger',
+            symbol: '♆',
+            '♆':{color:'green',description:"Aspect of Hunger"},
+            flatValue:20,
+            enchantment:true,
+            hunger:true
+        },
+        fury:{
+            name:"fury",
+            symbol:"♅",
+            "♅":{color:'red',description:"Aspect of Fury"},
+            flatValue:20,
+            enchantment:true,
+            fury:true
         }
     }
 }

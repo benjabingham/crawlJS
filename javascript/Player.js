@@ -186,7 +186,10 @@ class Player {
     static gainStamina(){
         let stamina = 2;
         if(Player.perks.stamina.aerobics){
-            stamina++;
+            stamina+= Player.perks.stamina.aerobics.val;
+        }
+        if(Player.hasAspect('vigor')){
+            stamina += Player.hasAspect('vigor')
         }
         if(Player.exertion){
             stamina--;
@@ -671,7 +674,13 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
+        let fury = Player.hasAspect('fury')
+        if(fury){
+            let missingHealth = Player.healthMax - Player.health
+            critChance += missingHealth * fury * 0.1;
+        }
 
+        console.log(critChance);
         return critChance
     }
 
@@ -905,6 +914,24 @@ class Player {
         return Player.equipped && Player.equipped.slot == item.slot;
     }
 
-    
+    //returns the number of times the chosen quality appears among items in the player's quickbar'
+    static hasAspect(aspect){
+        let count = 0
+        Player.inventory.items.forEach(item=>{
+            if(item.quickSlot && item[aspect]){
+                count++;
+            }
+        })
+
+        return count;
+    }
+
+    static activatePostAttackTriggers(){
+        if(Player.hasAspect('hunger')){
+            n = Player.hasAspect('hunger')
+            Player.changeStamina(3*n);
+            Player.changeNourishment(-1*n);
+        }
+    }
 
 }

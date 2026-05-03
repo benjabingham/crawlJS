@@ -474,7 +474,11 @@ class Player {
 
         Log.addMessage('You drink the '+item.name+".");
         while(item.unlabeled){
+            let quickSlot = item.quickSlot
             item = LootManager.getPotionLoot(item.tier);
+            item.quickSlot = slot;
+            item.slot = slot;
+            Player.inventory.items[slot] = item;
         }
         if(item.stamina){
             Player.changeStamina(item.stamina);

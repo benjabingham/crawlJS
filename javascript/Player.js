@@ -44,7 +44,8 @@ class Player {
         ooze:{},
         dark:{},
         fuel:{},
-        durability:{}
+        durability:{},
+        potions:{}
     }
         
     
@@ -345,8 +346,13 @@ class Player {
         if(Player.inventory.items[nQuickSlots-1] && Player.inventory.items[nQuickSlots-1].quickSlot){
             quickSlot = false;
         }
+        if(Player.perks.potions.potionsExpert && item.unlabeled){
+            while(item.unlabeled){item = LootManager.getPotionLoot(item.tier)}
+            Log.addMessage("It's a "+item.name+"!")
+        }
         item.quickSlot = quickSlot
         Player.inventory.items.push(item);
+        
         Player.inventoryCleanup();
     }
 
@@ -488,8 +494,18 @@ class Player {
         if(item.message){
             Log.addMessage(item.message,false,false,item.tip);
         }
-        Player.consume(slot);
-
+        let consumePotion = true;
+        let littleSips = Player.perks.potions.littleSips
+        if(littleSips){
+            let consumeChance = (Math.pow(littleSips.amount,littleSips.val))
+            consumePotion = Math.random() < consumeChance;
+        }
+        if(consumePotion){
+            Player.consume(slot);
+        }else{
+            Log.addMessage("Such a tiny sip!",'pos',false,"You took such a tiny sip that the potion was not consumed.")
+        }
+        XP.gainPotionsXP(60);
         Display.fillBars();
 
         return true;

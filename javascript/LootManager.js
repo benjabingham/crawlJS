@@ -10,7 +10,7 @@ class LootManager{
         }else{
             key = entityGroupInfo.key;
         }
-        console.log(key)
+        //console.log(key)
 
         if(!entityType){
             entityType = entityGroupInfo.entityType
@@ -157,7 +157,7 @@ class LootManager{
 
         LootManager.getTreasureModifier(treasure, tier);
         LootManager.getTreasureSize(treasure);
-        console.log(treasure)
+        //console.log(treasure)
         //if outside of range, widen range and try again!
         if(treasure.value > max){
             let newMax = max * 1.5;
@@ -233,7 +233,7 @@ class LootManager{
     }
 
     static getFoodLoot(tier = 0, rottenMultiplier = 1){
-        console.log(rottenMultiplier)
+        //console.log(rottenMultiplier)
         let foods = Object.keys(itemVars.food);
         let nFoods = foods.length; 
         //nrolls represents number of EXTRA rolls.
@@ -521,7 +521,7 @@ class LootManager{
                     break;
                 case 'possibleFlavorTexts':
                 case 'flavorText':
-                    console.log(value)
+                    //console.log(value)
                     if(!item.possibleFlavorTexts){
                         item.possibleFlavorTexts = [];
                         if(item.flavorText){item.possibleFlavorTexts.push(item.flavorText)}
@@ -587,12 +587,11 @@ class LootManager{
             if(item.rotten){texts = texts.concat(itemVars.foodFlavorTexts.rotten)}
             if(Math.random() < 0.25){texts = texts.concat(itemVars.foodFlavorTexts.general)}
         }
-        console.log(texts);
         
         if(item.possibleFlavorTexts){texts = texts.concat(item.possibleFlavorTexts)}
         if(!texts){return false}
         let index = Random.roll(0,texts.length-1)
-        console.log(texts[index])
+        //console.log(texts[index])
         item.flavorText = texts[index];
     }
 
@@ -677,7 +676,7 @@ class LootManager{
     //takes string type, returns array of weapon objects of that type.
     static getWeaponsOfType(type){
         let weapons = [];
-        console.log(type);
+        //console.log(type);
         Object.keys(itemVars.weapons).forEach(key =>{
             let weapon = itemVars.weapons[key];
             console.log(weapon);

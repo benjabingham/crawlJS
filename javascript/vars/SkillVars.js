@@ -292,5 +292,23 @@ let skillVars = {
             amount:.5,
             description:"Each weapon's max damage is increased by an amount equal to half of its degrade chance. When determining if a weapon will degrade on attack, its max damage is added to its degrade chance."
         },
+    ],
+    potions:[
+        {
+            type:"misc",
+            category:"potions",
+            unique:true,
+            name:"potions expert",
+            key:"potionsExpert",
+            description:"When you obtain an unlabeled potion, identify it."
+        },
+        {
+            type:"misc",
+            category:"potions",
+            name:"little sips",
+            key:"littleSips",
+            amount:.5,
+            description:"50% chance to not consume a potion when you drink it."
+        },
     ]
 }

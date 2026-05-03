@@ -95,14 +95,14 @@ class Save{
 
     static degradeStains(mapString){
         let stains = Save.maps[mapString].stains;
-        console.log(stains);
         let y = 0;
         stains.forEach((row)=>{
             let x = 0;
             row.forEach((tile)=>{
                 if(tile){
-                    if(Random.roll(0,1)){
-                        stains[y][x]--;
+                    let stain = Board.getStain(x,y)
+                    if(stain && stain.level > 0 && Random.roll(0,1)){
+                        Board.setStain(x,y,-1)
                     }
                     x++;
                 }

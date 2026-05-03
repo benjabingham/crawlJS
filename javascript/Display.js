@@ -146,6 +146,7 @@ class Display{
     }
 
     static printBoard(){
+        console.log("turn "+Log.turnCounter)
         let devMode = true;
         let boardArray = Board.boardArray;
         let playerPos = EntityManager.getEntity('player');
@@ -172,6 +173,7 @@ class Display{
                 //out of bounds
                 if(Board.hasPlayerLos({x:x, y:y})){
                     if(boardArray[y] && boardArray[y][x]){
+                        let entity = boardArray[y][x]
                         if(Board.wallArray[y][x]){
                             let wallType = Board.wallArray[y][x].wallType;
                             if(!wallType){
@@ -180,24 +182,27 @@ class Display{
                             entityDiv.addClass('grid-'+wallType)
                             
                         }
-                        symbol = boardArray[y][x].tempSymbol ? boardArray[y][x].tempSymbol : boardArray[y][x].symbol;
-                        if(boardArray[y][x].name){
+                        symbol = entity.tempSymbol ? entity.tempSymbol : entity.symbol;
+                        if(entity.name){
                             gridDiv.addClass('grid-hint').off('mouseenter')
-                            Display.setHintText(gridDiv, boardArray[y][x].name, "label");
+                            Display.setHintText(gridDiv, entity.name, "label");
                             if(devMode){
                                 gridDiv.on('click',()=>{
-                                    console.log(boardArray[y][x]);
+                                    console.log(entity);
                                 })
                             }                 
                         }
-                        Display.applyColor(boardArray[y][x], entityDiv);
-                        let highlighted = boardArray[y][x].highlighted;
-                        let highlightedAdjacents = boardArray[y][x].highlightedAdjacents;
+                        Display.applyColor(entity, entityDiv);
+                        //flash white on hit, red on crit... i don't like how it looks.
+                        //if(entity.lastDamagedTurn == Log.turnCounter){Display.flash(entityDiv,'damaged')}
+                        //if(entity.lastCritTurn == Log.turnCounter){Display.flash(entityDiv,'crit')}
+                        let highlighted = entity.highlighted;
+                        let highlightedAdjacents = entity.highlightedAdjacents;
                         if(highlighted || highlightedAdjacents){
                             Display.addHighlights({x:displayX,y:displayY}, highlighted,highlightedAdjacents)
                             //reset each frame
-                            boardArray[y][x].highlighted = false;
-                            boardArray[y][x].highlightedAdjacents = [];
+                            entity.highlighted = false;
+                            entity.highlightedAdjacents = [];
                         }
                         Display.showParryHighlight(x,y, entityDiv);
                     }

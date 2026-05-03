@@ -236,6 +236,33 @@ h1, h2, h3{
 
 }
 
+.flash-damaged{
+    animation-name: flashDamaged;
+    animation-duration: 0.8s;
+    animation-delay:-0.3s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashDamaged{
+    from{
+        color:white
+    }
+
+}
+
+.flash-crit{
+    animation-name: flashCrit;
+    animation-duration: 0.7s;
+    transition-timing-function: ease-out;
+}
+
+@keyframes flashCrit{
+    from{
+        color:var(--lightRed)
+    }
+
+}
+
 .flash-lightRed{
     animation-name: flashLightRed;
     animation-duration: .7s;

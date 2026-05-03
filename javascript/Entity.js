@@ -551,6 +551,7 @@ class Entity{
         if(!this.mortal){
             this.mortal = 0;
         }
+        this.lastDamagedTurn = Log.turnCounter;
         this.mortal += mortal;
     }
 
@@ -1029,6 +1030,7 @@ class PlayerEntity extends Entity{
         let mortality = Random.rollN(damageDice,0,damage,advantage);
         let multiplier = Player.getDamageMultiplier(weapon,"unarmed",target,crit);
         mortality = Math.floor(mortality*multiplier)
+
         XP.gainUnarmedAttackXP(target);
         if(sizeBonus > Math.random()*100){
             stunAdded = Math.max(0,stunAdded-1);
@@ -1040,6 +1042,7 @@ class PlayerEntity extends Entity{
         }
         EntityManager.transmitMessage(target.name+" is struck!",false,false,false,target.id);
         Log.sendCritMessage(crit);
+        if(mortality){Log.addMessage(mortality+" Damage!",'danger')}
         EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
         if(!target.dead){     
             if(vulnerability){
@@ -1047,6 +1050,7 @@ class PlayerEntity extends Entity{
             }
         }
         target.addMortality(mortality);
+        if(crit){target.lastCritTurn = Log.turnCounter}
         if(Monster.prototype.isPrototypeOf(target)){
             target.addStunTime(stunAdded);
             target.checkBloody();
@@ -1274,7 +1278,8 @@ class SwordEntity extends Entity{
             }
             Log.sendStrikeMessage(strikeType, weapon, target);
             Log.sendCritMessage(crit);
-            
+            if(crit){target.lastCritTurn = Log.turnCounter}
+            if(mortality){Log.addMessage(mortality+" Damage!",'danger')}
             EntityManager.transmitMessage(EntityManager.getDamageText(target, mortality))
             if(!target.dead){
                 if(vulnerability){
@@ -1518,6 +1523,7 @@ class Monster extends Entity{
 
         this.addMortality(Random.roll(0,this.decay));
 
+
         this.checkDead(this.name + ' wastes away.')
     }
 
@@ -1754,6 +1760,7 @@ class Monster extends Entity{
     attack(target){
         if(target.isSword){
             this.beat(target);
+            target.lastDamagedTurn = Log.turnCounter;
             return;
         }
 

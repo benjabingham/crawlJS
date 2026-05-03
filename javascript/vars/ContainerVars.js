@@ -188,7 +188,7 @@ let containerVars = {
         behavior:"",
         hitDice:0,
         damage:4,
-        inventorySlots: 1,
+        inventorySlots: 3,
         isContainer: true,
         spawnEntities:{
             maxCapacity:3,
@@ -223,9 +223,9 @@ let containerVars = {
             },
             food:{
                 chance:50,
-                maxNumber:2,
+                maxNumber:3,
                 tier:1,
-                rottenMultiplier:2
+                rottenMultiplier:2.5
             }
         },
         color:'gray'

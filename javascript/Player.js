@@ -347,7 +347,7 @@ class Player {
             quickSlot = false;
         }
         if(Player.perks.potions.potionsExpert && item.unlabeled){
-            while(item.unlabeled){item = LootManager.getPotionLoot(item.tier)}
+            while(item.unlabeled){item = LootManager.getPotionLoot(item.tier, false)}
             Log.addMessage("It's a "+item.name+"!")
         }
         item.quickSlot = quickSlot
@@ -475,7 +475,7 @@ class Player {
         Log.addMessage('You drink the '+item.name+".");
         while(item.unlabeled){
             let quickSlot = item.quickSlot
-            item = LootManager.getPotionLoot(item.tier);
+            item = LootManager.getPotionLoot(item.tier, false);
             item.quickSlot = slot;
             item.slot = slot;
             Player.inventory.items[slot] = item;

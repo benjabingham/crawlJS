@@ -237,6 +237,16 @@ let containerVars = {
         hitDice:0,
         inventorySlots: 1,
         isContainer: true,
+         inventory:[
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 50
+            },
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 20
+            }
+        ],
         loot:{
             weapon:{
                 chance:2,

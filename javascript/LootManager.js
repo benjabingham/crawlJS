@@ -100,6 +100,9 @@ class LootManager{
         }
         //trim down to max size
         entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
+        entitySave.inventory.items.forEach(item=>{
+            if(item.unlabeled){LootManager.generateUnlabeledPotionDetails(item)}
+        })
     }
 
     static trimInventory(items, max){
@@ -172,7 +175,7 @@ class LootManager{
         return treasure;
     }
 
-    static getPotionLoot(tier){
+    static getPotionLoot(tier = 0, replaceNeg = true){
         let nRolls = tier-3;
         let greater = (nRolls > 0);
         nRolls = Math.abs(nRolls);
@@ -187,7 +190,7 @@ class LootManager{
         }
 
         //be nice... Lower chance to find negative potions
-        if(potion.negative){
+        if(potion.negative && replaceNeg){
             if(Random.roll(0,tier)){
                 potion = JSON.parse(JSON.stringify(itemVars.potions.unlabeled))
             }
@@ -762,5 +765,16 @@ class LootManager{
         }
 
         return symbolsSpan;
+    }
+
+    static generateUnlabeledPotionDetails(item){
+        if(!item.unlabeled || !item.potable){return false;}
+        if(typeof item.tier == 'undefined'){
+            item.tier = Random.roll(0,5);
+        }
+        let texts = itemVars.potionFlavorText;
+        let nRolls = item.tier-3;
+        let index = Random.roll(0,texts.length-1,nRolls)
+        item.flavorText = texts[index];
     }
 }

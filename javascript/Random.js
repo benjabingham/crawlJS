@@ -3,9 +3,10 @@ class Random{
     //returns a random integer between min and max, inclusive
     static roll(min,max, adv=0){
         let roll = Math.floor(Math.random()*(max-min+1))+min;
+        let maxMinFunc = (adv > 0) ? Math.max : Math.min;
         //roll adv more times, taking the highest result
         for(let i = 0; i < adv; i++){
-            roll = Math.max(roll,Random.roll(min,max))
+            roll = maxMinFunc(roll,Random.roll(min,max))
         }
 
         return roll;

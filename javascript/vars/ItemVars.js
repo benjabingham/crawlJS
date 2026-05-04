@@ -1605,7 +1605,6 @@ let itemVars = {
             color:'darkPurple',
             unlabeled: true,
             value: 5,
-            tier: 3,
             
             bulk:0.5,
         },
@@ -1850,5 +1849,20 @@ let itemVars = {
             
             bulk:0.5,
         }
-    }
+    },
+    //generated based on tier for unlabeled potions. lower ones more common for low tier, higher for high
+    potionFlavorText:[
+        "Holding it fills you with dread.",
+        "You can smell a foul odor even through the cork.",
+        "The bottle has a skull painted on it.",
+        "It has an unsettling, sludgy texture.",
+        "There are bits of detritus floating in it.",
+        "The bottle is filthy.",
+        "The glass container has grown opaque with age.",
+        "Smells like alcohol.",
+        "The bottle is clean.",
+        "It has a sweet floral scent.",
+        "Flecks of glitter dance in the liquid.",
+        "It has a faint, radiant, glow.",
+    ]
 }

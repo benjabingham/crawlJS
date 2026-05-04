@@ -165,6 +165,7 @@ XP Sources:
     break weapons
         decreased degrade chance
         weapons get extra damage ? equal to their degrade chance
+        items always degrade when they crit and always crit when they degrade
 
 
 effects of advantage

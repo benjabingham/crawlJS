@@ -64,8 +64,17 @@ ways to increase that bonus
 veto one perk each levelup
 
 talismans - items that give perk-ish benefits while in your quickbar
-    vigor - +1 stamina per turn
-    nourishment - lower chance to lose hunger
-    frost - each turn, chance to stun each ajacent enemy
-    of the mule - +50% bulk capacity
-    of fury - + 20% crit chance
+    vigor - +1 stamina per turn ♃
+    nourishment - lower chance to lose hunger ♆
+    frost - each turn, chance to stun each ajacent enemy ♇
+    of the mule - +50% bulk capacity ♄
+    of fury - + 20% crit chance ♅
+
+
+    OR add this as a modifier onto "enchanted" treasure (or weapons?). Display as a colored symbol.
+    
+Ranged weapons  
+    Dont show a sword, but highlight a cone (variable wideness?) On "fire", attack nearest monster in that cone.
+    has "uses" property for ammunition
+    ammunition items can be used, loading them into the equipped ranged weapon.
+    ranged weapons will have a load cost and a fire cost in stamina. (bows have fire cost, xbows have load cost)

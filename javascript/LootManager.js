@@ -746,6 +746,7 @@ class LootManager{
 
     //chance is chance the item gets an enchantment, from 0-1
     static getItemEnchantment(item,chance){
+        if(item.enchantmentChance){chance += item.enchantmentChance}
         if(Math.random() > chance){return false}
         let enchantmentKeys = Object.keys(itemVars.enchantments);
         console.log(enchantmentKeys)

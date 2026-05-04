@@ -560,6 +560,7 @@ class Entity{
             console.log({message:'kill',entity:this})
             if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win',false,false,this.id);
+                Sound.playDie();
                 XP.gainFoeXP(this);
             }
             this.name += " corpse";
@@ -1209,6 +1210,7 @@ class SwordEntity extends Entity{
     }
 
     swordAttack(target){
+        Sound.playHit();
         let weapon = this.item;
         let damage = weapon.damage;
         console.log(damage);

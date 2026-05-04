@@ -722,6 +722,7 @@ class Inventory{
 
     static addDragBehavior(element, item, inventoryId){
         element.on('mousedown',e=>{
+            Sound.playClick();
             if(e.originalEvent.button != 0){
                 return false;
             }

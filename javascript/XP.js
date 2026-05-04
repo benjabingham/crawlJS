@@ -394,7 +394,7 @@ class XP{
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
                     XP.applyPerk(perk)
                     Inventory.displayInventory();
-                    Inventory.selectCharacterInfoTab();
+                    //Inventory.selectCharacterInfoTab();
                     Display.hideHintDiv();
                     modal.remove();
                 })

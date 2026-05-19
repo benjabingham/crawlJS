@@ -180,7 +180,7 @@ class EntityManager{
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
-        if(!EntityManager.checkEncumberedV2()){
+        if(Board.isOpenSpace(x,y) && !EntityManager.checkEncumberedV2()){
             return false;
         }
         EntityManager.checkEther();

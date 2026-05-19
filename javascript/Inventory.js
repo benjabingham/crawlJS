@@ -421,7 +421,7 @@ class Inventory{
         }
         let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
         return $('<button>').text(text).addClass('inventory-title-buttons').on('click',e=>{
-            this.toggleInventory();
+            GameMaster.inventoryOpenClose();
         })
     }
 

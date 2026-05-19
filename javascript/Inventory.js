@@ -992,7 +992,7 @@ class Inventory{
 
     static getUnequipButton(slot){
         return $('<button>').addClass('item-button').text('unequip').on('click',function(){
-            GameMaster.useItem({type:'item-'+(slot+1)});
+            GameMaster.equipSelectedItem(false,slot);
         })
     }
 

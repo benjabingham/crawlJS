@@ -374,8 +374,13 @@ class GameMaster{
         return result;
     }
 
-    static equipSelectedItem(event){
-        let item = Inventory.getSelectedItem();
+    static equipSelectedItem(event,slot = null){
+        let item;
+        if(slot == null){
+            item = Inventory.getSelectedItem();
+        }else{
+            item = Player.inventory.items[slot];
+        }
         if(!Inventory.itemIsAccessible(item)){return false}
         
         let result = false

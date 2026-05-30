@@ -185,7 +185,9 @@ class Shop{
     }
 
     static buyItem(slot){
-        let item = Shop.inventory[slot];
+        console.log(slot);
+        let item = JSON.parse(JSON.stringify(Shop.inventory[slot]));
+        console.log(item);
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
             GameMaster.postPlayerAction()
@@ -195,11 +197,13 @@ class Shop{
         item.fresh = false;
         Inventory.take(slot,true);
         if(slot != -1){
-            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier})
+            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
         }
         Shop.inventoryCleanup();
         Player.inventoryCleanup();
         Inventory.displayInventory();
+        Inventory.findValidSelect();
+        console.log(Inventory.getSelectedItem())
         Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
         GameMaster.postPlayerAction()
 

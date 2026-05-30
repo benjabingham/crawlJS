@@ -69,3 +69,8 @@ talismans - items that give perk-ish benefits while in your quickbar
     frost - each turn, chance to stun each ajacent enemy
     of the mule - +50% bulk capacity
     of fury - + 20% crit chance
+
+
+    monsters that only walk along walls
+
+    skill - swift - monsters attack the tile you were in last turn

@@ -7,11 +7,11 @@ class Sound{
 
 
     static soundInit(){
-        Object.entries(Sound.sounds).forEach(sound=>{
-            sound.onEnded = ()=>{
-                //TODO - this doesnt work. Need to find a way to reload all sounds once they're done playing.
-                console.log('done')
-            }
+        Object.entries(Sound.sounds).forEach(item=>{
+            let sound = item[1]
+            sound.addEventListener('ended', (e)=>{
+                sound.load();
+            })
         })
     }
 
@@ -22,12 +22,13 @@ class Sound{
     }
 
     static playClick(){
-        Sound.sounds.click.load();
-        Sound.sounds.click.play();
+        Sound.sounds.hit.load();
+        Sound.sounds.hit.play();
     }
 
     static playDie(){
         Sound.sounds.die.load();
         Sound.sounds.die.play();
     }
+
 }

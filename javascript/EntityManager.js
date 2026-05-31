@@ -189,6 +189,8 @@ class EntityManager{
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
         if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){
             EntityManager.cancelAction({blocked:true})
+        }else{
+            Sound.playMove();
         }
     }
 

@@ -512,6 +512,7 @@ class GameMaster{
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         EntityManager.rotateSword(swordId,direction);
+        Sound.playRotate();
         GameMaster.postPlayerAction();
     }
 

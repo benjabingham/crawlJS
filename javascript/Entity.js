@@ -560,7 +560,7 @@ class Entity{
             console.log({message:'kill',entity:this})
             if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win',false,false,this.id);
-                Sound.playDie();
+                Sound.playDie(this);
                 XP.gainFoeXP(this);
             }
             this.name += " corpse";
@@ -677,6 +677,7 @@ class Entity{
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage,disadvantage*-1);
+            Sound.playMonsterHit(damage)
             if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
@@ -1210,7 +1211,6 @@ class SwordEntity extends Entity{
     }
 
     swordAttack(target){
-        Sound.playHit();
         let weapon = this.item;
         let damage = weapon.damage;
         console.log(damage);
@@ -1266,7 +1266,7 @@ class SwordEntity extends Entity{
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
         let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
         mortality = Math.floor(mortality*multiplier)
-        
+        Sound.playPlayerHit(mortality);
         console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
@@ -1768,7 +1768,7 @@ class Monster extends Entity{
 
         let damage = this.damage;
         let mortality = Random.roll(0,damage);
-
+        Sound.playMonsterHit(mortality);
         if (target.id == 'player'){
             EntityManager.transmitMessage(this.name+" attacks you!", 'danger', false, false, this.id);
             if(mortality == 0){

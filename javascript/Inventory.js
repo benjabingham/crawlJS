@@ -502,6 +502,9 @@ class Inventory{
         }
         if(!this.playerInBag){
             this.selectedContainer = false;
+            Sound.playCloseBag();
+        }else{
+            Sound.playOpenBag();
         }
         if(this.playerInBag && !this.selectedContainer){
 
@@ -550,7 +553,7 @@ class Inventory{
 
     static navigate(event){
         console.log(event)
-
+        Sound.playMove();
         //this way "up" and "item-up" both work.
         let splitEventType = event.type.split('-')
         let direction = splitEventType[splitEventType.length-1];

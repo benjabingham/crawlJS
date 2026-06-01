@@ -375,6 +375,8 @@ class Entity{
             }
         };
 
+        Sound.playOpenBag();
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
@@ -678,6 +680,7 @@ class Entity{
             EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage,disadvantage*-1);
             Sound.playMonsterHit(damage)
+            Sound.playSwordHit();
             if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;

@@ -50,6 +50,7 @@ class EntityManager{
         let item = weapon.item;
         if(EntityManager.itemWillDegrade(weapon,modifier,multiplier)){
             Display.flash($('body'),'item-breaking')
+            Sound.playBreakSword();
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  

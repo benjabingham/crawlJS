@@ -6,23 +6,47 @@ class Sound{
         click:[new Audio('audio/click.mp3')],
         die:[new Audio('audio/die1.mp3'),new Audio('audio/die2.mp3')],
         dieSmall:[new Audio('audio/dieSmall1.mp3'),new Audio('audio/dieSmall2.mp3')],
-        dieLarge:[new Audio('audio/dieLarge2.mp3')],
+        dieLarge:[new Audio('audio/dieLarge2.mp3'),new Audio('audio/dieLarge1.mp3')],
         monsterHit:[new Audio('audio/monsterHit.mp3')],
         monsterHitStrong:[new Audio('audio/monsterHitStrong.mp3')],
         monsterHitWeak:[new Audio('audio/monsterHitWeak.mp3')],
-        move:[new Audio('audio/move.mp3')],
-        rotate:[new Audio('audio/rotate.mp3')],
+        move:[new Audio('audio/move1.mp3'),new Audio('audio/move2.mp3'),new Audio('audio/move3.mp3')],
+        rotate:[new Audio('audio/swing1.mp3'),new Audio('audio/swing2.mp3'),new Audio('audio/swing3.mp3')],
+        getMoney:[new Audio('audio/getMoney.mp3')],
+        take:[new Audio('audio/take3.mp3')],
+        openBag:[new Audio('audio/openBag.mp3')],
+        closeBag:[new Audio('audio/closeBag.mp3')],
+        drawWeapon:[new Audio('audio/drawWeapon.mp3')],
+        awayWeapon:[new Audio('audio/awayWeapon.mp3')],
+        rewind:[new Audio('audio/rewind.mp3')],
+        breakSword:[new Audio('audio/breakSword.mp3')],
+        swordHit:[new Audio('audio/swordHit.mp3')],
+        burn:[new Audio('audio/burn.mp3')],
+
     }
 
 
     static soundInit(){
+        //adjust volumes
+        let volumes = {
+            drawWeapon:0.5,
+            dieSmall:0.5,
+            die:0.5,
+            dieLarge:0.5
+        }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
+            let groupName = group[0];
+            
             soundGroup.forEach(sound=>{
+                //sound.volume = 0.5
+                //sound.playbackRate = 0.6
                 sound.addEventListener('ended', (e)=>{
-                    sound.load();
-                    console.log('load');
+                    //sound.load();
                 })
+                if(volumes[groupName]){
+                    sound.volume = volumes[groupName]
+                }
             })
             
         })
@@ -69,12 +93,52 @@ class Sound{
         Sound.playSound(soundGroup);
     }
 
+    static playGetMoney(){
+        Sound.playSound(Sound.soundGroups.getMoney)
+    }
+
     static playMove(){
         Sound.playSound(Sound.soundGroups.move)
     }
 
+    static playRewind(){
+        Sound.playSound(Sound.soundGroups.rewind)
+    }
+
     static playRotate(){
         Sound.playSound(Sound.soundGroups.rotate)
+    }
+
+    static playBreakSword(){
+        Sound.playSound(Sound.soundGroups.breakSword)
+    }
+
+    static playSwordHit(){
+        //Sound.playSound(Sound.soundGroups.swordHit)
+    }
+
+    static playTake(){
+        Sound.playSound(Sound.soundGroups.take)
+    }
+
+    static playOpenBag(){
+        Sound.playSound(Sound.soundGroups.openBag)
+    }
+
+    static playCloseBag(){
+        Sound.playSound(Sound.soundGroups.closeBag)
+    }
+
+    static playDrawWeapon(){
+        Sound.playSound(Sound.soundGroups.drawWeapon)
+    }
+
+    static playAwayWeapon(){
+        Sound.playSound(Sound.soundGroups.awayWeapon)
+    }
+
+    static playBurn(){
+        Sound.playSound(Sound.soundGroups.burn)
     }
 
     static playSound(soundGroup){

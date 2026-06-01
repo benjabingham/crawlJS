@@ -182,6 +182,7 @@ class GameMaster{
         }
         console.log('rewind');
         History.rewind();
+        Sound.playRewind();
         EntityManager.skipBehaviors = true;
         Log.turnCounter--;
         Log.messages[log.turnCounter] = false;

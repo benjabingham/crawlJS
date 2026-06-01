@@ -352,6 +352,7 @@ class Player {
         }
         item.quickSlot = quickSlot
         Player.inventory.items.push(item);
+        Sound.playTake();
         
         Player.inventoryCleanup();
     }
@@ -360,6 +361,7 @@ class Player {
         if(Player.equipped || !GameMaster.dungeonMode){
             return false;
         }
+        Sound.playDrawWeapon();
         Player.equipped = weapon;
         if(!weapon.quickSlot){
             Inventory.swapSlot(0,weapon);
@@ -383,6 +385,7 @@ class Player {
         if (!Player.equipped){
             return false;
         }
+        Sound.playAwayWeapon();
         let weapon = Player.equipped;
         Player.equipped = false;
         if(weapon.weapon){
@@ -430,6 +433,8 @@ class Player {
         if(Player.lightTime > 95){
             Log.addMessage('the fuel is burning fast.')
         }
+
+        Sound.playBurn();
         
 
         if(consume){
@@ -849,6 +854,7 @@ class Player {
         Player.gold += n;
         Player.gold = Math.max(Player.gold,0)
         Display.flash($('.gold-div'),'goldDivs')
+        Sound.playGetMoney();
         Display.displayGold()
     }
 

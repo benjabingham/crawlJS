@@ -166,12 +166,15 @@ class Entity{
     move(x, y){
         x += this.x;
         y += this.y;
-    
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
             if(Board.getStain(this.x,this.y)){
                 Board.smearStain(this,{x:x,y:y});
             }
             this.setPosition(x,y);
+            if(isPlayer){
+                Sound.playMove();
+            }
             return true;
         }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && PlayerEntity.prototype.isPrototypeOf(this)){
             this.lootContainer(Board.entityAt(x,y));

@@ -513,7 +513,7 @@ class GameMaster{
         let swordId = EntityManager.getProperty('player','sword')
         EntityManager.removeEntity(swordId);
         EntityManager.rotateSword(swordId,direction);
-        Sound.playRotate();
+        
         GameMaster.postPlayerAction();
     }
 
@@ -585,7 +585,13 @@ class GameMaster{
             Inventory.displayInventory();
             return false;
         }    
-        EntityManager.placeSword('player');   
+        EntityManager.placeSword('player');
+        let swordId = EntityManager.getProperty('player','sword')
+        let sword = EntityManager.getEntity(swordId);
+        console.log(sword.getStrikeType());
+        if(!EntityManager.skipBehaviors && sword.getStrikeType() == 'swing'){
+            Sound.playRotate();
+        }   
         if(!EntityManager.skipBehaviors){
             GameMaster.resolveEntityBehaviors();
         }

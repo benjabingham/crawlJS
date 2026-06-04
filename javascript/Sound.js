@@ -22,6 +22,7 @@ class Sound{
         breakSword:[new Audio('audio/breakSword.mp3')],
         swordHit:[new Audio('audio/swordHit.mp3')],
         burn:[new Audio('audio/burn.mp3')],
+        error:[new Audio('audio/error.mp3'),new Audio('audio/error.mp3'),new Audio('audio/error.mp3')],
 
     }
 
@@ -139,6 +140,10 @@ class Sound{
 
     static playBurn(){
         Sound.playSound(Sound.soundGroups.burn)
+    }
+
+    static playError(){
+        Sound.playSound(Sound.soundGroups.error)
     }
 
     static playSound(soundGroup){

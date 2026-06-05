@@ -3,6 +3,9 @@ class Sound{
         hit:[new Audio('audio/hit.mp3')],
         hitStrong:[new Audio('audio/hitStrong.mp3')],
         hitWeak:[new Audio('audio/hitWeak.mp3')],
+        crit:[new Audio('audio/crit.mp3')],
+        brutalCrit:[new Audio('audio/brutalCrit.mp3')],
+        savageCrit:[new Audio('audio/savageCrit.mp3')],
         click:[new Audio('audio/click.mp3')],
         die:[new Audio('audio/die1.mp3'),new Audio('audio/die2.mp3')],
         dieSmall:[new Audio('audio/dieSmall1.mp3'),new Audio('audio/dieSmall2.mp3')],
@@ -36,7 +39,10 @@ class Sound{
             drawWeapon:0.5,
             dieSmall:0.5,
             die:0.5,
-            dieLarge:0.5
+            dieLarge:0.5,
+            crit:0.1,
+            brutalCrit:0.1,
+            savageCrit:0.1
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -159,6 +165,17 @@ class Sound{
 
     static playError(){
         Sound.playSound(Sound.soundGroups.error)
+    }
+
+    static playCrit(level){
+        if(!level){return false}
+        if(level==1){
+            Sound.playSound(Sound.soundGroups.crit)
+        }else if(level==2){
+            Sound.playSound(Sound.soundGroups.brutalCrit)
+        }else{
+            Sound.playSound(Sound.soundGroups.savageCrit)
+        }
     }
 
     static playSound(soundGroup){

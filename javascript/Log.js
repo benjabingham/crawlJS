@@ -204,6 +204,7 @@ class Log{
     }
 
     static sendCritMessage(crit){
+        Sound.playCrit(crit);
         if(crit == 1){
             EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
         }else if(crit == 2){

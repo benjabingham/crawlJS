@@ -428,6 +428,7 @@ class Inventory{
     }
 
     static getSelectedItem(){
+        console.log(this.selectedInventory);
         if(this.selectedInventory == "player-inventory"){
             return Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
         }else{
@@ -504,6 +505,7 @@ class Inventory{
         }
         if(!this.playerInBag){
             this.selectedContainer = false;
+            this.selectedInventory = 'player-inventory'
         }
         if(this.playerInBag && !this.selectedContainer){
 

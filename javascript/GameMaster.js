@@ -35,7 +35,7 @@ class GameMaster{
             //{x:50,y:42}
         );
 
-        XP.levelUp(false);
+        //XP.levelUp(false);
 
     }
 
@@ -51,6 +51,7 @@ class GameMaster{
     static startGame(message=false, position=false){
         $('#day-div').text('Day '+Save.day);
         GameMaster.dungeonMode = true;
+        Inventory.selectedInventory = "player-inventory";
         Log.wipeLog();
         Log.initialWarnings();
         Inventory.toggleInventory(false)

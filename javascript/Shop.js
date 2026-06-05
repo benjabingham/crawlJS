@@ -96,8 +96,6 @@ class Shop{
             slot++;
         }
 
-        console.log(Shop.carriedMaterials)
-        console.log(Shop.inventory);
         
     }
 
@@ -186,12 +184,8 @@ class Shop{
         return potion;
     }
 
-    //something wrong happening here with slots.
-    //the shopContainer is desynced from the actual shop.
     static buyItem(slot){
-        console.log(slot);
         let item = JSON.parse(JSON.stringify(Shop.inventory[slot]));
-        console.log(item);
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
             //Sound.playError();
@@ -204,14 +198,11 @@ class Shop{
         if(slot != -1){
             Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
         }
-        console.log(Shop.inventory[slot])
         Player.inventoryCleanup();
         Inventory.displayInventory();
         Inventory.findValidSelect();
-        console.log(Inventory.getSelectedItem())
         Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
         GameMaster.postPlayerAction()
-        console.log(Shop.inventory)
         return true;
     }
 

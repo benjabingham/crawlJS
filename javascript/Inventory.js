@@ -428,7 +428,7 @@ class Inventory{
     }
 
     static getSelectedItem(){
-        console.log(this.selectedInventory);
+        if(!this.selectedContainer){this.selectedInventory = "player-inventory"}
         if(this.selectedInventory == "player-inventory"){
             return Player.inventory.items[Inventory.displayedInventorySlots[Inventory.selectedInventory]]
         }else{
@@ -570,7 +570,7 @@ class Inventory{
             case "right":
                 if(Inventory.selectedInventory == "world-inventory"){
                     Inventory.selectedInventory = "player-inventory"
-                }else if(Inventory.selectedInventory == "player-inventory"){
+                }else if(Inventory.selectedInventory == "player-inventory" && Inventory.selectedContainer){
                     Inventory.selectedInventory = "world-inventory";
                     Inventory.selectWorldInventoryTab();
                 }

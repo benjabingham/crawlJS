@@ -18,6 +18,9 @@ class Sound{
         closeBag:[new Audio('audio/closeBag.mp3')],
         drawWeapon:[new Audio('audio/drawWeapon.mp3')],
         awayWeapon:[new Audio('audio/awayWeapon.mp3')],
+        drop:[new Audio('audio/drop.mp3')],
+        eat:[new Audio('audio/eat.mp3')],
+        drink:[new Audio('audio/drink.mp3')],
         rewind:[new Audio('audio/rewind.mp3')],
         breakSword:[new Audio('audio/breakSword.mp3')],
         swordHit:[new Audio('audio/swordHit.mp3')],
@@ -136,6 +139,18 @@ class Sound{
 
     static playAwayWeapon(){
         Sound.playSound(Sound.soundGroups.awayWeapon)
+    }
+
+    static playDrop(){
+        Sound.playSound(Sound.soundGroups.drop)
+    }
+
+    static playDrink(){
+        Sound.playSound(Sound.soundGroups.drink)
+    }
+
+    static playEat(){
+        Sound.playSound(Sound.soundGroups.eat)
     }
 
     static playBurn(){

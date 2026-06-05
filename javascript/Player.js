@@ -444,6 +444,7 @@ class Player {
 
     static eatItem(item){
         if(!item.food){return false}
+        Sound.playEat();
         if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
         Log.addMessage('You eat the '+item.name+".");
@@ -475,6 +476,7 @@ class Player {
     static drinkItem(item){
         let slot = item.slot;
         if(!item.potable){return false}
+        Sound.playDrink();
         if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
 
         Log.addMessage('You drink the '+item.name+".");
@@ -604,6 +606,7 @@ class Player {
         if(!Player.inventory.items[slot]){
             return false;
         }
+        Sound.playDrop();
         if(Player.equipped && Player.equipped.slot == slot){
             Player.unequipWeapon();
         }

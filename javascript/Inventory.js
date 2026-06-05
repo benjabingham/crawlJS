@@ -736,6 +736,7 @@ class Inventory{
             $(element).on('mousemove', function(){
                 $(element).off('mousemove');
                 if(behaviorSet){return false}
+                Sound.playTake();
                 behaviorSet = true;
                 if(follower){
                     $('body').append(
@@ -773,6 +774,7 @@ class Inventory{
                 return false;
             }
             if(!Inventory.draggedItem.inventoryId){return false}
+            Sound.playDrop();
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
             if(Display.mouseOverBoard && Inventory.draggedItem.inventoryId == 'player-inventory'){

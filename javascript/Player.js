@@ -55,7 +55,7 @@ class Player {
         ]
     }
 
-    static gold = 200;
+    static gold = 0;
     //points to equipped object
     static equipped = false;
     static level=1;

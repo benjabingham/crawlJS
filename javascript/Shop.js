@@ -42,6 +42,7 @@ class Shop{
 
     //I don't think this ever actually does anything...
     //items are never truly removed from the shop, they are just marked as "purchased".
+    /*
     static inventoryCleanup(){
         let newInventory = [];
         let slot = 0;
@@ -54,6 +55,7 @@ class Shop{
         })
         Shop.setInventory(newInventory);
     }
+    */
 
 
     //stock inventory from fresh
@@ -94,8 +96,6 @@ class Shop{
             slot++;
         }
 
-        console.log(Shop.carriedMaterials)
-        console.log(Shop.inventory);
         
     }
 
@@ -185,24 +185,24 @@ class Shop{
     }
 
     static buyItem(slot){
-        let item = Shop.inventory[slot];
+        let item = JSON.parse(JSON.stringify(Shop.inventory[slot]));
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
+            //Sound.playError();
             GameMaster.postPlayerAction()
             return false;
         }
         Player.changeGold(item.price*-1);
         item.fresh = false;
-        Inventory.take(slot,true);
+        Inventory.take(slot,false);
         if(slot != -1){
-            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier})
+            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
         }
-        Shop.inventoryCleanup();
         Player.inventoryCleanup();
         Inventory.displayInventory();
+        Inventory.findValidSelect();
         Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
         GameMaster.postPlayerAction()
-
         return true;
     }
 

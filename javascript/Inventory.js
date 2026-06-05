@@ -179,6 +179,8 @@ class Inventory{
     }
 
     static displayItemInfo(item, inventory){
+        //dont ever display placeholder items in shop
+        if(!item || !item.name){return false}
         if(!item){
             $('#'+inventory+'-description').html('')
             return false;
@@ -421,7 +423,7 @@ class Inventory{
         }
         let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
         return $('<button>').text(text).addClass('inventory-title-buttons').on('click',e=>{
-            this.toggleInventory();
+            GameMaster.inventoryOpenClose();
         })
     }
 
@@ -551,6 +553,7 @@ class Inventory{
         return 0;
     }
 
+    //expect event to have type:"left", or type"*-left"
     static navigate(event){
         console.log(event)
         Sound.playMove();
@@ -572,12 +575,28 @@ class Inventory{
                 GameMaster.stopDrop();
                 break;
             case "up":
-                this.displayedInventorySlots[Inventory.selectedInventory]--
+                let nUps = 0
+                //go up once, then keep going up until selected item has a name, or have looked at all items in inventory.
+                while((!this.getSelectedItem().name || !nUps) && nUps < this.getItemsInInventory(Inventory.selectedInventory)){
+                    this.displayedInventorySlots[Inventory.selectedInventory]--
+                    nUps++;
+                    Inventory.loopSelectFromNegative();
+                    console.log({
+                        name:this.getSelectedItem(),
+                        nUps:nUps,
+                        items:this.getItemsInInventory(Inventory.selectedInventory)
+                    })
+                }
                 break;
             case "down":
-                //use modulo to loop around
-                this.displayedInventorySlots[Inventory.selectedInventory] = (this.displayedInventorySlots[Inventory.selectedInventory] + 1) % this.getItemsInInventory(Inventory.selectedInventory)
-                
+                let nDowns = 0
+                //works same as up but down
+                while((!this.getSelectedItem().name || !nDowns) && nDowns < this.getItemsInInventory(Inventory.selectedInventory)){
+                    //use modulo to loop around
+                    this.displayedInventorySlots[Inventory.selectedInventory] = (this.displayedInventorySlots[Inventory.selectedInventory] + 1) % this.getItemsInInventory(Inventory.selectedInventory)
+                    this.findValidSelect();
+                    nDowns++;
+                }
                 break;
         }
 
@@ -615,9 +634,19 @@ class Inventory{
 
     static findValidSelect(){
         let nItems = this.getItemsInInventory(this.selectedInventory);
-        while(this.displayedInventorySlots[Inventory.selectedInventory] >= nItems){
+        //go up as long as selected item is invalid, but not out of range
+        while(Inventory.getSelectedItem() && !Inventory.getSelectedItem().name){
+            this.displayedInventorySlots[Inventory.selectedInventory]++;
+        }
+        //go down while selected item is above range or invalid
+        while(this.displayedInventorySlots[Inventory.selectedInventory] >= nItems || (Inventory.getSelectedItem() && !Inventory.getSelectedItem().name)){
             this.displayedInventorySlots[Inventory.selectedInventory]--
         }
+        Inventory.loopSelectFromNegative();
+    }
+
+    static loopSelectFromNegative(){
+        let nItems = this.getItemsInInventory(this.selectedInventory);
         this.displayedInventorySlots[Inventory.selectedInventory] += nItems;
         this.displayedInventorySlots[Inventory.selectedInventory] %= nItems;
         this.displayedInventorySlots[Inventory.selectedInventory] = this.displayedInventorySlots[Inventory.selectedInventory] ? this.displayedInventorySlots[Inventory.selectedInventory] : 0;
@@ -625,6 +654,8 @@ class Inventory{
 
     static displayContainerInventory(){
         let container = Inventory.selectedContainer;
+        console.log(Player.inventory)
+        console.log(Inventory.selectedContainer)
         $('#world-inventory-list').html('');
         if(!container){
             this.clearContainerInventory();
@@ -998,7 +1029,7 @@ class Inventory{
 
     static getUnequipButton(slot){
         return $('<button>').addClass('item-button').text('unequip').on('click',function(){
-            GameMaster.useItem({type:'item-'+(slot+1)});
+            GameMaster.equipSelectedItem(false,slot);
         })
     }
 

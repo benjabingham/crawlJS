@@ -176,7 +176,7 @@ class LootManager{
     }
 
     static getPotionLoot(tier = 0, replaceNeg = true){
-        let nRolls = tier-3;
+        let nRolls = tier-2;
         let greater = (nRolls > 0);
         nRolls = Math.abs(nRolls);
 

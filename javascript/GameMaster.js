@@ -51,6 +51,7 @@ class GameMaster{
     static startGame(message=false, position=false){
         $('#day-div').text('Day '+Save.day);
         GameMaster.dungeonMode = true;
+        Inventory.selectedInventory = "player-inventory";
         Log.wipeLog();
         Log.initialWarnings();
         Inventory.toggleInventory(false)
@@ -375,8 +376,14 @@ class GameMaster{
         return result;
     }
 
-    static equipSelectedItem(event){
-        let item = Inventory.getSelectedItem();
+    //if slot is defined, uses that slot instead of selected item
+    static equipSelectedItem(event,slot = null){
+        let item;
+        if(slot == null){
+            item = Inventory.getSelectedItem();
+        }else{
+            item = Player.inventory.items[slot];
+        }
         if(!Inventory.itemIsAccessible(item)){return false}
         
         let result = false

@@ -35,23 +35,35 @@ class EntityManager{
         return new SwordEntity(ownerId, item);
     }
 
+    //checks if an item will degrade but doesnt degrade it - returns t/f
+    static itemWillDegrade(weapon, modifier, multiplier, damage = 0){
+        let item = weapon.item;
+        let flimsy = item.flimsy;
+        if(Player.perks.durability.disposableBlows && damage){flimsy += damage}
+        modifier += Player.getDegradeChanceModifier(item);
+        let degradeChance = (flimsy) + modifier;
+        let random = (Math.random()*100) * (1/multiplier);
+        return random < degradeChance;
+    }
+
     static degradeItem(weapon, modifier = 0, multiplier = 1){
         let item = weapon.item;
-        let degradeChance = (item.flimsy) + modifier;
-        let random = (Math.random()*100) * (1/multiplier);
-        if(random < degradeChance){
+        if(EntityManager.itemWillDegrade(weapon,modifier,multiplier)){
+            Display.flash($('body'),'item-breaking')
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
                 if(!item.worn){
                     LootManager.applyModifier(item,itemVars.weaponModifiers.worn);
-                }          
+                }       
+                XP.gainDurabilityXP(10)   
             }else{
                 EntityManager.transmitMessage(item.name + ' has broken!', 'urgent','broken','This item can no longer be used. Use a point of luck to extend its life.');
 
                 LootManager.breakWeapon(Player.equipped);
                 Player.unequipWeapon();
                 weapon.unequip();
+                XP.gainDurabilityXP(30)   
             }
         }
     }
@@ -78,6 +90,7 @@ class EntityManager{
         let owner = EntityManager.getEntity(ownerId);
         let swordId = owner.sword;
         let sword = EntityManager.getEntity(swordId);
+        if(!sword.item || !sword.item.weapon){return false}
 
         sword.place();
     }
@@ -113,6 +126,47 @@ class EntityManager{
         return true;
     }
 
+    /*
+    //lose 1 stamina on move
+    static checkEncumbered(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            if(Player.stamina >= encumbrance){
+                Player.changeStamina(encumbrance*-1);
+            }else{
+                EntityManager.cancelAction({insuficientStamina:true});
+                return false;
+            }
+        }
+
+        return true;
+    }
+    */
+    //on move, chance to lose 1 stamina and end turn.
+    //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
+    static checkEncumberedV2(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            let diff = Player.getBulk()-Player.maxBulk;
+            let percentOver = diff/Player.maxBulk;
+            let nChecks = 1;
+            nChecks += Math.floor(percentOver*10)
+            for(let i = 0; i < nChecks; i++){
+                let chance = 3;
+                if(i==0){chance += 2}
+                if(Random.roll(1,100) <= chance){
+                    Player.changeStamina(-1)
+                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                    Display.flash($('#player-inventory'),'inventory')
+                    XP.gainBulkXP(nChecks)
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     static checkEther(){
         if(Player.equipped && Player.equipped.ether){
             Player.changeStamina(1);
@@ -124,6 +178,9 @@ class EntityManager{
             return false;
         }
         if(!EntityManager.checkUnwieldy()){
+            return false;
+        }
+        if(Board.isOpenSpace(x,y) && !EntityManager.checkEncumberedV2()){
             return false;
         }
         EntityManager.checkEther();
@@ -168,7 +225,9 @@ class EntityManager{
                     skip++
                 }
             }
-            
+            entity.checkPreMoveTriggers();
+
+            //do this only if not stunned
             if (!skip){
                 entity.parryable = false;
                 switch(entity.behavior){
@@ -179,22 +238,10 @@ class EntityManager{
                         entity.chaseBinary();
                     default:
                 }
-                if(entity.dead && entity.reconstitute && Monster.prototype.isPrototypeOf(entity)){
-                    entity.reconstituteFn(entity.reconstitute);
-                }
-
-                if(entity.changeForms){
-                    entity.checkTransform('perTurnChance')
-                }
-                
             }
-            if(entity.decay && !slow){
-                entity.triggerDecay();
-            }
-            //can still spawn if stunned
-            if(entity.spawnEntities && !slow && !entity.wait){
-                EntityManager.spawnEntity(entity);
-            }
+            
+            entity.checkPostMoveTriggers(skip, slow)
+            
             entity.stunned = Math.max(entity.stunned-1, 0);
             if (!entity.dead){ 
                 if(entity.stunned > 0){
@@ -220,6 +267,7 @@ class EntityManager{
     }
 
     static equipWeapon(wielderId, weapon, verbose=true){
+        if(!weapon.weapon){return false}
         let id = EntityManager.getProperty(wielderId, "sword");
         let sword = EntityManager.getEntity(id);
         sword.equip(weapon); 
@@ -287,61 +335,113 @@ class EntityManager{
     static loadRoom(json){
         console.log(json);
         Save.catchUpMap(json.name);
+        Board.mapName = json.name;
+        console.log(Board.mapName)
         Board.setDimensions(json.width,json.height)
         Board.boardInit(json);
 
         Board.destinations = json.destinations;
         console.log(json.roster)
         json.roster.forEach((entitySave)=>{
-            let groupInfo = entitySave.entityGroupInfo;
-            let entityObj;
-            let x = entitySave.x;
-            let y = entitySave.y;
-            let random = Random.roll(0,99);
-            let spawn = (random < groupInfo.spawnChance || !groupInfo.spawnChance);
-            if(groupInfo.entityType == "player"){
-                EntityManager.playerEntity = EntityManager.playerInit(x, y)
-            }else if(groupInfo.entityType == "monster"){
-                if(entitySave.alive && spawn){
-                    entityObj = new Monster(groupInfo.key,x,y,groupInfo);
-                }
-            }else if(groupInfo.entityType == 'wall'){
-                entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible, groupInfo.wallType);
-            }else if(groupInfo.entityType == 'container'){
-                if(entitySave.alive){
-                    entityObj = new Container(groupInfo.key,x,y,groupInfo);
-                }
-            }
-            if(entityObj){
-                entityObj.index = entitySave.index;
-            }else{
-                console.log({
-                    message:'entityObj = false',
-                    entitySave:entitySave
-                })
-                return false;
-            }
-            if(entitySave.inventory){
-                entityObj.inventory.items = entitySave.inventory.items;
-                entityObj.inventory.gold = entitySave.inventory.gold;
-            }
-
-            if(entityObj.spawnEntities){
-                if(entitySave.containedEntities){
-                    entityObj.containedEntities = entitySave.containedEntities;
-                }else{
-                    entityObj.generateContainedEntities();
-                }
-            }
+            EntityManager.spawnEntity(entitySave)
         })
         
         EntityManager.currentMap = json;
         
     }
 
+    static spawnEntity(entitySave, spawnChance = -1){
+        let groupInfo = entitySave.entityGroupInfo;
+        let entityObj;
+        let x = entitySave.x;
+        let y = entitySave.y;
+        let random = Random.roll(0,99);
+        if(spawnChance == -1){
+            spawnChance = groupInfo.spawnChance
+        }
+        let spawn = (random < spawnChance || typeof spawnChance == 'undefined');
+        if(groupInfo.entityType == "player"){
+            EntityManager.playerEntity = EntityManager.playerInit(x, y)
+        }else if(groupInfo.entityType == "monster"){
+            if(entitySave.alive && spawn){
+                entityObj = new Monster(groupInfo.key,x,y,groupInfo);
+            }
+        }else if(groupInfo.entityType == 'wall'){
+            entityObj = new Wall(x, y, groupInfo.hitDice, groupInfo.name, groupInfo.destructible, groupInfo.wallType);
+        }else if(groupInfo.entityType == 'container'){
+            if(entitySave.alive){
+                entityObj = new Container(groupInfo.key,x,y,groupInfo);
+            }
+        }else if(groupInfo.entityType == 'itemPile'){
+            if(entitySave.alive){
+                entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
+            }
+        }
+        if(entityObj){
+            entityObj.index = entitySave.index;
+            
+        }else{
+            console.log({
+                message:'entityObj = false',
+                entitySave:entitySave
+            })
+            return false;
+        }
+        if(entitySave.inventory){
+            entityObj.inventory.items = entitySave.inventory.items;
+            entityObj.inventory.gold = entitySave.inventory.gold;
+        }
+
+        if(entityObj.spawnEntities){
+            if(entitySave.containedEntities){
+                entityObj.containedEntities = entitySave.containedEntities;
+            }else{
+                entityObj.generateContainedEntities();
+            }
+        }
+
+        if(!entityObj.checkSpawnConditions()){
+            console.log('obliterating')
+            entityObj.obliterated = true;
+            entityObj.dead = true;
+            entityObj.x = -2;
+            entityObj.y = -2;
+        }
+    }
+
+    static reanimateMonsters(){
+        let message = Board.mapName + ' stirs to life...'
+        if(!message.split(' ')[0] != "The"){
+            message = "The "+ message
+        }
+        Log.addMessage(message,'urgent')
+        let roster = EntityManager.currentMap.roster;
+        let ignoredIndexes = []
+        console.log(EntityManager.entities)
+        Object.entries(EntityManager.entities).forEach(entity=>{
+            ignoredIndexes.push(entity.index)
+        })
+        let i = 0;
+        //spawn each entity if it isnt already in the map, and if the player doesnt have line of sight
+        roster.forEach(entitySave=>{
+            entitySave.alive = true;
+            console.log(entitySave)
+            if(
+                !ignoredIndexes.includes(i) &&
+                entitySave.entityGroupInfo.entityType == 'monster' &&
+                !EntityManager.hasPlayerLos(entitySave)
+            ){
+                EntityManager.spawnEntity(entitySave)
+            }
+
+            i++;
+        })
+
+    }
+
     //function used for entities spawning other entities
     //if they live when you leave the dungeon, their loot is returned to their container
-    static spawnEntity(spawner){
+    static spawnEntityFromSpawner(spawner){
         let spawnEntities = spawner.spawnEntities;
 
         if(!spawner.containedEntities.length){
@@ -349,6 +449,7 @@ class EntityManager{
         }
 
         if(Math.random()*100 > spawnEntities.spawnChance && !spawner.disturbed){
+            //console.log('nospawn')
             return false;
         }
 
@@ -463,6 +564,7 @@ class EntityManager{
 
     static updateSavedInventories(){
         for (const [key, entity] of Object.entries(EntityManager.entities)) { 
+            //if entity was spawned, return it and its items to its spawner
             if(typeof entity.spawnerID != 'undefined' ){
                 if ((entity.dead && !entity.reconstitute) || entity.obliterated){
                     delete EntityManager.entities[key];
@@ -473,7 +575,7 @@ class EntityManager{
                         spawner.returnContainedEntity(entity);
                         spawnerSave = EntityManager.currentMap.roster[spawner.index];
                     }
-                    //if spawner was spawned, don't bother
+                    //if spawner was itself spawned, don't bother
                     if(spawnerSave && !spawnerSave.spawnerID && !spawner.spawnEntities.items){
                         spawnerSave.inventory.items = spawner.inventory.items;
                         spawnerSave.inventory.gold = spawner.inventory.gold;
@@ -481,7 +583,6 @@ class EntityManager{
                     }
                    
                 }
-                
             }else if(typeof entity.index != 'undefined'){
                 let entitySave = EntityManager.currentMap.roster[entity.index];
                 entitySave.inventory.items = entity.inventory.items;
@@ -490,6 +591,20 @@ class EntityManager{
                     entitySave.containedEntities = entity.containedEntities;
                 }
 
+            }else if(entity.isItemPile && !entity.obliterated){
+                let entitySave = {
+                    alive:true,
+                    entityGroupId:-1,
+                    entityGroupInfo:{
+                        id:-1,
+                        entityType:"itemPile"
+                    },
+                    index:EntityManager.currentMap.roster.length,
+                    inventory:entity.inventory,
+                    x:entity.x,
+                    y:entity.y
+                }
+                EntityManager.currentMap.roster.push(entitySave);
             }
         }
     }
@@ -553,9 +668,14 @@ class EntityManager{
         console.log(message);
     }
 
-    //does this entity have line of sight of player (DOES NOT INCLUDE LIGHT, BUT RETURNS FALSE IF OUTSIDE OF VIEW WINDOW)
-    static hasPlayerLos(entity){
-        return Board.getLineOfSight(entity.x,entity.y);
+    //does this entity have line of sight of player (RETURNS FALSE IF OUTSIDE OF VIEW WINDOW)
+    static hasPlayerLos(entity, requireLight = false){
+        if(requireLight){
+            return Board.hasPlayerLos(entity)
+        }
+        else{
+            return Board.getLineOfSight(entity.x,entity.y);
+        }
     }
 
     static transformEntity(entity, formInfo){
@@ -592,34 +712,6 @@ class EntityManager{
         Board.placeEntity(newEntity,newEntity.x,newEntity.y);
     }
 
-    static sendStrikeMessage(strikeType, weapon, target){
-        let message = '';
-        let tipText = '';
-        switch (strikeType){
-            case "swing":
-                message = 'you swing your weapon into the '+target.name+"."
-                tipText = "A swing is a strike that has you rotating your weapon into a target."
-                break;
-            case "jab":
-                message = "you jab the "+target.name+'.'
-                tipText = "A target is jabbed when you strike them by advancing towards them."
-                break;
-            case "strafe":
-                message = "you deliver a strafing strike to the "+target.name+"."
-                strikeType = "strafing"
-                tipText = "A strafing strike is one where you strike while moving sideways or backwards diagonally"
-                break;
-            case "draw":
-                message = 'you draw your weapon, striking the '+target.name+"."
-                tipText = "a draw strike occurs when you draw your weapon into a target."
-                break;
-            default:    
-                message = "you strike the "+target.name+".";
-
-        }
-        EntityManager.transmitMessage(message,false,strikeType,tipText,target.id);
-    }
-
     static getDamageText(target,damage){
         if(!damage){
             return 'a negligible strike...'
@@ -643,10 +735,8 @@ class EntityManager{
 
     static getPossibleStrikes(target){
         let playerPos = EntityManager.playerEntity;
-        console.log(playerPos);
         let weaponPos = playerPos.swordEntity;
         let possibleStrikes = [];
-        console.log(weaponPos,target);
 
         let swordToTarget = {
             x:target.x - weaponPos.x,
@@ -659,8 +749,7 @@ class EntityManager{
         }
 
 
-        if(Player.equipped && EntityManager.getDistance(weaponPos,target) == 1){
-            console.log('equipped');
+        if(Player.equipped && Player.equipped.weapon && EntityManager.getDistance(weaponPos,target) == 1){
             //the space the player would have to move into to make a moving attack
             let moveSpace = {x: target.x - playerToWeapon.x, y: target.y - playerToWeapon.y}
             let canMoveStrike = Board.isOpenSpace(moveSpace.x, moveSpace.y) || Board.entityAt(moveSpace.x,moveSpace.y).id == playerPos.swordEntity.id

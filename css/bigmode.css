@@ -1,0 +1,43 @@
+.bigmode{
+    --gridSize:42px;
+    #mid-content{
+        width:716px;
+    }
+
+    #log-window{
+        margin-top:0rem;
+        margin-left:1rem;
+    }
+
+    #board:after{
+        width:716px;
+        height:716px;
+    }
+
+    .board-grid-div{
+        font-size:2.1rem;
+    }
+
+    #board-entity-8-8{
+        text:before{
+            transform:translate(-12px)
+        }
+    }
+    .board-stain-div{
+        margin-top:0px;
+        margin-left:0px;
+        margin-right:0px;
+    }
+
+    .board-entity-div.highlight-clockwise>text:before{
+        transform:translate(-12px) rotate(45deg)  !important;
+    }
+
+    .board-entity-div.highlight-counterclockwise>text:before{
+        transform:translate(-12px) rotate(-45deg) !important;
+    }
+
+    #town-screen{
+        height:100%;
+    }
+}

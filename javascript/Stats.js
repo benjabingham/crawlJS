@@ -1,6 +1,6 @@
 class Stats{
     static logStats(){
-        let n = 300;
+        let n = 3000;
         [{array:monsterVars, type:'monster'},{array:containerVars,type:'container'}].forEach((category)=>{
             Object.keys(category.array).forEach((key)=>{
                 let total = 0;
@@ -32,12 +32,17 @@ class Stats{
 
                     return -1;
                 })
-                console.log({
+                let results = {
                     key:key,
                     average:total/n,
                     median:all[Math.floor(n/2)],
                     all:all
-                })
+                }
+                console.log(
+                    results
+                )
+                $('body').prepend(JSON.stringify(results))
+                $('body').prepend($('<hr>'))
             })
         })
     }

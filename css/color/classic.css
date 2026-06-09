@@ -1,8 +1,11 @@
 .classic{
+    --gridSize:30px;
+
     /*dungeon*/
     --dark:#222;
     --darkAccent:#262626;
     --overlay:#2222222d;
+    --bag-overlay:#222222bb;
     /*
     --floor:#c2c2c2;
 q
@@ -60,6 +63,9 @@ q
     --luckBarText:var(--darkGreen);
     --hungerBar:var(--orange);
     --hungerBarText:var(--darkOrange);
+    --xpBar:var(--lightBlue);
+    --xpBarFull:var(--green);
+    --xpBarText:var(--darkBlue);
     --resourceBorder:var(--defaultEntity);
 
 
@@ -72,14 +78,17 @@ q
     
     --red:rgb(231, 46, 0);
     --darkRed:rgb(117,0,0);
+    --deepRed:rgb(77, 1, 1);
     --muteRed:rgb(190, 38, 0);
     --lightRed:rgb(243, 152, 129);
     --brightPurple:rgb(153, 0, 255);
     --darkPurple:rgb(90, 0, 150);
+    --lightBlue:rgb(86, 122, 202);
     --blue:blue;
     --darkBlue:rgb(0, 0, 136);
     --green:rgb(16, 167, 16);
     --darkGreen:rgb(0, 105, 0);
+    --deepGreen:rgb(1, 48, 1);
     --yellow:yellow;
     --darkYellow:rgb(110, 110, 0);
     --orange:orange;
@@ -94,7 +103,7 @@ q
     --darkGray:#303030;
     --lightGray:#636363;
     --silver:rgb(139, 137, 134);
-    --gold:rgb(172, 118, 20);;
+    --gold:rgb(172, 118, 20);
 
 
     
@@ -111,7 +120,8 @@ q
     --shopFresh:#fdd7003a;
     --shopFreshBorder:var(--inventoryBorder);
     --selectedSlot:#f3e3b6;
-
+    --slotUnavailable:#b1a48e;
+    --flashInventory:#dba444;
     
     /*log*/
     --logFresh:rgba(252, 244, 233, 0.562);
@@ -120,6 +130,9 @@ q
 
     /*town*/
     --shopBackground:rgba(252, 143, 0, 0.164);
+
+    /*flash*/
+    --flashItemBreaking:#5a431f;
 }
 
 .clearblue{

@@ -1,11 +1,4 @@
-todo - inventory rework
-    - inventory dialog boxes 
-    - carry weight instead of slot system
-    - keep "belt" as slot system. Perhaps these items use less weight.
-
 more skills
-    - haggling
-    - selling
     - guard
         enemies attack your proficient weapons with disadvantage
 
@@ -58,9 +51,6 @@ doors - walls that can be attacked and "open" or disappear upon bumping into the
 some entities can do this, others cant.
 how to close... ???
 
-overall bonus on attacks that breaks weapons.
-ways to increase that bonus
-
 veto one perk each levelup
 
 talismans - items that give perk-ish benefits while in your quickbar
@@ -74,3 +64,15 @@ talismans - items that give perk-ish benefits while in your quickbar
     monsters that only walk along walls
 
     skill - swift - monsters attack the tile you were in last turn
+
+Burning status - when on player, lose hp each turn until you use a wait action to pat off (can't wait otherwise)
+    when on monster, treat focus as 0, lose hp each turn, chance to remove each turn. MAybe when they stay in place? Transfer to other units when hit them.
+
+v0.6.0
+travel
+    Remove town screen. Everything works like dungeon now, just different levels of "zoomed out".
+    When exit dungeon, enter "map" mode, which is way zoomed out. Traveling costs time here. As time passes, become more tired.
+    In map mode, navigate between points of interest, including towns.
+    When enter town, navigate it like a dungeon. Shop/tavern are entities. (behind the scenes, they will work as containers and their options will be pseudoitems.)
+    eventually - map is procedurally generated with different dungeons in different locations each game. Have a vision radius, remember what you've seen.
+sound

@@ -558,7 +558,7 @@ class Inventory{
     //expect event to have type:"left", or type"*-left"
     static navigate(event){
         console.log(event)
-        Sound.playMove();
+        Sound.playNav();
         //this way "up" and "item-up" both work.
         let splitEventType = event.type.split('-')
         let direction = splitEventType[splitEventType.length-1];

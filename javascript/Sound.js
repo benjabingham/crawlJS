@@ -13,7 +13,8 @@ class Sound{
         monsterHit:[new Audio('audio/monsterHit.mp3')],
         monsterHitStrong:[new Audio('audio/monsterHitStrong.mp3')],
         monsterHitWeak:[new Audio('audio/monsterHitWeak.mp3')],
-        move:[new Audio('audio/move1.mp3'),new Audio('audio/move2.mp3'),new Audio('audio/move3.mp3')],
+        softMove:[new Audio('audio/move1.mp3'),new Audio('audio/move2.mp3'),new Audio('audio/move3.mp3')],
+        hardMove:[new Audio('audio/moveStone1.mp3'),new Audio('audio/moveStone2.mp3'),new Audio('audio/moveStone3.mp3')],
         rotate:[new Audio('audio/swing1.mp3'),new Audio('audio/swing2.mp3'),new Audio('audio/swing3.mp3')],
         getMoney:[new Audio('audio/getMoney.mp3')],
         take:[new Audio('audio/take3.mp3')],
@@ -23,12 +24,14 @@ class Sound{
         awayWeapon:[new Audio('audio/awayWeapon.mp3')],
         drop:[new Audio('audio/drop.mp3')],
         eat:[new Audio('audio/eat.mp3')],
+        rotten:[new Audio('audio/rotten.mp3')],
         drink:[new Audio('audio/drink.mp3')],
         rewind:[new Audio('audio/rewind.mp3')],
         breakSword:[new Audio('audio/breakSword.mp3')],
         swordHit:[new Audio('audio/swordHit.mp3')],
         burn:[new Audio('audio/burn.mp3')],
         error:[new Audio('audio/error.mp3'),new Audio('audio/error.mp3'),new Audio('audio/error.mp3')],
+        levelUp:[new Audio('audio/levelup.mp3')],
 
     }
 
@@ -42,7 +45,9 @@ class Sound{
             dieLarge:0.5,
             crit:0.1,
             brutalCrit:0.1,
-            savageCrit:0.1
+            savageCrit:0.1,
+            rotten:0.5,
+            hardMove:0.7
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -108,7 +113,18 @@ class Sound{
     }
 
     static playMove(){
-        Sound.playSound(Sound.soundGroups.move)
+        let playerPos = EntityManager.playerEntity;
+        let floorType = Board.getFloor(playerPos.x,playerPos.y);
+        let softFloors = ['dirt','grass']
+        if(softFloors.includes(floorType)){
+            Sound.playSound(Sound.soundGroups.softMove)
+        }else{
+            Sound.playSound(Sound.soundGroups.hardMove)
+        }
+    }
+
+    static playNav(){
+        Sound.playSound(Sound.soundGroups.hardMove)
     }
 
     static playRewind(){
@@ -159,12 +175,20 @@ class Sound{
         Sound.playSound(Sound.soundGroups.eat)
     }
 
+    static playRotten(){
+        Sound.playSound(Sound.soundGroups.rotten)
+    }
+
     static playBurn(){
         Sound.playSound(Sound.soundGroups.burn)
     }
 
     static playError(){
         Sound.playSound(Sound.soundGroups.error)
+    }
+
+    static playLevelUp(){
+        Sound.playSound(Sound.soundGroups.levelUp)
     }
 
     static playCrit(level){

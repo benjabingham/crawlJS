@@ -312,6 +312,7 @@ class XP{
         console.log(JSON.parse(JSON.stringify(this.skills)))
         let skillOptions = this.getWeightedSkills(3);
         let perkOptions = this.getPerks(skillOptions);
+        Sound.playLevelUp();
         XP.openLevelupDialog(perkOptions);
         this.reduceWeights();
         if(raiseThreshold){
@@ -392,6 +393,7 @@ class XP{
 
             modal.append(
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
+                    Sound.playClick();
                     XP.applyPerk(perk)
                     Inventory.displayInventory();
                     //Inventory.selectCharacterInfoTab();

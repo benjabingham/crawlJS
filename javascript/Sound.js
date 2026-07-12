@@ -79,7 +79,7 @@ class Sound{
             let trackName = track[0];
             
             audioTrack.addEventListener('ended', (e)=>{
-                //sound.load();
+                Sound.playRandomTrack();
             })
             if(volumes[trackName]){
                 audioTrack.volume = volumes[trackName]
@@ -233,6 +233,13 @@ class Sound{
     static playTrack(track){
         track.load();
         track.play();
+    }
+
+    static playRandomTrack(){
+        let tracks = Object.values(this.tracks);
+        let index = Random.roll(0,tracks.length-1)
+        let track = tracks[index]
+        this.playTrack(track)
     }
 
 }

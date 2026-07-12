@@ -14,7 +14,7 @@ class GameMaster{
     }
 
     static quickStart(){
-        Sound.playTrack(Sound.tracks.ambient1)
+        Sound.playRandomTrack();
         GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);

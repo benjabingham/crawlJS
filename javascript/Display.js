@@ -114,34 +114,35 @@ class Display{
                     ).append(
                         $('<div>').addClass('board-entity-div').attr('id','board-entity-'+displayX+'-'+displayY)
                     )
-                )                 
+                )      
+                Display.addClickControlsToTile({x:displayX, y:displayY})           
             }
         }
-
-        Display.addClickControls();
     }
 
-    static addClickControls(){
-        let playerPos = {x:8,y:8};
-        let translations = {
-            right:{x:1,y:0}, left:{x:-1,y:0}, up:{x:0,y:-1}, down:{x:0,y:1}, upleft:{x:-1,y:-1}, upright:{x:1,y:-1}, downleft:{x:-1,y:1}, downright:{x:1,y:1}, wait:{x:0,y:0}
-        };
+    //uses the display position of a tile(that is, its coordinates in the view window, not on the whole board)
+    static addClickControlsToTile(tileDisplayPos){
+        let x = tileDisplayPos.x;
+        let y = tileDisplayPos.y;
+        let direction = "";
+        if(y > 8){direction += "down"}
+        if(y < 8){direction += "up"}
+        if(x < 8){direction += "left"}
+        if(x > 8){direction += "right"}
+        if(direction === ""){direction = 'wait'}
 
-        for (const [key, value] of Object.entries(translations)) {
-            let x = playerPos.x + value.x;
-            let y = playerPos.y + value.y;
-            let gridSquare = $('#board-grid-'+x+'-'+y);
+        let gridSquare = $('#board-grid-'+x+'-'+y);
 
-            gridSquare.addClass('control-grid').on('click',(e)=>{
-                e.preventDefault();
-                let event = {type:key}
-                if(key == 'wait'){
-                    GameMaster.wait(event);
-                    return;
-                }
+        gridSquare.addClass('control-grid').on('click',(e)=>{
+            e.preventDefault();
+            let event = {type:direction}
+            if(direction == 'wait'){
+                GameMaster.wait(event);
+                return true;
+            }else{
                 GameMaster.movePlayer(event);
-            })
-        }
+            }
+        })
 
     }
 
@@ -167,7 +168,7 @@ class Display{
                 entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
-                    //gridDiv.off('click');
+                    gridDiv.off('contextmenu');
                 }
                 let symbol = '';
                 //out of bounds
@@ -187,7 +188,7 @@ class Display{
                             gridDiv.addClass('grid-hint').off('mouseenter')
                             Display.setHintText(gridDiv, entity.name, "label");
                             if(devMode){
-                                gridDiv.on('click',()=>{
+                                gridDiv.on('contextmenu',()=>{
                                     console.log(entity);
                                 })
                             }                 

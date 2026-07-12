@@ -35,8 +35,27 @@ class Sound{
     }
 
     static tracks = {
-        ambient1:new Audio('audio/tracks/ambient_track_1.mp3'),
-        ambient2:new Audio('audio/tracks/ambient_track_2.mp3')
+        ambient1:{
+            track: new Audio('audio/tracks/ambient_track_1.mp3'),
+            lastPlayed:false,
+            general:true
+        },
+        ambient2:{
+            track: new Audio('audio/tracks/ambient_track_2.mp3'),
+            lastPlayed:false,
+            general:true
+        },
+        ambiantWeird:{
+            track: new Audio('audio/tracks/ambient_track_weird.mp3'),
+            weird:true
+        },
+        ambientOutside:{
+            track: new Audio('audio/tracks/outdoors_ambiance.mp3'),
+            outdoors:true
+        },
+        /*heroism:{
+            track: new Audio('audio/tracks/HEROISM.mp3')
+        },*/
 
     }
 
@@ -51,12 +70,14 @@ class Sound{
             brutalCrit:0.1,
             savageCrit:0.1,
             rotten:0.5,
-            //hardMove:0.7,
+            hardMove:0.8,
             levelUp:0.2,
             eat:0.5,
 
             ambient1:0.3,
             ambient2:0.3,
+            ambient4:0.5,
+            heroism:0.3
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -75,7 +96,7 @@ class Sound{
             
         })
         Object.entries(Sound.tracks).forEach(track=>{
-            let audioTrack = track[1]
+            let audioTrack = track[1].track
             let trackName = track[0];
             
             audioTrack.addEventListener('ended', (e)=>{
@@ -231,8 +252,8 @@ class Sound{
     }
 
     static playTrack(track){
-        track.load();
-        track.play();
+        track.track.load();
+        track.track.play();
     }
 
     static playRandomTrack(){

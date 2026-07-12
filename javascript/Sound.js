@@ -32,9 +32,13 @@ class Sound{
         burn:[new Audio('audio/burn.mp3')],
         error:[new Audio('audio/error.mp3'),new Audio('audio/error.mp3'),new Audio('audio/error.mp3')],
         levelUp:[new Audio('audio/levelup.mp3')],
-
     }
 
+    static tracks = {
+        ambient1:new Audio('audio/tracks/ambient_track_1.mp3'),
+        ambient2:new Audio('audio/tracks/ambient_track_2.mp3')
+
+    }
 
     static soundInit(){
         //adjust volumes
@@ -47,7 +51,12 @@ class Sound{
             brutalCrit:0.1,
             savageCrit:0.1,
             rotten:0.5,
-            hardMove:0.7
+            //hardMove:0.7,
+            levelUp:0.2,
+            eat:0.5,
+
+            ambient1:0.3,
+            ambient2:0.3,
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -63,6 +72,19 @@ class Sound{
                     sound.volume = volumes[groupName]
                 }
             })
+            
+        })
+        Object.entries(Sound.tracks).forEach(track=>{
+            let audioTrack = track[1]
+            let trackName = track[0];
+            
+            audioTrack.addEventListener('ended', (e)=>{
+                //sound.load();
+            })
+            if(volumes[trackName]){
+                audioTrack.volume = volumes[trackName]
+            }
+          
             
         })
     }
@@ -206,6 +228,11 @@ class Sound{
         let sound = soundGroup[Random.roll(0,soundGroup.length-1)]
         sound.load();
         sound.play();
+    }
+
+    static playTrack(track){
+        track.load();
+        track.play();
     }
 
 }

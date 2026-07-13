@@ -41,15 +41,12 @@ class Town{
                 if(Player.gold >= meal.cost){
                     let oldNourishment = Player.nourishment
                     if(meal.item){
-                        if(Player.inventory.items.length < Player.inventory.slots){
-                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                            LootManager.getFlavorText(itemCopy)
-                            Player.pickUpItem(itemCopy);
-                        }else{
-                            Player.changeNourishment(item.food);
-                        }
+                        let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                        LootManager.getFlavorText(itemCopy)
+                        Player.pickUpItem(itemCopy);
                     }else{
                         Player.changeNourishment(meal.nourishment);
+                        Sound.playEat();
                     }
                     let nourishmentGained = Player.nourishment - oldNourishment;
                     Player.gold-= meal.cost;

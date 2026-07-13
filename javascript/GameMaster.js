@@ -14,7 +14,6 @@ class GameMaster{
     }
 
     static quickStart(){
-        Sound.playRandomTrack();
         GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
@@ -52,6 +51,7 @@ class GameMaster{
     static startGame(message=false, position=false){
         $('#day-div').text('Day '+Save.day);
         GameMaster.dungeonMode = true;
+        Sound.playRandomTrack();
         Inventory.selectedInventory = "player-inventory";
         Log.wipeLog();
         Log.initialWarnings();
@@ -116,7 +116,6 @@ class GameMaster{
     }
 
     static travel(x,y){
-        Sound.playRandomTrack();
         let direction = false;
         if (x < 0){
             direction = "left"
@@ -147,6 +146,7 @@ class GameMaster{
         }else if(destination.type == "dungeon"){
             GameMaster.getRoom(destination.name);
         }
+        Sound.playRandomTrack();
     }
 
     static loadTown(){

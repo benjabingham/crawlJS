@@ -43,15 +43,13 @@ class Sound{
     static tracks = {
         ambient1:{
             track: new Audio('audio/tracks/ambient_track_1.mp3'),
-            lastPlayed:false,
+
         },
         ambient2:{
             track: new Audio('audio/tracks/ambient_track_2.mp3'),
-            lastPlayed:false,
             setting:['indoors'],
-            skippable:true
         },
-        ambiantWeird:{
+        ambientWeird:{
             track: new Audio('audio/tracks/ambient_track_weird.mp3'),
             vibe:['weird'],
             scale:['dungeon','world']
@@ -59,11 +57,11 @@ class Sound{
         ambientOutside:{
             track: new Audio('audio/tracks/outdoors_ambiance.mp3'),
             setting:['outdoors'],
-            skippable:true
         },
         townHarp:{
             track: new Audio('audio/tracks/harp.mp3'),
-            scale:['town','world']
+            scale:['town','world'],
+            unskippable:true
         },
         /*heroism:{
             track: new Audio('audio/tracks/HEROISM.mp3')
@@ -72,6 +70,8 @@ class Sound{
     }
 
     static playingTrack = false;
+
+    static lastPlayedTrackName = false
 
     static soundInit(){
         //adjust volumes
@@ -90,9 +90,10 @@ class Sound{
 
             ambient1:0.3,
             ambient2:0.3,
+            ambientWeird:0.6,
             ambientOutside:0.5,
             heroism:0.3,
-            townHarp:0.4
+            townHarp:0.25
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -113,12 +114,14 @@ class Sound{
         Object.entries(Sound.tracks).forEach(track=>{
             let audioTrack = track[1].track
             let trackName = track[0];
-            
+            track[1].timesPlayed = 0;
+            track[1].name = trackName;
             audioTrack.addEventListener('ended', (e)=>{
                 Sound.playingTrack = false;
+                Sound.lastPlayedTrackName = trackName;
                 setTimeout(()=>{
                     Sound.playRandomTrack();
-                },Random.roll(1,5)/**1000*/*60)
+                },Random.roll(2,5)*100)
             })
             if(volumes[trackName]){
                 audioTrack.volume = volumes[trackName]
@@ -272,17 +275,30 @@ class Sound{
     static playTrack(track){
         if(this.playingTrack){
             this.fadeOutTrack();
+            this.playingTrack = false;
         }
         track.track.load();
         track.track.play();
+        console.log('Playing '+track.name)
+        track.timesPlayed += 1;
         this.playingTrack = track;
     }
 
     static playRandomTrack(){
-        let tracks = Object.values(this.tracks);
-        let index = Random.roll(0,tracks.length-1)
-        let track = tracks[index]
-        this.playTrack(track)
+        let fading = false;
+        if(this.playingTrack){
+            if(this.playingTrack.unskippable || this.trackIsAppropriate(this.playingTrack)){
+                return false
+            }
+            this.fadeOutTrack();
+            fading = true
+            this.playingTrack = false;
+        }
+        let waitms = 0
+        if(fading){waitms = 3000}
+
+        let track = this.getAppropriateTrack()
+        setTimeout(()=>{this.playTrack(track)}, waitms)
     }
 
 
@@ -292,7 +308,7 @@ class Sound{
         let volume = track.track.volume;
         //calls itself recursively on a timeout, resetting track when it reaches zero
         let lowerVolume = function(){
-            let newVolume = track.track.volume - volume*0.05
+            let newVolume = track.track.volume - volume*0.02
             track.track.volume = Math.max(newVolume,0)
             console.log(track.track.volume)
             if(track.track.volume > 0){
@@ -307,9 +323,46 @@ class Sound{
         lowerVolume();
     }
 
+    //gets the appropriate track that has been played the least
+    static getAppropriateTrack(){
+        let appropriateTracks = [];
+        //first, get a list of all appropriate tracks
+        Object.entries(Sound.tracks).forEach(track=>{
+            let trackObj = track[1]
+            let trackName = track[0];
+            if(Sound.lastPlayedTrackName != trackName && Sound.trackIsAppropriate(trackObj)){
+                appropriateTracks.push(trackObj);
+            }
+        })
+
+        //first randomize the order
+        appropriateTracks.sort((a,b)=>{
+            return(Random.roll(-1,1))
+        })
+
+        appropriateTracks.sort((a,b)=>{
+            if(a.timesPlayed > b.timesPlayed){
+                return 1;
+            }else if(b.timesPlayed > a.timesPlayed){
+                return -1
+            }
+            return 0;
+        })
+
+        return appropriateTracks[0]
+    }
+
 
     //TODO - should check if vibe, setting, and scale are appropriate
     static trackIsAppropriate(track){
+        let scale = GameMaster.dungeonMode?"dungeon":"town"
+        let setting = GameMaster.dungeonMode?false:"outdoors"
+        if(track.scale && !track.scale.includes(scale)){
+            return false;
+        }
+        if(setting && track.setting && !track.setting.includes(setting)){
+            return false;
+        }
         return true;
     }
 

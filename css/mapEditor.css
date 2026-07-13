@@ -247,3 +247,10 @@ h3,h4{
     height:100%;
 }
 
+#map-types{
+    ul{
+        list-style-type: none;
+        text-transform: capitalize;
+    }
+}
+

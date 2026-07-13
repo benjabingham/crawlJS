@@ -12,6 +12,10 @@ class Controls{
         Controls.dragGrid();
         Controls.floorModeButton();
         Controls.entityModeButton();
+        Controls.mapTypesModeButton();
+        Controls.initMapTypes();
+        $('#floor-controls').hide();
+        $('#map-types').hide();
     }
 
     static saveButtons(){
@@ -347,6 +351,7 @@ class Controls{
         $('#floor-controls-button').on('click',()=>{
             $('#entity-group-controls').hide();
             $('#draw-options-div').hide();
+            $('#map-types').hide();
 
             $('#floor-controls').show();
             Controls.entityMode = false;
@@ -357,11 +362,71 @@ class Controls{
     static entityModeButton(){
         $('#entity-controls-button').on('click',()=>{
             $('#floor-controls').hide();
+            $('#map-types').hide();
             $('#entity-group-controls').show();
             $('#draw-options-div').show();
 
             Controls.floorMode = false;
             Controls.entityMode = true;
+        })
+    }
+
+    static mapTypesModeButton(){
+        $('#map-types-button').on('click',()=>{
+            $('#floor-controls').hide();
+            $('#map-types').show();
+            $('#entity-group-controls').hide();
+            $('#draw-options-div').hide();
+
+            Controls.floorMode = false;
+            Controls.entityMode = false;
+        })
+    }
+
+    static initMapTypes(){
+        let scales = mapTypes.scale
+        let vibes = mapTypes.vibe
+        let settings = mapTypes.setting
+        scales.forEach((scale)=>{
+            $('#scale-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','radio').attr('id',scale+'-radio').addClass('scale-radios').on('click',function(e){
+                        //e.preventDefault();
+                        $('.scale-radios').prop('checked',false)
+                        $(this).prop('checked','true')
+                        Save.mapTypes.scale = scale
+                    }).prop('checked',scale=='dungeon')
+                ).append(
+                    $('<label>').attr('for','#'+scale+'-radio').text(scale)
+                )
+            )
+        })
+        settings.forEach((setting)=>{
+            $('#setting-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','checkbox').attr('id',setting+'-box').addClass('setting-box').on('click',function(e){
+                        //e.preventDefault();
+                        Save.mapTypes.setting[setting] = $(this).prop('checked')
+                        console.log($(this).attr('id'))
+                    })
+                ).append(
+                    $('<label>').attr('for','#'+setting+'-box').text(setting)
+                )
+            )
+        })
+        vibes.forEach((vibe)=>{
+            $('#vibe-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','checkbox').attr('id',vibe+'-box').addClass('vibe-box').on('click',function(e){
+                        //e.preventDefault();
+                        Save.mapTypes.vibe[vibe] = $(this).prop('checked')
+                        console.log($(this).attr('id'))
+                        console.log(Save.mapTypes)
+                    })
+                ).append(
+                    $('<label>').attr('for','#'+vibe+'-box').text(vibe)
+                )
+            )
         })
     }
 

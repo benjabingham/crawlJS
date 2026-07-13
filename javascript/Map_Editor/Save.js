@@ -4,6 +4,9 @@ class Save{
     static future = [];
     static historyMax = 100;
     static mapName = 'untitled map';
+    static mapTypes = {
+        scale:'dungeon',setting:{},vibe:{},
+    }
 
     static load(json){
         Save.mapName = json.name;
@@ -14,9 +17,30 @@ class Save{
         if(json.floorMatrix){
             Grid.floorMatrix = JSON.parse(json.floorMatrix)
         }
+        Save.loadMapTypes(json.mapTypes);
         Grid.updateGrid();
         Controls.populateEntityGroupSelect();
         Controls.chooseGroup(EntityGroupManager.selectedEntityGroup);
+    }
+
+    //pass maptype json
+    static loadMapTypes(json){
+        this.mapTypes = json
+        $('.scale-radios').prop('checked',false)
+        $('#'+json.scale+'-radio').prop('checked',true)
+
+        mapTypes.setting.forEach((setting)=>{
+            if(json.setting[setting]){
+                $('#'+setting+'-box').prop('checked',true)
+            }
+        })
+
+        mapTypes.vibe.forEach((vibe)=>{
+            if(json.vibe[vibe]){
+                $('#'+vibe+'-box').prop('checked',true)
+            }
+        })
+
     }
 
     static saveSnapshot(trimFuture = true){
@@ -62,6 +86,7 @@ class Save{
         //get deep copy of top frame
         let json = JSON.parse(JSON.stringify(Save.getTopFrame()));
         json.entityGroups = JSON.parse(json.entityGroups);
+        json.mapTypes = JSON.parse(JSON.stringify(Save.mapTypes))
         let file = new File([JSON.stringify(json)], Save.mapName+'.json', {
             type:'text/plain'
         })

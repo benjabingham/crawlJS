@@ -46,3 +46,9 @@ let mapVars = {
         }
     },
 }
+
+let mapTypes = {
+    vibe:['undead','weird','serene'],
+    scale:['dungeon','town','world'],
+    setting:['indoors','outdoors']
+}

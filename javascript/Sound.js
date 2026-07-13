@@ -34,30 +34,44 @@ class Sound{
         levelUp:[new Audio('audio/levelup.mp3')],
     }
 
+    //tracks are judged to be appropriate based on vibe, scale, and setting.
+    //In order for a track to be appropriate, each of its set attributes must match the present location.
+    //vibe - undead/weird/serene/unset
+    //scale - dungeon/town/world/unset
+    //setting - indoors/outdoors/unset
+    
     static tracks = {
         ambient1:{
             track: new Audio('audio/tracks/ambient_track_1.mp3'),
             lastPlayed:false,
-            general:true
         },
         ambient2:{
             track: new Audio('audio/tracks/ambient_track_2.mp3'),
             lastPlayed:false,
-            general:true
+            setting:['indoors'],
+            skippable:true
         },
         ambiantWeird:{
             track: new Audio('audio/tracks/ambient_track_weird.mp3'),
-            weird:true
+            vibe:['weird'],
+            scale:['dungeon','world']
         },
         ambientOutside:{
             track: new Audio('audio/tracks/outdoors_ambiance.mp3'),
-            outdoors:true
+            setting:['outdoors'],
+            skippable:true
+        },
+        townHarp:{
+            track: new Audio('audio/tracks/harp.mp3'),
+            scale:['town','world']
         },
         /*heroism:{
             track: new Audio('audio/tracks/HEROISM.mp3')
         },*/
 
     }
+
+    static playingTrack = false;
 
     static soundInit(){
         //adjust volumes
@@ -77,7 +91,8 @@ class Sound{
             ambient1:0.3,
             ambient2:0.3,
             ambientOutside:0.5,
-            heroism:0.3
+            heroism:0.3,
+            townHarp:0.4
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]
@@ -100,7 +115,10 @@ class Sound{
             let trackName = track[0];
             
             audioTrack.addEventListener('ended', (e)=>{
-                Sound.playRandomTrack();
+                Sound.playingTrack = false;
+                setTimeout(()=>{
+                    Sound.playRandomTrack();
+                },Random.roll(1,5)/**1000*/*60)
             })
             if(volumes[trackName]){
                 audioTrack.volume = volumes[trackName]
@@ -252,8 +270,12 @@ class Sound{
     }
 
     static playTrack(track){
+        if(this.playingTrack){
+            this.fadeOutTrack();
+        }
         track.track.load();
         track.track.play();
+        this.playingTrack = track;
     }
 
     static playRandomTrack(){
@@ -261,6 +283,34 @@ class Sound{
         let index = Random.roll(0,tracks.length-1)
         let track = tracks[index]
         this.playTrack(track)
+    }
+
+
+    static fadeOutTrack(){
+        let track = this.playingTrack;
+        this.playingTrack = false;
+        let volume = track.track.volume;
+        //calls itself recursively on a timeout, resetting track when it reaches zero
+        let lowerVolume = function(){
+            let newVolume = track.track.volume - volume*0.05
+            track.track.volume = Math.max(newVolume,0)
+            console.log(track.track.volume)
+            if(track.track.volume > 0){
+                setTimeout(lowerVolume,100)
+            }else{
+                track.track.pause();
+                track.track.volume = volume;
+                track.track.currentTime = 0;
+            }
+        }
+
+        lowerVolume();
+    }
+
+
+    //TODO - should check if vibe, setting, and scale are appropriate
+    static trackIsAppropriate(track){
+        return true;
     }
 
 }

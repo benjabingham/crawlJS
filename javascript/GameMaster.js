@@ -116,6 +116,7 @@ class GameMaster{
     }
 
     static travel(x,y){
+        Sound.playRandomTrack();
         let direction = false;
         if (x < 0){
             direction = "left"

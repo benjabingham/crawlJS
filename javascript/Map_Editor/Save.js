@@ -25,6 +25,7 @@ class Save{
 
     //pass maptype json
     static loadMapTypes(json){
+        if(!json){return false}
         this.mapTypes = json
         $('.scale-radios').prop('checked',false)
         $('#'+json.scale+'-radio').prop('checked',true)

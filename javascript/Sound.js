@@ -76,7 +76,7 @@ class Sound{
 
             ambient1:0.3,
             ambient2:0.3,
-            ambient4:0.5,
+            ambientOutside:0.5,
             heroism:0.3
         }
         Object.entries(Sound.soundGroups).forEach(group=>{

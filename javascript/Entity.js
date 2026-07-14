@@ -181,6 +181,7 @@ class Entity{
             //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
+            //instead do Location.exitLocation
             GameMaster.travel(x,y);
             return true;
         }

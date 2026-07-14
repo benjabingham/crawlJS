@@ -1,0 +1,57 @@
+hardcode names of all world maps
+load them right away 
+
+when leaving a dungeon or town map, search all world maps for location with same name and open space in correct direction. Put you there.
+
+create multiple player spawn points on dungeon and town maps
+when entering dungeon or town, find player spawn point closest to edge entered
+
+
+⍝
+⍉
+⍾
+⎆
+⎉
+⎊
+⏣
+⏾
+⏿
+▩
+▣
+△
+▲
+▼
+▽
+◁
+◉
+◈
+◎
+◯
+★
+☆
+☉
+☊
+☋
+☖
+☗
+☙
+☥
+☼
+♖
+⚐
+⚑
+⚘
+⚝
+⛨
+⛯
+✠
+
+❦
+⟑
+⩍
+⩎
+⩓
+⯕
+⯖
+ⴵ
+⸙

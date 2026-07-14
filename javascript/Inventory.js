@@ -14,7 +14,7 @@ class Inventory{
     static showBulkAndGold = false;
 
     //displays player's inventory, either in the dungeon or in the town
-    static displayInventory(dungeonMode=true){
+    static displayInventory(){
         this.checkForItemPile();
         //$('#inventory-wrapper').show();
         $('#player-inventory-list').html('');
@@ -66,7 +66,6 @@ class Inventory{
         if(item.purchased){
             return false;
         }
-        let dungeonMode = GameMaster.dungeonMode;
         let slot = item.slot;
         let itemValue = item.value;
         //let itemValue = LootManager.getValue(item);
@@ -76,8 +75,9 @@ class Inventory{
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let quickSlot = item.quickSlot;
         let available = Inventory.itemIsAccessible(item, inventory);
-        let dropMode = inventory == "player-inventory" && GameMaster.dropMode && dungeonMode
-        let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
+        let dropMode = inventory == "player-inventory" && GameMaster.dropMode
+        let inShop = Inventory.selectedContainer.shop == true;
+        let shopItem = (inventory=="world-inventory") && inShop;
         let draggable = available || shopItem;
         let availableStyling = available || shopItem;   
         let symbolsSpan = LootManager.getItemSymbolsSpan(item);
@@ -132,7 +132,7 @@ class Inventory{
         }
 
         //equip/unequip/burn
-        if(dungeonMode){
+        if(!inShop){
             if(item.weapon && !Player.equipped){
                 buttons.equip = true;
             }
@@ -144,7 +144,7 @@ class Inventory{
             }
             
         }
-        if(!dungeonMode && inventory == "player-inventory"){
+        if(inShop && inventory == "player-inventory"){
             buttons.sell = LootManager.getValue(item);
         }
         
@@ -418,7 +418,7 @@ class Inventory{
     }
 
     static getRummageButton(){
-        if(!GameMaster.dungeonMode){
+        if(Board.getScale() != 'dungeon'){
             return false;
         }
         let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
@@ -940,7 +940,7 @@ class Inventory{
         if(inventory == "world-inventory" && this.selectedContainer.shop){
             return false;
         }
-        return ((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode);
+        return ((item.quickSlot || Inventory.playerInBag) || Board.getScale() != 'dungeon');
     }
 
     static addButtons(slot,inventory,buttons){
@@ -1011,7 +1011,7 @@ class Inventory{
 
     static getEatButton(slot){
         return $('<button>').addClass('item-button').text('eat').on('click',function(){
-            GameMaster.eatItem({type:'item-'+(slot+1)},GameMaster.dungeonMode);
+            GameMaster.eatItem({type:'item-'+(slot+1)});
             Inventory.displayInventory();
         })
     }

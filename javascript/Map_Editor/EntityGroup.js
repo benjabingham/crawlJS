@@ -14,6 +14,7 @@ class EntityGroup{
     instances = {};
     count = 0;
     wallType = false;
+    locationId = false;
 
     constructor(empty = false){
         if(empty){

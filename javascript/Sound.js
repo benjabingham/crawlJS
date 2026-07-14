@@ -355,17 +355,12 @@ class Sound{
 
     //TODO - should check if vibe, setting, and scale are appropriate
     static trackIsAppropriate(track){
-        //for now, hardcode town values while not in dungeon.
-        let scale = 'town';
-        let setting = {outdoors:true};
-        let vibe = {serene:true};
-        if(GameMaster.dungeonMode){
-            let mapTypes = EntityManager.currentMap.mapTypes
-            if(!mapTypes){return false}
-            scale = mapTypes.scale
-            setting = mapTypes.setting
-            vibe = mapTypes.vibe
-        }
+        let mapTypes = EntityManager.currentMap.mapTypes
+        if(!mapTypes){return false}
+        scale = mapTypes.scale
+        setting = mapTypes.setting
+        vibe = mapTypes.vibe
+        
         let appropriate = true;
 
         //track scale must match map scale

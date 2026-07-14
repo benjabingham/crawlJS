@@ -2,7 +2,6 @@ class GameMaster{
     static customControls = {};
     static dungeonId = 0;
     static quickStartMode = true;
-    static dungeonMode = false;
     static currentTown;
     static startTime;
 
@@ -50,7 +49,6 @@ class GameMaster{
 
     static startGame(message=false, position=false){
         $('#day-div').text('Day '+Save.day);
-        GameMaster.dungeonMode = true;
         Sound.playRandomTrack();
         Inventory.selectedInventory = "player-inventory";
         Log.wipeLog();
@@ -86,7 +84,7 @@ class GameMaster{
         $(document).off('keydown').on("keydown", InputManager.recieveInput);
         $(document).off('click').on("click", (event)=>{
             InputManager.currentEvent = event;
-            Inventory.displayInventory(this.dungeonMode);
+            Inventory.displayInventory();
             InputManager.lastEvent = event;
 
         });
@@ -151,7 +149,6 @@ class GameMaster{
 
     static loadTown(){
         //GameMaster.nextDay();
-        GameMaster.dungeonMode = false;
         Shop.restockInventory();
         Player.changeStamina(100);
         Display.showTownScreen();
@@ -164,9 +161,6 @@ class GameMaster{
     }
 
     static rewind(event){
-        if (!GameMaster.dungeonMode){
-            return false
-        }
         if(Player.equipped && Player.equipped.unlucky){
             Log.addNotice("Can't Rewind")
             Log.addNotice("something you're holding is cursed!")
@@ -195,9 +189,6 @@ class GameMaster{
     }
 
     static drop(event){
-        if (!GameMaster.dungeonMode){
-            return false
-        }
         if(!GameMaster.dropMode){
             GameMaster.dropMode = true;
             Inventory.selectedInventory = "player-inventory";
@@ -233,9 +224,6 @@ class GameMaster{
 
     static inventoryOpenClose(event){
         //console.log('inventoryOpenClose');
-        if(!GameMaster.dungeonMode){
-            return false;
-        }
         Inventory.toggleInventory();
         if(Inventory.playerInBag){
             if(Inventory.selectedContainer){
@@ -285,22 +273,21 @@ class GameMaster{
             return true;
         }
         Inventory.displayedInventorySlots["player-inventory"] = slot;
-        Inventory.displayInventory(GameMaster.dungeonMode)
+        Inventory.displayInventory()
 
     }
 
     //general case use item - will work for any item.
     static useItem(event){
-        if(GameMaster.dungeonMode){
-            let swordId = EntityManager.getProperty('player','sword')
-            EntityManager.removeEntity(swordId);
-        }
+        let swordId = EntityManager.getProperty('player','sword')
+        EntityManager.removeEntity(swordId);
+        
         
         let slot = parseInt(event.type.split('-')[1])-1;
         console.log(slot);
         if(GameMaster.dropMode){
             GameMaster.dropItem(slot);
-        }else if(!Player.useItem(Player.inventory.items[slot]) && GameMaster.dungeonMode){
+        }else if(!Player.useItem(Player.inventory.items[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }
@@ -309,6 +296,7 @@ class GameMaster{
     }
 
     static useFuel(event){
+        if(Board.getScale!='dungeon'){return false}
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.addFuel(Player.inventory.items[slot])){
             //skip behaviors if invalid item
@@ -371,15 +359,17 @@ class GameMaster{
             return false;
         }
 
-        if(GameMaster.dungeonMode){
-            GameMaster.postPlayerAction();
-        }
+        GameMaster.postPlayerAction();
+        
 
         return result;
     }
 
     //if slot is defined, uses that slot instead of selected item
     static equipSelectedItem(event,slot = null){
+        if(Board.getScale != 'dungeon'){
+            return false;
+        }
         let item;
         if(slot == null){
             item = Inventory.getSelectedItem();
@@ -404,9 +394,8 @@ class GameMaster{
             return false;
         }
 
-        if(GameMaster.dungeonMode){
-            GameMaster.postPlayerAction();
-        }
+        GameMaster.postPlayerAction();
+        
 
         return result;
     }
@@ -452,19 +441,18 @@ class GameMaster{
     }
 
 
-    static eatItem(event, dungeonMode=true){
+    static eatItem(event){
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.eatItem(Player.inventory.items[slot])){
             //skip behaviors if invalid item
             EntityManager.skipBehaviors = true;
         }
 
-        if(dungeonMode){
-            GameMaster.postPlayerAction();
-        }
+        GameMaster.postPlayerAction();
+        
     }
 
-    static drinkItem(event, dungeonMode=GameMaster.dungeonMode){
+    static drinkItem(event){
         
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.drinkItem(Player.inventory.items[slot])){
@@ -472,9 +460,8 @@ class GameMaster{
             EntityManager.skipBehaviors = true;
         }
 
-        if(dungeonMode){
-            GameMaster.postPlayerAction();
-        }
+        GameMaster.postPlayerAction();
+        
     }
 
     static showBulkAndGold(event){
@@ -503,10 +490,9 @@ class GameMaster{
             //navigate in inventory instead   
         }
         GameMaster.stopDrop();
-        if (!GameMaster.dungeonMode){
-            return false
+        if(Board.getScale=='dungeon'){
+            Player.gainStamina();
         }
-        Player.gainStamina();
         GameMaster.postPlayerAction();
     }
 
@@ -515,7 +501,7 @@ class GameMaster{
             return false;
         }
         GameMaster.stopDrop();
-        if (!GameMaster.dungeonMode){
+        if (Board.getScale!='dungeon'){
             return false
         }
         let direction = event.type == 'clockwise'? 1 : -1;
@@ -534,9 +520,6 @@ class GameMaster{
             return false;
         }
         GameMaster.stopDrop();
-        if (!GameMaster.dungeonMode){
-            return false
-        }
         let dungeonId = GameMaster.dungeonId;
         let direction = event.type;
 
@@ -588,12 +571,7 @@ class GameMaster{
 
     static postPlayerAction(){ 
         Display.hideHintDiv()
-        if(!GameMaster.dungeonMode){
-            Log.turnCounter++;
-            Log.printLog();  
-            Inventory.displayInventory();
-            return false;
-        }    
+        
         EntityManager.placeSword('player');
         let swordId = EntityManager.getProperty('player','sword')
         let sword = EntityManager.getEntity(swordId);

@@ -73,6 +73,11 @@ class EntityGroupManager{
         return group.wallType;
     }
 
+    static get currentLocationId(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.locationId;
+    }
+
     static setEntityType(entityType){
         let group = EntityGroupManager.getCurrentGroup();
         group.setEntityType(entityType);
@@ -91,6 +96,11 @@ class EntityGroupManager{
     static setEntityName(entityName){
         let group = EntityGroupManager.getCurrentGroup();
         group.entityName = entityName;
+    }
+
+    static setEntityLocationId(locationId){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.locationId = locationId;
     }
 
     static setSymbol(symbol){

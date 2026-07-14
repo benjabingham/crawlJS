@@ -317,7 +317,7 @@ class Player {
             return false;
         }
 
-        let dungeonMode = GameMaster.dungeonMode;
+        let dungeonMode = Board.getScale()=='dungeon';
         
         if(dungeonMode && item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            return Player.unequipWeapon();
@@ -329,7 +329,7 @@ class Player {
             return Player.eatItem(item);
         }else if (item.potable){
             return Player.drinkItem(item);
-        }else if(!dungeonMode){
+        }else if(Inventory.selectedContainer.shop == true){
             let result = Shop.sellItem(item.slot);
             Inventory.displayInventory();
             return result;
@@ -358,7 +358,7 @@ class Player {
     }
 
     static equipWeapon(weapon, verbose=true){
-        if(Player.equipped || !GameMaster.dungeonMode){
+        if(Player.equipped || Board.getScale!='dungeon'){
             return false;
         }
         Sound.playDrawWeapon();

@@ -440,5 +440,9 @@ class Board{
 
         return result;
     }
+
+    static getScale(){
+        return EntityManager.currentMap.mapTypes.scale
+    }
     
 }

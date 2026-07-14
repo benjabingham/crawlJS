@@ -1,4 +1,5 @@
 class Save{
+    //contains all sorts of locations - world maps, dungeons, and towns
     static maps = {};
     static day = 1;
 
@@ -50,8 +51,8 @@ class Save{
 
     static mapInit(json){
         console.log(json);
-        let roomString = json.name;
-        console.log('initializing map - '+roomString);
+        let locationId = json.name;
+        console.log('initializing map - '+locationId);
         let entityGroups = json.entityGroups.entityGroups;
         let roster = [];
         let counter = 0;
@@ -78,7 +79,7 @@ class Save{
         if(json.floorMatrix){
             json.floorMatrix = JSON.parse(json.floorMatrix);
         }
-        Save.maps[roomString] = json;
+        Save.maps[locationId] = json;
     }
 
     static catchUpMap(mapString){

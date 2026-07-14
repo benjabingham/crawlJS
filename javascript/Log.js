@@ -154,16 +154,16 @@ class Log{
                 message.fresh = false;
             })
             turnMessage.prepend(
-                GameMaster.dungeonMode ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
+                Board.getScale() == 'dungeon' ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
             ).append($('<hr>'))
             messages.printed = true;
         }else{
             $('#log').prepend(
-                GameMaster.dungeonMode ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
+                Board.getScale() == 'dungeon' ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
             )
         }
 
-        if(!GameMaster.dungeonMode){
+        if(Board.getScale() == 'town'){
             Log.printDayToLog(true)
         }
     }

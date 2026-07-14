@@ -726,7 +726,7 @@ class LootManager{
             let multiplier = Player.perks.sell.trapper.val
             multiplier += 1
             value *= multiplier;
-            value = Math.ceiling(value);
+            value = Math.ceil(value);
         }
 
         return value;

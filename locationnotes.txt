@@ -1,11 +1,20 @@
-hardcode names of all world maps
-load them right away 
+7/14/26 - Location.json has tools to place player in correct spot in world map after leaving dungeon.
 
-when leaving a dungeon or town map, search all world maps for location with same name and open space in correct direction. Put you there.
+todo - 
 
+call Location.exitLocation() instead of GameMaster.Travel.
+
+Using Locations.worldMapIds, load in all world maps on game start.
+Parse through them on load to populate Location.worldMaps
+
+Add Location entity functionality - push into them to travel.
 create multiple player spawn points on dungeon and town maps
 when entering dungeon or town, find player spawn point closest to edge entered
 
+add town map functionality - create shop entities (shouldnt be too hard, shops already pretend to be containers)
+create containers that give rest menu
+
+figure out new exertion mechanic - tie to tiles moved on world map
 
 ⍝
 ⍉

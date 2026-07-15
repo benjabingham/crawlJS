@@ -180,8 +180,7 @@ class Inventory{
 
     static displayItemInfo(item, inventory){
         //dont ever display placeholder items in shop
-        if(!item || !item.name){return false}
-        if(!item){
+        if(!item || !item.name){
             $('#'+inventory+'-description').html('')
             return false;
         }

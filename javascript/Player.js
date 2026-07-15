@@ -186,7 +186,10 @@ class Player {
     static gainStamina(){
         let stamina = 2;
         if(Player.perks.stamina.aerobics){
-            stamina++;
+            stamina+= Player.perks.stamina.aerobics.val;
+        }
+        if(Player.hasAspect('vigorAspect')){
+            stamina += Player.hasAspect('vigorAspect')
         }
         if(Player.exertion){
             stamina--;
@@ -681,7 +684,13 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
+        let fury = Player.hasAspect('furyAspect')
+        if(fury){
+            let missingHealth = Player.healthMax - Player.health
+            critChance += missingHealth * fury * 0.1;
+        }
 
+        console.log(critChance);
         return critChance
     }
 
@@ -878,7 +887,12 @@ class Player {
                     dummyItem.type[key] = perk;
                     let proficiencySpan = Display.getProficiencySpan(dummyItem)
                     let perkDiv = $('<div>').text(key).append(proficiencySpan).addClass('perk-divs')
-                    let hintText = "You have proficiency "+perk+" with "+key+" weapons. Damage with those weapons is rerolled "+perk+" times, with the highest roll used."
+                    let weapons = LootManager.getWeaponsOfType(key);
+                    let weaponNames = [];
+                    weapons.forEach(weapon=>{
+                        weaponNames.push(weapon.name)
+                    })
+                    let hintText = "You have proficiency "+perk+" with "+key+" weapons ("+weaponNames.join(", ")+"). Damage with those weapons is rerolled "+perk+" times, with the highest roll being used. enemy attacks against those weapons are rerolled "+perk+" times, with the lowest roll being used."
                     Display.setHintText(perkDiv,hintText)
                     element.append(
                         perkDiv
@@ -916,6 +930,24 @@ class Player {
         return Player.equipped && Player.equipped.slot == item.slot;
     }
 
-    
+    //returns the number of times the chosen quality appears among items in the player's quickbar'
+    static hasAspect(aspect){
+        let count = 0
+        Player.inventory.items.forEach(item=>{
+            if(item.quickSlot && item[aspect]){
+                count++;
+            }
+        })
+
+        return count;
+    }
+
+    static activatePostAttackTriggers(){
+        if(Player.hasAspect('hungerAspect')){
+            let n = Player.hasAspect('hungerAspect')
+            Player.changeStamina(3*n);
+            Player.changeNourishment(-1*n);
+        }
+    }
 
 }

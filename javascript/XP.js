@@ -347,12 +347,10 @@ class XP{
                     attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
                     let proficiencySpan = $('<span>').text(" proficiency").addClass('keyword');
                     let weapons = LootManager.getWeaponsOfType(perk.attackType);
-                    console.log(weapons);
                     let weaponNames = [];
                     weapons.forEach(weapon=>{
                         weaponNames.push(weapon.name)
                     })
-                    console.log(weaponNames);
                     Display.setHintText(attackTypeSpan, weaponNames.join(", "));
                     Display.setHintText(proficiencySpan, keywordVars.proficiency.hintText);
                     text.append("Increase ").append(attackTypeSpan).append(proficiencySpan);

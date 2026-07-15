@@ -18,7 +18,7 @@ keywordVars = {
         hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
     },
     proficiency:{
-        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Has the opposite effect on an enemy's attacks against a proficient weapon."
+        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Enemies' attacks against that weapon make the same number of damage rolls, using the lowest."
     },
     swing:{
         hintText:"A swing is a strike that occurs when you rotate your weapon into a target."
@@ -46,13 +46,17 @@ keywordVars = {
         rotten:{name:"rotten", hintText:"Eating this food item will decrease your hunger bar instead of raising it."},
         treasure:{name:"treasure", hintText:"This item has value not for its purpose, but for its rarity."},
         fuel:{name:"fuel", hintText:"This item can be burned in your lantern, producing light."},
-        food:{name:"food", hintText:"You can eat this."}
+        food:{name:"food", hintText:"You can eat this."},
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
+    
+        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
+        hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
+        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."}
     },
 
     symbols:{
         9910:{name:"cursed",symbol:'⚶'},
         10515:{name:"worn",symbol:'⤓'},
-        43:{name:"accustomed",symbol:'+'}
+        43:{name:"accustomed",symbol:'+'},
     }
 }

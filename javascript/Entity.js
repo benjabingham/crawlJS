@@ -961,7 +961,7 @@ class PlayerEntity extends Entity{
     canUnarmedStrike(x,y){
         if(Player.equipped && Player.equipped.weapon){
             return false;
-        }
+        }        
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         //console.log(targetEntity)
@@ -988,6 +988,12 @@ class PlayerEntity extends Entity{
             return false;
         }
 
+        //this check has to go here because otherwise, encumbrance isn't checked when moving into occupied tiles.
+        //returns true because you CAN unarmed strike but fail.
+        if(!EntityManager.checkEncumberedV2()){
+            return true
+        }
+
         let rotationalDistance = canUnarmedStrike.rotationalDistance;
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         
@@ -1003,11 +1009,13 @@ class PlayerEntity extends Entity{
             weapon.stun +=1;
         }
 
-        return this.unarmedStrike(targetEntity, weapon);
+        
+
+        return this.unarmedStrike(targetEntity, weapon,{x:x,y:y});
     }
 
     //weapon is defined by canUnarmedStrike, and is determined by specifics of strike.
-    unarmedStrike(target, weapon){
+    unarmedStrike(target, weapon,translation){
         if(target.id == this.id || target.isWall){
             return false;  
         }
@@ -1059,6 +1067,7 @@ class PlayerEntity extends Entity{
             }
         }
         target.addMortality(mortality);
+        Player.activatePostAttackTriggers();
         if(crit){target.lastCritTurn = Log.turnCounter}
         if(Monster.prototype.isPrototypeOf(target)){
             target.addStunTime(stunAdded);
@@ -1069,6 +1078,7 @@ class PlayerEntity extends Entity{
         target.knock(this.id);
         target.onHit(this, sizeBonus);
         
+        EntityManager.moveEntity('player',translation.x,translation.y)
         return true;
     }
 
@@ -1184,6 +1194,7 @@ class SwordEntity extends Entity{
                 //this is false if player tried to jab or strafe without enough stamina
                 if(attackOccurs){
                     this.swordAttack(target);
+                    Player.activatePostAttackTriggers();
                 }else{
                     Log.addMessage('Attack failed! Not enough stamina.','danger')
                     let lastPos = History.getSnapshotEntity(this.id);

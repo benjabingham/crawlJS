@@ -307,8 +307,8 @@ let skillVars = {
             category:"potions",
             name:"little sips",
             key:"littleSips",
-            amount:.5,
-            description:"50% chance to not consume a potion when you drink it."
+            amount:.3,
+            description:"30% chance to not consume a potion when you drink it."
         },
     ]
 }

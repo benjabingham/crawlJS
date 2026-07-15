@@ -390,6 +390,7 @@ class Display{
     
     static getSymbolHintText(symbol){
         let charCode = symbol.charCodeAt(0)
+        if(!keywordVars.symbols[charCode]){return false}
         return keywordVars.symbols[charCode].name
     }
 
@@ -415,7 +416,7 @@ class Display{
         })
         let proficienciesText = proficienciesTextArray.join(", ")
 
-        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used. Has the opposite effect on attacks agains this weapon.";
+        let hintText = "Proficiencies - "+proficienciesText+". Damage is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the highest roll used. Damage against this weapon is rerolled "+proficiency+" time"+(proficiency!=1?"s":"")+", with the lowest roll used.";
         Display.setHintText(span,hintText)
 
 

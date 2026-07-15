@@ -180,7 +180,10 @@ class EntityManager{
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
-        if(Board.isOpenSpace(x,y) && !EntityManager.checkEncumberedV2()){
+        let targetX = EntityManager.playerEntity.x+x;
+        let targetY = EntityManager.playerEntity.y+y;
+
+        if(Board.isOpenSpace(targetX,targetY) && !EntityManager.checkEncumberedV2()){
             return false;
         }
         EntityManager.checkEther();

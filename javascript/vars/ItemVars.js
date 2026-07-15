@@ -4,7 +4,7 @@ let itemVars = {
             weapon:true,
             name:"club",
             damage:3,
-            stunTime:3,
+            stunTime:4,
             weight:2,
             flimsy:-2,
             type:{
@@ -788,9 +788,9 @@ let itemVars = {
         wood:{
             name:'wooden',
             flimsy:6,
-            stunTime: -2,
-            weight:-1,
-            damage:-1,
+            stunTimeMult:0.7,
+            weightMult:0.8,
+            damageMult:0.7,
             bulk:0.8,
             sharp:{
                 damage:-1,
@@ -803,7 +803,7 @@ let itemVars = {
             fuel:true,
             light:1,
 
-            frequency:7
+            frequency:6
 
         },
         bone:{
@@ -812,6 +812,7 @@ let itemVars = {
             blunt:{
                 damage: -1,
             },
+            damageMult:0.8,
             sharp:{
                 flimsy:4,
             },
@@ -826,12 +827,14 @@ let itemVars = {
         limestone:{
             name:'limestone',
             flimsy:6,
-            weight:2,
-            stunTime:3,
-            damage:2,
+            weightMult:2,
+            stunTime:1,
+            damage:1,
+            damageMult:1.2,
             bulk:2,
             blunt:{
-                damage:2
+                damageMult:1.25,
+                stunTimeMult:1.5
             },
             value:.2,
             color:'silver',
@@ -842,6 +845,9 @@ let itemVars = {
         flint:{
             name:'flint',
             flimsy:4,
+            weightMult:0.8,
+            damageMult:0.8,
+            stunTimeMult:0.8,
             blunt:{
                 flimsy:4,
             },
@@ -853,6 +859,7 @@ let itemVars = {
         ceramic:{
             name:'ceramic',
             flimsy:10,
+            weightMult:0.9,
             blunt:{
                 flimsy:10,
             },
@@ -878,9 +885,10 @@ let itemVars = {
             name:'lead',
             flimsy:3,
             weight:1,
-            stunTime:2,
+            weightMult:1.25,
+            stunTimeMult:1.3,
             blunt:{
-                damage:1
+                damageMult:1.35
             },
             value:2,
             color:'darkgray',
@@ -891,12 +899,13 @@ let itemVars = {
         },
         rubber:{
             name:'rubber',
-            damage:-5,
+            damageMult:0.4,
+            stunTimeMult:1.5,
             blunt:{
                 stunTime:2
             },
             sharp:{
-                damage:-3
+                damage:-2
             },
             value:.5,
 
@@ -960,9 +969,10 @@ let itemVars = {
         },
         ironwood:{
             name:'ironwood',
-            stunTime:2,
+            stunTimeMult:1.2,
             blunt:{
-                damage:2
+                stunTime:1,
+                damageMult:1.35
             },
             sharp:{
                 damage:-1
@@ -994,9 +1004,10 @@ let itemVars = {
         },
         gravsteel:{
             name:'gravsteel',
-            weight:3,
-            stuntime:6,
-            damage:8,
+            weightMult:2.5,
+            stunTime:2,
+            stuntimeMult:2,
+            damageMult:2.5,
             blunt:{
                 damage: 4
             },
@@ -1009,9 +1020,11 @@ let itemVars = {
         lightsteel:{
             name:'lightsteel',
             weight:-1,
-            stunTime:-2,
+            weightMult:0.8,
+            stunTime:-1,
+            stunTimeMult:0.6,
             blunt:{
-                damage:-2
+                damageMult:0.65
             },
             sharp:{
                 damage:2
@@ -1045,14 +1058,15 @@ let itemVars = {
         },
         gold:{
             name:'gold',
-            weight:1,
+            weightMult:1.5,
+            damageMult:1.2,
             stunTime:2,
             flimsy:8,
             sharp:{
                 damage:-2
             },
             blunt:{
-                damage:2
+                damageMult:1.5
             },
             value:12,
             color:'gold',
@@ -1063,14 +1077,15 @@ let itemVars = {
         },
         platinum:{
             name:'platinum',
-            weight:2,
-            stunTime:4,
-            flimsy:1,
-            damage:4,
+            weightMult:2,
+            stunTime:2,
+            stunTimeMult:1.25,
+            damageMult:1.8,
             bulk:5,
             blunt:{
                 damage:2
             },
+            flimsy:1,
             value:19,
             color:'silver',
             frequency:2,
@@ -1080,6 +1095,7 @@ let itemVars = {
         adamantine:{
             name:'adamantine',
             weight:-1,
+            weightMult:0.8,
             sharp:{
                 damage:2
             },

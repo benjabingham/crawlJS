@@ -878,7 +878,12 @@ class Player {
                     dummyItem.type[key] = perk;
                     let proficiencySpan = Display.getProficiencySpan(dummyItem)
                     let perkDiv = $('<div>').text(key).append(proficiencySpan).addClass('perk-divs')
-                    let hintText = "You have proficiency "+perk+" with "+key+" weapons. Damage with those weapons is rerolled "+perk+" times, with the highest roll used."
+                    let weapons = LootManager.getWeaponsOfType(key);
+                    let weaponNames = [];
+                    weapons.forEach(weapon=>{
+                        weaponNames.push(weapon.name)
+                    })
+                    let hintText = "You have proficiency "+perk+" with "+key+" weapons ("+weaponNames.join(", ")+"). Damage with those weapons is rerolled "+perk+" times, with the highest roll being used. enemy attacks against those weapons are rerolled "+perk+" times, with the lowest roll being used."
                     Display.setHintText(perkDiv,hintText)
                     element.append(
                         perkDiv

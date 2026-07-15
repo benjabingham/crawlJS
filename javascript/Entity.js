@@ -960,7 +960,8 @@ class PlayerEntity extends Entity{
     canUnarmedStrike(x,y){
         if(Player.equipped && Player.equipped.weapon){
             return false;
-        }        
+        }
+        if(Board.wallAt(this.x+x,this.y+y)){return false}        
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         //console.log(targetEntity)

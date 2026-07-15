@@ -1066,6 +1066,7 @@ class PlayerEntity extends Entity{
             }
         }
         target.addMortality(mortality);
+        Player.activatePostAttackTriggers();
         if(crit){target.lastCritTurn = Log.turnCounter}
         if(Monster.prototype.isPrototypeOf(target)){
             target.addStunTime(stunAdded);
@@ -1192,6 +1193,7 @@ class SwordEntity extends Entity{
                 //this is false if player tried to jab or strafe without enough stamina
                 if(attackOccurs){
                     this.swordAttack(target);
+                    Player.activatePostAttackTriggers();
                 }else{
                     Log.addMessage('Attack failed! Not enough stamina.','danger')
                     let lastPos = History.getSnapshotEntity(this.id);

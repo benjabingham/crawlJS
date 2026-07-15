@@ -405,7 +405,7 @@ let itemVars = {
             color:'red',
             bulk:1,
             treasure:true,
-
+            enchantmentChance:0.2,
             flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
 
         },
@@ -1275,6 +1275,7 @@ let itemVars = {
         cursed:{
             name: 'cursed',
             symbol:'⚶',
+            '⚶':{color:'darkPurple'},
             unlucky:true,
             value: .3
         },
@@ -1881,4 +1882,30 @@ let itemVars = {
         "Flecks of glitter dance in the liquid.",
         "It has a faint, radiant, glow.",
     ]
+    enchantments:{
+        vigor:{
+            name:'vigor',
+            symbol:'♃',
+            '♃':{color:'orange',description:"Aspect of Vigor"},
+            flatValue:20,
+            enchantment:true,
+            vigor:true
+        },
+        hunger:{
+            name:'hunger',
+            symbol: '♆',
+            '♆':{color:'green',description:"Aspect of Hunger"},
+            flatValue:20,
+            enchantment:true,
+            hunger:true
+        },
+        fury:{
+            name:"fury",
+            symbol:"♅",
+            "♅":{color:'red',description:"Aspect of Fury"},
+            flatValue:20,
+            enchantment:true,
+            fury:true
+        }
+    }
 }

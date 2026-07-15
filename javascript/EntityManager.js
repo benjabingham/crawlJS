@@ -16,6 +16,8 @@ class EntityManager{
     static currentMap;
 
     static playerEntity;
+
+    static playerSpawnPositions = [];
     
     static entityManagerInit(){
         Board.boardInit();
@@ -24,6 +26,8 @@ class EntityManager{
     static wipeEntities(){
         EntityManager.entities = {};
         EntityManager.entityCounter = 0;
+        EntityManager.playerEntity = false;
+        EntityManager.playerSpawnPositions = [];
         History.reset();
     }
 
@@ -369,8 +373,16 @@ class EntityManager{
             spawnChance = groupInfo.spawnChance
         }
         let spawn = (random < spawnChance || typeof spawnChance == 'undefined');
+        //if there's already a player entity, don't initialize another one.
+        //this will happen because different possible spawn locations are encoded as multiple player entities.
+        //GameMaster will teleport player to correct location.
         if(groupInfo.entityType == "player"){
-            EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            EntityManager.playerSpawnPositions.push({x:x,y:y})
+            if(!EntityManager.playerEntity){
+                EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            }else{
+                return false;
+            }
         }else if(groupInfo.entityType == "monster"){
             if(entitySave.alive && spawn){
                 entityObj = new Monster(groupInfo.key,x,y,groupInfo);

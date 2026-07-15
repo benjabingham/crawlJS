@@ -38,13 +38,18 @@ class GameMaster{
 
     }
 
+    //call when leaving a map
     static reset(){
+        EntityManager.currentMap.stains = Board.stainArray;
+        GameMaster.dungeonId++;
         EntityManager.updateSavedInventories();
         Player.unequipWeapon();
         Log.wipeLog();
         EntityManager.wipeEntities();
         GameMaster.stopDrop();
+        EntityManager.playerEntity = false;
         Board.lightSourceIDs = [];
+        EntityManager.currentMap = false;
     }
 
     static startGame(message=false, position=false){
@@ -94,9 +99,12 @@ class GameMaster{
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
+        
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
+            //startingPosition may be x/y coords, or may be 'left','right',etc. Pass to getStartingPosition to translate to coords.
+            startingPosition = Location.getStartingPosition(startingPosition);
             Board.floorArray = Save.maps[roomString].floorMatrix;
             GameMaster.startGame(message, startingPosition);
         }else{
@@ -107,6 +115,7 @@ class GameMaster{
                 console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
+                startingPosition = Location.getStartingPosition(startingPosition);
                 Board.floorArray = Save.maps[roomString].floorMatrix;
                 GameMaster.startGame(message, startingPosition);
             })
@@ -534,6 +543,7 @@ class GameMaster{
         let translation = translations[direction];
         EntityManager.movePlayer(translation.x,translation.y);
 
+        //detects if moved off of map, so no postPlayerAction
         if(dungeonId != GameMaster.dungeonId){
             return false;
         }

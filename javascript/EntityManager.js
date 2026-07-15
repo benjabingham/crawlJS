@@ -144,6 +144,7 @@ class EntityManager{
     */
     //on move, chance to lose 1 stamina and end turn.
     //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
+    //return falso if encumbered, true if not
     static checkEncumberedV2(){
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
@@ -183,6 +184,9 @@ class EntityManager{
         let targetX = EntityManager.playerEntity.x+x;
         let targetY = EntityManager.playerEntity.y+y;
 
+        //check if the space being moved into is open. If it is, checks encumbrance.
+        //if occupied, doesn't bother. This means encumbrance has to be checked again later
+        //in the case of an unarmed strike.
         if(Board.isOpenSpace(targetX,targetY) && !EntityManager.checkEncumberedV2()){
             return false;
         }
@@ -190,7 +194,7 @@ class EntityManager{
 
         let playerEntity = EntityManager.getEntity("player");
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
-        if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){
+        if(!unarmedStrike && !EntityManager.moveEntity('player',x,y)){
             EntityManager.cancelAction({blocked:true})
         }
     }

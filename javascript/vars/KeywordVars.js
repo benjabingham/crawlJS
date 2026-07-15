@@ -49,9 +49,9 @@ keywordVars = {
         food:{name:"food", hintText:"You can eat this."},
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     
-        vigor:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
-        hunger:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
-        fury:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."}
+        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
+        hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
+        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."}
     },
 
     symbols:{

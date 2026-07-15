@@ -188,8 +188,8 @@ class Player {
         if(Player.perks.stamina.aerobics){
             stamina+= Player.perks.stamina.aerobics.val;
         }
-        if(Player.hasAspect('vigor')){
-            stamina += Player.hasAspect('vigor')
+        if(Player.hasAspect('vigorAspect')){
+            stamina += Player.hasAspect('vigorAspect')
         }
         if(Player.exertion){
             stamina--;
@@ -684,7 +684,7 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
-        let fury = Player.hasAspect('fury')
+        let fury = Player.hasAspect('furyAspect')
         if(fury){
             let missingHealth = Player.healthMax - Player.health
             critChance += missingHealth * fury * 0.1;
@@ -943,8 +943,8 @@ class Player {
     }
 
     static activatePostAttackTriggers(){
-        if(Player.hasAspect('hunger')){
-            let n = Player.hasAspect('hunger')
+        if(Player.hasAspect('hungerAspect')){
+            let n = Player.hasAspect('hungerAspect')
             Player.changeStamina(3*n);
             Player.changeNourishment(-1*n);
         }

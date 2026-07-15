@@ -1884,7 +1884,7 @@ let itemVars = {
     ],
     enchantments:{
         vigor:{
-            name:'vigor',
+            name:'vigorAspect',
             symbol:'♃',
             '♃':{color:'orange',description:"Aspect of Vigor"},
             flatValue:20,
@@ -1892,7 +1892,7 @@ let itemVars = {
             vigor:true
         },
         hunger:{
-            name:'hunger',
+            name:'hungerAspect',
             symbol: '♆',
             '♆':{color:'green',description:"Aspect of Hunger"},
             flatValue:20,
@@ -1900,7 +1900,7 @@ let itemVars = {
             hunger:true
         },
         fury:{
-            name:"fury",
+            name:"furyAspect",
             symbol:"♅",
             "♅":{color:'red',description:"Aspect of Fury"},
             flatValue:20,

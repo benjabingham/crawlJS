@@ -180,9 +180,12 @@ class Entity{
             this.lootContainer(Board.entityAt(x,y));
             //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
+        }else if(Board.entityAt(x,y) && Location.prototype.isPrototypeOf(Board.entityAt(x,y)) && PlayerEntity.prototype.isPrototypeOf(this)){
+            Board.entityAt(x,y).enter()
+            return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
-            //instead do Location.exitLocation
-            GameMaster.travel(x,y);
+            Travel.exitLocation(x,y)
+            //GameMaster.travel(x,y);
             return true;
         }
 
@@ -2034,5 +2037,30 @@ class ItemPile extends Entity{
         })
 
         this.name = nameArray.join(', ');
+    }
+}
+
+class Location extends Entity{
+    //locationId is string, must match with the filename (minus ".json" of a map in the rooms/ directory)
+    locationId = false;
+
+    constructor(x, y, additionalParameters = {}){
+        super('Lo',x,y, 'Location');
+        
+        //copy additional parameters... This should include LocationId
+        for (const [key, val] of Object.entries(additionalParameters)) { 
+            //if legal key...
+            if(!['inventory','id','x','y','instances'].includes(key)){
+                this[key] = val;
+            }
+        }
+
+        this.name = additionalParameters.entityName;
+
+        return this;
+    }
+
+    enter(){
+        Travel.enterLocation(this);
     }
 }

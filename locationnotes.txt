@@ -1,11 +1,11 @@
-7/14/26 - Location.json has tools to place player in correct spot in world map after leaving dungeon.
+7/14/26 - Travel.json has tools to place player in correct spot in world map after leaving dungeon.
 
 todo - 
 
-call Location.exitLocation() instead of GameMaster.Travel.
+call Travel.exitLocation() instead of GameMaster.Travel.
 
-Using Locations.worldMapIds, load in all world maps on game start.
-Parse through them on load to populate Location.worldMaps
+Using Travel.worldMapIds, load in all world maps on game start.
+Parse through them on load to populate Travel.worldMaps
 
 Add Location entity functionality - push into them to travel.
 create multiple player spawn points on dungeon and town maps

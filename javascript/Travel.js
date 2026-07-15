@@ -1,4 +1,4 @@
-class Location{
+class Travel{
 
     static worldMapIds = ['World Map 1']
     //on game start, all world maps should be searched for locations.
@@ -10,11 +10,11 @@ class Location{
     //x and y are player's current x and y values.
     static exitLocation(x,y){
         let locationId = EntityManager.currentMap.name 
-        let exitDirection = Location.getExitDirection(x,y)
+        let exitDirection = Travel.getExitDirection(x,y)
         if(!exitDirection){return false}
 
-        let worldMapId = Location.findWorldMapDestination(locationId,exitDirection)
-        let locationCoords = Location.getLocationCoords(worldMapId,locationId)
+        let worldMapId = Travel.findWorldMapDestination(locationId,exitDirection)
+        let locationCoords = Travel.getLocationCoords(worldMapId,locationId)
         let destinationCoords = locationCoords;
         switch (exitDirection){
             case "left":
@@ -57,7 +57,7 @@ class Location{
     //has a valid exit location.
     static findWorldMapDestination(locationId, direction){
         let exitMap = false;
-        for (const [mapId,locations] of Object.entries(Location.worldMaps)){
+        for (const [mapId,locations] of Object.entries(Travel.worldMaps)){
             if(locations[locationId] && locations[locationId].validExits && locations[locationId].validExits[direction]){
                 exitMap = mapId;
             }
@@ -68,7 +68,7 @@ class Location{
 
     //looks in saves for x,y coords of location locationId in map mapId
     static getLocationCoords(mapId, locationId){
-        //I don't know why I did it this way... I can just use Location.worldMaps
+        //I don't know why I did it this way... I can just use Travel.worldMaps
         /*
         let entityGroups = Save.maps[locationId].entityGroups.entityGroups
         let locationEntity = false;
@@ -81,7 +81,7 @@ class Location{
 
         return {x:locationEntity.x,y:locationEntity.y}
         */
-        let location = Location.worldMaps[mapId][locationId]
+        let location = Travel.worldMaps[mapId][locationId]
         return{x:location.x,y:location.y}
     }
 

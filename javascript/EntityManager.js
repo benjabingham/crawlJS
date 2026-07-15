@@ -397,6 +397,8 @@ class EntityManager{
             if(entitySave.alive){
                 entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
             }
+        }else if(groupInfo.entityType == 'location'){
+            entityObj = new Location(x,y,groupInfo) 
         }
         if(entityObj){
             entityObj.index = entitySave.index;
@@ -421,6 +423,7 @@ class EntityManager{
             }
         }
 
+        //use for stuff like the Tree of Greed
         if(!entityObj.checkSpawnConditions()){
             console.log('obliterating')
             entityObj.obliterated = true;

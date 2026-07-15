@@ -104,7 +104,7 @@ class GameMaster{
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);
             //startingPosition may be x/y coords, or may be 'left','right',etc. Pass to getStartingPosition to translate to coords.
-            startingPosition = Location.getStartingPosition(startingPosition);
+            startingPosition = Travel.getStartingPosition(startingPosition);
             Board.floorArray = Save.maps[roomString].floorMatrix;
             GameMaster.startGame(message, startingPosition);
         }else{
@@ -115,7 +115,7 @@ class GameMaster{
                 console.log(json);
                 Save.mapInit(json);
                 EntityManager.loadRoom(Save.maps[roomString]);
-                startingPosition = Location.getStartingPosition(startingPosition);
+                startingPosition = Travel.getStartingPosition(startingPosition);
                 Board.floorArray = Save.maps[roomString].floorMatrix;
                 GameMaster.startGame(message, startingPosition);
             })

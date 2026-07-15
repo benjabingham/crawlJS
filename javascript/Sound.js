@@ -357,9 +357,9 @@ class Sound{
     static trackIsAppropriate(track){
         let mapTypes = EntityManager.currentMap.mapTypes
         if(!mapTypes){return false}
-        scale = mapTypes.scale
-        setting = mapTypes.setting
-        vibe = mapTypes.vibe
+        let scale = mapTypes.scale
+        let setting = mapTypes.setting
+        let vibe = mapTypes.vibe
         
         let appropriate = true;
 

@@ -12,6 +12,7 @@ let mainReleases = [
 
 let devBranches = [
     {name: 'Sound', branchName: 'sound'},
+    {name: 'Dev', branchName: 'dev'},
     /*
     {name: 'Test', branchName: 'test-0.4.0'},
     

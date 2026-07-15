@@ -390,10 +390,11 @@ class EntityManager{
             entityObj.index = entitySave.index;
             
         }else{
+            /*
             console.log({
                 message:'entityObj = false',
                 entitySave:entitySave
-            })
+            })*/
             return false;
         }
         if(entitySave.inventory){

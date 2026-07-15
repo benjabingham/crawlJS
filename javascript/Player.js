@@ -361,7 +361,7 @@ class Player {
     }
 
     static equipWeapon(weapon, verbose=true){
-        if(Player.equipped || Board.getScale!='dungeon'){
+        if(Player.equipped || Board.getScale()!='dungeon'){
             return false;
         }
         Sound.playDrawWeapon();

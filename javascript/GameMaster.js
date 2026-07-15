@@ -305,7 +305,7 @@ class GameMaster{
     }
 
     static useFuel(event){
-        if(Board.getScale!='dungeon'){return false}
+        if(Board.getScale()!='dungeon'){return false}
         let slot = parseInt(event.type.split('-')[1])-1;
         if(!Player.addFuel(Player.inventory.items[slot])){
             //skip behaviors if invalid item
@@ -376,7 +376,7 @@ class GameMaster{
 
     //if slot is defined, uses that slot instead of selected item
     static equipSelectedItem(event,slot = null){
-        if(Board.getScale != 'dungeon'){
+        if(Board.getScale() != 'dungeon'){
             return false;
         }
         let item;
@@ -499,7 +499,7 @@ class GameMaster{
             //navigate in inventory instead   
         }
         GameMaster.stopDrop();
-        if(Board.getScale=='dungeon'){
+        if(Board.getScale()=='dungeon'){
             Player.gainStamina();
         }
         GameMaster.postPlayerAction();
@@ -510,7 +510,7 @@ class GameMaster{
             return false;
         }
         GameMaster.stopDrop();
-        if (Board.getScale!='dungeon'){
+        if (Board.getScale()!='dungeon'){
             return false
         }
         let direction = event.type == 'clockwise'? 1 : -1;

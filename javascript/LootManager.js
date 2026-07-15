@@ -474,7 +474,7 @@ class LootManager{
     }
 
     static applyModifier(item, modifier, recursion = false){
-        console.log(modifier);
+        //console.log(modifier);
         item[modifier.name] = true;
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
@@ -721,7 +721,7 @@ class LootManager{
         //console.log(type);
         Object.keys(itemVars.weapons).forEach(key =>{
             let weapon = itemVars.weapons[key];
-            console.log(weapon);
+            //console.log(weapon);
             if(weapon.type && weapon.type[type]){
                 weapons.push(weapon);
             }
@@ -776,7 +776,7 @@ class LootManager{
         if(item.enchantmentChance){chance += item.enchantmentChance}
         if(Math.random() > chance){return false}
         let enchantmentKeys = Object.keys(itemVars.enchantments);
-        console.log(enchantmentKeys)
+        //console.log(enchantmentKeys)
         let index = Random.roll(0,enchantmentKeys.length-1)
         LootManager.applyModifier(item,itemVars.enchantments[enchantmentKeys[index]])
     }

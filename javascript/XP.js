@@ -331,7 +331,7 @@ class XP{
         )
 
         perkOptions.forEach(perk =>{
-            console.log(perk);
+            //console.log(perk);
             let text = $('<text>');
             let oldVal = 0;
             let newVal = 0;

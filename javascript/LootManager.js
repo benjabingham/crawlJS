@@ -103,7 +103,7 @@ class LootManager{
 
         //chance for enchantments...
         entitySave.inventory.items.forEach(item=>{
-            LootManager.getItemEnchantment(item,0.001)
+            LootManager.getItemEnchantment(item,0.005)
         })
     }
 
@@ -150,7 +150,7 @@ class LootManager{
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
-            LootManager.getItemEnchantment(newTreasure,0.01)
+            LootManager.getItemEnchantment(newTreasure,0.05)
             //if value is outside of range, expand range and try again
             if(
                 (greater && newTreasure.value > treasure.value) ||
@@ -230,7 +230,7 @@ class LootManager{
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsCursed(weapon,tier,curseMultiplier)
-        LootManager.getItemEnchantment(weapon,0.01)
+        LootManager.getItemEnchantment(weapon,0.025)
         LootManager.getIsWorn(weapon, tier);
         if(!weapon.flimsy || weapon.flimsy < 0){
             weapon.flimsy = 0;

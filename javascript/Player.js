@@ -928,7 +928,7 @@ class Player {
 
     static activatePostAttackTriggers(){
         if(Player.hasAspect('hunger')){
-            n = Player.hasAspect('hunger')
+            let n = Player.hasAspect('hunger')
             Player.changeStamina(3*n);
             Player.changeNourishment(-1*n);
         }

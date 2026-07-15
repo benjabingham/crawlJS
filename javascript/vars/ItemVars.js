@@ -405,7 +405,7 @@ let itemVars = {
             color:'red',
             bulk:1,
             treasure:true,
-
+            enchantmentChance:0.2,
             flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
 
         },

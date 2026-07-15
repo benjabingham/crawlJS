@@ -1710,7 +1710,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 3,
-            value: 10,
+            value: 15,
             color: 'green',
             message:'Your luck returns to you.',
             
@@ -1720,8 +1720,8 @@ let itemVars = {
             name:'greater luck potion',
             usable: true,
             potable: true,
-            luck: 6,
-            value: 15,
+            luck: 5,
+            value: 20,
             color: 'green',
             message:'Your luck returns to you.',
             
@@ -1807,7 +1807,7 @@ let itemVars = {
             stamina: 10,
             health: 10,
             luck: 10,
-            value: 20,
+            value: 30,
             hunger: 10,
             light:2,
             color: 'gold',

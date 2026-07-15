@@ -46,7 +46,7 @@ class LootManager{
             let weaponLoot = lootChances.weapon;
             if(weaponLoot){
                 if(Random.roll(1,99) < weaponLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials, weaponLoot.curseMultiplier));
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials, weaponLoot.curseMultiplier, weaponLoot.preferredRange));
                 }
             }
 
@@ -217,7 +217,9 @@ class LootManager{
     }
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
-    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1){
+    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
+        let min = preferredRange.min;
+        let max = preferredRange.max;
         //extra curse bonus...
         if(Random.roll(1,30) <= curseMultiplier){
             tier+= 3
@@ -228,9 +230,20 @@ class LootManager{
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getIsCursed(weapon,tier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
+
+        if(weapon.value > max){
+            let newMax = max * 2;
+            weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier, {min:min, max:newMax})
+        }else if(weapon.value < min){
+            let newMin = Math.floor(min/2)
+            weapon = LootManager.getWeaponLoot(tier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
+        }
+
         if(!weapon.flimsy || weapon.flimsy < 0){
             weapon.flimsy = 0;
         }
+
+        
 
         return weapon;
     }
@@ -478,6 +491,20 @@ class LootManager{
                     if(item[key]){
                         item[key] += value;
                         item[key] = Math.max(1,item[key]);
+                    }
+                    break;
+                case 'damageMult':
+                case 'stunTimeMult':
+                case 'weightMult':
+                    let attribute = key.split('Mult')[0]
+                    //multiply attribute by value. Round down final number for increase, up for decrease.
+                    if(item[attribute]){
+                        item[attribute] *= value;
+                        if(value>1){
+                            item[attribute] = Math.floor(item[attribute])
+                        }else{
+                            item[attribute] = Math.ceil(item[attribute])
+                        }
                     }
                     break;
                 case 'flimsy':

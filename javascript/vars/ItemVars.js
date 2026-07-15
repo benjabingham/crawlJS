@@ -731,7 +731,7 @@ let itemVars = {
             value:12,
             bulk:1,
             scalable:true,
-            possibleFlavorTexts:["She's beautiful...","Why does it look like that?","You wish it had some clothes on.","A depiction of a man forgotten in all but form.","It would be worth more if you could find the head..."]
+            possibleFlavorTexts:["She's beautiful...","Why does it look like that?","You wish it had some clothes on.","A depiction of a man forgotten in all but form.","It would be worth more if you could find the head...","Depicts a man with a wooden hammer and a belt of potions."]
         },
         tiara:{
             name:"tiara",

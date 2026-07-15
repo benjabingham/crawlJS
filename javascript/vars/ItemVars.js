@@ -1881,7 +1881,7 @@ let itemVars = {
         "It has a sweet floral scent.",
         "Flecks of glitter dance in the liquid.",
         "It has a faint, radiant, glow.",
-    ]
+    ],
     enchantments:{
         vigor:{
             name:'vigor',

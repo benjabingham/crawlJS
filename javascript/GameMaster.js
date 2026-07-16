@@ -10,6 +10,7 @@ class GameMaster{
         GameMaster.currentTown = mapVars['Sundun'];
         Shop.shopInit();
         Display.displayInit();
+        Save.loadMaps();
     }
 
     static quickStart(){
@@ -17,9 +18,6 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
-
-
-
        /*
         
         GameMaster.getRoom(
@@ -99,7 +97,6 @@ class GameMaster{
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
-        
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);

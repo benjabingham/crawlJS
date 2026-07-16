@@ -35,7 +35,7 @@ class Travel{
 
         GameMaster.reset();
 
-        GameMaster.getRoom(worldMapId,destinationCoords)
+        GameMaster.getRoom(worldMapId,false,destinationCoords)
     }
 
     static getExitDirection(x,y){
@@ -66,28 +66,15 @@ class Travel{
         return exitMap;
     }
 
-    //looks in saves for x,y coords of location locationId in map mapId
+    //looks for x,y coords of location locationId in map mapId
     static getLocationCoords(mapId, locationId){
-        //I don't know why I did it this way... I can just use Travel.worldMaps
-        /*
-        let entityGroups = Save.maps[locationId].entityGroups.entityGroups
-        let locationEntity = false;
-        for (const [id,entityGroup] of Object.entries(entityGroups)){
-            if(entityGroup.locationId && entityGroup.locationId == locationId){
-                //don't expect more than one instance... just use the first one.
-                locationEntity = Object.values(entityGroup.instances)[0]
-            }
-        }
-
-        return {x:locationEntity.x,y:locationEntity.y}
-        */
         let location = Travel.worldMaps[mapId][locationId]
         return{x:location.x,y:location.y}
     }
 
     //pass locationEntity object
     static enterLocation(locationEntity){
-        let direction = Location.getEnterDirection(locationEntity)
+        let direction = Travel.getEnterDirection(locationEntity)
 
         GameMaster.reset();
         let startingPosition = {}
@@ -126,10 +113,10 @@ class Travel{
         //check if we're lookign at x or y axis
         let axis = (startingPosition.left || startingPosition.right) ? "x":"y";
         //check if we want high or low value
-        let invert = (startingPosition.down || startingPosition.right)? -1:1;
+        let invert = (startingPosition.up || startingPosition.left)? -1:1;
 
-        //without inverting, this function puts the lowest position in [0].
-        //so invert if down or right, which wants highest at [0]
+        //without inverting, this function puts the highest position in [0].
+        //so invert if down or right, which wants lowest at [0]
         let comparefn = function(a,b){
             if(a[axis] > b[axis]){
                 return -1 * invert;
@@ -142,4 +129,47 @@ class Travel{
 
         return playerSpawnPositions[0];
     }
+
+    //cycle through a map roster. Record
+    static markValidExitsInRoster(mapData){
+        let roster = mapData.roster;
+        let mapId = mapData.name;
+        let board = {}
+        if(!Travel.worldMaps[mapId]){
+            Travel.worldMaps[mapId] = {}
+        }
+        roster.forEach((entity)=>{
+            let x = entity.x;
+            let y = entity.x
+            if(!board.x){
+                board.x = {}
+            }
+            board.x.y = true
+        })
+        let translations = {
+            left:{x:-1,y:0},
+            right:{x:1,y:0},
+            up:{x:0,y:-1},
+            down:{x:0,y:1}
+        }
+
+        roster.forEach((entity)=>{
+            let entityInfo = entity.entityGroupInfo;
+            if(entityInfo.entityType == 'location'){
+                console.log(entity)
+                if(!Travel.worldMaps[mapId][entityInfo.locationId]){
+                    Travel.worldMaps[mapId][entityInfo.locationId] = {x:entity.x,y:entity.y,validExits:{}}
+                }
+                for (const [direction,coords] of Object.entries(translations)){
+                    //if direction is empty...
+                    let targetPos = {x:entity.x+coords.x, y: entity.y+coords.y}
+                    if(!board[targetPos.x] || !board[targetPos.x][targetPos.y]){
+                        Travel.worldMaps[mapId][entityInfo.locationId].validExits[direction]=true
+                    }
+                }
+            }
+        })
+        console.log(Travel.worldMaps)
+    }
+
 }

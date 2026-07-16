@@ -2,13 +2,13 @@
 
 todo - 
 
-call Travel.exitLocation() instead of GameMaster.Travel.
+call Travel.exitLocation() instead of GameMaster.Travel. (DONE)
 
 Using Travel.worldMapIds, load in all world maps on game start.
 Parse through them on load to populate Travel.worldMaps
 
-Add Location entity functionality - push into them to travel.
-create multiple player spawn points on dungeon and town maps
+Add Location entity functionality - push into them to travel. (DONE)
+create multiple player spawn points on dungeon and town maps 
 when entering dungeon or town, find player spawn point closest to edge entered (DONE)
 
 add town map functionality - create shop entities (shouldnt be too hard, shops already pretend to be containers)

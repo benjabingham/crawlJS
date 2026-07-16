@@ -55,6 +55,7 @@ class Save{
         console.log('initializing map - '+locationId);
         let entityGroups = json.entityGroups.entityGroups;
         let roster = [];
+        let scale = json.mapTypes.scale
         let counter = 0;
         for(const [key, entityGroup] of Object.entries(entityGroups)){
             let instances = entityGroup.instances;
@@ -78,6 +79,9 @@ class Save{
         json.roster = roster;
         if(json.floorMatrix){
             json.floorMatrix = JSON.parse(json.floorMatrix);
+        }
+        if(scale=='world'){
+            Travel.markValidExitsInRoster(json)
         }
         Save.maps[locationId] = json;
     }
@@ -233,5 +237,17 @@ class Save{
         }else{
             return false
         }
+    }
+
+    static loadMaps(){
+        Travel.worldMapIds.forEach((mapId)=>{
+            console.log('loading map '+mapId);
+            fetch('./rooms/'+mapId+'.json')
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+                Save.mapInit(json);
+            })
+        })
     }
 }

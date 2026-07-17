@@ -5,6 +5,10 @@ class GameMaster{
     static currentTown;
     static startTime;
 
+    static get scale(){
+        return EntityManager.currentMap.mapTypes.scale
+    }
+
     static gameMasterInit(){
         EntityManager.entityManagerInit();
         GameMaster.currentTown = mapVars['Sundun'];

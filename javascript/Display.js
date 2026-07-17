@@ -299,6 +299,7 @@ class Display{
     }
 
     static addDirectionHighlight(){
+        if(GameMaster.scale != 'dungeon'){return false}
         let playerEntity = EntityManager.getEntity('player');
         let swordEntity = playerEntity.swordEntity;
         //this is how we tell if it's equipped, or outside of the map

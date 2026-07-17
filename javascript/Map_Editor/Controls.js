@@ -76,6 +76,7 @@ class Controls{
         Controls.entityNameInput();
         Controls.symbolInput();
         Controls.colorInput();
+        Controls.lightStrengthInput();
         Controls.locationIdInput();
         Controls.wallTypeDropdown();
         Controls.spawnChanceInput();
@@ -249,6 +250,15 @@ class Controls{
         })
     }
 
+    static lightStrengthInput(){
+        let input = $('#light-strength-input');
+        input.on('change',function(){
+            EntityGroupManager.setLightStrength(input.val());
+            Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+    }
+
     static locationIdInput(){
         let input = $('#location-id-input');
         input.on('change',function(){
@@ -349,6 +359,7 @@ class Controls{
         $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
         $('#entity-color-input').val(EntityGroupManager.currentColor);
         Controls.updateColorPreview();
+        $('#light-strength-input').val(EntityGroupManager.currentLightStrength);
         $('#entity-options-cosmetic').show();
     }
 

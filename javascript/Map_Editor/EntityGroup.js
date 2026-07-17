@@ -6,6 +6,7 @@ class EntityGroup{
     key;
     symbol;
     color;
+    lightStrength;
     entityName;
     groupName;
     spawnChance = 100;

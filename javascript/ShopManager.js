@@ -53,7 +53,7 @@ class ShopManager{
     static restockShops(mapId){
         let roster = Save.maps[mapId].roster
         roster.forEach((entity)=>{
-            if(entity.entityType=='shop'){
+            if(entity.entityGroupInfo.shop){
                 ShopManager.restockShopInventory(mapId,entity.shopId,entity.inventory);
             }
         })
@@ -61,6 +61,7 @@ class ShopManager{
 
     //pass roster inventory (which is an object, so pass by reference), and update its item array.
     static restockShopInventory(mapId, shopId, inventory){
+        console.log('restocking!!!!!!!')
         let inventoryItems = inventory.items;
         let shopTemplate = mapVars[mapId].shops[shopId]
         inventoryItems.forEach((item)=>{
@@ -150,7 +151,7 @@ class ShopManager{
     static buyItem(slot){
         let shop = Inventory.selectedContainer
         let shopItems = shop.inventory.items
-        let item = JSON.parse(JSON.stringify(shopItems[slot]));
+        let item = shopItems[slot];
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
             //Sound.playError();
@@ -171,7 +172,12 @@ class ShopManager{
     }
 
     static transferItem(item){
+        let shop = Inventory.selectedContainer
+        let shopItems = shop.inventory.items
+        let slot = item.slot;
         item.fresh = false;
+        console.log(item)
+        console.log(item.fresh)
         Inventory.take(slot,false);
         if(slot != -1){
             shopItems.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})

@@ -43,6 +43,11 @@ class EntityGroupManager{
         return group.color;
     }
 
+    static get currentLightStrength(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.lightStrength;
+    }
+
     static get currentEntityName(){
         let group = EntityGroupManager.getCurrentGroup();
         return group.entityName;
@@ -101,6 +106,11 @@ class EntityGroupManager{
     static setColor(color){
         let group = EntityGroupManager.getCurrentGroup();
         group.color = color;
+    }
+
+    static setLightStrength(lightStrength){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.lightStrength = lightStrength;
     }
 
     static setEntityName(entityName){

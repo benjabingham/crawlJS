@@ -8,7 +8,6 @@ class GameMaster{
     static gameMasterInit(){
         EntityManager.entityManagerInit();
         GameMaster.currentTown = mapVars['Sundun'];
-        Shop.shopInit();
         Display.displayInit();
         Save.loadMaps();
     }
@@ -153,6 +152,7 @@ class GameMaster{
         Sound.playRandomTrack();
     }
 
+    /*
     static loadTown(){
         //GameMaster.nextDay();
         Shop.restockInventory();
@@ -160,6 +160,7 @@ class GameMaster{
         Display.showTownScreen();
         Player.light = 0;
     }
+        */
 
     static nextDay(){
         Save.day++

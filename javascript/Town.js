@@ -19,10 +19,6 @@ class Town{
         GameMaster.postPlayerAction();
     }
 
-    static showShop(){
-        
-    }
-
     static nourishmentDiv(){
         let meals = [
             {
@@ -134,7 +130,7 @@ class Town{
             $('#day-div').text('Day '+Save.day);
             //GameMaster.loadTown();
             //Inventory.displayInventory();
-            Shop.restockInventory();
+            ShopManager.restockInventory();
             Log.addMessage('You rested.')
             if(restInfo.healthChange > 0){
                 Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
@@ -171,7 +167,7 @@ class Town{
     static displayShop(){
         $('#shop-wrapper').show();
         $('#shop-list').html('');
-        let inventory = Shop.inventory;
+        let inventory = ShopManager.inventory;
         let shopContainer = {
             inventory:{items:inventory},
             shop:true,

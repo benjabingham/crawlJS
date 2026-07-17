@@ -68,6 +68,16 @@ class EntityGroupManager{
         return group.wait;
     }
 
+    static get currentShop(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.shop;
+    }
+
+    static get currentShopId(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.shopId;
+    }
+
     static get currentWallType(){
         let group = EntityGroupManager.getCurrentGroup();
         return group.wallType;
@@ -126,6 +136,16 @@ class EntityGroupManager{
     static setWait(wait){
         let group = EntityGroupManager.getCurrentGroup();
         group.wait = wait;
+    }
+
+    static setShop(shop){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.shop = shop;
+    }
+
+    static setShopId(shopId){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.shopId = shopId;
     }
 
     static setWallType(wallType){

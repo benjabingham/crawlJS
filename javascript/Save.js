@@ -71,7 +71,11 @@ class Save{
                         items:[]
                     }
                 }
-                LootManager.getEntityLoot(entitySave);
+                if(entityGroup.entityType=='shop'){
+                    entitySave.inventory.items = ShopManager.generateShopInventory(locationId,entityGroupInfo.shopId)
+                }else{
+                    LootManager.getEntityLoot(entitySave);
+                }
                 roster.push(entitySave)
                 counter++;
             }
@@ -80,9 +84,9 @@ class Save{
         if(json.floorMatrix){
             json.floorMatrix = JSON.parse(json.floorMatrix);
         }
-        if(scale=='world'){
-            Travel.markValidExitsInRoster(json)
-        }
+        
+        Travel.markValidExitsInRoster(json)
+        
         Save.maps[locationId] = json;
     }
 
@@ -94,6 +98,7 @@ class Save{
             Save.mapRespawn(mapString);
             Save.degradeStains(mapString);
             Save.scatterItems(mapString);
+            Save.restockShops(mapString);
         }
         map.lastDay = day;
     }

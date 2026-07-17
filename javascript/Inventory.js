@@ -611,7 +611,7 @@ class Inventory{
         }else{
             let slot = Inventory.displayedInventorySlots["world-inventory"]
             if(Inventory.selectedContainer.shop){
-                Shop.buyItem(slot)
+                ShopManager.buyItem(slot)
             }else{
                 Inventory.take(slot);
                 GameMaster.postPlayerAction();
@@ -820,11 +820,11 @@ class Inventory{
                 let shopItem = Inventory.draggedItem.inventoryId == "world-inventory" && Inventory.selectedContainer.shop;
                 if(Inventory.lastHoveredSlot.inventoryId == "world-inventory" && Inventory.draggedItem.inventoryId == "player-inventory" && Inventory.selectedContainer.shop){
                     //sell item
-                    Shop.sellItem(Inventory.draggedItem.slot);
+                    ShopManager.sellItem(Inventory.draggedItem.slot);
                 }else if(Inventory.lastHoveredSlot.inventoryId == "player-inventory" && shopItem){
                     //buy item
                     let item = Inventory.selectedContainer.inventory.items[Inventory.draggedItem.slot]
-                    if(Shop.buyItem(Inventory.draggedItem.slot)){
+                    if(ShopManager.buyItem(Inventory.draggedItem.slot)){
                         Inventory.moveItem(item.slot,Inventory.lastHoveredSlot.slot,"player-inventory","player-inventory")
                     };
                 }else if(!shopItem && Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
@@ -1042,14 +1042,14 @@ class Inventory{
 
     static getSellButton(slot, value){
         return $('<button>').addClass('item-button').text('sell - '+value).on('click',function(){
-            Shop.sellItem(slot);
+            ShopManager.sellItem(slot);
             Inventory.displayInventory();
         })
     }
 
     static getBuyButton(slot,price){
         return $('<button>').addClass('item-button').text('buy - '+price).on('click',function(){
-            Shop.buyItem(slot);
+            ShopManager.buyItem(slot);
             Inventory.displayInventory();
         })
     }

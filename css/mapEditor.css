@@ -254,3 +254,19 @@ h3,h4{
     }
 }
 
+#shop-options{
+    padding-top:5px
+}
+
+#shop-info-div{
+    display:none;
+}
+
+.box-div{
+    display:inline;
+    label{
+        width:fit-content;
+        display:inline;
+    }
+}
+

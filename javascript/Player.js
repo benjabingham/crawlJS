@@ -333,7 +333,7 @@ class Player {
         }else if (item.potable){
             return Player.drinkItem(item);
         }else if(Inventory.selectedContainer.shop == true){
-            let result = Shop.sellItem(item.slot);
+            let result = ShopManager.sellItem(item.slot);
             Inventory.displayInventory();
             return result;
         }else if(!Player.equipped){

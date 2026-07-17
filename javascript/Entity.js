@@ -70,6 +70,8 @@ class Entity{
     reanimator;
     //logMessage - {message,class}. Sent to log first time entity is seen.
     logMessage;
+    //shop - determines if entity is a shop
+    shop;
 
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){

@@ -1,37 +1,9 @@
-class Shop{
-
-    static get weaponTiers(){
-        return GameMaster.currentTown.shop.weaponTiers;
-    }
-
-    static get inventory(){
-        return GameMaster.currentTown.shop.inventory;
-    }
-
-    static get fuelSlots(){
-        return GameMaster.currentTown.shop.fuelSlots;
-    }
-
-    static get potionSlots(){
-        return GameMaster.currentTown.shop.potionSlots;
-    }
-
-    static get carriedMaterials(){
-        return GameMaster.currentTown.shop.carriedMaterials
-    }
-
-    static setInventory(arr){
-        GameMaster.currentTown.shop.inventory = arr;
-    }
-
-    static shopInit(){
-        Shop.stockInventory();
-    }
+class ShopManager{
 
 //why did i do this???
     static getInventory(){
         let inventory = [];
-        Shop.inventory.forEach((item)=>{
+        ShopManager.inventory.forEach((item)=>{
             if(item && !item.purchased){
                 inventory.push(item);
             }
@@ -59,81 +31,86 @@ class Shop{
 
 
     //stock inventory from fresh
-    static stockInventory(){
-        Shop.setInventory([]);
+    //called by Save.mapInit()
+    static generateShopInventory(mapId, shopId){
+        let shopTemplate = mapVars[mapId].shops[shopId]
+        let inventory = [];
         let slot = 0;
-        Shop.weaponTiers.forEach((tier)=>{
+        shopTemplate.weaponTiers.forEach((tier)=>{
             let priceMultiplier = Random.roll(1,4) + tier;
-            let item = LootManager.getWeaponLoot(tier, Shop.carriedMaterials);
+            let item = LootManager.getWeaponLoot(tier, shopTemplate.carriedMaterials);
             
             item.price = Math.max(item.value,1) * priceMultiplier;
             item.slot = slot;
             item.tier = tier;
-            Shop.inventory.push(item);
+            inventory.push(item);
             slot++;
         })
 
-        for(let i=0; i<Shop.fuelSlots; i++){
-            let fuel = Shop.getFuel();
+        for(let i=0; i<shopTemplate.fuelSlots; i++){
+            let fuel = shopTemplate.getFuel();
             fuel.slot = slot;
-            Shop.inventory.push(fuel);
+            inventory.push(fuel);
             slot++;
         }
 
-        /*
-        for(let i=0; i<0; i++){
-            let supplies = Shop.getSupplies();
-            supplies.slot = slot;
-            Shop.inventory.push(supplies);
-            slot++;
-        }
-        */
-
-        for(let i=0; i<Shop.potionSlots; i++){
-            let potion = Shop.getPotion();
+        for(let i=0; i<shopTemplate.potionSlots; i++){
+            let potion = ShopManager.getPotion();
             potion.slot = slot;
-            Shop.inventory.push(potion);
+            inventory.push(potion);
             slot++;
         }
 
-        
+        return inventory;        
     }
 
-    static restockInventory(){
-        this.inventory.forEach((item)=>{
+    static restockShops(mapId){
+        let roster = Save.maps[mapId].roster
+        roster.forEach((entity)=>{
+            if(entity.entityType=='shop'){
+                ShopManager.restockShopInventory(mapId,entity.shopId,entity.inventory);
+            }
+        })
+    }
+
+    //pass roster inventory (which is an object, so pass by reference), and update its item array.
+    static restockShopInventory(mapId, shopId, inventory){
+        let inventoryItems = inventory.items;
+        let shopTemplate = mapVars[mapId].shops[shopId]
+        inventoryItems.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
                 if(Random.roll(0,2)){
-                    let fuel = Shop.getFuel();
+                    let fuel = ShopManager.getFuel();
                     fuel.slot = slot;
                     fuel.fresh = true;
-                    Shop.inventory[slot] = fuel;
+                    inventoryItems[slot] = fuel;
                 }
             }else if(item.tier == 'potion'){
                 if(Random.roll(0,2)){
-                    let potion = Shop.getPotion();
+                    let potion = ShopManager.getPotion();
                     potion.slot = slot;
                     potion.fresh = true;
-                    Shop.inventory[slot] = potion;
+                    inventoryItems[slot] = potion;
                 }
             }else if(item.tier == 'supplies'){
                 if(Random.roll(0,2)){
-                    let supplies = Shop.getSupplies();
+                    let supplies = ShopManager.getSupplies();
                     supplies.slot = slot;
                     supplies.fresh = true;
-                    Shop.inventory[slot] = supplies;
+                    inventoryItems[slot] = supplies;
                 }
             }else{
                 let restockChance = Math.max(50-(item.tier*8),10);
                 let random = Random.roll(1,99);
                 if(random < restockChance){
-                    let newItem = LootManager.getWeaponLoot(item.tier, Shop.carriedMaterials);
+                    let newItem = LootManager.getWeaponLoot(item.tier, ShopManager.carriedMaterials);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
-                    newItem.price = Math.max(newItem.value,1) * priceMultiplier;
+                    newItem.price = Math.max(newItem.value* priceMultiplier,1) ;
                     newItem.slot = slot;
                     newItem.fresh = true;
                     newItem.tier = item.tier;
-                    Shop.inventory[slot] = newItem;
+                    inventoryItems[slot] = newItem;
                 }
             }
             if(item.fresh){
@@ -185,7 +162,7 @@ class Shop{
     }
 
     static buyItem(slot){
-        let item = JSON.parse(JSON.stringify(Shop.inventory[slot]));
+        let item = JSON.parse(JSON.stringify(ShopManager.inventory[slot]));
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
             //Sound.playError();
@@ -196,7 +173,7 @@ class Shop{
         item.fresh = false;
         Inventory.take(slot,false);
         if(slot != -1){
-            Shop.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
+            ShopManager.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
         }
         Player.inventoryCleanup();
         Inventory.displayInventory();

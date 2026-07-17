@@ -81,6 +81,7 @@ class Controls{
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
+        Controls.shopInputs();
 
         Controls.floorTypeSelect();
     }
@@ -216,6 +217,7 @@ class Controls{
                 $('#entity-options-cosmetic').hide();
             }
             Grid.updateGrid();
+            Controls.showHideShopOptions();
             Save.saveSnapshot();
         })
     }
@@ -303,6 +305,44 @@ class Controls{
             Save.saveSnapshot();
         })
     }
+
+    static shopInputs(){
+        Controls.isShopInput();
+        Controls.shopIdInput();
+    }
+
+    static shopIdInput(){
+        let input = $('#shop-id-input');
+        input.on('change',function(){
+            EntityGroupManager.setShopId(input.val());
+            console.log(EntityGroupManager.currentShopId)
+            Save.saveSnapshot();
+        })
+    }
+    static isShopInput(){
+        let input = $('#shop-checkbox');
+        input.on('change',function(){
+            let isShop = input.is(':checked')
+            EntityGroupManager.setShop(isShop);
+            Controls.showHideShopOptions();
+            Save.saveSnapshot();
+        })
+    }
+
+    static showHideShopOptions(){
+        let isShop = EntityGroupManager.currentShop
+        console.log(EntityGroupManager.getCurrentGroup())
+        $('#shop-id-input').val(EntityGroupManager.currentShopId)
+        console.log(isShop)
+        $('#shop-checkbox').prop('checked', isShop);
+        if(isShop){
+            $('#shop-info-div').show()
+        }else{
+            $('#shop-info-div').hide()
+            EntityGroupManager.setShopId('')
+        }
+        console.log(EntityGroupManager.currentShopId)
+    }
     
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
@@ -362,6 +402,7 @@ class Controls{
         }else{
             $('#wall-options').hide();
         }
+        Controls.showHideShopOptions();
 
         if(group.entityType == 'location'){
             $('#location-options').show();

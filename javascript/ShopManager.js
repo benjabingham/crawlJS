@@ -48,7 +48,7 @@ class ShopManager{
         })
 
         for(let i=0; i<shopTemplate.fuelSlots; i++){
-            let fuel = shopTemplate.getFuel();
+            let fuel = ShopManager.getFuel();
             fuel.slot = slot;
             inventory.push(fuel);
             slot++;
@@ -162,7 +162,9 @@ class ShopManager{
     }
 
     static buyItem(slot){
-        let item = JSON.parse(JSON.stringify(ShopManager.inventory[slot]));
+        let shop = Inventory.selectedContainer
+        let shopItems = shop.inventory.items
+        let item = JSON.parse(JSON.stringify(shopItems[slot]));
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
             //Sound.playError();
@@ -173,7 +175,7 @@ class ShopManager{
         item.fresh = false;
         Inventory.take(slot,false);
         if(slot != -1){
-            ShopManager.inventory.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
+            shopItems.splice(slot,0,{purchased:true,tier:item.tier, weapon:item.weapon})
         }
         Player.inventoryCleanup();
         Inventory.displayInventory();

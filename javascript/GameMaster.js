@@ -425,7 +425,7 @@ class GameMaster{
         }
 
         if(Inventory.selectedContainer.shop){
-            Shop.sellItem(Inventory.getSelectedItem().slot)
+            ShopManager.sellItem(Inventory.getSelectedItem().slot)
         }else{
             Inventory.moveItem(Inventory.getSelectedItem().slot, Inventory.getItemsInInventory("world-inventory"),"player-inventory","world-inventory")
         }

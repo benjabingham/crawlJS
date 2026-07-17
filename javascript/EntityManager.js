@@ -424,6 +424,10 @@ class EntityManager{
             }
         }
 
+        if(entityObj.lightStrength){
+            Board.lightSourceIDs.push(entityObj.id);
+        }
+
         //use for stuff like the Tree of Greed
         if(!entityObj.checkSpawnConditions()){
             console.log('obliterating')

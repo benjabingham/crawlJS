@@ -71,8 +71,8 @@ class Save{
                         items:[]
                     }
                 }
-                if(entityGroup.entityType=='shop'){
-                    entitySave.inventory.items = ShopManager.generateShopInventory(locationId,entityGroupInfo.shopId)
+                if(entityGroup.shop){
+                    entitySave.inventory.items = ShopManager.generateShopInventory(locationId,entityGroup.shopId)
                 }else{
                     LootManager.getEntityLoot(entitySave);
                 }

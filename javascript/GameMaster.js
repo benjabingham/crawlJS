@@ -53,6 +53,8 @@ class GameMaster{
         EntityManager.playerEntity = false;
         Board.lightSourceIDs = [];
         EntityManager.currentMap = false;
+        Player.light = 0;
+        Player.lightTime = 0;
     }
 
     static startGame(message=false, position=false){

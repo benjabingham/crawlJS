@@ -268,8 +268,14 @@ class Board{
     }
 
     static hasLight(pos){
+        //if(GameMaster.scale != 'dungeon'){return true}
         let hasLight = false
-        let playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        let playerLightPos
+        if(GameMaster.scale == 'dungeon'){
+            playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        }else{
+            playerLightPos = EntityManager.getEntity('player')
+        }
         let sources = [{
             x:playerLightPos.x,
             y:playerLightPos.y,

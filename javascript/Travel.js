@@ -33,7 +33,6 @@ class Travel{
                 return false;
         }
 
-        GameMaster.reset();
 
         GameMaster.getRoom(worldMapId,false,destinationCoords)
     }
@@ -76,7 +75,6 @@ class Travel{
     static enterLocation(locationEntity){
         let direction = Travel.getEnterDirection(locationEntity)
 
-        GameMaster.reset();
         let startingPosition = {}
         startingPosition[direction] = true;
         GameMaster.getRoom(locationEntity.locationId,false,startingPosition)

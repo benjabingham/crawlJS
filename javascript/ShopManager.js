@@ -208,10 +208,13 @@ class ShopManager{
         Log.printDayToLog(false);
         let oldLuck = Player.luck;
         GameMaster.nextDay();
-        $('#day-div').text('Day '+Save.day);
-        //GameMaster.loadTown();
-        //Inventory.displayInventory();
+
+        let container = Inventory.selectedContainer
+        let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
         GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y})
+        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
+        Inventory.displayedInventorySlots = selectedSlots
+        console.log(selectedSlots)
         Log.addMessage('You rested.')
         if(restInfo.healthChange > 0){
             Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')

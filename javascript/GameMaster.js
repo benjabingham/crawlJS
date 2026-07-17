@@ -38,6 +38,7 @@ class GameMaster{
 
     //call when leaving a map
     static reset(){
+        if(!EntityManager.currentMap){return false}
         EntityManager.currentMap.stains = Board.stainArray;
         GameMaster.dungeonId++;
         EntityManager.updateSavedInventories();
@@ -97,6 +98,7 @@ class GameMaster{
     }
 
     static getRoom(roomString, message=false, startingPosition=false){
+        GameMaster.reset();
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);

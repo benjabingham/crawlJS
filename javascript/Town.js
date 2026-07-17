@@ -123,27 +123,7 @@ class Town{
     static restButton(){
         let restButton = $('#rest-button')
         restButton.off().on('click',()=>{
-            let restInfo = Player.getRestInfo();
-            Log.printDayToLog(false);
-            let oldLuck = Player.luck;
-            GameMaster.nextDay();
-            $('#day-div').text('Day '+Save.day);
-            //GameMaster.loadTown();
-            //Inventory.displayInventory();
-            ShopManager.restockInventory();
-            Log.addMessage('You rested.')
-            if(restInfo.healthChange > 0){
-                Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
-            }
-            if(oldLuck < Player.luck){
-                Log.addMessage("Gained "+(Player.luck-oldLuck)+ " luck!","win")
-            }
-            if(restInfo.nourishmentChange < 0){
-                Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
-            }
-            Log.addMessage('You are now well rested.','pos')
-            GameMaster.postPlayerAction();
-            $('.hint-divs').text(Town.getRestHintText());
+            
         })
         
         restButton.on('mouseenter',()=>{

@@ -55,7 +55,7 @@ class Player {
         ]
     }
 
-    static gold = 0;
+    static gold = 100;
     //points to equipped object
     static equipped = false;
     static level=1;
@@ -865,6 +865,7 @@ class Player {
     }
 
     static changeGold(n){
+        if(!n){return false}
         Player.gold += n;
         Player.gold = Math.max(Player.gold,0)
         Display.flash($('.gold-div'),'goldDivs')

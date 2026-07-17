@@ -190,7 +190,7 @@ class Inventory{
             itemValue = '0';
         }
         let descriptionBodyElement;
-        if(item.weapon || item.potable){
+        if(item.weapon || item.potable || item.description){
             descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
         }else{
             descriptionBodyElement = '';
@@ -272,17 +272,23 @@ class Inventory{
                         gainLose = 'lose'
                         power *= -1;
                     }
-                    $('#'+inventory+'-description-body').append(
+                    descriptionBodyElement.append(
                         $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
                     )
                 }
             })
 
             if(item.unlabeled){
-                $('#'+inventory+'-description-body').append(
+                descriptionBodyElement.append(
                     $('<div>').addClass('potion-description').text('unknown effect...')
                 )
             }
+        }
+
+        if(item.description){
+            descriptionBodyElement.append(
+                $('<div>').addClass('item-description').text(item.description)
+            )
         }
 
 
@@ -365,9 +371,14 @@ class Inventory{
         let nameDiv = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan).append(symbolsSpan)
         Display.applyColor(item,nameDiv)
         let bulkDiv = $('<div>').addClass('item-bulk-div').text(bulk+"b");
+        
         Display.setHintText(bulkDiv, "This item has a bulk of "+bulk+".","info")
 
-        header.append(goldDiv).append(nameDiv).append(bulkDiv)
+        if(!item.specialShopItem){
+            header.append(goldDiv).append(nameDiv).append(bulkDiv)
+        }else{
+            header.append(nameDiv);
+        }
 
         return header;
     }
@@ -556,13 +567,10 @@ class Inventory{
 
     //expect event to have type:"left", or type"*-left"
     static navigate(event){
-        console.log(event)
         Sound.playNav();
         //this way "up" and "item-up" both work.
         let splitEventType = event.type.split('-')
         let direction = splitEventType[splitEventType.length-1];
-        console.log(splitEventType);
-        console.log(direction)
 
         switch(direction){
             case "left":

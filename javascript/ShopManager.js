@@ -1,66 +1,52 @@
 class ShopManager{
 
-//why did i do this???
-    static getInventory(){
-        let inventory = [];
-        ShopManager.inventory.forEach((item)=>{
-            if(item && !item.purchased){
-                inventory.push(item);
-            }
-        })
-        
-        return inventory;
-    }
-
-    //I don't think this ever actually does anything...
-    //items are never truly removed from the shop, they are just marked as "purchased".
-    /*
-    static inventoryCleanup(){
-        let newInventory = [];
-        let slot = 0;
-        Shop.inventory.forEach((item) =>{
-            if(item){
-                newInventory.push(item);
-                item.slot = slot;
-                slot++;
-            }
-        })
-        Shop.setInventory(newInventory);
-    }
-    */
-
-
     //stock inventory from fresh
     //called by Save.mapInit()
     static generateShopInventory(mapId, shopId){
         let shopTemplate = mapVars[mapId].shops[shopId]
         let inventory = [];
         let slot = 0;
-        shopTemplate.weaponTiers.forEach((tier)=>{
-            let priceMultiplier = Random.roll(1,4) + tier;
-            let item = LootManager.getWeaponLoot(tier, shopTemplate.carriedMaterials);
-            
-            item.price = Math.max(item.value,1) * priceMultiplier;
-            item.slot = slot;
-            item.tier = tier;
-            inventory.push(item);
-            slot++;
-        })
-
-        for(let i=0; i<shopTemplate.fuelSlots; i++){
-            let fuel = ShopManager.getFuel();
-            fuel.slot = slot;
-            inventory.push(fuel);
-            slot++;
+        if(shopTemplate.specialItems){
+            shopTemplate.specialItems.forEach((item)=>{
+                item.slot = slot;
+                item.specialShopItem=true;
+                inventory.push(item);
+                slot++;
+            })
+        }
+        
+        if(shopTemplate.weaponTiers){
+            shopTemplate.weaponTiers.forEach((tier)=>{
+                let priceMultiplier = Random.roll(1,4) + tier;
+                let item = LootManager.getWeaponLoot(tier, shopTemplate.carriedMaterials);
+                
+                item.price = Math.max(item.value,1) * priceMultiplier;
+                item.slot = slot;
+                item.tier = tier;
+                inventory.push(item);
+                slot++;
+            })
         }
 
-        for(let i=0; i<shopTemplate.potionSlots; i++){
-            let potion = ShopManager.getPotion();
-            potion.slot = slot;
-            inventory.push(potion);
-            slot++;
+        if(shopTemplate.fuelSlots){
+            for(let i=0; i<shopTemplate.fuelSlots; i++){
+                let fuel = ShopManager.getFuel();
+                fuel.slot = slot;
+                inventory.push(fuel);
+                slot++;
+            }
         }
+        
 
+        if(shopTemplate.potionSlots){
+            for(let i=0; i<shopTemplate.potionSlots; i++){
+                let potion = ShopManager.getPotion();
+                potion.slot = slot;
+                inventory.push(potion);
+                slot++;
+            }
+        }
+       
         return inventory;        
     }
 
@@ -172,6 +158,19 @@ class ShopManager{
             return false;
         }
         Player.changeGold(item.price*-1);
+        if(item.specialShopItem){
+            ShopManager.transferSpecial(item)
+        }else{
+            ShopManager.transferItem(item)
+        }
+        if(item.type != 'rest'){
+            Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
+        }
+        GameMaster.postPlayerAction()
+        return true;
+    }
+
+    static transferItem(item){
         item.fresh = false;
         Inventory.take(slot,false);
         if(slot != -1){
@@ -180,10 +179,53 @@ class ShopManager{
         Player.inventoryCleanup();
         Inventory.displayInventory();
         Inventory.findValidSelect();
-        Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
-        GameMaster.postPlayerAction()
-        return true;
     }
+
+    static transferSpecial(item){
+        let itemType = item.type
+        console.log(item.type);
+        switch(itemType){
+            case "morsel":
+                let morsel = JSON.parse(JSON.stringify(itemVars.food.morsel))
+                LootManager.getFlavorText(morsel)
+                Player.pickUpItem(morsel)
+                break;
+            case "fullMeal":
+                Player.changeNourishment(100)
+                Sound.playEat();
+                
+                break;
+            case "rest":
+                ShopManager.triggerRest()
+                break;
+            default:
+                throw(new Error("Special shop item type "+itemType+ " not found."))
+        }
+    }
+
+    static triggerRest(){
+        let restInfo = Player.getRestInfo();
+        Log.printDayToLog(false);
+        let oldLuck = Player.luck;
+        GameMaster.nextDay();
+        $('#day-div').text('Day '+Save.day);
+        //GameMaster.loadTown();
+        //Inventory.displayInventory();
+        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y})
+        Log.addMessage('You rested.')
+        if(restInfo.healthChange > 0){
+            Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
+        }
+        if(oldLuck < Player.luck){
+            Log.addMessage("Gained "+(Player.luck-oldLuck)+ " luck!","win")
+        }
+        if(restInfo.nourishmentChange < 0){
+            Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
+        }
+        Log.addMessage('You are now well rested.','pos')
+        //GameMaster.postPlayerAction();
+    }
+
 
     static sellItem(slot){
         let item = Player.inventory.items[slot];
@@ -196,4 +238,5 @@ class ShopManager{
         GameMaster.postPlayerAction()
     }
 
+  
 }

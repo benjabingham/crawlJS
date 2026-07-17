@@ -98,13 +98,15 @@ class Save{
             Save.mapRespawn(mapString);
             Save.degradeStains(mapString);
             Save.scatterItems(mapString);
-            Save.restockShops(mapString);
+            ShopManager.restockShops(mapString);
         }
         map.lastDay = day;
     }
 
     static degradeStains(mapString){
+        //console.log(Save.maps)
         let stains = Save.maps[mapString].stains;
+        if(!stains){return false}
         let y = 0;
         stains.forEach((row)=>{
             let x = 0;

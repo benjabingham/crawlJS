@@ -159,8 +159,10 @@ class Display{
                 let entityDiv = $('#board-entity-'+displayX+'-'+displayY);
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
+                let tileRemembered = GameMaster.scale == 'world' && Board.tileHasBeenSeen({x:x, y:y})
+                let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || tileRemembered
                 //don't bother if spot was dark before and is still dark
-                if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
+                if (!playerCanSee && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
                 entityDiv.html('');
@@ -172,7 +174,7 @@ class Display{
                 }
                 let symbol = '';
                 //out of bounds
-                if(Board.hasPlayerLos({x:x, y:y})){
+                if(playerCanSee){
                     if(boardArray[y] && boardArray[y][x]){
                         let entity = boardArray[y][x]
                         if(Board.wallArray[y][x]){

@@ -608,6 +608,7 @@ class GameMaster{
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
         GameMaster.updateDisplay();
+        Board.updateSeenTiles();
         if(!EntityManager.skipBehaviors){
             Log.turnCounter++;
         }else{

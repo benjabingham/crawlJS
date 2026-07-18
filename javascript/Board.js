@@ -267,6 +267,7 @@ class Board{
         return float ? distance : Math.floor(distance);
     }
 
+    //a light array would be good... Might improve performance
     static hasLight(pos){
         //if(GameMaster.scale != 'dungeon'){return true}
         let hasLight = false
@@ -450,5 +451,39 @@ class Board{
     static getScale(){
         return EntityManager.currentMap.mapTypes.scale
     }
+
+    //looks at every tile in viewwindow and records if it's been seen
+    static updateSeenTiles(){
+        let map = EntityManager.currentMap
+        let playerPos = EntityManager.getEntity('player');
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                let x = (displayX-8) + playerPos.x;
+                let y = (displayY-8) + playerPos.y;
+                if(Board.hasPlayerLos({x:x,y:y})){Board.updateSeenTile({x:x,y:y})}
+            }
+        }
+    }
+
+    //pass tile coords, sets it as "Seen" in map file.
+    static updateSeenTile(pos){
+        let map = EntityManager.currentMap
+        if(!map.seenTiles){
+            map.seenTiles = {}
+        }
+        if(!map.seenTiles[pos.x]){
+            map.seenTiles[pos.x] = {}
+        }
+        map.seenTiles[pos.x][pos.y] = true
+    }
     
+    //check seenTiles obj set by Board.updateSeenTile
+    static tileHasBeenSeen(pos){
+        let map = EntityManager.currentMap
+        if(!map.seenTiles || !map.seenTiles[pos.x] || !map.seenTiles[pos.x][pos.y]){
+            return false
+        }
+
+        return true
+    }
 }

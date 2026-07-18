@@ -56,6 +56,7 @@ class GameMaster{
         EntityManager.playerEntity = false;
         Board.lightSourceIDs = [];
         EntityManager.currentMap = false;
+        Player.fillStamina();
         Player.light = 0;
         Player.lightTime = 0;
     }
@@ -78,6 +79,9 @@ class GameMaster{
         Display.showDungeonScreen();
         if(position){
             EntityManager.playerEntity.setPosition(position.x,position.y);
+        }
+        if(GameMaster.scale == 'dungeon'){
+            EntityManager.playerEntity.pointTowardsCenter();
         }
         EntityManager.reapWounded();
         board.placeEntities();

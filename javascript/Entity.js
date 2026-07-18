@@ -612,7 +612,6 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
-        console.log('checksplatter')
         if(!this.blood){
             return false;
         }
@@ -962,6 +961,11 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
+    pointTowardsCenter(){
+        let sword = EntityManager.getEntity(this.sword)
+        sword.pointTowardsCenter();
+    }
+
     //x and y are RELATIVE TO PLAYER
     canUnarmedStrike(x,y){
         if(Player.equipped && Player.equipped.weapon){
@@ -1237,10 +1241,8 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
-        console.log(damage);
         let weight = weapon.weight;
         let stunTime = weapon.stunTime;
-        console.log(stunTime)
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
@@ -1252,11 +1254,11 @@ class SwordEntity extends Entity{
             stunTime += Player.getBonusStun(weapon,target);
             damage += Player.getItemBonusDamage(weapon);
         }
-        
+        /*
         console.log({
             damage:damage,
             stunTime:stunTime
-        })
+        })*/
         //damage is only referenced for perks
         let degrades = EntityManager.itemWillDegrade(this,0,0.25,damage)
         let crit = Player.getCrit(weapon, strikeType,target);
@@ -1291,7 +1293,7 @@ class SwordEntity extends Entity{
         let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
         mortality = Math.floor(mortality*multiplier)
         Sound.playPlayerHit(mortality);
-        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
+        //console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
@@ -1384,12 +1386,10 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        console.log({pos1:pos1,pos2:pos2})
         let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
         let y = position.y;
-        console.log(Board.entityAt(x,y));
         let bestPos;
         let bestRotation;
         let bestDistance = -1;
@@ -1411,7 +1411,6 @@ class SwordEntity extends Entity{
             position = this.getSwordPosition(rotation);
             x = position.x;
             y = position.y;
-            console.log(bestDistance);
         }
 
         let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)

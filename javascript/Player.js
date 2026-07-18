@@ -197,6 +197,10 @@ class Player {
         Player.changeStamina(stamina);
     }
 
+    static fillStamina(){
+        Player.stamina = Player.staminaMax;
+    }
+
     static checkHungerModifiers(){
         let stamina = 0;
         let random = Math.random()*100;

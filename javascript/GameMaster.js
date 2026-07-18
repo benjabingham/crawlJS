@@ -22,14 +22,14 @@ class GameMaster{
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
        
-        
+        /*
         GameMaster.getRoom(
             'Sundun',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
             
         );
-        
-       /*
+        */
+       
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
@@ -37,18 +37,20 @@ class GameMaster{
         );
 
         XP.levelUp(false);
-        */
+        
 
     }
 
     //call when leaving a map
-    static reset(){
+    static reset(resetLog = true){
         if(!EntityManager.currentMap){return false}
         EntityManager.currentMap.stains = Board.stainArray;
         GameMaster.dungeonId++;
         EntityManager.updateSavedInventories();
         Player.unequipWeapon();
-        Log.wipeLog();
+        if(resetLog){
+            Log.wipeLog();
+        }
         EntityManager.wipeEntities();
         GameMaster.stopDrop();
         EntityManager.playerEntity = false;
@@ -62,7 +64,7 @@ class GameMaster{
         $('#day-div').text('Day '+Save.day);
         Sound.playRandomTrack();
         Inventory.selectedInventory = "player-inventory";
-        Log.wipeLog();
+       // Log.wipeLog();
         Log.initialWarnings();
         Inventory.toggleInventory(false)
         if(message){
@@ -104,8 +106,8 @@ class GameMaster{
 
     }
 
-    static getRoom(roomString, message=false, startingPosition=false){
-        GameMaster.reset();
+    static getRoom(roomString, message=false, startingPosition=false, resetLog = true){
+        GameMaster.reset(resetLog);
         if(Save.maps[roomString]){
             console.log('room cached')
             EntityManager.loadRoom(Save.maps[roomString]);

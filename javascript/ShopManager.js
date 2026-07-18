@@ -217,7 +217,7 @@ class ShopManager{
 
         let container = Inventory.selectedContainer
         let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
-        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y})
+        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
         Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
         Inventory.displayedInventorySlots = selectedSlots
         console.log(selectedSlots)

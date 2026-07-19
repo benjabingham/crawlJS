@@ -338,7 +338,8 @@ class Player {
 
     static checkChangeNourishment(hungerChance = 0.25){
         if(GameMaster.scale == 'world'){
-            hungerChance *= Player.fatigue*10;
+            hungerChance *= Player.fatigue*5;
+            hungerChance += 20
         }
         let random = Math.random()*100;
         hungerChance *= (Player.hungerPercent/150)+.66

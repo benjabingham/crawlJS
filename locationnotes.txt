@@ -16,6 +16,8 @@ new features
             - image?
                 - art of shopkeeper
     - fatigue
+        - instead of level 1 giving -50% max bulk, do -30% max bulk and stamina
+        - Allow fatigue to build up in dungeon, but don't affect player until they leave. Should accrue perhaps the same as hunger.
     - npcs
         - work same as shop dialogue, but without stuff to buy
     - monsters remember you for a day

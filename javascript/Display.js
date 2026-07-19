@@ -48,6 +48,7 @@ class Display{
     }
 
     static setHintText(element, hintText, hintClass = "info"){
+        if(!element){return false;}
         element.addClass('keyword').on('mousemove',()=>{
             $('.hint-divs').show().text(hintText).addClass(hintClass);
             
@@ -351,10 +352,18 @@ class Display{
     }
 
     static fatigueDiv(){
-        let fatigueLevels = {0:'rested', 1:'exerted',2:'exhausted'};
-        let fatigueColors = {0:'black', 1:'darkOrange',2:'red'}
+        let fatigueLevels = {0:'rested', 1:'fatigued',2:'exhausted'};
+        let fatigueColors = {0:'black', 1:'darkPurple',2:'brightPurple'}
+        let fatigueHints = {
+            0:'You have no ill effects.',
+            1:'Your Bulk Capacity is cut in half.',
+            2:'Your Bulk Capacity is cut in half. Whenever you would gain Fatigue, you lose HP instead.'
+        }
         
         $('#fatigue-level-div').text('You are '+fatigueLevels[Player.fatigueLevel]+'.').css('color', 'var(--'+fatigueColors[Player.fatigueLevel]+')');
+        Display.setHintText(
+            $('#fatigue-level-div'),
+            "Your Fatigue is "+Player.fatigue+"/"+Player.fatigueMax+". "+fatigueHints[Player.fatigueLevel])
     }
     
     static fillBars(){

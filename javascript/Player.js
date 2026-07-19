@@ -15,7 +15,6 @@ class Player {
 
     static fatigue = 0;
     static fatigueMax = 10;
-    static fatigueLevel = 0;
 
     static light = 0;
     static lightMax = 8;
@@ -129,6 +128,14 @@ class Player {
         return Math.floor(Player.fatigue/Player.fatigueMax);
     }
 
+    static get modifiedMaxBulk(){
+        let maxBulk = Player.maxBulk
+        if(Player.fatigueLevel){
+            maxBulk = Math.floor(maxBulk/2)
+        }
+        return maxBulk;
+    }
+
     static getRestInfo(){
         console.log(JSON.parse(JSON.stringify(XP.skills)))
         console.log(XP.offeredPerks)
@@ -201,7 +208,7 @@ class Player {
             stamina += Player.hasAspect('vigorAspect')
         }
         if(Player.fatigueLevel){
-            stamina--;
+            //stamina--;
         }
         Player.changeStamina(stamina);
     }
@@ -894,7 +901,11 @@ class Player {
     }
 
     static getEncumbranceLevel(){
-        let level = Math.floor(Player.getBulk()/Player.maxBulk);
+        let maxBulk = Player.modifiedMaxBulk
+        if(Player.fatigueLevel > 1){
+            maxBulk = Math.floor(maxBulk/2)
+        }
+        let level = Math.floor(Player.getBulk()/maxBulk);
         level *= level;
         return level;
     }

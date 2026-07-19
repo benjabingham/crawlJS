@@ -390,7 +390,7 @@ class Inventory{
         while(bulk.includes('.') && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
             bulk = bulk.slice(0,bulk.length-1)
         }
-        $('.bulk-div').text(bulk+" / "+Player.maxBulk+" bulk")
+        $('.bulk-div').text(bulk+" / "+Player.modifiedMaxBulk+" bulk")
     }
 
     static checkEncumbered(){

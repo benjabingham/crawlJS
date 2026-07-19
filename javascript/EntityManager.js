@@ -151,6 +151,7 @@ class EntityManager{
     //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
     //return falso if encumbered, true if not
     static checkEncumberedV2(){
+        if(GameMaster.scale=='town'){return true}
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
             let diff = Player.getBulk()-Player.maxBulk;
@@ -161,11 +162,19 @@ class EntityManager{
                 let chance = 3;
                 if(i==0){chance += 2}
                 if(Random.roll(1,100) <= chance){
-                    Player.changeStamina(-1)
-                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     Display.flash($('#player-inventory'),'inventory')
                     XP.gainBulkXP(nChecks)
-                    return false;
+                    if(GameMaster.scale=='dungeon'){
+                        Player.changeStamina(-1)
+                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                        return false;
+                    }
+                    if(GameMaster.scale=='world'){
+                        Player.changeFatigue(1)
+                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. You have a chance to gain an additional point of Fatigue earch turn.')
+                        return true
+                    }
+                    
                 }
             }
         }

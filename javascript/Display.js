@@ -356,8 +356,8 @@ class Display{
         let fatigueColors = {0:'black', 1:'darkPurple',2:'brightPurple'}
         let fatigueHints = {
             0:'You have no ill effects.',
-            1:'Your Bulk Capacity is cut in half.',
-            2:'Your Bulk Capacity is cut in half. Whenever you would gain Fatigue, you lose HP instead.'
+            1:'Your Bulk Capacity and Max Stamina are each reduced by 30%.',
+            2:'Your Bulk Capacity and Max Stamina are each reduced by 30%. Whenever you would gain Fatigue, you lose HP instead.'
         }
         
         $('#fatigue-level-div').text('You are '+fatigueLevels[Player.fatigueLevel]+'.').css('color', 'var(--'+fatigueColors[Player.fatigueLevel]+')');
@@ -367,9 +367,10 @@ class Display{
     }
     
     static fillBars(){
-        let staminaPercent = Player.staminaPercent;
+        let staminaPercent = Player.modifiedStaminaPercent;
+        console.log(staminaPercent)
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
-        $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
+        $('#stamina-level').text(Player.stamina+"/"+Player.modifiedMaxStamina);
 
         let rawPercent = Player.fatiguePercent;
         let fatiguePercent

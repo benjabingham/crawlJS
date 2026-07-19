@@ -92,6 +92,14 @@ class Player {
         return Math.floor((Player.stamina/Player.staminaMax)*100);
     }
 
+    static get modifiedStaminaPercent(){
+        console.log({
+            stamina:Player.stamina,
+            modifiedMax:Player.modifiedMaxStamina
+        })
+        return Math.floor((Player.stamina/Player.modifiedMaxStamina)*100);
+    }
+
     static get fatiguePercent(){
         return Math.floor(((Player.fatigue)/Player.fatigueMax)*100);
     }
@@ -131,9 +139,17 @@ class Player {
     static get modifiedMaxBulk(){
         let maxBulk = Player.maxBulk
         if(Player.fatigueLevel){
-            maxBulk = Math.floor(maxBulk/2)
+            maxBulk = Math.floor(maxBulk*0.7)
         }
         return maxBulk;
+    }
+
+    static get modifiedMaxStamina(){
+        let maxStamina = Player.staminaMax
+        if(Player.fatigueLevel){
+            maxStamina = Math.floor(maxStamina*0.7)
+        }
+        return maxStamina;
     }
 
     static getRestInfo(){
@@ -214,7 +230,7 @@ class Player {
     }
 
     static fillStamina(){
-        Player.stamina = Player.staminaMax;
+        Player.stamina = Player.modifiedMaxStamina;
     }
 
     static checkHungerModifiers(){
@@ -227,16 +243,16 @@ class Player {
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){
-            if(Player.stamina < Player.staminaMax){
-                if(scale=='world'){
+            if(scale=='world'){
+                if(Player.stamina < Player.modifiedMaxStamina){
                     Player.changeFatigue(-1)
                     Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to lose fatigue each turn.");
-                }else{
-                    Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to gain stamina each turn.");
-                    stamina++;
                 }
+            }else{
+                Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to gain stamina each turn.");
+                stamina++;
                 
-            }
+            }   
         }else if(random < loseChance){
             if(scale=='world'){
                 Player.changeFatigue(1)
@@ -256,7 +272,7 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Player.stamina+n;
         Player.stamina = Math.max(0,Player.stamina)
-        Player.stamina = Math.min(Player.staminaMax,Player.stamina);
+        Player.stamina = Math.min(Player.modifiedMaxStamina,Player.stamina);
 
         let hungerChance = (Player.stamina - oldStamina)*2;
         Player.checkChangeNourishment(hungerChance);
@@ -338,7 +354,7 @@ class Player {
 
     static checkChangeNourishment(hungerChance = 0.25){
         if(GameMaster.scale == 'world'){
-            hungerChance *= Player.fatigue*5;
+            //hungerChance *= Player.fatigue;
             hungerChance += 20
         }
         let random = Math.random()*100;
@@ -350,7 +366,7 @@ class Player {
 
     static reset(){
         Player.staminaMax = 10;
-        Player.stamina = Player.staminaMax;
+        Player.stamina = Player.modifiedMaxStamina;
 
         Player.healthMax = 10;
         Player.health = Player.healthMax;

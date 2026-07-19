@@ -27,9 +27,9 @@ class Log{
 
     static initialWarnings(){
         if (Player.fatigueLevel == 1){
-            Log.addMessage('You are exerted! Stamina regen dereased.','danger')
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','danger')
         }else if (Player.fatigueLevel > 1){
-            Log.addMessage('You are exhausted! Moving will cost stamina. Stamina regen decreased.','urgent')
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','urgent')
         }
     }
 

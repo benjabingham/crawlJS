@@ -93,7 +93,7 @@ class Player {
     }
 
     static get fatiguePercent(){
-        return Math.floor((Player.fatigue/Player.fatigueMax)*100);
+        return Math.floor(((Player.fatigue)/Player.fatigueMax)*100);
     }
 
     static get healthPercent(){
@@ -122,6 +122,10 @@ class Player {
         }
 
         return level;
+    }
+
+    static get fatigueLevel(){
+        return Math.floor(Player.fatigue/Player.fatigueMax);
     }
 
     static getRestInfo(){
@@ -179,10 +183,8 @@ class Player {
         Player.changeLuck(luck);
 
         Player.changeNourishment(-3);
-
-        Player.setFatigueLevel(0);
-
         
+        Player.changeFatigue(Player.fatigueMax*-1);
 
         XP.checkLevelUp();
 
@@ -245,7 +247,7 @@ class Player {
 
     static changeFatigue(n){
         Player.fatigue = Player.fatigue+n;
-        Player.fatigue = Math.min(Player.fatigueMax,Player.fatigue);
+        Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
         Player.fatigue = Math.max(0,Player.fatigue)
     }
 
@@ -272,15 +274,10 @@ class Player {
         }
     }
 
-    static changeFatigueLevel(n){
-        n += Player.fatigueLevel;
-        Player.setFatigueLevel(n);    
-    }
-
-    static setFatigueLevel(n){
-        Player.fatigueLevel = n;
-        Player.fatigueLevel = Math.min(Player.fatigueLevel, 2);
-        Player.fatigueLevel = Math.max(Player.fatigueLevel, 0);
+    static setFatigue(n){
+        Player.fatigue = n;
+        Player.fatigue = Math.min(Player.fatigue, Player.fatigueMax*2);
+        Player.fatigue = Math.max(Player.fatigue, 0);
     }
 
     static changeNourishment(n){

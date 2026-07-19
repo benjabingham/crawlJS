@@ -57,9 +57,18 @@
 } 
 
 #fatigue-level{
-    background-color: var(--fatigueBar);
+    background-color: var(--brightPurple);
     color:var(--fatigueBarText);
 } 
+
+#fatigue-level.full{
+    background-color: var(--fatigueBar);
+    /*color:var(--floor);*/
+} 
+
+#fatigue-bar.full{
+    background-color: var(--brightPurple);
+}
 
 #luck-level{
     background-color: var(--luckBar);

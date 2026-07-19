@@ -362,9 +362,22 @@ class Display{
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
         $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
 
-        let fatiguePercent = Player.fatiguePercent;
+        let rawPercent = Player.fatiguePercent;
+        let fatiguePercent
+        if(rawPercent == 200){
+            fatiguePercent = 100
+        }else{
+            fatiguePercent = rawPercent % 100
+        }
         $('#fatigue-level').css('width',fatiguePercent*1.5+"px");
         $('#fatigue-level').text(Player.fatigue+"/"+Player.fatigueMax);
+        if(Player.fatigue >= Player.fatigueMax){
+            $('#fatigue-bar').addClass('full')
+            $('#fatigue-level').addClass('full')
+        }else{
+            $('#fatigue-bar').removeClass('full')
+            $('#fatigue-bar').removeClass('full')
+        }
 
         let healthPercent = Player.healthPercent;
         $('#health-level').css('width',healthPercent*1.5+"px");

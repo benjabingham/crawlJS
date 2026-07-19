@@ -31,7 +31,7 @@ let mapVars = {
                         type:'rest',
                         price:0,
                         name:"rest",
-                        description:"The day will pass. Some monsters will respawn, your Exertion will decrease, and your Hunger will deplete. Some extra Hunger will be converted into Health if you're hurt.",
+                        description:"The day will pass. Some monsters will respawn, your fatigue will decrease, and your Hunger will deplete. Some extra Hunger will be converted into Health if you're hurt.",
                         flavorText:"In such a cruel world, at least rest is free."
                     }
                 ]

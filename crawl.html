@@ -74,7 +74,7 @@
         <div id="hud-div">
             <div id="day-div"></div>
             <div id = "resources">
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="hp-bar-container">
                     <div id="hp-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">HP</div>
                     <div id = "health-bar" class="resource-bar-divs">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="stamina-bar-container">
                     <div id="stamina-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Stamina</div>
                     <div id = "stamina-bar" class="resource-bar-divs">
@@ -90,7 +90,15 @@
                     </div>
                 </div>
 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="fatigue-bar-container">
+                    <div id="fatigue-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">Fatigue</div>
+                    <div id = "fatigue-bar" class="resource-bar-divs">
+                        <div id = "fatigue-level" class="resource-level-divs"></div>
+                    </div>
+                </div>
+
+                <div class="resource-bar-containers" id="luck-bar-container">
                     <div id="luck-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Luck</div>
                     <div id = "luck-bar" class="resource-bar-divs">
@@ -98,7 +106,7 @@
                     </div>
                 </div>
 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="huunger-bar-container">
                     <div id="hunger-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Hunger</div>
                     <div id = "hunger-bar" class="resource-bar-divs">
@@ -108,7 +116,7 @@
 
             </div>
             <!--<div id="nourishment-level-div"></div>-->
-            <div id="exertion-level-div"></div>
+            <div id="fatigue-level-div"></div>
             <div id="gold-div"class="gold-div"></div>
 
 
@@ -150,7 +158,7 @@
                             <button id="rest-button">rest</button>
                             <br>
                             <div class="hint-text">
-                                Rest to reset exertion.
+                                Rest to reset fatigue.
                             </div>
                         </div>
                     </div>

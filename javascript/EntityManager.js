@@ -105,8 +105,8 @@ class EntityManager{
         return entity.move(x,y);
     }
 
-    static checkPlayerExertion(){
-        if(Player.exertion > 1){
+    static checkPlayerfatigue(){
+        if(Player.fatigueLevel > 1){
             if(Player.stamina){
                 Player.changeStamina(-1);
             }else{
@@ -180,7 +180,7 @@ class EntityManager{
     }
     
     static movePlayer(x,y){
-        if(!EntityManager.checkPlayerExertion()){
+        if(!EntityManager.checkPlayerfatigue()){
             return false;
         }
         if(!EntityManager.checkUnwieldy()){

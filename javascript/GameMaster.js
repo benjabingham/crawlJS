@@ -6,6 +6,9 @@ class GameMaster{
     static startTime;
 
     static get scale(){
+        if(!EntityManager.currentMap || !EntityManager.currentMap.mapTypes){
+            return false;
+        }
         return EntityManager.currentMap.mapTypes.scale
     }
 
@@ -160,7 +163,7 @@ class GameMaster{
         EntityManager.currentMap = false;
 
         if(destination.type == "town"){
-            Player.changeExertion(1);
+            Player.changeFatigue(1);
             GameMaster.loadTown();
         }else if(destination.type == "dungeon"){
             GameMaster.getRoom(destination.name);
@@ -513,10 +516,10 @@ class GameMaster{
             //navigate in inventory instead   
         }
         GameMaster.stopDrop();
-        if(Board.getScale()=='dungeon'){
+        if(GameMaster.scale =='dungeon'){
             Player.gainStamina();
         }
-        GameMaster.postPlayerAction();
+        GameMaster.postPlayerAction("wait");
     }
 
     static rotate(event){
@@ -593,7 +596,7 @@ class GameMaster{
         })
     }
 
-    static postPlayerAction(){ 
+    static postPlayerAction(action=false){ 
         Display.hideHintDiv()
         
         EntityManager.placeSword('player');
@@ -613,6 +616,9 @@ class GameMaster{
         }
         History.saveSnapshot();
         Board.calculateLosArray(EntityManager.getEntity('player'));
+        if(GameMaster.scale=='world' && action != 'wait'){
+            Player.changeFatigue(1)
+        }
         GameMaster.updateDisplay();
         Board.updateSeenTiles();
         if(!EntityManager.skipBehaviors){
@@ -621,8 +627,6 @@ class GameMaster{
             Log.rewind();
         }
         Log.printLog();  
-        
-
         
         Log.clearNotices();
         EntityManager.skipBehaviors = false;

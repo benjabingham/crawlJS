@@ -93,7 +93,7 @@ class Town{
         if(!restInfo){
             restInfo = Player.getRestInfo();
         }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
+        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.fatigueChange+" fatigue. 50% change to gain 1 luck.";
 
         return hintText;
     }
@@ -117,7 +117,7 @@ class Town{
         $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
         $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
 
-        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
+        $('#fatigue-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
     }
 
     static restButton(){
@@ -134,8 +134,8 @@ class Town{
         }).on('mouseleave',()=>{
             $('.hint-divs').html('');
             Display.fillBars();
-            Display.exertionDiv();
-            $('#exertion-level-div').removeClass('preview');
+            Display.fatigueDiv();
+            $('#fatigue-level-div').removeClass('preview');
             $('#health-level').removeClass('preview');
 
             $('#luck-level').removeClass('preview');

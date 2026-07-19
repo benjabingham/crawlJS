@@ -350,17 +350,21 @@ class Display{
         Display.highlightedCells = [];
     }
 
-    static exertionDiv(){
-        let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
-        let exertionColors = {0:'black', 1:'darkOrange',2:'red'}
+    static fatigueDiv(){
+        let fatigueLevels = {0:'rested', 1:'exerted',2:'exhausted'};
+        let fatigueColors = {0:'black', 1:'darkOrange',2:'red'}
         
-        $('#exertion-level-div').text('You are '+exertionLevels[Player.exertion]+'.').css('color', 'var(--'+exertionColors[Player.exertion]+')');
+        $('#fatigue-level-div').text('You are '+fatigueLevels[Player.fatigueLevel]+'.').css('color', 'var(--'+fatigueColors[Player.fatigueLevel]+')');
     }
     
     static fillBars(){
         let staminaPercent = Player.staminaPercent;
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
         $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
+
+        let fatiguePercent = Player.fatiguePercent;
+        $('#fatigue-level').css('width',fatiguePercent*1.5+"px");
+        $('#fatigue-level').text(Player.fatigue+"/"+Player.fatigueMax);
 
         let healthPercent = Player.healthPercent;
         $('#health-level').css('width',healthPercent*1.5+"px");
@@ -384,7 +388,15 @@ class Display{
             $('#xp-level').removeClass('full-xp')
         }
 
-        Display.exertionDiv();
+        if(GameMaster.scale=='dungeon'){
+            $('#stamina-bar-container').show();
+            $('#fatigue-bar-container').hide();
+        }else{
+            $('#stamina-bar-container').hide();
+            $('#fatigue-bar-container').show();
+        }
+
+        Display.fatigueDiv();
 
     }
 

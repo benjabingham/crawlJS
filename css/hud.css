@@ -13,7 +13,7 @@
     }
 }
 
-#day-div, #nourishment-level-div, #exertion-level-div{
+#day-div, #nourishment-level-div, #fatigue-level-div{
     margin:auto;
     width:fit-content;
 }
@@ -54,6 +54,11 @@
 #stamina-level{
     background-color: var(--staminaBar);
     color:var(--staminaBarText);
+} 
+
+#fatigue-level{
+    background-color: var(--fatigueBar);
+    color:var(--fatigueBarText);
 } 
 
 #luck-level{
@@ -170,6 +175,9 @@
     }
     #stamina-stat-div{
         color:var(--darkYellow)
+    }
+    #fatigue-stat-div{
+        color:var(--darkPurple)
     }
     #luck-stat-div{
         color:var(--darkGreen)

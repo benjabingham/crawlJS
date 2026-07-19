@@ -13,7 +13,9 @@ class Player {
 
     static maxBulk = 10;
 
-    static exertion = 0;
+    static fatigue = 0;
+    static fatigueMax = 10;
+    static fatigueLevel = 0;
 
     static light = 0;
     static lightMax = 8;
@@ -90,6 +92,10 @@ class Player {
         return Math.floor((Player.stamina/Player.staminaMax)*100);
     }
 
+    static get fatiguePercent(){
+        return Math.floor((Player.fatigue/Player.fatigueMax)*100);
+    }
+
     static get healthPercent(){
         return Math.floor((Player.health/Player.healthMax)*100);
     }
@@ -139,7 +145,7 @@ class Player {
             healthChange += (Player.nourishment + nourishmentChange)
         }
 
-        let exertionChange = Player.exertion*-1
+        let fatigueLevelChange = Player.fatigueLevel*-1
 
         if((Player.health+healthChange) > Player.healthMax){
             healthChange = Player.healthMax - Player.health;
@@ -156,7 +162,7 @@ class Player {
         return{
             healthChange:healthChange,
             nourishmentChange:nourishmentChange,
-            exertionChange:exertionChange
+            fatigueLevelChange:fatigueLevelChange
         }
     }
 
@@ -174,7 +180,7 @@ class Player {
 
         Player.changeNourishment(-3);
 
-        Player.setExertion(0);
+        Player.setFatigueLevel(0);
 
         
 
@@ -191,7 +197,7 @@ class Player {
         if(Player.hasAspect('vigorAspect')){
             stamina += Player.hasAspect('vigorAspect')
         }
-        if(Player.exertion){
+        if(Player.fatigueLevel){
             stamina--;
         }
         Player.changeStamina(stamina);
@@ -237,6 +243,12 @@ class Player {
         }
     }
 
+    static changeFatigue(n){
+        Player.fatigue = Player.fatigue+n;
+        Player.fatigue = Math.min(Player.fatigueMax,Player.fatigue);
+        Player.fatigue = Math.max(0,Player.fatigue)
+    }
+
     static changeHealth(n){
         Player.health = Player.health+n;
         Player.health = Math.min(Player.healthMax,Player.health);
@@ -260,15 +272,15 @@ class Player {
         }
     }
 
-    static changeExertion(n){
-        n += Player.exertion;
-        Player.setExertion(n);    
+    static changeFatigueLevel(n){
+        n += Player.fatigueLevel;
+        Player.setFatigueLevel(n);    
     }
 
-    static setExertion(n){
-        Player.exertion = n;
-        Player.exertion = Math.min(Player.exertion, 2);
-        Player.exertion = Math.max(Player.exertion, 0);
+    static setFatigueLevel(n){
+        Player.fatigueLevel = n;
+        Player.fatigueLevel = Math.min(Player.fatigueLevel, 2);
+        Player.fatigueLevel = Math.max(Player.fatigueLevel, 0);
     }
 
     static changeNourishment(n){
@@ -857,6 +869,8 @@ class Player {
                 return Player.nourishmentMax;
             case "bulk capacity":
                 return Player.maxBulk;
+            case "fatigue limit":
+                return Player.fatigueMax;
             default:
                 return 0;
         }
@@ -933,7 +947,7 @@ class Player {
     static getPlayerStatsDiv(){
         let element = $('#character-stats-div')
         element.html('');
-        let stats = ['hp','stamina','luck','hunger','bulk capacity']
+        let stats = ['hp','stamina','luck','hunger','bulk capacity','fatigue limit']
         stats.forEach((statName)=>{
             let statDiv = $('<div>').addClass('stat-div').attr('id',statName.split(' ')[0]+'-stat-div')
             statDiv.text(Player.getMaxResource(statName)+' ' +statName)

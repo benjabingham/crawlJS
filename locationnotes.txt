@@ -2,26 +2,25 @@
 
 todo - 
 
-call Travel.exitLocation() instead of GameMaster.Travel. (DONE)
+qol / restoring features
+    - restore (and fix) rest hint
+    - print fresh shop items in log
 
-Using Travel.worldMapIds, load in all world maps on game start.
-Parse through them on load to populate Travel.worldMaps
-
-Add Location entity functionality - push into them to travel. (DONE)
-create multiple player spawn points on dungeon and town maps 
-when entering dungeon or town, find player spawn point closest to edge entered (DONE)
-
-add town map functionality - create shop entities (shouldnt be too hard, shops already pretend to be containers)
-create containers that give rest menu
-
-TOWN PLANS 
-add entity type - shop extends container
-define each town's shops in mapVars - townId{shops:{shopId:{[shopinfo]}}}
-in map editor, shop type being selected asks for shopId.
-shop items are generated during mapinit, and are refreshed in the catchupmap function.
+new features
+    - shop screen
+        - utulize map space when in town shop.
+            - dialogue?
+                - dialogue window to talk to shop keeper.
+                - learn lore and map secrets
+                - get quests
+            - image?
+                - art of shopkeeper
+    - exertion
+    - npcs
+        - work same as shop dialogue, but without stuff to buy
+    - monsters remember you for a day
 
 figure out new exertion mechanic - tie to tiles moved on world map
-Set up Tavern shop type - give fake items for meal and rest.
 
 some musing -
 replace stamina bar with exertion bar when traveling. Go up by 1 each tile. Gain a level of exertion each time it's filled.

@@ -925,10 +925,20 @@ class Player {
                     element.append(perkDiv) 
                 }
             })
-            
+            Player.getPlayerStatsDiv();
          
         })
+    }
 
+    static getPlayerStatsDiv(){
+        let element = $('#character-stats-div')
+        element.html('');
+        let stats = ['hp','stamina','luck','hunger','bulk capacity']
+        stats.forEach((statName)=>{
+            let statDiv = $('<div>').addClass('stat-div').attr('id',statName.split(' ')[0]+'-stat-div')
+            statDiv.text(Player.getMaxResource(statName)+' ' +statName)
+            element.append(statDiv)
+        })
     }
 
     static itemIsEquipped(item){

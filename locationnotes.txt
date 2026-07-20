@@ -15,9 +15,6 @@ new features
                 - get quests
             - image?
                 - art of shopkeeper
-    - fatigue
-        - instead of level 1 giving -50% max bulk, do -30% max bulk and stamina
-        - Allow fatigue to build up in dungeon, but don't affect player until they leave. Should accrue perhaps the same as hunger.
     - npcs
         - work same as shop dialogue, but without stuff to buy
     - monsters remember you for a day
@@ -25,15 +22,6 @@ new features
 figure out new fatigue mechanic - tie to tiles moved on world map
 
 some musing -
-replace stamina bar with fatigue bar when traveling. Go up by 1 each tile. Gain a level of fatigue each time it's filled.
-fatigue reduces max stamina and bulk.
-
-hunger also depletes faster when traveling... Up to 30% chance to deplete each tile?
-
-hunger drains faster at higher levels of fatigue. Perhaps excess bulk is more likely to trigger,
-and instead expends an extra tile of movement.
-
-resting only removes one level of fatigue.
 
 Track monsters that see player- mark them as 'alerted', and mark the day they were alerted.
 Monsters always spawn the day they were alerted... But perhaps give them a few turns (up to 10) of random movement?

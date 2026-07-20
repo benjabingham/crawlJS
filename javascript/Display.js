@@ -170,10 +170,11 @@ class Display{
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
                 let tileRemembered = GameMaster.scale == 'world' && Board.tileHasBeenSeen({x:x, y:y})
-                if(worldMapId){
-                    tileRemembered = Board.tileHasBeenSeen({x:x,y:y},Save.maps[worldMapId])
-                }
+                
                 let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || tileRemembered
+                if(worldMapId){
+                    playerCanSee = Board.tileHasBeenSeen({x:x,y:y},Save.maps[worldMapId])
+                }
                 //don't bother if spot was dark before and is still dark
                 if (!playerCanSee && gridDiv.hasClass('grid-dark')) { 
                     continue;
@@ -259,6 +260,7 @@ class Display{
     }
 
     static showParryHighlight(x,y, entityDiv){
+        if(!Board.boardArray[y] || !Board.boardArray[y][x]){return false}
         if(
             Board.boardArray[y][x].parryable && Display.parryInRange(x,y)
         ){

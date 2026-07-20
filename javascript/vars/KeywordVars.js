@@ -32,6 +32,9 @@ keywordVars = {
     draw:{
         hintText:"A draw strike occurs when you draw your weapon into a target."
     },
+    "End the day":{
+        hintText:"Some monsters will respawn, and you will Level Up if you have enough XP."
+    },
 
     traits:{
         worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},

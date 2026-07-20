@@ -185,9 +185,12 @@ class GameMaster{
     }
         */
 
-    static nextDay(){
+    static nextDay(rest = true){
         Save.day++
-        Player.rest();  
+        if(rest){
+            Player.rest();
+        }
+          
     }
 
     static rewind(event){

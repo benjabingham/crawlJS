@@ -204,6 +204,9 @@ class ShopManager{
             case "rest":
                 ShopManager.triggerRest()
                 break;
+            case "gamble":
+                ShopManager.triggerGamble(item)
+                break;
             default:
                 throw(new Error("Special shop item type "+itemType+ " not found."))
         }
@@ -231,7 +234,51 @@ class ShopManager{
         if(restInfo.nourishmentChange < 0){
             Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
         }
-        Log.addMessage('You are now well rested.','pos')
+        //GameMaster.postPlayerAction();
+    }
+
+    static triggerGamble(item){
+        Log.printDayToLog(false);
+        let oldLuck = Player.luck;
+        let effects = item.effects;
+        if(effects.rest){
+            GameMaster.nextDay(false);
+            XP.checkLevelUp();
+        }
+
+        Sound.playDrink();
+
+        let container = Inventory.selectedContainer
+        let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
+        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
+        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
+        Inventory.displayedInventorySlots = selectedSlots
+        console.log(selectedSlots)
+        if(item.message){
+            Log.addMessage(item.message)
+        }
+        if(effects.luck){
+            let luck = Random.roll(effects.luck.min,effects.luck.max)
+            Player.changeLuck(luck)
+            let message = luck >= 0 ? "Gained" : "Lost"
+            message += " " +Math.abs(luck)+" Luck."
+            Log.addMessage(message,message = luck > 0 ? "pos" : "danger")
+        }
+        if(effects.hunger){
+            let hunger = Random.roll(effects.hunger.min,effects.hunger.max)
+            Player.changeNourishment(hunger)
+            let message = hunger >= 0 ? "Gained" : "Lost"
+            message += " " +Math.abs(hunger)+" Hunger."
+            Log.addMessage(message,message = hunger > 0 ? "pos" : "danger")
+        }
+        if(effects.fatigue){
+            let fatigue = Random.roll(effects.fatigue.min,effects.fatigue.max)
+            Player.changeFatigue(fatigue)
+            let message = fatigue >= 0 ? "Gained" : "Lost"
+            message += " " +Math.abs(fatigue)+" Fatigue."
+            Log.addMessage(message,message = fatigue > 0 ? "danger" : "pos")
+        }
+        
         //GameMaster.postPlayerAction();
     }
 

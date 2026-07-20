@@ -223,7 +223,8 @@ class Display{
                         }
                         Display.showParryHighlight(x,y, entityDiv);
                     }
-                    if(Board.isSpace(x,y)){
+                    let isSpace = Board.isSpace(x,y) || worldMapId
+                    if(isSpace){
                         //floor stuff
                         let floorArray = worldMapId ? Board.worldMapFloorArray:Board.floorArray
                         let floorType = Board.getFloor(x,y,floorArray);
@@ -232,7 +233,7 @@ class Display{
                         }
                         gridDiv.addClass(floorType+'Floor')
                     }
-                    if(!Board.isSpace(x,y)){
+                    if(!isSpace){
                         if(Board.hasAdjacentEmptySpace(x,y)){
                             gridDiv.addClass('grid-exit');
                         }else{

@@ -31,8 +31,30 @@ let mapVars = {
                         type:'rest',
                         price:0,
                         name:"rest",
-                        description:"The day will pass. Some monsters will respawn, your fatigue will decrease, and your Hunger will deplete. Some extra Hunger will be converted into Health if you're hurt.",
+                        description:"End the day.",
+                        descriptionKeyword:"End the day",
                         flavorText:"In such a cruel world, at least rest is free."
+                    },
+                    {
+                        type:'gamble',
+                        price:5,
+                        name:'carouse',
+                        message:"You're pretty sure you had a good time...",
+                        description:"End the day.",
+                        descriptionKeyword:"End the day",
+                        flavorText:"Who knows what the night may hold.",
+                        effects:{
+                            luck:{
+                                min:0,max:2
+                            },
+                            hunger:{
+                                min:-1,max:-3
+                            },
+                            fatigue:{
+                                min:-10,max:3
+                            },
+                            rest:true
+                        }
                     }
                 ]
             }

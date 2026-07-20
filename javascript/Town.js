@@ -89,14 +89,7 @@ class Town{
         })
     }
 
-    static getRestHintText(restInfo){
-        if(!restInfo){
-            restInfo = Player.getRestInfo();
-        }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.fatigueChange+" fatigue. 50% change to gain 1 luck.";
-
-        return hintText;
-    }
+    
 
     static previewRestBars(restInfo){
         console.log(restInfo);

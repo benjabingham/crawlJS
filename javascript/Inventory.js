@@ -286,9 +286,19 @@ class Inventory{
         }
 
         if(item.description){
-            descriptionBodyElement.append(
-                $('<div>').addClass('item-description').text(item.description)
-            )
+            if(item.type=='rest'){
+                descriptionBodyElement.append(
+                    Inventory.getRestDescription(item)
+                )
+            }else if(item.type=='gamble'){
+                descriptionBodyElement.append(
+                    Inventory.getGambleDescription(item)
+                )
+            }else{
+                descriptionBodyElement.append(
+                    $('<div>').addClass('item-description').text(item.description)
+                )
+            }
         }
 
 
@@ -381,6 +391,60 @@ class Inventory{
         }
 
         return header;
+    }
+
+    static getRestDescription(item, restInfo = Player.getRestInfo()){
+    
+        let changes = {}
+        Object.keys(restInfo).forEach((key)=>{
+            if(restInfo[key] >= 0 ){
+                changes[key] = "+ "+restInfo[key]
+            }else{
+                changes[key] = "- "+restInfo[key]*-1
+            }
+        })
+        changes.healthChange += " HP ("+Player.health+" → "+(Player.health+restInfo.healthChange)+")"
+        changes.nourishmentChange += " Hunger ("+Player.nourishment+" → "+(Player.nourishment+restInfo.nourishmentChange)+")"
+        changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Player.fatigue+restInfo.fatigueChange)+")"
+
+        let description = $("<span>").addClass('keyword bold').text(item.description)
+        Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
+        let div = $("<div>").addClass('item-description').append(description).append(" You will gain:").append(
+            $("<div>").append(changes.nourishmentChange).addClass('hunger-text-div rest-info-div')
+        ).append(
+            $("<div>").append(changes.healthChange).addClass('hp-text-div rest-info-div')
+        ).append(
+            $("<div>").append(changes.fatigueChange).addClass('fatigue-text-div rest-info-div')
+        )
+        //let hintText = "You will gain: "+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.fatigueChange+" fatigue. 50% change to gain 1 luck.";
+
+        
+
+        return div;
+    }
+
+    static getGambleDescription(item){
+        let description = $("<span>").addClass('keyword bold').text(item.description)
+        Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
+        let div = $("<div>").addClass('item-description').append(description).append(" You will receive:")
+        let effects = item.effects
+        let resources = ['luck','hunger','fatigue','health']
+        resources.forEach((resource)=>{
+            if(effects[resource]){
+                let min = effects[resource].min;
+                let max = effects[resource].max;
+                min = min > 0 ? "+"+min:min
+                max = max > 0 ? "+"+max:max
+                div.append(
+                    $("<div>").addClass(resource+'-text-div rest-info-div').append(
+                        min+" to "+max+" "+resource.charAt(0).toUpperCase() + resource.slice(1)
+                    )
+                )
+            }
+        })
+        
+
+        return div;
     }
 
     static setBulkDiv(){

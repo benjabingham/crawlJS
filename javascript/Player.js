@@ -174,7 +174,8 @@ class Player {
             healthChange += (Player.nourishment + nourishmentChange)
         }
 
-        let fatigueLevelChange = Player.fatigueLevel*-1
+        let fatigueChange = -10
+        fatigueChange = Math.max(Player.fatigue*-1,fatigueChange)
 
         if((Player.health+healthChange) > Player.healthMax){
             healthChange = Player.healthMax - Player.health;
@@ -191,7 +192,7 @@ class Player {
         return{
             healthChange:healthChange,
             nourishmentChange:nourishmentChange,
-            fatigueLevelChange:fatigueLevelChange
+            fatigueChange:fatigueChange
         }
     }
 
@@ -205,7 +206,7 @@ class Player {
         }
 
         let luck = Math.floor(Math.random()*2)
-        Player.changeLuck(luck);
+        //Player.changeLuck(luck);
 
         Player.changeNourishment(-3);
         

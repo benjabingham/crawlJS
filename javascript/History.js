@@ -74,7 +74,7 @@ class History{
     }
 
     static canRewind(){
-        return History.snapshots.length > 1 && Player.luck > 0;
+        return History.snapshots.length > 1 && Player.luck > 0 && Log.turnCounter>1;
     }
 
     static rewind(){

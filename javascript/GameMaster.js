@@ -75,6 +75,7 @@ class GameMaster{
             Log.addMessage(message,'urgent');
         }
         Log.addTip();
+        Player.applyDelayedFatigue();
         Log.printLog();
         let entityManager = EntityManager;
         let board = Board;

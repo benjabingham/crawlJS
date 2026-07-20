@@ -15,6 +15,7 @@ class Player {
 
     static fatigue = 0;
     static fatigueMax = 10;
+    static delayedFatigue = 0;
 
     static light = 0;
     static lightMax = 8;
@@ -238,6 +239,8 @@ class Player {
         if(scale=='town'){return false}
         let stamina = 0;
         let random = Math.random()*100;
+        //effects are twice as likely at world scale
+        if(scale=='world')(random/2)
         //gaining uses percentage, losing uses flat value.
         let gainChance = (Player.hungerPercent - 80)/2;
         let loseChance = (4 - Player.nourishment)*8;
@@ -245,7 +248,7 @@ class Player {
         if (random < gainChance){
             if(scale=='world'){
                 if(Player.stamina < Player.modifiedMaxStamina){
-                    Player.changeFatigue(-1)
+                    Player.changeFatigue(-2)
                     Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to lose fatigue each turn.");
                 }
             }else{
@@ -274,8 +277,12 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.modifiedMaxStamina,Player.stamina);
 
-        let hungerChance = (Player.stamina - oldStamina)*2;
-        Player.checkChangeNourishment(hungerChance);
+        if(GameMaster.scale=='dungeon'){
+            let hungerChance = (Player.stamina - oldStamina)*2;
+            Player.checkChangeNourishment(hungerChance);
+            let fatigueChance = (oldStamina - Player.stamina)/2;
+            Player.checkChangeDelayedFatigue(fatigueChance);
+        }
 
         if(n < 0){
             XP.gainStaminaXP(n*-1);
@@ -300,6 +307,9 @@ class Player {
             XP.gainHPXP(n*-1);
             Display.flash($('body'),'deepRed');
             Display.flash($('#health-level'),'lightRed');
+            if(GameMaster.scale=='dungeon'){
+                Player.checkChangeDelayedFatigue(n*-10)
+            }
         }
     }
 
@@ -362,6 +372,25 @@ class Player {
         if(random < hungerChance){
             Player.changeNourishment(-1);
         }
+    }
+
+    static checkChangeDelayedFatigue(fatigueChance = 0.25){
+        let random = Math.random()*100;
+        console.log(fatigueChance)
+        console.log(random)
+        console.log('checking')
+        if(random < fatigueChance){
+            console.log('added')
+            Player.delayedFatigue++;
+        }
+    }
+
+    static applyDelayedFatigue(){
+        if(!Player.delayedFatigue){return false}
+        Player.changeFatigue(Player.delayedFatigue)
+        Log.addMessage("As your adrenaline wears off, your fatigue catches up with you. Your activities in the dungone have gained you "+Player.delayedFatigue+" fatigue.",'danger',false,"Taking damage and spending stamina in dungeons has a chance to increase your fatigue. This fatigue doesn't set in until you leave the dungeon.")
+        Player.delayedFatigue = 0;
+
     }
 
     static reset(){
@@ -563,6 +592,9 @@ class Player {
         }
         if(item.light){
             Player.addFuel(item,false);
+        }
+        if(item.fatigue){
+            Player.changeFatigue(item.fatigue);
         }
         if(item.message){
             Log.addMessage(item.message,false,false,item.tip);

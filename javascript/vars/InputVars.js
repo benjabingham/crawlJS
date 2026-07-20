@@ -42,6 +42,8 @@ inputVars = {
         {inputName:'item-left', inputKey:'ArrowLeft', itemNav:true},
         {inputName:'item-right', inputKey:'ArrowRight', itemNav:true},
 
+        {inputName:'world-map', inputKey:'KeyM', worldMap:true},
+
     ],
     noNumpad:[
         {inputName:'upleft', inputKey:'KeyI', movePlayer:true},

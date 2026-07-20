@@ -54,7 +54,7 @@ class Travel{
 
     //takes id of a location and direction exiting location, returns the id of the world map which
     //has a valid exit location.
-    static findWorldMapDestination(locationId, direction){
+    static findWorldMapDestination(locationId, direction = Board.enteredDirection){
         let exitMap = false;
         for (const [mapId,locations] of Object.entries(Travel.worldMaps)){
             if(locations[locationId] && locations[locationId].validExits && locations[locationId].validExits[direction]){
@@ -74,7 +74,7 @@ class Travel{
     //pass locationEntity object
     static enterLocation(locationEntity){
         let direction = Travel.getEnterDirection(locationEntity)
-
+        Board.enteredDirection = direction;
         let startingPosition = {}
         startingPosition[direction] = true;
         GameMaster.getRoom(locationEntity.locationId,false,startingPosition)

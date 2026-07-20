@@ -388,7 +388,7 @@ class Player {
     static applyDelayedFatigue(){
         if(!Player.delayedFatigue){return false}
         Player.changeFatigue(Player.delayedFatigue)
-        Log.addMessage("As your adrenaline wears off, your fatigue catches up with you. Your activities in the dungone have gained you "+Player.delayedFatigue+" fatigue.",'danger',false,"Taking damage and spending stamina in dungeons has a chance to increase your fatigue. This fatigue doesn't set in until you leave the dungeon.")
+        Log.addMessage("As your adrenaline wears off, your fatigue catches up with you. Your activities in the dungeon have gained you "+Player.delayedFatigue+" fatigue.",'danger',false,"Taking damage and spending stamina in dungeons has a chance to increase your fatigue. This fatigue doesn't set in until you leave the dungeon.")
         Player.delayedFatigue = 0;
 
     }

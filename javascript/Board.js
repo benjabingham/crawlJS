@@ -10,7 +10,10 @@ class Board{
     static stainArray = [];
     static floorArray = [];
     static lightSourceIDs = [];
-
+    //saved world map, array, so can be viewed while in dungeon or town
+    static worldMapArray = false;
+    static worldMapFloorArray = false;
+    static enteredDirection = false;
     static destinations = {};
 
     static boardInit(roomJson = false){
@@ -103,10 +106,12 @@ class Board{
         }
     }
 
-    static getFloor(x,y){
-        if ( Board.floorArray && Board.floorArray[y] && Board.floorArray[y][x]){
-            return Board.floorArray[y][x]
+    static getFloor(x,y, floorArray = Board.floorArray){
+        //console.log(floorArray)
+        if ( floorArray && floorArray[y] && floorArray[y][x]){
+            return floorArray[y][x]
         }
+
 
         return false;
     }
@@ -478,12 +483,28 @@ class Board{
     }
     
     //check seenTiles obj set by Board.updateSeenTile
-    static tileHasBeenSeen(pos){
-        let map = EntityManager.currentMap
+    static tileHasBeenSeen(pos, map = EntityManager.currentMap){
         if(!map.seenTiles || !map.seenTiles[pos.x] || !map.seenTiles[pos.x][pos.y]){
             return false
         }
 
         return true
+    }
+
+    static saveWorldMapArray(){
+        let array = JSON.parse(JSON.stringify(Board.boardArray));
+        array.forEach((column)=>{
+            column.forEach((cell)=>{
+                if(cell.name=='you'){
+                    cell.symbol = ''
+                    console.log('FOUND YOU')
+                }
+            })
+        })
+
+        console.log(array)
+
+        Board.worldMapArray = array;
+        Board.worldMapFloorArray = JSON.parse(JSON.stringify(Board.floorArray))
     }
 }

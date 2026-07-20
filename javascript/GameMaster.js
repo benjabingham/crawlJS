@@ -36,7 +36,7 @@ class GameMaster{
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
-            {x:50,y:42}
+            //{x:50,y:42}
         );
 
         XP.levelUp(false);
@@ -50,6 +50,9 @@ class GameMaster{
         EntityManager.currentMap.stains = Board.stainArray;
         GameMaster.dungeonId++;
         EntityManager.updateSavedInventories();
+        if(GameMaster.scale=='world'){
+            Board.saveWorldMapArray();
+        }
         Player.unequipWeapon();
         if(resetLog){
             Log.wipeLog();
@@ -509,6 +512,17 @@ class GameMaster{
             }
         })
             */
+    }
+
+    static viewWorldMap(event){
+        if(!Board.worldMapArray){return false}
+        //currently uses the last entered direction... Would be better to cycle through possible visited maps
+        if(!Display.viewingWorldMap){
+            Display.printBoard(Travel.findWorldMapDestination(EntityManager.currentMap.name,Board.enteredDirection))
+        }else{
+            console.log('exit map')
+            Display.printBoard()
+        }
     }
 
     static wait(event){

@@ -9,6 +9,7 @@ class Display{
     ]
     static highlightedCells=[];
     static mouseOverBoard = false;
+    static viewingWorldMap = true;
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -147,11 +148,19 @@ class Display{
 
     }
 
-    static printBoard(){
+    //if passed worldMapId, instead shows that map
+    static printBoard(worldMapId = false){
+        let boardArray = Board.boardArray
+        let playerPos = EntityManager.getEntity('player');
+        if(worldMapId){
+            boardArray=Board.worldMapArray
+            playerPos = Travel.getLocationCoords(worldMapId,EntityManager.currentMap.name)
+            Display.viewingWorldMap = true
+        }else{
+            Display.viewingWorldMap = false
+        }
         console.log("turn "+Log.turnCounter)
         let devMode = true;
-        let boardArray = Board.boardArray;
-        let playerPos = EntityManager.getEntity('player');
         Display.addDirectionHighlight();
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -161,6 +170,9 @@ class Display{
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
                 let tileRemembered = GameMaster.scale == 'world' && Board.tileHasBeenSeen({x:x, y:y})
+                if(worldMapId){
+                    tileRemembered = Board.tileHasBeenSeen({x:x,y:y},Save.maps[worldMapId])
+                }
                 let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || tileRemembered
                 //don't bother if spot was dark before and is still dark
                 if (!playerCanSee && gridDiv.hasClass('grid-dark')) { 
@@ -178,7 +190,7 @@ class Display{
                 if(playerCanSee){
                     if(boardArray[y] && boardArray[y][x]){
                         let entity = boardArray[y][x]
-                        if(Board.wallArray[y][x]){
+                        if(Board.wallArray[y][x] && !worldMapId){
                             let wallType = Board.wallArray[y][x].wallType;
                             if(!wallType){
                                 wallType = 'wall'
@@ -212,7 +224,8 @@ class Display{
                     }
                     if(Board.isSpace(x,y)){
                         //floor stuff
-                        let floorType = Board.getFloor(x,y);
+                        let floorArray = worldMapId ? Board.worldMapFloorArray:Board.floorArray
+                        let floorType = Board.getFloor(x,y,floorArray);
                         if(!floorType){
                             floorType = 'stone';
                         }

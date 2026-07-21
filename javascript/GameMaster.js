@@ -56,6 +56,8 @@ class GameMaster{
         Player.unequipWeapon();
         if(resetLog){
             Log.wipeLog();
+        }else{
+            Log.resetTurn = Log.turnCounter;
         }
         EntityManager.wipeEntities();
         GameMaster.stopDrop();
@@ -116,7 +118,7 @@ class GameMaster{
 
         });
 
-        GameMaster.postPlayerAction();
+        GameMaster.postPlayerAction(false,false);
 
     }
 
@@ -328,7 +330,7 @@ class GameMaster{
             EntityManager.skipBehaviors = true;
         }
 
-        GameMaster.postPlayerAction();
+        GameMaster.postPlayerAction('useItem');
     }
 
     static useFuel(event){
@@ -617,8 +619,8 @@ class GameMaster{
         })
     }
 
-    static postPlayerAction(action=false){ 
-        console.trace();
+    static postPlayerAction(action=false,snapshot = true){ 
+        //console.trace();
         Display.hideHintDiv()
         
         EntityManager.placeSword('player');
@@ -636,7 +638,9 @@ class GameMaster{
             Player.checkHungerModifiers();
             Player.checkChangeNourishment();
         }
-        History.saveSnapshot();
+        if(snapshot){
+            History.saveSnapshot();
+        }
         Board.calculateLosArray(EntityManager.getEntity('player'));
         if(GameMaster.scale=='world' && action != 'wait'){
             Player.changeFatigue(1)

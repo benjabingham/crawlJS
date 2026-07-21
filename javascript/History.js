@@ -74,7 +74,12 @@ class History{
     }
 
     static canRewind(){
-        return History.snapshots.length > 1 && Player.luck > 0 && Log.turnCounter>1;
+        console.log({
+            turnCounter:Log.turnCounter,
+            resetTurn:Log.resetTurn
+        })
+        return History.snapshots.length > 1 && Player.luck > 0 //&& Log.turnCounter>Log.resetTurn+1;
+        //return History.snapshots.length > 1 && Player.luck > 0;
     }
 
     static rewind(){

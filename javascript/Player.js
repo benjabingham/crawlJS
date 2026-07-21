@@ -402,6 +402,7 @@ class Player {
         Player.health = Player.healthMax;
     }
 
+    //as a rule, postPlayerAction DOES NOT occur from any of these calls. Handle elsewhere.
     static useItem(item){
         if(!item){
             return false;
@@ -420,7 +421,7 @@ class Player {
         }else if (item.potable){
             return Player.drinkItem(item);
         }else if(Inventory.selectedContainer.shop == true){
-            let result = ShopManager.sellItem(item.slot);
+            let result = ShopManager.sellItem(item.slot,false);
             Inventory.displayInventory();
             return result;
         }else if(!Player.equipped){

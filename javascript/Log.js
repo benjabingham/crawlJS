@@ -3,6 +3,7 @@ class Log{
     static messages = {};
     static notices = [];
     static turnCounter = 0;
+    static resetTurn = 0;
 
     static logInit(){
         $('#log-title').off().on('click',(e)=>{
@@ -85,6 +86,7 @@ class Log{
     static wipeLog(){
         Log.messages = {};
         Log.turnCounter = 0;
+        Log.resetTurn = 0;
         $('.turn-message').remove();
         $('.day-counter').remove();
     }

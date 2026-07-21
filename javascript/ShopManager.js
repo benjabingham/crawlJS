@@ -164,10 +164,12 @@ class ShopManager{
         }else{
             ShopManager.transferItem(item)
         }
-        if(item.type != 'rest'){
+        if(item.type != 'rest' && !(item.effects && item.effects.rest)){
             Log.addMessage("Purchased "+item.name+" for "+item.price+" gold.")
+            GameMaster.postPlayerAction()
+        }else{
+
         }
-        GameMaster.postPlayerAction()
         return true;
     }
 
@@ -195,11 +197,12 @@ class ShopManager{
                 let morsel = JSON.parse(JSON.stringify(itemVars.food.morsel))
                 LootManager.getFlavorText(morsel)
                 Player.pickUpItem(morsel)
+                GameMaster.postPlayerAction();
                 break;
             case "fullMeal":
                 Player.changeNourishment(100)
                 Sound.playEat();
-                
+                GameMaster.postPlayerAction();
                 break;
             case "rest":
                 ShopManager.triggerRest()
@@ -220,9 +223,6 @@ class ShopManager{
 
         let container = Inventory.selectedContainer
         let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
-        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
-        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
-        Inventory.displayedInventorySlots = selectedSlots
         console.log(selectedSlots)
         Log.addMessage('You rested.')
         if(restInfo.healthChange > 0){
@@ -234,6 +234,10 @@ class ShopManager{
         if(restInfo.nourishmentChange < 0){
             Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
         }
+        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
+        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
+        Inventory.displayedInventorySlots = selectedSlots
+        
         //GameMaster.postPlayerAction();
     }
 
@@ -250,10 +254,6 @@ class ShopManager{
 
         let container = Inventory.selectedContainer
         let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
-        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
-        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
-        Inventory.displayedInventorySlots = selectedSlots
-        console.log(selectedSlots)
         if(item.message){
             Log.addMessage(item.message)
         }
@@ -278,12 +278,17 @@ class ShopManager{
             message += " " +Math.abs(fatigue)+" Fatigue."
             Log.addMessage(message,message = fatigue > 0 ? "danger" : "pos")
         }
+        GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
+        Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
+        Inventory.displayedInventorySlots = selectedSlots
+        console.log(selectedSlots)
+        
         
         //GameMaster.postPlayerAction();
     }
 
 
-    static sellItem(slot){
+    static sellItem(slot,postPlayerAction = true){
         let item = Player.inventory.items[slot];
         Player.inventory.items[slot] = false;
         let value = LootManager.getValue(item)
@@ -291,7 +296,9 @@ class ShopManager{
         Player.inventoryCleanup();
         Log.addMessage("sold "+item.name+" for "+value+" gold.")
         XP.gainSellXP(value)
-        GameMaster.postPlayerAction()
+        if(postPlayerAction){
+            GameMaster.postPlayerAction()
+        }
     }
 
   

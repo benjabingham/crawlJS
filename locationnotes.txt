@@ -4,7 +4,6 @@ todo -
 
 qol / restoring features
     - restore (and fix) rest hint
-    - print fresh shop items in log
 
 new features
     - shop screen

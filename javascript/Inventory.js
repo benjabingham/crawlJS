@@ -160,6 +160,21 @@ class Inventory{
         Inventory.addButtons(slot, inventory, buttons);
     }
 
+    static getItemNameSpanFull(item){
+        let symbolsSpan = LootManager.getItemSymbolsSpan(item)
+        let proficiencySpan = Display.getProficiencySpan(item);
+
+        let span = $('<span>').text(item.name).append(proficiencySpan).append(symbolsSpan);
+         Display.applyColor(item, span);
+
+        if(item.uses){
+            $(span).append("("+item.uses+")")
+        }
+
+        return span
+
+    }
+
     static addBulkAndGoldInfo(item, element, shopItem = false){
         let bulk = LootManager.getItemBulk(item);
         let gold = shopItem ? item.price : item.value;

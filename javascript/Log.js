@@ -48,6 +48,20 @@ class Log{
         });
     }
 
+    static addSpanMessage(message,messageClass = false, tipText=false,highlightID=-1){
+        if(!Log.messages[Log.turnCounter]){
+            Log.messages[Log.turnCounter] = [];
+        }
+        Log.messages[Log.turnCounter].unshift({
+            message:'',
+            spanMessage:message,
+            fresh:true,
+            messageClass: messageClass,
+            tipText: tipText,
+            highlightID:highlightID
+        });
+    }
+
     static addTip(){
         let tips = [
             "Ogres are dangerous, but have limited interest in you unless you bother them. If you can't fight them, leave them alone!",
@@ -122,6 +136,9 @@ class Log{
                     }
                 }else{
                     messageElement = $('<p>').text("> "+message.message).addClass('log-message-p');
+                }
+                if(message.spanMessage){
+                    messageElement.append(message.spanMessage)
                 }
                 if(message.tipText){
                     tipText = message.tipText;

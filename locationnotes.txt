@@ -30,6 +30,13 @@ And stop them from moving too close to a player spawn point.
 Monsters that saw player leave map will also remember where they were at that time, and use those coords
 instead of normal spawn coords for rest of day...
 
+Craftsman - repairs worn weapons of certain materials (flint,wood,bone,etc.)
+reasonably cheap - costs weapon value
+
+other towns might have "metalsmith", which will do the same but for metal weapons
+
+some metalsmiths can also reform metal weapons?
+
 ⍝
 ⍉
 ⍾

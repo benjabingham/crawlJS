@@ -54,43 +54,51 @@ class ShopManager{
         let roster = Save.maps[mapId].roster
         roster.forEach((entity)=>{
             if(entity.entityGroupInfo.shop){
-                ShopManager.restockShopInventory(mapId,entity.shopId,entity.inventory);
+                ShopManager.restockShopInventory(mapId,entity.entityGroupInfo.shopId,entity);
             }
         })
     }
 
-    //pass roster inventory (which is an object, so pass by reference), and update its item array.
-    static restockShopInventory(mapId, shopId, inventory){
+    //pass roster entity, and update its item array.
+    static restockShopInventory(mapId, shopId, entitySave){
+        let inventory = entitySave.inventory
         console.log('restocking!!!!!!!')
         let inventoryItems = inventory.items;
+        console.log({
+            mapId:mapId,
+            shopId:shopId,
+        })
         let shopTemplate = mapVars[mapId].shops[shopId]
+        let restockChances = shopTemplate.restockChances
         inventoryItems.forEach((item)=>{
             let slot = item.slot;
             if(item.tier == 'fuel'){
-                if(Random.roll(0,2)){
+                let restockChance = restockChances.fuel
+                if(Math.random() < restockChance){
                     let fuel = ShopManager.getFuel();
                     fuel.slot = slot;
                     fuel.fresh = true;
                     inventoryItems[slot] = fuel;
                 }
             }else if(item.tier == 'potion'){
-                if(Random.roll(0,2)){
+                let restockChance = restockChances.potion
+                if(Math.random() < restockChance){
                     let potion = ShopManager.getPotion();
                     potion.slot = slot;
                     potion.fresh = true;
                     inventoryItems[slot] = potion;
                 }
             }else if(item.tier == 'supplies'){
-                if(Random.roll(0,2)){
+                let restockChance = restockChances.supplies
+                if(Math.random() < restockChance){
                     let supplies = ShopManager.getSupplies();
                     supplies.slot = slot;
                     supplies.fresh = true;
                     inventoryItems[slot] = supplies;
                 }
-            }else{
-                let restockChance = Math.max(50-(item.tier*8),10);
-                let random = Random.roll(1,99);
-                if(random < restockChance){
+            }else if(restockChances && restockChances.weaponTiers){
+                let restockChance = restockChances.weaponTiers[item.tier]
+                if(Math.random() < restockChance){
                     let newItem = LootManager.getWeaponLoot(item.tier, ShopManager.carriedMaterials);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value* priceMultiplier,1) ;
@@ -102,6 +110,18 @@ class ShopManager{
             }
             if(item.fresh){
                 item.fresh = false;
+            }
+            let newItem = inventoryItems[slot]
+            if(newItem.fresh){
+                console.log(entitySave)
+                let message = $('<span>').append(
+                    entitySave.entityGroupInfo.entityName+" stocked "
+                ).append(
+                    Inventory.getItemNameSpanFull(newItem).addClass('bold capitalize')
+                ).append(
+                    " - "+newItem.price+" Gold"
+                )
+                Log.addSpanMessage(message)
             }
         })
     }

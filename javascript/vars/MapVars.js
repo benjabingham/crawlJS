@@ -9,7 +9,17 @@ let mapVars = {
                 weaponTiers:[0,2,3,4],
                 carriedMaterials:['wood','copper','bronze','iron','steel'],
                 fuelSlots:2,
-                potionSlots:2
+                potionSlots:2,
+                restockChances:{
+                    weaponTiers:{
+                        0:0.3,
+                        2:0.2,
+                        3:0.13,
+                        4:0.8
+                    },
+                    fuel:0.4,
+                    potion:0.3
+                }
             },
             tavern:{
                 specialItems:[

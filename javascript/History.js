@@ -78,13 +78,14 @@ class History{
             turnCounter:Log.turnCounter,
             resetTurn:Log.resetTurn
         })
-        return History.snapshots.length > 1 && Player.luck > 0 //&& Log.turnCounter>Log.resetTurn+1;
+        let luckCost = 1 + Player.hasQualityInInventory('cursed');
+        return History.snapshots.length > 1 && Player.luck >= luckCost //&& Log.turnCounter>Log.resetTurn+1;
         //return History.snapshots.length > 1 && Player.luck > 0;
     }
 
     static rewind(){
         console.log('rewind');
-        let luckCost = 1;
+        let luckCost = 1 + Player.hasQualityInInventory('cursed');
         if(Player.equipped && Player.equipped.lucky && Random.roll(0,1)){
             luckCost = 0
         }

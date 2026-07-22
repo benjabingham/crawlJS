@@ -22,6 +22,7 @@ class GameMaster{
     static quickStart(){
         GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
+        //LootManager.applyModifier(starterWeapon,itemVars.weaponModifiers.cursed)
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
        
@@ -199,9 +200,9 @@ class GameMaster{
     }
 
     static rewind(event){
-        if(Player.hasQualityInInventory('cursed')){
+        if(Player.hasQualityEquipped('cursed')){
             Log.addNotice("Can't Rewind")
-            Log.addNotice("Something in your inventory is cursed!")
+            Log.addNotice("You're equipped item is cursed!")
             Log.printLog();  
             Log.clearNotices();
             return false;
@@ -210,6 +211,8 @@ class GameMaster{
             Log.addNotice("Can't Rewind")
             if(!Player.luck){
                 Log.addNotice('Out of luck!')
+            }else if (Player.luck < Player.hasQualityInInventory('cursed')+1){
+                Log.addNotice('Not Enough Luck! Something in your inventory is cursed!')
             }
             Log.printLog();  
             Log.clearNotices();

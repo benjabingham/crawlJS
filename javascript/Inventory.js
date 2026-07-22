@@ -231,6 +231,8 @@ class Inventory{
                 if(hasTrait){
                     text = ", "+text
                 }
+                //show at 1?
+                //if(typeof item[key] == 'number' && !noDisplayNumber.includes(key)){
                 if(item[key] > 1 && !noDisplayNumber.includes(key)){
                     text = text+" "+item[key]
                 }

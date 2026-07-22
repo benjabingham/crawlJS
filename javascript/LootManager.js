@@ -440,6 +440,8 @@ class LootManager{
         
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.cursed);
+            let maxCurseLevel = Math.floor(weapon.val/10);
+            weapon.curse = Math.min(10,Random.roll(1,maxCurseLevel))
         }
 
         return true;
@@ -458,6 +460,9 @@ class LootManager{
         
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(item,itemVars.treasureModifiers.cursed);
+            let maxCurseLevel = Math.floor(item.val/5);
+            item.curse = Math.min(10,Random.roll(1,maxCurseLevel))
+            
         }
 
         return true;
@@ -597,6 +602,12 @@ class LootManager{
                     
                     //min value 0.1
                     item[key] = Math.max(item[key], 0.1);
+                    break;
+                case 'cursed':
+                    if(!item.cursed || typeof item.cursed != "number"){
+                        item.cursed = 0
+                    }
+                    item.cursed += value;
                     break;
                 case 'possibleFlavorTexts':
                 case 'flavorText':
@@ -852,7 +863,11 @@ class LootManager{
             }
             let hintText;
             if(symbol.name){
+                console.log(item[symbol.name])
                 hintText = symbol.name
+                if(item[symbol.name] && typeof item[symbol.name] == 'number'){
+                    hintText += " "+item[symbol.name]
+                }
             }
             if(hintText){Display.setHintText(symbolSpan,hintText)}
             symbolsSpan.append(symbolSpan);

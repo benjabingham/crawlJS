@@ -1284,7 +1284,7 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
-            cursed:true,
+            cursed:1,
             value: .3
         },
         craftTiers:{
@@ -1342,7 +1342,7 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
-            cursed:true,
+            cursed:1,
             possibleFlavorTexts:["It has a hostile energy.","Unnaturally cold to the touch","Smells strongly of blood.","It seems to move...","It's hard to pull your eyes from it.","It's beautiful..."]
         },
     },

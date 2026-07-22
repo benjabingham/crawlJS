@@ -1053,12 +1053,21 @@ class Player {
     static hasQualityInInventory(quality){
         let count = 0
         Player.inventory.items.forEach(item=>{
-            if(item[quality]){
-                count++;
+            let val = item[quality]
+            if(val){
+                if(typeof val == "number"){
+                    count+= val
+                }else{
+                    count++;
+                }
             }
         })
 
         return count;
+    }
+
+    static hasQualityEquipped(quality){
+        return Player.equipped[quality]
     }
 
     static activatePostAttackTriggers(){

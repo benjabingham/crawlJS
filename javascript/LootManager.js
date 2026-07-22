@@ -181,10 +181,10 @@ class LootManager{
         modifiedMax = treasure.huge ? max * 1.25 : max; 
         if(treasure.value > max){
             let newMax = cursed ? max * 1.1 : max * 1.5;
-            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, {min:min, max:newMax})
+            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, curseMultiplier*1.15, {min:min, max:newMax})
         }else if(treasure.value < min){
             let newMin = Math.floor(min/2)
-            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
+            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
         }
         treasure.treasure = true;
         LootManager.getFlavorText(treasure);
@@ -253,7 +253,7 @@ class LootManager{
         modifiedMax = weapon.damned ? max * 4 : max;
         if(weapon.value > modifiedMax){
             let newMax = cursed ? max * 1.25 : max * 2;
-            weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier, {min:min, max:newMax})
+            weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier*1.3, {min:min, max:newMax})
         }else if(weapon.value < min){
             let newMin = Math.floor(min/2)
             weapon = LootManager.getWeaponLoot(tier,allowedMaterials, curseMultiplier, {min:newMin, max:max})

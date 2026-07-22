@@ -86,7 +86,7 @@ class History{
     static rewind(){
         console.log('rewind');
         let luckCost = 1 + Player.hasQualityInInventory('cursed');
-        if(Player.equipped && Player.equipped.lucky && Random.roll(0,1)){
+        if(Player.refundLuck()){
             luckCost = 0
         }
         let luck = Player.luck-luckCost;
@@ -117,7 +117,7 @@ class History{
             Player.luckMax -= 3;
         }
         if(!luckCost){
-            Log.addMessage("Luck is with you!","win",false,"The item you are holding is lucky, and has refunded your luck!",-1,-1)
+            Log.addMessage("Luck is with you!","win",false,"Your luck has been refunded!",-1,-1)
         }
 
         

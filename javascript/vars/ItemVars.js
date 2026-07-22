@@ -431,7 +431,7 @@ let itemVars = {
         },
         sigiledBone:{
             name:"sigiled bone",
-            value:1,
+            value:2,
             color:'bone',
             bulk:0.5,
             treasure:true,
@@ -441,7 +441,7 @@ let itemVars = {
         },
         sigiledSkull:{
             name:"sigiled skull",
-            value:3,
+            value:5,
             color:'bone',
             bulk:1,
             treasure:true,
@@ -1967,13 +1967,13 @@ let itemVars = {
         },
         hunger:{
             name:'hungerAspect',
-            flatValue:20,
+            flatValue:10,
             enchantment:true,
             hunger:true
         },
         fury:{
             name:"furyAspect",
-            flatValue:20,
+            flatValue:15,
             enchantment:true,
             fury:true
         },
@@ -1982,6 +1982,12 @@ let itemVars = {
             flatValue:5,
             enchantment:true,
             lucky:true
+        },
+        blessed:{
+            name:"blessed",
+            flatValue:50,
+            enchantment:true,
+            blessed:true
         }
     }
 }

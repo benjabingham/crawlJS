@@ -1067,7 +1067,22 @@ class Player {
     }
 
     static hasQualityEquipped(quality){
+        if(Player.equipped){return false}
         return Player.equipped[quality]
+    }
+
+    static refundLuck(){
+        let random = Math.random();
+        if(Player.hasQualityEquipped('lucky') && random < 0.5){
+            return true;
+        }
+        if(Player.hasQualityEquipped('blessed') && random < 0.75){
+            return true;
+        }
+        if(Player.hasQualityInInventory('blessed') && random < 0.5){
+            return true;
+        }
+        return false;
     }
 
     static activatePostAttackTriggers(){

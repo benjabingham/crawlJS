@@ -41,7 +41,7 @@ keywordVars = {
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
         ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
-        cursed:{name:'cursed', hintText:"While this item is in your inventory, you must spend 1 additional luck to rewind. While it's equipped, you can't use luck."},
+        cursed:{name:'cursed', hintText:"While this item is in your inventory, you must spend 1 additional luck to rewind. While it's equipped, you can't rewind."},
         damned:{name:'damned', hintText:"You can't use luck while this item is in your inventory."},
         wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
 
@@ -56,16 +56,18 @@ keywordVars = {
         vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
         hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
         furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."},
-        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use."}
+        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use."},
+        blessed:{name:"blessed",hintText:"While this item is in your inventory, luck has a 50% chance to be refunded on use. While equipped, this chance increases to 75%."}
     },
 
     symbols:{
         cursed:{name:"cursed",symbol:'⚶',color:'darkPurple'},
-        damned:{name:"damned",symbol:'⛧',color:'darkRed'},
+        damned:{name:"damned",symbol:'⛧',color:'red'},
         vigorAspect:{name: "Aspect of Vigor",color:"orange",symbol:'♃'},
         hungerAspect:{name: "Aspect of Hunger",color:"green",symbol:'♆'},
         furyAspect:{name: "Aspect of Fury",color:"red",symbol:'♅'},
         lucky:{name: "lucky",color:"green",symbol:'☘'},
+        blessed:{name: "blessed",color:"gold",symbol:'✧'},
         worn:{name:"degraded",symbol:'⤓'},
         proficient:{name:"proficient",symbol:'+'},
     }

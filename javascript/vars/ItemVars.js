@@ -1265,7 +1265,6 @@ let itemVars = {
     weaponModifiers:{
         worn:{
             name:'worn',
-            symbol:'⤓',
             flimsy:1,
             sharp:{
                 damage:-1
@@ -1274,8 +1273,6 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
-            symbol:'⚶',
-            '⚶':{color:'darkPurple'},
             unlucky:true,
             value: .3
         },
@@ -1885,24 +1882,18 @@ let itemVars = {
     enchantments:{
         vigor:{
             name:'vigorAspect',
-            symbol:'♃',
-            '♃':{color:'orange',description:"Aspect of Vigor"},
             flatValue:20,
             enchantment:true,
             vigor:true
         },
         hunger:{
             name:'hungerAspect',
-            symbol: '♆',
-            '♆':{color:'green',description:"Aspect of Hunger"},
             flatValue:20,
             enchantment:true,
             hunger:true
         },
         fury:{
             name:"furyAspect",
-            symbol:"♅",
-            "♅":{color:'red',description:"Aspect of Fury"},
             flatValue:20,
             enchantment:true,
             fury:true

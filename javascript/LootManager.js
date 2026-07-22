@@ -479,7 +479,7 @@ class LootManager{
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
                 case 'name':
-                    if(!modifier.symbol && !modifier.suffix){
+                    if(!keywordVars.symbols[value] && !modifier.suffix){
                         item[key] = value + ' ' + item[key];
                     }
                     break;
@@ -799,27 +799,27 @@ class LootManager{
 
     static getItemSymbolsSpan(item){
         let symbolsSpan = $('<span>')
-        let symbols = item.symbols;
-        if(!symbols){symbols = []}
-        symbols = [...symbols];
-        //console.log(symbols);
-        
-        if(symbols){
-            symbols.forEach((symbol)=>{
-                let symbolSpan = $('<span>').text(" "+symbol);
-                if(item[symbol] && item[symbol].color){
-                    Display.applyColor(item[symbol],symbolSpan)
-                }
-                let hintText;
-                if(item[symbol] && item[symbol].description){
-                    hintText = item[symbol].description
-                }else{
-                    hintText = Display.getSymbolHintText(symbol);
-                }
-                if(hintText){Display.setHintText(symbolSpan,hintText)}
-                symbolsSpan.append(symbolSpan);
-            })
+        let symbols = [];
+        for (const [key,value] of Object.entries(item)){
+            if(keywordVars.symbols[key] && value){
+                symbols.push(JSON.parse(JSON.stringify(keywordVars.symbols[key])))
+            }
         }
+        //console.log(symbols);
+        if(!symbols.length){return symbolsSpan}
+
+        symbols.forEach((symbol)=>{
+            let symbolSpan = $('<span>').text(" "+symbol.symbol);
+            if(symbol.color){
+                Display.applyColor(symbol,symbolSpan)
+            }
+            let hintText;
+            if(symbol.name){
+                hintText = symbol.name
+            }
+            if(hintText){Display.setHintText(symbolSpan,hintText)}
+            symbolsSpan.append(symbolSpan);
+        })
 
         return symbolsSpan;
     }

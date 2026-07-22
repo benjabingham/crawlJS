@@ -55,8 +55,11 @@ keywordVars = {
     },
 
     symbols:{
-        9910:{name:"cursed",symbol:'⚶'},
-        10515:{name:"worn",symbol:'⤓'},
-        43:{name:"accustomed",symbol:'+'},
+        cursed:{name:"cursed",symbol:'⚶',color:'darkPurple'},
+        vigorAspect:{name: "Aspect of Vigor",color:"orange",symbol:'♃'},
+        hungerAspect:{name: "Aspect of Hunger",color:"green",symbol:'♆'},
+        furyAspect:{name: "Aspect of Fury",color:"red",symbol:'♅'},
+        worn:{name:"degraded",symbol:'⤓'},
+        proficient:{name:"proficient",symbol:'+'},
     }
 }

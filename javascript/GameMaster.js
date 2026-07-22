@@ -36,7 +36,7 @@ class GameMaster{
         GameMaster.getRoom(
             'Abandoned Village',
             'You awake in the dead of night to the sounds of violence. Goblins have ransacked your village. There is nothing left for you here. Escape to a nearby town. (reach the checkered tiles at the edge of the map)',
-            //{x:50,y:42}
+            {x:50,y:42}
         );
 
         XP.levelUp(false);
@@ -199,9 +199,9 @@ class GameMaster{
     }
 
     static rewind(event){
-        if(Player.equipped && Player.equipped.unlucky){
+        if(Player.hasQualityInInventory('cursed')){
             Log.addNotice("Can't Rewind")
-            Log.addNotice("something you're holding is cursed!")
+            Log.addNotice("Something in your inventory is cursed!")
             Log.printLog();  
             Log.clearNotices();
             return false;

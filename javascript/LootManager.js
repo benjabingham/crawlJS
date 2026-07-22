@@ -53,7 +53,7 @@ class LootManager{
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.preferredRange));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.curseMultiplier, treasureLoot.preferredRange));
                 }
             }
 
@@ -103,7 +103,8 @@ class LootManager{
         entitySave.inventory.items.forEach(item=>{
             if(item.unlabeled){LootManager.generateUnlabeledPotionDetails(item)}
             //chance for enchantments...
-            LootManager.getItemEnchantment(item,0.005)
+            LootManager.getItemEnchantment(item,0.0025)
+            LootManager.getTreasureIsCursed(item,0,(1/item.value)/2)
         })
     }
 
@@ -135,7 +136,11 @@ class LootManager{
         return inventory;
     }
 
-    static getTreasureLoot(tier, allowedMaterials, preferredRange = {min: 0 , max: 9999}){
+    static getTreasureLoot(tier, allowedMaterials, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
+        if(Random.roll(1,30) <= curseMultiplier){
+            tier+= 2
+            curseMultiplier = 9999;
+        }    
         let nRolls = tier-3;
         let greater = (nRolls > 0);
         let min = preferredRange.min;
@@ -144,7 +149,7 @@ class LootManager{
 
         let treasure = LootManager.getTreasure();
         let treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
-        LootManager.applyModifier(treasure, treasureMaterial);
+        LootManager.applyModifier(treasure, treasureMaterial); 
 
         for(let i = 0; i < nRolls; i++){
             let newTreasure = LootManager.getTreasure();
@@ -163,10 +168,15 @@ class LootManager{
 
         LootManager.getTreasureModifier(treasure, tier);
         LootManager.getTreasureSize(treasure);
+        let cursed = LootManager.getTreasureIsCursed(treasure, tier, curseMultiplier)
         //console.log(treasure)
         //if outside of range, widen range and try again!
+        //adjust max based on certain item qualities ...
+        let modifiedMax = cursed ? (max*2)+5 : max;
+        modifiedMax = treasure.tiny ? max * 0.75 : max;
+        modifiedMax = treasure.huge ? max * 1.25 : max; 
         if(treasure.value > max){
-            let newMax = max * 1.5;
+            let newMax = cursed ? max * 1.1 : max * 1.5;
             treasure = LootManager.getTreasureLoot(tier, allowedMaterials, {min:min, max:newMax})
         }else if(treasure.value < min){
             let newMin = Math.floor(min/2)
@@ -225,18 +235,19 @@ class LootManager{
         let max = preferredRange.max;
         //extra curse bonus...
         if(Random.roll(1,30) <= curseMultiplier){
-            tier+= 3
+            tier+= 4
             curseMultiplier = 999;
         }        
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
-        LootManager.getIsCursed(weapon,tier,curseMultiplier)
+        let cursed = LootManager.getWeaponIsCursed(weapon,tier,curseMultiplier)
         LootManager.getItemEnchantment(weapon,0.025)
         LootManager.getIsWorn(weapon, tier);
 
-        if(weapon.value > max){
-            let newMax = max * 2;
+        let modifiedMax = cursed ? max * 2 : max;
+        if(weapon.value > modifiedMax){
+            let newMax = cursed ? max * 1.25 : max * 2;
             weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier, {min:min, max:newMax})
         }else if(weapon.value < min){
             let newMin = Math.floor(min/2)
@@ -415,14 +426,38 @@ class LootManager{
     }
 
     //checks to apply cursed to a weapon
-    static getIsCursed(weapon, tier, multiplier = 1){
-        let notCursedChance = (30 * tier) / multiplier;
-        if(Random.roll(0,99) < notCursedChance){
+    static getWeaponIsCursed(weapon, tier, multiplier = 1){
+        if(weapon.cursed){return false}
+        let exemptChance = (30 * tier) / multiplier;
+        let chance = (weapon.value) * multiplier
+        if(weapon.curseChance){
+            chance += weapon.curseChance*100;
+            exemptChance -= weapon.curseChance*100;
+        }
+        if(Random.roll(0,99) < exemptChance){
             return false;
         }
-        let chance = (weapon.value) * multiplier
+        
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.cursed);
+        }
+
+        return true;
+    }
+
+    static getTreasureIsCursed(item, tier, multiplier = 1){
+        let exemptChance = (30 * tier) / multiplier;
+        let chance = (item.value) * multiplier
+        if(item.curseChance){
+            chance += item.curseChance*100;
+            exemptChance -= item.curseChance*100;
+        }
+        if(Random.roll(0,99) < exemptChance){
+            return false;
+        }
+        
+        if(Random.roll(0,99) < chance){
+            LootManager.applyModifier(item,itemVars.treasureModifiers.cursed);
         }
 
         return true;

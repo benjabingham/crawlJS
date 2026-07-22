@@ -406,6 +406,7 @@ let itemVars = {
             bulk:1,
             treasure:true,
             enchantmentChance:0.2,
+            curseChance:0.2,
             flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
 
         },
@@ -820,6 +821,7 @@ let itemVars = {
             weight:-1,
             value:.15,
             color:'bone',
+            curseChance:0.2,
 
             frequency:1
 
@@ -878,6 +880,7 @@ let itemVars = {
                 damage:2,
             },
             value:.5,
+            curseChance:0.2,
 
             frequency:1
         },
@@ -893,6 +896,7 @@ let itemVars = {
             value:2,
             color:'darkgray',
             bulk:3,
+            curseChance:0.2,
 
             frequency:3
 
@@ -957,15 +961,17 @@ let itemVars = {
                 damage:6
             },
             color:'clearBlue',
-            frequency:1
+            frequency:1,
+            curseChance:0.2,
         },
         sigiledBone:{
             name:'sigiled bone',
-            flimsy:10,
+            flimsy:7,
             weight:-1,
             value:3,
             color:'bone',
-            frequency:1
+            frequency:1,
+            curseChance:0.5,
         },
         ironwood:{
             name:'ironwood',
@@ -1054,7 +1060,8 @@ let itemVars = {
             value:10,
             color:'silver',
             frequency:3,
-            treasure:true
+            treasure:true,
+            curseChance:-0.2,
         },
         gold:{
             name:'gold',
@@ -1133,6 +1140,7 @@ let itemVars = {
             name:"bone",
             value:0.2,
             color:"bone",
+            curseChance:0.2,
 
             possibleFlavorTexts:["Made from antler.","You have to be careful not to prick yourself on it.","Smells like death.","It's still bloody.","There's a bit of hair stuck to it...", "You find yourself comforted by the thought that this may be you one day."]
         },
@@ -1179,13 +1187,15 @@ let itemVars = {
             value:2,
             color:"darkgray",
             bulk:3,
-            possibleFlavorTexts:["It's heavier than it looks.",'It smells sweet... Perhaps a taste?']
+            possibleFlavorTexts:["It's heavier than it looks.",'It smells sweet... Perhaps a taste?'],
+            curseChance:0.2,
         },
         sigiledBone:{
             name:"sigiled bone",
             value:2.5,
             color:"bone",
-            possibleFlavorTexts:["Smells like death.","There's a bit of hair stuck to it...", "It's definitely human."]
+            possibleFlavorTexts:["Smells like death.","There's a bit of hair stuck to it...", "It's definitely human."],
+            curseChance:0.5,
         },
         copper:{
             name:'copper',
@@ -1220,7 +1230,8 @@ let itemVars = {
             value:8,
             color:"silver",
             bulk:1.8,
-            possibleFlavorTexts:["It shines splendidly.","You've heard the moon used to shine like silver. It's hard for you to believe."]
+            possibleFlavorTexts:["It shines splendidly.","You've heard the moon used to shine like silver. It's hard for you to believe."],
+            curseChance:-0.2,
         },
         gold:{
             name:'gold',
@@ -1273,7 +1284,7 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
-            unlucky:true,
+            cursed:true,
             value: .3
         },
         craftTiers:{
@@ -1328,7 +1339,12 @@ let itemVars = {
             name:'pristine',
             value:1.5,
             possibleFlavorTexts:["How is it so clean?","It's like new!","You almost want to keep it.","How has it weathered the ages so?","You wish you were so pristine."]
-        } 
+        },
+        cursed:{
+            name: 'cursed',
+            cursed:true,
+            possibleFlavorTexts:["It has a hostile energy.","Unnaturally cold to the touch","Smells strongly of blood.","It seems to move...","It's hard to pull your eyes from it.","It's beautiful..."]
+        },
     },
     food:{
         hardboiledEgg:{

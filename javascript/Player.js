@@ -222,8 +222,8 @@ class Player {
         if(Player.perks.stamina.aerobics){
             stamina+= Player.perks.stamina.aerobics.val;
         }
-        if(Player.hasAspect('vigorAspect')){
-            stamina += Player.hasAspect('vigorAspect')
+        if(Player.hasQualityInQuickbar('vigorAspect')){
+            stamina += Player.hasQualityInQuickbar('vigorAspect')
         }
         if(Player.fatigueLevel){
             //stamina--;
@@ -775,7 +775,7 @@ class Player {
             pointsMissing *= Player.perks.hunger.hangry.val
             critChance += pointsMissing/10;
         }
-        let fury = Player.hasAspect('furyAspect')
+        let fury = Player.hasQualityInQuickbar('furyAspect')
         if(fury){
             let missingHealth = Player.healthMax - Player.health
             critChance += missingHealth * fury * 0.1;
@@ -1039,10 +1039,21 @@ class Player {
     }
 
     //returns the number of times the chosen quality appears among items in the player's quickbar'
-    static hasAspect(aspect){
+    static hasQualityInQuickbar(quality){
         let count = 0
         Player.inventory.items.forEach(item=>{
-            if(item.quickSlot && item[aspect]){
+            if(item.quickSlot && item[quality]){
+                count++;
+            }
+        })
+
+        return count;
+    }
+
+    static hasQualityInInventory(quality){
+        let count = 0
+        Player.inventory.items.forEach(item=>{
+            if(item[quality]){
                 count++;
             }
         })
@@ -1051,8 +1062,8 @@ class Player {
     }
 
     static activatePostAttackTriggers(){
-        if(Player.hasAspect('hungerAspect')){
-            let n = Player.hasAspect('hungerAspect')
+        if(Player.hasQualityInQuickbar('hungerAspect')){
+            let n = Player.hasQualityInQuickbar('hungerAspect')
             Player.changeStamina(3*n);
             Player.changeNourishment(-1*n);
         }

@@ -219,10 +219,13 @@ class Log{
         Log.messages[Log.turnCounter] = false;
         $('.turn-'+Log.turnCounter+'-message').remove();
         $('.turn-'+(Log.turnCounter-1)+'-message').remove();
-        Log.messages[Log.turnCounter-1].printed = false
-        Log.messages[Log.turnCounter-1].forEach((message)=>{
+        if(Log.messages[Log.turnCounter-1]){
+            Log.messages[Log.turnCounter-1].printed = false
+            Log.messages[Log.turnCounter-1].forEach((message)=>{
             message.fresh = true
         })
+        }
+        
         Log.printTurn(Log.turnCounter-1)        
     }
 

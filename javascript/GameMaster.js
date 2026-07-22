@@ -22,7 +22,7 @@ class GameMaster{
     static quickStart(){
         GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
-        //LootManager.applyModifier(starterWeapon,itemVars.weaponModifiers.cursed)
+        //LootManager.applyModifier(starterWeapon,itemVars.treasureModifiers.damned)
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
        
@@ -203,6 +203,13 @@ class GameMaster{
         if(Player.hasQualityEquipped('cursed')){
             Log.addNotice("Can't Rewind")
             Log.addNotice("You're equipped item is cursed!")
+            Log.printLog();  
+            Log.clearNotices();
+            return false;
+        }
+        if(Player.hasQualityInInventory('damned')){
+            Log.addNotice("Can't Rewind")
+            Log.addNotice("You have a Damned item in your inventory!")
             Log.printLog();  
             Log.clearNotices();
             return false;

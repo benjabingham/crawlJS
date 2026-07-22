@@ -405,8 +405,8 @@ let itemVars = {
             color:'red',
             bulk:1,
             treasure:true,
-            enchantmentChance:0.2,
-            curseChance:0.2,
+            enchantmentChance:0.3,
+            curseChance:0.3,
             flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
 
         },
@@ -435,6 +435,7 @@ let itemVars = {
             color:'bone',
             bulk:0.5,
             treasure:true,
+            curseChance:0.2,
 
             flavorText:"Somehow it's still warm..."
         },
@@ -444,6 +445,7 @@ let itemVars = {
             color:'bone',
             bulk:1,
             treasure:true,
+            curseChance:0.5,
 
             flavorText:"They eyeless sockets seem to follow you."
         },
@@ -671,6 +673,7 @@ let itemVars = {
             bulk:0.1,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["Painstakingly engraved","This once held tremendous sentimental value for someone. Not any more.","There's still a finger attached to it..."]
         },
         cup:{
@@ -687,6 +690,7 @@ let itemVars = {
             bulk:0.15,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["Inlaid with lewd images.","Inlaid with a painting of a fat, jolly man.","Inlaid with a painting of a stern looking woman.","This once held tremendous sentimental value for someone. Not any more.","Pretty!"]
 
         },
@@ -740,6 +744,7 @@ let itemVars = {
             bulk:0.75,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["The gems have long been pried from it.","The delicate craftsmanship is inspiring."]
         },
         underplate:{
@@ -756,6 +761,7 @@ let itemVars = {
             bulk:1.2,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["It seems even kings are forgotten to time.","You can't bring yourself to put it on."]
         }
     },
@@ -822,6 +828,7 @@ let itemVars = {
             value:.15,
             color:'bone',
             curseChance:0.2,
+            enchantmentChance:0.05,
 
             frequency:1
 
@@ -867,6 +874,7 @@ let itemVars = {
             },
             value:.8,
             color:'brown',
+            enchantmentChance:0.1,
 
             frequency:1
         },
@@ -881,6 +889,7 @@ let itemVars = {
             },
             value:.5,
             curseChance:0.2,
+            enchantmentChance:0.1,
 
             frequency:1
         },
@@ -963,6 +972,7 @@ let itemVars = {
             color:'clearBlue',
             frequency:1,
             curseChance:0.2,
+            enchantmentChance:0.1,
         },
         sigiledBone:{
             name:'sigiled bone',
@@ -972,6 +982,7 @@ let itemVars = {
             color:'bone',
             frequency:1,
             curseChance:0.5,
+            enchantmentChance:0.1,
         },
         ironwood:{
             name:'ironwood',
@@ -984,6 +995,7 @@ let itemVars = {
                 damage:-1
             },
             value:3,
+            enchantmentChance:0.1,
             color:'redBrown',
             frequency:2
         },
@@ -995,6 +1007,7 @@ let itemVars = {
                 damage:8
             },
             color:'darkPurple',
+            enchantmentChance:0.1,
             frequency:1
         },
         meteorite:{
@@ -1006,6 +1019,7 @@ let itemVars = {
             value:7,
             resistant:true,
             color:'gray',
+            enchantmentChance:0.1,
             frequency:1
         },
         gravsteel:{
@@ -1062,6 +1076,7 @@ let itemVars = {
             frequency:3,
             treasure:true,
             curseChance:-0.2,
+            enchantmentChance:0.1,
         },
         gold:{
             name:'gold',
@@ -1079,6 +1094,7 @@ let itemVars = {
             color:'gold',
             bulk:3,
             frequency:3,
+            enchantmentChance:0.1,
             treasure:true
 
         },
@@ -1109,6 +1125,7 @@ let itemVars = {
             bulk:0.75,
             value:20,
             color:'blue',
+            enchantmentChance:0.1,
             frequency:1
         },
         ethersteel:{
@@ -1141,6 +1158,7 @@ let itemVars = {
             value:0.2,
             color:"bone",
             curseChance:0.2,
+            enchantmentChance:0.05,
 
             possibleFlavorTexts:["Made from antler.","You have to be careful not to prick yourself on it.","Smells like death.","It's still bloody.","There's a bit of hair stuck to it...", "You find yourself comforted by the thought that this may be you one day."]
         },
@@ -1196,6 +1214,7 @@ let itemVars = {
             color:"bone",
             possibleFlavorTexts:["Smells like death.","There's a bit of hair stuck to it...", "It's definitely human."],
             curseChance:0.5,
+            enchantmentChance:0.05,
         },
         copper:{
             name:'copper',
@@ -1223,6 +1242,7 @@ let itemVars = {
             value:5,
             color:'silver',
             bulk:1.8,
+            enchantmentChance:0.02,
             possibleFlavorTexts:[]
         },
         silver:{
@@ -1238,6 +1258,7 @@ let itemVars = {
             value:10,
             color:"gold",
             bulk:3,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["Its weight dismisses any doubts you had of its authenticity.","They say the sun shone brighter than gold. You wonder if it's true."]
         },
         platinum:{
@@ -1245,6 +1266,7 @@ let itemVars = {
             value:20,
             color:"silver",
             bulk:4,
+            enchantmentChance:0.1,
             possibleFlavorTexts:['The opulence is sickening.','It shines brilliantly.']
         }
     },
@@ -1344,6 +1366,11 @@ let itemVars = {
             name: 'cursed',
             cursed:1,
             possibleFlavorTexts:["It has a hostile energy.","Unnaturally cold to the touch","Smells strongly of blood.","It seems to move...","It's hard to pull your eyes from it.","It's beautiful..."]
+        },
+        damned:{
+            name: 'damned',
+            damned:true,
+            possibleFlavorTexts:["It has a malicious energy.","Unnaturally cold to the touch","Smells strongly of blood.","It quivers...","It's hard to pull your eyes from it.","It's beautiful...","It's terrible...","It leaves a residue of blood on everything it touches.","You aren't meant to have this.","You should have left this where you found it."]
         },
     },
     food:{

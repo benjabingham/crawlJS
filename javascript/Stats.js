@@ -1,15 +1,20 @@
 class Stats{
     static logStats(){
-        let n = 3000;
+        let n = 100;
         [{array:monsterVars, type:'monster'},{array:containerVars,type:'container'}].forEach((category)=>{
             Object.keys(category.array).forEach((key)=>{
                 let total = 0;
+                let cursedCount = 0;
+                let cursed = [];
+                let damnedCount = 0;
+                let damned = [];
                 let all = [];
                 for(let i = 0; i < n; i++){
                     let entity = {entityGroupInfo:{key:key, entityType:category.type}};
                     LootManager.getEntityLoot(entity);
                     let inventory = entity.inventory.items;
                     let inventoryValue = 0;
+                    
                     if(entity.inventory.gold){
                         inventoryValue += entity.inventory.gold;
                     }
@@ -17,6 +22,14 @@ class Stats{
                         if(item.value){
                             inventoryValue += item.value;
                         }
+                        if(item.cursed){
+                            cursedCount ++;
+                            cursed.push(item.value)
+                        };
+                        if(item.damned){
+                            damnedCount ++;
+                            damned.push(item.value)
+                        };
                     })
                     if(entity.entityGroupInfo.key == "weaponChest"){
                         console.log(inventory[0].name);
@@ -35,6 +48,10 @@ class Stats{
                 let results = {
                     key:key,
                     average:total/n,
+                    cursedCount:cursedCount,
+                    cursed:cursed,
+                    damnedCount:damnedCount,
+                    damned:damned,
                     median:all[Math.floor(n/2)],
                     all:all
                 }

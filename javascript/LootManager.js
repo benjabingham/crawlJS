@@ -96,15 +96,18 @@ class LootManager{
 
         let inventory = LootManager.getInventoryFromTemplate(template)
         if(inventory){
+            inventory.items.forEach((item)=>{
+                //chance for enchantments...
+                LootManager.getItemEnchantment(item,0.0025)
+                LootManager.getTreasureIsCursed(item,0,0)
+            })
             entitySave.inventory.items = entitySave.inventory.items.concat(inventory);
         }
         //trim down to max size
         entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
         entitySave.inventory.items.forEach(item=>{
             if(item.unlabeled){LootManager.generateUnlabeledPotionDetails(item)}
-            //chance for enchantments...
-            LootManager.getItemEnchantment(item,0.0025)
-            LootManager.getTreasureIsCursed(item,0,(1/item.value)/2)
+            
         })
     }
 
@@ -241,8 +244,8 @@ class LootManager{
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
-        let cursed = LootManager.getWeaponIsCursed(weapon,tier,curseMultiplier)
         LootManager.getItemEnchantment(weapon,0.025)
+        let cursed = LootManager.getWeaponIsCursed(weapon,tier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
 
         let modifiedMax = cursed ? max * 2 : max;
@@ -440,32 +443,43 @@ class LootManager{
         
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.cursed);
+            return true;
+            /*
             let maxCurseLevel = Math.floor(weapon.val/10);
             weapon.curse = Math.min(10,Random.roll(1,maxCurseLevel))
+            */
         }
 
-        return true;
+        return false;
     }
 
     static getTreasureIsCursed(item, tier, multiplier = 1){
-        let exemptChance = (30 * tier) / multiplier;
-        let chance = (item.value) * multiplier
+        let chance = (item.value) * multiplier;
+        let divisor = tier/2
+        divisor = Math.max(divisor,1);
+        chance /= divisor;
         if(item.curseChance){
             chance += item.curseChance*100;
-            exemptChance -= item.curseChance*100;
         }
-        if(Random.roll(0,99) < exemptChance){
-            return false;
+
+        if(chance/multiplier > 25){
+            let damnedChance = chance
+            if(Random.roll(0,99) < damnedChance){
+                LootManager.applyModifier(item,itemVars.treasureModifiers.damned)
+                return true
+            }
         }
+        
         
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(item,itemVars.treasureModifiers.cursed);
-            let maxCurseLevel = Math.floor(item.val/5);
+            /*let maxCurseLevel = Math.floor(item.val/5);
             item.curse = Math.min(10,Random.roll(1,maxCurseLevel))
-            
+            */
+            return true
         }
 
-        return true;
+        return false;
     }
 
     static getWeapon(material = false){

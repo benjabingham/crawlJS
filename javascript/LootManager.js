@@ -175,7 +175,8 @@ class LootManager{
         //console.log(treasure)
         //if outside of range, widen range and try again!
         //adjust max based on certain item qualities ...
-        let modifiedMax = cursed ? (max*2)+5 : max;
+        let modifiedMax = treasure.cursed ? (max*2)+5 : max;
+        modifiedMax = treasure.damned ? max * 10 : max;
         modifiedMax = treasure.tiny ? max * 0.75 : max;
         modifiedMax = treasure.huge ? max * 1.25 : max; 
         if(treasure.value > max){
@@ -248,7 +249,8 @@ class LootManager{
         let cursed = LootManager.getWeaponIsCursed(weapon,tier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
 
-        let modifiedMax = cursed ? max * 2 : max;
+        let modifiedMax = weapon.cursed ? max * 2 : max;
+        modifiedMax = weapon.damned ? max * 4 : max;
         if(weapon.value > modifiedMax){
             let newMax = cursed ? max * 1.25 : max * 2;
             weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier, {min:min, max:newMax})
@@ -439,6 +441,14 @@ class LootManager{
         }
         if(Random.roll(0,99) < exemptChance){
             return false;
+        }
+
+        if(weapon.treasure){
+            let damnedChance = chance
+            if(Random.roll(0,99) < damnedChance){
+                LootManager.applyModifier(item,itemVars.treasureModifiers.damned)
+                return true
+            }
         }
         
         if(Random.roll(0,99) < chance){

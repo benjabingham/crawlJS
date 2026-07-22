@@ -434,7 +434,7 @@ let monsterVars = {
                 chance:15,
                 tier:4,
                 allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold','silver'],
-                curseMultiplier: 3,
+                curseMultiplier: 1.5,
                 preferredRange:{min:5,max:100},
             },
             treasure:{
@@ -505,7 +505,7 @@ let monsterVars = {
                 chance:5,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3,
+                curseMultiplier: 1.5,
                 preferredRange:{min:5,max:30},
             },
             treasure:{
@@ -556,7 +556,7 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3,
+                curseMultiplier: 1.5,
                 preferredRange:{min:1,max:30},
             },
             treasure:{
@@ -620,7 +620,7 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3,
+                curseMultiplier: 1.5,
                 preferredRange:{min:1,max:30},
             },
             treasure:{
@@ -670,7 +670,7 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3,
+                curseMultiplier: 1.5,
                 preferredRange:{min:1,max:30},
             },
             treasure:{
@@ -709,7 +709,7 @@ let monsterVars = {
                 chance:5,
                 tier:2,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier:3,
+                curseMultiplier:1.5,
                 preferredRange:{min:5,max:50},
             },
             treasure:{

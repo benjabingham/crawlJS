@@ -541,7 +541,9 @@ class LootManager{
                     break;
                 case 'flatValue':
                     if(!item.value){item.value = 0;}
+                    if(!item.floatValue){item.floatValue = item.value}
                     item.value += value;
+                    item.floatValue += value;
                     break;
                 case 'color':
                     item[key] = value;

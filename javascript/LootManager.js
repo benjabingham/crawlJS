@@ -95,8 +95,8 @@ class LootManager{
         }   
 
         let inventory = LootManager.getInventoryFromTemplate(template)
-        if(inventory && inventory.items){
-            inventory.items.forEach((item)=>{
+        if(inventory){
+            inventory.forEach((item)=>{
                 //chance for enchantments...
                 LootManager.getItemEnchantment(item,0.0025)
                 LootManager.getTreasureIsCursed(item,0,0)

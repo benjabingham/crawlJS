@@ -140,6 +140,7 @@ class LootManager{
     }
 
     static getTreasureLoot(tier, allowedMaterials, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
+        let originalTier = tier;
         if(Random.roll(1,30) <= curseMultiplier){
             tier+= 2
             curseMultiplier = 9999;
@@ -171,7 +172,7 @@ class LootManager{
 
         LootManager.getTreasureModifier(treasure, tier);
         LootManager.getTreasureSize(treasure);
-        let cursed = LootManager.getTreasureIsCursed(treasure, tier, curseMultiplier)
+        let cursed = LootManager.getTreasureIsCursed(treasure, originalTier, curseMultiplier)
         //console.log(treasure)
         //if outside of range, widen range and try again!
         //adjust max based on certain item qualities ...
@@ -181,10 +182,10 @@ class LootManager{
         modifiedMax = treasure.huge ? max * 1.25 : max; 
         if(treasure.value > max){
             let newMax = cursed ? max * 1.1 : max * 1.5;
-            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, curseMultiplier*1.15, {min:min, max:newMax})
+            treasure = LootManager.getTreasureLoot(originalTier, allowedMaterials, curseMultiplier*1.15, {min:min, max:newMax})
         }else if(treasure.value < min){
             let newMin = Math.floor(min/2)
-            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
+            treasure = LootManager.getTreasureLoot(originalTier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
         }
         treasure.treasure = true;
         LootManager.getFlavorText(treasure);
@@ -237,26 +238,27 @@ class LootManager{
     static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
         let min = preferredRange.min;
         let max = preferredRange.max;
+        let originalTier = tier
         //extra curse bonus...
         if(Random.roll(1,30) <= curseMultiplier){
-            tier+= 4
+            tier+= 3
             curseMultiplier = 999;
         }        
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
         LootManager.getItemEnchantment(weapon,0.025)
-        let cursed = LootManager.getWeaponIsCursed(weapon,tier,curseMultiplier)
+        let cursed = LootManager.getWeaponIsCursed(weapon,originalTier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
 
         let modifiedMax = weapon.cursed ? max * 2 : max;
         modifiedMax = weapon.damned ? max * 4 : max;
         if(weapon.value > modifiedMax){
             let newMax = cursed ? max * 1.25 : max * 2;
-            weapon = LootManager.getWeaponLoot(tier, allowedMaterials, curseMultiplier*1.3, {min:min, max:newMax})
+            weapon = LootManager.getWeaponLoot(originalTier, allowedMaterials, curseMultiplier*1.3, {min:min, max:newMax})
         }else if(weapon.value < min){
             let newMin = Math.floor(min/2)
-            weapon = LootManager.getWeaponLoot(tier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
+            weapon = LootManager.getWeaponLoot(originalTier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
         }
 
         if(!weapon.flimsy || weapon.flimsy < 0){
@@ -446,7 +448,7 @@ class LootManager{
         if(weapon.treasure){
             let damnedChance = chance
             if(Random.roll(0,99) < damnedChance){
-                LootManager.applyModifier(item,itemVars.treasureModifiers.damned)
+                LootManager.applyModifier(weapon,itemVars.treasureModifiers.damned)
                 return true
             }
         }
@@ -888,8 +890,8 @@ class LootManager{
             let hintText;
             if(symbol.name){
                 console.log(item[symbol.name])
-                hintText = symbol.name
-                if(item[symbol.name] && typeof item[symbol.name] == 'number'){
+                hintText = Display.capitalizeFirstLetter(symbol.name);
+                if(item[symbol.name] > 1 && typeof item[symbol.name] == 'number'){
                     hintText += " "+item[symbol.name]
                 }
             }

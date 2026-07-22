@@ -40,9 +40,9 @@ keywordVars = {
         worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
-        ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
-        cursed:{name:'cursed', hintText:"While this item is in your inventory, you must spend 1 additional luck to rewind. While it's equipped, you can't rewind."},
-        damned:{name:'damned', hintText:"You can't use luck while this item is in your inventory."},
+        ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina.",color:"clearBlue"},
+        cursed:{name:'cursed', hintText:"While this item is in your inventory, you must spend 1 additional luck to rewind. While it's equipped, you can't rewind.", color:'darkPurple'},
+        damned:{name:'damned', hintText:"You can't use luck while this item is in your inventory.", "color":'red'},
         wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
 
         preserved:{name:'preserved',hintText:"This food item is less likely to be rotten."},
@@ -53,11 +53,11 @@ keywordVars = {
         food:{name:"food", hintText:"You can eat this."},
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     
-        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
-        hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
-        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."},
-        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use."},
-        blessed:{name:"blessed",hintText:"While this item is in your inventory, luck has a 50% chance to be refunded on use. While equipped, this chance increases to 75%."}
+        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait.",color:"orange"},
+        hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina.",color:"green"},
+        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing.",color:"red"},
+        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use.",color:"green"},
+        blessed:{name:"blessed",hintText:"While this item is in your inventory, luck has a 50% chance to be refunded on use. While equipped, this chance increases to 75%.",color:"gold"}
     },
 
     symbols:{

@@ -229,7 +229,7 @@ class Inventory{
                 let text = trait.name
                 let noDisplayNumber = ['food','fuel']
                 if(hasTrait){
-                    text = ", "+text
+                    traitsDiv.append(", ")
                 }
                 //show at 1?
                 //if(typeof item[key] == 'number' && !noDisplayNumber.includes(key)){
@@ -237,6 +237,9 @@ class Inventory{
                     text = text+" "+item[key]
                 }
                 let traitSpan = $('<span>').addClass('trait-spans').text(text);
+                if(trait.color){
+                    Display.applyColor(trait,traitSpan)
+                }
                 Display.setHintText(traitSpan, trait.hintText)
                 traitsDiv.append(traitSpan)
                 hasTrait = true;

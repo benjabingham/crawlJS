@@ -1,4 +1,5 @@
 class Save{
+    //contains all sorts of locations - world maps, dungeons, and towns
     static maps = {};
     static day = 1;
 
@@ -50,10 +51,11 @@ class Save{
 
     static mapInit(json){
         console.log(json);
-        let roomString = json.name;
-        console.log('initializing map - '+roomString);
+        let locationId = json.name;
+        console.log('initializing map - '+locationId);
         let entityGroups = json.entityGroups.entityGroups;
         let roster = [];
+        let scale = json.mapTypes.scale
         let counter = 0;
         for(const [key, entityGroup] of Object.entries(entityGroups)){
             let instances = entityGroup.instances;
@@ -69,7 +71,11 @@ class Save{
                         items:[]
                     }
                 }
-                LootManager.getEntityLoot(entitySave);
+                if(entityGroup.shop){
+                    entitySave.inventory.items = ShopManager.generateShopInventory(locationId,entityGroup.shopId)
+                }else{
+                    LootManager.getEntityLoot(entitySave);
+                }
                 roster.push(entitySave)
                 counter++;
             }
@@ -78,7 +84,10 @@ class Save{
         if(json.floorMatrix){
             json.floorMatrix = JSON.parse(json.floorMatrix);
         }
-        Save.maps[roomString] = json;
+        
+        Travel.markValidExitsInRoster(json)
+        
+        Save.maps[locationId] = json;
     }
 
     static catchUpMap(mapString){
@@ -89,12 +98,15 @@ class Save{
             Save.mapRespawn(mapString);
             Save.degradeStains(mapString);
             Save.scatterItems(mapString);
+            ShopManager.restockShops(mapString);
         }
         map.lastDay = day;
     }
 
     static degradeStains(mapString){
+        //console.log(Save.maps)
         let stains = Save.maps[mapString].stains;
+        if(!stains){return false}
         let y = 0;
         stains.forEach((row)=>{
             let x = 0;
@@ -232,5 +244,17 @@ class Save{
         }else{
             return false
         }
+    }
+
+    static loadMaps(){
+        Travel.worldMapIds.forEach((mapId)=>{
+            console.log('loading map '+mapId);
+            fetch('./rooms/'+mapId+'.json')
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+                Save.mapInit(json);
+            })
+        })
     }
 }

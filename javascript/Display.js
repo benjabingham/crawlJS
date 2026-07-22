@@ -9,6 +9,7 @@ class Display{
     ]
     static highlightedCells=[];
     static mouseOverBoard = false;
+    static viewingWorldMap = true;
 
     static displayInit(){
         Display.customControls = GameMaster.customControls;
@@ -48,6 +49,7 @@ class Display{
     }
 
     static setHintText(element, hintText, hintClass = "info"){
+        if(!element){return false;}
         element.addClass('keyword').on('mousemove',()=>{
             $('.hint-divs').show().text(hintText).addClass(hintClass);
             
@@ -146,11 +148,19 @@ class Display{
 
     }
 
-    static printBoard(){
+    //if passed worldMapId, instead shows that map
+    static printBoard(worldMapId = false){
+        let boardArray = Board.boardArray
+        let playerPos = EntityManager.getEntity('player');
+        if(worldMapId){
+            boardArray=Board.worldMapArray
+            playerPos = Travel.getLocationCoords(worldMapId,EntityManager.currentMap.name)
+            Display.viewingWorldMap = true
+        }else{
+            Display.viewingWorldMap = false
+        }
         console.log("turn "+Log.turnCounter)
         let devMode = true;
-        let boardArray = Board.boardArray;
-        let playerPos = EntityManager.getEntity('player');
         Display.addDirectionHighlight();
         for(let displayY=0; displayY<17; displayY++){
             for(let displayX=0; displayX<17; displayX++){
@@ -159,8 +169,14 @@ class Display{
                 let entityDiv = $('#board-entity-'+displayX+'-'+displayY);
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
+                let tileRemembered = GameMaster.scale == 'world' && Board.tileHasBeenSeen({x:x, y:y})
+                
+                let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || tileRemembered
+                if(worldMapId){
+                    playerCanSee = Board.tileHasBeenSeen({x:x,y:y},Save.maps[worldMapId])
+                }
                 //don't bother if spot was dark before and is still dark
-                if (!Board.hasPlayerLos({x:x, y:y}) && gridDiv.hasClass('grid-dark')) { 
+                if (!playerCanSee && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
                 entityDiv.html('');
@@ -172,10 +188,10 @@ class Display{
                 }
                 let symbol = '';
                 //out of bounds
-                if(Board.hasPlayerLos({x:x, y:y})){
+                if(playerCanSee){
                     if(boardArray[y] && boardArray[y][x]){
                         let entity = boardArray[y][x]
-                        if(Board.wallArray[y][x]){
+                        if(Board.wallArray[y][x] && !worldMapId){
                             let wallType = Board.wallArray[y][x].wallType;
                             if(!wallType){
                                 wallType = 'wall'
@@ -207,15 +223,17 @@ class Display{
                         }
                         Display.showParryHighlight(x,y, entityDiv);
                     }
-                    if(Board.isSpace(x,y)){
+                    let isSpace = Board.isSpace(x,y) || worldMapId
+                    if(isSpace){
                         //floor stuff
-                        let floorType = Board.getFloor(x,y);
+                        let floorArray = worldMapId ? Board.worldMapFloorArray:Board.floorArray
+                        let floorType = Board.getFloor(x,y,floorArray);
                         if(!floorType){
                             floorType = 'stone';
                         }
                         gridDiv.addClass(floorType+'Floor')
                     }
-                    if(!Board.isSpace(x,y)){
+                    if(!isSpace){
                         if(Board.hasAdjacentEmptySpace(x,y)){
                             gridDiv.addClass('grid-exit');
                         }else{
@@ -243,6 +261,7 @@ class Display{
     }
 
     static showParryHighlight(x,y, entityDiv){
+        if(!Board.boardArray[y] || !Board.boardArray[y][x]){return false}
         if(
             Board.boardArray[y][x].parryable && Display.parryInRange(x,y)
         ){
@@ -299,6 +318,7 @@ class Display{
     }
 
     static addDirectionHighlight(){
+        if(GameMaster.scale != 'dungeon'){return false}
         let playerEntity = EntityManager.getEntity('player');
         let swordEntity = playerEntity.swordEntity;
         //this is how we tell if it's equipped, or outside of the map
@@ -347,17 +367,43 @@ class Display{
         Display.highlightedCells = [];
     }
 
-    static exertionDiv(){
-        let exertionLevels = {0:'rested', 1:'exerted',2:'exhausted'};
-        let exertionColors = {0:'black', 1:'darkOrange',2:'red'}
+    static fatigueDiv(){
+        let fatigueLevels = {0:'rested', 1:'fatigued',2:'exhausted'};
+        let fatigueColors = {0:'black', 1:'darkPurple',2:'brightPurple'}
+        let fatigueHints = {
+            0:'You have no ill effects.',
+            1:'Your Bulk Capacity and Max Stamina are each reduced by 30%.',
+            2:'Your Bulk Capacity and Max Stamina are each reduced by 30%. Whenever you would gain Fatigue, you lose HP instead.'
+        }
         
-        $('#exertion-level-div').text('You are '+exertionLevels[Player.exertion]+'.').css('color', 'var(--'+exertionColors[Player.exertion]+')');
+        $('#fatigue-level-div').text('You are '+fatigueLevels[Player.fatigueLevel]+'.').css('color', 'var(--'+fatigueColors[Player.fatigueLevel]+')');
+        Display.setHintText(
+            $('#fatigue-level-div'),
+            "Your Fatigue is "+Player.fatigue+"/"+Player.fatigueMax+". "+fatigueHints[Player.fatigueLevel])
     }
     
     static fillBars(){
-        let staminaPercent = Player.staminaPercent;
+        let staminaPercent = Player.modifiedStaminaPercent;
+        console.log(staminaPercent)
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
-        $('#stamina-level').text(Player.stamina+"/"+Player.staminaMax);
+        $('#stamina-level').text(Player.stamina+"/"+Player.modifiedMaxStamina);
+
+        let rawPercent = Player.fatiguePercent;
+        let fatiguePercent
+        if(rawPercent == 200){
+            fatiguePercent = 100
+        }else{
+            fatiguePercent = rawPercent % 100
+        }
+        $('#fatigue-level').css('width',fatiguePercent*1.5+"px");
+        $('#fatigue-level').text(Player.fatigue+"/"+Player.fatigueMax);
+        if(Player.fatigue >= Player.fatigueMax){
+            $('#fatigue-bar').addClass('full')
+            $('#fatigue-level').addClass('full')
+        }else{
+            $('#fatigue-bar').removeClass('full')
+            $('#fatigue-bar').removeClass('full')
+        }
 
         let healthPercent = Player.healthPercent;
         $('#health-level').css('width',healthPercent*1.5+"px");
@@ -381,7 +427,15 @@ class Display{
             $('#xp-level').removeClass('full-xp')
         }
 
-        Display.exertionDiv();
+        if(GameMaster.scale=='dungeon'){
+            $('#stamina-bar-container').show();
+            $('#fatigue-bar-container').hide();
+        }else{
+            $('#stamina-bar-container').hide();
+            $('#fatigue-bar-container').show();
+        }
+
+        Display.fatigueDiv();
 
     }
 

@@ -10,7 +10,10 @@ class Board{
     static stainArray = [];
     static floorArray = [];
     static lightSourceIDs = [];
-
+    //saved world map, array, so can be viewed while in dungeon or town
+    static worldMapArray = false;
+    static worldMapFloorArray = false;
+    static enteredDirection = false;
     static destinations = {};
 
     static boardInit(roomJson = false){
@@ -103,10 +106,12 @@ class Board{
         }
     }
 
-    static getFloor(x,y){
-        if ( Board.floorArray && Board.floorArray[y] && Board.floorArray[y][x]){
-            return Board.floorArray[y][x]
+    static getFloor(x,y, floorArray = Board.floorArray){
+        //console.log(floorArray)
+        if ( floorArray && floorArray[y] && floorArray[y][x]){
+            return floorArray[y][x]
         }
+
 
         return false;
     }
@@ -267,9 +272,16 @@ class Board{
         return float ? distance : Math.floor(distance);
     }
 
+    //a light array would be good... Might improve performance
     static hasLight(pos){
+        //if(GameMaster.scale != 'dungeon'){return true}
         let hasLight = false
-        let playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        let playerLightPos
+        if(GameMaster.scale == 'dungeon'){
+            playerLightPos = EntityManager.getEntity('player').swordEntity.getSwordPosition();
+        }else{
+            playerLightPos = EntityManager.getEntity('player')
+        }
         let sources = [{
             x:playerLightPos.x,
             y:playerLightPos.y,
@@ -440,5 +452,59 @@ class Board{
 
         return result;
     }
+
+    static getScale(){
+        return EntityManager.currentMap.mapTypes.scale
+    }
+
+    //looks at every tile in viewwindow and records if it's been seen
+    static updateSeenTiles(){
+        let map = EntityManager.currentMap
+        let playerPos = EntityManager.getEntity('player');
+        for(let displayY=0; displayY<17; displayY++){
+            for(let displayX=0; displayX<17; displayX++){
+                let x = (displayX-8) + playerPos.x;
+                let y = (displayY-8) + playerPos.y;
+                if(Board.hasPlayerLos({x:x,y:y})){Board.updateSeenTile({x:x,y:y})}
+            }
+        }
+    }
+
+    //pass tile coords, sets it as "Seen" in map file.
+    static updateSeenTile(pos){
+        let map = EntityManager.currentMap
+        if(!map.seenTiles){
+            map.seenTiles = {}
+        }
+        if(!map.seenTiles[pos.x]){
+            map.seenTiles[pos.x] = {}
+        }
+        map.seenTiles[pos.x][pos.y] = true
+    }
     
+    //check seenTiles obj set by Board.updateSeenTile
+    static tileHasBeenSeen(pos, map = EntityManager.currentMap){
+        if(!map.seenTiles || !map.seenTiles[pos.x] || !map.seenTiles[pos.x][pos.y]){
+            return false
+        }
+
+        return true
+    }
+
+    static saveWorldMapArray(){
+        let array = JSON.parse(JSON.stringify(Board.boardArray));
+        array.forEach((column)=>{
+            column.forEach((cell)=>{
+                if(cell.name=='you'){
+                    cell.symbol = ''
+                    console.log('FOUND YOU')
+                }
+            })
+        })
+
+        console.log(array)
+
+        Board.worldMapArray = array;
+        Board.worldMapFloorArray = JSON.parse(JSON.stringify(Board.floorArray))
+    }
 }

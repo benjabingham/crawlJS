@@ -78,12 +78,13 @@
           <div id="entity-type-div" class="control-panel-input-divs">
               <label for="entity-type-dropdown">Entity Type</label>
               <select id="entity-type-dropdown">
-              <option value="" disabled selected>Select Entity Type</option>
-              <option value="monster">Monster</option>
-              <option value="wall">Wall</option>
-              <option value="container">Container</option>
-              <option value="player">Player</option>
-            </select>
+                <option value="" disabled selected>Select Entity Type</option>
+                <option value="monster">Monster</option>
+                <option value="wall">Wall</option>
+                <option value="container">Container</option>
+                <option value="player">Player</option>
+                <option value="location">Location</option>
+              </select>
             <div id="entity-type-dropdown-div">
               <label for="entity-select-dropdown">Entity</label>
               <select id="entity-select-dropdown">
@@ -91,6 +92,10 @@
               </select>
             </div>
 
+          </div>
+          <div id="location-options" class="control-panel-input-divs">
+            <label for="location-id-input">Location Id</label>
+            <input type="text" id="location-id-input">
           </div>
           <div id="entity-options-cosmetic" class="control-panel-input-divs">
             <h4>Cosmetic Options</h4>
@@ -101,6 +106,8 @@
             <input type="text" id="entity-symbol-input">
             <label for="symbol-input">Entity Color</label>
             <input type="text" id="entity-color-input">
+            <label for="light-strength-input">Light Strength</label>
+            <input type="number" id="light-strength-input">
           </div>
           <div id="wall-options" class="control-panel-input-divs">
             <label for="wall-type-dropdown">Wall Type</label>
@@ -108,6 +115,7 @@
               <option value="" disabled selected>Select Wall Type</option>
             </select>
           </div>
+          
           <div id="entity-options" class="control-panel-input-divs">
             <h4>Other Options</h4>
             <div id="spawn-options">
@@ -120,7 +128,17 @@
             <div id="behavior-options">
               Wait for LOS <input type="checkbox" id="wait-checkbox">
             </div>
-            
+            <div id="shop-options">
+              <div id="shop-box-div" class="box-div">
+                <label for="shop-box">Is Shop</label>
+                <input type="checkbox" id="shop-checkbox">
+              </div>
+              <br>
+              <div id="shop-info-div">
+                <label for="shop-id-input">Shop ID</label>
+                <input id="shop-id-input">
+              </div>
+            </div>
           </div>
           
         </div>

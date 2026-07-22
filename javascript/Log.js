@@ -3,6 +3,7 @@ class Log{
     static messages = {};
     static notices = [];
     static turnCounter = 0;
+    static resetTurn = 0;
 
     static logInit(){
         $('#log-title').off().on('click',(e)=>{
@@ -26,10 +27,10 @@ class Log{
     }
 
     static initialWarnings(){
-        if (Player.exertion == 1){
-            Log.addMessage('You are exerted! Stamina regen dereased.','danger')
-        }else if (Player.exertion > 1){
-            Log.addMessage('You are exhausted! Moving will cost stamina. Stamina regen decreased.','urgent')
+        if (Player.fatigueLevel == 1){
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','danger')
+        }else if (Player.fatigueLevel > 1){
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','urgent')
         }
     }
 
@@ -42,6 +43,20 @@ class Log{
             fresh:true,
             messageClass: messageClass,
             keyword: keyword,
+            tipText: tipText,
+            highlightID:highlightID
+        });
+    }
+
+    static addSpanMessage(message,messageClass = false, tipText=false,highlightID=-1){
+        if(!Log.messages[Log.turnCounter]){
+            Log.messages[Log.turnCounter] = [];
+        }
+        Log.messages[Log.turnCounter].unshift({
+            message:'',
+            spanMessage:message,
+            fresh:true,
+            messageClass: messageClass,
             tipText: tipText,
             highlightID:highlightID
         });
@@ -85,6 +100,7 @@ class Log{
     static wipeLog(){
         Log.messages = {};
         Log.turnCounter = 0;
+        Log.resetTurn = 0;
         $('.turn-message').remove();
         $('.day-counter').remove();
     }
@@ -121,6 +137,9 @@ class Log{
                 }else{
                     messageElement = $('<p>').text("> "+message.message).addClass('log-message-p');
                 }
+                if(message.spanMessage){
+                    messageElement.append(message.spanMessage)
+                }
                 if(message.tipText){
                     tipText = message.tipText;
                     if(!keyword){
@@ -154,16 +173,16 @@ class Log{
                 message.fresh = false;
             })
             turnMessage.prepend(
-                GameMaster.dungeonMode ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
+                Board.getScale() == 'dungeon' ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
             ).append($('<hr>'))
             messages.printed = true;
         }else{
             $('#log').prepend(
-                GameMaster.dungeonMode ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
+                Board.getScale() == 'dungeon' ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
             )
         }
 
-        if(!GameMaster.dungeonMode){
+        if(Board.getScale() == 'town'){
             Log.printDayToLog(true)
         }
     }

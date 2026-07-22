@@ -70,6 +70,8 @@ class Entity{
     reanimator;
     //logMessage - {message,class}. Sent to log first time entity is seen.
     logMessage;
+    //shop - determines if entity is a shop
+    shop;
 
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
@@ -180,8 +182,12 @@ class Entity{
             this.lootContainer(Board.entityAt(x,y));
             //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
+        }else if(Board.entityAt(x,y) && Location.prototype.isPrototypeOf(Board.entityAt(x,y)) && PlayerEntity.prototype.isPrototypeOf(this)){
+            Board.entityAt(x,y).enter()
+            return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
-            GameMaster.travel(x,y);
+            Travel.exitLocation(x,y)
+            //GameMaster.travel(x,y);
             return true;
         }
 
@@ -606,7 +612,6 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
-        console.log('checksplatter')
         if(!this.blood){
             return false;
         }
@@ -956,11 +961,17 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
+    pointTowardsCenter(){
+        let sword = EntityManager.getEntity(this.sword)
+        sword.pointTowardsCenter();
+    }
+
     //x and y are RELATIVE TO PLAYER
     canUnarmedStrike(x,y){
         if(Player.equipped && Player.equipped.weapon){
             return false;
         }
+        if(GameMaster.scale != "dungeon"){return false}
         if(Board.wallAt(this.x+x,this.y+y)){return false}        
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
@@ -1231,10 +1242,8 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
-        console.log(damage);
         let weight = weapon.weight;
         let stunTime = weapon.stunTime;
-        console.log(stunTime)
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
@@ -1246,11 +1255,11 @@ class SwordEntity extends Entity{
             stunTime += Player.getBonusStun(weapon,target);
             damage += Player.getItemBonusDamage(weapon);
         }
-        
+        /*
         console.log({
             damage:damage,
             stunTime:stunTime
-        })
+        })*/
         //damage is only referenced for perks
         let degrades = EntityManager.itemWillDegrade(this,0,0.25,damage)
         let crit = Player.getCrit(weapon, strikeType,target);
@@ -1285,7 +1294,7 @@ class SwordEntity extends Entity{
         let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
         mortality = Math.floor(mortality*multiplier)
         Sound.playPlayerHit(mortality);
-        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
+        //console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
@@ -1378,12 +1387,10 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        console.log({pos1:pos1,pos2:pos2})
         let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
         let y = position.y;
-        console.log(Board.entityAt(x,y));
         let bestPos;
         let bestRotation;
         let bestDistance = -1;
@@ -1405,7 +1412,6 @@ class SwordEntity extends Entity{
             position = this.getSwordPosition(rotation);
             x = position.x;
             y = position.y;
-            console.log(bestDistance);
         }
 
         let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)
@@ -1513,9 +1519,7 @@ class Monster extends Entity{
             this.inventory.slots = this.inventorySlots;
         }
 
-        if(this.lightStrength){
-            Board.lightSourceIDs.push(this.id);
-        }
+
         
         return this;
     }  
@@ -2034,5 +2038,30 @@ class ItemPile extends Entity{
         })
 
         this.name = nameArray.join(', ');
+    }
+}
+
+class Location extends Entity{
+    //locationId is string, must match with the filename (minus ".json" of a map in the rooms/ directory)
+    locationId = false;
+
+    constructor(x, y, additionalParameters = {}){
+        super('Lo',x,y, 'Location');
+        
+        //copy additional parameters... This should include LocationId
+        for (const [key, val] of Object.entries(additionalParameters)) { 
+            //if legal key...
+            if(!['inventory','id','x','y','instances'].includes(key)){
+                this[key] = val;
+            }
+        }
+
+        this.name = additionalParameters.entityName;
+
+        return this;
+    }
+
+    enter(){
+        Travel.enterLocation(this);
     }
 }

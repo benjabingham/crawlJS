@@ -315,3 +315,21 @@
 
     hr{width:100%};
 }
+
+.hp-text-div{
+    color:var(--deepRed)
+}
+.hunger-text-div{
+    color:var(--darkOrange)
+}
+.fatigue-text-div{
+    color:var(--darkPurple)
+}
+.luck-text-div{
+    color:var(--darkGreen)
+}
+
+.rest-info-div{
+    width:fit-content;
+    margin:auto;
+}

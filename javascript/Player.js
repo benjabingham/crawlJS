@@ -13,7 +13,9 @@ class Player {
 
     static maxBulk = 10;
 
-    static exertion = 0;
+    static fatigue = 0;
+    static fatigueMax = 10;
+    static delayedFatigue = 0;
 
     static light = 0;
     static lightMax = 8;
@@ -80,7 +82,8 @@ class Player {
             lightTime:Player.lightTime,
             inventory:Player.inventory,
             gold:Player.gold,
-            equipped:Player.equipped
+            equipped:Player.equipped,
+            fatigue:Player.fatigue
         }))
             
         
@@ -88,6 +91,18 @@ class Player {
 
     static get staminaPercent(){
         return Math.floor((Player.stamina/Player.staminaMax)*100);
+    }
+
+    static get modifiedStaminaPercent(){
+        console.log({
+            stamina:Player.stamina,
+            modifiedMax:Player.modifiedMaxStamina
+        })
+        return Math.floor((Player.stamina/Player.modifiedMaxStamina)*100);
+    }
+
+    static get fatiguePercent(){
+        return Math.floor(((Player.fatigue)/Player.fatigueMax)*100);
     }
 
     static get healthPercent(){
@@ -118,6 +133,26 @@ class Player {
         return level;
     }
 
+    static get fatigueLevel(){
+        return Math.floor(Player.fatigue/Player.fatigueMax);
+    }
+
+    static get modifiedMaxBulk(){
+        let maxBulk = Player.maxBulk
+        if(Player.fatigueLevel){
+            maxBulk = Math.floor(maxBulk*0.7)
+        }
+        return maxBulk;
+    }
+
+    static get modifiedMaxStamina(){
+        let maxStamina = Player.staminaMax
+        if(Player.fatigueLevel){
+            maxStamina = Math.floor(maxStamina*0.7)
+        }
+        return maxStamina;
+    }
+
     static getRestInfo(){
         console.log(JSON.parse(JSON.stringify(XP.skills)))
         console.log(XP.offeredPerks)
@@ -139,7 +174,8 @@ class Player {
             healthChange += (Player.nourishment + nourishmentChange)
         }
 
-        let exertionChange = Player.exertion*-1
+        let fatigueChange = -10
+        fatigueChange = Math.max(Player.fatigue*-1,fatigueChange)
 
         if((Player.health+healthChange) > Player.healthMax){
             healthChange = Player.healthMax - Player.health;
@@ -156,7 +192,7 @@ class Player {
         return{
             healthChange:healthChange,
             nourishmentChange:nourishmentChange,
-            exertionChange:exertionChange
+            fatigueChange:fatigueChange
         }
     }
 
@@ -170,13 +206,11 @@ class Player {
         }
 
         let luck = Math.floor(Math.random()*2)
-        Player.changeLuck(luck);
+        //Player.changeLuck(luck);
 
         Player.changeNourishment(-3);
-
-        Player.setExertion(0);
-
         
+        Player.changeFatigue(Player.fatigueMax*-1);
 
         XP.checkLevelUp();
 
@@ -191,27 +225,46 @@ class Player {
         if(Player.hasAspect('vigorAspect')){
             stamina += Player.hasAspect('vigorAspect')
         }
-        if(Player.exertion){
-            stamina--;
+        if(Player.fatigueLevel){
+            //stamina--;
         }
         Player.changeStamina(stamina);
     }
 
+    static fillStamina(){
+        Player.stamina = Player.modifiedMaxStamina;
+    }
+
     static checkHungerModifiers(){
+        let scale = GameMaster.scale
+        if(scale=='town'){return false}
         let stamina = 0;
         let random = Math.random()*100;
+        //effects are twice as likely at world scale
+        if(scale=='world')(random/2)
         //gaining uses percentage, losing uses flat value.
         let gainChance = (Player.hungerPercent - 80)/2;
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){
-            if(Player.stamina < Player.staminaMax){
+            if(scale=='world'){
+                if(Player.stamina < Player.modifiedMaxStamina){
+                    Player.changeFatigue(-2)
+                    Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to lose fatigue each turn.");
+                }
+            }else{
                 Log.addMessage('Your full stomach lends you strength.', 'pos',false,"You have a chance to gain stamina each turn.");
                 stamina++;
-            }
+                
+            }   
         }else if(random < loseChance){
-            stamina--;
-            Log.addMessage('Your hunger weakens you...', 'danger',false,"You have a chance to lose stamina each turn. Refill your hunger bar to end this effect.");
+            if(scale=='world'){
+                Player.changeFatigue(1)
+                Log.addMessage('Your hunger weakens you...', 'danger',false,"You have a chance to gain fatigue each turn. Refill your hunger bar to end this effect.");
+            }else{
+                Log.addMessage('Your hunger weakens you...', 'danger',false,"You have a chance to lose stamina each turn. Refill your hunger bar to end this effect.");
+                stamina--;
+            }
         }
 
         Player.changeStamina(stamina);
@@ -223,14 +276,27 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Player.stamina+n;
         Player.stamina = Math.max(0,Player.stamina)
-        Player.stamina = Math.min(Player.staminaMax,Player.stamina);
+        Player.stamina = Math.min(Player.modifiedMaxStamina,Player.stamina);
 
-        let hungerChance = (Player.stamina - oldStamina)*2;
-        Player.checkChangeNourishment(hungerChance);
+        if(GameMaster.scale=='dungeon'){
+            let hungerChance = (Player.stamina - oldStamina)*2;
+            Player.checkChangeNourishment(hungerChance);
+            let fatigueChance = (oldStamina - Player.stamina)/2;
+            Player.checkChangeDelayedFatigue(fatigueChance);
+        }
 
         if(n < 0){
             XP.gainStaminaXP(n*-1);
         }
+    }
+
+    static changeFatigue(n){
+        Player.fatigue = Player.fatigue+n;
+        if(Player.fatigue>Player.fatigueMax*2){
+            Player.changeHealth(Player.fatigueMax*2-Player.fatigue);
+        }
+        Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
+        Player.fatigue = Math.max(0,Player.fatigue)
     }
 
     static changeHealth(n){
@@ -242,6 +308,9 @@ class Player {
             XP.gainHPXP(n*-1);
             Display.flash($('body'),'deepRed');
             Display.flash($('#health-level'),'lightRed');
+            if(GameMaster.scale=='dungeon'){
+                Player.checkChangeDelayedFatigue(n*-10)
+            }
         }
     }
 
@@ -256,15 +325,10 @@ class Player {
         }
     }
 
-    static changeExertion(n){
-        n += Player.exertion;
-        Player.setExertion(n);    
-    }
-
-    static setExertion(n){
-        Player.exertion = n;
-        Player.exertion = Math.min(Player.exertion, 2);
-        Player.exertion = Math.max(Player.exertion, 0);
+    static setFatigue(n){
+        Player.fatigue = n;
+        Player.fatigue = Math.min(Player.fatigue, Player.fatigueMax*2);
+        Player.fatigue = Math.max(Player.fatigue, 0);
     }
 
     static changeNourishment(n){
@@ -300,6 +364,10 @@ class Player {
     }
 
     static checkChangeNourishment(hungerChance = 0.25){
+        if(GameMaster.scale == 'world'){
+            //hungerChance *= Player.fatigue;
+            hungerChance += 20
+        }
         let random = Math.random()*100;
         hungerChance *= (Player.hungerPercent/150)+.66
         if(random < hungerChance){
@@ -307,20 +375,40 @@ class Player {
         }
     }
 
+    static checkChangeDelayedFatigue(fatigueChance = 0.25){
+        let random = Math.random()*100;
+        console.log(fatigueChance)
+        console.log(random)
+        console.log('checking')
+        if(random < fatigueChance){
+            console.log('added')
+            Player.delayedFatigue++;
+        }
+    }
+
+    static applyDelayedFatigue(){
+        if(!Player.delayedFatigue){return false}
+        Player.changeFatigue(Player.delayedFatigue)
+        Log.addMessage("As your adrenaline wears off, your fatigue catches up with you. Your activities in the dungeon have gained you "+Player.delayedFatigue+" fatigue.",'danger',false,"Taking damage and spending stamina in dungeons has a chance to increase your fatigue. This fatigue doesn't set in until you leave the dungeon.")
+        Player.delayedFatigue = 0;
+
+    }
+
     static reset(){
         Player.staminaMax = 10;
-        Player.stamina = Player.staminaMax;
+        Player.stamina = Player.modifiedMaxStamina;
 
         Player.healthMax = 10;
         Player.health = Player.healthMax;
     }
 
+    //as a rule, postPlayerAction DOES NOT occur from any of these calls. Handle elsewhere.
     static useItem(item){
         if(!item){
             return false;
         }
 
-        let dungeonMode = GameMaster.dungeonMode;
+        let dungeonMode = Board.getScale()=='dungeon';
         
         if(dungeonMode && item.weapon && Player.equipped && Player.equipped.slot == item.slot){
            return Player.unequipWeapon();
@@ -332,8 +420,8 @@ class Player {
             return Player.eatItem(item);
         }else if (item.potable){
             return Player.drinkItem(item);
-        }else if(!dungeonMode){
-            let result = Shop.sellItem(item.slot);
+        }else if(Inventory.selectedContainer.shop == true){
+            let result = ShopManager.sellItem(item.slot,false);
             Inventory.displayInventory();
             return result;
         }else if(!Player.equipped){
@@ -361,7 +449,7 @@ class Player {
     }
 
     static equipWeapon(weapon, verbose=true){
-        if(Player.equipped || !GameMaster.dungeonMode){
+        if(Player.equipped || Board.getScale()!='dungeon'){
             return false;
         }
         Sound.playDrawWeapon();
@@ -506,6 +594,9 @@ class Player {
         }
         if(item.light){
             Player.addFuel(item,false);
+        }
+        if(item.fatigue){
+            Player.changeFatigue(item.fatigue);
         }
         if(item.message){
             Log.addMessage(item.message,false,false,item.tip);
@@ -853,18 +944,25 @@ class Player {
                 return Player.nourishmentMax;
             case "bulk capacity":
                 return Player.maxBulk;
+            case "fatigue limit":
+                return Player.fatigueMax;
             default:
                 return 0;
         }
     }
 
     static getEncumbranceLevel(){
-        let level = Math.floor(Player.getBulk()/Player.maxBulk);
+        let maxBulk = Player.modifiedMaxBulk
+        if(Player.fatigueLevel > 1){
+            maxBulk = Math.floor(maxBulk/2)
+        }
+        let level = Math.floor(Player.getBulk()/maxBulk);
         level *= level;
         return level;
     }
 
     static changeGold(n){
+        if(!n){return false}
         Player.gold += n;
         Player.gold = Math.max(Player.gold,0)
         Display.flash($('.gold-div'),'goldDivs')
@@ -920,10 +1018,20 @@ class Player {
                     element.append(perkDiv) 
                 }
             })
-            
+            Player.getPlayerStatsDiv();
          
         })
+    }
 
+    static getPlayerStatsDiv(){
+        let element = $('#character-stats-div')
+        element.html('');
+        let stats = ['hp','stamina','luck','hunger','bulk capacity','fatigue limit']
+        stats.forEach((statName)=>{
+            let statDiv = $('<div>').addClass('stat-div').attr('id',statName.split(' ')[0]+'-stat-div')
+            statDiv.text(Player.getMaxResource(statName)+' ' +statName)
+            element.append(statDiv)
+        })
     }
 
     static itemIsEquipped(item){
@@ -948,6 +1056,11 @@ class Player {
             Player.changeStamina(3*n);
             Player.changeNourishment(-1*n);
         }
+    }
+
+    static triggerFatigue(){
+        Player.changeFatigue(1);
+
     }
 
 }

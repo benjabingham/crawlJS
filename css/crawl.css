@@ -287,6 +287,14 @@ h1, h2, h3{
     cursor: pointer;
 }
 
+.bold{
+    font-weight: bold;
+}
+
+.capitalize{
+    text-transform: capitalize;
+}
+
 #layout-buttons{
     display:flex;
     justify-content:center;

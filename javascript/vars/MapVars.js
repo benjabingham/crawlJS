@@ -4,46 +4,74 @@ let mapVars = {
         symbol:'☉',
         type:'town',
         description:'',
-        shop:{
-            weaponTiers:[0,2,3,4],
-            carriedMaterials:['wood','copper','bronze','iron','steel'],
-            fuelSlots:2,
-            potionSlots:2
-        },
-        tavern:{
-            fullMeal:10,
-            morsel:2,
-            rest:0
-        },
-        destinations:{
-            north:{
-                name:"Abandoned Village",
-                symbol:'⌂',
-                type:'dungeon',
-                description:'',
-            },
-            south:{
-                name:"Rat Nest",
-                symbol:'Π',
-                type:'dungeon',
-                description:'',
-            },
-            east:{
-                name:"Goblin Keep",
-                symbol:'Π',
-                type:'dungeon',
-                description:'',
-            },
-            west:{
-                name:"Dark Forest",
-                symbol:'❧',
-                type:'dungeon',
-                description:'',
-                destinations:{
-                    west:"Gravehold"
+        shops:{
+            shop:{
+                weaponTiers:[0,2,3,4],
+                carriedMaterials:['wood','copper','bronze','iron','steel'],
+                fuelSlots:2,
+                potionSlots:2,
+                restockChances:{
+                    weaponTiers:{
+                        0:0.3,
+                        2:0.2,
+                        3:0.13,
+                        4:0.8
+                    },
+                    fuel:0.4,
+                    potion:0.3
                 }
             },
-        }
+            tavern:{
+                specialItems:[
+                    {
+                        type:'fullMeal',
+                        price:10,
+                        name:"Proper Meal",
+                        description:"Fully refill your hunger bar.",
+                        flavorText:"\"You look hungry. How about something that'll really fill you up?\""
+                    },
+                    {
+                        type:'morsel',
+                        price:2,
+                        name:"Morsel",
+                        description:"Refills your hunger by 1 point.",
+                        flavorText:"It's not much, but it's something to put in your stomach."
+                    },
+                    {
+                        type:'rest',
+                        price:0,
+                        name:"rest",
+                        description:"End the day.",
+                        descriptionKeyword:"End the day",
+                        flavorText:"In such a cruel world, at least rest is free."
+                    },
+                    {
+                        type:'gamble',
+                        price:5,
+                        name:'carouse',
+                        message:"You're pretty sure you had a good time...",
+                        description:"End the day.",
+                        descriptionKeyword:"End the day",
+                        flavorText:"Who knows what the night may hold.",
+                        effects:{
+                            luck:{
+                                min:0,max:2
+                            },
+                            hunger:{
+                                min:-1,max:-3
+                            },
+                            fatigue:{
+                                min:-10,max:3
+                            },
+                            rest:true
+                        }
+                    }
+                ]
+            }
+        },
+        //for back compatibility .... TODO remove.
+        
+        
     },
 }
 

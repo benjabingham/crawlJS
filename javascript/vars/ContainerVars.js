@@ -979,6 +979,27 @@ let containerVars = {
         bloodColor:{r:173,g:26,b:202},
         color:'darkPurple'
     },
+    house:{
+        name:"house",
+        symbol:"⌂",
+        behavior:"",
+        hitDice:1,
+        inventorySlots: 0,
+        isContainer: true,
+        lightStrength:2,
+        color:'brown'
+    },
+    lamp:{
+        name:"lamp",
+        symbol:"⍡",
+        behavior:"",
+        hitDice:2,
+        inventorySlots: 0,
+        behaviorInfo:{sturdy:50},
+        isContainer: true,
+        lightStrength:2,
+        color:'woodBrown'
+    },
     t0Treasure:{
         name:"t0 treasure",
         symbol:"⍞",

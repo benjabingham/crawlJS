@@ -76,10 +76,13 @@ class Controls{
         Controls.entityNameInput();
         Controls.symbolInput();
         Controls.colorInput();
+        Controls.lightStrengthInput();
+        Controls.locationIdInput();
         Controls.wallTypeDropdown();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
+        Controls.shopInputs();
 
         Controls.floorTypeSelect();
     }
@@ -164,6 +167,13 @@ class Controls{
             }else{
                 $('#wall-options').hide();
             }
+
+            if(entityType=='location'){
+                $('#location-options').show()
+                $('#entity-options-cosmetic').show();
+            }else{
+                $('#location-options').hide()
+            }
              
             Grid.updateGrid();
             Save.saveSnapshot();
@@ -208,6 +218,7 @@ class Controls{
                 $('#entity-options-cosmetic').hide();
             }
             Grid.updateGrid();
+            Controls.showHideShopOptions();
             Save.saveSnapshot();
         })
     }
@@ -235,6 +246,24 @@ class Controls{
             EntityGroupManager.setColor(input.val());
             Controls.updateColorPreview();
             Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+    }
+
+    static lightStrengthInput(){
+        let input = $('#light-strength-input');
+        input.on('change',function(){
+            EntityGroupManager.setLightStrength(input.val());
+            Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+    }
+
+    static locationIdInput(){
+        let input = $('#location-id-input');
+        input.on('change',function(){
+            EntityGroupManager.setEntityLocationId(input.val());
+            console.log(input.val())
             Save.saveSnapshot();
         })
     }
@@ -286,12 +315,51 @@ class Controls{
             Save.saveSnapshot();
         })
     }
+
+    static shopInputs(){
+        Controls.isShopInput();
+        Controls.shopIdInput();
+    }
+
+    static shopIdInput(){
+        let input = $('#shop-id-input');
+        input.on('change',function(){
+            EntityGroupManager.setShopId(input.val());
+            console.log(EntityGroupManager.currentShopId)
+            Save.saveSnapshot();
+        })
+    }
+    static isShopInput(){
+        let input = $('#shop-checkbox');
+        input.on('change',function(){
+            let isShop = input.is(':checked')
+            EntityGroupManager.setShop(isShop);
+            Controls.showHideShopOptions();
+            Save.saveSnapshot();
+        })
+    }
+
+    static showHideShopOptions(){
+        let isShop = EntityGroupManager.currentShop
+        console.log(EntityGroupManager.getCurrentGroup())
+        $('#shop-id-input').val(EntityGroupManager.currentShopId)
+        console.log(isShop)
+        $('#shop-checkbox').prop('checked', isShop);
+        if(isShop){
+            $('#shop-info-div').show()
+        }else{
+            $('#shop-info-div').hide()
+            EntityGroupManager.setShopId('')
+        }
+        console.log(EntityGroupManager.currentShopId)
+    }
     
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
         $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
         $('#entity-color-input').val(EntityGroupManager.currentColor);
         Controls.updateColorPreview();
+        $('#light-strength-input').val(EntityGroupManager.currentLightStrength);
         $('#entity-options-cosmetic').show();
     }
 
@@ -318,6 +386,7 @@ class Controls{
         $('#group-name-div').show();
         $('#entity-type-div').show();
         $('#entity-type-dropdown').val('');
+        $('#location-id-input').val('');
         $('#group-name-input').val(group.groupName)
         Save.saveSnapshot();
     }
@@ -343,6 +412,17 @@ class Controls{
             Controls.showWallOptions();
         }else{
             $('#wall-options').hide();
+        }
+        Controls.showHideShopOptions();
+
+        if(group.entityType == 'location'){
+            $('#location-options').show();
+            $('#location-id-input').val(EntityGroupManager.currentLocationId)
+            console.log(EntityGroupManager.currentGroupName)
+            console.log(EntityGroupManager.currentLocationId)
+            Controls.showCosmeticOptions();
+        }else{
+            $('#location-options').hide();
         }
     
     }

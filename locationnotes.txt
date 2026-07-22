@@ -1,0 +1,86 @@
+7/14/26 - Travel.json has tools to place player in correct spot in world map after leaving dungeon.
+
+todo - 
+
+qol / restoring features
+    - restore (and fix) rest hint
+
+new features
+    - shop screen
+        - utulize map space when in town shop.
+            - dialogue?
+                - dialogue window to talk to shop keeper.
+                - learn lore and map secrets
+                - get quests
+            - image?
+                - art of shopkeeper
+    - npcs
+        - work same as shop dialogue, but without stuff to buy
+    - monsters remember you for a day
+
+figure out new fatigue mechanic - tie to tiles moved on world map
+
+some musing -
+
+Track monsters that see player- mark them as 'alerted', and mark the day they were alerted.
+Monsters always spawn the day they were alerted... But perhaps give them a few turns (up to 10) of random movement?
+And stop them from moving too close to a player spawn point.
+
+Monsters that saw player leave map will also remember where they were at that time, and use those coords
+instead of normal spawn coords for rest of day...
+
+Craftsman - repairs worn weapons of certain materials (flint,wood,bone,etc.)
+reasonably cheap - costs weapon value
+
+other towns might have "metalsmith", which will do the same but for metal weapons
+
+some metalsmiths can also reform metal weapons?
+
+⍝
+⍉
+⍾
+⎆
+⎉
+⎊
+⏣
+⏾
+⏿
+▩
+▣
+△
+▲
+▼
+▽
+◁
+◉
+◈
+◎
+◯
+★
+☆
+☉
+☊
+☋
+☖
+☗
+☙
+☥
+☼
+♖
+⚐
+⚑
+⚘
+⚝
+⛨
+⛯
+✠
+
+❦
+⟑
+⩍
+⩎
+⩓
+⯕
+⯖
+ⴵ
+⸙

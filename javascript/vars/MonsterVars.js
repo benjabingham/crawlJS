@@ -41,6 +41,48 @@ let monsterVars = {
         color:'darkGreen',
         types:{humanoid:true, goblinoid:true}
     },
+    hobGoblin:{
+        name:"Hobgoblin",
+        symbol:"Hg",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:25,
+            enrage:20,
+            daze:20,
+            beat:15
+        },
+        hitDice:2,
+        damage:6,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 5
+            },
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:1,
+                preferredRange:{min:1,max:15},
+            },
+            treasure:{
+                chance:15,
+                tier:0,
+                preferredRange:{min:1,max:5}
+            },
+            gold:{
+                chance:20,
+                amount:5
+            },
+            food:{
+                chance:15,
+                tier:1,
+            }
+        },
+        color:'darkYellow',
+        types:{humanoid:true, goblinoid:true}
+    },
     goblinBoss:{
         name:"goblin boss",
         symbol:"Gb",

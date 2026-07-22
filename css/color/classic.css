@@ -59,6 +59,8 @@ q
     --healthBarText:var(--darkRed);
     --staminaBar:var(--yellow);
     --staminaBarText:var(--darkYellow);
+    --fatigueBar:var(--darkPurple);
+    --fatigueBarText:var(--lightPurple);
     --luckBar:var(--green);
     --luckBarText:var(--darkGreen);
     --hungerBar:var(--orange);
@@ -81,6 +83,7 @@ q
     --deepRed:rgb(77, 1, 1);
     --muteRed:rgb(190, 38, 0);
     --lightRed:rgb(243, 152, 129);
+    --lightPurple:rgb(220, 177, 248);
     --brightPurple:rgb(153, 0, 255);
     --darkPurple:rgb(90, 0, 150);
     --lightBlue:rgb(86, 122, 202);

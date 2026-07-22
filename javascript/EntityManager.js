@@ -16,6 +16,8 @@ class EntityManager{
     static currentMap;
 
     static playerEntity;
+
+    static playerSpawnPositions = [];
     
     static entityManagerInit(){
         Board.boardInit();
@@ -24,6 +26,8 @@ class EntityManager{
     static wipeEntities(){
         EntityManager.entities = {};
         EntityManager.entityCounter = 0;
+        EntityManager.playerEntity = false;
+        EntityManager.playerSpawnPositions = [];
         History.reset();
     }
 
@@ -101,8 +105,9 @@ class EntityManager{
         return entity.move(x,y);
     }
 
-    static checkPlayerExertion(){
-        if(Player.exertion > 1){
+    //NOT IN USE
+    static checkPlayerfatigue(){
+        if(Player.fatigueLevel > 1){
             if(Player.stamina){
                 Player.changeStamina(-1);
             }else{
@@ -147,6 +152,7 @@ class EntityManager{
     //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
     //return falso if encumbered, true if not
     static checkEncumberedV2(){
+        if(GameMaster.scale=='town'){return true}
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
             let diff = Player.getBulk()-Player.maxBulk;
@@ -157,11 +163,19 @@ class EntityManager{
                 let chance = 3;
                 if(i==0){chance += 2}
                 if(Random.roll(1,100) <= chance){
-                    Player.changeStamina(-1)
-                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     Display.flash($('#player-inventory'),'inventory')
                     XP.gainBulkXP(nChecks)
-                    return false;
+                    if(GameMaster.scale=='dungeon'){
+                        Player.changeStamina(-1)
+                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                        return false;
+                    }
+                    if(GameMaster.scale=='world'){
+                        Player.changeFatigue(1)
+                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. You have a chance to gain an additional point of Fatigue earch turn.')
+                        return true
+                    }
+                    
                 }
             }
         }
@@ -176,9 +190,10 @@ class EntityManager{
     }
     
     static movePlayer(x,y){
-        if(!EntityManager.checkPlayerExertion()){
+        /*
+        if(!EntityManager.checkPlayerfatigue()){
             return false;
-        }
+        }*/
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
@@ -369,8 +384,16 @@ class EntityManager{
             spawnChance = groupInfo.spawnChance
         }
         let spawn = (random < spawnChance || typeof spawnChance == 'undefined');
+        //if there's already a player entity, don't initialize another one.
+        //this will happen because different possible spawn locations are encoded as multiple player entities.
+        //GameMaster will teleport player to correct location.
         if(groupInfo.entityType == "player"){
-            EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            EntityManager.playerSpawnPositions.push({x:x,y:y})
+            if(!EntityManager.playerEntity){
+                EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            }else{
+                return false;
+            }
         }else if(groupInfo.entityType == "monster"){
             if(entitySave.alive && spawn){
                 entityObj = new Monster(groupInfo.key,x,y,groupInfo);
@@ -385,6 +408,8 @@ class EntityManager{
             if(entitySave.alive){
                 entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
             }
+        }else if(groupInfo.entityType == 'location'){
+            entityObj = new Location(x,y,groupInfo) 
         }
         if(entityObj){
             entityObj.index = entitySave.index;
@@ -410,6 +435,11 @@ class EntityManager{
             }
         }
 
+        if(entityObj.lightStrength){
+            Board.lightSourceIDs.push(entityObj.id);
+        }
+
+        //use for stuff like the Tree of Greed
         if(!entityObj.checkSpawnConditions()){
             console.log('obliterating')
             entityObj.obliterated = true;

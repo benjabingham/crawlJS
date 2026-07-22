@@ -34,11 +34,14 @@ class Log{
         }
     }
 
-    static addMessage(message, messageClass = false, keyword = false, tipText = false, highlightID = -1){
-        if(!Log.messages[Log.turnCounter]){
-            Log.messages[Log.turnCounter] = [];
+    //turnOffset is used to print a message into a past or future turn.... Currently only used for rewind.
+    static addMessage(message, messageClass = false, keyword = false, tipText = false, highlightID = -1,turnOffset = 0){
+        let turn = Log.turnCounter+turnOffset;
+        console.log(message)
+        if(!Log.messages[turn]){
+            Log.messages[turn] = [];
         }
-        Log.messages[Log.turnCounter].unshift({
+        Log.messages[turn].unshift({
             message:message,
             fresh:true,
             messageClass: messageClass,
@@ -106,7 +109,6 @@ class Log{
     }
 
     static printTurn(turn){   
-        console.log(turn);     
         let messages = Log.messages[turn];
         $('.message-fresh').removeClass('message-fresh')
         $('.temp-turn-counter').remove();
@@ -114,7 +116,7 @@ class Log{
             if(messages.printed){
                 return false;
             }
-            let turnMessage = $('<div>').attr('id','turn-'+turn+'-message').addClass('turn-message')
+            let turnMessage = $('<div>').addClass('turn-'+turn+'-message turn-message')
             $('#log').prepend(turnMessage);
             messages.forEach((message) => {
                 let keyword = false;
@@ -213,9 +215,15 @@ class Log{
     }
 
     static rewind(){
+        console.log(Log.turnCounter)
         Log.messages[Log.turnCounter] = false;
-        $('#turn-'+Log.turnCounter+'-message').remove();
-        $('#turn-'+Log.turnCounter-1+'-message').addClass('message-fresh');
+        $('.turn-'+Log.turnCounter+'-message').remove();
+        $('.turn-'+(Log.turnCounter-1)+'-message').remove();
+        Log.messages[Log.turnCounter-1].printed = false
+        Log.messages[Log.turnCounter-1].forEach((message)=>{
+            message.fresh = true
+        })
+        Log.printTurn(Log.turnCounter-1)        
     }
 
     static peek(){

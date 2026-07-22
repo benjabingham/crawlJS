@@ -54,7 +54,8 @@ keywordVars = {
     
         vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait."},
         hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina."},
-        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."}
+        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing."},
+        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use."}
     },
 
     symbols:{
@@ -62,6 +63,7 @@ keywordVars = {
         vigorAspect:{name: "Aspect of Vigor",color:"orange",symbol:'♃'},
         hungerAspect:{name: "Aspect of Hunger",color:"green",symbol:'♆'},
         furyAspect:{name: "Aspect of Fury",color:"red",symbol:'♅'},
+        lucky:{name: "lucky",color:"green",symbol:'☘'},
         worn:{name:"degraded",symbol:'⤓'},
         proficient:{name:"proficient",symbol:'+'},
     }

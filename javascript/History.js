@@ -84,7 +84,11 @@ class History{
 
     static rewind(){
         console.log('rewind');
-        let luck = Player.luck-1;
+        let luckCost = 1;
+        if(Player.equipped && Player.equipped.lucky && Random.roll(0,1)){
+            luckCost = 0
+        }
+        let luck = Player.luck-luckCost;
         History.snapshots.pop();
         let snapshot = History.popSnapshot();
         EntityManager.loadSnapshot(snapshot);
@@ -101,13 +105,21 @@ class History{
             playerLuck:Player.luck
         })
         //use this instead of player.changeluck because may have gained luck on the frame thats being undone, which would otherwise allow infinite rewinding
-        Player.luck = Math.min(luck,Player.luck-1);
+        Player.luck = Math.min(luck,Player.luck-luckCost);
         XP.gainLuckXP();
+        Log.turnCounter--;
+        Log.messages[Log.turnCounter] = false;
+        Log.addMessage("You used Luck.","pos",false,false,-1,-1)
         if (Player.luck < 0){
-            Log.addMessage("You've angered fate.", 'urgent',false,"You used luck you didn't have. Maximum luck decreased.")
+            Log.addMessage("You've angered fate.", 'urgent',false,"You used luck you didn't have. Maximum luck decreased.",-1,-1)
             Player.luck = 0;
             Player.luckMax -= 3;
         }
+        if(!luckCost){
+            Log.addMessage("Luck is with you!","win",false,"The item you are holding is lucky, and has refunded your luck!",-1,-1)
+        }
+
+        
         Player.luck = Math.max(0,Player.luck);
     }
 }

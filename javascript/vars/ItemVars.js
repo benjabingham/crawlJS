@@ -1933,6 +1933,12 @@ let itemVars = {
             flatValue:20,
             enchantment:true,
             fury:true
+        },
+        lucky:{
+            name:"lucky",
+            flatValue:5,
+            enchantment:true,
+            lucky:true
         }
     }
 }

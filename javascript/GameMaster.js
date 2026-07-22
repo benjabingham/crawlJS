@@ -22,7 +22,6 @@ class GameMaster{
     static quickStart(){
         GameMaster.startTime = new Date().getTime();
         let starterWeapon = LootManager.getStarterWeapon();
-        LootManager.applyModifier(starterWeapon,itemVars.enchantments.vigor)
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
        
@@ -220,8 +219,7 @@ class GameMaster{
         History.rewind();
         Sound.playRewind();
         EntityManager.skipBehaviors = true;
-        Log.turnCounter--;
-        Log.messages[log.turnCounter] = false;
+        
         GameMaster.postPlayerAction();
         
 
@@ -650,10 +648,10 @@ class GameMaster{
         Board.updateSeenTiles();
         if(!EntityManager.skipBehaviors){
             Log.turnCounter++;
+            Log.printLog();  
         }else{
             Log.rewind();
         }
-        Log.printLog();  
         
         Log.clearNotices();
         EntityManager.skipBehaviors = false;

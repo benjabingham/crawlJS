@@ -605,12 +605,17 @@ class Player {
         let littleSips = Player.perks.potions.littleSips
         if(littleSips){
             let consumeChance = (Math.pow(littleSips.amount,littleSips.val))
+            if(item.tinySips){
+                consumeChance += item.tinySips * 0.15;
+            }
             consumePotion = Math.random() < consumeChance;
         }
         if(consumePotion){
             Player.consume(slot);
         }else{
             Log.addMessage("Such a tiny sip!",'pos',false,"You took such a tiny sip that the potion was not consumed.")
+            if(!item.tinySips){item.tinySips = 0}
+            item.tinySips++;
         }
         XP.gainPotionsXP();
         Display.fillBars();

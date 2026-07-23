@@ -25,10 +25,7 @@ class GameMaster{
         //LootManager.applyModifier(starterWeapon,itemVars.enchantments.blessed)
         Player.pickUpItem(starterWeapon);
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
-                Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
 
-                        Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
-        Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
 
        
         /*

@@ -1667,12 +1667,14 @@ class Monster extends Entity{
             (targetItem.isContainer && this.hasDetectionLos(target))
         ){
             this.attack(targetItem);
-        }
+        }else{
+            if(!this.move(x, y)){
+                this.move(0, y);
+                this.move(x, 0); 
+            }
+        }   
     
-        if(!this.move(x, y)){
-            this.move(0, y);
-            this.move(x, 0); 
-        }
+        
 
     }
 
@@ -1723,13 +1725,15 @@ class Monster extends Entity{
         
         ){
             this.attack(targetItem);
+        }else{
+            if(!this.move(x, y)){
+                let message = [target,x,y,'failed']
+                this.move(0, y);
+                this.move(x, 0); 
+            }
         }
     
-        if(!this.move(x, y)){
-            let message = [target,x,y,'failed']
-            this.move(0, y);
-            this.move(x, 0); 
-        }
+        
     }
 
     //check if a monster can see a target for player-detection purposes
@@ -1826,7 +1830,16 @@ class Monster extends Entity{
         ){
             Sound.playMonsterHit(mortality);
             target.addMortality(mortality);
-            target.knock(this.id);
+
+            let sturdyChance = target.threshold;
+            sturdyChance -= mortality * 3;
+            if(target.behaviorInfo && target.behaviorInfo.sturdy){
+                sturdyChance += target.behaviorInfo.sturdy;
+            }
+            
+            if(sturdyChance < Random.roll(0,99)){
+                target.knock(this.id);
+            }
         }
 
     }

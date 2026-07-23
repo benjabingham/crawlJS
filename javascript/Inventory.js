@@ -583,7 +583,11 @@ class Inventory{
 
         //if full of quickslots, remove item in highest slot
         if(Player.inventory.items[Inventory.nQuickSlots-1] && Player.inventory.items[Inventory.nQuickSlots-1].quickSlot){
-            Player.inventory.items[Inventory.nQuickSlots-1].quickSlot = false;
+            let itemToSwap = Player.inventory.items[Inventory.nQuickSlots-1]
+            itemToSwap.quickSlot = false;
+            if(Player.equipped && Player.equipped.slot == itemToSwap.slot){
+                Player.unequipWeapon();
+            }
         }
         item.quickSlot = true;
         Player.inventoryCleanup()

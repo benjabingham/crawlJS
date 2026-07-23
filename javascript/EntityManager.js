@@ -584,6 +584,11 @@ class EntityManager{
             }
 
             entityObj.addStunTime(2);
+            let i = 0
+            while(entityObj.slow < Random.roll(0,99) && i <= 10){
+                entityObj.addStunTime(1)
+                i++;
+            }
             EntityManager.triggerEntityBehavior(entityObj)
         }
 

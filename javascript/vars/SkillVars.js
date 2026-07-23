@@ -102,7 +102,7 @@ let skillVars = {
             name:"concussive blows",
             key:"concussiveBlows",
             description:"Blunt weapons get bonus max stun equal to 30% of their max damage.",
-            amount:.3
+            amount:.35
         },
     ],
     long:[

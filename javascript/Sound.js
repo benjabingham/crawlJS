@@ -42,8 +42,8 @@ class Sound{
     
     static tracks = {
         ambient1:{
-            track: new Audio('audio/error.mp3'),
-        },/*
+            track: new Audio('audio/tracks/ambient_track_1.mp3'),
+        },
         ambient2:{
             track: new Audio('audio/tracks/ambient_track_2.mp3'),
             setting:['indoors'],
@@ -120,6 +120,7 @@ class Sound{
             audioTrack.addEventListener('ended', (e)=>{
                 Sound.playingTrack = false;
                 Sound.lastPlayedTrackName = trackName;
+                console.log(trackName + " ended")
                 setTimeout(()=>{
                     Sound.playRandomTrack();
                 },Random.roll(2,5)*100)
@@ -300,8 +301,15 @@ class Sound{
 
         let track = this.getAppropriateTrack()
         this.trackOnDeck = track;
+        console.log('setting timeout')
         setTimeout(()=>{
-            if(this.trackOnDeck && this.trackOnDeck.name == track.name){
+            console.log('timeout')
+            console.log({
+                track:track,
+                trackOnDeck:Sound.trackOnDeck
+            })
+            if(Sound.trackOnDeck && Sound.trackOnDeck.name == track.name){
+                console.log('playing')
                 this.playTrack(track)
                 this.trackOnDeck = false;
             }
@@ -373,11 +381,21 @@ class Sound{
         let vibe = mapTypes.vibe
         
         let appropriate = true;
+    
+        console.log(track.name)
 
-        //track scale must match map scale
-        if(track.scale && track.scale != scale){
-            return false;
+        //only one track scale must match
+        if(track.scale){
+            appropriate = false;
+            track.scale.forEach((trackScale)=>{
+                if(trackScale == scale){
+                    appropriate = true
+                }
+            })
         }
+
+        if(!appropriate){return false}
+
         //Each track setting (indoors/outdoors) must be true for map
         if(track.setting){
             track.setting.forEach((trackSetting)=>{

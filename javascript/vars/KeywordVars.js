@@ -47,7 +47,8 @@ keywordVars = {
 
         preserved:{name:'preserved',hintText:"This food item is less likely to be rotten."},
         perishable:{name:'perishable',hintText:"This food item is more likely to be rotten."},
-        rotten:{name:"rotten", hintText:"Eating this food item will decrease your hunger bar instead of raising it."},
+        rotten:{name:"rotten", hintText:"Eating this food item will deplete your hunger bar instead of replenishing it."},
+        dubious:{name:"dubious", hintText:"This food might be rotten. If it is, eating it will deplete your hunger bar instead of replenishing it."},
         treasure:{name:"treasure", hintText:"This item has value not for its purpose, but for its rarity."},
         fuel:{name:"fuel", hintText:"This item can be burned in your lantern, producing light."},
         food:{name:"food", hintText:"You can eat this."},

@@ -288,11 +288,11 @@ class LootManager{
         let food = JSON.parse(JSON.stringify(itemVars.food[foodKey]));
 
         if(food.preserved){rottenMultiplier /= 2}
-        if(food.perishable){rottenMultiplier *= 2}
+        if(food.perishable){rottenMultiplier *= 3}
         rottenMultiplier *= Math.random()+0.5
-        food.rottenMultiplier = rottenMultiplier;
-        if(Math.random() < rottenMultiplier * .2){
-            LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
+        food.rottenChance = rottenMultiplier * 0.2;
+        if(food.rottenChance >= 0.2){
+            LootManager.applyModifier(food,itemVars.foodModifiers.dubious)
         }
 
         food.tier = tier;
@@ -692,9 +692,9 @@ class LootManager{
         }
 
         if(item.food){
-            if(!item.rottenMultiplier || item.rottenMultiplier < 0.5){
+            if(!item.rottenChance || item.rottenChance < 0.1){
                 texts = texts.concat(itemVars.foodFlavorTexts.lowRotten);
-            }else if(item.rottenMultiplier < 2){
+            }else if(item.rottenChance < 0.4){
                 texts = texts.concat(itemVars.foodFlavorTexts.mediumRotten);
             }else{
                 texts = texts.concat(itemVars.foodFlavorTexts.highRotten);

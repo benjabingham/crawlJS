@@ -1374,8 +1374,8 @@ let itemVars = {
         },
     },
     food:{
-        hardboiledEgg:{
-            name:'hard boiled egg',
+        egg:{
+            name:'egg',
             usable: true,
             food:1,
             color:'bone',
@@ -1383,7 +1383,7 @@ let itemVars = {
             bulk:0.15,
             perishable:true,
 
-            possibleFlavorTexts:["Under certain conditions, an egg can remain safe to eat for decades... You aren't sure what those conditions are.","Egg.","Who farted?"]
+            possibleFlavorTexts:["Under certain conditions, an egg can remain safe to eat for decades... You aren't sure what those conditions are.","Egg.","Who farted?","Hard boiled.","Raw."]
         },
         nuts:{
             name:'nuts',
@@ -1570,6 +1570,11 @@ let itemVars = {
             rotten:true,
             name:"rotten",
             value:0.3
+        },
+        dubious:{
+            dubious:true,
+            name:"dubious",
+            value:0.5
         }
     },
     foodFlavorTexts:{

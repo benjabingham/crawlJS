@@ -222,59 +222,64 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = Math.random()*100;
-            let skip = 0;
-            if(entity.stunned){
-                skip+= entity.stunned;
-            }
-            let slow = 0;
-            if(entity.behaviorInfo){
-                slow += (random <= entity.slow);
-                skip += slow;
-            }
-            if(entity.wait){
-                //wait until is within screen AND has player los
-                if(!EntityManager.hasPlayerLos(entity)){
-                    skip++;
-                }else{
-                    entity.wait = false;
-                }
-            }else
-            
-            if(!entity.wait && entity.wakeupChance && !entity.awake){
-                if(Math.random()*100 < entity.wakeupChance){
-                    entity.awake = true;
-                }else{
-                    skip++
-                }
-            }
-            entity.checkPreMoveTriggers();
+            EntityManager.triggerEntityBehavior(entity)
+        }
+    }
 
-            //do this only if not stunned
-            if (!skip){
-                entity.parryable = false;
-                switch(entity.behavior){
-                    case "chase":
-                        entity.chaseNatural();
-                        break;
-                    case "chaseBinary":
-                        entity.chaseBinary();
-                    default:
-                }
-            }
-            
-            entity.checkPostMoveTriggers(skip, slow)
-            
-            entity.stunned = Math.max(entity.stunned-1, 0);
-            if (!entity.dead){ 
-                if(entity.stunned > 0){
-                    entity.tempSymbol = entity.symbol.toLowerCase();
-                }else{
-                    entity.tempSymbol = false;
-                }
+    static triggerEntityBehavior(entity){
+        let random = Math.random()*100;
+        let skip = 0;
+        if(entity.stunned){
+            skip+= entity.stunned;
+        }
+        let slow = 0;
+        if(entity.behaviorInfo){
+            slow += (random <= entity.slow);
+            console.log("SLOW: "+slow)
+            skip += slow;
+        }
+        if(entity.wait){
+            //wait until is within screen AND has player los
+            if(!EntityManager.hasPlayerLos(entity)){
+                skip++;
             }else{
-                //entity.tempSymbol = 'x';
+                entity.wait = false;
             }
+        }else
+        
+        if(!entity.wait && entity.wakeupChance && !entity.awake){
+            if(Math.random()*100 < entity.wakeupChance){
+                entity.awake = true;
+            }else{
+                skip++
+            }
+        }
+        entity.checkPreMoveTriggers();
+
+        //do this only if not stunned
+        if (!skip){
+            entity.parryable = false;
+            switch(entity.behavior){
+                case "chase":
+                    entity.chaseNatural();
+                    break;
+                case "chaseBinary":
+                    entity.chaseBinary();
+                default:
+            }
+        }
+        
+        entity.checkPostMoveTriggers(skip, slow)
+        
+        entity.stunned = Math.max(entity.stunned-1, 0);
+        if (!entity.dead){ 
+            if(entity.stunned > 0){
+                entity.tempSymbol = entity.symbol.toLowerCase();
+            }else{
+                entity.tempSymbol = false;
+            }
+        }else{
+            //entity.tempSymbol = 'x';
         }
     }
 
@@ -508,6 +513,7 @@ class EntityManager{
 
         //check if we should wait a turn... Use average slow value of spawned entities
         let keysToSpawn = spawner.containedEntities.slice(nSpawn*-1)
+
         if(Math.random()*100 < EntityManager.getAverageSlow(keysToSpawn)){
             if(!spawner.disturbed){
                 spawner.disturbed = 1;
@@ -566,20 +572,19 @@ class EntityManager{
                 //cant take more than half the items because inventory length updates as they are taken
                 //i like this
                 for(let j = 0; j < spawner.inventory.items.length; j++){
-                    if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
+                    if(entityObj.inventory.items.length < entityObj.inventorySlots){
                         let item = spawner.inventory.items.splice(j,1)[0];
                         entityObj.inventory.items.push(item);
                     }
                 }
             }
     
-            
-    
             if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
                 Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger', false, false, entityObj.id);
             }
 
-            
+            entityObj.addStunTime(2);
+            EntityManager.triggerEntityBehavior(entityObj)
         }
 
         if(spawner.disturbed){

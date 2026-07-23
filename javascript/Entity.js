@@ -847,13 +847,13 @@ class Entity{
         if(!this.spawnEntities){
             return false;
         }
-        console.log('disturbing');
         if(this.spawnEntities.disturbChance > Math.random()*100){
             if(!this.disturbed){
                 this.disturbed = 0;
             } 
             //console.log('DISTURBED');
             this.disturbed++;
+            this.slow /= 2;
         }
     }
 

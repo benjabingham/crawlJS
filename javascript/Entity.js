@@ -1667,14 +1667,14 @@ class Monster extends Entity{
             (targetItem.isContainer && this.hasDetectionLos(target))
         ){
             this.attack(targetItem);
-        }else{
-            if(!this.move(x, y)){
-                this.move(0, y);
-                this.move(x, 0); 
-            }
-        }   
+        }
     
-        
+        //try to move unless attacked player
+        if(!this.move(x, y) && !(targetItem && targetItem.id == 'player')){
+            let message = [target,x,y,'failed']
+            this.move(0, y);
+            this.move(x, 0); 
+        }
 
     }
 
@@ -1725,12 +1725,13 @@ class Monster extends Entity{
         
         ){
             this.attack(targetItem);
-        }else{
-            if(!this.move(x, y)){
-                let message = [target,x,y,'failed']
-                this.move(0, y);
-                this.move(x, 0); 
-            }
+        }
+
+        //try to move unless attacked player
+        if(!this.move(x, y) && !(targetItem && targetItem.id == 'player')){
+            let message = [target,x,y,'failed']
+            this.move(0, y);
+            this.move(x, 0); 
         }
     
         
@@ -1828,18 +1829,21 @@ class Monster extends Entity{
             (target.isContainer) &&
             !(target.isMonster && !target.dead)
         ){
-            Sound.playMonsterHit(mortality);
             target.addMortality(mortality);
+            if(!target.dead){
+                mortality = Math.floor(mortality/2)
+            }
+            Sound.playMonsterHit(mortality);
 
-            let sturdyChance = target.threshold;
-            sturdyChance -= mortality * 3;
+            let knockChance = mortality/target.threshold;
             if(target.behaviorInfo && target.behaviorInfo.sturdy){
-                sturdyChance += target.behaviorInfo.sturdy;
+                knockChance -= target.behaviorInfo.sturdy;
             }
             
-            if(sturdyChance < Random.roll(0,99)){
+            if(knockChance > Random.roll(0,99)){
                 target.knock(this.id);
             }
+
         }
 
     }

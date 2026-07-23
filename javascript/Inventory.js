@@ -132,7 +132,7 @@ class Inventory{
         }
 
         //equip/unequip/burn
-        if(!inShop){
+        if(GameMaster.scale == 'dungeon'){
             if(item.weapon && !Player.equipped){
                 buttons.equip = true;
             }

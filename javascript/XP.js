@@ -4,6 +4,7 @@ class XP{
         hp: {},
         stamina: {},
         luck: {},
+        fatigue:{},
         hunger: {},
         bulk:{},
         swords: {},
@@ -217,6 +218,15 @@ class XP{
         weightAmount *= 0.75;
         amount /= 5;
         this.gain('stamina',amount,weightAmount)
+    }
+
+    static gainFatigueXp(amount){
+        //multiply amount fatigue gained by current percentage of fatigue
+        let percent = Player.fatiguePercent;
+        let weightAmount = amount * percent;
+        weightAmount *= 0.15;
+        amount /= 2;
+        this.gain('fatigue',amount,weightAmount)
     }
 
     static gainBulkXP(amount = 1){
@@ -452,6 +462,9 @@ class XP{
                 break;
             case "bulk capacity":
                 Player.maxBulk += perk.amount;
+                break;
+            case "fatigue limit":
+                Player.fatigueMax += perk.amount;
                 break;
             default:
                 console.log('BAR '+perk.bar+' NOT RECOGNIZED')

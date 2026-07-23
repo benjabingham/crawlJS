@@ -64,6 +64,13 @@ let skillVars = {
             description:"Rotten food has no ill effect on you. Gain 1 luck whenever you eat rotten food."
         },
     ],
+    fatigue:[
+        {
+            type:"raiseBarMax",
+            bar:"fatigue limit",
+            amount:2
+        }
+    ],
     bulk:[
         {
             type:"raiseBarMax",

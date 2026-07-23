@@ -297,6 +297,10 @@ class Player {
         }
         Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
         Player.fatigue = Math.max(0,Player.fatigue)
+
+        if(n > 0){
+            XP.gainFatigueXp(n);
+        }
     }
 
     static changeHealth(n){

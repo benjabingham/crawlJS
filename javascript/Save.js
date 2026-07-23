@@ -252,7 +252,6 @@ class Save{
             fetch('./rooms/'+mapId+'.json')
             .then((response) => response.json())
             .then((json) => {
-                console.log(json);
                 Save.mapInit(json);
             })
         })

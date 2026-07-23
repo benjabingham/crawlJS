@@ -384,7 +384,6 @@ class Display{
     
     static fillBars(){
         let staminaPercent = Player.modifiedStaminaPercent;
-        console.log(staminaPercent)
         $('#stamina-level').css('width',staminaPercent*1.5+"px");
         $('#stamina-level').text(Player.stamina+"/"+Player.modifiedMaxStamina);
 

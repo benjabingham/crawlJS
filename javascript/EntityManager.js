@@ -235,7 +235,6 @@ class EntityManager{
         let slow = 0;
         if(entity.behaviorInfo){
             slow += (random <= entity.slow);
-            console.log("SLOW: "+slow)
             skip += slow;
         }
         if(entity.wait){

@@ -154,7 +154,6 @@ class Travel{
         roster.forEach((entity)=>{
             let entityInfo = entity.entityGroupInfo;
             if(entityInfo.entityType == 'location'){
-                console.log(entity)
                 if(!Travel.worldMaps[mapId][entityInfo.locationId]){
                     Travel.worldMaps[mapId][entityInfo.locationId] = {x:entity.x,y:entity.y,validExits:{}}
                 }

@@ -94,10 +94,6 @@ class Player {
     }
 
     static get modifiedStaminaPercent(){
-        console.log({
-            stamina:Player.stamina,
-            modifiedMax:Player.modifiedMaxStamina
-        })
         return Math.floor((Player.stamina/Player.modifiedMaxStamina)*100);
     }
 
@@ -381,9 +377,6 @@ class Player {
 
     static checkChangeDelayedFatigue(fatigueChance = 0.25){
         let random = Math.random()*100;
-        console.log(fatigueChance)
-        console.log(random)
-        console.log('checking')
         if(random < fatigueChance){
             console.log('added')
             Player.delayedFatigue++;

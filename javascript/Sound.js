@@ -41,9 +41,9 @@ class Sound{
     //setting - indoors/outdoors/unset
     
     static tracks = {
-        /*ambient1:{
-            track: new Audio('audio/tracks/ambient_track_1.mp3'),
-        },*/
+        ambient1:{
+            track: new Audio('audio/error.mp3'),
+        },/*
         ambient2:{
             track: new Audio('audio/tracks/ambient_track_2.mp3'),
             setting:['indoors'],

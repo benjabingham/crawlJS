@@ -41,10 +41,9 @@ class Sound{
     //setting - indoors/outdoors/unset
     
     static tracks = {
-        ambient1:{
+        /*ambient1:{
             track: new Audio('audio/tracks/ambient_track_1.mp3'),
-
-        },
+        },*/
         ambient2:{
             track: new Audio('audio/tracks/ambient_track_2.mp3'),
             setting:['indoors'],
@@ -72,6 +71,8 @@ class Sound{
     static playingTrack = false;
 
     static lastPlayedTrackName = false
+
+    static trackOnDeck = false;
 
     static soundInit(){
         //adjust volumes
@@ -298,7 +299,13 @@ class Sound{
         if(fading){waitms = 3000}
 
         let track = this.getAppropriateTrack()
-        setTimeout(()=>{this.playTrack(track)}, waitms)
+        this.trackOnDeck = track;
+        setTimeout(()=>{
+            if(this.trackOnDeck && this.trackOnDeck.name == track.name){
+                this.playTrack(track)
+                this.trackOnDeck = false;
+            }
+        }, waitms)
     }
 
 
@@ -310,7 +317,11 @@ class Sound{
         let lowerVolume = function(){
             let newVolume = track.track.volume - volume*0.02
             track.track.volume = Math.max(newVolume,0)
-            console.log(track.track.volume)
+            //trying to play a track again while it's fading out
+            if(Sound.playingTrack && Sound.playingTrack.name == track.name){
+                track.track.volume = volume;
+                return false;
+            }
             if(track.track.volume > 0){
                 setTimeout(lowerVolume,100)
             }else{

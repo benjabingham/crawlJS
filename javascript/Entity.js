@@ -178,11 +178,11 @@ class Entity{
                 Sound.playMove();
             }
             return true;
-        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && PlayerEntity.prototype.isPrototypeOf(this)){
+        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && isPlayer){
             this.lootContainer(Board.entityAt(x,y));
             //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
-        }else if(Board.entityAt(x,y) && Location.prototype.isPrototypeOf(Board.entityAt(x,y)) && PlayerEntity.prototype.isPrototypeOf(this)){
+        }else if(Board.entityAt(x,y) && Location.prototype.isPrototypeOf(Board.entityAt(x,y)) && isPlayer){
             Board.entityAt(x,y).enter()
             return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
@@ -1662,8 +1662,10 @@ class Monster extends Entity{
         let targetY = this.y+y
         let targetItem = Board.entityAt(targetX, targetY);
         
-
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || 
+            (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) || 
+            (targetItem.isContainer && this.hasDetectionLos(target))
+        ){
             this.attack(targetItem);
         }
     
@@ -1715,7 +1717,11 @@ class Monster extends Entity{
         let targetItem = Board.entityAt(targetX, targetY);
         
 
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible ||
+            (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) ||
+            (targetItem.isContainer && this.hasDetectionLos(target))
+        
+        ){
             this.attack(targetItem);
         }
     
@@ -1790,8 +1796,8 @@ class Monster extends Entity{
 
         let damage = this.damage;
         let mortality = Random.roll(0,damage);
-        Sound.playMonsterHit(mortality);
         if (target.id == 'player'){
+            Sound.playMonsterHit(mortality);
             EntityManager.transmitMessage(this.name+" attacks you!", 'danger', false, false, this.id);
             if(mortality == 0){
                 if(Display.parryInRange(this.x,this.y)){
@@ -1810,10 +1816,15 @@ class Monster extends Entity{
                 }
             }
         }else if(target.isWall && target.destructible){
+            Sound.playMonsterHit(mortality);
             EntityManager.addMortality(target.id, mortality);
         }
 
-        if(target.dead){
+        if(
+            (target.isContainer) &&
+            !(target.isMonster && !target.dead)
+        ){
+            Sound.playMonsterHit(mortality);
             target.addMortality(mortality);
             target.knock(this.id);
         }

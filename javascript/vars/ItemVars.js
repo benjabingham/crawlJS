@@ -1631,7 +1631,7 @@ let itemVars = {
             name:'potion of fatigue',
             usable: true,
             potable: true,
-            color: 'orange',
+            color: 'purple',
             fatigue: 5,
             value: 3,
             negative:true,

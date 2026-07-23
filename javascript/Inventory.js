@@ -281,7 +281,7 @@ class Inventory{
         }
 
         if(item.potable){
-            let effects = ['health','stamina','luck','hunger','light']
+            let effects = ['health','stamina','luck','hunger','light','fatigue']
             effects.forEach((effect)=>{
                 let power = item[effect]
                 if(power){

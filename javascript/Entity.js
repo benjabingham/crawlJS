@@ -1011,7 +1011,7 @@ class PlayerEntity extends Entity{
         let weapon = {
             damage:3,
             stun:2,
-            weight:3,
+            heft:3,
             type:{unarmed:true}
         }
 
@@ -1030,13 +1030,13 @@ class PlayerEntity extends Entity{
         if(target.id == this.id || target.isWall){
             return false;  
         }
-        let weight = weapon.weight;
-        if(target.parryable){weight = Math.max(0,weight-1)}
+        let heft = weapon.heft;
+        if(target.parryable){heft = Math.max(0,heft-1)}
         
-        if(Player.stamina < weight){
+        if(Player.stamina < heft){
             return false;
         }
-        Player.changeStamina(weight * -1);   
+        Player.changeStamina(heft * -1);   
         let damage = weapon.damage;
         let stunTime = weapon.stun;
         stunTime += Player.getAnatomyBonus(target);
@@ -1181,18 +1181,18 @@ class SwordEntity extends Entity{
             if(target.id != this.id && !target.isWall){
                 if (this.owner == 'player'){  
                     let strikeType = this.getStrikeType();
-                    let weight;
+                    let heft;
                     if(this.item[strikeType]){
-                        weight = this.item[strikeType].weight;
+                        heft = this.item[strikeType].heft;
                     }else{
-                        weight = this.item.weight;
+                        heft = this.item.heft;
                     }
                     if(target.parryable){
-                        weight = Math.max(0,weight-1);
+                        heft = Math.max(0,heft-1);
                     }
                     //swings and draws get canceled. Jabs and strafes are still allowed, but dont trigger an attack.
                     //this is so having 0 stamina doesnt hinder your movement.
-                    if(Player.stamina < weight){
+                    if(Player.stamina < heft){
                         if(strikeType=="strafe" || strikeType == "jab"){
                             attackOccurs = false;
                         }else{
@@ -1200,7 +1200,7 @@ class SwordEntity extends Entity{
                             return false;
                         }
                     }
-                    Player.changeStamina(weight * -1);
+                    Player.changeStamina(heft * -1);
                 }
                 //this is false if player tried to jab or strafe without enough stamina
                 if(attackOccurs){
@@ -1242,13 +1242,13 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
-        let weight = weapon.weight;
+        let heft = weapon.heft;
         let stunTime = weapon.stunTime;
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
             stunTime = weapon[strikeType].stunTime;
-            weight = weapon[strikeType].weight
+            heft = weapon[strikeType].heft
             stunTime += Player.getBonusStun(weapon[strikeType],target);
             damage += Player.getItemBonusDamage(weapon[strikeType], weapon);
         }else{
@@ -1315,7 +1315,7 @@ class SwordEntity extends Entity{
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
-            EntityManager.emitSound(target,weight); 
+            EntityManager.emitSound(target,heft); 
             target.addMortality(mortality);           
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);

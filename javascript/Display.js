@@ -286,24 +286,24 @@ class Display{
         }
         console.log(possibleStrikes);
         let weaponItem = EntityManager.playerEntity.swordEntity.item
-        let weight = 99999
+        let heft = 99999
         
         possibleStrikes.forEach((strike)=>{
             if (weaponItem && weaponItem[strike]){
-                weight = Math.min(weight, weaponItem[strike].weight);
+                heft = Math.min(heft, weaponItem[strike].heft);
             }else if(weaponItem){
-                weight = Math.min(weight,weaponItem.weight)
+                heft = Math.min(heft,weaponItem.heft)
             }
 
             if(strike == 'unarmed'){
-                weight = Math.min(weight,3);
+                heft = Math.min(heft,3);
             }
         })
 
         //because parrys cost 1 less...
-        weight-=1;
+        heft-=1;
 
-        return weight <= Player.stamina;
+        return heft <= Player.stamina;
     }
 
     //pos is coords of display grid. Highlighted is bool, if that grid is highlighted. Highlighted adjacents is array of directions (ex. {x:1,y:-1}) of adjacent highlighted cells

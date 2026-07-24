@@ -561,7 +561,7 @@ class LootManager{
                     break;
                 case 'damage':
                 case 'stunTime':
-                case 'weight':
+                case 'heft':
                     if(item[key]){
                         item[key] += value;
                         item[key] = Math.max(1,item[key]);
@@ -569,7 +569,7 @@ class LootManager{
                     break;
                 case 'damageMult':
                 case 'stunTimeMult':
-                case 'weightMult':
+                case 'heftMult':
                     let attribute = key.split('Mult')[0]
                     //multiply attribute by value. Round down final number for increase, up for decrease.
                     if(item[attribute]){

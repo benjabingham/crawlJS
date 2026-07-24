@@ -5,7 +5,7 @@ let itemVars = {
             name:"club",
             damage:3,
             stunTime:4,
-            weight:2,
+            heft:2,
             flimsy:-2,
             type:{
                 blunt:true,
@@ -15,7 +15,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     simple:true
@@ -28,7 +28,7 @@ let itemVars = {
             name:"mace",
             damage:5,
             stunTime:3,
-            weight:2,
+            heft:2,
             flimsy:-1,
             type:{
                 blunt:true,
@@ -38,7 +38,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     sharp:true,
@@ -51,7 +51,7 @@ let itemVars = {
             name:"hammer",
             damage:8,
             stunTime:5,
-            weight:3,
+            heft:3,
             flimsy:-1,
             bulk:3,
             type:{
@@ -60,7 +60,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true
                 }
@@ -72,7 +72,7 @@ let itemVars = {
             name:"maul",
             damage:12,
             stunTime:7,
-            weight:5,
+            heft:5,
             flimsy:-1,
             bulk:6,
             type:{
@@ -81,7 +81,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:5,
-                weight:3,
+                heft:3,
                 type:{
                     blunt:true
                 }
@@ -95,7 +95,7 @@ let itemVars = {
             name:"rapier",
             damage:2,
             stunTime:2,
-            weight:1,
+            heft:1,
             bulk:2,
             type:{
                 sword:true,
@@ -104,7 +104,7 @@ let itemVars = {
             jab:{
                 damage:8,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     sword:true,
                     sharp:true,
@@ -118,12 +118,12 @@ let itemVars = {
             name:"scimitar",
             damage:7,
             stunTime:2,
-            weight:3,
+            heft:3,
             bulk:2,
             strafe:{
                 damage:6,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     sword:true,
                     edged:true,
@@ -143,7 +143,7 @@ let itemVars = {
             name:"shortsword",
             damage:4,
             stunTime:1,
-            weight:2,
+            heft:2,
             bulk:1.2,
             type:{
                 sword:true,
@@ -154,7 +154,7 @@ let itemVars = {
             draw:{
                 damage:4,
                 stunTime:3,
-                weight:1,
+                heft:1,
                 type:{
                     sword:true,
                     edged:true,
@@ -169,7 +169,7 @@ let itemVars = {
             name:"longsword",
             damage:8,
             stunTime:2,
-            weight:3,
+            heft:3,
             bulk:3,
             type:{
                 sword:true,
@@ -184,7 +184,7 @@ let itemVars = {
             name:"katana",
             damage:8,
             stunTime:1,
-            weight:3,
+            heft:3,
             bulk:3,
             type:{
                 sword:true,
@@ -194,7 +194,7 @@ let itemVars = {
             draw:{
                 damage:8,
                 stunTime:5,
-                weight:3,
+                heft:3,
                 type:{
                     sword:true,
                     edged:true,
@@ -210,7 +210,7 @@ let itemVars = {
             name:"greatsword",
             damage:12,
             stunTime:4,
-            weight:5,
+            heft:5,
             bulk:5,
             type:{
                 sword:true,
@@ -226,12 +226,12 @@ let itemVars = {
             name:"goliath sword",
             damage:20,
             stunTime:6,
-            weight:7,
+            heft:7,
             bulk:7,
             draw:{
                 damage:25,
                 stunTime:8,
-                weight:9,
+                heft:9,
                 type:{
                     sword:true,
                     edged:true,
@@ -253,7 +253,7 @@ let itemVars = {
             name:"handaxe",
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             bulk:1.3,
             type:{
                 edged:true,
@@ -263,7 +263,7 @@ let itemVars = {
             swing:{
                 damage:6,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     edged:true,
                     axe:true,
@@ -278,7 +278,7 @@ let itemVars = {
             wrecking:true,
             damage:2,
             stunTime:3,
-            weight:3,
+            heft:3,
             bulk:3.5,
             type:{
                 axe:true,
@@ -288,7 +288,7 @@ let itemVars = {
             swing:{
                 damage:8,
                 stunTime:3,
-                weight:3,
+                heft:3,
                 type:{
                     axe:true,
                     improvised:true,
@@ -303,7 +303,7 @@ let itemVars = {
             name:"greataxe",
             damage:2,
             stunTime:3,
-            weight:3,
+            heft:3,
             bulk:6,
             type:{
                 edged:true,
@@ -313,7 +313,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:6,
-                weight:5,
+                heft:5,
                 type:{
                     edged:true,
                     axe:true,
@@ -328,7 +328,7 @@ let itemVars = {
             name:"halberd",
             damage:8,
             stunTime:3,
-            weight:4,
+            heft:4,
             bulk:7,
             type:{
                 edged:true,
@@ -338,7 +338,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:6,
+                heft:6,
                 type:{
                     edged:true,
                     long:true,
@@ -415,7 +415,7 @@ let itemVars = {
             name:"branch",
             damage:1,
             stunTime:1,
-            weight:1,
+            heft:1,
             bulk:0.7,
             type:{
                 blunt:true,
@@ -512,7 +512,7 @@ let itemVars = {
             iron:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:2,
             bulk:1.8,
             type:{
@@ -522,7 +522,7 @@ let itemVars = {
             swing:{
                 damage:5,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -558,7 +558,7 @@ let itemVars = {
             wood:true,
             damage:2,
             stunTime:2,
-            weight:1,
+            heft:1,
             flimsy:8,
             bulk:0.7,
             type:{
@@ -569,7 +569,7 @@ let itemVars = {
             jab:{
                 damage:1,
                 stunTime:1,
-                weight:1,
+                heft:1,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -588,7 +588,7 @@ let itemVars = {
             wood:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:8,
             bulk:4.5,
             type:{
@@ -599,7 +599,7 @@ let itemVars = {
             swing:{
                 damage:5,
                 stunTime:3,
-                weight:3,
+                heft:3,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -618,7 +618,7 @@ let itemVars = {
             wood:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:8,
             bulk:4,
             type:{
@@ -630,7 +630,7 @@ let itemVars = {
             jab:{
                 damage:4,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     improvised:true,
                     long:true,
@@ -796,7 +796,7 @@ let itemVars = {
             name:'wooden',
             flimsy:6,
             stunTimeMult:0.7,
-            weightMult:0.8,
+            heftMult:0.8,
             damageMult:0.7,
             bulk:0.8,
             sharp:{
@@ -824,7 +824,7 @@ let itemVars = {
                 flimsy:4,
             },
             stunTime:-1,
-            weight:-1,
+            heft:-1,
             value:.15,
             color:'bone',
             curseChance:0.2,
@@ -836,7 +836,7 @@ let itemVars = {
         limestone:{
             name:'limestone',
             flimsy:6,
-            weightMult:2,
+            heftMult:2,
             stunTime:1,
             damage:1,
             damageMult:1.2,
@@ -854,7 +854,7 @@ let itemVars = {
         flint:{
             name:'flint',
             flimsy:4,
-            weightMult:0.8,
+            heftMult:0.8,
             damageMult:0.8,
             stunTimeMult:0.8,
             blunt:{
@@ -868,7 +868,7 @@ let itemVars = {
         ceramic:{
             name:'ceramic',
             flimsy:10,
-            weightMult:0.9,
+            heftMult:0.9,
             blunt:{
                 flimsy:10,
             },
@@ -896,8 +896,8 @@ let itemVars = {
         lead:{
             name:'lead',
             flimsy:3,
-            weight:1,
-            weightMult:1.25,
+            heft:1,
+            heftMult:1.25,
             stunTimeMult:1.3,
             blunt:{
                 damageMult:1.35
@@ -977,7 +977,7 @@ let itemVars = {
         sigiledBone:{
             name:'sigiled bone',
             flimsy:7,
-            weight:-1,
+            heft:-1,
             value:3,
             color:'bone',
             frequency:1,
@@ -1024,7 +1024,7 @@ let itemVars = {
         },
         gravsteel:{
             name:'gravsteel',
-            weightMult:2.5,
+            heftMult:2.5,
             stunTime:2,
             stuntimeMult:2,
             damageMult:2.5,
@@ -1039,8 +1039,8 @@ let itemVars = {
         },
         lightsteel:{
             name:'lightsteel',
-            weight:-1,
-            weightMult:0.8,
+            heft:-1,
+            heftMult:0.8,
             stunTime:-1,
             stunTimeMult:0.6,
             blunt:{
@@ -1080,7 +1080,7 @@ let itemVars = {
         },
         gold:{
             name:'gold',
-            weightMult:1.5,
+            heftMult:1.5,
             damageMult:1.2,
             stunTime:2,
             flimsy:8,
@@ -1100,7 +1100,7 @@ let itemVars = {
         },
         platinum:{
             name:'platinum',
-            weightMult:2,
+            heftMult:2,
             stunTime:2,
             stunTimeMult:1.25,
             damageMult:1.8,
@@ -1117,8 +1117,8 @@ let itemVars = {
         
         adamantine:{
             name:'adamantine',
-            weight:-1,
-            weightMult:0.8,
+            heft:-1,
+            heftMult:0.8,
             sharp:{
                 damage:2
             },
@@ -1259,7 +1259,7 @@ let itemVars = {
             color:"gold",
             bulk:3,
             enchantmentChance:0.1,
-            possibleFlavorTexts:["Its weight dismisses any doubts you had of its authenticity.","They say the sun shone brighter than gold. You wonder if it's true."]
+            possibleFlavorTexts:["Its heft dismisses any doubts you had of its authenticity.","They say the sun shone brighter than gold. You wonder if it's true."]
         },
         platinum:{
             name:'platinum',
@@ -1468,7 +1468,7 @@ let itemVars = {
             weapon:true,
             damage:1,
             stunTime:1,
-            weight:1,
+            heft:1,
             type:{
                 blunt:true,
                 improvised:true
@@ -1515,7 +1515,7 @@ let itemVars = {
             weapon:true,
             damage:1,
             stunTime:2,
-            weight:1,
+            heft:1,
             bulk:1,
             type:{
                 blunt:true,
@@ -1555,7 +1555,7 @@ let itemVars = {
             weapon:true,
             damage:3,
             stunTime:4,
-            weight:2,
+            heft:2,
             bulk:1,
             type:{
                 blunt:true,

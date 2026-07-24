@@ -346,7 +346,7 @@ class Inventory{
                     ).append(
                         $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime).append(bonusStunSpans.normal)
                     ).append(
-                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
+                        $('<div>').addClass('item-heft').attr('id',inventory+'-item-heft-'+item.slot).text('heft: '+item.heft)
                     )
                 ).append(
                     special?($('<div>').addClass('item-stats-normal').append(
@@ -356,7 +356,7 @@ class Inventory{
                     ).append(
                         $('<div>').addClass('item-stun').text('stun: '+special.stunTime).append(bonusStunSpans.special)
                     ).append(
-                        $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                        $('<div>').addClass('item-heft').text('heft: '+special.heft)
                     )):false
                 )
             ).append("<hr>")
@@ -372,7 +372,7 @@ class Inventory{
                         ).append(
                             $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
                         ).append(
-                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                            $('<div>').addClass('item-heft').text('heft: '+special.heft)
                         )
                     )
                 }

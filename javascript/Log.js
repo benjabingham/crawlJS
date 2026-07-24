@@ -226,7 +226,7 @@ class Log{
         })
         }
         
-        Log.printTurn(Log.turnCounter-1)        
+        //Log.printTurn(Log.turnCounter-1)        
     }
 
     static peek(){

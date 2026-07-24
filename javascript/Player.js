@@ -68,6 +68,7 @@ class Player {
         Player.luck = Player.luckMax
         //Player.nourishment = Math.floor(Player.nourishmentMax/2)
         Player.nourishment = 7;
+        Player.fatigue = 3;
         Player.inventoryCleanup();
         XP.XPInit();
     }
@@ -339,8 +340,18 @@ class Player {
         }
         */
         if(Player.nourishment < 0){
-            Player.changeHealth((Player.nourishment));
-            Log.addMessage('You are starving! ' + Player.nourishment +" health!", 'urgent');
+            let nourishmentMissing = Player.nourishment*-1
+            let healthLoss = Random.roll(0,nourishmentMissing)
+            let fatigueGain = nourishmentMissing
+            Player.changeHealth(healthLoss * -1);
+            Player.changeFatigue(fatigueGain);
+            console.trace();
+            let message = "You are starving! (+"+fatigueGain+" Fatigue"
+            if(healthLoss){
+                message += ", -"+healthLoss+" HP"
+            }
+            message+=")"
+            Log.addMessage(message, 'urgent');
         }
         Player.nourishment = Math.min(Player.nourishmentMax,Player.nourishment);
         Player.nourishment = Math.max(0,Player.nourishment)

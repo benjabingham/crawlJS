@@ -61,7 +61,7 @@ let skillVars = {
             name:"iron gut",
             key:"ironGut",
             amount:1,
-            description:"Rotten food has no ill effect on you. Gain 1 luck whenever you eat rotten food."
+            description:"Rotten food has no ill effect on you. You have a 50% chance to gain 1 luck whenever you eat rotten food."
         },
     ],
     fatigue:[

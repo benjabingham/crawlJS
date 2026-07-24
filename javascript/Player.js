@@ -539,28 +539,65 @@ class Player {
         if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
         Log.addMessage('You eat the '+item.name+".");
+        Player.changeNourishment(item.food);
         let rotten = item.rotten || (item.dubious && Math.random() < item.rottenChance);
-        let ironGut = Player.perks.hunger.ironGut
-        if(rotten && ironGut){
-            Player.changeNourishment(item.food);
-            Player.changeLuck(ironGut.val * ironGut.amount);
-            Display.flash($('body'),'darkGreen');
-            Sound.playRotten();
-            Log.addMessage("It's rotten!",'win','rotten','Yum!')
-            //if(!item.rotten){LootManager.applyModifier(item, itemVars.foodModifiers.rotten)}
-        }else if(rotten){
-            Player.changeNourishment(item.food*-1);
-            Log.addMessage("It's rotten!",'danger','rotten','This food item reduced your hunger level by 1 instead of increasing it.')
-            Display.flash($('body'),'darkGreen');
-            Sound.playRotten();
-            //if(!item.rotten){LootManager.applyModifier(item, itemVars.foodModifiers.rotten)}
-        }else{
-            Player.changeNourishment(item.food);
+        if(rotten){
+            Player.sufferRotten(item);
         }
         
         Player.consume(slot);
 
         return true;
+    }
+
+    static sufferRotten(item){
+        Display.flash($('body'),'darkGreen');
+        Sound.playRotten();
+        let ironGut = Player.perks.hunger.ironGut
+        if(ironGut){
+            Log.addMessage("It's rotten!",'win','rotten','Yum!')
+            let chance = 1 - Math.pow(ironGut.val * ironGut.amount);
+            if(Math.random() < chance){
+                Player.changeLuck(1);
+                Log.addMessage('Gained 1 luck!','win')
+            }
+            return true
+        }
+        let strength = item.food;
+        let effects = ['fatigue','hp','hunger'];
+        let fatigueGain = 0;
+        let hungerLoss = 0;
+        let hpLoss = 0;
+
+        Log.addMessage("It's rotten!",'danger','rotten','This food item has negative effects.')
+        
+        for(let i = 0; i < strength; i++){
+            let effect = effects[Random.roll(0,2)];
+            switch(effect){
+                case 'fatigue':
+                    fatigueGain += 2;
+                    break;
+                case 'hp':
+                    hpLoss += 1;
+                    break;
+                case 'hunger':
+                    hungerLoss += 2;
+                    break;
+                default:
+            }
+        }
+        if(fatigueGain){
+            Player.changeFatigue(fatigueGain)
+            Log.addMessage('Gained '+fatigueGain+' fatigue!','danger', false, "Eating rotten food has fatigued you.")
+        }
+        if(hungerLoss){
+            Player.changeNourishment(hungerLoss*-1)
+            Log.addMessage('Lost '+hungerLoss+' hunger!','danger', false, "Eating rotten food has drained your hunger.")
+        }
+        if(hpLoss){
+            Player.changeHealth(hpLoss*-1)
+            Log.addMessage('lost '+hpLoss+' HP!','danger', false, "Eating rotten food has harmed you.")
+        }  
     }
 
     static drinkItem(item){

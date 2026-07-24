@@ -528,7 +528,7 @@ class Inventory{
 
         if(GameMaster.dropMode){
             bagTitleElement.append(
-                $('<button>').text('drop bag').addClass('inventory-title-buttons').on('click',e=>{
+                $('<button>').text('Empty Bag').addClass('inventory-title-buttons').on('click',e=>{
                     GameMaster.dropBag();
                 })
             )

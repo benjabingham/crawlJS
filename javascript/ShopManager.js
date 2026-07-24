@@ -245,15 +245,16 @@ class ShopManager{
         let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
         console.log(selectedSlots)
         Log.addMessage('You rested.')
+        /*
         if(restInfo.healthChange > 0){
             Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
-        }
+        }*/
         if(oldLuck < Player.luck){
             Log.addMessage("Gained "+(Player.luck-oldLuck)+ " luck!","win")
-        }
+        }/*
         if(restInfo.nourishmentChange < 0){
             Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
-        }
+        }*/
         GameMaster.getRoom(EntityManager.currentMap.name,false,{x:EntityManager.playerEntity.x,y:EntityManager.playerEntity.y},false)
         Inventory.openContainerInventory(Board.entityAt(container.x,container.y));
         Inventory.displayedInventorySlots = selectedSlots

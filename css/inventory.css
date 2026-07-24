@@ -337,3 +337,8 @@
     width:fit-content;
     margin:auto;
 }
+
+.starving-span{
+    color:var(--darkRed);
+    font-weight: 500;
+}

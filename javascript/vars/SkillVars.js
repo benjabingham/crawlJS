@@ -10,7 +10,7 @@ let skillVars = {
             category:"hp",
             name:"vitality",
             key:"vitality",
-            description:"Gain +2 health when you rest.",
+            description:"Gain +2 health when you rest with your hunger bar at least half full.",
             amount:2
         },
     ],

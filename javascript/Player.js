@@ -150,7 +150,7 @@ class Player {
         return maxStamina;
     }
 
-    static getRestInfo(){
+    /*static getRestInfo(){
         console.log(JSON.parse(JSON.stringify(XP.skills)))
         console.log(XP.offeredPerks)
         let healthChange = Player.nourishmentLevel;
@@ -191,9 +191,73 @@ class Player {
             nourishmentChange:nourishmentChange,
             fatigueChange:fatigueChange
         }
+    }*/
+
+    static getRestInfo(){
+        let projectedMissingHealth = Player.healthMax - Player.health;
+        let projectedHunger = Player.nourishment;
+        let projectedFatigue = Player.fatigue;
+        let restInfo ={
+            healthChange:0,
+            nourishmentChange:0,
+            fatigueChange:0
+        }
+
+        if(Player.perks.vitality && Player.hungerPercent >= 50){
+            projectedMissingHealth -= 2;
+            healthChange += 2;
+        }
+
+        //let freeFatigueChange = Math.ceil((Player.fatigueMax * -1)/2)+2
+        let freeFatigueChange = Player.fatigueMax * -1
+        restInfo.fatigueChange += freeFatigueChange;
+        projectedFatigue += freeFatigueChange;
+
+        //lose 3 hunger at base
+        restInfo.nourishmentChange = -3;
+        projectedHunger -= 3;
+
+        let i = 0;
+        let nHealthTicks = Math.ceil((100-Player.healthPercent)/30)
+        // gain fatigue to gain health at a rate of 1:2, unless fatigue is at 6 or above. Do one time for every 30% of health missing, rounded up.
+        while(i < nHealthTicks && projectedMissingHealth > 0 && projectedFatigue < 6){     
+            restInfo.healthChange++;
+            projectedMissingHealth--;
+            restInfo.fatigueChange += 2;
+            projectedFatigue += 2;
+            
+            i++;
+        }
+
+        //THEN use hunger to reduce fatigue at a rate of 2:1, unless hunger is 4 or below
+        i = 0;
+        
+        while(i < 3 && projectedFatigue > 0 && projectedHunger > 4){
+            restInfo.fatigueChange -= 2
+            projectedFatigue -= 2
+
+            restInfo.nourishmentChange -=1;
+            projectedHunger -=1;
+
+            i++;
+        }
+        
+
+        
+
+        return restInfo;
     }
 
     static rest(){
+        let restInfo = Player.getRestInfo();
+        Player.changeHealth(restInfo.healthChange)
+        Player.changeFatigue(restInfo.fatigueChange)
+        Player.changeNourishment(restInfo.nourishmentChange)
+
+        XP.checkLevelUp;
+    }
+
+    /*static rest(){
         let health = Player.nourishmentLevel;
         let oldHealth = Player.health;
         Player.changeHealth(health);
@@ -211,7 +275,7 @@ class Player {
 
         XP.checkLevelUp();
 
-    }
+    }*/
 
 
     static gainStamina(){

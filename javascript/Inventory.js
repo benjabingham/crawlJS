@@ -456,17 +456,23 @@ class Inventory{
             }
         })
         changes.healthChange += " HP ("+Player.health+" → "+(Player.health+restInfo.healthChange)+")"
-        changes.nourishmentChange += " Hunger ("+Player.nourishment+" → "+(Player.nourishment+restInfo.nourishmentChange)+")"
-        changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Player.fatigue+restInfo.fatigueChange)+")"
+        changes.nourishmentChange += " Hunger ("+Player.nourishment+" → "+(Math.max(Player.nourishment+restInfo.nourishmentChange,0))+")"
+        changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Math.max(Player.fatigue+restInfo.fatigueChange,0))+")"
+
+        let starvingSpan = '';
+        if(Player.nourishment+restInfo.nourishmentChange < 0){
+            starvingSpan = $('<span>').addClass('starving-span').text(' ☠')
+            Display.setHintText(starvingSpan,"You will experience starvation, gaining fatigue and possibly losing health.")
+        }
 
         let description = $("<span>").addClass('keyword bold').text(item.description)
         Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
         let div = $("<div>").addClass('item-description').append(description).append(" You will gain:").append(
-            $("<div>").append(changes.nourishmentChange).addClass('hunger-text-div rest-info-div')
-        ).append(
-            $("<div>").append(changes.healthChange).addClass('hp-text-div rest-info-div')
+            $("<div>").append(changes.nourishmentChange).append(starvingSpan).addClass('hunger-text-div rest-info-div')
         ).append(
             $("<div>").append(changes.fatigueChange).addClass('fatigue-text-div rest-info-div')
+        ).append(
+            $("<div>").append(changes.healthChange).addClass('hp-text-div rest-info-div')
         )
         //let hintText = "You will gain: "+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.fatigueChange+" fatigue. 50% change to gain 1 luck.";
 

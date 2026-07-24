@@ -659,10 +659,11 @@ class GameMaster{
         Board.updateSeenTiles();
         if(!EntityManager.skipBehaviors){
             Log.turnCounter++;
-            Log.printLog();  
         }else{
             Log.rewind();
         }
+
+        Log.printLog();
         
         Log.clearNotices();
         EntityManager.skipBehaviors = false;

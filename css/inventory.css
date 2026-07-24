@@ -195,6 +195,10 @@
     height:fit-content;
 }
 
+.item-stats-spans{
+    width:fit-content;
+}
+
 .item-value{
     bottom:0px;
 }

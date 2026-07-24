@@ -32,8 +32,20 @@ keywordVars = {
     draw:{
         hintText:"A draw strike occurs when you draw your weapon into a target."
     },
+    strikeNormal:{
+        hintText:"This weapon's strikes will use these values by default."
+    },
     "End the day":{
         hintText:"Some monsters will respawn, and you will Level Up if you have enough XP."
+    },
+    strikeDamage:{
+        hintText:"When this strike deals damage, this is the maximum damage it will deal, with 0 being the minimum."
+    },
+    strikeStun:{
+        hintText:"When this strike hits an enemy, this is the maximum number of turns it will stun them for, with 1 being the minimum (including the turn you hit them)."
+    },
+    strikeHeft:{
+        hintText:"This is the amount of Stamina it costs to strike an enemy."
     },
 
     traits:{

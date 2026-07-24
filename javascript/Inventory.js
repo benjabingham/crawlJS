@@ -337,26 +337,43 @@ class Inventory{
             let bonusDamageSpans = Player.getItemBonusDamageSpanWithSpecial(item,special);
             let bonusStunSpans = Player.getItemBonusStunSpanWithSpecial(item,special);
 
+            let strikeInfoSpans = {
+                normal:{
+                    title: $('<div>').addClass('item-title item-stats-spans').text('Normal:'),
+                    damage: $('<div>').addClass('item-damage item-stats-spans').attr('id',inventory+'-item-damage-'+item.slot).append('Damage: '+item.damage).append(bonusDamageSpans.normal),
+                    stun: $('<div>').addClass('item-stun item-stats-spans').attr('id',inventory+'-item-stun-'+item.slot).text('Stun: '+item.stunTime).append(bonusStunSpans.normal),
+                    heft: $('<div>').addClass('item-heft item-stats-spans').attr('id',inventory+'-item-heft-'+item.slot).text('Heft: '+item.heft)
+                },
+                special: special ? {
+                    title: $('<div>').addClass('item-title item-stats-spans').text(specialName+":"),
+                    damage: $('<div>').addClass('item-damage item-stats-spans').text('Damage: '+special.damage).append(bonusDamageSpans.special),
+                    stun: $('<div>').addClass('item-stun item-stats-spans').text('Stun: '+special.stunTime).append(bonusStunSpans.special),
+                    heft: $('<div>').addClass('item-heft item-stats-spans').text('Heft: '+special.heft)
+                } : false
+            }
+
+            Inventory.applyWeaponDescriptionTiptext(strikeInfoSpans, specialName)
+
             $('#'+inventory+'-description-body').append(
                 $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
                     $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text('Normal:')
+                        strikeInfoSpans.normal.title
                     ).append(
-                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).append('Damage: '+item.damage).append(bonusDamageSpans.normal)
+                        strikeInfoSpans.normal.damage
                     ).append(
-                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime).append(bonusStunSpans.normal)
+                        strikeInfoSpans.normal.stun
                     ).append(
-                        $('<div>').addClass('item-heft').attr('id',inventory+'-item-heft-'+item.slot).text('heft: '+item.heft)
+                        strikeInfoSpans.normal.heft
                     )
                 ).append(
                     special?($('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(specialName+":")
+                        strikeInfoSpans.special.title
                     ).append(
-                        $('<div>').addClass('item-damage').text('Damage: '+special.damage).append(bonusDamageSpans.special)
+                        strikeInfoSpans.special.damage
                     ).append(
-                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime).append(bonusStunSpans.special)
+                        strikeInfoSpans.special.stun
                     ).append(
-                        $('<div>').addClass('item-heft').text('heft: '+special.heft)
+                        strikeInfoSpans.special.heft
                     )):false
                 )
             ).append("<hr>")
@@ -377,6 +394,21 @@ class Inventory{
                     )
                 }
             })    */
+        }
+    }
+
+    static applyWeaponDescriptionTiptext(strikeInfoSpans, specialStrike){
+        Display.setHintText(strikeInfoSpans.normal.title,keywordVars.strikeNormal.hintText)
+        if(strikeInfoSpans.special && specialStrike){
+            Display.setHintText(strikeInfoSpans.special.title,keywordVars[specialStrike].hintText)
+        }
+        for (const [strikeType, strikeSpans] of Object.entries(strikeInfoSpans)){
+            for (const [key, span] of Object.entries(strikeSpans)){
+                let hintText = keywordVars['strike'+Display.capitalizeFirstLetter(key)]
+                if(hintText){
+                    Display.setHintText(span,hintText.hintText)
+                }
+            }
         }
     }
 

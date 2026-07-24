@@ -43,6 +43,7 @@ class XP{
             }
         });
         XP.applyPerk(skillVars.simple[0],false)
+        XP.applyPerk(skillVars.hunger[2],false)
 
         /*
         XP.applyPerk(skillVars.swing[0],false)

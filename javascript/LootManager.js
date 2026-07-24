@@ -290,10 +290,13 @@ class LootManager{
         if(food.preserved){rottenMultiplier /= 2}
         if(food.perishable){rottenMultiplier *= 3}
         rottenMultiplier *= Math.random()+0.5
-        food.rottenChance = rottenMultiplier * 0.2;
-        if(food.rottenChance >= 0.2){
+        food.rottenChance = rottenMultiplier * 0.4;
+        if(food.rottenChance >= 0.9){
+            LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
+        }else if(food.rottenChance >= 0.3){
             LootManager.applyModifier(food,itemVars.foodModifiers.dubious)
         }
+        
 
         food.tier = tier;
         LootManager.getFlavorText(food);

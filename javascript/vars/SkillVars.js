@@ -60,7 +60,7 @@ let skillVars = {
             category:"hunger",
             name:"iron gut",
             key:"ironGut",
-            amount:1,
+            amount:0.5,
             description:"Rotten food has no ill effect on you. You have a 50% chance to gain 1 luck whenever you eat rotten food."
         },
     ],

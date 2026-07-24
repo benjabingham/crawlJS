@@ -538,7 +538,7 @@ class Player {
         Sound.playEat();
         if(Player.itemIsEquipped(item)){Player.unequipWeapon()}
         let slot = item.slot;
-        Log.addMessage('You eat the '+item.name+".");
+        Log.addMessage('You eat the '+item.name+"."+ " (+"+item.food+" hunger)");
         Player.changeNourishment(item.food);
         let rotten = item.rotten || (item.dubious && Math.random() < item.rottenChance);
         if(rotten){
@@ -556,7 +556,7 @@ class Player {
         let ironGut = Player.perks.hunger.ironGut
         if(ironGut){
             Log.addMessage("It's rotten!",'win','rotten','Yum!')
-            let chance = 1 - Math.pow(ironGut.val * ironGut.amount);
+            let chance = 1 - Math.pow(1-ironGut.amount, ironGut.val);
             if(Math.random() < chance){
                 Player.changeLuck(1);
                 Log.addMessage('Gained 1 luck!','win')

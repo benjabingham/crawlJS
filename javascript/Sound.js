@@ -94,7 +94,7 @@ class Sound{
             ambientWeird:0.6,
             ambientOutside:0.5,
             heroism:0.3,
-            townHarp:0.25
+            townHarp:0.2
         }
         Object.entries(Sound.soundGroups).forEach(group=>{
             let soundGroup = group[1]

@@ -1058,6 +1058,7 @@ class PlayerEntity extends Entity{
         let mortality = Random.rollN(damageDice,0,damage,advantage);
         let multiplier = Player.getDamageMultiplier(weapon,"unarmed",target,crit);
         mortality = Math.floor(mortality*multiplier)
+        Sound.playPlayerHit(mortality)
 
         XP.gainUnarmedAttackXP(target);
         if(sizeBonus > Math.random()*100){

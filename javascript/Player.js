@@ -364,6 +364,9 @@ class Player {
     }
 
     static checkChangeNourishment(hungerChance = 0.25){
+        if(GameMaster.scale == 'town'){
+            return false;
+        }
         if(GameMaster.scale == 'world'){
             //hungerChance *= Player.fatigue;
             hungerChance += 20

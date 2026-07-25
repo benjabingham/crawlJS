@@ -254,7 +254,6 @@ class Player {
         Player.changeFatigue(restInfo.fatigueChange)
         Player.changeNourishment(restInfo.nourishmentChange)
 
-        XP.checkLevelUp;
     }
 
     /*static rest(){

@@ -6,6 +6,7 @@ class ShopManager{
         let shopTemplate = mapVars[mapId].shops[shopId]
         let inventory = [];
         let slot = 0;
+
         if(shopTemplate.specialItems){
             shopTemplate.specialItems.forEach((item)=>{
                 item.slot = slot;
@@ -43,6 +44,16 @@ class ShopManager{
                 let potion = ShopManager.getPotion();
                 potion.slot = slot;
                 inventory.push(potion);
+                slot++;
+            }
+        }
+
+        if(shopTemplate.morselSlots){
+            console.log('morsel')
+            for(let i=0; i<shopTemplate.morselSlots; i++){
+                let morsel = ShopManager.getMorsel();
+                morsel.slot = slot;
+                inventory.push(morsel);
                 slot++;
             }
         }
@@ -96,6 +107,14 @@ class ShopManager{
                     supplies.fresh = true;
                     inventoryItems[slot] = supplies;
                 }
+            }else if(item.tier == 'morsel'){
+                let restockChance = restockChances.morsel
+                if(Math.random() < restockChance){
+                    let morsel = ShopManager.getMorsel();
+                    morsel.slot = slot;
+                    morsel.fresh = true;
+                    inventoryItems[slot] = morsel;
+                }
             }else if(restockChances && restockChances.weaponTiers){
                 let restockChance = restockChances.weaponTiers[item.tier]
                 if(Math.random() < restockChance){
@@ -132,6 +151,14 @@ class ShopManager{
         let multiplier = tier+1.5;
         item.price = Math.ceil(item.value * multiplier);
         item.tier = 'supplies'
+
+        return item;
+    }
+
+    static getMorsel(){
+        let item = JSON.parse(JSON.stringify(itemVars.food.morsel))
+        item.price = 1
+        item.tier = 'morsel'
 
         return item;
     }
@@ -219,6 +246,11 @@ class ShopManager{
                 Player.pickUpItem(morsel)
                 GameMaster.postPlayerAction();
                 break;
+            case "meal":
+                Player.changeNourishment(item.nourishment);
+                Sound.playEat();
+                GameMaster.postPlayerAction();
+                break;
             case "fullMeal":
                 Player.changeNourishment(100)
                 Sound.playEat();
@@ -240,6 +272,7 @@ class ShopManager{
         Log.printDayToLog(false);
         let oldLuck = Player.luck;
         GameMaster.nextDay();
+        Player.rest();
 
         let container = Inventory.selectedContainer
         let selectedSlots = JSON.parse(JSON.stringify(Inventory.displayedInventorySlots))
@@ -267,8 +300,7 @@ class ShopManager{
         let oldLuck = Player.luck;
         let effects = item.effects;
         if(effects.rest){
-            GameMaster.nextDay(false);
-            XP.checkLevelUp();
+            GameMaster.nextDay();
         }
 
         Sound.playDrink();

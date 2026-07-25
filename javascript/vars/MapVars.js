@@ -22,23 +22,14 @@ let mapVars = {
                 }
             },
             tavern:{
+                morselSlots:3,
+                restockChances:{
+                    morsel:0.5,
+                },
                 specialItems:[
                     {
-                        type:'fullMeal',
-                        price:10,
-                        name:"Proper Meal",
-                        description:"Fully refill your hunger bar.",
-                        flavorText:"\"You look hungry. How about something that'll really fill you up?\""
-                    },
-                    {
-                        type:'morsel',
-                        price:2,
-                        name:"Morsel",
-                        description:"Refills your hunger by 1 point.",
-                        flavorText:"It's not much, but it's something to put in your stomach."
-                    },
-                    {
                         type:'rest',
+                        tier:'rest',
                         price:0,
                         name:"rest",
                         description:"End the day.",
@@ -47,6 +38,7 @@ let mapVars = {
                     },
                     {
                         type:'gamble',
+                        tier:'rest',
                         price:5,
                         name:'carouse',
                         message:"You're pretty sure you had a good time...",
@@ -65,7 +57,25 @@ let mapVars = {
                             },
                             rest:true
                         }
-                    }
+                    },
+                    {
+                        type:'fullMeal',
+                        tier:'meal',
+                        price:10,
+                        name:"Feast",
+                        description:"Fully refill your hunger bar.",
+                        flavorText:"\"You look hungry. How about something that'll really fill you up?\""
+                    },
+                    {
+                        type:'meal',
+                        tier:'meal',
+                        price:3,
+                        name:"Meal",
+                        nourishment:2,
+                        description:"Regain 2 Hunger.",
+                        flavorText:"\"Now, this here is my own recipe...\""
+                    },
+
                 ]
             }
         },

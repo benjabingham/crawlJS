@@ -193,12 +193,9 @@ class GameMaster{
     }
         */
 
-    static nextDay(rest = true){
+    static nextDay(){
         Save.day++
-        if(rest){
-            Player.rest();
-        }
-          
+        XP.checkLevelUp();
     }
 
     static rewind(event){
@@ -363,6 +360,10 @@ class GameMaster{
         ){
             return false
         }
+        //if item is in shop, try to buy it. If can't, return false.
+        if(Inventory.selectedContainer.shop && !ShopManager.buyItem(item.slot)){
+            return false;
+        }
         let selectSlot
         if(Inventory.selectedInventory == 'world-inventory'){
             Inventory.take(item.slot);
@@ -392,8 +393,13 @@ class GameMaster{
     static burnSelectedItem(event){
         let item = Inventory.getSelectedItem();
         if(!Inventory.itemIsAccessible(item) || !item.fuel){return false}
+        //if item is in shop, try to buy it. If can't, return false.
+        if(Inventory.selectedContainer.shop && !ShopManager.buyItem(item.slot)){
+            return false;
+        }
         let selectSlot
         if(Inventory.selectedInventory == 'world-inventory'){
+            
             Inventory.take(item.slot);
             selectSlot = item.slot
         }
@@ -417,6 +423,10 @@ class GameMaster{
     //if slot is defined, uses that slot instead of selected item
     static equipSelectedItem(event,slot = null){
         if(Board.getScale() != 'dungeon'){
+            return false;
+        }
+        //if item is in shop, try to buy it. If can't, return false.
+        if(Inventory.selectedContainer.shop && !ShopManager.buyItem(item.slot)){
             return false;
         }
         let item;

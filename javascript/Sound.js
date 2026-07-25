@@ -361,8 +361,8 @@ class Sound{
         })
 
         appropriateTracks.sort((a,b)=>{
-            weightedA = a.timesPlayed;
-            weightedB = b.timesPlayed;
+            let weightedA = a.timesPlayed;
+            let weightedB = b.timesPlayed;
             if(a.rarity){
                 weightedA *= a.rarity
                 weightedA += a.rarity

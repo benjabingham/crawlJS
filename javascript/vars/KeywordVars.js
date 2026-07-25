@@ -66,7 +66,7 @@ keywordVars = {
         food:{name:"food", hintText:"You can eat this."},
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
     
-        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 additional stamina when you wait.",color:"orange"},
+        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 stamina at the start of your turn if you're adjacent to a monster.",color:"orange"},
         hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina.",color:"green"},
         furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing.",color:"red"},
         lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use.",color:"green"},

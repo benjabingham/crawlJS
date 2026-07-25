@@ -354,6 +354,23 @@ class Board{
         return result;
     }
 
+    static hasAdjacentLivingMonster(x,y){
+        let result = false;
+        EntityManager.translations.forEach((translation)=>{
+            let xToCheck = x+translation.x;
+            let yToCheck = y+translation.y;
+            if(Board.isSpace(xToCheck,yToCheck) &&
+                Board.entityAt(xToCheck,yToCheck) &&
+                Board.entityAt(xToCheck,yToCheck).isMonster &&
+                !Board.entityAt(xToCheck,yToCheck).dead
+            ){
+                result = true;
+            }
+        })
+
+        return result;
+    }
+
     static setStain(x,y, level = 1, color = {r:185, g:80, b:53}){
         if(!Board.stainArray[y]){
             Board.stainArray[y] = [];

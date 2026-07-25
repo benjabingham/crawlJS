@@ -286,9 +286,6 @@ class Player {
         if(Player.perks.stamina.aerobics){
             stamina+= Player.perks.stamina.aerobics.val;
         }
-        if(Player.hasQualityInQuickbar('vigorAspect')){
-            stamina += Player.hasQualityInQuickbar('vigorAspect')
-        }
         if(Player.fatigueLevel){
             //stamina--;
         }
@@ -297,6 +294,14 @@ class Player {
 
     static fillStamina(){
         Player.stamina = Player.modifiedMaxStamina;
+    }
+
+    static checkPostTurnTriggers(){
+        if(Player.hasQualityInQuickbar('vigorAspect') && Board.hasAdjacentLivingMonster(EntityManager.playerEntity.x,EntityManager.playerEntity.y)){
+            Player.changeStamina(Player.hasQualityInQuickbar('vigorAspect'))
+        }
+        Player.checkHungerModifiers();
+        Player.checkChangeNourishment();
     }
 
     static checkHungerModifiers(){

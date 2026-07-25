@@ -24,6 +24,7 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         //LootManager.applyModifier(starterWeapon,itemVars.enchantments.blessed)
         Player.pickUpItem(starterWeapon);
+        LootManager.applyModifier(starterWeapon,itemVars.enchantments.vigor)
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
 
 
@@ -658,8 +659,7 @@ class GameMaster{
         }
         Board.placeEntities();
         if(!EntityManager.skipBehaviors){
-            Player.checkHungerModifiers();
-            Player.checkChangeNourishment();
+            Player.checkPostTurnTriggers();
         }
         if(snapshot){
             History.saveSnapshot();

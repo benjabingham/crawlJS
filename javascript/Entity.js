@@ -853,7 +853,9 @@ class Entity{
             } 
             //console.log('DISTURBED');
             this.disturbed++;
-            this.behaviorInfo.slow /= 2;
+            if(this.behaviorInfo && this.behaviorInfo.slow){
+                this.behaviorInfo.slow /= 2;
+            }
         }
     }
 

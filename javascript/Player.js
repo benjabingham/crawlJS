@@ -208,14 +208,18 @@ class Player {
             healthChange += 2;
         }
 
-        //let freeFatigueChange = Math.ceil((Player.fatigueMax * -1)/2)+2
-        let freeFatigueChange = Player.fatigueMax * -1
-        restInfo.fatigueChange += freeFatigueChange;
-        projectedFatigue += freeFatigueChange;
+        
 
         //lose 3 hunger at base
         restInfo.nourishmentChange = -3;
         projectedHunger -= 3;
+
+        let freeFatigueChange = -2
+        if(projectedHunger >= 0){freeFatigueChange -= Math.floor((Player.fatigueMax)/2)}
+        console.log(freeFatigueChange)
+        //let freeFatigueChange = Player.fatigueMax * -1
+        restInfo.fatigueChange += freeFatigueChange;
+        projectedFatigue += freeFatigueChange;
 
         let i = 0;
         let nHealthTicks = Math.ceil((100-Player.healthPercent)/30)

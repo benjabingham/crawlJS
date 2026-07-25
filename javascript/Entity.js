@@ -1139,6 +1139,14 @@ class SwordEntity extends Entity{
         return rotation;
     }
 
+    rotateByRelativePosition(pos){
+        let x = pos.x + this.ownerEntity.x;
+        let y = pos.y + this.ownerEntity.y;
+        let rotation = this.getRotationFromPosition({x:x,y:y});
+        this.rotation = rotation;
+
+    }
+
     updateSymbol(){
         let symbol = '|'
         if (this.rotation % 4 == 1){

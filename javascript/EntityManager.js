@@ -228,6 +228,11 @@ class EntityManager{
         EntityManager.checkEther();
 
         let playerEntity = EntityManager.getEntity("player");
+        if(!(Player.equipped && Player.equipped.weapon)){
+            let swordId = playerEntity.sword
+            let sword = EntityManager.getEntity(swordId);
+            sword.rotateByRelativePosition({x:x,y:y})
+        }
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
         if(!unarmedStrike && !EntityManager.moveEntity('player',x,y)){
             EntityManager.cancelAction({blocked:true})

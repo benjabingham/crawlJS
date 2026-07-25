@@ -360,14 +360,17 @@ class GameMaster{
         ){
             return false
         }
-        //if item is in shop, try to buy it. If can't, return false.
-        if(Inventory.selectedContainer.shop && !ShopManager.buyItem(item.slot)){
-            return false;
-        }
-        let selectSlot
+        let selectSlot = item.slot
+
         if(Inventory.selectedInventory == 'world-inventory'){
-            Inventory.take(item.slot);
-            selectSlot = item.slot
+            //if item is in shop, try to buy it. If can't, return false.
+            if(Inventory.selectedContainer.shop){
+                if(!ShopManager.buyItem(item.slot)){
+                    return false;
+                }
+            }else{
+                Inventory.take(item.slot);
+            }
         }
         let result = false
         if(item.food){

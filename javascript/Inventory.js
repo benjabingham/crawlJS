@@ -153,8 +153,14 @@ class Inventory{
             buttons = {take: true};
         }else if(dropMode){
            buttons = {drop: true}
-        }else if(shopItem){
-            buttons = {buy:item.price};
+        }
+
+        if(shopItem){
+            buttons.buy = item.price;
+            delete buttons.equip;
+            delete buttons.drink;
+            delete buttons.burn;
+            delete buttons.eat;
         }
 
         Inventory.addButtons(slot, inventory, buttons);
@@ -1095,7 +1101,7 @@ class Inventory{
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'eat':
-                        button = this.getEatButton(slot)
+                        button = this.getEatButton(slot, inventory, buttons.buy)
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'drink':
@@ -1142,8 +1148,9 @@ class Inventory{
         )
     }
 
-    static getEatButton(slot){
-        return $('<button>').addClass('item-button').text('eat').on('click',function(){
+    static getEatButton(slot, inventory, price){
+        let eatText = price ? "eat - "+price : 'eat'
+        return $('<button>').addClass('item-button').text(eatText).on('click',function(){
             GameMaster.eatItem({type:'item-'+(slot+1)});
             Inventory.displayInventory();
         })
@@ -1182,7 +1189,8 @@ class Inventory{
     }
 
     static getBuyButton(slot,price){
-        return $('<button>').addClass('item-button').text('buy - '+price).on('click',function(){
+        let buyText = price ? 'buy - '+price : 'free'
+        return $('<button>').addClass('item-button').text(buyText).on('click',function(){
             ShopManager.buyItem(slot);
             Inventory.displayInventory();
         })

@@ -8,6 +8,9 @@ let mapVars = {
             shop:{
                 weaponTiers:[0,2,3,4],
                 carriedMaterials:['wood','copper','bronze','iron','steel'],
+                curseMultiplier:0,
+                enchantmentChance:0,
+                preferredRange:{min:1,max:10},
                 fuelSlots:2,
                 potionSlots:2,
                 restockChances:{
@@ -15,10 +18,10 @@ let mapVars = {
                         0:0.3,
                         2:0.2,
                         3:0.13,
-                        4:0.8
+                        4:0.08
                     },
                     fuel:0.4,
-                    potion:0.3
+                    potion:0.15
                 }
             },
             tavern:{

@@ -19,7 +19,7 @@ class ShopManager{
         if(shopTemplate.weaponTiers){
             shopTemplate.weaponTiers.forEach((tier)=>{
                 let priceMultiplier = Random.roll(1,4) + tier;
-                let item = LootManager.getWeaponLoot(tier, shopTemplate.carriedMaterials);
+                let item = LootManager.getWeaponLoot(tier, shopTemplate.carriedMaterials,shopTemplate.curseMultiplier,shopTemplate.preferredRange,shopTemplate.enchantmentChance);
                 
                 item.price = Math.max(item.value,1) * priceMultiplier;
                 item.slot = slot;
@@ -132,7 +132,6 @@ class ShopManager{
             }
             let newItem = inventoryItems[slot]
             if(newItem.fresh){
-                console.log(entitySave)
                 let message = $('<span>').append(
                     entitySave.entityGroupInfo.entityName+" stocked "
                 ).append(
@@ -140,7 +139,9 @@ class ShopManager{
                 ).append(
                     " - "+newItem.price+" Gold"
                 )
-                Log.addSpanMessage(message)
+                if(LootManager.getItemNameWithSymbols(item) != LootManager.getItemNameWithSymbols(newItem)){
+                    Log.addSpanMessage(message)
+                }
             }
         })
     }

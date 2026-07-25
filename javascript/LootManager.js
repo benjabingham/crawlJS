@@ -235,7 +235,7 @@ class LootManager{
     }
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
-    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
+    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}, enchantmentChance = 0.025){
         let min = preferredRange.min;
         let max = preferredRange.max;
         let originalTier = tier
@@ -247,7 +247,7 @@ class LootManager{
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
-        LootManager.getItemEnchantment(weapon,0.025)
+        LootManager.getItemEnchantment(weapon,enchantmentChance)
         let cursed = LootManager.getWeaponIsCursed(weapon,originalTier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
 

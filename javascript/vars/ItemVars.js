@@ -1966,7 +1966,7 @@ let itemVars = {
     enchantments:{
         vigor:{
             name:'vigorAspect',
-            flatValue:20,
+            flatValue:50,
             enchantment:true,
             vigor:true
         },

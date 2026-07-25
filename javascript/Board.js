@@ -355,7 +355,7 @@ class Board{
     }
 
     static hasAdjacentLivingMonster(x,y){
-        let result = false;
+        let result = 0;
         EntityManager.translations.forEach((translation)=>{
             let xToCheck = x+translation.x;
             let yToCheck = y+translation.y;
@@ -364,7 +364,7 @@ class Board{
                 Board.entityAt(xToCheck,yToCheck).isMonster &&
                 !Board.entityAt(xToCheck,yToCheck).dead
             ){
-                result = true;
+                result++;
             }
         })
 

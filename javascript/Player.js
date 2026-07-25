@@ -297,8 +297,23 @@ class Player {
     }
 
     static checkPostTurnTriggers(){
-        if(Player.hasQualityInQuickbar('vigorAspect') && Board.hasAdjacentLivingMonster(EntityManager.playerEntity.x,EntityManager.playerEntity.y)){
+        if(Player.hasQualityInQuickbar('vigorAspect')){
             Player.changeStamina(Player.hasQualityInQuickbar('vigorAspect'))
+        }
+        let adrenaline = Player.perks.stamina.adrenaline
+        if(adrenaline && Player.modifiedStaminaPercent < 100){
+            let staminaGained = 0;
+            let gainChance = 1 - Math.pow(1-adrenaline.amount, adrenaline.val);
+            let nMonsters = Board.hasAdjacentLivingMonster(EntityManager.playerEntity.x,EntityManager.playerEntity.y)
+            for(let i = 0; i < nMonsters; i++){
+                if(Math.random() < gainChance){
+                    staminaGained++
+                }
+            }
+            if(staminaGained > 0){
+                Log.addMessage('Adrenaline fuels you!','pos',false,"You gained "+staminaGained +" Stamina from the Adrenaline perk.")
+                Player.changeStamina(staminaGained) 
+            }
         }
         Player.checkHungerModifiers();
         Player.checkChangeNourishment();

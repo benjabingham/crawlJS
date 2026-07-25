@@ -30,6 +30,14 @@ let skillVars = {
         {
             type:"misc",
             category:"stamina",
+            name:"adrenaline",
+            key:"adrenaline",
+            description:"At the start of your turn, for each adjacent monster, 50% chance to gain 1 Stamina.",
+            amount:0.5
+        },
+        {
+            type:"misc",
+            category:"stamina",
             name:"final push",
             key:"finalPush",
             description:"Attacks that use your last point of stamina are guaranteed crits.",

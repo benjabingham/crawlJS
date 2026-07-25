@@ -24,7 +24,7 @@ class GameMaster{
         let starterWeapon = LootManager.getStarterWeapon();
         //LootManager.applyModifier(starterWeapon,itemVars.enchantments.blessed)
         Player.pickUpItem(starterWeapon);
-        LootManager.applyModifier(starterWeapon,itemVars.enchantments.vigor)
+        //LootManager.applyModifier(starterWeapon,itemVars.enchantments.vigor)
         Player.pickUpItem(JSON.parse(JSON.stringify(itemVars.fuel.oilFlask)))
 
 

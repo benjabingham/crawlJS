@@ -60,7 +60,8 @@ class Sound{
         townHarp:{
             track: new Audio('audio/tracks/harp.mp3'),
             scale:['town','world'],
-            unskippable:true
+            unskippable:true,
+            rarity:1
         },
         /*heroism:{
             track: new Audio('audio/tracks/HEROISM.mp3')
@@ -360,9 +361,20 @@ class Sound{
         })
 
         appropriateTracks.sort((a,b)=>{
-            if(a.timesPlayed > b.timesPlayed){
+            weightedA = a.timesPlayed;
+            weightedB = b.timesPlayed;
+            if(a.rarity){
+                weightedA *= a.rarity
+                weightedA += a.rarity
+            }
+            if(b.rarity){
+                weightedB *= b.rarity
+                weightedB += b.rarity
+            }
+
+            if(weightedA > weightedB){
                 return 1;
-            }else if(b.timesPlayed > a.timesPlayed){
+            }else if(weightedB > weightedA){
                 return -1
             }
             return 0;

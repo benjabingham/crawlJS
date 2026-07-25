@@ -153,6 +153,7 @@ class EntityManager{
     //return falso if encumbered, true if not
     static checkEncumberedV2(){
         if(GameMaster.scale=='town'){return true}
+        if(GameMaster.scale == 'world'){return EntityManager.checkEncumberedWorld()}
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
             let diff = Player.getBulk()-Player.maxBulk;
@@ -165,18 +166,36 @@ class EntityManager{
                 if(Random.roll(1,100) <= chance){
                     Display.flash($('#player-inventory'),'inventory')
                     XP.gainBulkXP(nChecks)
-                    if(GameMaster.scale=='dungeon'){
-                        Player.changeStamina(-1)
-                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
-                        return false;
-                    }
-                    if(GameMaster.scale=='world'){
-                        Player.changeFatigue(1)
-                        Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. You have a chance to gain an additional point of Fatigue earch turn.')
-                        return true
-                    }
-                    
+                    Player.changeStamina(-1)
+                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
+                    return false;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    static checkEncumberedWorld(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            let diff = Player.getBulk()-Player.maxBulk;
+            let percentOver = diff/Player.maxBulk;
+            let nChecks = 1;
+            nChecks += Math.floor(percentOver*10)
+            let fatigueGained = 0;
+            for(let i = 0; i < nChecks; i++){
+                let chance = 5;
+                if(i==0){chance += 15}
+                if(Random.roll(1,100) <= chance){
+                    Display.flash($('#player-inventory'),'inventory')
+                    XP.gainBulkXP(nChecks)
+                    fatigueGained++;
+                }
+            }
+            if(fatigueGained){
+                Player.changeFatigue(fatigueGained)
+                Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. You have a chance to gain Fatigue earch turn.')
             }
         }
 

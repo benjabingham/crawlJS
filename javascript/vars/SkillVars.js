@@ -32,7 +32,8 @@ let skillVars = {
             category:"stamina",
             name:"final push",
             key:"finalPush",
-            description:"Attacks that use your last point of stamina are guaranteed crits."
+            description:"Attacks that use your last point of stamina are guaranteed crits.",
+            unique:true,
         },
     ],
     luck:[

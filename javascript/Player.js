@@ -84,6 +84,7 @@ class Player {
             inventory:Player.inventory,
             gold:Player.gold,
             equipped:Player.equipped,
+            delayedFatigue:Player.delayedFatigue,
             fatigue:Player.fatigue
         }))
             
@@ -362,15 +363,17 @@ class Player {
         Player.stamina = Math.max(0,Player.stamina)
         Player.stamina = Math.min(Player.modifiedMaxStamina,Player.stamina);
 
-        if(GameMaster.scale=='dungeon'){
-            let hungerChance = (Player.stamina - oldStamina);
-            Player.checkChangeNourishment(hungerChance);
-            let fatigueChance = (oldStamina - Player.stamina)/2;
-            Player.checkChangeDelayedFatigue(fatigueChance);
+        if(GameMaster.scale != 'dungeon'){
+            return false;
         }
-
+            
         if(n < 0){
             XP.gainStaminaXP(n*-1);
+            let delayedFatigueChance = (n*-1) * 0.75
+            Player.checkChangeDelayedFatigue(delayedFatigueChance);
+        }else{
+            let hungerChance = (Player.stamina - oldStamina)*1.5;
+            Player.checkChangeNourishment(hungerChance);
         }
     }
 
@@ -397,7 +400,9 @@ class Player {
             Display.flash($('body'),'deepRed');
             Display.flash($('#health-level'),'lightRed');
             if(GameMaster.scale=='dungeon'){
-                Player.checkChangeDelayedFatigue(n*-10)
+                for(let i = 0; i < n*-1; i++){
+                    Player.checkChangeDelayedFatigue(50)
+                }
             }
         }
     }

@@ -1667,7 +1667,7 @@ class Monster extends Entity{
         
         if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || 
             (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) || 
-            (targetItem.isContainer && this.hasDetectionLos(target))
+            (targetItem.isContainer && Board.hasPlayerLos(this))
         ){
             this.attack(targetItem);
         }
@@ -1724,7 +1724,7 @@ class Monster extends Entity{
 
         if(targetItem.id == "player" || targetItem.dead || targetItem.destructible ||
             (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) ||
-            (targetItem.isContainer && this.hasDetectionLos(target))
+            (targetItem.isContainer && Board.hasPlayerLos(this))
         
         ){
             this.attack(targetItem);
@@ -1831,7 +1831,9 @@ class Monster extends Entity{
                 }
             }
         }else if(target.isWall && target.destructible){
-            Sound.playMonsterHit(mortality);
+            if(Board.hasPlayerLos(this)){
+                Sound.playMonsterHit(mortality);
+            }
             EntityManager.addMortality(target.id, mortality);
         }
 
@@ -1843,8 +1845,10 @@ class Monster extends Entity{
             if(!target.dead){
                 mortality = Math.floor(mortality/2)
             }
-            Sound.playMonsterHit(mortality);
-
+            if(Board.hasPlayerLos(this)){
+                Sound.playMonsterHit(mortality);
+            }
+            console.log('ATTACKING '+target.name)
             let knockChance = mortality/target.threshold;
             if(target.behaviorInfo && target.behaviorInfo.sturdy){
                 knockChance -= target.behaviorInfo.sturdy;

@@ -73,12 +73,8 @@ class ShopManager{
     //pass roster entity, and update its item array.
     static restockShopInventory(mapId, shopId, entitySave){
         let inventory = entitySave.inventory
-        console.log('restocking!!!!!!!')
         let inventoryItems = inventory.items;
-        console.log({
-            mapId:mapId,
-            shopId:shopId,
-        })
+
         let shopTemplate = mapVars[mapId].shops[shopId]
         let restockChances = shopTemplate.restockChances
         inventoryItems.forEach((item)=>{
@@ -118,7 +114,7 @@ class ShopManager{
             }else if(restockChances && restockChances.weaponTiers){
                 let restockChance = restockChances.weaponTiers[item.tier]
                 if(Math.random() < restockChance){
-                    let newItem = LootManager.getWeaponLoot(item.tier, ShopManager.carriedMaterials);
+                    let newItem = LootManager.getWeaponLoot(item.tier, shopTemplate.carriedMaterials, shopTemplate.curseMultiplier,shopTemplate.preferredRange);
                     let priceMultiplier = Random.roll(1,4) + item.tier;
                     newItem.price = Math.max(newItem.value* priceMultiplier,1) ;
                     newItem.slot = slot;

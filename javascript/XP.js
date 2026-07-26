@@ -43,7 +43,7 @@ class XP{
             }
         });
         XP.applyPerk(skillVars.simple[0],false)
-        XP.applyPerk(skillVars.stamina[2],false)
+        //XP.applyPerk(skillVars.stamina[2],false)
 
         /*
         XP.applyPerk(skillVars.swing[0],false)

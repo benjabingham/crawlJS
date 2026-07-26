@@ -205,7 +205,7 @@ class Player {
 
         if(Player.perks.vitality && Player.hungerPercent >= 50){
             projectedMissingHealth -= 2;
-            healthChange += 2;
+            restInfo.healthChange += 2;
         }
 
         
@@ -363,7 +363,7 @@ class Player {
         Player.stamina = Math.min(Player.modifiedMaxStamina,Player.stamina);
 
         if(GameMaster.scale=='dungeon'){
-            let hungerChance = (Player.stamina - oldStamina)*2;
+            let hungerChance = (Player.stamina - oldStamina);
             Player.checkChangeNourishment(hungerChance);
             let fatigueChance = (oldStamina - Player.stamina)/2;
             Player.checkChangeDelayedFatigue(fatigueChance);

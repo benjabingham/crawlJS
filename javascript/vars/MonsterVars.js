@@ -701,6 +701,7 @@ let monsterVars = {
         },
         hitDice:3,
         damage:6,
+        fatiguing:3,
         inventorySlots: 2,
         inventory:[
         ],
@@ -1064,6 +1065,7 @@ let monsterVars = {
         inventorySlots: 2,
         isContainer: true,
         blood:0,
+        fatiguing:1,
         behaviorInfo:{
             focus:25,
             slow:95,

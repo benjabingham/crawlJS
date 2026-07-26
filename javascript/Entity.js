@@ -1822,6 +1822,13 @@ class Monster extends Entity{
                     Player.light = Math.max(Player.light-1,0)
                     EntityManager.transmitMessage('your light is drained.','danger')
                 }
+                if(this.fatiguing){
+                    let fatigueAmount = Random.roll(0,this.fatiguing);
+                    if(fatigueAmount){
+                        Log.addMessage(this.name+" saps your energy! ("+Player.fatigue+" → "+ (Player.fatigue+fatigueAmount) +" fatigue)",'danger',false,false,this.id)
+                        Player.changeFatigue(fatigueAmount)
+                    }
+                }
             }
         }else if(target.isWall && target.destructible){
             Sound.playMonsterHit(mortality);

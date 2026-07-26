@@ -612,7 +612,7 @@ class GameMaster{
         if(dungeonId != GameMaster.dungeonId){
             return false;
         }
-        GameMaster.postPlayerAction();
+        GameMaster.postPlayerAction('move');
     }
 
     static resolveEntityBehaviors(){
@@ -665,7 +665,7 @@ class GameMaster{
             History.saveSnapshot();
         }
         Board.calculateLosArray(EntityManager.getEntity('player'));
-        if(GameMaster.scale=='world' && action != 'wait'){
+        if(GameMaster.scale=='world' && action == 'move'){
             Player.changeFatigue(1)
         }
         GameMaster.updateDisplay();

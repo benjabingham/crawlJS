@@ -461,7 +461,7 @@ class Inventory{
                 changes[key] = "- "+restInfo[key]*-1
             }
         })
-        changes.healthChange += " HP ("+Player.health+" → "+(Player.health+restInfo.healthChange)+")"
+        changes.healthChange += " HP ("+Player.health+" → "+Math.min((Player.health+restInfo.healthChange),Player.healthMax)+")"
         changes.nourishmentChange += " Hunger ("+Player.nourishment+" → "+(Math.max(Player.nourishment+restInfo.nourishmentChange,0))+")"
         changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Math.max(Player.fatigue+restInfo.fatigueChange,0))+")"
 

@@ -203,8 +203,7 @@ class Player {
             nourishmentChange:0,
             fatigueChange:0
         }
-
-        if(Player.perks.vitality && Player.hungerPercent >= 50){
+        if(Player.perks.hp.vitality && Player.hungerPercent >= 50){
             projectedMissingHealth -= 2;
             restInfo.healthChange += 2;
         }

@@ -198,7 +198,7 @@ class ShopManager{
         let item = shopItems[slot];
         if (item.price > Player.gold){
             Log.addMessage("Too poor!",'danger')
-            //Sound.playError();
+            Sound.playError();
             GameMaster.postPlayerAction()
             return false;
         }
@@ -250,6 +250,10 @@ class ShopManager{
                 break;
             case "fullMeal":
                 Player.changeNourishment(100)
+                if(Math.random() > 0.5 && Player.luckPercent < 100){
+                    Player.changeLuck(1)
+                    Log.addMessage('Gained luck!','win')
+                }
                 Sound.playEat();
                 GameMaster.postPlayerAction();
                 break;

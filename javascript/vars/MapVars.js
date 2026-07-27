@@ -66,7 +66,7 @@ let mapVars = {
                         tier:'meal',
                         price:10,
                         name:"Feast",
-                        description:"Fully refill your hunger bar.",
+                        description:"Fully refill your hunger bar. 50% chance to gain 1 luck.",
                         flavorText:"\"You look hungry. How about something that'll really fill you up?\""
                     },
                     {

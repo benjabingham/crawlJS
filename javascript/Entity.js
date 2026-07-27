@@ -684,6 +684,7 @@ class Entity{
         let knock = false;
         let disadvantage = Player.getAdvantage(targetSword.item)
         console.log("disadvantage: "+disadvantage)
+        let tipText = ''
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage,disadvantage*-1);
@@ -692,6 +693,11 @@ class Entity{
             if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
+                tipText = 'You did not have enough stamina to hold your weapon steady.'
+            }else if(damage > targetSword.item.heft){
+                knock = true;
+                tipText = "The attack's damage exceeded your weapon's Heft."
+                Player.changeStamina(targetSword.item.heft * -1)
             }else{
                 Player.changeStamina(damage * -1);
             }
@@ -712,14 +718,15 @@ class Entity{
             return false
         }
         let beatChance = 0;
+        let beat = false;
         if(this.behaviorInfo){
             beatChance = this.behaviorInfo.beat;
+            beat = Random.roll(1,100) <= beatChance
+            if(beat){tipText = 'this monster has a flat chance to push your weapon aside even.'}
         }
 
-        let random = Random.roll(1,100);
-        if(random <= beatChance || knock){
+        if(beat || knock){
             if (targetSword.knockSword()){
-                let tipText = knock ? 'You did not have enough stamina to hold your weapon steady.' : 'this monster has a chance to push your weapon aside even if you have stamina remaining.'
                 EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText, this.id);
             }
             

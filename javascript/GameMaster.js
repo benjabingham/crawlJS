@@ -362,8 +362,9 @@ class GameMaster{
             return false
         }
         let selectSlot = item.slot
+        let selectedInventory = Inventory.selectedInventory
 
-        if(Inventory.selectedInventory == 'world-inventory'){
+        if(selectedInventory == 'world-inventory'){
             //if item is in shop, try to buy it. If can't, return false.
             if(Inventory.selectedContainer.shop){
                 if(!ShopManager.buyItem(item.slot)){
@@ -380,6 +381,7 @@ class GameMaster{
             result = Player.drinkItem(item);
         }
         //if consumed one use of multiuse item, reselect it.
+        selectSlot = item.slot
         if(typeof Player.inventory.items[selectSlot] != 'undefined'){
             Inventory.selectedInventory = "player-inventory";
             Inventory.displayedInventorySlots["player-inventory"] = selectSlot;

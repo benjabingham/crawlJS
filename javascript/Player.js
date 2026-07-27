@@ -380,7 +380,9 @@ class Player {
         Player.fatigue = Player.fatigue+n;
         if(Player.fatigue>Player.fatigueMax*2){
             let diff = Player.fatigue - Player.fatigueMax*2
-            Player.changeHealth(Random.roll(0,diff) *-1);
+            let healthLoss = Random.roll(0,diff)
+            healthLoss = Math.min(healthLoss,(Player.health-1))
+            Player.changeHealth( healthLoss*-1);
         }
         Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
         Player.fatigue = Math.max(0,Player.fatigue)
@@ -1095,9 +1097,6 @@ class Player {
 
     static getEncumbranceLevel(){
         let maxBulk = Player.modifiedMaxBulk
-        if(Player.fatigueLevel > 1){
-            maxBulk = Math.floor(maxBulk/2)
-        }
         let level = Math.floor(Player.getBulk()/maxBulk);
         level *= level;
         return level;

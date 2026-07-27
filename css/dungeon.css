@@ -213,6 +213,26 @@
     text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
 }
 
+.grid-seenFloor{
+    background:
+    repeating-conic-gradient(var(--floorMemoryAccent) 0% 25%, var(--floorMemory) 0% 50%) 
+    50% / var(--gridSize);
+    background-size:20% 20%;
+    /*border:1px solid var(--gridLine);*/
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    opacity: 0.3;
+    
+}
+
+.grid-seenWall{
+    background:
+    repeating-conic-gradient(var(--wallMemory) 0% 25%, var(--dark) 0% 50%) 
+    50% / var(--gridSize);
+    background-size:20% 20%;
+    /*border:1px solid var(--gridLine);*/
+    text-shadow: -1px -1px 0 var(--outline), 1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px 1px 0 var(--outline);
+    opacity: 0.2;
+}
 
 
 .stoneFloor{

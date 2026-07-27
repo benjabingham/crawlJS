@@ -13,6 +13,8 @@ q
     --dirtFloor:#c9c0af;
     */
     --floor:#c9c9c9;
+    --floorMemory:#535353;
+    --floorMemoryAccent:#888;
 
     --grassFloor:#bbcabb;
     --grassAccent:#b1c4b1;
@@ -21,6 +23,7 @@ q
     --dirtAccent:#c9c0ae;
 
     --wall:#777;
+    --wallMemory:#929292;
     --wallAccent:#888;
 
     --exit:#555;

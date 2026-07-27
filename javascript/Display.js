@@ -169,19 +169,19 @@ class Display{
                 let entityDiv = $('#board-entity-'+displayX+'-'+displayY);
                 let x = (displayX-8) + playerPos.x;
                 let y = (displayY-8) + playerPos.y;
-                let tileRemembered = GameMaster.scale == 'world' && Board.tileHasBeenSeen({x:x, y:y})
-                
-                let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || tileRemembered
+                let tileRemembered = Board.tileHasBeenSeen({x:x, y:y})                
+                let playerCanSee = Board.hasPlayerLos({x:x, y:y}) || (tileRemembered && GameMaster.scale == 'world')
                 if(worldMapId){
+                    //THIS IS FOR VIEWING MAP FROM INSIDE DUNGEON
                     playerCanSee = Board.tileHasBeenSeen({x:x,y:y},Save.maps[worldMapId])
                 }
                 //don't bother if spot was dark before and is still dark
-                if (!playerCanSee && gridDiv.hasClass('grid-dark')) { 
+                if (!playerCanSee && !tileRemembered && gridDiv.hasClass('grid-dark')) { 
                     continue;
                 }
                 entityDiv.html('');
-                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor').off('mouseleave mouseenter mousemove');
-                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable');
+                gridDiv.removeClass('grid-dark grid-exit grid-hint stoneFloor grassFloor dirtFloor woodFloor ').off('mouseleave mouseenter mousemove');
+                entityDiv.removeClass('grid-highlighted highlight-up grid-tree grid-wall grid-wood highlight-down highlight-left highlight-right highlight-clockwise highlight-counterclockwise parryable grid-seenWall grid-seenFloor');
                 Display.applyOpacity(0,stainDiv);
                 if(devMode){
                     gridDiv.off('contextmenu');
@@ -245,7 +245,12 @@ class Display{
                         Display.applyBackgroundColorRGB(Board.getStain(x,y).color, stainDiv);
                         Display.applyOpacity(Board.getStain(x,y).level,stainDiv);
                     }
-                //out of sight
+                }else if(tileRemembered && !worldMapId && Board.isSpace(x,y)){
+                    if(Board.wallArray[y][x]){
+                        entityDiv.addClass('grid-seenWall')
+                    }else{
+                        entityDiv.addClass('grid-seenFloor')
+                    }
                 }else{
                     gridDiv.addClass('grid-dark')
                 }

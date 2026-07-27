@@ -694,7 +694,7 @@ class Entity{
                 Player.stamina = 0;
                 knock = true;
                 tipText = 'You did not have enough stamina to hold your weapon steady.'
-            }else if(damage > targetSword.item.heft){
+            }else if(damage > targetSword.item.heft && !this.grabby){
                 knock = true;
                 tipText = "The attack's damage exceeded your weapon's Heft."
                 Player.changeStamina(targetSword.item.heft * -1)

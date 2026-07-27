@@ -775,6 +775,13 @@ let monsterVars = {
         inventorySlots:3,
         sightDistance:2,
         tracking:5,
+        loot:{
+            weapon:{
+                chance:10,
+                tier:2,
+                preferredRange:{min:0,max:10},
+            },
+        },
         inventory:[
             {
                 item: itemVars.drops.orangeGoo,

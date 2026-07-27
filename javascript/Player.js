@@ -379,7 +379,8 @@ class Player {
     static changeFatigue(n){
         Player.fatigue = Player.fatigue+n;
         if(Player.fatigue>Player.fatigueMax*2){
-            Player.changeHealth(Player.fatigueMax*2-Player.fatigue);
+            let diff = Player.fatigue - Player.fatigueMax*2
+            Player.changeHealth(Random.roll(0,diff) *-1);
         }
         Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
         Player.fatigue = Math.max(0,Player.fatigue)

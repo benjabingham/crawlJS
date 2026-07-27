@@ -947,6 +947,26 @@ let containerVars = {
             disturbChance:70,
             audioDisturbChance:15
         },
+        loot:{
+            weapon:{
+                chance:15,
+                tier:3,
+                preferredRange:{min:3,max:50}
+            },
+            treasure:{
+                chance:10,
+                tier:3,
+                preferredRange:{min:3,max:50}
+            },
+            potion:{
+                chance:5,
+                tier:3
+            },
+            gold:{
+                chance:20,
+                amount:20
+            }
+        },
         hitDice:3,
         inventorySlots: 3,
         inventory:[

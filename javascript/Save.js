@@ -145,6 +145,7 @@ class Save{
 
     static scatterItems(mapString){
         let map = Save.maps[mapString];
+        let scale = map.mapTypes.scale;
         let stealers = 0
         let nMisc = 0;
         //console.log(map);
@@ -154,15 +155,17 @@ class Save{
             if(entity.entityGroupInfo.entityType == "monster" && entity.alive){
                 stealers++;
             }else if(entity.entityGroupInfo.entityType == "itemPile"){
-
                 //total number of map tiles minus walls and such
                 let mapSpace = nTiles - nMisc;
                 let percentMonsters = stealers/mapSpace;
                 let stealChance = percentMonsters;
+                if(scale == 'world' || scale == 'town'){
+                    stealChance += 0.1
+                }
                 //take first (most valuable) item first
                 if(entity.inventory.gold){
                     let rand = Math.random()
-                    rand = 0;
+                    //rand = 0;
                     if(rand < stealChance*entity.inventory.gold){
                         Save.scatterGold(entity.inventory.gold, mapString)
                         entity.inventory.gold = 0;
@@ -177,6 +180,7 @@ class Save{
                         itemStealChance *= item.value+1;
                         itemStealChance+=.05
                     }
+                    itemStealChance = Math.min(itemStealChance,0.9)
                     let rand = Math.random();
                     if(rand < itemStealChance){
                         Save.scatterItem(item, mapString)  
@@ -194,6 +198,7 @@ class Save{
                 
             }else{
                 nMisc++;
+                //console.log(entity)
             }
         })
     }

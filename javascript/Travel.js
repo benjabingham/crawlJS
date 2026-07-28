@@ -33,8 +33,8 @@ class Travel{
                 return false;
         }
 
-
         GameMaster.getRoom(worldMapId,false,destinationCoords)
+        Save.scatterItems(locationId)
     }
 
     static getExitDirection(x,y){
@@ -73,11 +73,13 @@ class Travel{
 
     //pass locationEntity object
     static enterLocation(locationEntity){
+        let lastRoom = EntityManager.currentMap.name
         let direction = Travel.getEnterDirection(locationEntity)
         Board.enteredDirection = direction;
         let startingPosition = {}
         startingPosition[direction] = true;
         GameMaster.getRoom(locationEntity.locationId,false,startingPosition)
+        Save.scatterItems(lastRoom)
     }
 
     //check player position against locationEntity position when player is entering that location

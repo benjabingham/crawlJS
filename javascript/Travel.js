@@ -35,6 +35,7 @@ class Travel{
 
         GameMaster.getRoom(worldMapId,false,destinationCoords)
         Save.scatterItems(locationId)
+        Player.changeFatigue(1)
     }
 
     static getExitDirection(x,y){

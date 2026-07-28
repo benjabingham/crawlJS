@@ -325,9 +325,9 @@ class Player {
         let stamina = 0;
         let random = Math.random()*100;
         //effects are twice as likely at world scale
-        if(scale=='world')(random/2)
+        if(scale=='world')(random/3)
         //gaining uses percentage, losing uses flat value.
-        let gainChance = (Player.hungerPercent - 80)/2;
+        let gainChance = (Player.hungerPercent - 70)/2;
         let loseChance = (4 - Player.nourishment)*8;
 
         if (random < gainChance){
@@ -474,7 +474,7 @@ class Player {
         }
         if(GameMaster.scale == 'world'){
             //hungerChance *= Player.fatigue;
-            hungerChance += 20
+            hungerChance += 30
         }
         let random = Math.random()*100;
         hungerChance *= (Player.hungerPercent/150)+.66

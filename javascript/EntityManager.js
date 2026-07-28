@@ -181,7 +181,7 @@ class EntityManager{
         if(encumbrance){
             if(Player.fatigueLevel >= 2 && Player.health <= 1){
                 Display.flash($('#player-inventory'),'inventory')
-                Log.addMessage('You have pushed yourself to your limit.','danger',false,'You can no longer travel while over your bulk limit.')
+                Log.addMessage('You have pushed yourself to your limit.','warning',false,'You can no longer travel while over your bulk limit.')
                 return false;
             }   
             let diff = Player.getBulk()-Player.maxBulk;

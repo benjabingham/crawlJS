@@ -317,6 +317,7 @@ class Player {
         }
         Player.checkHungerModifiers();
         Player.checkChangeNourishment();
+        console.log(Player.health)
     }
 
     static checkHungerModifiers(){
@@ -382,7 +383,11 @@ class Player {
             let diff = Player.fatigue - Player.fatigueMax*2
             let healthLoss = Random.roll(0,diff)
             healthLoss = Math.min(healthLoss,(Player.health-1))
-            Player.changeHealth( healthLoss*-1);
+            healthLoss = Math.max(healthLoss,0)
+            if(healthLoss){
+                Log.addMessage('You are pushing yourself to your limit...','danger',false,'Your Fatigue is at its limit. Whenever you would gain fatigue, you now have a chance to lose that much health. (This cannot kill you)')
+                Player.changeHealth( healthLoss*-1);
+            }
         }
         Player.fatigue = Math.min(Player.fatigueMax*2,Player.fatigue);
         Player.fatigue = Math.max(0,Player.fatigue)

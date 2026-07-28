@@ -466,15 +466,20 @@ class Inventory{
         changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Math.max(Player.fatigue+restInfo.fatigueChange,0))+")"
 
         let starvingSpan = '';
+        let hungrySpan = '';
         if(Player.nourishment+restInfo.nourishmentChange < 0){
             starvingSpan = $('<span>').addClass('starving-span').text(' ☠')
             Display.setHintText(starvingSpan,"You will experience starvation, gaining fatigue and possibly losing health.")
+        }
+        if(Player.nourishment < 4){
+            starvingSpan = $('<span>').addClass('starving-span').text(' !')
+            Display.setHintText(starvingSpan,"You are hungry. Resource conversion disabled. (You will not lose hunger to further lower fatigue, or gain fatigue to gain health)")
         }
 
         let description = $("<span>").addClass('keyword bold').text(item.description)
         Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
         let div = $("<div>").addClass('item-description').append(description).append(" You will gain:").append(
-            $("<div>").append(changes.nourishmentChange).append(starvingSpan).addClass('hunger-text-div rest-info-div')
+            $("<div>").append(changes.nourishmentChange).append(starvingSpan).append(hungrySpan).addClass('hunger-text-div rest-info-div')
         ).append(
             $("<div>").append(changes.fatigueChange).addClass('fatigue-text-div rest-info-div')
         ).append(

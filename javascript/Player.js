@@ -221,6 +221,9 @@ class Player {
         restInfo.fatigueChange += freeFatigueChange;
         projectedFatigue += freeFatigueChange;
 
+        //don't do anything else if current hunger below 4
+        if(Player.nourishment < 4){return restInfo}
+
         let i = 0;
         let nHealthTicks = Math.ceil((100-Player.healthPercent)/30)
         // gain fatigue to gain health at a rate of 1:2, unless fatigue is at 6 or above. Do one time for every 30% of health missing, rounded up.
@@ -236,7 +239,7 @@ class Player {
         //THEN use hunger to reduce fatigue at a rate of 2:1, unless hunger is 4 or below
         i = 0;
         
-        while(i < 3 && projectedFatigue > 0 && projectedHunger > 4){
+        while(i < 3 && projectedFatigue > 0 && projectedHunger > 3){
             restInfo.fatigueChange -= 2
             projectedFatigue -= 2
 

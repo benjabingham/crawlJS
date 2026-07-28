@@ -1,6 +1,6 @@
 more skills
-    - guard
-        enemies attack your proficient weapons with disadvantage
+    - Quick Sheathing
+        - draw skill - unequiping weapons is a free action
 
 
 Classes
@@ -86,3 +86,9 @@ travel
     When enter town, navigate it like a dungeon. Shop/tavern are entities. (behind the scenes, they will work as containers and their options will be pseudoitems.)
     eventually - map is procedurally generated with different dungeons in different locations each game. Have a vision radius, remember what you've seen.
 sound
+
+REWORK SWORD KNOCKING
+    weapons get knocked when damage to them exceeds their heft
+    this means an attack against your weapon can only drain your stamina as much as an attack with that weapon would !
+
+give weapon drops a preferred heft or bulk range - goblins should drop light weapons, orcs heavy

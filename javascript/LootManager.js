@@ -154,6 +154,7 @@ class LootManager{
         let treasure = LootManager.getTreasure();
         let treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
         LootManager.applyModifier(treasure, treasureMaterial); 
+        LootManager.getItemEnchantment(treasure,0.03)
 
         for(let i = 0; i < nRolls; i++){
             let newTreasure = LootManager.getTreasure();

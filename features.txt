@@ -92,3 +92,10 @@ REWORK SWORD KNOCKING
     this means an attack against your weapon can only drain your stamina as much as an attack with that weapon would !
 
 give weapon drops a preferred heft or bulk range - goblins should drop light weapons, orcs heavy
+
+features that will be good for the game
+    - more useable items
+    - player Classes
+    - non-death failstates (monsters that take stuff and run)
+    - run modifiers!
+    - ways to win ...

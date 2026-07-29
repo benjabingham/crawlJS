@@ -26,6 +26,7 @@ class Player {
         hp:{},
         hunger:{},
         bulk:{},
+        luck:{},
         sword:{},
         axe:{},
         blunt:{},
@@ -413,6 +414,11 @@ class Player {
                 for(let i = 0; i < n*-1; i++){
                     Player.checkChangeDelayedFatigue(50)
                 }
+            }
+            if(Player.perks.hp.bloodRush){
+                Player.changeStamina(n*-1*Player.perks.hp.bloodRush.val)
+                //Player.changeFatigue(n*Player.perks.hp.bloodRush.val)
+                Log.addMessage('Pain fuels you!','pos',false,'The Blood Rush perk has caused you to gain stamina.')
             }
         }
     }
@@ -951,6 +957,18 @@ class Player {
         
         console.log(crits);
         return crits;
+    }
+
+    //takes strikeType and heft, refunds if appropriate.
+    static checkRefund(strikeType, heft){
+        if(!Player.perks[strikeType].refund){
+            return false;
+        }
+        if(Math.random() < 0.5){return false}
+        let refund = Math.floor(heft/2)
+        if(!refund){return false}
+        Log.addMessage('An effortless strike!','pos',false,'You were refunded Stamina.')
+        Player.changeStamina(refund)
     }
 
     static getDamageMultiplier(weaponItem, strikeType, target, crit){

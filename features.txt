@@ -99,3 +99,7 @@ features that will be good for the game
     - non-death failstates (monsters that take stuff and run)
     - run modifiers!
     - ways to win ...
+
+
+
+rename 'harp' 'first respite'

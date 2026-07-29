@@ -160,7 +160,7 @@ class LootManager{
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
-            LootManager.getItemEnchantment(newTreasure,0.05)
+            LootManager.getItemEnchantment(newTreasure,0.03)
             //if value is outside of range, expand range and try again
             if(
                 (greater && newTreasure.value > treasure.value) ||

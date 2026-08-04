@@ -55,10 +55,14 @@ button{
     
         margin:5px;
     }
+
+    a:hover,button:hover{
+        cursor: pointer;
+        background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
+    }
 }
 
-button:hover,
-#map-editor-link:hover{
+button:hover{
     cursor: pointer;
     background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
 

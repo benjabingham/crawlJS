@@ -1316,6 +1316,7 @@ class SwordEntity extends Entity{
                 target.parryable = false;
             }
             Log.sendStrikeMessage(strikeType, weapon, target);
+            Player.checkRefund(strikeType,heft);
             Log.sendCritMessage(crit);
             if(crit){target.lastCritTurn = Log.turnCounter}
             if(mortality){Log.addMessage(mortality+" Damage!",'danger')}

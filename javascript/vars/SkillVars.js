@@ -13,6 +13,13 @@ let skillVars = {
             description:"Gain +2 health when you rest with your hunger bar at least half full.",
             amount:2
         },
+        {
+            type:"misc",
+            category:"hp",
+            name:"blood rush",
+            key:"bloodRush",
+            description:"When you lose Health, gain that much Stamina."
+        },
     ],
     stamina:[
         {
@@ -49,7 +56,14 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"luck",
             amount:2
-        }
+        },
+        {
+            type:"misc",
+            category:"luck",
+            name:"fortune's thrill",
+            key:"fortunesThrill",
+            description:"When you use luck, gain 2 Stamina."
+        },
     ],
     hunger:[
         {
@@ -165,28 +179,60 @@ let skillVars = {
             type:"critChance",
             attackType:"swing",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"swing",
+            name:"effortless swing",
+            key:"refund",
+            description:"Swing strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     jab:[
         {
             type:"critChance",
             attackType:"jab",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"jab",
+            name:"effortless jab",
+            key:"refund",
+            description:"Jab strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     draw:[
         {
             type:"critChance",
             attackType:"draw",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"draw",
+            name:"effortless draw",
+            key:"refund",
+            description:"Draw strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true,
+        },
     ],
     strafe:[
         {
             type:"critChance",
             attackType:"strafe",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"draw",
+            name:"effortless strafe",
+            key:"refund",
+            description:"Strafe strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     counterattack:[
         {

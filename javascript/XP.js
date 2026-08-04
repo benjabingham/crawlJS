@@ -43,7 +43,8 @@ class XP{
             }
         });
         XP.applyPerk(skillVars.simple[0],false)
-        //XP.applyPerk(skillVars.hp[1],false)
+
+        //XP.applyPerk(skillVars.draw[1],false)
 
         /*
         XP.applyPerk(skillVars.swing[0],false)
@@ -225,7 +226,7 @@ class XP{
         //multiply amount fatigue gained by current percentage of fatigue
         let percent = Player.fatiguePercent;
         let weightAmount = amount * percent;
-        weightAmount *= 0.15;
+        weightAmount *= 0.10;
         amount /= 2;
         this.gain('fatigue',amount,weightAmount)
     }

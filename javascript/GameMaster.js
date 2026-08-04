@@ -227,6 +227,10 @@ class GameMaster{
         }
         console.log('rewind');
         History.rewind();
+        console.log(Player.perks)
+        if(Player.perks.luck.fortunesThrill){
+            Player.changeStamina(Player.perks.luck.fortunesThrill.val * 2)
+        }
         Sound.playRewind();
         EntityManager.skipBehaviors = true;
         

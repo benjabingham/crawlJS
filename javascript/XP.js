@@ -226,7 +226,7 @@ class XP{
         //multiply amount fatigue gained by current percentage of fatigue
         let percent = Player.fatiguePercent;
         let weightAmount = amount * percent;
-        weightAmount *= 0.15;
+        weightAmount *= 0.10;
         amount /= 2;
         this.gain('fatigue',amount,weightAmount)
     }

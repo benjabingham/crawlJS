@@ -227,7 +227,7 @@ let skillVars = {
         },
         {
             type:"misc",
-            category:"draw",
+            category:"strafe",
             name:"effortless strafe",
             key:"refund",
             description:"Strafe strikes have a 50% chance to refund half of their stamina cost, rounded down.",

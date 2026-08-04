@@ -472,8 +472,8 @@ class Inventory{
             Display.setHintText(starvingSpan,"You will experience starvation, gaining fatigue and possibly losing health.")
         }
         if(Player.nourishment < 4){
-            starvingSpan = $('<span>').addClass('starving-span').text(' !')
-            Display.setHintText(starvingSpan,"You are hungry. Resource conversion disabled. (You will not lose hunger to further lower fatigue, or gain fatigue to gain health)")
+            hungrySpan = $('<span>').addClass('starving-span').text(' !')
+            Display.setHintText(hungrySpan,"You are hungry. Resource conversion disabled. (You will not lose hunger to further lower fatigue, or gain fatigue to gain health)")
         }
 
         let description = $("<span>").addClass('keyword bold').text(item.description)

@@ -46,14 +46,14 @@ class LootManager{
             let weaponLoot = lootChances.weapon;
             if(weaponLoot){
                 if(Random.roll(1,99) < weaponLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials, weaponLoot.curseMultiplier));
+                    entitySave.inventory.items.push(LootManager.getWeaponLoot(weaponLoot.tier,weaponLoot.allowedMaterials, weaponLoot.curseMultiplier, weaponLoot.preferredRange));
                 }
             }
 
             let treasureLoot = lootChances.treasure;
             if(treasureLoot){
                 if(Random.roll(1,99) < treasureLoot.chance){
-                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.preferredRange));
+                    entitySave.inventory.items.push(LootManager.getTreasureLoot(treasureLoot.tier,treasureLoot.allowedMaterials,treasureLoot.curseMultiplier, treasureLoot.preferredRange));
                 }
             }
 
@@ -96,12 +96,18 @@ class LootManager{
 
         let inventory = LootManager.getInventoryFromTemplate(template)
         if(inventory){
+            inventory.forEach((item)=>{
+                //chance for enchantments...
+                LootManager.getItemEnchantment(item,0.0025)
+                LootManager.getTreasureIsCursed(item,0,0)
+            })
             entitySave.inventory.items = entitySave.inventory.items.concat(inventory);
         }
         //trim down to max size
         entitySave.inventory.items = LootManager.trimInventory(entitySave.inventory.items, template.inventorySlots)
         entitySave.inventory.items.forEach(item=>{
             if(item.unlabeled){LootManager.generateUnlabeledPotionDetails(item)}
+            
         })
     }
 
@@ -133,7 +139,12 @@ class LootManager{
         return inventory;
     }
 
-    static getTreasureLoot(tier, allowedMaterials, preferredRange = {min: 0 , max: 9999}){
+    static getTreasureLoot(tier, allowedMaterials, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}){
+        let originalTier = tier;
+        if(Random.roll(1,30) <= curseMultiplier){
+            tier+= 2
+            curseMultiplier = 9999;
+        }    
         let nRolls = tier-3;
         let greater = (nRolls > 0);
         let min = preferredRange.min;
@@ -142,12 +153,14 @@ class LootManager{
 
         let treasure = LootManager.getTreasure();
         let treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
-        LootManager.applyModifier(treasure, treasureMaterial);
+        LootManager.applyModifier(treasure, treasureMaterial); 
+        LootManager.getItemEnchantment(treasure,0.03)
 
         for(let i = 0; i < nRolls; i++){
             let newTreasure = LootManager.getTreasure();
             treasureMaterial = LootManager.getTreasureMaterial(allowedMaterials);
             LootManager.applyModifier(newTreasure, treasureMaterial);
+            LootManager.getItemEnchantment(newTreasure,0.03)
             //if value is outside of range, expand range and try again
             if(
                 (greater && newTreasure.value > treasure.value) ||
@@ -160,14 +173,20 @@ class LootManager{
 
         LootManager.getTreasureModifier(treasure, tier);
         LootManager.getTreasureSize(treasure);
+        let cursed = LootManager.getTreasureIsCursed(treasure, originalTier, curseMultiplier)
         //console.log(treasure)
         //if outside of range, widen range and try again!
+        //adjust max based on certain item qualities ...
+        let modifiedMax = treasure.cursed ? (max*2)+5 : max;
+        modifiedMax = treasure.damned ? max * 10 : max;
+        modifiedMax = treasure.tiny ? max * 0.75 : max;
+        modifiedMax = treasure.huge ? max * 1.25 : max; 
         if(treasure.value > max){
-            let newMax = max * 1.5;
-            treasure = LootManager.getTreasureLoot(tier, allowedMaterials, {min:min, max:newMax})
+            let newMax = cursed ? max * 1.1 : max * 1.5;
+            treasure = LootManager.getTreasureLoot(originalTier, allowedMaterials, curseMultiplier*1.15, {min:min, max:newMax})
         }else if(treasure.value < min){
             let newMin = Math.floor(min/2)
-            treasure = LootManager.getTreasureLoot(tier,allowedMaterials, {min:newMin, max:max})
+            treasure = LootManager.getTreasureLoot(originalTier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
         }
         treasure.treasure = true;
         LootManager.getFlavorText(treasure);
@@ -217,7 +236,10 @@ class LootManager{
     }
 
     //allowedMaterials is an array of weapon material keys. Rarity will be based on order!
-    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1){
+    static getWeaponLoot(tier, allowedMaterials=false, curseMultiplier = 1, preferredRange = {min: 0 , max: 9999}, enchantmentChance = 0.025){
+        let min = preferredRange.min;
+        let max = preferredRange.max;
+        let originalTier = tier
         //extra curse bonus...
         if(Random.roll(1,30) <= curseMultiplier){
             tier+= 3
@@ -226,11 +248,25 @@ class LootManager{
         let weaponMaterial = LootManager.getWeaponMaterial(tier, allowedMaterials);
         let weapon = LootManager.getWeapon(weaponMaterial.key);
         LootManager.applyModifier(weapon, weaponMaterial);
-        LootManager.getIsCursed(weapon,tier,curseMultiplier)
+        LootManager.getItemEnchantment(weapon,enchantmentChance)
+        let cursed = LootManager.getWeaponIsCursed(weapon,originalTier,curseMultiplier)
         LootManager.getIsWorn(weapon, tier);
+
+        let modifiedMax = weapon.cursed ? max * 2 : max;
+        modifiedMax = weapon.damned ? max * 4 : max;
+        if(weapon.value > modifiedMax){
+            let newMax = cursed ? max * 1.25 : max * 2;
+            weapon = LootManager.getWeaponLoot(originalTier, allowedMaterials, curseMultiplier*1.3, {min:min, max:newMax})
+        }else if(weapon.value < min){
+            let newMin = Math.floor(min/2)
+            weapon = LootManager.getWeaponLoot(originalTier,allowedMaterials, curseMultiplier, {min:newMin, max:max})
+        }
+
         if(!weapon.flimsy || weapon.flimsy < 0){
             weapon.flimsy = 0;
         }
+
+        
 
         return weapon;
     }
@@ -253,12 +289,15 @@ class LootManager{
         let food = JSON.parse(JSON.stringify(itemVars.food[foodKey]));
 
         if(food.preserved){rottenMultiplier /= 2}
-        if(food.perishable){rottenMultiplier *= 2}
+        if(food.perishable){rottenMultiplier *= 3}
         rottenMultiplier *= Math.random()+0.5
-        food.rottenMultiplier = rottenMultiplier;
-        if(Math.random() < rottenMultiplier * .2){
+        food.rottenChance = rottenMultiplier * 0.4;
+        if(food.rottenChance >= 0.9){
             LootManager.applyModifier(food,itemVars.foodModifiers.rotten)
+        }else if(food.rottenChance >= 0.3){
+            LootManager.applyModifier(food,itemVars.foodModifiers.dubious)
         }
+        
 
         food.tier = tier;
         LootManager.getFlavorText(food);
@@ -398,17 +437,65 @@ class LootManager{
     }
 
     //checks to apply cursed to a weapon
-    static getIsCursed(weapon, tier, multiplier = 1){
-        let notCursedChance = (30 * tier) / multiplier;
-        if(Random.roll(0,99) < notCursedChance){
+    static getWeaponIsCursed(weapon, tier, multiplier = 1){
+        if(weapon.cursed){return false}
+        let exemptChance = (30 * tier) / multiplier;
+        let chance = (weapon.value) * multiplier
+        if(weapon.curseChance){
+            chance += weapon.curseChance*100;
+            exemptChance -= weapon.curseChance*100;
+        }
+        if(Random.roll(0,99) < exemptChance){
             return false;
         }
-        let chance = (weapon.value) * multiplier
+
+        if(weapon.treasure){
+            let damnedChance = chance
+            if(Random.roll(0,99) < damnedChance){
+                LootManager.applyModifier(weapon,itemVars.treasureModifiers.damned)
+                return true
+            }
+        }
+        
         if(Random.roll(0,99) < chance){
             LootManager.applyModifier(weapon,itemVars.weaponModifiers.cursed);
+            return true;
+            /*
+            let maxCurseLevel = Math.floor(weapon.val/10);
+            weapon.curse = Math.min(10,Random.roll(1,maxCurseLevel))
+            */
         }
 
-        return true;
+        return false;
+    }
+
+    static getTreasureIsCursed(item, tier, multiplier = 1){
+        let chance = (item.value) * multiplier;
+        let divisor = tier/2
+        divisor = Math.max(divisor,1);
+        chance /= divisor;
+        if(item.curseChance){
+            chance += item.curseChance*100;
+        }
+
+        if(chance/multiplier > 25){
+            let damnedChance = chance
+            if(Random.roll(0,99) < damnedChance){
+                LootManager.applyModifier(item,itemVars.treasureModifiers.damned)
+                return true
+            }
+        }
+        
+        
+        if(Random.roll(0,99) < chance){
+            LootManager.applyModifier(item,itemVars.treasureModifiers.cursed);
+            /*let maxCurseLevel = Math.floor(item.val/5);
+            item.curse = Math.min(10,Random.roll(1,maxCurseLevel))
+            */
+            return true
+        }
+
+        return false;
     }
 
     static getWeapon(material = false){
@@ -457,13 +544,17 @@ class LootManager{
     }
 
     static applyModifier(item, modifier, recursion = false){
+        //console.log(modifier);
         item[modifier.name] = true;
         for (const [key, value] of Object.entries(modifier)){
             switch(key){
                 case 'name':
-                    if(!modifier.symbol){
+                    if(!keywordVars.symbols[value] && !modifier.suffix){
                         item[key] = value + ' ' + item[key];
                     }
+                    break;
+                case 'suffix':
+                    item.name = item.name + " " + value;
                     break;
                 case 'symbol':
                     if(!item.symbols){
@@ -474,10 +565,24 @@ class LootManager{
                     break;
                 case 'damage':
                 case 'stunTime':
-                case 'weight':
+                case 'heft':
                     if(item[key]){
                         item[key] += value;
                         item[key] = Math.max(1,item[key]);
+                    }
+                    break;
+                case 'damageMult':
+                case 'stunTimeMult':
+                case 'heftMult':
+                    let attribute = key.split('Mult')[0]
+                    //multiply attribute by value. Round down final number for increase, up for decrease.
+                    if(item[attribute]){
+                        item[attribute] *= value;
+                        if(value>1){
+                            item[attribute] = Math.floor(item[attribute])
+                        }else{
+                            item[attribute] = Math.ceil(item[attribute])
+                        }
                     }
                     break;
                 case 'flimsy':
@@ -504,6 +609,12 @@ class LootManager{
                     
                     }
                     break;
+                case 'flatValue':
+                    if(!item.value){item.value = 0;}
+                    if(!item.floatValue){item.floatValue = item.value}
+                    item.value += value;
+                    item.floatValue += value;
+                    break;
                 case 'color':
                     item[key] = value;
                     break;
@@ -521,6 +632,12 @@ class LootManager{
                     
                     //min value 0.1
                     item[key] = Math.max(item[key], 0.1);
+                    break;
+                case 'cursed':
+                    if(!item.cursed || typeof item.cursed != "number"){
+                        item.cursed = 0
+                    }
+                    item.cursed += value;
                     break;
                 case 'possibleFlavorTexts':
                 case 'flavorText':
@@ -579,9 +696,9 @@ class LootManager{
         }
 
         if(item.food){
-            if(!item.rottenMultiplier || item.rottenMultiplier < 0.5){
+            if(!item.rottenChance || item.rottenChance < 0.1){
                 texts = texts.concat(itemVars.foodFlavorTexts.lowRotten);
-            }else if(item.rottenMultiplier < 2){
+            }else if(item.rottenChance < 0.4){
                 texts = texts.concat(itemVars.foodFlavorTexts.mediumRotten);
             }else{
                 texts = texts.concat(itemVars.foodFlavorTexts.highRotten);
@@ -682,7 +799,7 @@ class LootManager{
         //console.log(type);
         Object.keys(itemVars.weapons).forEach(key =>{
             let weapon = itemVars.weapons[key];
-            console.log(weapon);
+            //console.log(weapon);
             if(weapon.type && weapon.type[type]){
                 weapons.push(weapon);
             }
@@ -732,6 +849,16 @@ class LootManager{
         return value;
     }
 
+    //chance is chance the item gets an enchantment, from 0-1
+    static getItemEnchantment(item,chance){
+        if(item.enchantmentChance){chance += item.enchantmentChance}
+        if(Math.random() > chance){return false}
+        let enchantmentKeys = Object.keys(itemVars.enchantments);
+        //console.log(enchantmentKeys)
+        let index = Random.roll(0,enchantmentKeys.length-1)
+        LootManager.applyModifier(item,itemVars.enchantments[enchantmentKeys[index]])
+    }
+
     static getItemBulk(item){
         if(!item.bulk){return 0.1}
         let bulk = item.bulk;
@@ -750,19 +877,31 @@ class LootManager{
 
     static getItemSymbolsSpan(item){
         let symbolsSpan = $('<span>')
-        let symbols = item.symbols;
-        if(!symbols){symbols = []}
-        symbols = [...symbols];
-        //console.log(symbols);
-        
-        if(symbols){
-            symbols.forEach((symbol)=>{
-                let symbolSpan = $('<span>').text(" "+symbol);
-                let hintText = Display.getSymbolHintText(symbol);
-                Display.setHintText(symbolSpan,hintText)
-                symbolsSpan.append(symbolSpan);
-            })
+        let symbols = [];
+        for (const [key,value] of Object.entries(item)){
+            if(keywordVars.symbols[key] && value){
+                symbols.push(JSON.parse(JSON.stringify(keywordVars.symbols[key])))
+            }
         }
+        //console.log(symbols);
+        if(!symbols.length){return symbolsSpan}
+
+        symbols.forEach((symbol)=>{
+            let symbolSpan = $('<span>').text(" "+symbol.symbol);
+            if(symbol.color){
+                Display.applyColor(symbol,symbolSpan)
+            }
+            let hintText;
+            if(symbol.name){
+                console.log(item[symbol.name])
+                hintText = Display.capitalizeFirstLetter(symbol.name);
+                if(item[symbol.name] > 1 && typeof item[symbol.name] == 'number'){
+                    hintText += " "+item[symbol.name]
+                }
+            }
+            if(hintText){Display.setHintText(symbolSpan,hintText)}
+            symbolsSpan.append(symbolSpan);
+        })
 
         return symbolsSpan;
     }

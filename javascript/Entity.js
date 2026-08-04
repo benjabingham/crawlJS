@@ -70,6 +70,8 @@ class Entity{
     reanimator;
     //logMessage - {message,class}. Sent to log first time entity is seen.
     logMessage;
+    //shop - determines if entity is a shop
+    shop;
 
     constructor(symbol='o', x=-1, y=-1, name=false, id=false){
         if (!id){
@@ -166,19 +168,26 @@ class Entity{
     move(x, y){
         x += this.x;
         y += this.y;
-    
+        let isPlayer = PlayerEntity.prototype.isPrototypeOf(this);
         if(Board.isSpace(x,y) && Board.isOpenSpace(x,y)){
             if(Board.getStain(this.x,this.y)){
                 Board.smearStain(this,{x:x,y:y});
             }
             this.setPosition(x,y);
+            if(isPlayer){
+                Sound.playMove();
+            }
             return true;
-        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && PlayerEntity.prototype.isPrototypeOf(this)){
+        }else if(Board.entityAt(x,y) && Board.entityAt(x,y).isContainer && isPlayer){
             this.lootContainer(Board.entityAt(x,y));
             //Inventory.openContainerInventory(Board.entityAt(x,y))
             return true;
+        }else if(Board.entityAt(x,y) && Location.prototype.isPrototypeOf(Board.entityAt(x,y)) && isPlayer){
+            Board.entityAt(x,y).enter()
+            return true;
         }else if(!Board.isSpace(x,y) && this.id == "player"){
-            GameMaster.travel(x,y);
+            Travel.exitLocation(x,y)
+            //GameMaster.travel(x,y);
             return true;
         }
 
@@ -375,6 +384,8 @@ class Entity{
             }
         };
 
+        Sound.playOpenBag();
+
         if(isPlayer && container.spawnEntities && container.seeNextContainedEntity()){
             Log.addMessage("a "+container.seeNextContainedEntity()+'!','danger')
             container.disturb();
@@ -560,6 +571,7 @@ class Entity{
             console.log({message:'kill',entity:this})
             if(Board.hasPlayerLos(this) && message){
                 EntityManager.transmitMessage(message, 'win',false,false,this.id);
+                Sound.playDie(this);
                 XP.gainFoeXP(this);
             }
             this.name += " corpse";
@@ -600,7 +612,6 @@ class Entity{
     };
 
     checkSplatter(damage, weapon){
-        console.log('checksplatter')
         if(!this.blood){
             return false;
         }
@@ -673,12 +684,20 @@ class Entity{
         let knock = false;
         let disadvantage = Player.getAdvantage(targetSword.item)
         console.log("disadvantage: "+disadvantage)
+        let tipText = ''
         if(targetSword.owner == 'player'){
             EntityManager.transmitMessage(this.name+" attacks your weapon...", false, "attacks your weapon", "Attacks against your weapon deplete your stamina, and have an increased chance to degrade the weapon.", this.id);
             let damage = Random.roll(0,this.damage,disadvantage*-1);
+            Sound.playMonsterHit(damage)
+            Sound.playSwordHit();
             if(damage > Player.stamina){
                 Player.stamina = 0;
                 knock = true;
+                tipText = 'You did not have enough stamina to hold your weapon steady.'
+            }else if(damage > targetSword.item.heft && !this.grabby){
+                knock = true;
+                tipText = "The attack's damage exceeded your weapon's Heft."
+                Player.changeStamina(targetSword.item.heft * -1)
             }else{
                 Player.changeStamina(damage * -1);
             }
@@ -699,14 +718,15 @@ class Entity{
             return false
         }
         let beatChance = 0;
+        let beat = false;
         if(this.behaviorInfo){
             beatChance = this.behaviorInfo.beat;
+            beat = Random.roll(1,100) <= beatChance
+            if(beat){tipText = 'this monster has a flat chance to push your weapon aside even.'}
         }
 
-        let random = Random.roll(1,100);
-        if(random <= beatChance || knock){
+        if(beat || knock){
             if (targetSword.knockSword()){
-                let tipText = knock ? 'You did not have enough stamina to hold your weapon steady.' : 'this monster has a chance to push your weapon aside even if you have stamina remaining.'
                 EntityManager.transmitMessage(this.name+" knocks your weapon out of the way!", 'danger','knock',tipText, this.id);
             }
             
@@ -834,13 +854,15 @@ class Entity{
         if(!this.spawnEntities){
             return false;
         }
-        console.log('disturbing');
         if(this.spawnEntities.disturbChance > Math.random()*100){
             if(!this.disturbed){
                 this.disturbed = 0;
             } 
             //console.log('DISTURBED');
             this.disturbed++;
+            if(this.behaviorInfo && this.behaviorInfo.slow){
+                this.behaviorInfo.slow /= 2;
+            }
         }
     }
 
@@ -948,11 +970,18 @@ class PlayerEntity extends Entity{
         return EntityManager.translations[this.rotation]
     }
 
+    pointTowardsCenter(){
+        let sword = EntityManager.getEntity(this.sword)
+        sword.pointTowardsCenter();
+    }
+
     //x and y are RELATIVE TO PLAYER
     canUnarmedStrike(x,y){
         if(Player.equipped && Player.equipped.weapon){
             return false;
         }
+        if(GameMaster.scale != "dungeon"){return false}
+        if(Board.wallAt(this.x+x,this.y+y)){return false}        
         let rotationalDistance = (Math.abs(x-this.directionFacing.x) + Math.abs(y-this.directionFacing.y))
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         //console.log(targetEntity)
@@ -979,13 +1008,19 @@ class PlayerEntity extends Entity{
             return false;
         }
 
+        //this check has to go here because otherwise, encumbrance isn't checked when moving into occupied tiles.
+        //returns true because you CAN unarmed strike but fail.
+        if(!EntityManager.checkEncumberedV2()){
+            return true
+        }
+
         let rotationalDistance = canUnarmedStrike.rotationalDistance;
         let targetEntity = Board.entityAt(this.x+x,this.y+y)
         
         let weapon = {
             damage:3,
             stun:2,
-            weight:3,
+            heft:3,
             type:{unarmed:true}
         }
 
@@ -994,21 +1029,23 @@ class PlayerEntity extends Entity{
             weapon.stun +=1;
         }
 
-        return this.unarmedStrike(targetEntity, weapon);
+        
+
+        return this.unarmedStrike(targetEntity, weapon,{x:x,y:y});
     }
 
     //weapon is defined by canUnarmedStrike, and is determined by specifics of strike.
-    unarmedStrike(target, weapon){
+    unarmedStrike(target, weapon,translation){
         if(target.id == this.id || target.isWall){
             return false;  
         }
-        let weight = weapon.weight;
-        if(target.parryable){weight = Math.max(0,weight-1)}
+        let heft = weapon.heft;
+        if(target.parryable){heft = Math.max(0,heft-1)}
         
-        if(Player.stamina < weight){
+        if(Player.stamina < heft){
             return false;
         }
-        Player.changeStamina(weight * -1);   
+        Player.changeStamina(heft * -1);   
         let damage = weapon.damage;
         let stunTime = weapon.stun;
         stunTime += Player.getAnatomyBonus(target);
@@ -1030,6 +1067,7 @@ class PlayerEntity extends Entity{
         let mortality = Random.rollN(damageDice,0,damage,advantage);
         let multiplier = Player.getDamageMultiplier(weapon,"unarmed",target,crit);
         mortality = Math.floor(mortality*multiplier)
+        Sound.playPlayerHit(mortality)
 
         XP.gainUnarmedAttackXP(target);
         if(sizeBonus > Math.random()*100){
@@ -1050,6 +1088,7 @@ class PlayerEntity extends Entity{
             }
         }
         target.addMortality(mortality);
+        Player.activatePostAttackTriggers();
         if(crit){target.lastCritTurn = Log.turnCounter}
         if(Monster.prototype.isPrototypeOf(target)){
             target.addStunTime(stunAdded);
@@ -1060,6 +1099,7 @@ class PlayerEntity extends Entity{
         target.knock(this.id);
         target.onHit(this, sizeBonus);
         
+        EntityManager.moveEntity('player',translation.x,translation.y)
         return true;
     }
 
@@ -1151,18 +1191,18 @@ class SwordEntity extends Entity{
             if(target.id != this.id && !target.isWall){
                 if (this.owner == 'player'){  
                     let strikeType = this.getStrikeType();
-                    let weight;
+                    let heft;
                     if(this.item[strikeType]){
-                        weight = this.item[strikeType].weight;
+                        heft = this.item[strikeType].heft;
                     }else{
-                        weight = this.item.weight;
+                        heft = this.item.heft;
                     }
                     if(target.parryable){
-                        weight = Math.max(0,weight-1);
+                        heft = Math.max(0,heft-1);
                     }
                     //swings and draws get canceled. Jabs and strafes are still allowed, but dont trigger an attack.
                     //this is so having 0 stamina doesnt hinder your movement.
-                    if(Player.stamina < weight){
+                    if(Player.stamina < heft){
                         if(strikeType=="strafe" || strikeType == "jab"){
                             attackOccurs = false;
                         }else{
@@ -1170,11 +1210,12 @@ class SwordEntity extends Entity{
                             return false;
                         }
                     }
-                    Player.changeStamina(weight * -1);
+                    Player.changeStamina(heft * -1);
                 }
                 //this is false if player tried to jab or strafe without enough stamina
                 if(attackOccurs){
                     this.swordAttack(target);
+                    Player.activatePostAttackTriggers();
                 }else{
                     Log.addMessage('Attack failed! Not enough stamina.','danger')
                     let lastPos = History.getSnapshotEntity(this.id);
@@ -1211,26 +1252,24 @@ class SwordEntity extends Entity{
     swordAttack(target){
         let weapon = this.item;
         let damage = weapon.damage;
-        console.log(damage);
-        let weight = weapon.weight;
+        let heft = weapon.heft;
         let stunTime = weapon.stunTime;
-        console.log(stunTime)
         let strikeType = this.getStrikeType();
         if(weapon[strikeType]){
             damage = weapon[strikeType].damage;
             stunTime = weapon[strikeType].stunTime;
-            weight = weapon[strikeType].weight
+            heft = weapon[strikeType].heft
             stunTime += Player.getBonusStun(weapon[strikeType],target);
             damage += Player.getItemBonusDamage(weapon[strikeType], weapon);
         }else{
             stunTime += Player.getBonusStun(weapon,target);
             damage += Player.getItemBonusDamage(weapon);
         }
-        
+        /*
         console.log({
             damage:damage,
             stunTime:stunTime
-        })
+        })*/
         //damage is only referenced for perks
         let degrades = EntityManager.itemWillDegrade(this,0,0.25,damage)
         let crit = Player.getCrit(weapon, strikeType,target);
@@ -1264,8 +1303,8 @@ class SwordEntity extends Entity{
         let mortality = Random.rollN(damageDice, 0, damage, advantage);
         let multiplier = Player.getDamageMultiplier(weapon,strikeType,target,crit);
         mortality = Math.floor(mortality*multiplier)
-        
-        console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
+        Sound.playPlayerHit(mortality);
+        //console.log({advantage: advantage, mortality:mortality, crit:crit, damageDice:damageDice, multiplier:multiplier})
         if (target.id == 'player'){
             let owner = EntityManager.getEntity(this.owner);
             EntityManager.transmitMessage(owner.name+" strikes you with "+this.name+'!');
@@ -1277,6 +1316,7 @@ class SwordEntity extends Entity{
                 target.parryable = false;
             }
             Log.sendStrikeMessage(strikeType, weapon, target);
+            Player.checkRefund(strikeType,heft);
             Log.sendCritMessage(crit);
             if(crit){target.lastCritTurn = Log.turnCounter}
             if(mortality){Log.addMessage(mortality+" Damage!",'danger')}
@@ -1286,7 +1326,7 @@ class SwordEntity extends Entity{
                     Log.addMessage(target.name+" recoils!",'pos',false,false,target.id)
                 }
             }
-            EntityManager.emitSound(target,weight); 
+            EntityManager.emitSound(target,heft); 
             target.addMortality(mortality);           
             if(Monster.prototype.isPrototypeOf(target)){
                 target.addStunTime(stunAdded);
@@ -1358,12 +1398,10 @@ class SwordEntity extends Entity{
 
     //place sword in space closest to center between two points
     findSwordMiddle(pos1,pos2){
-        console.log({pos1:pos1,pos2:pos2})
         let rotation = this.rotation;
         let position = this.getSwordPosition(rotation);
         let x = position.x;
         let y = position.y;
-        console.log(Board.entityAt(x,y));
         let bestPos;
         let bestRotation;
         let bestDistance = -1;
@@ -1385,7 +1423,6 @@ class SwordEntity extends Entity{
             position = this.getSwordPosition(rotation);
             x = position.x;
             y = position.y;
-            console.log(bestDistance);
         }
 
         let validSpace = (Board.isValidSwordSpace(bestPos.x,bestPos.y) || Board.entityAt(bestPos.x,bestPos.y).id == this.id)
@@ -1493,9 +1530,7 @@ class Monster extends Entity{
             this.inventory.slots = this.inventorySlots;
         }
 
-        if(this.lightStrength){
-            Board.lightSourceIDs.push(this.id);
-        }
+
         
         return this;
     }  
@@ -1638,12 +1673,16 @@ class Monster extends Entity{
         let targetY = this.y+y
         let targetItem = Board.entityAt(targetX, targetY);
         
-
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || 
+            (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) || 
+            (targetItem.isContainer && Board.hasPlayerLos(this))
+        ){
             this.attack(targetItem);
         }
     
-        if(!this.move(x, y)){
+        //try to move unless attacked player
+        if(!this.move(x, y) && !(targetItem && targetItem.id == 'player')){
+            let message = [target,x,y,'failed']
             this.move(0, y);
             this.move(x, 0); 
         }
@@ -1691,15 +1730,22 @@ class Monster extends Entity{
         let targetItem = Board.entityAt(targetX, targetY);
         
 
-        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible || (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY))){
+        if(targetItem.id == "player" || targetItem.dead || targetItem.destructible ||
+            (targetItem.owner == 'player' && !Board.wallAt(targetX, targetY)) ||
+            (targetItem.isContainer && Board.hasPlayerLos(this))
+        
+        ){
             this.attack(targetItem);
         }
-    
-        if(!this.move(x, y)){
+
+        //try to move unless attacked player
+        if(!this.move(x, y) && !(targetItem && targetItem.id == 'player')){
             let message = [target,x,y,'failed']
             this.move(0, y);
             this.move(x, 0); 
         }
+    
+        
     }
 
     //check if a monster can see a target for player-detection purposes
@@ -1766,8 +1812,8 @@ class Monster extends Entity{
 
         let damage = this.damage;
         let mortality = Random.roll(0,damage);
-
         if (target.id == 'player'){
+            Sound.playMonsterHit(mortality);
             EntityManager.transmitMessage(this.name+" attacks you!", 'danger', false, false, this.id);
             if(mortality == 0){
                 if(Display.parryInRange(this.x,this.y)){
@@ -1784,14 +1830,42 @@ class Monster extends Entity{
                     Player.light = Math.max(Player.light-1,0)
                     EntityManager.transmitMessage('your light is drained.','danger')
                 }
+                if(this.fatiguing){
+                    let fatigueAmount = Random.roll(0,this.fatiguing);
+                    if(fatigueAmount){
+                        Log.addMessage(this.name+" saps your energy! ("+Player.fatigue+" → "+ (Player.fatigue+fatigueAmount) +" fatigue)",'danger',false,false,this.id)
+                        Player.changeFatigue(fatigueAmount)
+                    }
+                }
             }
         }else if(target.isWall && target.destructible){
+            if(Board.hasPlayerLos(this)){
+                Sound.playMonsterHit(mortality);
+            }
             EntityManager.addMortality(target.id, mortality);
         }
 
-        if(target.dead){
+        if(
+            (target.isContainer) &&
+            !(target.isMonster && !target.dead)
+        ){
             target.addMortality(mortality);
-            target.knock(this.id);
+            if(!target.dead){
+                mortality = Math.floor(mortality/2)
+            }
+            if(Board.hasPlayerLos(this)){
+                Sound.playMonsterHit(mortality);
+            }
+            console.log('ATTACKING '+target.name)
+            let knockChance = mortality/target.threshold;
+            if(target.behaviorInfo && target.behaviorInfo.sturdy){
+                knockChance -= target.behaviorInfo.sturdy;
+            }
+            
+            if(knockChance > Random.roll(0,99)){
+                target.knock(this.id);
+            }
+
         }
 
     }
@@ -2014,5 +2088,30 @@ class ItemPile extends Entity{
         })
 
         this.name = nameArray.join(', ');
+    }
+}
+
+class Location extends Entity{
+    //locationId is string, must match with the filename (minus ".json" of a map in the rooms/ directory)
+    locationId = false;
+
+    constructor(x, y, additionalParameters = {}){
+        super('Lo',x,y, 'Location');
+        
+        //copy additional parameters... This should include LocationId
+        for (const [key, val] of Object.entries(additionalParameters)) { 
+            //if legal key...
+            if(!['inventory','id','x','y','instances'].includes(key)){
+                this[key] = val;
+            }
+        }
+
+        this.name = additionalParameters.entityName;
+
+        return this;
+    }
+
+    enter(){
+        Travel.enterLocation(this);
     }
 }

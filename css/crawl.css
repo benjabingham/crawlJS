@@ -32,14 +32,37 @@ html{
     padding:1rem;
 }
 
-button,
-#map-editor-link{
+button{
     color: rgb(15, 12, 0);
     background-image:linear-gradient(var(--buttonG1),var(--buttonG2))
 }
 
-button:hover,
-#map-editor-link:hover{
+#menu-buttons-div{
+    a, button{
+        color: rgb(15, 12, 0);
+        background-image:linear-gradient(var(--buttonG1),var(--buttonG2));
+        display: block;
+        width:fit-content;
+        padding:5px;
+        border:2px solid;
+        border-left-color:#666;
+        border-top-color:#666;
+        font-family:arial;
+        font-weight:400;
+        text-decoration: none;
+        font-size: larger;
+        margin:auto; 
+    
+        margin:5px;
+    }
+
+    a:hover,button:hover{
+        cursor: pointer;
+        background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
+    }
+}
+
+button:hover{
     cursor: pointer;
     background-image:linear-gradient(var(--buttonHoverG1),var(--buttonHoverG2))
 
@@ -147,21 +170,6 @@ h1, h2, h3{
         margin:auto;
         padding:5px;
     }
-}
-
-#map-editor-link{
-    display: block;
-    width:fit-content;
-    padding:5px;
-    border:2px solid;
-    border-left-color:#666;
-    border-top-color:#666;
-    font-family:arial;
-    font-weight:400;
-    text-decoration: none;
-    font-size: larger;
-    margin:auto; 
-    
 }
 
 #menu-buttons-div{
@@ -287,6 +295,14 @@ h1, h2, h3{
     cursor: pointer;
 }
 
+.bold{
+    font-weight: bold;
+}
+
+.capitalize{
+    text-transform: capitalize;
+}
+
 #layout-buttons{
     display:flex;
     justify-content:center;
@@ -298,4 +314,12 @@ h1, h2, h3{
         margin-left:5px;
         margin-right:5px;
     }
+}
+
+#tutorial-iframe{
+    margin: 0 auto 0 auto
+}
+
+.header-centered{
+    text-align: center;
 }

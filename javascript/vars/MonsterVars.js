@@ -21,7 +21,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:5,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:15},
             },
             treasure:{
                 chance:5,
@@ -38,6 +39,48 @@ let monsterVars = {
             }
         },
         color:'darkGreen',
+        types:{humanoid:true, goblinoid:true}
+    },
+    hobGoblin:{
+        name:"Hobgoblin",
+        symbol:"Hg",
+        behavior:"chase",
+        behaviorInfo:{
+            focus:25,
+            enrage:20,
+            daze:20,
+            beat:15
+        },
+        hitDice:2,
+        damage:6,
+        inventorySlots: 2,
+        inventory:[
+            {
+                item: itemVars.potions.unlabeled,
+                chance: 5
+            },
+        ],
+        loot:{
+            weapon:{
+                chance:15,
+                tier:1,
+                preferredRange:{min:1,max:15},
+            },
+            treasure:{
+                chance:15,
+                tier:0,
+                preferredRange:{min:1,max:5}
+            },
+            gold:{
+                chance:20,
+                amount:5
+            },
+            food:{
+                chance:15,
+                tier:1,
+            }
+        },
+        color:'darkYellow',
         types:{humanoid:true, goblinoid:true}
     },
     goblinBoss:{
@@ -62,7 +105,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:10,
-                tier:2
+                tier:2,
+                preferredRange:{min:10,max:200},
             },
             treasure:{
                 chance:30,
@@ -101,7 +145,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:20,
-                tier:1
+                tier:1,
+                preferredRange:{min:5,max:30},
             },
             treasure:{
                 chance:30,
@@ -144,7 +189,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:30,
-                tier:2
+                tier:2,
+                preferredRange:{min:7,max:50}
             },
             treasure:{
                 chance:40,
@@ -292,7 +338,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:1,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:30},
             },
             treasure:{
                 chance:5,
@@ -343,7 +390,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:1,
-                tier:1
+                tier:1,
+                preferredRange:{min:1,max:30},
             },
             treasure:{
                 chance:5,
@@ -386,7 +434,8 @@ let monsterVars = {
                 chance:15,
                 tier:4,
                 allowedMaterials: ['sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron', 'gold','silver'],
-                curseMultiplier: 3
+                curseMultiplier: 1.5,
+                preferredRange:{min:5,max:100},
             },
             treasure:{
                 chance:20,
@@ -456,7 +505,8 @@ let monsterVars = {
                 chance:5,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3
+                curseMultiplier: 1.5,
+                preferredRange:{min:5,max:30},
             },
             treasure:{
                 chance:1,
@@ -498,7 +548,7 @@ let monsterVars = {
             },
             {
                 item: itemVars.drops.sigiledBone,
-                chance:100
+                chance:50
             }
         ],
         loot:{
@@ -506,7 +556,8 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3
+                curseMultiplier: 1.5,
+                preferredRange:{min:1,max:30},
             },
             treasure:{
                 chance:15,
@@ -561,7 +612,7 @@ let monsterVars = {
             },
             {
                 item: itemVars.drops.sigiledBone,
-                chance:100
+                chance:50
             }
         ],
         loot:{
@@ -569,7 +620,8 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3
+                curseMultiplier: 1.5,
+                preferredRange:{min:1,max:30},
             },
             treasure:{
                 chance:15,
@@ -610,7 +662,7 @@ let monsterVars = {
         inventory:[
             {
                 item: itemVars.drops.sigiledBone,
-                chance:100
+                chance:50
             }
         ],
         loot:{
@@ -618,7 +670,8 @@ let monsterVars = {
                 chance:15,
                 tier:1,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier: 3
+                curseMultiplier: 1.5,
+                preferredRange:{min:1,max:30},
             },
             treasure:{
                 chance:15,
@@ -648,6 +701,7 @@ let monsterVars = {
         },
         hitDice:3,
         damage:6,
+        fatiguing:3,
         inventorySlots: 2,
         inventory:[
         ],
@@ -656,15 +710,16 @@ let monsterVars = {
                 chance:5,
                 tier:2,
                 allowedMaterials: ['bone','sigiledBone', 'obsidian','glass','crystal','lead','copper','bronze','iron','silver'],
-                curseMultiplier:3
+                curseMultiplier:1.5,
+                preferredRange:{min:5,max:50},
             },
             treasure:{
-                chance:15,
+                chance:20,
                 tier:2,
-                preferredRange:{min:3,max:20}
+                preferredRange:{min:3,max:50}
             },
             gold:{
-                chance:10,
+                chance:20,
                 amount:10
             },
             potion:{
@@ -720,6 +775,13 @@ let monsterVars = {
         inventorySlots:3,
         sightDistance:2,
         tracking:5,
+        loot:{
+            weapon:{
+                chance:10,
+                tier:2,
+                preferredRange:{min:0,max:10},
+            },
+        },
         inventory:[
             {
                 item: itemVars.drops.orangeGoo,
@@ -917,7 +979,8 @@ let monsterVars = {
         loot:{
             weapon:{
                 chance:15,
-                tier:5
+                tier:5,
+                preferredRange:{min:5,max:100},
             },
             treasure:{
                 chance:75,
@@ -1009,6 +1072,7 @@ let monsterVars = {
         inventorySlots: 2,
         isContainer: true,
         blood:0,
+        fatiguing:1,
         behaviorInfo:{
             focus:25,
             slow:95,

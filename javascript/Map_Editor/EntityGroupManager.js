@@ -43,6 +43,11 @@ class EntityGroupManager{
         return group.color;
     }
 
+    static get currentLightStrength(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.lightStrength;
+    }
+
     static get currentEntityName(){
         let group = EntityGroupManager.getCurrentGroup();
         return group.entityName;
@@ -68,9 +73,24 @@ class EntityGroupManager{
         return group.wait;
     }
 
+    static get currentShop(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.shop;
+    }
+
+    static get currentShopId(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.shopId;
+    }
+
     static get currentWallType(){
         let group = EntityGroupManager.getCurrentGroup();
         return group.wallType;
+    }
+
+    static get currentLocationId(){
+        let group = EntityGroupManager.getCurrentGroup();
+        return group.locationId;
     }
 
     static setEntityType(entityType){
@@ -88,9 +108,19 @@ class EntityGroupManager{
         group.color = color;
     }
 
+    static setLightStrength(lightStrength){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.lightStrength = lightStrength;
+    }
+
     static setEntityName(entityName){
         let group = EntityGroupManager.getCurrentGroup();
         group.entityName = entityName;
+    }
+
+    static setEntityLocationId(locationId){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.locationId = locationId;
     }
 
     static setSymbol(symbol){
@@ -116,6 +146,16 @@ class EntityGroupManager{
     static setWait(wait){
         let group = EntityGroupManager.getCurrentGroup();
         group.wait = wait;
+    }
+
+    static setShop(shop){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.shop = shop;
+    }
+
+    static setShopId(shopId){
+        let group = EntityGroupManager.getCurrentGroup();
+        group.shopId = shopId;
     }
 
     static setWallType(wallType){

@@ -3,6 +3,7 @@ class Log{
     static messages = {};
     static notices = [];
     static turnCounter = 0;
+    static resetTurn = 0;
 
     static logInit(){
         $('#log-title').off().on('click',(e)=>{
@@ -26,18 +27,21 @@ class Log{
     }
 
     static initialWarnings(){
-        if (Player.exertion == 1){
-            Log.addMessage('You are exerted! Stamina regen dereased.','danger')
-        }else if (Player.exertion > 1){
-            Log.addMessage('You are exhausted! Moving will cost stamina. Stamina regen decreased.','urgent')
+        if (Player.fatigueLevel == 1){
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','danger')
+        }else if (Player.fatigueLevel > 1){
+            Log.addMessage('You are fatigued! Max Bulk and Stamina decreased.','urgent')
         }
     }
 
-    static addMessage(message, messageClass = false, keyword = false, tipText = false, highlightID = -1){
-        if(!Log.messages[Log.turnCounter]){
-            Log.messages[Log.turnCounter] = [];
+    //turnOffset is used to print a message into a past or future turn.... Currently only used for rewind.
+    static addMessage(message, messageClass = false, keyword = false, tipText = false, highlightID = -1,turnOffset = 0){
+        let turn = Log.turnCounter+turnOffset;
+        console.log(message)
+        if(!Log.messages[turn]){
+            Log.messages[turn] = [];
         }
-        Log.messages[Log.turnCounter].unshift({
+        Log.messages[turn].unshift({
             message:message,
             fresh:true,
             messageClass: messageClass,
@@ -47,35 +51,22 @@ class Log{
         });
     }
 
+    static addSpanMessage(message,messageClass = false, tipText=false,highlightID=-1){
+        if(!Log.messages[Log.turnCounter]){
+            Log.messages[Log.turnCounter] = [];
+        }
+        Log.messages[Log.turnCounter].unshift({
+            message:'',
+            spanMessage:message,
+            fresh:true,
+            messageClass: messageClass,
+            tipText: tipText,
+            highlightID:highlightID
+        });
+    }
+
     static addTip(){
-        let tips = [
-            "Ogres are dangerous, but have limited interest in you unless you bother them. If you can't fight them, leave them alone!",
-            "Remember you can move diagonally! This opens up many useful maneuvers in combat.",
-            "Buying a proper meal fills your hunger bar completely.",
-            "Luck regenerates when you rest, but very slowly. Use it sparingly!",
-            "Weapon breaking is completely random - you can use luck to make your weapons last longer!",
-            "Stunned enemies appear in lower case, and recieve guaranteed critical hits. Press the advantage!",
-            "Scroll over an object with your mouse to see what it is.",
-            "Scroll over a bolded keyword to see what it means.",
-            "Objects like shrubs, tables, and bedrolls may contain treasure - push against them or destroy them to search them!",
-            "Paper burns bright, but not very long. Burn it if you need a quick burst of light.",
-            "The contents of unlabeled potions are undetermined until the moment you drink them. Use luck to make better use of them.",
-            "Some lootable objects like shrubs and rat stashes have a chance to restock as days pass.",
-            "Most oozes have a low sight radius. Keep your distance if you don't want to fight them.",
-            "Corrosive(green) and absorbent(orange) oozes track your weapon instead of you. Put it away and they'll leave you alone!",
-            "Black oozes follow the heat of your lantern. The lower your light, the lower their detection range.",
-            "Smarter monsters will remember where they last saw you. Run around a corner and then hide to escape them.",
-            "Heavier weapons make more sound. Use lighter weapons around sleeping enemies to remain undetected.",
-            "Your proficiency with a weapon is represented by a number of '+'s next to that weapon's name. Scroll over the '+'s to learn more.",
-            "Skills that are used more are more likely to be recieved as levelup rewards. This includes taking damage and using luck!",
-            "Guaranteed crits are applied separately from crits achieved via crit chance. They scale multiplicitively!",
-            "A food item's flavor text can give you a hint to its likelihood of being rotten.",
-            "Food not labeled as rotten still has a chance of being rotten when eaten... Use luck to reroll those odds.",
-            "Be very wary of corridors that are only one tile wide. Being cornered there is sure death.",
-            "Watch your bulk - carrying more than your max can cause you to lose turns at random intervals.",
-            "Equipped items don't count towards your bulk. Equip a hefty piece of treasure to make a hasty escape.",
-            "Weapons score a guaranteed crit when they break while attacking an enemy."
-        ]
+        let tips = tipVars;
 
         let tip = tips[Random.roll(0,tips.length-1)]
 
@@ -85,12 +76,12 @@ class Log{
     static wipeLog(){
         Log.messages = {};
         Log.turnCounter = 0;
+        Log.resetTurn = 0;
         $('.turn-message').remove();
         $('.day-counter').remove();
     }
 
     static printTurn(turn){   
-        console.log(turn);     
         let messages = Log.messages[turn];
         $('.message-fresh').removeClass('message-fresh')
         $('.temp-turn-counter').remove();
@@ -98,7 +89,7 @@ class Log{
             if(messages.printed){
                 return false;
             }
-            let turnMessage = $('<div>').attr('id','turn-'+turn+'-message').addClass('turn-message')
+            let turnMessage = $('<div>').addClass('turn-'+turn+'-message turn-message')
             $('#log').prepend(turnMessage);
             messages.forEach((message) => {
                 let keyword = false;
@@ -120,6 +111,9 @@ class Log{
                     }
                 }else{
                     messageElement = $('<p>').text("> "+message.message).addClass('log-message-p');
+                }
+                if(message.spanMessage){
+                    messageElement.append(message.spanMessage)
                 }
                 if(message.tipText){
                     tipText = message.tipText;
@@ -154,16 +148,16 @@ class Log{
                 message.fresh = false;
             })
             turnMessage.prepend(
-                GameMaster.dungeonMode ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
+                Board.getScale() == 'dungeon' ? $('<p>').text('Turn '+turn).addClass('turn-counter') : ""
             ).append($('<hr>'))
             messages.printed = true;
         }else{
             $('#log').prepend(
-                GameMaster.dungeonMode ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
+                Board.getScale() == 'dungeon' ? $('<div>').addClass('temp-turn-counter turn-counter').text('Turn '+turn).append($('<hr>')) : ""
             )
         }
 
-        if(!GameMaster.dungeonMode){
+        if(Board.getScale() == 'town'){
             Log.printDayToLog(true)
         }
     }
@@ -194,9 +188,18 @@ class Log{
     }
 
     static rewind(){
+        console.log(Log.turnCounter)
         Log.messages[Log.turnCounter] = false;
-        $('#turn-'+Log.turnCounter+'-message').remove();
-        $('#turn-'+Log.turnCounter-1+'-message').addClass('message-fresh');
+        $('.turn-'+Log.turnCounter+'-message').remove();
+        $('.turn-'+(Log.turnCounter-1)+'-message').remove();
+        if(Log.messages[Log.turnCounter-1]){
+            Log.messages[Log.turnCounter-1].printed = false
+            Log.messages[Log.turnCounter-1].forEach((message)=>{
+            message.fresh = true
+        })
+        }
+        
+        //Log.printTurn(Log.turnCounter-1)        
     }
 
     static peek(){
@@ -204,6 +207,7 @@ class Log{
     }
 
     static sendCritMessage(crit){
+        Sound.playCrit(crit);
         if(crit == 1){
             EntityManager.transmitMessage("Critical Hit!",'pos',"Critical Hit", keywordVars.critical.hintText);
         }else if(crit == 2){

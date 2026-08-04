@@ -4,6 +4,7 @@ class XP{
         hp: {},
         stamina: {},
         luck: {},
+        fatigue:{},
         hunger: {},
         bulk:{},
         swords: {},
@@ -42,6 +43,8 @@ class XP{
             }
         });
         XP.applyPerk(skillVars.simple[0],false)
+
+        //XP.applyPerk(skillVars.draw[1],false)
 
         /*
         XP.applyPerk(skillVars.swing[0],false)
@@ -219,6 +222,15 @@ class XP{
         this.gain('stamina',amount,weightAmount)
     }
 
+    static gainFatigueXp(amount){
+        //multiply amount fatigue gained by current percentage of fatigue
+        let percent = Player.fatiguePercent;
+        let weightAmount = amount * percent;
+        weightAmount *= 0.10;
+        amount /= 2;
+        this.gain('fatigue',amount,weightAmount)
+    }
+
     static gainBulkXP(amount = 1){
         this.gain('bulk',0,amount)
     }
@@ -312,6 +324,7 @@ class XP{
         console.log(JSON.parse(JSON.stringify(this.skills)))
         let skillOptions = this.getWeightedSkills(3);
         let perkOptions = this.getPerks(skillOptions);
+        Sound.playLevelUp();
         XP.openLevelupDialog(perkOptions);
         this.reduceWeights();
         if(raiseThreshold){
@@ -330,7 +343,7 @@ class XP{
         )
 
         perkOptions.forEach(perk =>{
-            console.log(perk);
+            //console.log(perk);
             let text = $('<text>');
             let oldVal = 0;
             let newVal = 0;
@@ -346,12 +359,10 @@ class XP{
                     attackTypeSpan = $('<span>').text(perk.attackType).addClass('keyword');
                     let proficiencySpan = $('<span>').text(" proficiency").addClass('keyword');
                     let weapons = LootManager.getWeaponsOfType(perk.attackType);
-                    console.log(weapons);
                     let weaponNames = [];
                     weapons.forEach(weapon=>{
                         weaponNames.push(weapon.name)
                     })
-                    console.log(weaponNames);
                     Display.setHintText(attackTypeSpan, weaponNames.join(", "));
                     Display.setHintText(proficiencySpan, keywordVars.proficiency.hintText);
                     text.append("Increase ").append(attackTypeSpan).append(proficiencySpan);
@@ -392,9 +403,10 @@ class XP{
 
             modal.append(
                 $('<div>').addClass('skill-option').append(text).on('click',(e)=>{
+                    Sound.playClick();
                     XP.applyPerk(perk)
                     Inventory.displayInventory();
-                    Inventory.selectCharacterInfoTab();
+                    //Inventory.selectCharacterInfoTab();
                     Display.hideHintDiv();
                     modal.remove();
                 })
@@ -452,6 +464,9 @@ class XP{
                 break;
             case "bulk capacity":
                 Player.maxBulk += perk.amount;
+                break;
+            case "fatigue limit":
+                Player.fatigueMax += perk.amount;
                 break;
             default:
                 console.log('BAR '+perk.bar+' NOT RECOGNIZED')

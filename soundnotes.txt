@@ -1,0 +1,5 @@
+All audio should be very loud - volume can be decreased but not increased.
+burn - cut out beginning bit, just want fwoosh
+levelup - use different instrument, should be more lowfi
+movestone - too base-y
+fix eat...

@@ -13,7 +13,7 @@
     }
 }
 
-#day-div, #nourishment-level-div, #exertion-level-div{
+#day-div, #nourishment-level-div, #fatigue-level-div{
     margin:auto;
     width:fit-content;
 }
@@ -55,6 +55,20 @@
     background-color: var(--staminaBar);
     color:var(--staminaBarText);
 } 
+
+#fatigue-level{
+    background-color: var(--brightPurple);
+    color:var(--fatigueBarText);
+} 
+
+#fatigue-level.full{
+    background-color: var(--fatigueBar);
+    /*color:var(--floor);*/
+} 
+
+#fatigue-bar.full{
+    background-color: var(--brightPurple);
+}
 
 #luck-level{
     background-color: var(--luckBar);
@@ -134,6 +148,54 @@
 
     div:has(.proficiencySpan) {
         line-height: 0.5rem;
+    }
+}
+
+#character-stats-div{
+    width:100%;
+    display:grid;
+    padding:5px;
+    height:100%;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(
+            min(100% / 1, max(100% / 2)),
+            1fr
+        )
+    );
+    box-sizing: border-box;
+    div{
+        text-transform: capitalize;
+        height:fit-content;
+        padding: 5px;
+    }
+
+    /*
+    div:before{
+        content:"• "
+    }*/
+
+    div:has(.proficiencySpan) {
+        line-height: 0.5rem;
+    }
+
+    #hp-stat-div{
+        color:var(--darkRed)
+    }
+    #stamina-stat-div{
+        color:var(--darkYellow)
+    }
+    #fatigue-stat-div{
+        color:var(--darkPurple)
+    }
+    #luck-stat-div{
+        color:var(--darkGreen)
+    }
+    #hunger-stat-div{
+        color:var(--darkOrange)
+    }
+    #bulk-stat-div{
+        color:var(--darkBlue)
     }
 }
 

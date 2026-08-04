@@ -14,7 +14,7 @@ class Inventory{
     static showBulkAndGold = false;
 
     //displays player's inventory, either in the dungeon or in the town
-    static displayInventory(dungeonMode=true){
+    static displayInventory(){
         this.checkForItemPile();
         //$('#inventory-wrapper').show();
         $('#player-inventory-list').html('');
@@ -66,7 +66,6 @@ class Inventory{
         if(item.purchased){
             return false;
         }
-        let dungeonMode = GameMaster.dungeonMode;
         let slot = item.slot;
         let itemValue = item.value;
         //let itemValue = LootManager.getValue(item);
@@ -76,8 +75,9 @@ class Inventory{
         let itemIsSelected = slot == Inventory.displayedInventorySlots[inventory] && inSelectedInventory;
         let quickSlot = item.quickSlot;
         let available = Inventory.itemIsAccessible(item, inventory);
-        let dropMode = inventory == "player-inventory" && GameMaster.dropMode && dungeonMode
-        let shopItem = (inventory=="world-inventory") && (Inventory.selectedContainer.shop==true);
+        let dropMode = inventory == "player-inventory" && GameMaster.dropMode
+        let inShop = Inventory.selectedContainer.shop == true;
+        let shopItem = (inventory=="world-inventory") && inShop;
         let draggable = available || shopItem;
         let availableStyling = available || shopItem;   
         let symbolsSpan = LootManager.getItemSymbolsSpan(item);
@@ -132,7 +132,7 @@ class Inventory{
         }
 
         //equip/unequip/burn
-        if(dungeonMode){
+        if(GameMaster.scale == 'dungeon'){
             if(item.weapon && !Player.equipped){
                 buttons.equip = true;
             }
@@ -144,7 +144,7 @@ class Inventory{
             }
             
         }
-        if(!dungeonMode && inventory == "player-inventory"){
+        if(inShop && inventory == "player-inventory"){
             buttons.sell = LootManager.getValue(item);
         }
         
@@ -153,11 +153,32 @@ class Inventory{
             buttons = {take: true};
         }else if(dropMode){
            buttons = {drop: true}
-        }else if(shopItem){
-            buttons = {buy:item.price};
+        }
+
+        if(shopItem){
+            buttons.buy = item.price;
+            delete buttons.equip;
+            delete buttons.drink;
+            delete buttons.burn;
+            delete buttons.eat;
         }
 
         Inventory.addButtons(slot, inventory, buttons);
+    }
+
+    static getItemNameSpanFull(item){
+        let symbolsSpan = LootManager.getItemSymbolsSpan(item)
+        let proficiencySpan = Display.getProficiencySpan(item);
+
+        let span = $('<span>').text(item.name).append(proficiencySpan).append(symbolsSpan);
+         Display.applyColor(item, span);
+
+        if(item.uses){
+            $(span).append("("+item.uses+")")
+        }
+
+        return span
+
     }
 
     static addBulkAndGoldInfo(item, element, shopItem = false){
@@ -180,8 +201,7 @@ class Inventory{
 
     static displayItemInfo(item, inventory){
         //dont ever display placeholder items in shop
-        if(!item || !item.name){return false}
-        if(!item){
+        if(!item || !item.name){
             $('#'+inventory+'-description').html('')
             return false;
         }
@@ -191,7 +211,7 @@ class Inventory{
             itemValue = '0';
         }
         let descriptionBodyElement;
-        if(item.weapon || item.potable){
+        if(item.weapon || item.potable || item.description){
             descriptionBodyElement = $('<div>').attr('id',inventory+'-description-body').addClass('inventory-description-body');
         }else{
             descriptionBodyElement = '';
@@ -215,12 +235,17 @@ class Inventory{
                 let text = trait.name
                 let noDisplayNumber = ['food','fuel']
                 if(hasTrait){
-                    text = ", "+text
+                    traitsDiv.append(", ")
                 }
+                //show at 1?
+                //if(typeof item[key] == 'number' && !noDisplayNumber.includes(key)){
                 if(item[key] > 1 && !noDisplayNumber.includes(key)){
                     text = text+" "+item[key]
                 }
                 let traitSpan = $('<span>').addClass('trait-spans').text(text);
+                if(trait.color){
+                    Display.applyColor(trait,traitSpan)
+                }
                 Display.setHintText(traitSpan, trait.hintText)
                 traitsDiv.append(traitSpan)
                 hasTrait = true;
@@ -262,7 +287,7 @@ class Inventory{
         }
 
         if(item.potable){
-            let effects = ['health','stamina','luck','hunger','light']
+            let effects = ['health','stamina','luck','hunger','light','fatigue']
             effects.forEach((effect)=>{
                 let power = item[effect]
                 if(power){
@@ -273,15 +298,31 @@ class Inventory{
                         gainLose = 'lose'
                         power *= -1;
                     }
-                    $('#'+inventory+'-description-body').append(
+                    descriptionBodyElement.append(
                         $('<div>').addClass('potion-description').text('On consumption: '+gainLose+' '+power+' '+effect+'.')
                     )
                 }
             })
 
             if(item.unlabeled){
-                $('#'+inventory+'-description-body').append(
+                descriptionBodyElement.append(
                     $('<div>').addClass('potion-description').text('unknown effect...')
+                )
+            }
+        }
+
+        if(item.description){
+            if(item.type=='rest'){
+                descriptionBodyElement.append(
+                    Inventory.getRestDescription(item)
+                )
+            }else if(item.type=='gamble'){
+                descriptionBodyElement.append(
+                    Inventory.getGambleDescription(item)
+                )
+            }else{
+                descriptionBodyElement.append(
+                    $('<div>').addClass('item-description').text(item.description)
                 )
             }
         }
@@ -302,26 +343,43 @@ class Inventory{
             let bonusDamageSpans = Player.getItemBonusDamageSpanWithSpecial(item,special);
             let bonusStunSpans = Player.getItemBonusStunSpanWithSpecial(item,special);
 
+            let strikeInfoSpans = {
+                normal:{
+                    title: $('<div>').addClass('item-title item-stats-spans').text('Normal:'),
+                    damage: $('<div>').addClass('item-damage item-stats-spans').attr('id',inventory+'-item-damage-'+item.slot).append('Damage: '+item.damage).append(bonusDamageSpans.normal),
+                    stun: $('<div>').addClass('item-stun item-stats-spans').attr('id',inventory+'-item-stun-'+item.slot).text('Stun: '+item.stunTime).append(bonusStunSpans.normal),
+                    heft: $('<div>').addClass('item-heft item-stats-spans').attr('id',inventory+'-item-heft-'+item.slot).text('Heft: '+item.heft)
+                },
+                special: special ? {
+                    title: $('<div>').addClass('item-title item-stats-spans').text(specialName+":"),
+                    damage: $('<div>').addClass('item-damage item-stats-spans').text('Damage: '+special.damage).append(bonusDamageSpans.special),
+                    stun: $('<div>').addClass('item-stun item-stats-spans').text('Stun: '+special.stunTime).append(bonusStunSpans.special),
+                    heft: $('<div>').addClass('item-heft item-stats-spans').text('Heft: '+special.heft)
+                } : false
+            }
+
+            Inventory.applyWeaponDescriptionTiptext(strikeInfoSpans, specialName)
+
             $('#'+inventory+'-description-body').append(
                 $('<div>').attr('id','#'+inventory+'-weapon-description').addClass('weapon-description').append(
                     $('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text('Normal:')
+                        strikeInfoSpans.normal.title
                     ).append(
-                        $('<div>').addClass('item-damage').attr('id',inventory+'-item-damage-'+item.slot).append('Damage: '+item.damage).append(bonusDamageSpans.normal)
+                        strikeInfoSpans.normal.damage
                     ).append(
-                        $('<div>').addClass('item-stun').attr('id',inventory+'-item-stun-'+item.slot).text('stun: '+item.stunTime).append(bonusStunSpans.normal)
+                        strikeInfoSpans.normal.stun
                     ).append(
-                        $('<div>').addClass('item-weight').attr('id',inventory+'-item-weight-'+item.slot).text('weight: '+item.weight)
+                        strikeInfoSpans.normal.heft
                     )
                 ).append(
                     special?($('<div>').addClass('item-stats-normal').append(
-                        $('<div>').addClass('item-title').text(specialName+":")
+                        strikeInfoSpans.special.title
                     ).append(
-                        $('<div>').addClass('item-damage').text('Damage: '+special.damage).append(bonusDamageSpans.special)
+                        strikeInfoSpans.special.damage
                     ).append(
-                        $('<div>').addClass('item-stun').text('stun: '+special.stunTime).append(bonusStunSpans.special)
+                        strikeInfoSpans.special.stun
                     ).append(
-                        $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                        strikeInfoSpans.special.heft
                     )):false
                 )
             ).append("<hr>")
@@ -337,11 +395,26 @@ class Inventory{
                         ).append(
                             $('<div>').addClass('item-stun').text('stun: '+special.stunTime)
                         ).append(
-                            $('<div>').addClass('item-weight').text('weight: '+special.weight)
+                            $('<div>').addClass('item-heft').text('heft: '+special.heft)
                         )
                     )
                 }
             })    */
+        }
+    }
+
+    static applyWeaponDescriptionTiptext(strikeInfoSpans, specialStrike){
+        Display.setHintText(strikeInfoSpans.normal.title,keywordVars.strikeNormal.hintText)
+        if(strikeInfoSpans.special && specialStrike){
+            Display.setHintText(strikeInfoSpans.special.title,keywordVars[specialStrike].hintText)
+        }
+        for (const [strikeType, strikeSpans] of Object.entries(strikeInfoSpans)){
+            for (const [key, span] of Object.entries(strikeSpans)){
+                let hintText = keywordVars['strike'+Display.capitalizeFirstLetter(key)]
+                if(hintText){
+                    Display.setHintText(span,hintText.hintText)
+                }
+            }
         }
     }
 
@@ -366,11 +439,81 @@ class Inventory{
         let nameDiv = $('<div>').addClass('item-name').attr('id',inventory+'-description-title').addClass('inventory-description-title').text(item.name).append(proficiencySpan).append(symbolsSpan)
         Display.applyColor(item,nameDiv)
         let bulkDiv = $('<div>').addClass('item-bulk-div').text(bulk+"b");
+        
         Display.setHintText(bulkDiv, "This item has a bulk of "+bulk+".","info")
 
-        header.append(goldDiv).append(nameDiv).append(bulkDiv)
+        if(!item.specialShopItem){
+            header.append(goldDiv).append(nameDiv).append(bulkDiv)
+        }else{
+            header.append(nameDiv);
+        }
 
         return header;
+    }
+
+    static getRestDescription(item, restInfo = Player.getRestInfo()){
+    
+        let changes = {}
+        Object.keys(restInfo).forEach((key)=>{
+            if(restInfo[key] >= 0 ){
+                changes[key] = "+ "+restInfo[key]
+            }else{
+                changes[key] = "- "+restInfo[key]*-1
+            }
+        })
+        changes.healthChange += " HP ("+Player.health+" → "+Math.min((Player.health+restInfo.healthChange),Player.healthMax)+")"
+        changes.nourishmentChange += " Hunger ("+Player.nourishment+" → "+(Math.max(Player.nourishment+restInfo.nourishmentChange,0))+")"
+        changes.fatigueChange += " Fatigue ("+Player.fatigue+" → "+(Math.max(Player.fatigue+restInfo.fatigueChange,0))+")"
+
+        let starvingSpan = '';
+        let hungrySpan = '';
+        if(Player.nourishment+restInfo.nourishmentChange < 0){
+            starvingSpan = $('<span>').addClass('starving-span').text(' ☠')
+            Display.setHintText(starvingSpan,"You will experience starvation, gaining fatigue and possibly losing health.")
+        }
+        if(Player.nourishment < 4){
+            hungrySpan = $('<span>').addClass('starving-span').text(' !')
+            Display.setHintText(hungrySpan,"You are hungry. Resource conversion disabled. (You will not lose hunger to further lower fatigue, or gain fatigue to gain health)")
+        }
+
+        let description = $("<span>").addClass('keyword bold').text(item.description)
+        Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
+        let div = $("<div>").addClass('item-description').append(description).append(" You will gain:").append(
+            $("<div>").append(changes.nourishmentChange).append(starvingSpan).append(hungrySpan).addClass('hunger-text-div rest-info-div')
+        ).append(
+            $("<div>").append(changes.fatigueChange).addClass('fatigue-text-div rest-info-div')
+        ).append(
+            $("<div>").append(changes.healthChange).addClass('hp-text-div rest-info-div')
+        )
+        //let hintText = "You will gain: "+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.fatigueChange+" fatigue. 50% change to gain 1 luck.";
+
+        
+
+        return div;
+    }
+
+    static getGambleDescription(item){
+        let description = $("<span>").addClass('keyword bold').text(item.description)
+        Display.setHintText(description,keywordVars[item.descriptionKeyword].hintText)
+        let div = $("<div>").addClass('item-description').append(description).append(" You will receive:")
+        let effects = item.effects
+        let resources = ['luck','hunger','fatigue','health']
+        resources.forEach((resource)=>{
+            if(effects[resource]){
+                let min = effects[resource].min;
+                let max = effects[resource].max;
+                min = min > 0 ? "+"+min:min
+                max = max > 0 ? "+"+max:max
+                div.append(
+                    $("<div>").addClass(resource+'-text-div rest-info-div').append(
+                        min+" to "+max+" "+resource.charAt(0).toUpperCase() + resource.slice(1)
+                    )
+                )
+            }
+        })
+        
+
+        return div;
     }
 
     static setBulkDiv(){
@@ -380,7 +523,7 @@ class Inventory{
         while(bulk.includes('.') && bulk[bulk.length-1] == '0' || bulk[bulk.length-1] == '.'){
             bulk = bulk.slice(0,bulk.length-1)
         }
-        $('.bulk-div').text(bulk+" / "+Player.maxBulk+" bulk")
+        $('.bulk-div').text(bulk+" / "+Player.modifiedMaxBulk+" bulk")
     }
 
     static checkEncumbered(){
@@ -402,7 +545,7 @@ class Inventory{
 
         if(GameMaster.dropMode){
             bagTitleElement.append(
-                $('<button>').text('drop bag').addClass('inventory-title-buttons').on('click',e=>{
+                $('<button>').text('Empty Bag').addClass('inventory-title-buttons').on('click',e=>{
                     GameMaster.dropBag();
                 })
             )
@@ -418,7 +561,7 @@ class Inventory{
     }
 
     static getRummageButton(){
-        if(!GameMaster.dungeonMode){
+        if(Board.getScale() != 'dungeon'){
             return false;
         }
         let text = this.playerInBag ? "Stop Rummaging" : "Rummage"
@@ -489,7 +632,11 @@ class Inventory{
 
         //if full of quickslots, remove item in highest slot
         if(Player.inventory.items[Inventory.nQuickSlots-1] && Player.inventory.items[Inventory.nQuickSlots-1].quickSlot){
-            Player.inventory.items[Inventory.nQuickSlots-1].quickSlot = false;
+            let itemToSwap = Player.inventory.items[Inventory.nQuickSlots-1]
+            itemToSwap.quickSlot = false;
+            if(Player.equipped && Player.equipped.slot == itemToSwap.slot){
+                Player.unequipWeapon();
+            }
         }
         item.quickSlot = true;
         Player.inventoryCleanup()
@@ -506,6 +653,9 @@ class Inventory{
         if(!this.playerInBag){
             this.selectedContainer = false;
             this.selectedInventory = 'player-inventory'
+            Sound.playCloseBag();
+        }else{
+            Sound.playOpenBag();
         }
         if(this.playerInBag && !this.selectedContainer){
 
@@ -554,13 +704,10 @@ class Inventory{
 
     //expect event to have type:"left", or type"*-left"
     static navigate(event){
-        console.log(event)
-
+        Sound.playNav();
         //this way "up" and "item-up" both work.
         let splitEventType = event.type.split('-')
         let direction = splitEventType[splitEventType.length-1];
-        console.log(splitEventType);
-        console.log(direction)
 
         switch(direction){
             case "left":
@@ -609,7 +756,7 @@ class Inventory{
         }else{
             let slot = Inventory.displayedInventorySlots["world-inventory"]
             if(Inventory.selectedContainer.shop){
-                Shop.buyItem(slot)
+                ShopManager.buyItem(slot)
             }else{
                 Inventory.take(slot);
                 GameMaster.postPlayerAction();
@@ -755,6 +902,7 @@ class Inventory{
 
     static addDragBehavior(element, item, inventoryId){
         element.on('mousedown',e=>{
+            Sound.playClick();
             if(e.originalEvent.button != 0){
                 return false;
             }
@@ -765,6 +913,7 @@ class Inventory{
             $(element).on('mousemove', function(){
                 $(element).off('mousemove');
                 if(behaviorSet){return false}
+                Sound.playTake();
                 behaviorSet = true;
                 if(follower){
                     $('body').append(
@@ -802,6 +951,7 @@ class Inventory{
                 return false;
             }
             if(!Inventory.draggedItem.inventoryId){return false}
+            Sound.playDrop();
             $('.dragged-item').remove()
             $('.inventory-between-div').off('mouseenter');
             if(Display.mouseOverBoard && Inventory.draggedItem.inventoryId == 'player-inventory'){
@@ -815,11 +965,11 @@ class Inventory{
                 let shopItem = Inventory.draggedItem.inventoryId == "world-inventory" && Inventory.selectedContainer.shop;
                 if(Inventory.lastHoveredSlot.inventoryId == "world-inventory" && Inventory.draggedItem.inventoryId == "player-inventory" && Inventory.selectedContainer.shop){
                     //sell item
-                    Shop.sellItem(Inventory.draggedItem.slot);
+                    ShopManager.sellItem(Inventory.draggedItem.slot);
                 }else if(Inventory.lastHoveredSlot.inventoryId == "player-inventory" && shopItem){
                     //buy item
                     let item = Inventory.selectedContainer.inventory.items[Inventory.draggedItem.slot]
-                    if(Shop.buyItem(Inventory.draggedItem.slot)){
+                    if(ShopManager.buyItem(Inventory.draggedItem.slot)){
                         Inventory.moveItem(item.slot,Inventory.lastHoveredSlot.slot,"player-inventory","player-inventory")
                     };
                 }else if(!shopItem && Inventory.moveItem(Inventory.draggedItem.slot, Inventory.lastHoveredSlot.slot, Inventory.draggedItem.inventoryId, Inventory.lastHoveredSlot.inventoryId)){
@@ -934,7 +1084,7 @@ class Inventory{
         if(inventory == "world-inventory" && this.selectedContainer.shop){
             return false;
         }
-        return ((item.quickSlot || Inventory.playerInBag) || !GameMaster.dungeonMode);
+        return ((item.quickSlot || Inventory.playerInBag) || Board.getScale() != 'dungeon');
     }
 
     static addButtons(slot,inventory,buttons){
@@ -956,7 +1106,7 @@ class Inventory{
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'eat':
-                        button = this.getEatButton(slot)
+                        button = this.getEatButton(slot, inventory, buttons.buy)
                         Inventory.addButton(inventory, slot, button)
                         break;
                     case 'drink':
@@ -1003,9 +1153,10 @@ class Inventory{
         )
     }
 
-    static getEatButton(slot){
-        return $('<button>').addClass('item-button').text('eat').on('click',function(){
-            GameMaster.eatItem({type:'item-'+(slot+1)},GameMaster.dungeonMode);
+    static getEatButton(slot, inventory, price){
+        let eatText = price ? "eat - "+price : 'eat'
+        return $('<button>').addClass('item-button').text(eatText).on('click',function(){
+            GameMaster.eatItem({type:'item-'+(slot+1)});
             Inventory.displayInventory();
         })
     }
@@ -1037,14 +1188,15 @@ class Inventory{
 
     static getSellButton(slot, value){
         return $('<button>').addClass('item-button').text('sell - '+value).on('click',function(){
-            Shop.sellItem(slot);
+            ShopManager.sellItem(slot);
             Inventory.displayInventory();
         })
     }
 
     static getBuyButton(slot,price){
-        return $('<button>').addClass('item-button').text('buy - '+price).on('click',function(){
-            Shop.buyItem(slot);
+        let buyText = price ? 'buy - '+price : 'free'
+        return $('<button>').addClass('item-button').text(buyText).on('click',function(){
+            ShopManager.buyItem(slot);
             Inventory.displayInventory();
         })
     }

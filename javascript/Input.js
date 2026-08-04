@@ -80,6 +80,7 @@ class InputManager{
                     if(input.useItem) GameMaster.useSelectedItem();
                     if(input.itemNav) GameMaster.navigateInventory(event);
                     if(input.showBulkGold) GameMaster.showBulkAndGold(event);
+                    if(input.worldMap) GameMaster.viewWorldMap(event);
                 }catch(e){
                     Log.addMessage('ERROR! PLEASE COPY THE BELOW TEXT AND SEND TO BEN')
                     Log.addMessage(e.name+" - "+e.message,'urgent')

@@ -4,8 +4,8 @@ let itemVars = {
             weapon:true,
             name:"club",
             damage:3,
-            stunTime:3,
-            weight:2,
+            stunTime:4,
+            heft:2,
             flimsy:-2,
             type:{
                 blunt:true,
@@ -15,7 +15,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     simple:true
@@ -28,7 +28,7 @@ let itemVars = {
             name:"mace",
             damage:5,
             stunTime:3,
-            weight:2,
+            heft:2,
             flimsy:-1,
             type:{
                 blunt:true,
@@ -38,7 +38,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     sharp:true,
@@ -51,7 +51,7 @@ let itemVars = {
             name:"hammer",
             damage:8,
             stunTime:5,
-            weight:3,
+            heft:3,
             flimsy:-1,
             bulk:3,
             type:{
@@ -60,7 +60,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true
                 }
@@ -72,7 +72,7 @@ let itemVars = {
             name:"maul",
             damage:12,
             stunTime:7,
-            weight:5,
+            heft:5,
             flimsy:-1,
             bulk:6,
             type:{
@@ -81,7 +81,7 @@ let itemVars = {
             jab:{
                 damage:2,
                 stunTime:5,
-                weight:3,
+                heft:3,
                 type:{
                     blunt:true
                 }
@@ -95,7 +95,7 @@ let itemVars = {
             name:"rapier",
             damage:2,
             stunTime:2,
-            weight:1,
+            heft:1,
             bulk:2,
             type:{
                 sword:true,
@@ -104,7 +104,7 @@ let itemVars = {
             jab:{
                 damage:8,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     sword:true,
                     sharp:true,
@@ -118,12 +118,12 @@ let itemVars = {
             name:"scimitar",
             damage:7,
             stunTime:2,
-            weight:3,
+            heft:3,
             bulk:2,
             strafe:{
                 damage:6,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     sword:true,
                     edged:true,
@@ -143,7 +143,7 @@ let itemVars = {
             name:"shortsword",
             damage:4,
             stunTime:1,
-            weight:2,
+            heft:2,
             bulk:1.2,
             type:{
                 sword:true,
@@ -154,7 +154,7 @@ let itemVars = {
             draw:{
                 damage:4,
                 stunTime:3,
-                weight:1,
+                heft:1,
                 type:{
                     sword:true,
                     edged:true,
@@ -169,7 +169,7 @@ let itemVars = {
             name:"longsword",
             damage:8,
             stunTime:2,
-            weight:3,
+            heft:3,
             bulk:3,
             type:{
                 sword:true,
@@ -184,7 +184,7 @@ let itemVars = {
             name:"katana",
             damage:8,
             stunTime:1,
-            weight:3,
+            heft:3,
             bulk:3,
             type:{
                 sword:true,
@@ -194,7 +194,7 @@ let itemVars = {
             draw:{
                 damage:8,
                 stunTime:5,
-                weight:3,
+                heft:3,
                 type:{
                     sword:true,
                     edged:true,
@@ -210,7 +210,7 @@ let itemVars = {
             name:"greatsword",
             damage:12,
             stunTime:4,
-            weight:5,
+            heft:5,
             bulk:5,
             type:{
                 sword:true,
@@ -226,12 +226,12 @@ let itemVars = {
             name:"goliath sword",
             damage:20,
             stunTime:6,
-            weight:7,
+            heft:7,
             bulk:7,
             draw:{
                 damage:25,
                 stunTime:8,
-                weight:9,
+                heft:9,
                 type:{
                     sword:true,
                     edged:true,
@@ -253,7 +253,7 @@ let itemVars = {
             name:"handaxe",
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             bulk:1.3,
             type:{
                 edged:true,
@@ -263,7 +263,7 @@ let itemVars = {
             swing:{
                 damage:6,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     edged:true,
                     axe:true,
@@ -278,7 +278,7 @@ let itemVars = {
             wrecking:true,
             damage:2,
             stunTime:3,
-            weight:3,
+            heft:3,
             bulk:3.5,
             type:{
                 axe:true,
@@ -288,7 +288,7 @@ let itemVars = {
             swing:{
                 damage:8,
                 stunTime:3,
-                weight:3,
+                heft:3,
                 type:{
                     axe:true,
                     improvised:true,
@@ -303,7 +303,7 @@ let itemVars = {
             name:"greataxe",
             damage:2,
             stunTime:3,
-            weight:3,
+            heft:3,
             bulk:6,
             type:{
                 edged:true,
@@ -313,7 +313,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:6,
-                weight:5,
+                heft:5,
                 type:{
                     edged:true,
                     axe:true,
@@ -328,7 +328,7 @@ let itemVars = {
             name:"halberd",
             damage:8,
             stunTime:3,
-            weight:4,
+            heft:4,
             bulk:7,
             type:{
                 edged:true,
@@ -338,7 +338,7 @@ let itemVars = {
             swing:{
                 damage:15,
                 stunTime:4,
-                weight:6,
+                heft:6,
                 type:{
                     edged:true,
                     long:true,
@@ -405,7 +405,8 @@ let itemVars = {
             color:'red',
             bulk:1,
             treasure:true,
-
+            enchantmentChance:0.3,
+            curseChance:0.3,
             flavorText:"The flesh sloughs off of this skull as if it had been slow-cooking for days. It carries a bloody sheen which persists however much you polish it. You should endeaver to be rid of this thing soon.",
 
         },
@@ -414,7 +415,7 @@ let itemVars = {
             name:"branch",
             damage:1,
             stunTime:1,
-            weight:1,
+            heft:1,
             bulk:0.7,
             type:{
                 blunt:true,
@@ -430,19 +431,21 @@ let itemVars = {
         },
         sigiledBone:{
             name:"sigiled bone",
-            value:1,
+            value:2,
             color:'bone',
             bulk:0.5,
             treasure:true,
+            curseChance:0.2,
 
             flavorText:"Somehow it's still warm..."
         },
         sigiledSkull:{
             name:"sigiled skull",
-            value:3,
+            value:5,
             color:'bone',
             bulk:1,
             treasure:true,
+            curseChance:0.5,
 
             flavorText:"They eyeless sockets seem to follow you."
         },
@@ -509,7 +512,7 @@ let itemVars = {
             iron:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:2,
             bulk:1.8,
             type:{
@@ -519,7 +522,7 @@ let itemVars = {
             swing:{
                 damage:5,
                 stunTime:4,
-                weight:2,
+                heft:2,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -555,7 +558,7 @@ let itemVars = {
             wood:true,
             damage:2,
             stunTime:2,
-            weight:1,
+            heft:1,
             flimsy:8,
             bulk:0.7,
             type:{
@@ -566,7 +569,7 @@ let itemVars = {
             jab:{
                 damage:1,
                 stunTime:1,
-                weight:1,
+                heft:1,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -585,7 +588,7 @@ let itemVars = {
             wood:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:8,
             bulk:4.5,
             type:{
@@ -596,7 +599,7 @@ let itemVars = {
             swing:{
                 damage:5,
                 stunTime:3,
-                weight:3,
+                heft:3,
                 type:{
                     blunt:true,
                     improvised:true,
@@ -615,7 +618,7 @@ let itemVars = {
             wood:true,
             damage:1,
             stunTime:2,
-            weight:2,
+            heft:2,
             flimsy:8,
             bulk:4,
             type:{
@@ -627,7 +630,7 @@ let itemVars = {
             jab:{
                 damage:4,
                 stunTime:2,
-                weight:2,
+                heft:2,
                 type:{
                     improvised:true,
                     long:true,
@@ -670,6 +673,7 @@ let itemVars = {
             bulk:0.1,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["Painstakingly engraved","This once held tremendous sentimental value for someone. Not any more.","There's still a finger attached to it..."]
         },
         cup:{
@@ -686,6 +690,7 @@ let itemVars = {
             bulk:0.15,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["Inlaid with lewd images.","Inlaid with a painting of a fat, jolly man.","Inlaid with a painting of a stern looking woman.","This once held tremendous sentimental value for someone. Not any more.","Pretty!"]
 
         },
@@ -731,7 +736,7 @@ let itemVars = {
             value:12,
             bulk:1,
             scalable:true,
-            possibleFlavorTexts:["She's beautiful...","Why does it look like that?","You wish it had some clothes on.","A depiction of a man forgotten in all but form.","It would be worth more if you could find the head..."]
+            possibleFlavorTexts:["She's beautiful...","Why does it look like that?","You wish it had some clothes on.","A depiction of a man forgotten in all but form.","It would be worth more if you could find the head...","Depicts a man with a wooden hammer and a belt of potions."]
         },
         tiara:{
             name:"tiara",
@@ -739,6 +744,7 @@ let itemVars = {
             bulk:0.75,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["The gems have long been pried from it.","The delicate craftsmanship is inspiring."]
         },
         underplate:{
@@ -755,6 +761,7 @@ let itemVars = {
             bulk:1.2,
             scalable:true,
             wearable:true,
+            enchantmentChance:0.1,
             possibleFlavorTexts:["It seems even kings are forgotten to time.","You can't bring yourself to put it on."]
         }
     },
@@ -788,9 +795,9 @@ let itemVars = {
         wood:{
             name:'wooden',
             flimsy:6,
-            stunTime: -2,
-            weight:-1,
-            damage:-1,
+            stunTimeMult:0.7,
+            heftMult:0.8,
+            damageMult:0.7,
             bulk:0.8,
             sharp:{
                 damage:-1,
@@ -803,7 +810,7 @@ let itemVars = {
             fuel:true,
             light:1,
 
-            frequency:7
+            frequency:6
 
         },
         bone:{
@@ -812,13 +819,16 @@ let itemVars = {
             blunt:{
                 damage: -1,
             },
+            damageMult:0.8,
             sharp:{
                 flimsy:4,
             },
             stunTime:-1,
-            weight:-1,
+            heft:-1,
             value:.15,
             color:'bone',
+            curseChance:0.2,
+            enchantmentChance:0.05,
 
             frequency:1
 
@@ -826,12 +836,14 @@ let itemVars = {
         limestone:{
             name:'limestone',
             flimsy:6,
-            weight:2,
-            stunTime:3,
-            damage:2,
+            heftMult:2,
+            stunTime:1,
+            damage:1,
+            damageMult:1.2,
             bulk:2,
             blunt:{
-                damage:2
+                damageMult:1.25,
+                stunTimeMult:1.5
             },
             value:.2,
             color:'silver',
@@ -842,6 +854,9 @@ let itemVars = {
         flint:{
             name:'flint',
             flimsy:4,
+            heftMult:0.8,
+            damageMult:0.8,
+            stunTimeMult:0.8,
             blunt:{
                 flimsy:4,
             },
@@ -853,11 +868,13 @@ let itemVars = {
         ceramic:{
             name:'ceramic',
             flimsy:10,
+            heftMult:0.9,
             blunt:{
                 flimsy:10,
             },
             value:.8,
             color:'brown',
+            enchantmentChance:0.1,
 
             frequency:1
         },
@@ -871,32 +888,37 @@ let itemVars = {
                 damage:2,
             },
             value:.5,
+            curseChance:0.2,
+            enchantmentChance:0.1,
 
             frequency:1
         },
         lead:{
             name:'lead',
             flimsy:3,
-            weight:1,
-            stunTime:2,
+            heft:1,
+            heftMult:1.25,
+            stunTimeMult:1.3,
             blunt:{
-                damage:1
+                damageMult:1.35
             },
             value:2,
             color:'darkgray',
             bulk:3,
+            curseChance:0.2,
 
             frequency:3
 
         },
         rubber:{
             name:'rubber',
-            damage:-5,
+            damageMult:0.4,
+            stunTimeMult:1.5,
             blunt:{
                 stunTime:2
             },
             sharp:{
-                damage:-3
+                damage:-2
             },
             value:.5,
 
@@ -948,26 +970,32 @@ let itemVars = {
                 damage:6
             },
             color:'clearBlue',
-            frequency:1
+            frequency:1,
+            curseChance:0.2,
+            enchantmentChance:0.1,
         },
         sigiledBone:{
             name:'sigiled bone',
-            flimsy:10,
-            weight:-1,
+            flimsy:7,
+            heft:-1,
             value:3,
             color:'bone',
-            frequency:1
+            frequency:1,
+            curseChance:0.5,
+            enchantmentChance:0.1,
         },
         ironwood:{
             name:'ironwood',
-            stunTime:2,
+            stunTimeMult:1.2,
             blunt:{
-                damage:2
+                stunTime:1,
+                damageMult:1.35
             },
             sharp:{
                 damage:-1
             },
             value:3,
+            enchantmentChance:0.1,
             color:'redBrown',
             frequency:2
         },
@@ -979,6 +1007,7 @@ let itemVars = {
                 damage:8
             },
             color:'darkPurple',
+            enchantmentChance:0.1,
             frequency:1
         },
         meteorite:{
@@ -990,13 +1019,15 @@ let itemVars = {
             value:7,
             resistant:true,
             color:'gray',
+            enchantmentChance:0.1,
             frequency:1
         },
         gravsteel:{
             name:'gravsteel',
-            weight:3,
-            stuntime:6,
-            damage:8,
+            heftMult:2.5,
+            stunTime:2,
+            stuntimeMult:2,
+            damageMult:2.5,
             blunt:{
                 damage: 4
             },
@@ -1008,10 +1039,12 @@ let itemVars = {
         },
         lightsteel:{
             name:'lightsteel',
-            weight:-1,
-            stunTime:-2,
+            heft:-1,
+            heftMult:0.8,
+            stunTime:-1,
+            stunTimeMult:0.6,
             blunt:{
-                damage:-2
+                damageMult:0.65
             },
             sharp:{
                 damage:2
@@ -1041,36 +1074,41 @@ let itemVars = {
             value:10,
             color:'silver',
             frequency:3,
-            treasure:true
+            treasure:true,
+            curseChance:-0.2,
+            enchantmentChance:0.1,
         },
         gold:{
             name:'gold',
-            weight:1,
+            heftMult:1.5,
+            damageMult:1.2,
             stunTime:2,
             flimsy:8,
             sharp:{
                 damage:-2
             },
             blunt:{
-                damage:2
+                damageMult:1.5
             },
             value:12,
             color:'gold',
             bulk:3,
             frequency:3,
+            enchantmentChance:0.1,
             treasure:true
 
         },
         platinum:{
             name:'platinum',
-            weight:2,
-            stunTime:4,
-            flimsy:1,
-            damage:4,
+            heftMult:2,
+            stunTime:2,
+            stunTimeMult:1.25,
+            damageMult:1.8,
             bulk:5,
             blunt:{
                 damage:2
             },
+            flimsy:1,
             value:19,
             color:'silver',
             frequency:2,
@@ -1079,13 +1117,15 @@ let itemVars = {
         
         adamantine:{
             name:'adamantine',
-            weight:-1,
+            heft:-1,
+            heftMult:0.8,
             sharp:{
                 damage:2
             },
             bulk:0.75,
             value:20,
             color:'blue',
+            enchantmentChance:0.1,
             frequency:1
         },
         ethersteel:{
@@ -1117,6 +1157,8 @@ let itemVars = {
             name:"bone",
             value:0.2,
             color:"bone",
+            curseChance:0.2,
+            enchantmentChance:0.05,
 
             possibleFlavorTexts:["Made from antler.","You have to be careful not to prick yourself on it.","Smells like death.","It's still bloody.","There's a bit of hair stuck to it...", "You find yourself comforted by the thought that this may be you one day."]
         },
@@ -1163,13 +1205,16 @@ let itemVars = {
             value:2,
             color:"darkgray",
             bulk:3,
-            possibleFlavorTexts:["It's heavier than it looks.",'It smells sweet... Perhaps a taste?']
+            possibleFlavorTexts:["It's heavier than it looks.",'It smells sweet... Perhaps a taste?'],
+            curseChance:0.2,
         },
         sigiledBone:{
             name:"sigiled bone",
             value:2.5,
             color:"bone",
-            possibleFlavorTexts:["Smells like death.","There's a bit of hair stuck to it...", "It's definitely human."]
+            possibleFlavorTexts:["Smells like death.","There's a bit of hair stuck to it...", "It's definitely human."],
+            curseChance:0.5,
+            enchantmentChance:0.05,
         },
         copper:{
             name:'copper',
@@ -1197,6 +1242,7 @@ let itemVars = {
             value:5,
             color:'silver',
             bulk:1.8,
+            enchantmentChance:0.02,
             possibleFlavorTexts:[]
         },
         silver:{
@@ -1204,20 +1250,23 @@ let itemVars = {
             value:8,
             color:"silver",
             bulk:1.8,
-            possibleFlavorTexts:["It shines splendidly.","You've heard the moon used to shine like silver. It's hard for you to believe."]
+            possibleFlavorTexts:["It shines splendidly.","You've heard the moon used to shine like silver. It's hard for you to believe."],
+            curseChance:-0.2,
         },
         gold:{
             name:'gold',
             value:10,
             color:"gold",
             bulk:3,
-            possibleFlavorTexts:["Its weight dismisses any doubts you had of its authenticity.","They say the sun shone brighter than gold. You wonder if it's true."]
+            enchantmentChance:0.1,
+            possibleFlavorTexts:["Its heft dismisses any doubts you had of its authenticity.","They say the sun shone brighter than gold. You wonder if it's true."]
         },
         platinum:{
             name:'platinum',
             value:20,
             color:"silver",
             bulk:4,
+            enchantmentChance:0.1,
             possibleFlavorTexts:['The opulence is sickening.','It shines brilliantly.']
         }
     },
@@ -1249,7 +1298,6 @@ let itemVars = {
     weaponModifiers:{
         worn:{
             name:'worn',
-            symbol:'⤓',
             flimsy:1,
             sharp:{
                 damage:-1
@@ -1258,8 +1306,7 @@ let itemVars = {
         },
         cursed:{
             name: 'cursed',
-            symbol:'⚶',
-            unlucky:true,
+            cursed:1,
             value: .3
         },
         craftTiers:{
@@ -1314,11 +1361,21 @@ let itemVars = {
             name:'pristine',
             value:1.5,
             possibleFlavorTexts:["How is it so clean?","It's like new!","You almost want to keep it.","How has it weathered the ages so?","You wish you were so pristine."]
-        } 
+        },
+        cursed:{
+            name: 'cursed',
+            cursed:1,
+            possibleFlavorTexts:["It has a hostile energy.","Unnaturally cold to the touch","Smells strongly of blood.","It seems to move...","It's hard to pull your eyes from it.","It's beautiful..."]
+        },
+        damned:{
+            name: 'damned',
+            damned:true,
+            possibleFlavorTexts:["It has a malicious energy.","Unnaturally cold to the touch","Smells strongly of blood.","It quivers...","It's hard to pull your eyes from it.","It's beautiful...","It's terrible...","It leaves a residue of blood on everything it touches.","You aren't meant to have this.","You should have left this where you found it."]
+        },
     },
     food:{
-        hardboiledEgg:{
-            name:'hard boiled egg',
+        egg:{
+            name:'egg',
             usable: true,
             food:1,
             color:'bone',
@@ -1326,7 +1383,7 @@ let itemVars = {
             bulk:0.15,
             perishable:true,
 
-            possibleFlavorTexts:["Under certain conditions, an egg can remain safe to eat for decades... You aren't sure what those conditions are.","Egg.","Who farted?"]
+            possibleFlavorTexts:["Under certain conditions, an egg can remain safe to eat for decades... You aren't sure what those conditions are.","Egg.","Who farted?","Hard boiled.","Raw."]
         },
         nuts:{
             name:'nuts',
@@ -1411,7 +1468,7 @@ let itemVars = {
             weapon:true,
             damage:1,
             stunTime:1,
-            weight:1,
+            heft:1,
             type:{
                 blunt:true,
                 improvised:true
@@ -1458,7 +1515,7 @@ let itemVars = {
             weapon:true,
             damage:1,
             stunTime:2,
-            weight:1,
+            heft:1,
             bulk:1,
             type:{
                 blunt:true,
@@ -1498,7 +1555,7 @@ let itemVars = {
             weapon:true,
             damage:3,
             stunTime:4,
-            weight:2,
+            heft:2,
             bulk:1,
             type:{
                 blunt:true,
@@ -1513,6 +1570,11 @@ let itemVars = {
             rotten:true,
             name:"rotten",
             value:0.3
+        },
+        dubious:{
+            dubious:true,
+            name:"dubious",
+            value:0.5
         }
     },
     foodFlavorTexts:{
@@ -1574,12 +1636,12 @@ let itemVars = {
             name:'potion of fatigue',
             usable: true,
             potable: true,
-            color: 'orange',
-            stamina: -5,
+            color: 'purple',
+            fatigue: 5,
             value: 3,
             negative:true,
             message: 'Your energy is sapped.',
-            tip: 'You lost stamina',
+            tip: 'You gained fatigue',
             
             bulk:0.5,
         },
@@ -1641,6 +1703,42 @@ let itemVars = {
             
             bulk:0.5,
         },
+        enduranceTincture:{
+            name:'tincture of endurance',
+            usable: true,
+            potable: true,
+            fatigue: -3,
+            value: 5,
+            color: 'darkYellow',
+            message:'You feel refreshed.',
+            tip: 'You lost fatigue',
+            
+            bulk:0.5,
+        },
+        endurancePotion:{
+            name:'potion of endurance',
+            usable: true,
+            potable: true,
+            fatigue: -8,
+            value: 10,
+            color: 'darkYellow',
+            message:'You feel refreshed.',
+            tip: 'You lost fatigue',
+            
+            bulk:0.5,
+        },
+        greaterEndurancePotion:{
+            name:'greater potion of endurance',
+            usable: true,
+            potable: true,
+            fatigue: -14,
+            value: 13,
+            color: 'darkYellow',
+            message:'You feel refreshed.',
+            tip: 'You lost fatigue',
+            
+            bulk:0.5,
+        },
         staminaTincture:{
             name:'stamina tincture',
             usable: true,
@@ -1693,7 +1791,7 @@ let itemVars = {
             usable: true,
             potable: true,
             luck: 3,
-            value: 10,
+            value: 15,
             color: 'green',
             message:'Your luck returns to you.',
             
@@ -1703,8 +1801,8 @@ let itemVars = {
             name:'greater luck potion',
             usable: true,
             potable: true,
-            luck: 6,
-            value: 15,
+            luck: 5,
+            value: 20,
             color: 'green',
             message:'Your luck returns to you.',
             
@@ -1790,7 +1888,7 @@ let itemVars = {
             stamina: 10,
             health: 10,
             luck: 10,
-            value: 20,
+            value: 30,
             hunger: 10,
             light:2,
             color: 'gold',
@@ -1864,5 +1962,37 @@ let itemVars = {
         "It has a sweet floral scent.",
         "Flecks of glitter dance in the liquid.",
         "It has a faint, radiant, glow.",
-    ]
+    ],
+    enchantments:{
+        vigor:{
+            name:'vigorAspect',
+            flatValue:50,
+            enchantment:true,
+            vigor:true
+        },
+        hunger:{
+            name:'hungerAspect',
+            flatValue:10,
+            enchantment:true,
+            hunger:true
+        },
+        fury:{
+            name:"furyAspect",
+            flatValue:15,
+            enchantment:true,
+            fury:true
+        },
+        lucky:{
+            name:"lucky",
+            flatValue:5,
+            enchantment:true,
+            lucky:true
+        },
+        blessed:{
+            name:"blessed",
+            flatValue:50,
+            enchantment:true,
+            blessed:true
+        }
+    }
 }

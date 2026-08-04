@@ -19,10 +19,6 @@ class Town{
         GameMaster.postPlayerAction();
     }
 
-    static showShop(){
-        
-    }
-
     static nourishmentDiv(){
         let meals = [
             {
@@ -41,15 +37,12 @@ class Town{
                 if(Player.gold >= meal.cost){
                     let oldNourishment = Player.nourishment
                     if(meal.item){
-                        if(Player.inventory.items.length < Player.inventory.slots){
-                            let itemCopy = JSON.parse(JSON.stringify(meal.item));
-                            LootManager.getFlavorText(itemCopy)
-                            Player.pickUpItem(itemCopy);
-                        }else{
-                            Player.changeNourishment(item.food);
-                        }
+                        let itemCopy = JSON.parse(JSON.stringify(meal.item));
+                        LootManager.getFlavorText(itemCopy)
+                        Player.pickUpItem(itemCopy);
                     }else{
                         Player.changeNourishment(meal.nourishment);
+                        Sound.playEat();
                     }
                     let nourishmentGained = Player.nourishment - oldNourishment;
                     Player.gold-= meal.cost;
@@ -96,14 +89,7 @@ class Town{
         })
     }
 
-    static getRestHintText(restInfo){
-        if(!restInfo){
-            restInfo = Player.getRestInfo();
-        }
-        let hintText = 'You will gain: '+restInfo.healthChange+" health, "+restInfo.nourishmentChange+" hunger, "+restInfo.exertionChange+" exertion. 50% change to gain 1 luck.";
-
-        return hintText;
-    }
+    
 
     static previewRestBars(restInfo){
         console.log(restInfo);
@@ -124,33 +110,13 @@ class Town{
         $('#hunger-level').css('width',hungerPercent*1.5+"px").addClass('preview');
         $('#hunger-level').text(newHunger+"/"+Player.nourishmentMax);
 
-        $('#exertion-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
+        $('#fatigue-level-div').addClass('preview').text('You are rested').css('color', 'var(--dark)');
     }
 
     static restButton(){
         let restButton = $('#rest-button')
         restButton.off().on('click',()=>{
-            let restInfo = Player.getRestInfo();
-            Log.printDayToLog(false);
-            let oldLuck = Player.luck;
-            GameMaster.nextDay();
-            $('#day-div').text('Day '+Save.day);
-            //GameMaster.loadTown();
-            //Inventory.displayInventory();
-            Shop.restockInventory();
-            Log.addMessage('You rested.')
-            if(restInfo.healthChange > 0){
-                Log.addMessage("Gained "+restInfo.healthChange+" health.",'pos')
-            }
-            if(oldLuck < Player.luck){
-                Log.addMessage("Gained "+(Player.luck-oldLuck)+ " luck!","win")
-            }
-            if(restInfo.nourishmentChange < 0){
-                Log.addMessage("Lost "+restInfo.nourishmentChange*-1+" hunger.",'danger')
-            }
-            Log.addMessage('You are now well rested.','pos')
-            GameMaster.postPlayerAction();
-            $('.hint-divs').text(Town.getRestHintText());
+            
         })
         
         restButton.on('mouseenter',()=>{
@@ -161,8 +127,8 @@ class Town{
         }).on('mouseleave',()=>{
             $('.hint-divs').html('');
             Display.fillBars();
-            Display.exertionDiv();
-            $('#exertion-level-div').removeClass('preview');
+            Display.fatigueDiv();
+            $('#fatigue-level-div').removeClass('preview');
             $('#health-level').removeClass('preview');
 
             $('#luck-level').removeClass('preview');
@@ -174,7 +140,7 @@ class Town{
     static displayShop(){
         $('#shop-wrapper').show();
         $('#shop-list').html('');
-        let inventory = Shop.inventory;
+        let inventory = ShopManager.inventory;
         let shopContainer = {
             inventory:{items:inventory},
             shop:true,

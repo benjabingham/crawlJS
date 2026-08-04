@@ -16,6 +16,8 @@ class EntityManager{
     static currentMap;
 
     static playerEntity;
+
+    static playerSpawnPositions = [];
     
     static entityManagerInit(){
         Board.boardInit();
@@ -24,6 +26,8 @@ class EntityManager{
     static wipeEntities(){
         EntityManager.entities = {};
         EntityManager.entityCounter = 0;
+        EntityManager.playerEntity = false;
+        EntityManager.playerSpawnPositions = [];
         History.reset();
     }
 
@@ -50,6 +54,7 @@ class EntityManager{
         let item = weapon.item;
         if(EntityManager.itemWillDegrade(weapon,modifier,multiplier)){
             Display.flash($('body'),'item-breaking')
+            Sound.playBreakSword();
             if(!item.worn){
                 EntityManager.transmitMessage(item.name + ' is showing wear!', 'urgent','showing wear','This item has degraded. It now has a chance to become broken. Use a point of luck to extend its life.',weapon.id);
                 LootManager.applyModifier(Player.equipped,itemVars.weaponModifiers.worn);  
@@ -100,8 +105,9 @@ class EntityManager{
         return entity.move(x,y);
     }
 
-    static checkPlayerExertion(){
-        if(Player.exertion > 1){
+    //NOT IN USE
+    static checkPlayerfatigue(){
+        if(Player.fatigueLevel > 1){
             if(Player.stamina){
                 Player.changeStamina(-1);
             }else{
@@ -144,7 +150,10 @@ class EntityManager{
     */
     //on move, chance to lose 1 stamina and end turn.
     //chance = 5% for first check, 3% for subsequent checks. Checked again for every 10% above your max.
+    //return falso if encumbered, true if not
     static checkEncumberedV2(){
+        if(GameMaster.scale=='town'){return true}
+        if(GameMaster.scale == 'world'){return EntityManager.checkEncumberedWorld()}
         let encumbrance = Player.getEncumbranceLevel()
         if(encumbrance){
             let diff = Player.getBulk()-Player.maxBulk;
@@ -155,12 +164,43 @@ class EntityManager{
                 let chance = 3;
                 if(i==0){chance += 2}
                 if(Random.roll(1,100) <= chance){
-                    Player.changeStamina(-1)
-                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     Display.flash($('#player-inventory'),'inventory')
                     XP.gainBulkXP(nChecks)
+                    Player.changeStamina(-1)
+                    Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. Whenever you try to move, you have a chance to lose 1 stamina and skip your turn.')
                     return false;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    static checkEncumberedWorld(){
+        let encumbrance = Player.getEncumbranceLevel()
+        if(encumbrance){
+            if(Player.fatigueLevel >= 2 && Player.health <= 1){
+                Display.flash($('#player-inventory'),'inventory')
+                Log.addMessage('You have pushed yourself to your limit.','warning',false,'You can no longer travel while over your bulk limit.')
+                return false;
+            }   
+            let diff = Player.getBulk()-Player.maxBulk;
+            let percentOver = diff/Player.maxBulk;
+            let nChecks = 1;
+            nChecks += Math.floor(percentOver*10)
+            let fatigueGained = 0;
+            for(let i = 0; i < nChecks; i++){
+                let chance = 5;
+                if(i==0){chance += 15}
+                if(Random.roll(1,100) <= chance){
+                    Display.flash($('#player-inventory'),'inventory')
+                    XP.gainBulkXP(nChecks)
+                    fatigueGained++;
+                }
+            }
+            if(fatigueGained){
+                Player.changeFatigue(fatigueGained)
+                Log.addMessage('Your bulk hinders you.','danger',false,'You are overencumbered. You have a chance to gain Fatigue earch turn.')
             }
         }
 
@@ -174,20 +214,27 @@ class EntityManager{
     }
     
     static movePlayer(x,y){
-        if(!EntityManager.checkPlayerExertion()){
+        /*
+        if(!EntityManager.checkPlayerfatigue()){
             return false;
-        }
+        }*/
         if(!EntityManager.checkUnwieldy()){
             return false;
         }
-        if(Board.isOpenSpace(x,y) && !EntityManager.checkEncumberedV2()){
+        let targetX = EntityManager.playerEntity.x+x;
+        let targetY = EntityManager.playerEntity.y+y;
+
+        //check if the space being moved into is open. If it is, checks encumbrance.
+        //if occupied, doesn't bother. This means encumbrance has to be checked again later
+        //in the case of an unarmed strike.
+        if(Board.isOpenSpace(targetX,targetY) && !EntityManager.checkEncumberedV2()){
             return false;
         }
         EntityManager.checkEther();
 
         let playerEntity = EntityManager.getEntity("player");
         let unarmedStrike = playerEntity.checkUnarmedStrike(x,y);
-        if(!EntityManager.moveEntity('player',x,y) && !unarmedStrike){
+        if(!unarmedStrike && !EntityManager.moveEntity('player',x,y)){
             EntityManager.cancelAction({blocked:true})
         }
     }
@@ -199,59 +246,63 @@ class EntityManager{
 
     static triggerBehaviors(){
         for (const [k,entity] of Object.entries(EntityManager.entities)){
-            let random = Math.random()*100;
-            let skip = 0;
-            if(entity.stunned){
-                skip+= entity.stunned;
-            }
-            let slow = 0;
-            if(entity.behaviorInfo){
-                slow += (random <= entity.slow);
-                skip += slow;
-            }
-            if(entity.wait){
-                //wait until is within screen AND has player los
-                if(!EntityManager.hasPlayerLos(entity)){
-                    skip++;
-                }else{
-                    entity.wait = false;
-                }
-            }else
-            
-            if(!entity.wait && entity.wakeupChance && !entity.awake){
-                if(Math.random()*100 < entity.wakeupChance){
-                    entity.awake = true;
-                }else{
-                    skip++
-                }
-            }
-            entity.checkPreMoveTriggers();
+            EntityManager.triggerEntityBehavior(entity)
+        }
+    }
 
-            //do this only if not stunned
-            if (!skip){
-                entity.parryable = false;
-                switch(entity.behavior){
-                    case "chase":
-                        entity.chaseNatural();
-                        break;
-                    case "chaseBinary":
-                        entity.chaseBinary();
-                    default:
-                }
-            }
-            
-            entity.checkPostMoveTriggers(skip, slow)
-            
-            entity.stunned = Math.max(entity.stunned-1, 0);
-            if (!entity.dead){ 
-                if(entity.stunned > 0){
-                    entity.tempSymbol = entity.symbol.toLowerCase();
-                }else{
-                    entity.tempSymbol = false;
-                }
+    static triggerEntityBehavior(entity){
+        let random = Math.random()*100;
+        let skip = 0;
+        if(entity.stunned){
+            skip+= entity.stunned;
+        }
+        let slow = 0;
+        if(entity.behaviorInfo){
+            slow += (random <= entity.slow);
+            skip += slow;
+        }
+        if(entity.wait){
+            //wait until is within screen AND has player los
+            if(!EntityManager.hasPlayerLos(entity)){
+                skip++;
             }else{
-                //entity.tempSymbol = 'x';
+                entity.wait = false;
             }
+        }else
+        
+        if(!entity.wait && entity.wakeupChance && !entity.awake){
+            if(Math.random()*100 < entity.wakeupChance){
+                entity.awake = true;
+            }else{
+                skip++
+            }
+        }
+        entity.checkPreMoveTriggers();
+
+        //do this only if not stunned
+        if (!skip){
+            entity.parryable = false;
+            switch(entity.behavior){
+                case "chase":
+                    entity.chaseNatural();
+                    break;
+                case "chaseBinary":
+                    entity.chaseBinary();
+                default:
+            }
+        }
+        
+        entity.checkPostMoveTriggers(skip, slow)
+        
+        entity.stunned = Math.max(entity.stunned-1, 0);
+        if (!entity.dead){ 
+            if(entity.stunned > 0){
+                entity.tempSymbol = entity.symbol.toLowerCase();
+            }else{
+                entity.tempSymbol = false;
+            }
+        }else{
+            //entity.tempSymbol = 'x';
         }
     }
 
@@ -300,6 +351,7 @@ class EntityManager{
     }
 
     static cancelAction(reason){
+        Sound.playError();
         Log.addNotice('Action Halted');
         if(reason.insuficientStamina){
             Log.addNotice('Not Enough Stamina')
@@ -360,8 +412,16 @@ class EntityManager{
             spawnChance = groupInfo.spawnChance
         }
         let spawn = (random < spawnChance || typeof spawnChance == 'undefined');
+        //if there's already a player entity, don't initialize another one.
+        //this will happen because different possible spawn locations are encoded as multiple player entities.
+        //GameMaster will teleport player to correct location.
         if(groupInfo.entityType == "player"){
-            EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            EntityManager.playerSpawnPositions.push({x:x,y:y})
+            if(!EntityManager.playerEntity){
+                EntityManager.playerEntity = EntityManager.playerInit(x, y)
+            }else{
+                return false;
+            }
         }else if(groupInfo.entityType == "monster"){
             if(entitySave.alive && spawn){
                 entityObj = new Monster(groupInfo.key,x,y,groupInfo);
@@ -376,15 +436,18 @@ class EntityManager{
             if(entitySave.alive){
                 entityObj = new ItemPile(x,y,entitySave.inventory.items,entitySave.inventory.gold)
             }
+        }else if(groupInfo.entityType == 'location'){
+            entityObj = new Location(x,y,groupInfo) 
         }
         if(entityObj){
             entityObj.index = entitySave.index;
             
         }else{
+            /*
             console.log({
                 message:'entityObj = false',
                 entitySave:entitySave
-            })
+            })*/
             return false;
         }
         if(entitySave.inventory){
@@ -400,6 +463,11 @@ class EntityManager{
             }
         }
 
+        if(entityObj.lightStrength){
+            Board.lightSourceIDs.push(entityObj.id);
+        }
+
+        //use for stuff like the Tree of Greed
         if(!entityObj.checkSpawnConditions()){
             console.log('obliterating')
             entityObj.obliterated = true;
@@ -468,6 +536,7 @@ class EntityManager{
 
         //check if we should wait a turn... Use average slow value of spawned entities
         let keysToSpawn = spawner.containedEntities.slice(nSpawn*-1)
+
         if(Math.random()*100 < EntityManager.getAverageSlow(keysToSpawn)){
             if(!spawner.disturbed){
                 spawner.disturbed = 1;
@@ -526,20 +595,24 @@ class EntityManager{
                 //cant take more than half the items because inventory length updates as they are taken
                 //i like this
                 for(let j = 0; j < spawner.inventory.items.length; j++){
-                    if(Math.random()*100 < 100  && entityObj.inventory.items.length < entityObj.inventorySlots){
+                    if(entityObj.inventory.items.length < entityObj.inventorySlots){
                         let item = spawner.inventory.items.splice(j,1)[0];
                         entityObj.inventory.items.push(item);
                     }
                 }
             }
     
-            
-    
             if(EntityManager.hasPlayerLos(entityObj) && Board.hasLight(entityObj)){
                 Log.addMessage(entityObj.name+" emerges from "+spawner.name+".",'danger', false, false, entityObj.id);
             }
 
-            
+            entityObj.addStunTime(2);
+            let i = 0
+            while(entityObj.slow < Random.roll(0,99) && i <= 10){
+                entityObj.addStunTime(1)
+                i++;
+            }
+            EntityManager.triggerEntityBehavior(entityObj)
         }
 
         if(spawner.disturbed){

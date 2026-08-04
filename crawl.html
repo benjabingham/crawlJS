@@ -30,12 +30,13 @@
     <script src="javascript/vars/KeywordVars.js?v=7"></script>
     <script src="javascript/vars/InputVars.js?v=7"></script>
     <script src="javascript/vars/MapVars.js?v=7"></script>
+    <script src="javascript/vars/TipVars.js?v=7"></script>
 
     <script src="javascript/vars/SkillVars.js?v=7"></script>
 
     <script src="javascript/LootManager.js?v=7"></script>
     <script src="javascript/Input.js?v=7"></script>
-    <script src="javascript/Shop.js?v=7"></script>
+    <script src="javascript/ShopManager.js?v=7"></script>
     <script src="javascript/Save.js?v=7"></script>
     <script src="javascript/GameMaster.js?v=7"></script>
     <script src="javascript/EntityManager.js?v=7"></script>
@@ -49,17 +50,20 @@
     <script src="javascript/Entity.js?v=7"></script>
     <script src="javascript/History.js?v=7"></script>
     <script src="javascript/Stats.js?v=7"></script>
+    <script src="javascript/Sound.js?v=7"></script>
 	<script src="javascript/crawl.js?v=7"></script>
 	<script src="javascript/XP.js?v=7"></script>
+    <script src="javascript/Travel.js?v=7"></script>
 
 
     </div>
     <div id ='home-screen'>
         <div id="save-manage-div">
-            <h1>S O L I D U S</h1>
+            <h1 class="header-centered">S O L I D U S</h1>
             <div id="menu-buttons-div">
                 <button id="new-save-button">New Game</button>
                 <a id="map-editor-link" href="https://htmlpreview.github.io/?https://github.com/benjabingham/crawlJS/blob/dev/mapEditor.html">Map Editor</a>    
+                <a id="tutorial-video-link" target="_blank" href="https://www.youtube.com/watch?v=3FcUWd7ks_0">Tutorial Video</a>
             </div>
              <!--
             <input type="file" id="load-file-input" />
@@ -72,7 +76,7 @@
         <div id="hud-div">
             <div id="day-div"></div>
             <div id = "resources">
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="hp-bar-container">
                     <div id="hp-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">HP</div>
                     <div id = "health-bar" class="resource-bar-divs">
@@ -80,7 +84,7 @@
                     </div>
                 </div>
                 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="stamina-bar-container">
                     <div id="stamina-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Stamina</div>
                     <div id = "stamina-bar" class="resource-bar-divs">
@@ -88,7 +92,15 @@
                     </div>
                 </div>
 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="fatigue-bar-container">
+                    <div id="fatigue-number-div" class="resource-number-divs"></div>
+                    <div class="resource-label-divs">Fatigue</div>
+                    <div id = "fatigue-bar" class="resource-bar-divs">
+                        <div id = "fatigue-level" class="resource-level-divs"></div>
+                    </div>
+                </div>
+
+                <div class="resource-bar-containers" id="luck-bar-container">
                     <div id="luck-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Luck</div>
                     <div id = "luck-bar" class="resource-bar-divs">
@@ -96,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="resource-bar-containers">
+                <div class="resource-bar-containers" id="huunger-bar-container">
                     <div id="hunger-number-div" class="resource-number-divs"></div>
                     <div class="resource-label-divs">Hunger</div>
                     <div id = "hunger-bar" class="resource-bar-divs">
@@ -106,7 +118,7 @@
 
             </div>
             <!--<div id="nourishment-level-div"></div>-->
-            <div id="exertion-level-div"></div>
+            <div id="fatigue-level-div"></div>
             <div id="gold-div"class="gold-div"></div>
 
 
@@ -148,7 +160,7 @@
                             <button id="rest-button">rest</button>
                             <br>
                             <div class="hint-text">
-                                Rest to reset exertion.
+                                Rest to reset fatigue.
                             </div>
                         </div>
                     </div>
@@ -193,7 +205,10 @@
                                 <div id = "xp-level" class="xp-level-divs"></div>
                             </div>
                         </div>
-                        <!--<div class="section-label-divs">XP</div>-->
+                        <hr>
+                        <div class="section-label-divs">Stats</div>
+                        <hr>
+                        <div id="character-stats-div"></div>
                         <hr>
                         <div class="section-label-divs">Perks & Proficiencies</div>
                         <hr>
@@ -217,32 +232,42 @@
     </div>
     <div id = 'instructions-div'>
         <H2>INSTRUCTIONS</H2>
+        <!--<iframe id="tutorial-iframe" width="560" height="315" src="https://www.youtube.com/embed/3FcUWd7ks_0?si=f2x0Mi0c7Ys-MClm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
         <h3>CONTROLS</h3>
         By default, the numpad is used to move - you can move up, down, left, right, or diagonally. Press numpad5 to wait.
-        use Q and W to rotate your weapon clockwise or counter-clockwise. Press TAB to rummage.
+        use Q and W to rotate your weapon clockwise or counter-clockwise. Press TAB to rummage, or to stop rummaging.
         <br></br>
         <h3>CRAWLING</h3>
         Use your oil flask to fuel your lantern so you can see.
         <br></br>
         Fight monsters by navigating your weapon onto them. If there is room, you will knock them backwards and may stun them.
-        Stunned enemies appear in lower case and take double damage. Many weapons deal different damage and stun depending on the type of strike - a SWING is when you hit an enemy by rotating your weapon. a JAB is when you advance on an enemy, thrusting your weapon into them.
-        <br></br>
+        Stunned enemies appear in lower case and take double damage. Many weapons deal different damage and stun depending on the type of strike.
+        <ul>
+            <li>A <strong>Swing</strong> is when you hit an enemy by rotating your weapon.</li>
+            <li>A <strong>Jab</strong> is when you advance on an enemy, thrusting your weapon into them.</li>
+            <li>A <strong>Strafing</strong> strike occurs when you hit an enemy by moving sideways or backwards diagonally.</li>
+            <li>A <strong>Draw</strong> strike occurs when you equip your weapon on top of an enemy.</li>
+        </ul>
         Striking an enemy costs STAMINA. Try not to run out!
-        Enemies can be blocked by placing your weapon in their way, but doing so causes them to damage your stamina. If you run out, they will knock your weapon aside and advance on you. (some enemies can do this even if your stamina is full... watch out!)
+        Enemies can be blocked by placing your weapon in their way, but doing so causes them to damage your stamina. If you run out, or if their damage exceeds the weapon's heft, they will knock your weapon aside and advance on you. (some enemies can do this even if your stamina is full... watch out!)
         Take a turn off to regain stamina by pressing '5'. Stamina gain is affected by your hunger level.
         <br></br>
         Luck can be used to undo an action by pressing BACKSPACE. this is a valuable resource! Use luck to undo a mistake, or to "reroll" an action with undesirable results (such as an attack that causes your weapon to break).
         <br></br>
-        items are represented by asterisks and can be collected by walking over them. Dead bodies and chests can be looted by pushing against them (or by smashing them). Items in your inventory can be used by pressing the numeral key corresponding to their slot (on the number bar, not the numpad). Items can be dropped by pressing the D key before pressing the corresponding number. Your tenth slot is currently inacessible, because there is no 10 key on the keyboard. Woops.
+        Items in the world are represented by asterisks and can be collected by walking over them. Dead bodies and chests can be looted by pushing against them (or by smashing them).
         <br></br>
         <h3>OUTSIDE THE DUNGEON</h3>
-        As days pass, luck and health will regenerate and nourishment will deplete. You may REST to pass a day without venturing into the dungeon.
+        Travel to a town to rest and sell treasure. Explore the world, and try to accumulate wealth.
         <br></br>
-        resources can be gained by finding treasure in the dungeon and selling it in town. Make sure to keep your lantern full of oil and your stomach full of food, as a top priority.
-        <br></br>
-        when in town, choose a map from the map select dropdown to venture off. Currently, the only dungeon is labeled "cave".
-        <br></br>
-        click 'new save' to begin
+        Traveling causes you to accrue Fatigue. This will have negative affects if you allow it to pass your Fatigue Limit.
+        <h3>BEATING THE GAME</h3>
+        The game currently has two placeholder win conditions:
+        <ul>
+            <li><strong>Find the Greed Heart</strong> - The Tree of Greed can be found in the Dark Forest if you enter with 100 gold or more. Kill it and bring its heart back to town.</li>
+            <li><strong>Find the Scroll of Undeath</strong> - The Scroll of Undeath can be found upon a bloodstained altar deep in the catacombs. Find it and bring it back to town.</li>
+        </ul>
+        Achieve either of these goals and you will be immortalized in the game.
+        
     </div>
 
     <div id="custom-controls-wrapper-div">

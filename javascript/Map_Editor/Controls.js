@@ -12,6 +12,10 @@ class Controls{
         Controls.dragGrid();
         Controls.floorModeButton();
         Controls.entityModeButton();
+        Controls.mapTypesModeButton();
+        Controls.initMapTypes();
+        $('#floor-controls').hide();
+        $('#map-types').hide();
     }
 
     static saveButtons(){
@@ -72,10 +76,13 @@ class Controls{
         Controls.entityNameInput();
         Controls.symbolInput();
         Controls.colorInput();
+        Controls.lightStrengthInput();
+        Controls.locationIdInput();
         Controls.wallTypeDropdown();
         Controls.spawnChanceInput();
         Controls.respawnChanceInput();
         Controls.waitInput();
+        Controls.shopInputs();
 
         Controls.floorTypeSelect();
     }
@@ -160,6 +167,13 @@ class Controls{
             }else{
                 $('#wall-options').hide();
             }
+
+            if(entityType=='location'){
+                $('#location-options').show()
+                $('#entity-options-cosmetic').show();
+            }else{
+                $('#location-options').hide()
+            }
              
             Grid.updateGrid();
             Save.saveSnapshot();
@@ -204,6 +218,7 @@ class Controls{
                 $('#entity-options-cosmetic').hide();
             }
             Grid.updateGrid();
+            Controls.showHideShopOptions();
             Save.saveSnapshot();
         })
     }
@@ -231,6 +246,24 @@ class Controls{
             EntityGroupManager.setColor(input.val());
             Controls.updateColorPreview();
             Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+    }
+
+    static lightStrengthInput(){
+        let input = $('#light-strength-input');
+        input.on('change',function(){
+            EntityGroupManager.setLightStrength(input.val());
+            Grid.updateGrid();
+            Save.saveSnapshot();
+        })
+    }
+
+    static locationIdInput(){
+        let input = $('#location-id-input');
+        input.on('change',function(){
+            EntityGroupManager.setEntityLocationId(input.val());
+            console.log(input.val())
             Save.saveSnapshot();
         })
     }
@@ -282,12 +315,51 @@ class Controls{
             Save.saveSnapshot();
         })
     }
+
+    static shopInputs(){
+        Controls.isShopInput();
+        Controls.shopIdInput();
+    }
+
+    static shopIdInput(){
+        let input = $('#shop-id-input');
+        input.on('change',function(){
+            EntityGroupManager.setShopId(input.val());
+            console.log(EntityGroupManager.currentShopId)
+            Save.saveSnapshot();
+        })
+    }
+    static isShopInput(){
+        let input = $('#shop-checkbox');
+        input.on('change',function(){
+            let isShop = input.is(':checked')
+            EntityGroupManager.setShop(isShop);
+            Controls.showHideShopOptions();
+            Save.saveSnapshot();
+        })
+    }
+
+    static showHideShopOptions(){
+        let isShop = EntityGroupManager.currentShop
+        console.log(EntityGroupManager.getCurrentGroup())
+        $('#shop-id-input').val(EntityGroupManager.currentShopId)
+        console.log(isShop)
+        $('#shop-checkbox').prop('checked', isShop);
+        if(isShop){
+            $('#shop-info-div').show()
+        }else{
+            $('#shop-info-div').hide()
+            EntityGroupManager.setShopId('')
+        }
+        console.log(EntityGroupManager.currentShopId)
+    }
     
     static showCosmeticOptions(){
         $('#entity-name-input').val(EntityGroupManager.currentEntityName);
         $('#entity-symbol-input').val(EntityGroupManager.currentSymbol);
         $('#entity-color-input').val(EntityGroupManager.currentColor);
         Controls.updateColorPreview();
+        $('#light-strength-input').val(EntityGroupManager.currentLightStrength);
         $('#entity-options-cosmetic').show();
     }
 
@@ -314,6 +386,7 @@ class Controls{
         $('#group-name-div').show();
         $('#entity-type-div').show();
         $('#entity-type-dropdown').val('');
+        $('#location-id-input').val('');
         $('#group-name-input').val(group.groupName)
         Save.saveSnapshot();
     }
@@ -340,6 +413,17 @@ class Controls{
         }else{
             $('#wall-options').hide();
         }
+        Controls.showHideShopOptions();
+
+        if(group.entityType == 'location'){
+            $('#location-options').show();
+            $('#location-id-input').val(EntityGroupManager.currentLocationId)
+            console.log(EntityGroupManager.currentGroupName)
+            console.log(EntityGroupManager.currentLocationId)
+            Controls.showCosmeticOptions();
+        }else{
+            $('#location-options').hide();
+        }
     
     }
 
@@ -347,6 +431,7 @@ class Controls{
         $('#floor-controls-button').on('click',()=>{
             $('#entity-group-controls').hide();
             $('#draw-options-div').hide();
+            $('#map-types').hide();
 
             $('#floor-controls').show();
             Controls.entityMode = false;
@@ -357,11 +442,71 @@ class Controls{
     static entityModeButton(){
         $('#entity-controls-button').on('click',()=>{
             $('#floor-controls').hide();
+            $('#map-types').hide();
             $('#entity-group-controls').show();
             $('#draw-options-div').show();
 
             Controls.floorMode = false;
             Controls.entityMode = true;
+        })
+    }
+
+    static mapTypesModeButton(){
+        $('#map-types-button').on('click',()=>{
+            $('#floor-controls').hide();
+            $('#map-types').show();
+            $('#entity-group-controls').hide();
+            $('#draw-options-div').hide();
+
+            Controls.floorMode = false;
+            Controls.entityMode = false;
+        })
+    }
+
+    static initMapTypes(){
+        let scales = mapTypes.scale
+        let vibes = mapTypes.vibe
+        let settings = mapTypes.setting
+        scales.forEach((scale)=>{
+            $('#scale-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','radio').attr('id',scale+'-radio').addClass('scale-radios').on('click',function(e){
+                        //e.preventDefault();
+                        $('.scale-radios').prop('checked',false)
+                        $(this).prop('checked','true')
+                        Save.mapTypes.scale = scale
+                    }).prop('checked',scale=='dungeon')
+                ).append(
+                    $('<label>').attr('for','#'+scale+'-radio').text(scale)
+                )
+            )
+        })
+        settings.forEach((setting)=>{
+            $('#setting-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','checkbox').attr('id',setting+'-box').addClass('setting-box').on('click',function(e){
+                        //e.preventDefault();
+                        Save.mapTypes.setting[setting] = $(this).prop('checked')
+                        console.log($(this).attr('id'))
+                    })
+                ).append(
+                    $('<label>').attr('for','#'+setting+'-box').text(setting)
+                )
+            )
+        })
+        vibes.forEach((vibe)=>{
+            $('#vibe-ul').append(
+                $('<li>').append(
+                    $('<input>').attr('type','checkbox').attr('id',vibe+'-box').addClass('vibe-box').on('click',function(e){
+                        //e.preventDefault();
+                        Save.mapTypes.vibe[vibe] = $(this).prop('checked')
+                        console.log($(this).attr('id'))
+                        console.log(Save.mapTypes)
+                    })
+                ).append(
+                    $('<label>').attr('for','#'+vibe+'-box').text(vibe)
+                )
+            )
         })
     }
 

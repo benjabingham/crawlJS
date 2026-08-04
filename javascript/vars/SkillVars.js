@@ -10,8 +10,15 @@ let skillVars = {
             category:"hp",
             name:"vitality",
             key:"vitality",
-            description:"Gain +2 health when you rest.",
+            description:"Gain +2 health when you rest with your hunger bar at least half full.",
             amount:2
+        },
+        {
+            type:"misc",
+            category:"hp",
+            name:"blood rush",
+            key:"bloodRush",
+            description:"When you lose Health, gain that much Stamina."
         },
     ],
     stamina:[
@@ -30,9 +37,18 @@ let skillVars = {
         {
             type:"misc",
             category:"stamina",
+            name:"adrenaline",
+            key:"adrenaline",
+            description:"At the start of your turn, for each adjacent monster, 50% chance to gain 1 Stamina.",
+            amount:0.5
+        },
+        {
+            type:"misc",
+            category:"stamina",
             name:"final push",
             key:"finalPush",
-            description:"Attacks that use your last point of stamina are guaranteed crits."
+            description:"Attacks that use your last point of stamina are guaranteed crits.",
+            unique:true,
         },
     ],
     luck:[
@@ -40,7 +56,14 @@ let skillVars = {
             type:"raiseBarMax",
             bar:"luck",
             amount:2
-        }
+        },
+        {
+            type:"misc",
+            category:"luck",
+            name:"fortune's thrill",
+            key:"fortunesThrill",
+            description:"When you use luck, gain 2 Stamina."
+        },
     ],
     hunger:[
         {
@@ -60,9 +83,16 @@ let skillVars = {
             category:"hunger",
             name:"iron gut",
             key:"ironGut",
-            amount:1,
-            description:"Rotten food has no ill effect on you. Gain 1 luck whenever you eat rotten food."
+            amount:0.5,
+            description:"Rotten food has no ill effect on you. You have a 50% chance to gain 1 luck whenever you eat rotten food."
         },
+    ],
+    fatigue:[
+        {
+            type:"raiseBarMax",
+            bar:"fatigue limit",
+            amount:2
+        }
     ],
     bulk:[
         {
@@ -101,8 +131,8 @@ let skillVars = {
             category:"blunt",
             name:"concussive blows",
             key:"concussiveBlows",
-            description:"Blunt weapons get bonus max stun equal to 30% of their max damage.",
-            amount:.3
+            description:"Blunt weapons get bonus max stun equal to 35% of their max damage.",
+            amount:.35
         },
     ],
     long:[
@@ -149,28 +179,60 @@ let skillVars = {
             type:"critChance",
             attackType:"swing",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"swing",
+            name:"effortless swing",
+            key:"refund",
+            description:"Swing strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     jab:[
         {
             type:"critChance",
             attackType:"jab",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"jab",
+            name:"effortless jab",
+            key:"refund",
+            description:"Jab strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     draw:[
         {
             type:"critChance",
             attackType:"draw",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"draw",
+            name:"effortless draw",
+            key:"refund",
+            description:"Draw strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true,
+        },
     ],
     strafe:[
         {
             type:"critChance",
             attackType:"strafe",
             chance: 0.2
-        }
+        },
+        {
+            type:"misc",
+            category:"strafe",
+            name:"effortless strafe",
+            key:"refund",
+            description:"Strafe strikes have a 50% chance to refund half of their stamina cost, rounded down.",
+            unique:true
+        },
     ],
     counterattack:[
         {
@@ -308,7 +370,7 @@ let skillVars = {
             name:"little sips",
             key:"littleSips",
             amount:.5,
-            description:"50% chance to not consume a potion when you drink it."
+            description:"50% chance to not consume a potion when you drink it. For each subsequent use on the same potion, chance decreases by 15%."
         },
     ]
 }

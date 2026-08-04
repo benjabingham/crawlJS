@@ -6,6 +6,7 @@ class EntityGroup{
     key;
     symbol;
     color;
+    lightStrength;
     entityName;
     groupName;
     spawnChance = 100;
@@ -14,6 +15,9 @@ class EntityGroup{
     instances = {};
     count = 0;
     wallType = false;
+    locationId = false;
+    shopId = false;
+    shop = false;
 
     constructor(empty = false){
         if(empty){

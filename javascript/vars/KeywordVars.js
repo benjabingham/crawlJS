@@ -18,7 +18,7 @@ keywordVars = {
         hintText:"Critical hits inflict double damage, and can be achieved through skills or by attacking stunned enemies."
     },
     proficiency:{
-        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Has the opposite effect on an enemy's attacks against a proficient weapon."
+        hintText:"Your proficiency in a weapon determines how many times damage is rolled for each attack, with the highest rolled number being used. Enemies' attacks against that weapon make the same number of damage rolls, using the lowest."
     },
     swing:{
         hintText:"A swing is a strike that occurs when you rotate your weapon into a target."
@@ -32,27 +32,56 @@ keywordVars = {
     draw:{
         hintText:"A draw strike occurs when you draw your weapon into a target."
     },
+    strikeNormal:{
+        hintText:"This weapon's strikes will use these values by default."
+    },
+    "End the day":{
+        hintText:"Some monsters will respawn, and you will Level Up if you have enough XP."
+    },
+    strikeDamage:{
+        hintText:"When this strike deals damage, this is the maximum damage it will deal, with 0 being the minimum."
+    },
+    strikeStun:{
+        hintText:"When this strike hits an enemy, this is the maximum number of turns it will stun them for, with 1 being the minimum (including the turn you hit them)."
+    },
+    strikeHeft:{
+        hintText:"This is the amount of Stamina it costs to strike an enemy."
+    },
 
     traits:{
         worn:{name:'worn', hintText:"This weapon has a higher degrade chance, and lower damage if it's sharp. It will become unuseable next time it degrades."},
         resistant:{name:'resistant', hintText:"This item can't be corroded"},
         unwieldy:{name:'unwieldy', hintText:"While this item is equipped, moving costs stamina."},
-        ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina."},
-        unlucky:{name:'cursed', hintText:"While this item is equipped, you can't use luck."},
+        ether:{name:'ether', hintText:"While this item is equipped, moving restores stamina.",color:"clearBlue"},
+        cursed:{name:'cursed', hintText:"While this item is in your inventory, you must spend 1 additional luck to rewind. While it's equipped, you can't rewind.", color:'darkPurple'},
+        damned:{name:'damned', hintText:"You can't use luck while this item is in your inventory.", "color":'red'},
         wrecking:{name:'wrecking', hintText:"This item deals triple damage to objects."},
 
         preserved:{name:'preserved',hintText:"This food item is less likely to be rotten."},
         perishable:{name:'perishable',hintText:"This food item is more likely to be rotten."},
-        rotten:{name:"rotten", hintText:"Eating this food item will decrease your hunger bar instead of raising it."},
+        rotten:{name:"rotten", hintText:"Eating this food item will have a negative effect."},
+        dubious:{name:"dubious", hintText:"This food might be rotten. If it is, eating it will have a negative effect."},
         treasure:{name:"treasure", hintText:"This item has value not for its purpose, but for its rarity."},
         fuel:{name:"fuel", hintText:"This item can be burned in your lantern, producing light."},
-        food:{name:"food", hintText:"You can eat this."}
+        food:{name:"food", hintText:"You can eat this."},
         //accustomed:{name:'accustomed', hintText:"When attacking with this weapon, damage is rolled twice, with the higher roll being used."}
+    
+        vigorAspect:{name:"aspect of vigor", hintText:"As long as this item is in your quickbar, regain 1 stamina at the start of your turn.",color:"orange"},
+        hungerAspect:{name:"aspect of hunger", hintText:"As long as this item is in your quickbar, whenever you attack, lose 1 hunger and regain 3 stamina.",color:"green"},
+        furyAspect:{name:"aspect of fury", hintText:"As long as this item is in your quickbar, your critical hit chance increases by 10% for each point of health you're missing.",color:"red"},
+        lucky:{name:"lucky",hintText:"While this item is equipped, luck has a 50% chance to be refunded on use.",color:"green"},
+        blessed:{name:"blessed",hintText:"While this item is in your inventory, luck has a 50% chance to be refunded on use. While equipped, this chance increases to 75%.",color:"gold"}
     },
 
     symbols:{
-        9910:{name:"cursed",symbol:'⚶'},
-        10515:{name:"worn",symbol:'⤓'},
-        43:{name:"accustomed",symbol:'+'}
+        cursed:{name:"cursed",symbol:'⚶',color:'darkPurple'},
+        damned:{name:"damned",symbol:'⛧',color:'red'},
+        vigorAspect:{name: "Aspect of Vigor",color:"orange",symbol:'♃'},
+        hungerAspect:{name: "Aspect of Hunger",color:"green",symbol:'♆'},
+        furyAspect:{name: "Aspect of Fury",color:"red",symbol:'♅'},
+        lucky:{name: "lucky",color:"green",symbol:'☘'},
+        blessed:{name: "blessed",color:"gold",symbol:'✧'},
+        worn:{name:"degraded",symbol:'⤓'},
+        proficient:{name:"proficient",symbol:'+'},
     }
 }

@@ -87,10 +87,6 @@ travel
     eventually - map is procedurally generated with different dungeons in different locations each game. Have a vision radius, remember what you've seen.
 sound
 
-REWORK SWORD KNOCKING
-    weapons get knocked when damage to them exceeds their heft
-    this means an attack against your weapon can only drain your stamina as much as an attack with that weapon would !
-
 give weapon drops a preferred heft or bulk range - goblins should drop light weapons, orcs heavy
 
 features that will be good for the game
@@ -99,7 +95,15 @@ features that will be good for the game
     - non-death failstates (monsters that take stuff and run)
     - run modifiers!
     - ways to win ...
+    - (optional?) mechanic to apply pressure - food costs more each day?
+    - Interesting monsters (ranged, sword-weilders)
 
 
 
 rename 'harp' 'first respite'
+
+allow degrade chance to appear in multiples of 0.5 for clarity
+
+shouldnt gain hunger while doing inventory stuff in map screen
+
+curse perks

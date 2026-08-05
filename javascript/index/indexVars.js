@@ -1,4 +1,6 @@
 let mainReleases = [
+    {name: 'v0.6.0', branchName: 'v0.6.0'},
+    {name: 'v0.5.0', branchName: 'v0.5.0'},
     {name: 'v0.4.1', branchName: 'v0.4.1'},
     {name: 'v0.4.0', branchName: 'v0.4.0'},
     {name: 'v0.3.2', branchName: 'v0.3.2'},
@@ -11,7 +13,6 @@ let mainReleases = [
 ]
 
 let devBranches = [
-    {name: 'v0.6.0 Staging', branchName: '0.6.0-staging'},
     {name: 'Memory', branchName: 'memory'},
     {name: 'Dev', branchName: 'dev'},
     /*
